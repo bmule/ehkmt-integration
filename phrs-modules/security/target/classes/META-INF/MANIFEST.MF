@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Export-Package: at.srfg.kmt.ehealth.phrs.security.api
+Built-By: m1s
+Tool: Bnd-1.10.0
+Bundle-Name: Personal Health System Framework Security
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 0.1.0.SNAPSHOT
+Bnd-LastModified: 1288791161073
+Bundle-ManifestVersion: 2
+Bundle-Activator: at.srfg.kmt.ehealth.phrs.security.impl.Activator
+Bundle-Description: Personal Health System Framework !        Personal
+  Health System Framework !        Personal Health System Framework !
+Import-Package: org.osgi.framework;version="[1.4,2)"
+Bundle-SymbolicName: at.srfg.kmt.ehealth.phrs.security
+

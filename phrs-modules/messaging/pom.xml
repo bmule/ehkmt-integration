@@ -17,14 +17,14 @@
     <parent>
         <groupId>at.srfg.kmt.ehealth.phrs</groupId>
         <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
 
     <groupId>at.srfg.kmt.ehealth.phrs</groupId>
     <artifactId>at.srfg.kmt.ehealth.phrs.messaging</artifactId>
     <packaging>bundle</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
 
     <name>Personal Health System Framework Messaging</name>
     <description>

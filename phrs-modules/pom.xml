@@ -15,7 +15,7 @@
 
     <groupId>at.srfg.kmt.ehealth.phrs</groupId>
     <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
    
 
@@ -36,5 +36,6 @@
 
   <modules>
     <module>messaging</module>
+    <module>security</module>
   </modules>
 </project>
