@@ -16,7 +16,7 @@
 
     <parent>
         <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../parent</relativePath>
     </parent>
