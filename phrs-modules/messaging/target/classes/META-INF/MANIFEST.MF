@@ -1,16 +1,17 @@
 Manifest-Version: 1.0
 Export-Package: at.srfg.kmt.ehealth.phrs.messaging.api
-Built-By: m1s
-Tool: Bnd-1.10.0
+Built-By: bmulreni
+Tool: Bnd-0.0.357
 Bundle-Name: Personal Health System Framework Messaging
 Created-By: Apache Maven Bundle Plugin
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT
-Bnd-LastModified: 1288791158567
+Bnd-LastModified: 1288967524344
 Bundle-ManifestVersion: 2
 Bundle-Activator: at.srfg.kmt.ehealth.phrs.messaging.impl.Activator
 Bundle-Description: Personal Health System Framework !        Personal
   Health System Framework !        Personal Health System Framework !
-Import-Package: org.osgi.framework;version="[1.4,2)"
+Import-Package: at.srfg.kmt.ehealth.phrs.messaging.api,org.osgi.framew
+ ork;version="1.4"
 Bundle-SymbolicName: at.srfg.kmt.ehealth.phrs.messaging
 
