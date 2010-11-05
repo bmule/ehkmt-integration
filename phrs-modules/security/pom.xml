@@ -49,7 +49,7 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
-
+<!--
   	<dependency>
   		<groupId>org.openhealthtools.openatna</groupId>
   		<artifactId>openatna</artifactId>
@@ -57,6 +57,7 @@
   		<type>pom</type>
   		<scope>compile</scope>
   	</dependency>
+-->
 
         <dependency>
             <groupId>org.apache.felix</groupId>
