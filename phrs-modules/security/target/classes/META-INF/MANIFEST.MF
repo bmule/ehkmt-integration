@@ -1,17 +1,18 @@
 Manifest-Version: 1.0
 Export-Package: at.srfg.kmt.ehealth.phrs.security.api
-Built-By: bmulreni
-Tool: Bnd-0.0.357
+Built-By: mradules
+Tool: Bnd-1.10.0
 Bundle-Name: Personal Health System Framework Security
 Created-By: Apache Maven Bundle Plugin
 Build-Jdk: 1.6.0_22
 Bundle-Version: 0.1.0.SNAPSHOT
-Bnd-LastModified: 1288967529250
+Bnd-LastModified: 1292243616788
 Bundle-ManifestVersion: 2
 Bundle-Activator: at.srfg.kmt.ehealth.phrs.security.impl.Activator
-Bundle-Description: Personal Health System Framework !        Personal
-  Health System Framework !        Personal Health System Framework !
+Bundle-Description: Personal Health System Framework Security package 
+ provide an unified way        to access over different security frame
+ works.
 Import-Package: at.srfg.kmt.ehealth.phrs.security.api,org.osgi.framewo
- rk;version="1.4"
+ rk;version="[1.4,2)"
 Bundle-SymbolicName: at.srfg.kmt.ehealth.phrs.security
 

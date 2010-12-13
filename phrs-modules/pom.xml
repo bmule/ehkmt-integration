@@ -11,7 +11,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
     <groupId>at.srfg.kmt.ehealth.phrs</groupId>
     <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
@@ -19,23 +19,28 @@
     <packaging>pom</packaging>
    
 
-  <name>Personal Health System Framework</name>
-  <description>
-    Personal Health System Framework !
-    Personal Health System Framework !
-    Personal Health System Framework !
-  </description>
+    <name>Personal Health System Framework</name>
+    <description>
+        Personal Health System Framework
+    </description>
 
-  <inceptionYear>2010</inceptionYear>
+    <inceptionYear>2010</inceptionYear>
 
-  <scm>
-   <!--
-   FIXME :    GIT hub url 
-   -->
-  </scm>
+    <scm>
+        <!--
+            FIXME :    GIT hub url 
+        -->
+    </scm>
 
-  <modules>
-    <module>messaging</module>
-    <module>security</module>
-  </modules>
+    <!--
+    Mihai : I add the utf-8 line and I consider that the UTF-8 must be the ecncoding used.
+    -->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <modules>
+        <module>messaging</module>
+        <module>security</module>
+    </modules>
 </project>
