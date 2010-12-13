@@ -8,4 +8,5 @@ if [ ! -d $1 ]; then
 fi
 
 
-mvn eclipse:configure-workspace -Declipse.workspace=$1 
+mvn eclipse:configure-workspace -Declipse.workspace=$1
+mvn eclipse:eclipse
