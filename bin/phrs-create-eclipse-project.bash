@@ -7,6 +7,6 @@ if [ ! -d $1 ]; then
     mkdir -p $1
 fi
 
+mvn -Declipse.workspace=$1 eclipse:add-maven-repo
 
-mvn eclipse:configure-workspace -Declipse.workspace=$1
-mvn eclipse:eclipse
+mvn eclipse:eclipse -e
