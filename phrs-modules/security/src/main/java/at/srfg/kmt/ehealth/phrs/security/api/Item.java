@@ -6,8 +6,9 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
 /**
+ * Defines
  *
- * @author mradules
+ * @author mihai
  */
 public interface Item {
 

@@ -31,4 +31,5 @@ public interface SecurityService {
      */
     boolean prove(Principal principal, Action action, Item item)
             throws SecurityException;
+
 }

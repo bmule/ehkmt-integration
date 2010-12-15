@@ -6,6 +6,8 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
 /**
+ * Defines an action what can be accomplished.
+ *
  *
  * @author mradules
  */
