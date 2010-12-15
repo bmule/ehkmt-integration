@@ -26,7 +26,7 @@
     -->
     <groupId>at.srfg.kmt.ehealth.phrs</groupId>
     <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
-    <packaging>bundle</packaging>
+    <packaging>ejb</packaging>
     <version>0.1-SNAPSHOT</version>
 
     <name>Personal Health System Framework Security</name>
@@ -50,89 +50,13 @@
 
 
     <dependencies>
-  	<dependency>
-  		<groupId>org.apache.cxf.dosgi</groupId>
-  		<artifactId>cxf-dosgi-ri-multibundle-distribution</artifactId>
-  		<version>1.2</version>
-  		<type>jar</type>
-  		<scope>compile</scope>
-  	</dependency>
-<!--
-  	<dependency>
-  		<groupId>org.openhealthtools.openatna</groupId>
-  		<artifactId>openatna</artifactId>
-  		<version>1.0.2</version>
-  		<type>pom</type>
-  		<scope>compile</scope>
-  	</dependency>
--->
 
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>1.2.0</version>
-        </dependency>
     
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>activemq-pool</artifactId>
-            <version>5.3.2</version>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-gae</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jackson</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-core</artifactId>
-            <version>2.4.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-jetty</artifactId>
-            <version>2.4.0</version>
             <scope>test</scope>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-test</artifactId>
-            <version>2.4.0</version>
-            <scope>test</scope>
-        </dependency>
-    
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-cxf</artifactId>
-            <version>2.4.0</version>
         </dependency>
         
         <dependency>
@@ -159,6 +83,7 @@
             <groupId>tr.com.srdc.icardea</groupId>
             <artifactId>consenteditor</artifactId>
             <version>0.0.1</version>
+            <type>war</type>
         </dependency>
 
         <!--
@@ -192,27 +117,16 @@
                 </configuration>
             </plugin>
 
-            <plugin>    
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <extensions>true</extensions>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>2.3</version>
                 <configuration>
-                    <instructions>
-                        <Export-Package>
-                            ${pom.artifactId}.api.*
-                        </Export-Package>
-                        <Private-Package>
-                            ${pom.artifactId}.impl.*
-                        </Private-Package>
-                        <Bundle-SymbolicName>
-                            ${pom.artifactId}
-                        </Bundle-SymbolicName>
-                        <Bundle-Activator>
-                            ${pom.artifactId}.impl.Activator
-                        </Bundle-Activator>
-                    </instructions>
+                    <ejbVersion>3.0</ejbVersion>
+                    <generateClient>true</generateClient>
                 </configuration>
-            </plugin>
+      </plugin>
+
         </plugins>
   </build>
 

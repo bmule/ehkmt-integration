@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite failures="0" time="0.055" errors="0" skipped="0" tests="1" name="at.srfg.kmt.ehealth.phrs.AppTest">
+<testsuite failures="0" time="0.028" errors="0" skipped="0" tests="1" name="at.srfg.kmt.ehealth.phrs.AppTest">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Libraries"/>
@@ -22,7 +22,7 @@
     <property name="basedir" value="/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/phrs-modules/messaging"/>
     <property name="java.endorsed.dirs" value="/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home/lib/endorsed"/>
     <property name="os.arch" value="x86_64"/>
-    <property name="surefire.real.class.path" value="/var/folders/lu/lu9No3cZG-ewyEzsQ1Mbr+++03U/-Tmp-/surefirebooter6852900151140070435.jar"/>
+    <property name="surefire.real.class.path" value="/var/folders/lu/lu9No3cZG-ewyEzsQ1Mbr+++03U/-Tmp-/surefirebooter7357934850266902555.jar"/>
     <property name="java.io.tmpdir" value="/var/folders/lu/lu9No3cZG-ewyEzsQ1Mbr+++03U/-Tmp-/"/>
     <property name="line.separator" value="
 "/>
@@ -64,5 +64,5 @@
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="sun.cpu.isalist" value=""/>
   </properties>
-  <testcase time="0.004" classname="at.srfg.kmt.ehealth.phrs.AppTest" name="testApp"/>
+  <testcase time="0.002" classname="at.srfg.kmt.ehealth.phrs.AppTest" name="testApp"/>
 </testsuite>

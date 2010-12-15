@@ -9,7 +9,10 @@ package at.srfg.kmt.ehealth.phrs.security.model;
 
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.Table;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  * Generic representation for an user group.
@@ -18,7 +21,7 @@ import javax.persistence.Table;
  *
  * @author Mihai
  */
-@Table
+@Entity
 public class Group implements Serializable {
 
     /**
@@ -66,6 +69,8 @@ public class Group implements Serializable {
      *
      * @return the unique id for this user.
      */
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public Long getId() {
         return id;
     }

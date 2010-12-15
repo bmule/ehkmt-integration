@@ -1,7 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
+import at.srfg.kmt.ehealth.phrs.security.model.Group;
 import java.util.Set;
-import org.osgi.service.useradmin.Group;
+
 
 /**
  * Used to define the groups under a certain action can run.

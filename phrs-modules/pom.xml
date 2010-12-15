@@ -39,8 +39,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+
+
+
     <modules>
-        <module>messaging</module>
+        <module>phrs-ear</module>
         <module>security</module>
     </modules>
+
+
+
+
 </project>

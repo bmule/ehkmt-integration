@@ -1,7 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
+import at.srfg.kmt.ehealth.phrs.security.model.Role;
 import java.util.Set;
-import org.osgi.service.useradmin.Role;
+
 
 /**
  * Used to define the roles under a certain action can run.
