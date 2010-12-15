@@ -46,7 +46,21 @@
             <id>JBoss Repo</id>
             <url>http://repository.jboss.com/maven2</url>
         </repository>
+
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/glassfish</url>
+        </repository>
+
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven2.java.net</id>
+            <url>http://download.java.net/maven/glassfish</url>
+        </pluginRepository>
+    </pluginRepositories>
+
 
 
     <dependencies>
@@ -102,6 +116,11 @@
             <version>3.5.0-Beta-2</version>
         </dependency>
 
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>6.0</version>
+        </dependency>
     </dependencies>
   
    
