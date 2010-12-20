@@ -26,7 +26,6 @@ import java.lang.annotation.Target;
  *   void doStuff();
  * }
  * ....
- *
  * @RunAs
  * public class MyBean implements RunAsGroup, RunAsRole, MyBusiness {
  *

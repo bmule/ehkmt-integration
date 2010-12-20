@@ -5,9 +5,9 @@
 
 package at.srfg.kmt.ehealth.phrs.security.api;
 
-import at.srfg.kmt.ehealth.phrs.security.model.Group;
-import at.srfg.kmt.ehealth.phrs.security.model.Role;
-import at.srfg.kmt.ehealth.phrs.security.model.User;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
 
 /**
  *
@@ -15,15 +15,15 @@ import at.srfg.kmt.ehealth.phrs.security.model.User;
  */
 public interface PermissionManager {
 
-    boolean prove(User user, Action action, Item item);
-    boolean prove(User user, Action action);
+    boolean validate(PhrUser user, Action action, Item item);
+    boolean validate(PhrUser user, Action action);
 
-    boolean prove(Role role, Action action, Item item);
-    boolean prove(Role role, Action action);
+    boolean validate(PhrRole role, Action action, Item item);
+    boolean validate(PhrRole role, Action action);
 
-    boolean prove(Group role, Action action, Item item);
-    boolean prove(Group role, Action action);
+    boolean validate(PhrGroup role, Action action, Item item);
+    boolean validate(PhrGroup role, Action action);
 
-    Group getAllowdGroupFor(Action action, Item item);
-    Role getAllowdRoleFor(Action action, Item item);
+    PhrGroup getAllowdGroupFor(Action action, Item item);
+    PhrRole getAllowdRoleFor(Action action, Item item);
 }

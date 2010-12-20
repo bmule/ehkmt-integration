@@ -31,6 +31,19 @@
         <relativePath>../parent</relativePath>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>codehaus-snapshots</id>
+            <url>http://ci.repository.codehaus.org/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
     <dependencies>
         <dependency>
@@ -39,7 +52,14 @@
             <version>0.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
-   </dependencies>
+
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>simple-view</artifactId>
+            <version>0.0.1</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
    
    
     <build>
@@ -50,18 +70,37 @@
                 <configuration>
                     <displayName>PHRS Enterprise archive</displayName>
                     <modules>
-                    <!--
+
                         <webModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>simple-view</artifactId>
                         </webModule>
-                    -->
+
                         <ejbModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
                         </ejbModule>
+
                     </modules>
+                </configuration>
+
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.0.5</version>
+                <configuration>
+                    <container>
+                        <containerId>geronimo2x</containerId>
+                        <!--
+                        change this if your geronimo is in other dir
+                        -->
+                        <home>/labo/apache/geronimo/geronimo-tomcat6-javaee5-2.2.1</home>
+                    </container>
                 </configuration>
             </plugin>
         </plugins>
-   </build>
+    </build>
 
 </project>

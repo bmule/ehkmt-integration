@@ -6,7 +6,7 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
 /**
- * Defines an action what can be accomplished.
+ * Defines an action what can be accomplished on a certain item.
  *
  *
  * @author mradules

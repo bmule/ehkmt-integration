@@ -10,8 +10,8 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
-import at.srfg.kmt.ehealth.phrs.security.model.Group;
-import at.srfg.kmt.ehealth.phrs.security.model.User;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
 import java.util.Set;
 import javax.ejb.Local;
 
@@ -43,7 +43,7 @@ public class GroupManagerBean implements GroupManager {
     /**
      * Used to communicate with the underlying persistence layer.
      */
-    @PersistenceContext
+    @PersistenceContext(unitName="phrs_storage")
     private EntityManager entityManager;
 
     /**
@@ -62,7 +62,7 @@ public class GroupManagerBean implements GroupManager {
      * @see GroupException
      */
     @Override
-    public boolean addGroup(Group group) {
+    public boolean addGroup(PhrGroup group) {
 
         if (group == null) {
             final NullPointerException nullException =
@@ -74,7 +74,7 @@ public class GroupManagerBean implements GroupManager {
         logger.debug("Tries add Group [#0]", group);
         final String name = group.getName();
 
-        final Group oldGroup;
+        final PhrGroup oldGroup;
         try {
             oldGroup = getGroupForName(name);
         } catch (NonUniqueResultException exception) {
@@ -102,7 +102,7 @@ public class GroupManagerBean implements GroupManager {
             oldGroup.setDescription(newDescription);
         }
 
-        final Set<User> newUsers = group.getUsers();
+        final Set<PhrUser> newUsers = group.getUsers();
         if (newUsers != null) {
             // FIXME : I think I must remove the old one as well
             oldGroup.setUsers(newUsers);
@@ -127,12 +127,12 @@ public class GroupManagerBean implements GroupManager {
      * calling the <code>getGroup</code> method (from the GroupException).
      * @see GroupException
      */
-    private Group getGroupForName(String name) {
+    private PhrGroup getGroupForName(String name) {
         final Query query = entityManager.createNamedQuery("findGroupForName");
         query.setParameter("name", name);
 
         try {
-            final Group result = (Group) query.getSingleResult();
+            final PhrGroup result = (PhrGroup) query.getSingleResult();
             return result;
         } catch (NoResultException exception) {
             logger.debug("No group with the name [#0] found.", name);
@@ -148,7 +148,7 @@ public class GroupManagerBean implements GroupManager {
      * group, false other wise.
      */
     @Override
-    public boolean groupExist(Group group) {
+    public boolean groupExist(PhrGroup group) {
 
         if (group == null) {
             final NullPointerException nullException =
@@ -160,7 +160,7 @@ public class GroupManagerBean implements GroupManager {
 
         final String name = group.getName();
         try {
-            final Group oldGroup = getGroupForName(name);
+            final PhrGroup oldGroup = getGroupForName(name);
             return oldGroup != null;
         } catch (NonUniqueResultException exception) {
             final GroupException gException =
@@ -174,7 +174,7 @@ public class GroupManagerBean implements GroupManager {
     }
 
     @Override
-    public Group removeGroup(Group group) {
+    public PhrGroup removeGroup(PhrGroup group) {
         
         if (group == null) {
             final NullPointerException nullException =
@@ -186,7 +186,7 @@ public class GroupManagerBean implements GroupManager {
         final String name = group.getName();
         // mihai : I can also do a 'merge' to assign the entity to the
         // actaul context.
-        final Group oldGroup = getGroupForName(name);
+        final PhrGroup oldGroup = getGroupForName(name);
         if (oldGroup != null) {
             entityManager.remove(oldGroup);
         }
@@ -201,27 +201,27 @@ public class GroupManagerBean implements GroupManager {
     }
 
     @Override
-    public Set<Group> getAllGroups() {
+    public Set<PhrGroup> getAllGroups() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void assignUserToGroup(User user, Group group) {
+    public void assignUserToGroup(PhrUser user, PhrGroup group) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void assignUsersToGroup(Set<User> users, Group group) {
+    public void assignUsersToGroup(Set<PhrUser> users, PhrGroup group) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void removeUserFromGroup(User user, Group group) {
+    public void removeUserFromGroup(PhrUser user, PhrGroup group) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void removeUsersFromGroup(Set<User> users, Group group) {
+    public void removeUsersFromGroup(Set<PhrUser> users, PhrGroup group) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

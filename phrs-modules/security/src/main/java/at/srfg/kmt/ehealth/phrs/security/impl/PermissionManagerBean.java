@@ -10,9 +10,9 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 import at.srfg.kmt.ehealth.phrs.security.api.Action;
 import at.srfg.kmt.ehealth.phrs.security.api.Item;
 import at.srfg.kmt.ehealth.phrs.security.api.PermissionManager;
-import at.srfg.kmt.ehealth.phrs.security.model.Group;
-import at.srfg.kmt.ehealth.phrs.security.model.Role;
-import at.srfg.kmt.ehealth.phrs.security.model.User;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 
@@ -26,42 +26,42 @@ import javax.ejb.Stateless;
 public class PermissionManagerBean implements PermissionManager {
 
     @Override
-    public Group getAllowdGroupFor(Action action, Item item) {
+    public PhrGroup getAllowdGroupFor(Action action, Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Role getAllowdRoleFor(Action action, Item item) {
+    public PhrRole getAllowdRoleFor(Action action, Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(User user, Action action, Item item) {
+    public boolean validate(PhrUser user, Action action, Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(User user, Action action) {
+    public boolean validate(PhrUser user, Action action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(Role role, Action action, Item item) {
+    public boolean validate(PhrRole role, Action action, Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(Role role, Action action) {
+    public boolean validate(PhrRole role, Action action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(Group role, Action action, Item item) {
+    public boolean validate(PhrGroup role, Action action, Item item) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean prove(Group role, Action action) {
+    public boolean validate(PhrGroup role, Action action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

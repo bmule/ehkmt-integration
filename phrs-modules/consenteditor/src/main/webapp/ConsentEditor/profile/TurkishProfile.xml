@@ -1,0 +1,223 @@
+<profile name="TurkishProfile">
+  <language name="Turkce" flag="TURKISH_FLAG">
+  	<Doctors>Hekim</Doctors>
+	<Nurses>Hemşire</Nurses>
+	<Psychiatrist>Psikiyatrist</Psychiatrist>
+	<Pharmacist>Eczacı</Pharmacist>
+	<Dentist>Diş Hekimi</Dentist>
+  	<ConsentEditor>iCardea Veri Paylaşım Hakları Yönetim Editörü</ConsentEditor>
+	<Alergies>Alerjiler</Alergies>
+  	<Conditions>Problemler</Conditions>
+  	<Procedures>Operasyonlar</Procedures>
+  	<Medications>İlaçlar</Medications>
+  	<TestResults>Test Sonuçları</TestResults>
+  	<Immunizations>Aşılar</Immunizations>
+  	<HospitalVistis>Hastane Ziyaretleri</HospitalVistis>
+  	<BasicHealthInformation>Temel Sağlık Bilgileri</BasicHealthInformation>
+  	<My_Consent_Documents>Tanımlanmış Veri Paylaşım Kısıtlama Dokümanlarım</My_Consent_Documents>
+    <Create_New_Consent_Document>Yeni Veri Paylaşım Kısıtlama Dokümanı Yarat</Create_New_Consent_Document>
+    <No_consent_documents>Tanımlanmış veri paylaşımını kısıtlama poliçeniz bulunamamıştır.</No_consent_documents>
+    <Retrieving_Consent_Document>Veri Paylaşım Kısıtlama Dokümanı çekiliyor</Retrieving_Consent_Document>
+    <Preparing>Lütfen bekleyiniz</Preparing>
+    <MediumLevel>Orta Seviye Güvenlik Ayarı</MediumLevel>
+    <LowLevel>Düşük Seviye Güvenlik Ayarı</LowLevel>
+    <HighLevel>Yüksek Seviye Güvenlik Ayarı</HighLevel>
+    <Register>Veri Paylaşım Kısıtlama Dokümanını Kaydet</Register>
+    <View_Current_Consent_Document>Geçerli Veri Paylaşım Kısıtlama Dökümanını Görüntüle</View_Current_Consent_Document>
+    <ChangeViewToMatrix>Matrix Halinde Göster</ChangeViewToMatrix>
+    <ChangeViewToList>Liste Halinde Göster</ChangeViewToList>
+    <SetAsCurrent>Şimdiki Veri Paylaşım Poliçem olarak belirle</SetAsCurrent>
+    <ViewRuleDetails>İlgili Veri Paylaşım Kuralını düzenle</ViewRuleDetails>
+    <Definition>Tanımı</Definition>
+    <ResourceSettings>Veri Ayarları</ResourceSettings>
+    <SubjectSettings>Aktör Ayarları</SubjectSettings>
+    <FamilyMember>Aile Üyesi</FamilyMember>
+    <ConsentRuleDetails>Veri Paylaşım Kuralı Detayları</ConsentRuleDetails>
+    <ExpirationDate>Son Geçerlilik Tarihi</ExpirationDate>
+    <Infinite>Sonsuz</Infinite>
+    <PrivacyLevel>Privacy Level</PrivacyLevel>
+    <No_Defined_Rules>Tanımlanmış Kural bulunamadı</No_Defined_Rules>
+    <Add_NewConsentRule>Yeni Paylaşım Kuralı Tanımla</Add_NewConsentRule>
+    <RoleResourceActionTriple>Rol-Veri-Yetki Üçlüsü</RoleResourceActionTriple>	
+    <DefError>Poliçe için bir tanımlayıcı giriniz</DefError>
+    <DateError>Son geçerlilik süresi için geçerli bir tarih giriniz</DateError>
+    <Description>Tanımı</Description>
+    <CustomRuleText>Özelleştirilmiş Kural</CustomRuleText>
+    <Cancel>İptal</Cancel>
+    <Removing_Consent_Form>Seçmiş olduğunuz poliçe siliniyor</Removing_Consent_Form>
+    <OperationSucceded>İşlem başarıyla sonuçlandı</OperationSucceded>
+    <OperationFailed>İşlem tamamlanamadı</OperationFailed>
+    <No_Defined_Template>Hasta numaranıza atanmış veri paylaşımını kısıtlama doküman şablonu bulunamamıştır.</No_Defined_Template>
+    <Details>Detaylar</Details>
+    <No_Rules>Tanımlı kurallar bulunmamaktadır</No_Rules>
+    <SelectAction>Veri Ulaşım haklarını seçiniz</SelectAction>
+    <ID_NO>ID</ID_NO>
+    <Advanced>Gelişmiş</Advanced>
+    <Close_Advanced>Detayları sakla</Close_Advanced>
+    <Actor>ROL</Actor>
+    <Action>HAKLARI</Action>
+    <Resource>VERI ADI</Resource>
+    <Permission>ERİŞİM İZNİ</Permission>
+    <ViewCondition>Paylaşım kısıtlamalarını Ekle</ViewCondition>
+    <ViewNotifications>Bildirim adreslerini izle</ViewNotifications>
+    <Obl_Cond>KISITLAMALAR</Obl_Cond>
+    <ViewObl_Cond>Kısıtlamaları/Koşulları Görüntüle</ViewObl_Cond>
+    <CloseObl_Cond>Kısıtlamaları/Koşulları Gizle</CloseObl_Cond>
+    <AllowFrom>İzin Başlangıç Tarihi</AllowFrom>
+	<AllowTo>İzin Bitiş Tarihi</AllowTo>
+	<SentTo>E-mail Adresi</SentTo>	
+    <GREEN>YEŞİL</GREEN>
+    <YELLOW>SARI</YELLOW>
+    <RED>KIRMIZI</RED>
+    <CUSTOM>Özelleştir</CUSTOM>
+    <RECOMMENDED>Önerilen</RECOMMENDED>
+    <Your_Setting>Bu şimdiki gizlilik ayarınız</Your_Setting>
+    <Apply_Setting>Bu gizlilik ayarlarını uygula</Apply_Setting>
+    <Customize_Setting>Ayarları Kişiselleştir</Customize_Setting>
+    <RegistrationSucceded>Gizlilik ayarlarınız kaydedildi.</RegistrationSucceded>
+    <Document_Artifacts>Paylaşılacak Sağlık Verileri</Document_Artifacts>
+    <AddNotifications>Bildirim adresi ekle</AddNotifications>
+    <AddNotificationsDeclaration>Bildirim mesajının gönderileceği adresi belirtiniz.</AddNotificationsDeclaration>
+    <ConsentEditDeclaration>Sağlık Veri kayıtlarınıza kimlerin ulaşabileceği, güncelleyebileceği bilgisini kişiselleştirin</ConsentEditDeclaration>
+    <SubjectList>Tanımlı Roller</SubjectList>
+    <AllowedList>Erişebilenler</AllowedList>
+    <ValidEmailAdress>Geçerli bir e-mail adresi girin</ValidEmailAdress>
+    <EnterValidDatePeriod>Geçerli ve uygun zaman aralığı giriniz</EnterValidDatePeriod>
+    <BlockedList>Erişim Engelliler</BlockedList>
+    <AddConditionsObligations>Paylaşım kurallarına kısıtlama ya da koşul ekleyebilirsiniz</AddConditionsObligations>
+    <AddCondition>Paylaşım kısıtlaması Ekle</AddCondition>
+    <No_conditions>Paylaşım kurallarına kısıtlayan kurallar bulunmamaktadır.</No_conditions>
+    <No_emails>Bildirim mesajları için tanımlanmış e-mail adresi bulunmamaktadır.</No_emails>
+    <Message>Mesaj</Message>
+    <MessageText>adlı kullanıcının sağlık veri kayıtlarına erişilmiştir.</MessageText>
+    <ArrangeAction>Erişim şekillerini ve rollerini düzenleyebilirsiniz</ArrangeAction>
+    <Delete>Sil</Delete>
+    <Back>Geri</Back>
+    <End_Date>Bitiş Tarihi</End_Date>
+    <Comments__>Yorumlar:</Comments__>
+    <Add_ConsentRule>Veri Paylaşım Kuralı Ekle</Add_ConsentRule>
+    <Add_Edit_Consent_Rule>Şablon Veri Paylaşım Kurallarını güncelleyebilir veya yeni kural oluşturabilirsiniz</Add_Edit_Consent_Rule>
+    <Treatment_Provider__>Uygulayan Hekim:</Treatment_Provider__>
+    <Severity>Şiddet</Severity>
+    <Add>Ekle</Add>
+    <Add_Reaction>Reaksiyon Ekle</Add_Reaction>
+    <Treatments>Tedavi</Treatments>
+    <Edit>Düzenle</Edit>
+    <Save>Kaydet</Save>
+    <ConsentRulesTable>Veri Paylaşım Kuralları Tablosu</ConsentRulesTable>
+    <Name>Adı</Name>
+    <Start_Date>Başlangıç Tarihi</Start_Date>
+    <No_Allergy_Entries>Kayıt Yok</No_Allergy_Entries>
+    <Reactions__>Reaksiyonlar:</Reactions__>
+    <ConsentRule_Details>Kural Detaylari</ConsentRule_Details>
+    <End_Date__>Bitiş Tarihi:</End_Date__>
+    <Name__>Ad:</Name__>
+    <Reaction>Reaksiyon</Reaction>
+    <ConsentRuleTemplate>Veri Paylaşım Kuralı</ConsentRuleTemplate>
+    <Status>Durum</Status>
+    <Creation_Date__>Yaratılma Tarihi:</Creation_Date__>
+    <Edit_Date__>Düzenlenme Tarihi:</Edit_Date__>
+    <Status__>Durum:</Status__>
+    <Choose_from_list>Listeden Seçin</Choose_from_list>
+  	<Getting_your_allergies>Alerji bilgileriniz getiriliyor...</Getting_your_allergies>
+  	<Operation_was_unsuccessful>İşlem başarısız.\nLütfen daha sonra tekrar deneyin.</Operation_was_unsuccessful>
+  	<Updating_allergy_info>Kayıt güncelleniyor...</Updating_allergy_info>
+  	<Removing_allergy>Kayıt siliniyor...</Removing_allergy>
+  	<Getting_allergy_list>Alerji listesi getiriliyor...</Getting_allergy_list>
+  	<Saving_new_consent>Bilgiler kaydediliyor...</Saving_new_consent>
+  	<Remove_Reaction>Reaksiyonu Sil</Remove_Reaction>
+  	
+  	<Password__>Şifre:</Password__>
+    <Surname__>Soyad:</Surname__>
+    <Confirm_Password__>Şifrenizi Doğrulayın:</Confirm_Password__>
+    <SRDC>SRDC</SRDC>
+    <Application_Preference>Uygulama Tercihleri</Application_Preference>
+    <SRDC_Personal_Health_Platform_helps_you>SRDC Personal Health Platform helps you</SRDC_Personal_Health_Platform_helps_you>
+    <Change_Account_Information>Hesap Bilgileri</Change_Account_Information>
+    <access_and_manage_your_data_easily>access and manage your data easily</access_and_manage_your_data_easily>
+    <Change_Application_Preferences>Menü Tercihleri</Change_Application_Preferences>
+    <Update>Güncelle</Update>
+    <E_mail__>E-posta:</E_mail__>
+    <Country__>Ülke:</Country__>
+    <store_and_protect_your_health_and_personal_information>store and protect your health and personal information</store_and_protect_your_health_and_personal_information>
+    <Personal_Health_Platform>Kişisel Sağlık Platformu</Personal_Health_Platform>
+    <Register_as__>Üyelik Türü:</Register_as__>
+    <Username__>Kullanıcı adı:</Username__>
+    <Logout>Çıkış</Logout>
+    <secure_and_private>secure and private</secure_and_private>
+    <Login>Giriş</Login>
+    <_Login>Giriş Yapın</_Login>
+    <Already_have_an_account_>Hesabınız var mı?</Already_have_an_account_>
+    <City__>Şehir:</City__>
+    <Change_your_preferences__then_click_Update_>Terchilerinizi değiştirip, güncelleyebilirsiniz.</Change_your_preferences__then_click_Update_>
+    <receive_important_messages_about_your_health>receive important messages about your health</receive_important_messages_about_your_health>
+    <Sign_Up>Yeni Kayıt</Sign_Up>
+    <Phone__>Telefon:</Phone__>
+    <get_immediate_information_from_Wikipedia>get immediate information from Wikipedia</get_immediate_information_from_Wikipedia>
+    <Why_use_SRDC_Personal_Health_Platform_>Why use SRDC Personal Health Platform?</Why_use_SRDC_Personal_Health_Platform_>
+    <Login_as__>Üyelik Türü:</Login_as__>
+    <Account_Management>PHR Yönetimi</Account_Management>
+    <Account_Information>PHR Hesap Bilgileri</Account_Information>
+    <easy_to_use>easy to use</easy_to_use>
+    <created_by_physicians>created by physicians</created_by_physicians>
+    <Dont_have_an_account_>Hesabınız yok mu?</Dont_have_an_account_>
+    <Welcome>Kullanıcı: </Welcome>
+    <Operation_was_unsuccessful>İşlem başarısız.\nLütfen daha sonra tekrar deneyin.</Operation_was_unsuccessful>
+    <Your_information_has_been_updated>Bilgileriniz başarıyla güncellendi.</Your_information_has_been_updated>
+  	
+  	<Login_Error>Geçersiz kullanıcı adı veya şifre</Login_Error>
+  	<Login_Fault>Giriş Başarısız</Login_Fault>
+  	<Retype_Password__>(Tekrar)Şifre:</Retype_Password__>
+  	<You_Can>Şunları yapabilirsiniz</You_Can>
+  	<PreviouslyDisallowedError>Önceden bu veriye ulaşım için yetkisi sınırlandırılmıştır</PreviouslyDisallowedError>
+  	<PreviouslyAllowedError>Önceden bu veriye ulaşım için izin hakkı verilmiş</PreviouslyAllowedError>
+  	<AssignRoleSubjectPairs>Tanımlanan veri paylaşım kuralına geçerli rol-veri eşleştirmeleri atamalısınız\nVazgeçmek için iptale basabilirsiniz</AssignRoleSubjectPairs>
+  	<PolicyDateExpired>Seçtiğiniz poliçenin geçerlilik tarihi geçmiş</PolicyDateExpired>
+  	<Add_New_Group>Yeni Grup Tanımla</Add_New_Group>
+  	<Add_New_Individual>Yeni Birey Tanımla</Add_New_Individual>
+  	<Add_New_Resource>Yeni Veri Tanımla</Add_New_Resource>
+  	<Groups>Gruplar</Groups>
+  	<Individuals>Bireyler</Individuals>
+  	<Resources>Veriler</Resources>
+  	<Speciality>Uzmanlık Alanı</Speciality>
+  	<SubjectIdentifier>Rol Belirleyici</SubjectIdentifier>
+  	<Organization>Organizasyon</Organization>
+  	<Members>Üyeler</Members>
+  	<Add_New_Member>Yeni Üye Tanımla</Add_New_Member>
+  	<Surname>Soyadı</Surname>
+  	<Type>Tür</Type>
+  	<Role>Rol</Role>
+  	<AdminPanel>Yönetici Paneli</AdminPanel>
+  	<Subjects>Kişiler</Subjects>
+  	<XPath>XPath</XPath>
+  	<ConfidentialityCode>Gizlilik Kodu</ConfidentialityCode>
+  	<ResourceIdentifier>Veri Belirleyici</ResourceIdentifier>
+  	<SectionName>Bölüm Adı</SectionName>
+  	<Group_Properties>Grup Özellikleri</Group_Properties>
+  	<Individual_Properties>Birey Özellikleri</Individual_Properties>
+  	<Resource_Properties>Veri Özellikleri</Resource_Properties>
+  	<Edit_Group>Grup'u Düzenle</Edit_Group>
+  	<Edit_Individual>Birey'i düzenle</Edit_Individual>
+  	<Edit_Resource>Veri'yi Düzenle</Edit_Resource>
+  	<Create_New_Group>Yeni Grup Oluştur</Create_New_Group>
+  	<Create_New_Individual>Yeni Birey Oluştur</Create_New_Individual>
+  	<Create_New_Resource>Yeni Veri Oluştur</Create_New_Resource>
+  	<Undo_Changes>Değişiklikleri Sıfırla</Undo_Changes>
+  	<Permit>İzin ver</Permit>
+  	<Deny>Reddet</Deny>
+  	<Actions>Yetkiler</Actions>
+  	<Obligations>Koşullar</Obligations>
+  	<Conditions2>Kısıtlamalar</Conditions2>
+  	<ShowInMatrix>Matrix'te göster</ShowInMatrix>
+  	<ShowRulesInMatrix>Veri paylaşım kurallarını Matrix'te göster</ShowRulesInMatrix>
+  	<SaveAsNewConsentDocument>Yeni Veri Paylaşım Kısıtlama Dökümanı olarak kaydet</SaveAsNewConsentDocument>
+  	<UpdateThisConsentDocument>Bu Veri Paylaşım Kısıtlama Dökümanını Güncelle</UpdateThisConsentDocument>
+  	<DownloadXACMLDocument>XACML Dökümanını indir</DownloadXACMLDocument>
+  	<StartDownload>İndirmeye başla</StartDownload>
+  	<Click2StartDownload>İndirmeyi başlatmak için lütfen düğmeye basın...</Click2StartDownload>
+  	<Download_Finished>Dosya indirme işlemi tamamlandı</Download_Finished>
+  	<Please_Select_ConsentDocument>Lütfen bir veri paylaşım kısıtlama dökümanı seçiniz...</Please_Select_ConsentDocument>
+  	
+  	
+  </language>
+</profile>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obligations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="model.xacml.consenteditor.srdc.com.tr schemas\obligation.xsd" xmlns="model.xacml.consenteditor.srdc.com.tr">
+    <obligation FulfillOn="Permit" Description="e-Mail to patient">
+        <AttributeAssignment AttributeId="ttr:com:srdc:xds:attribute:mailto" DataType="http://www.w3.org/2001/XMLSchema#string">
+            <ResourceAttributeDesignator AttributeId="tr:com:srdc:xds:attribute:patient-email" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </AttributeAssignment>
+        <AttributeAssignment AttributeId="tr:com:srdc:xds:attribute:subject-name" DataType="http://www.w3.org/2001/XMLSchema#string">
+            <SubjectAttributeDesignator AttributeId="tr:edu:metu:srdc:xds:attribute:subject-name" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </AttributeAssignment>
+        <AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string">
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </AttributeAssignment>
+        <AttributeAssignment AttributeId="urn:oasis:names:tc:xacml:1.0:subject:role" DataType="http://www.w3.org/2001/XMLSchema#string">
+            <SubjectAttributeDesignator AttributeId="urn:oasis:names:tc:xacml:1.0:subject:role" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </AttributeAssignment>
+        <AttributeAssignment AttributeId="tr:com:srdc:xds:attribute:requesting-facility" DataType="http://www.w3.org/2001/XMLSchema#string">
+            <SubjectAttributeDesignator AttributeId="tr:edu:metu:srdc:xds:attribute:requesting-facility" DataType="http://www.w3.org/2001/XMLSchema#string"/>
+        </AttributeAssignment>
+    </obligation>
+</obligations>

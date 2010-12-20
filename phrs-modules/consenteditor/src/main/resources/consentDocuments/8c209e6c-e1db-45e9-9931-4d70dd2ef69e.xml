@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:consentDocument tns:isCurrent="0"
+	tns:id="8c209e6c-e1db-45e9-9931-4d70dd2ef69e"
+    xsi:schemaLocation="model.consenteditor.srdc.com.tr sampleData\ConsentModel.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="model.consenteditor.srdc.com.tr">
+    <tns:consentDocumentMetaData>
+    </tns:consentDocumentMetaData>
+    <tns:consentRule tns:id="12132923489">
+        <tns:description>Dentists can update my basic health information and conditions</tns:description>
+        <tns:consentRuleTarget>
+            <tns:subjectElements>
+                <tns:subjectElement>
+                    <tns:group tns:isUserDefined="false">
+                        <tns:id>ROLECODE:DENTIST</tns:id>
+                        <tns:name>Dentist</tns:name>
+                        <tns:members />
+                    </tns:group>
+                </tns:subjectElement>
+            </tns:subjectElements>
+            <tns:resourceElements>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:BASICHEALTH</tns:id>
+                    <tns:name>Basic Health Information</tns:name>
+                    <tns:confidentialityCode>LOW</tns:confidentialityCode>
+                </tns:resourceElement>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:CONDITION</tns:id>
+                    <tns:name>Conditions</tns:name>
+                    <tns:confidentialityCode>LOW</tns:confidentialityCode>
+                </tns:resourceElement>
+            </tns:resourceElements>
+            <tns:actionElements>
+                <tns:action>WRITE</tns:action>
+            </tns:actionElements>
+        </tns:consentRuleTarget>
+        <tns:isAllow>1</tns:isAllow>
+        <tns:condition>
+            <tns:timeConstraint>
+                <tns:allowFrom>2001-12-17 09:30:27</tns:allowFrom>
+                <tns:allowUntil>2011-12-20 19:30:27</tns:allowUntil>
+            </tns:timeConstraint>
+        </tns:condition>
+        <tns:obligation>
+            <tns:sentEmailTo>
+                <tns:to>hastamail@deneme.com.tr</tns:to>
+                <tns:to>hastayakin@deneme.com.tr</tns:to>
+                <tns:emailText>deneme bir iki</tns:emailText>
+            </tns:sentEmailTo>
+        </tns:obligation>
+    </tns:consentRule>
+    <tns:consentRule tns:id="dsfdsffdsfsfds">
+        <tns:description>Doctors can read my test results and conditions, Pharmacists can read my medications and conditions.</tns:description>
+        <tns:consentRuleTarget>
+            <tns:subjectElements>
+                <tns:subjectElement>
+                    <tns:group tns:isUserDefined="false">
+                        <tns:id>ROLECODE:PHARMACIST</tns:id>
+                        <tns:name>Pharmacist</tns:name>
+                        <tns:members />
+                    </tns:group>
+                </tns:subjectElement>
+                <tns:subjectElement>
+                    <tns:group tns:isUserDefined="false">
+                        <tns:id>ROLECODE:DOCTOR</tns:id>
+                        <tns:name>Doctor</tns:name>
+                        <tns:description>Reseachers</tns:description>
+                        <tns:members />
+                    </tns:group>
+                </tns:subjectElement>
+            </tns:subjectElements>
+            <tns:resourceElements>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:MEDICATION</tns:id>
+                    <tns:name>Medications</tns:name>
+                    <tns:confidentialityCode>ALL</tns:confidentialityCode>
+                </tns:resourceElement>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:CONDITION</tns:id>
+                    <tns:name>Conditions</tns:name>
+                    <tns:confidentialityCode>ALL</tns:confidentialityCode>
+                </tns:resourceElement>
+            </tns:resourceElements>
+            <tns:actionElements>
+                <tns:action>READ</tns:action>
+            </tns:actionElements>
+        </tns:consentRuleTarget>
+        <tns:isAllow>1</tns:isAllow>
+        <tns:condition>
+            <tns:timeConstraint>
+                <tns:allowFrom>2001-12-17 09:30:27</tns:allowFrom>
+                <tns:allowUntil>2011-12-20 19:30:27</tns:allowUntil>
+            </tns:timeConstraint>
+        </tns:condition>
+        <tns:obligation>
+            <tns:sentEmailTo>
+                <tns:to>desee@deneme.com.tr</tns:to>
+                <tns:emailText>deneme bir iki</tns:emailText>
+            </tns:sentEmailTo>
+        </tns:obligation>
+    </tns:consentRule>
+    <tns:consentRule tns:id="abnmkllhgllhgf">
+        <tns:description>Nurses can not update my basic health information</tns:description>
+        <tns:consentRuleTarget>
+            <tns:subjectElements>
+                <tns:subjectElement>
+                    <tns:group tns:isUserDefined="false">
+                        <tns:id>ROLECODE:NURSE</tns:id>
+                        <tns:name>Nurse</tns:name>
+                        <tns:members />
+                    </tns:group>
+                </tns:subjectElement>
+            </tns:subjectElements>
+            <tns:resourceElements>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:BASICHEALTH</tns:id>
+                    <tns:name>Basic Health Information</tns:name>
+                    <tns:confidentialityCode>LOW</tns:confidentialityCode>
+                </tns:resourceElement>
+            </tns:resourceElements>
+            <tns:actionElements>
+                <tns:action>UPDATE</tns:action>
+            </tns:actionElements>
+        </tns:consentRuleTarget>
+        <tns:isAllow>0</tns:isAllow>
+    </tns:consentRule>
+    <tns:consentRule tns:id="12345678hnvdsad">
+        <tns:description>Doctors can update my medications and operations</tns:description>
+        <tns:consentRuleTarget>
+            <tns:subjectElements>
+                <tns:subjectElement>
+                    <tns:group tns:isUserDefined="false">
+                        <tns:id>ROLECODE:DOCTOR</tns:id>
+                        <tns:name>Doctor</tns:name>
+                        <tns:members />
+                    </tns:group>
+                </tns:subjectElement>
+            </tns:subjectElements>
+            <tns:resourceElements>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:OPERATION</tns:id>
+                    <tns:name>Operations</tns:name>
+                    <tns:confidentialityCode>ALL</tns:confidentialityCode>
+                </tns:resourceElement>
+                <tns:resourceElement>
+                    <tns:id>RESOURCECODE:MEDICATION</tns:id>
+                    <tns:name>Medications</tns:name>
+                    <tns:confidentialityCode>ALL</tns:confidentialityCode>
+                </tns:resourceElement>
+            </tns:resourceElements>
+            <tns:actionElements>
+                <tns:action>READ</tns:action>
+                <tns:action>UPDATE</tns:action>
+            </tns:actionElements>
+        </tns:consentRuleTarget>
+        <tns:isAllow>1</tns:isAllow>
+    </tns:consentRule>
+</tns:consentDocument>

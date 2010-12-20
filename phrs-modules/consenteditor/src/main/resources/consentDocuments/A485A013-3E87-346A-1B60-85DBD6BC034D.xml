@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:consentDocument xmlns:ns1="model.consenteditor.srdc.com.tr" ns1:isCurrent="0"
+	ns1:id="A485A013-3E87-346A-1B60-85DBD6BC034D">
+    <ns1:consentDocumentMetaData>
+        <ns1:patientId>e</ns1:patientId>
+        <ns1:definition>Dentist Consent Document</ns1:definition>
+        <ns1:creationDate>2010-10-07 11:43:18</ns1:creationDate>
+        <ns1:modificationDate>2010-10-07 13:33:03</ns1:modificationDate>
+        <ns1:expirationDate>2011-9-29 9:0:0</ns1:expirationDate>
+    </ns1:consentDocumentMetaData>
+    <ns1:consentRule ns1:id="12132923489">
+        <ns1:description>Dentists can update my basic health information and conditions</ns1:description>
+        <ns1:consentRuleTarget>
+            <ns1:subjectElements>
+                <ns1:subjectElement>
+                    <ns1:group>
+                        <ns1:id>ROLECODE:DENTIST</ns1:id>
+                        <ns1:name>Dentist</ns1:name>
+                        <ns1:description>Diş Hekimi</ns1:description>
+                        <ns1:members/>
+                    </ns1:group>
+                </ns1:subjectElement>
+            </ns1:subjectElements>
+            <ns1:resourceElements>
+                <ns1:resourceElement>
+                    <ns1:id>RESOURCECODE:CONDITION</ns1:id>
+                    <ns1:name>Conditions</ns1:name>
+                    <ns1:confidentialityCode>ALL</ns1:confidentialityCode>
+                </ns1:resourceElement>
+                <ns1:resourceElement>
+                    <ns1:id>RESOURCECODE:BASICHEALTH</ns1:id>
+                    <ns1:name>Basic Health Information</ns1:name>
+                    <ns1:confidentialityCode>ALL</ns1:confidentialityCode>
+                </ns1:resourceElement>
+            </ns1:resourceElements>
+            <ns1:actionElements>
+                <ns1:action>UPDATE</ns1:action>
+            </ns1:actionElements>
+        </ns1:consentRuleTarget>
+        <ns1:isAllow>1</ns1:isAllow>
+        <ns1:obligation>
+            <ns1:sentEmailTo>
+                <ns1:to>hastamail@deneme.com.tr</ns1:to>
+                <ns1:to>hastayakin@deneme.com.tr</ns1:to>
+                <ns1:emailText>Your information has been reached.</ns1:emailText>
+            </ns1:sentEmailTo>
+        </ns1:obligation>
+    </ns1:consentRule>
+</ns1:consentDocument>

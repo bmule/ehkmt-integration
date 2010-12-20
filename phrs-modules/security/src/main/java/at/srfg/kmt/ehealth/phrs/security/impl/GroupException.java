@@ -9,7 +9,7 @@
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
-import at.srfg.kmt.ehealth.phrs.security.model.Group;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 
 /**
  * Indicates a problem during a <code>Group</code> related
@@ -36,7 +36,7 @@ public class GroupException extends RuntimeException {
     /**
      * The Group that may cause the exception.
      */
-    private Group group;
+    private PhrGroup group;
 
     /**
      * Constructs an <code>GroupException</code>
@@ -89,11 +89,11 @@ public class GroupException extends RuntimeException {
      *
      * @return the <code>Group</code> that may creates the problem.
      */
-    public Group getGroup() {
+    public PhrGroup getGroup() {
         return group;
     }
 
-    public void setGroup(Group group) {
+    public void setGroup(PhrGroup group) {
         this.group = group;
     }
 }

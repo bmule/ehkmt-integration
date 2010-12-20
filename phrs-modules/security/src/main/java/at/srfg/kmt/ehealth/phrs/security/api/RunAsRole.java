@@ -1,6 +1,6 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
-import at.srfg.kmt.ehealth.phrs.security.model.Role;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
 import java.util.Set;
 
 
@@ -16,5 +16,5 @@ public interface RunAsRole {
      *
      * @return the roles under a certain action can run.
      */
-    Set<Role> getRoles();
+    Set<PhrRole> getRoles();
 }

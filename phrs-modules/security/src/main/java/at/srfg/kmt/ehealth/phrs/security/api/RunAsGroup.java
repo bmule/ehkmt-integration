@@ -1,6 +1,6 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
-import at.srfg.kmt.ehealth.phrs.security.model.Group;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import java.util.Set;
 
 
@@ -16,5 +16,5 @@ public interface RunAsGroup {
      *
      * @return the groups under a certain action can run.
      */
-    Set<Group> getGroups();
+    Set<PhrGroup> getGroups();
 }
