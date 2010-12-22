@@ -7,7 +7,7 @@
 package at.srfg.kmt.ehealth.phrs;
 
 
-import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
+//import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.naming.Context;
@@ -32,11 +32,6 @@ public class TestServlet extends HttpServlet {
 
 
 
-        try {
-            search();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
         
 
 
@@ -74,16 +69,5 @@ public class TestServlet extends HttpServlet {
         return "Test Servlet";
     }
 
-    private void search() throws NamingException {
-        final Context context = new InitialContext();
-
-        final GroupManager lookup = (GroupManager) context.lookup("java:comp/env/GroupManagerBean/local");
-        System.out.println("-->" + lookup);
-
-
-
-        // phrs-ear-0.1-SNAPSHOT/GroupManagerBean/local
-
-    }
 
 }
