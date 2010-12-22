@@ -9,7 +9,7 @@
         <jndi-name>phrs-Datasource</jndi-name>
         <connection-url>jdbc:postgresql:phrs_storage</connection-url>
         <driver-class>org.postgresql.Driver</driver-class>
-        <user-name>john</user-name>
-        <password>uskglass</password>
+        <user-name>phrs</user-name>
+        <password>phrs</password>
     </local-tx-datasource>
 </datasources>
