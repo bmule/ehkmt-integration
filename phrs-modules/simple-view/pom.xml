@@ -59,24 +59,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.apache.openejb</groupId>
-            <artifactId>openejb-core</artifactId>
-            <version>3.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.openejb</groupId>
-            <artifactId>openejb-client</artifactId>
-            <version>(3.1.0,]</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
-            <type>ejb</type>
             <version>0.1-SNAPSHOT</version>
         </dependency>
+
 
 
     </dependencies>

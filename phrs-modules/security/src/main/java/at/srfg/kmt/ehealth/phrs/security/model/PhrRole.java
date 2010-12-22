@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * Generic representation for an user role.
@@ -79,6 +81,7 @@ public class PhrRole implements Serializable {
         return name;
     }
 
+    @OneToMany
     public Set<PhrUser> getUsers() {
         return users;
     }
@@ -147,6 +150,7 @@ public class PhrRole implements Serializable {
         users.add(user);
     }
 
+    @Transient
     public boolean isRoleEmpty() {
         return users == null ? true : users.isEmpty();
     }

@@ -15,6 +15,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * Generic representation for an user group.
@@ -25,7 +27,7 @@ import javax.persistence.NamedQuery;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findGroupForName", query="SELECT g FROM PhrGroup AS g e WHERE g.name = :name"),
+    @NamedQuery(name="findGroupForName", query="SELECT g FROM PhrGroup AS g WHERE g.name = :name"),
     @NamedQuery(name="removeAllGroups", query="DELETE FROM PhrGroup g"),
     @NamedQuery(name="removeGroupForName", query="DELETE FROM PhrGroup g WHERE g.name = :name")
 })
@@ -99,6 +101,7 @@ public class PhrGroup implements Serializable {
         return name;
     }
 
+    @OneToMany
     public Set<PhrUser> getUsers() {
         return users;
     }
@@ -167,6 +170,7 @@ public class PhrGroup implements Serializable {
         users.add(user);
     }
 
+    @Transient
     public boolean isGroupEmpty() {
         return users == null ? true : users.isEmpty();
     }

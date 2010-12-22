@@ -92,13 +92,37 @@
                 <version>1.0.5</version>
                 <configuration>
                     <container>
-                        <containerId>geronimo2x</containerId>
-                        <!--
-                        change this if your geronimo is in other dir
-                        -->
-                        <home>/labo/apache/geronimo/geronimo-tomcat6-javaee5-2.2.1</home>
+                        <containerId>jboss51x</containerId>
+                        <home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA</home>
+                        <append>false</append>
+                        <timeout>300000</timeout><!-- 5 minutes -->
+                        <append>false</append>
+                        <log>${project.build.directory}/logs/jboss51x.log</log>
+                        <output>${project.build.directory}/logs/jboss51x.out</output>
                     </container>
+
+                    <configuration>
+                        <type>existing</type>
+                        <home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA/server/default</home>
+                        <properties>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                            <cargo.jboss.configuration>default</cargo.jboss.configuration>
+                            <cargo.rmi.port>1099</cargo.rmi.port>
+                            <cargo.logging>high</cargo.logging>
+                        </properties>
+
+                        <deployables>
+                        <!-- application to deploy -->
+                            <deployable>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>phrs-ear</artifactId>
+                                <type>ear</type>
+                            </deployable>
+                        </deployables>
+                    </configuration>
+
                 </configuration>
+
             </plugin>
         </plugins>
     </build>

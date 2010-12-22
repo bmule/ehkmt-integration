@@ -47,9 +47,11 @@
         <!--
         mihai : this is consent manager, I preffer to keep the
         contentmanager like sub-module.
-        -->
-        <module>simple-view</module>
         <module>consenteditor</module>
+        -->
+        
+        <module>simple-view</module>
+
     </modules>
 
 

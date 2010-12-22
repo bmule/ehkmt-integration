@@ -62,8 +62,8 @@ public class GroupManagerBean implements GroupManager {
      * @see GroupException
      */
     @Override
-    public boolean addGroup(PhrGroup group) {
-
+        public boolean addGroup(PhrGroup group) {
+        System.out.println("-->" + group);
         if (group == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -86,7 +86,9 @@ public class GroupManagerBean implements GroupManager {
             throw gException;
         }
 
+        System.out.println("1-->" + group);
         if (oldGroup == null) {
+            System.out.println("1-->" + oldGroup);
             entityManager.persist(group);
             logger.debug("Group [#0] was persisted.", group);
             return true;
