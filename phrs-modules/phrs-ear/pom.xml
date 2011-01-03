@@ -43,6 +43,11 @@
         </repository>
     </repositories>
 
+    <properties>
+        <jboss.home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA</jboss.home>
+        <jboss.domain.home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA/server/default</jboss.domain.home>
+    </properties>
+
 
     <dependencies>
         <dependency>
@@ -58,6 +63,14 @@
             <version>0.0.1</version>
             <type>war</type>
         </dependency>
+
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>phrs-util</artifactId>
+            <version>0.0.1</version>
+            <type>ejb</type>
+        </dependency>
+
     </dependencies>
    
    
@@ -92,7 +105,7 @@
                 <configuration>
                     <container>
                         <containerId>jboss51x</containerId>
-                        <home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA</home>
+                        <home>${jboss.home}</home>
                         <append>false</append>
                         <timeout>300000</timeout><!-- 5 minutes -->
                         <append>false</append>
@@ -102,7 +115,7 @@
 
                     <configuration>
                         <type>existing</type>
-                        <home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA/server/default</home>
+                        <home>${jboss.domain.home}</home>
                         <properties>
                             <cargo.servlet.port>8080</cargo.servlet.port>
                             <cargo.jboss.configuration>default</cargo.jboss.configuration>

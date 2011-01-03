@@ -98,8 +98,6 @@
             http://repository.jboss.com/maven2
         -->
 
-
-
         <dependency>
             <groupId>javaee</groupId>
             <artifactId>javaee-api</artifactId>

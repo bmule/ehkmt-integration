@@ -52,10 +52,36 @@
             <version>4.8.2</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+        PHRS dependencies - this must be at least provided because
+        during run time the container add the dep to the classpath
+        -->
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>phrs-util</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javaee</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>5</version>
             <scope>provided</scope>
         </dependency>
 

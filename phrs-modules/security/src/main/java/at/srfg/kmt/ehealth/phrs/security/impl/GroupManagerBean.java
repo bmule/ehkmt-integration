@@ -12,8 +12,10 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+
 import java.util.Set;
 import javax.ejb.Local;
+import javax.ejb.Remote;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -63,7 +65,6 @@ public class GroupManagerBean implements GroupManager {
      */
     @Override
         public boolean addGroup(PhrGroup group) {
-        System.out.println("-->" + group);
         if (group == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -86,9 +87,7 @@ public class GroupManagerBean implements GroupManager {
             throw gException;
         }
 
-        System.out.println("1-->" + group);
         if (oldGroup == null) {
-            System.out.println("1-->" + oldGroup);
             entityManager.persist(group);
             logger.debug("Group [#0] was persisted.", group);
             return true;

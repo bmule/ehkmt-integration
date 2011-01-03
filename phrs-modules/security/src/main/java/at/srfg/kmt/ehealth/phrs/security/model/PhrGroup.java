@@ -71,6 +71,13 @@ public class PhrGroup implements Serializable {
     }
 
     /**
+     * Builds an Group instance.
+     */
+    public PhrGroup(String name) {
+        this.name = name;
+    }
+
+    /**
      * Returns the description for this Group.
      *
      * @return the description for this Group.
