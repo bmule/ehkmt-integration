@@ -12,11 +12,11 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import java.util.HashSet;
+import java.util.List;
 
 import java.util.Set;
 import javax.ejb.Local;
-import javax.ejb.Remote;
-
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -27,6 +27,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Stateless bean local scoped used to manage and manipulate
+ * <code>PhrGroup</code> and related information.
  *
  * @author Mihai
  */
@@ -45,7 +47,7 @@ public class GroupManagerBean implements GroupManager {
     /**
      * Used to communicate with the underlying persistence layer.
      */
-    @PersistenceContext(unitName="phrs_storage")
+    @PersistenceContext(unitName = "phrs_storage")
     private EntityManager entityManager;
 
     /**
@@ -64,7 +66,7 @@ public class GroupManagerBean implements GroupManager {
      * @see GroupException
      */
     @Override
-        public boolean addGroup(PhrGroup group) {
+    public boolean addGroup(PhrGroup group) {
         if (group == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -72,7 +74,7 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        logger.debug("Tries add Group [#0]", group);
+        logger.debug("Tries add Group [$0]", group);
         final String name = group.getName();
 
         final PhrGroup oldGroup;
@@ -174,9 +176,18 @@ public class GroupManagerBean implements GroupManager {
 
     }
 
+    /**
+     * Removes a specified group. The group to remove must be registered
+     * otherwise this has no effect.
+     *
+     * @param group the group to remove, it can not be null.
+     * @return the removed group or null if the group to remove is not
+     * registered.
+     * @throws NullPointerException if the group argument is null.
+     */
     @Override
     public PhrGroup removeGroup(PhrGroup group) {
-        
+
         if (group == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -195,34 +206,132 @@ public class GroupManagerBean implements GroupManager {
         return oldGroup;
     }
 
+    /**
+     * Removes all the registered groups. After this the \
+     * <code>getAllGroups</code> method call will return an empty set.
+     */
     @Override
     public void removeAllGroups() {
         final Query query = entityManager.createNamedQuery("removeAllGroups");
         query.executeUpdate();
+        logger.debug("All the PHRS groups are removed.");
     }
 
+    /**
+     * Return all the registered groups.
+     *
+     * @return all the registered groups.
+     */
     @Override
     public Set<PhrGroup> getAllGroups() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Query query = entityManager.createNamedQuery("getAllGroups");
+        final List resultList = query.getResultList();
+        final Set<PhrGroup> result = new HashSet<PhrGroup>(resultList);
+        return result;
     }
 
     @Override
     public void assignUserToGroup(PhrUser user, PhrGroup group) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (user == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The user argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (group == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The group argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+
+        logger.debug("Tries to assign user [#0] to group [#1].", user, group);
+        entityManager.merge(group);
+        group.addUser(user);
+        logger.debug("User [#0] was assined to group [#1].", user, group);
     }
 
     @Override
     public void assignUsersToGroup(Set<PhrUser> users, PhrGroup group) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (users == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The users argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (users.isEmpty()) {
+            final IllegalArgumentException argumentException =
+                    new IllegalArgumentException("The users can not be an empty exception.");
+            logger.error(argumentException.getMessage(), argumentException);
+            throw argumentException;
+        }
+
+        if (group == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The group argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        logger.debug("Tries to assign users [#0] to group [#1].", users, group);
+        entityManager.merge(group);
+        group.addUsers(users);
+        logger.debug("Users [#0] was assined to group [#1].", users, group);
     }
 
     @Override
     public void removeUserFromGroup(PhrUser user, PhrGroup group) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (user == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The user argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (group == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The group argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        logger.debug("Tries to remove user [#0] from group [#1].", user, group);
+        entityManager.merge(group);
+        group.removeUser(user);
+        logger.debug("User [#0] was removed from group [#1].", user, group);
     }
 
     @Override
     public void removeUsersFromGroup(Set<PhrUser> users, PhrGroup group) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (users == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The users argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (users.isEmpty()) {
+            final IllegalArgumentException argumentException =
+                    new IllegalArgumentException("The users can not be an empty exception.");
+            logger.error(argumentException.getMessage(), argumentException);
+            throw argumentException;
+        }
+
+        if (group == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The group argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        logger.debug("Tries to remove users [#0] from group [#1].", users, group);
+        entityManager.merge(group);
+        group.removeUsers(users);
+        logger.debug("Users [#0] was removed from group [#1].", users, group);
     }
 }

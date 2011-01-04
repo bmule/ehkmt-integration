@@ -29,32 +29,51 @@
     <version>0.1-SNAPSHOT</version>
 
     
-
     <name>Personal Health System Framework Security</name>
     <description>
         Personal Health System Framework Security package provide an unified way
         to access over different security frameworks.
     </description>
-
     <inceptionYear>2010</inceptionYear>
 
-    <scm>
-        <!-- FIXME :    GIT hub url -->
-    </scm>
+
+    <properties>
+        <version.junit_junit>[4.8,)</version.junit_junit>
+        <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
+        <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
 
     <repositories>
         <repository>
-            <id>JBoss Repo</id>
-            <url>http://repository.jboss.com/maven2</url>
+            <id>jboss-nexus-group-public</id>
+            <name>JBoss Repository Nexus Group Public</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
 
         <repository>
-            <id>javaee5.java.net</id>
-            <url>http://download.java.net/maven/2/</url>
+            <id>jboss-nexus</id>
+            <name>JBoss Repository Nexus</name>
+
+            <url>https://repository.jboss.org/nexus/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
         </repository>
 
     </repositories>
-
 
 
     <dependencies>
@@ -81,27 +100,46 @@
             <scope>test</scope>
         </dependency>
 
-        <!--
-            Mihai : I prefer to add this dependecy on this level (project)
-            intead to add it to the mater pom.
-        
+
         <dependency>
-            <groupId>tr.com.srdc.icardea</groupId>
-            <artifactId>consenteditor</artifactId>
-            <version>0.0.1</version>
-            <type>war</type>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-api</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
         </dependency>
-        -->
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-spi</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
 
-        <!--
-            Hibernate depndedencies, it requires the JBoss Repository
-            http://repository.jboss.com/maven2
-        -->
 
         <dependency>
-            <groupId>javaee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>5</version>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-jbossas-remote-5.1</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>5.1.0.GA</version>
+            <type>pom</type>
             <scope>provided</scope>
         </dependency>
 

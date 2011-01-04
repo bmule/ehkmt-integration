@@ -9,7 +9,6 @@ package at.srfg.kmt.ehealth.phrs;
 
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
-import javax.naming.InitialContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
@@ -22,8 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
+ * This is just an example - this class has only didactical purposes. <br>
+ * To use this example use the following URL :
+ * http://localhost:8080/simple-view/TestServlet?q=XXX where 
+ * XXX is : 
+ * <ul>
+ * <li> addGroup - to add a group.
+ * </ul>
  *
- * @author mradules
+ * @author Mihai
  */
 public class TestServlet extends HttpServlet {
 
@@ -35,43 +41,38 @@ public class TestServlet extends HttpServlet {
     private static final Logger logger =
             LoggerFactory.getLogger(TestServlet.class);
 
+    /**
+     * Runs on every HTTP GET method.
+     *
+     *
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("text/html;charset=UTF-8");
-        final GroupManager groupManager;
-        try {
-            groupManager = JBossJNDILookup.lookupLocal(GroupManager.class);
-        } catch (Exception exception) {
-            logger.error(exception.getMessage(), exception);
-            writeToResponse(response, "FAILURE ! - see the log");
+        final String q = request.getParameter("q");
+        if (q == null || q.isEmpty()) {
+            logger.debug("No q paramater set.");
+            writeToResponse(response, "No q parameter.");
             return;
         }
 
-        final PhrGroup group = new PhrGroup("mihais");
-        groupManager.addGroup(group);
-        logger.debug("The Group [#0] was persited.", group);
+        if ("addGroup".equalsIgnoreCase(q)) {
+            addGroup(response);
+            return;
+        }
 
-        writeToResponse(response, group.toString());
+        writeToResponse(response, "Parameter [" + q + "] not supported.");
     }
 
     private void writeToResponse(HttpServletResponse response, String msg) throws IOException {
 
-
-        try {
-            final InitialContext ctx = new InitialContext();
-            final Object lookup = ctx.lookup("java:comp/env/");
-            logger.info(">>>" + lookup);
-            logger.info(">>>" + ctx.getEnvironment());
-
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
-
-
-
-        PrintWriter out = response.getWriter();
+        final PrintWriter out = response.getWriter();
         try {
             out.println("<html>");
             out.println("<head>");
@@ -84,6 +85,22 @@ public class TestServlet extends HttpServlet {
         } finally {
             out.close();
         }
+    }
+
+    private void addGroup(HttpServletResponse response) throws IOException {
+        final GroupManager groupManager;
+        try {
+            groupManager = JBossJNDILookup.lookupLocal(GroupManager.class);
+        } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
+            writeToResponse(response, "FAILURE ! - see the log");
+            return;
+        }
+
+        final PhrGroup group = new PhrGroup("mihais");
+        groupManager.addGroup(group);
+        logger.debug("The Group [#0] was persited.", group);
+        writeToResponse(response, group.toString());
     }
 
     /** 

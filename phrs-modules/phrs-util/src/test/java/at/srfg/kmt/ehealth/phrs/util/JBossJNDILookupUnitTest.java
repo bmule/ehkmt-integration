@@ -20,6 +20,8 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This test suite is used to test the <code>JBossJNDILookup</code>
@@ -42,6 +44,14 @@ import org.junit.runner.RunWith;
 public class JBossJNDILookupUnitTest {
 
     /**
+     * The Logger instance. All log messages from this class
+     * are routed through this member. The Logger name space
+     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.GroupManagerBeanUnitTest</code>.
+     */
+    private static final Logger logger =
+            LoggerFactory.getLogger(JBossJNDILookupUnitTest.class);
+
+    /**
      * Builds a <code>JBossJNDILookupUnitTest</code> instance.
      */
     public JBossJNDILookupUnitTest() {
@@ -61,8 +71,19 @@ public class JBossJNDILookupUnitTest {
      */
     @Deployment
     public static JavaArchive createDeployment() throws MalformedURLException {
-        final JavaArchive ejbJar = ShrinkWrap.create(JavaArchive.class, "test.jar");
-        ejbJar.addClasses(MyService.class, MyServiceBean.class);
+        final JavaArchive ejbJar =
+                ShrinkWrap.create(JavaArchive.class, "test.jar");
+
+        // all the classes from the at.srfg.kmt.ehealth.phrs.util package
+        // are added
+        // to the ejb jar (and to the classpath).
+        // see the log for the ejb jar structure
+        ejbJar.addPackage(JBossJNDILookupUnitTest.class.getPackage());
+
+        final String ejbStructure = ejbJar.toString(true);
+        logger.debug("EJB jar structure on deploy is :");
+        logger.debug(ejbStructure);
+
         return ejbJar;
     }
 
@@ -90,7 +111,7 @@ public class JBossJNDILookupUnitTest {
         cnxConfig.put("java.naming.provider.url", "localhost:1099");
 
         final int explected = 10;
-        final MyService service = 
+        final MyService service =
                 JBossJNDILookup.lookup("phrs-ear-0.1-SNAPSHOT/GroupManagerBean/local", cnxConfig);
         final long result = service.doStuff(explected);
 
