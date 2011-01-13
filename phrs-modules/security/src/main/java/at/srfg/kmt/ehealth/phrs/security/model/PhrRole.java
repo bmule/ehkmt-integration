@@ -9,10 +9,13 @@ package at.srfg.kmt.ehealth.phrs.security.model;
 
 import java.io.Serializable;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -26,6 +29,13 @@ import javax.persistence.Transient;
  * @author Mihai
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findRoleForName", query = "SELECT r FROM PhrRole AS r WHERE r.name = :name"),
+    @NamedQuery(name = "findRoleForNamePattern", query = "SELECT r FROM PhrRole AS r WHERE r.name LIKE :namePattern"),
+    @NamedQuery(name = "removeAllRoles", query = "DELETE FROM PhrRole AS g"),
+    @NamedQuery(name = "removeRoleForName", query = "DELETE FROM PhrRole AS r WHERE r.name = :name"),
+    @NamedQuery(name = "getAllRoles", query = "SELECT r FROM PhrRole AS r")
+})
 public class PhrRole implements Serializable {
 
     /**
@@ -49,6 +59,24 @@ public class PhrRole implements Serializable {
      * All the user members in this with this role.
      */
     private Set<PhrUser> users;
+
+    /**
+     * Builds an <code>PhrRole</code>PhrRole instance.
+     */
+    public PhrRole() {
+        // UNIMPLMEEMNTED
+    }
+
+    /**
+     * Builds an <code>PhrRole</code>PhrRole instance for a given name.
+     */
+    public PhrRole(String name) {
+        if (name == null) {
+            throw new NullPointerException("The argument name can not be null.");
+        }
+
+        this.name = name;
+    }
 
     /**
      * Returns the description for this Role.
@@ -81,7 +109,7 @@ public class PhrRole implements Serializable {
         return name;
     }
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     public Set<PhrUser> getUsers() {
         return users;
     }
@@ -154,7 +182,6 @@ public class PhrRole implements Serializable {
     public boolean isRoleEmpty() {
         return users == null ? true : users.isEmpty();
     }
-
 
     /**
      * Returns a string representation for this Role.

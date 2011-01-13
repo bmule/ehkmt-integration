@@ -12,6 +12,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 
 /**
  * Defines a generic piece of information.
@@ -20,16 +23,18 @@ import javax.persistence.Id;
  *
  * @author Mihai
  */
+@NamedQueries({
+    @NamedQuery(name = "findActionForName", query = "SELECT a FROM PhrAction AS a WHERE a.name = :name"),
+    @NamedQuery(name = "removeAllActions", query = "DELETE FROM PhrAction AS a"),
+    @NamedQuery(name = "removeActionForName", query = "DELETE FROM PhrAction AS a WHERE a.name = :name"),
+    @NamedQuery(name = "getAllActions", query = "SELECT a  FROM PhrAction AS a")
+})
 @Entity
 public class PhrAction implements Serializable {
 
     private Long id;
     private String name;
     private String uri;
-    private Serializable original;
-    private PhrAction parent;
-    private PhrAction next;
-    private PhrAction previous;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -49,14 +54,6 @@ public class PhrAction implements Serializable {
         this.name = name;
     }
 
-    public Serializable getOriginal() {
-        return original;
-    }
-
-    public void setOriginal(Serializable original) {
-        this.original = original;
-    }
-
     public String getUri() {
         return uri;
     }
@@ -65,36 +62,8 @@ public class PhrAction implements Serializable {
         this.uri = uri;
     }
 
-    public PhrAction getNext() {
-        return next;
-    }
-
-    public void setNext(PhrAction next) {
-        this.next = next;
-    }
-
-    public PhrAction getParent() {
-        return parent;
-    }
-
-    public void setParent(PhrAction parent) {
-        this.parent = parent;
-    }
-
-    public PhrAction getPrevious() {
-        return previous;
-    }
-
-    public void setPrevious(PhrAction previous) {
-        this.previous = previous;
-    }
-
     @Override
     public String toString() {
-        final String result = String.format("PhrItem{name=#0, url=#1, parent=#2}",
-                name, 
-                uri,
-                parent == null ? "no parent" : parent.getName());
-        return result;
+        return "PhrAction{" + "name=" + name + "uri=" + uri + '}';
     }
 }

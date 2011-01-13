@@ -8,10 +8,15 @@ package at.srfg.kmt.ehealth.phrs.security.model;
 
 
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * Generic representation for an user.
@@ -19,6 +24,14 @@ import javax.persistence.Id;
  * @author Mihai
  */
 @Entity
+@NamedQueries({
+    @NamedQuery(name = "findUserForName", query = "SELECT u FROM PhrUser AS u WHERE u.name = :name"),
+    @NamedQuery(name = "findUserForURI", query = "SELECT u FROM PhrUser AS u WHERE u.uri = :uri"),
+    @NamedQuery(name = "findUserForNamePattern", query = "SELECT u FROM PhrUser AS u WHERE u.name LIKE :namePattern"),
+    @NamedQuery(name = "removeAllUsers", query = "DELETE FROM PhrUser AS u"),
+    @NamedQuery(name = "removeUserForName", query = "DELETE FROM PhrUser AS u WHERE u.name = :name"),
+    @NamedQuery(name = "getAllUsers", query = "SELECT u FROM PhrUser AS u")
+})
 public class PhrUser implements Serializable {
 
     /**
@@ -53,6 +66,17 @@ public class PhrUser implements Serializable {
      */
     public PhrUser() {
         // UNIMPLEMEMENTED
+    }
+
+    /**
+     * Builds an <code>User</code> instance for a given name and family name.
+     *
+     * @param name the person name.
+     * @param familyName the family name.
+     */
+    public PhrUser(String name, String familyName) {
+        this.name = name;
+        this.familyName = familyName;
     }
 
     /**
@@ -91,6 +115,8 @@ public class PhrUser implements Serializable {
      *
      * @return the extra information for this user.
      */
+    @Lob 
+    @Basic(fetch=FetchType.LAZY)
     public Serializable getOriginal() {
         return original;
     }
@@ -168,7 +194,7 @@ public class PhrUser implements Serializable {
     @Override
     public String toString() {
         final String result =
-                String.format("User{name=%s, familyName=,uri=%s}", name, familyName, uri);
+                String.format("User{name=%s, familyName=%s,uri=%s}", name, familyName, uri);
 
         return result;
     }

@@ -5,13 +5,18 @@
  * User : mradules
  */
 
+
 package at.srfg.kmt.ehealth.phrs.security.model;
 
+
 import java.io.Serializable;
+import javax.persistence.Basic;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 /**
  * Defines a generic piece of information.
@@ -23,21 +28,22 @@ import javax.persistence.Id;
 @Entity
 public class PhrItem implements Serializable {
 
-    
     private Long id;
-    
+
     private String name;
-    
+
     private String uri;
-    
+
     private Serializable original;
 
     private PhrItem parent;
+
     private PhrItem next;
+
     private PhrItem previous;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
     }
@@ -54,6 +60,8 @@ public class PhrItem implements Serializable {
         this.name = name;
     }
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     public Serializable getOriginal() {
         return original;
     }
@@ -97,7 +105,7 @@ public class PhrItem implements Serializable {
     @Override
     public String toString() {
         final String result = String.format("PhrItem{name=#0, uri=#1, parent=#2}",
-                name, 
+                name,
                 uri,
                 parent == null ? "no parent" : parent.getName());
         return result;

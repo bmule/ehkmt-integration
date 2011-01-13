@@ -60,6 +60,26 @@ public interface GroupManager {
      */
     Set<PhrGroup> getAllGroups();
 
+    /**
+     * Returns a group for a given name, the group name attribute match
+     * exactly the specified name.
+     *
+     * @param name the group name.
+     * @return a PHRS group with the name name that match exactly the
+     * specified name.
+     */
+    PhrGroup getGroupForName(String name);
+
+    /**
+     * Returns a set of <code>PhrGroup</code> where the group name match
+     * a certain pattern. The pattern syntax is defined in the implementation.
+     *
+     * @param namePattern the name pattern.
+     * @return a set of <code>PhrGroup</code> where the group name match
+     * a certain pattern
+     */
+    Set<PhrGroup> getGroupsForNamePattern(String namePattern);
+
     void assignUserToGroup(PhrUser user, PhrGroup group);
     void assignUsersToGroup(Set<PhrUser> users, PhrGroup group);
 

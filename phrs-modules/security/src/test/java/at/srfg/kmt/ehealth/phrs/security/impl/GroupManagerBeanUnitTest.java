@@ -9,9 +9,13 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 
 import java.util.Set;
 import static org.junit.Assert.*;
+import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrGroup;
+import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrUser;
 
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.util.Util;
 import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
 import java.net.MalformedURLException;
@@ -31,7 +35,9 @@ import org.slf4j.LoggerFactory;
  * Integration test for the GroupManagerBean.
  * More precisely this test build and deploy a test ejb jar that
  * contains the GroupManagerBean and proves its functionality together
- * with other components in a running container.
+ * with other components in a running container. <br>
+ * Note : all test (the methods annotated with 'Test') run in the 
+ * same transaction, each test run in a transaction.
  * 
  * @author Mihai
  * @see GroupManagerBean
@@ -63,8 +69,7 @@ public class GroupManagerBeanUnitTest {
 
     /**
      * Builds a <code>JavaArchive</code> which contains :
-     * the <code>MyService</code>
-     * interface and the <code>MyServiceBean</code> class;
+     * all the required beans and libraries;
      * the Arquillian deploy it in to the running container
      * under the name test.ebj when the test starts.
      *
@@ -90,6 +95,9 @@ public class GroupManagerBeanUnitTest {
 
         final Package modelPackage = Package.getPackage("at.srfg.kmt.ehealth.phrs.security.model");
         ejbJar.addPackage(modelPackage);
+
+        final Package utilsPackage = Util.class.getPackage();
+        ejbJar.addPackage(utilsPackage);
 
         // the test-persistence.xml file is in the classpath, it is added
         // to the deployed under the name persistence.xml.
@@ -130,6 +138,7 @@ public class GroupManagerBeanUnitTest {
 
         final boolean groupExistResponse = groupManager.groupExist(group);
         assertTrue("The addGroup groupExist must be true.", groupExistResponse);
+
 
         return group;
     }
@@ -215,11 +224,113 @@ public class GroupManagerBeanUnitTest {
      * 
      * @see GroupManager#removeGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      */
-    //@Test(expected = EJBException.class)
+    @Test(expected = EJBException.class)
     public void testRemoveGroupWithNullGroup() {
         final PhrGroup group = null;
         try {
             groupManager.removeGroup(group);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Tests the GroupManager.getGroupForName(java.lang.String) method.
+     * More precisely this test registers a test, retrive it and prove if
+     * is the correct one.
+     *
+     *
+     * @see GroupManager#getGroupForName(java.lang.String)
+     */
+    @Test
+    public void testGetGroupForName() {
+        final PhrGroup group = addGroup();
+        final String expected = group.getName();
+        final PhrGroup groupForNameResponse = groupManager.getGroupForName(expected);
+
+        assertNotNull(groupForNameResponse);
+        final String name = groupForNameResponse.getName();
+        assertEquals(expected, name);
+    }
+
+    /**
+     * Tests the GroupManager.getGroupForName(java.lang.String) method with a
+     * wrong name - a name that is does not math with any registered groups.
+     */
+    @Test
+    public void testGetGroupForWrongName() {
+        final PhrGroup group = addGroup();
+        final String expected = group.getName();
+        final PhrGroup groupForNameResponse = groupManager.getGroupForName(expected + "XXXX");
+
+        assertNull(groupForNameResponse);
+    }
+
+    /**
+     * Tests the GroupManager.getGroupForName(java.lang.String) method with
+     * a null argument. A EJBException caused by a NullPointerException raises.
+     *
+     * @see GroupManager#getGroupForName(java.lang.String)
+     */
+    @Test(expected = EJBException.class)
+    public void testGetGroupForNullName() {
+        final PhrGroup group = addGroup();
+        try {
+            groupManager.getGroupForName(null);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Tests the GroupManager.getGroupsForNamePattern(java.lang.String) method.
+     * More precisely this test registers a test, retrive it and prove if
+     * is the correct one.
+     *
+     * @see GroupManager#getGroupsForNamePattern(java.lang.String)
+     */
+    @Test
+    public void testGroupsForNamePattern() {
+
+        final PhrGroup group = addGroup();
+        final String name = group.getName();
+        final Set<PhrGroup> response =
+                groupManager.getGroupsForNamePattern(name + "%");
+        // I expect only one group with the name starting with the 'name'
+        final int expected = 1;
+        final int size = response.size();
+        assertEquals(expected, size);
+    }
+
+    @Test
+    public void testGroupsForNamePatternWithWrongName() {
+        final PhrGroup group = addGroup();
+        final String name = group.getName();
+        final Set<PhrGroup> response =
+                groupManager.getGroupsForNamePattern(name + "XXX" + "%");
+        // there is no group with this name
+        final int expected = 0;
+        final int size = response.size();
+        assertEquals(expected, size);
+    }
+
+    /**
+     * Tests the GroupManager.getGroupsForNamePattern(java.lang.String) 
+     * method with a null argument. A EJBException caused
+     * by a NullPointerException raises.
+     *
+     * @see GroupManager#getGroupsForNamePattern(java.lang.String)
+     */
+    @Test(expected = EJBException.class)
+    public void testGroupsForNamePatternForNullName() {
+        try {
+            groupManager.getGroupsForNamePattern(null);
         } catch (EJBException exception) {
             final Throwable cause = exception.getCause();
             final boolean isNullPointer = cause instanceof NullPointerException;
@@ -253,21 +364,130 @@ public class GroupManagerBeanUnitTest {
     }
 
     /**
-     * Builds a <code>PhrGroup</code> with a certain name and description.
-     * The <code>PhrGroup</code> name is formed from the 'Group_' prefix
-     * followed by the actual time in milliseconds.
-     *
-     * @return a <code>PhrGroup</code> with a certain name and description.
+     * Assigns a user to a group and prove if the operation was proper done.
+     * This test tests the :
+     * GroupManager.assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, 
+     * at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) method.
+     * 
+     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
      */
-    private PhrGroup createPhrGroup() {
-        final StringBuffer name = new StringBuffer();
-        name.append("Group_");
-        final long time = new Date().getTime();
-        name.append(time);
+    @Test
+    public void testAssignUserToGroup() {
+        final PhrGroup group = addGroup();
+        final PhrUser user = createPhrUser();
+        groupManager.assignUserToGroup(user, group);
 
-        final PhrGroup group = new PhrGroup(name.toString());
-        group.setDescription("Dummy PHR Group_" + time);
+        final String name = group.getName();
+        final PhrGroup groupForName = groupManager.getGroupForName(name);
+        final Set<PhrUser> users = groupForName.getUsers();
+        final int size = users.size();
 
-        return group;
+        // I excpect only one user.
+        assertEquals(1, size);
+        final String expectdName = user.getName();
+        final String expectdFamilyName = user.getFamilyName();
+
+        final PhrUser getUser = users.iterator().next();
+
+        final String getUserName = getUser.getName();
+        final String getUserFamilyName = getUser.getFamilyName();
+
+        assertEquals(expectdName, getUserName);
+        assertEquals(expectdFamilyName, getUserFamilyName);
     }
+
+    /**
+     * Uses the  GroupManager.assignUserToGroup(user, group) with a null user
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testAssignUserToGroupWithNullUser() {
+        final PhrGroup group = addGroup();
+        final PhrUser user = null;
+        try {
+            groupManager.assignUserToGroup(user, group);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Uses the  GroupManager.assignUserToGroup(user, group) with a null group
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testAssignUserToGroupWithNullGroup() {
+        final PhrGroup group = null;
+        final PhrUser user = createPhrUser();
+        try {
+            groupManager.assignUserToGroup(user, group);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Tests the GroupManager.removeUserFromGroup(user, group) method.
+     * More precisely this method adds a new user to a group, remove it
+     * and prove it if the remove is proper done.
+     * 
+     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test
+    public void testRemoveUserFromGroup() {
+        final PhrGroup group = addGroup();
+        final PhrUser user = createPhrUser();
+        groupManager.assignUserToGroup(user, group);
+
+        groupManager.removeUserFromGroup(user, group);
+
+        final String name = group.getName();
+        final PhrGroup groupForName = groupManager.getGroupForName(name);
+        final Set<PhrUser> users = groupForName.getUsers();
+
+        assertTrue(users.isEmpty());
+    }
+
+    /**
+     * Uses the  GroupManager.removeUserFromGroup(user, group) with a null group
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testRemoveUserFromGroupNullGroup() {
+        final PhrGroup group = null;
+        final PhrUser user = createPhrUser();
+
+        groupManager.removeUserFromGroup(user, group);
+    }
+
+    /**
+     * Uses the  GroupManager.removeUserFromGroup(user, group) with a null user
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testRemoveUserFromGroupNullUser() {
+        final PhrGroup group = createPhrGroup();
+        final PhrUser user = null;
+
+        groupManager.removeUserFromGroup(user, group);
+    }
+
 }

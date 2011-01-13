@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * XXX is : 
  * <ul>
  * <li> addGroup - to add a group.
+ * <li> removeAllGroups - removes all registered groups.
  * </ul>
  *
  * @author Mihai
@@ -66,6 +67,11 @@ public class TestServlet extends HttpServlet {
             addGroup(response);
             return;
         }
+        
+        if ("removeAllGroups".equalsIgnoreCase(q)) {
+            removeAllGroups(response);
+            return;
+        }
 
         writeToResponse(response, "Parameter [" + q + "] not supported.");
     }
@@ -101,6 +107,19 @@ public class TestServlet extends HttpServlet {
         groupManager.addGroup(group);
         logger.debug("The Group [#0] was persited.", group);
         writeToResponse(response, group.toString());
+    }
+
+    private void removeAllGroups(HttpServletResponse response) throws IOException {
+        final GroupManager groupManager;
+        try {
+            groupManager = JBossJNDILookup.lookupLocal(GroupManager.class);
+        } catch (Exception exception) {
+            logger.error(exception.getMessage(), exception);
+            writeToResponse(response, "FAILURE ! - see the log");
+            return;
+        }
+        
+        groupManager.removeAllGroups();
     }
 
     /** 

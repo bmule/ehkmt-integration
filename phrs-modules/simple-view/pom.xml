@@ -29,6 +29,38 @@
         only for test purposes.
     </description>
 
+    <!--
+    FIXME : Move this on the paternt, the reposiotry is used overall.
+    -->
+    <repositories>
+        <repository>
+            <id>jboss-nexus-group-public</id>
+            <name>JBoss Repository Nexus Group Public</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>jboss-nexus</id>
+            <name>JBoss Repository Nexus</name>
+
+            <url>https://repository.jboss.org/nexus/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
@@ -79,13 +111,12 @@
         </dependency>
 
         <dependency>
-            <groupId>javaee</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>5</version>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>5.1.0.GA</version>
+            <type>pom</type>
             <scope>provided</scope>
         </dependency>
-
-
 
     </dependencies>
 </project>

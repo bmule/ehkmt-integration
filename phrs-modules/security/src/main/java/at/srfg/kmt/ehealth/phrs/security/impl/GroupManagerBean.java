@@ -12,6 +12,7 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.util.Util;
 import java.util.HashSet;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class GroupManagerBean implements GroupManager {
      */
     @Override
     public boolean addGroup(PhrGroup group) {
+
         if (group == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -74,24 +76,25 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        logger.debug("Tries add Group [$0]", group);
+
+        logger.debug("Tries to add Group [{}]", group);
         final String name = group.getName();
 
         final PhrGroup oldGroup;
         try {
-            oldGroup = getGroupForName(name);
+            oldGroup = getGroupForNameExactMatch(name);
         } catch (NonUniqueResultException exception) {
             final GroupException gException =
                     new GroupException(exception);
             gException.setGroup(group);
-            logger.error("Duplicate group found for #0", group);
+            logger.error("Duplicate group found for {}", group);
             logger.error(gException.getMessage(), exception);
             throw gException;
         }
 
         if (oldGroup == null) {
             entityManager.persist(group);
-            logger.debug("Group [#0] was persisted.", group);
+            logger.debug("Group [{}] was persisted.", group);
             return true;
         }
 
@@ -111,7 +114,7 @@ public class GroupManagerBean implements GroupManager {
             oldGroup.setUsers(newUsers);
         }
 
-        logger.debug("Group [#0] was upadted.", group);
+        logger.debug("Group [{}] was upadted.", group);
         return false;
     }
 
@@ -130,15 +133,23 @@ public class GroupManagerBean implements GroupManager {
      * calling the <code>getGroup</code> method (from the GroupException).
      * @see GroupException
      */
-    private PhrGroup getGroupForName(String name) {
+    private PhrGroup getGroupForNameExactMatch(String name) {
         final Query query = entityManager.createNamedQuery("findGroupForName");
         query.setParameter("name", name);
 
         try {
             final PhrGroup result = (PhrGroup) query.getSingleResult();
+
+            // mihai : 
+            // I call 'result.getUsers().size();' to ensure that
+            // that all the users are waking up when the group is retuned.
+            // the reason for this is : the OneToMany lazy initialisation works
+            // only in the same transtion/session - if the session is done
+            // then the lazy initalisayion will fail.
+            result.getUsers().size();
             return result;
         } catch (NoResultException exception) {
-            logger.debug("No group with the name [#0] found.", name);
+            logger.debug("No group with the name [{}] found.", name);
             return null;
         }
     }
@@ -163,13 +174,13 @@ public class GroupManagerBean implements GroupManager {
 
         final String name = group.getName();
         try {
-            final PhrGroup oldGroup = getGroupForName(name);
+            final PhrGroup oldGroup = getGroupForNameExactMatch(name);
             return oldGroup != null;
         } catch (NonUniqueResultException exception) {
             final GroupException gException =
                     new GroupException(exception);
             gException.setGroup(group);
-            logger.error("Duplicate group found for #0", group);
+            logger.error("Duplicate group found for {}", group);
             logger.error(gException.getMessage(), exception);
             throw gException;
         }
@@ -198,7 +209,7 @@ public class GroupManagerBean implements GroupManager {
         final String name = group.getName();
         // mihai : I can also do a 'merge' to assign the entity to the
         // actaul context.
-        final PhrGroup oldGroup = getGroupForName(name);
+        final PhrGroup oldGroup = getGroupForNameExactMatch(name);
         if (oldGroup != null) {
             entityManager.remove(oldGroup);
         }
@@ -212,9 +223,22 @@ public class GroupManagerBean implements GroupManager {
      */
     @Override
     public void removeAllGroups() {
-        final Query query = entityManager.createNamedQuery("removeAllGroups");
-        query.executeUpdate();
-        logger.debug("All the PHRS groups are removed.");
+        final Query allGroupsQuery =
+                entityManager.createNamedQuery("getAllGroups");
+
+        final List<PhrGroup> groups = allGroupsQuery.getResultList();
+        // mihai :
+        // this may tahe while for a big number of groups.
+        // I try to do it on one fire using a bulk operation but
+        // the bulk delete have problems with the OneToMany.
+        for (PhrGroup group : groups) {
+            entityManager.remove(group);
+        }
+
+//        final Query groupQuery = entityManager.createNamedQuery("removeAllGroups");
+//        groupQuery.executeUpdate();
+//        entityManager.flush();
+//        logger.debug("All the PHRS groups are removed.");
     }
 
     /**
@@ -247,11 +271,20 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
+        final Object[] toLog = Util.forLog(user, group);
+        logger.debug("Tries to assign user [{}] to group [{}].", toLog);
 
-        logger.debug("Tries to assign user [#0] to group [#1].", user, group);
+        final Set<PhrUser> actualUsers = group.getUsers();
+        final Set<PhrUser> users = actualUsers == null
+                ? new HashSet<PhrUser>()
+                : actualUsers;
+        users.add(user);
+        group.setUsers(users);
+
+        entityManager.merge(user);
         entityManager.merge(group);
-        group.addUser(user);
-        logger.debug("User [#0] was assined to group [#1].", user, group);
+
+        logger.debug("User [{}] was assined to group [{}].", toLog);
     }
 
     @Override
@@ -278,10 +311,23 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        logger.debug("Tries to assign users [#0] to group [#1].", users, group);
+        final Object[] toLog = Util.forLog(users, group);
+        logger.debug("Tries to assign users [{}] to group [{}].", toLog);
+
+
+        final Set<PhrUser> actualUsers = group.getUsers();
+        final Set<PhrUser> usrs = actualUsers == null
+                ? new HashSet<PhrUser>()
+                : actualUsers;
+
+        usrs.addAll(users);
+        group.setUsers(users);
+        for (PhrUser user : users) {
+            entityManager.merge(user);
+        }
         entityManager.merge(group);
-        group.addUsers(users);
-        logger.debug("Users [#0] was assined to group [#1].", users, group);
+
+        logger.debug("Users [{}] was assined to group [{}].", toLog);
     }
 
     @Override
@@ -300,10 +346,22 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        logger.debug("Tries to remove user [#0] from group [#1].", user, group);
+        final Object[] toLog = Util.forLog(user, group);
+        logger.debug("Tries to remove user [{}] from group [{}].", toLog);
+
+        final Set<PhrUser> actualUsers = group.getUsers();
+        final Set<PhrUser> users = actualUsers == null
+                ? new HashSet<PhrUser>()
+                : actualUsers;
+        users.remove(user);
+        group.setUsers(users);
+
+        entityManager.merge(user);
+        entityManager.remove(user);
+        
         entityManager.merge(group);
-        group.removeUser(user);
-        logger.debug("User [#0] was removed from group [#1].", user, group);
+
+        logger.debug("User [{}] was removed from group [{}].", toLog);
     }
 
     @Override
@@ -329,9 +387,69 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        logger.debug("Tries to remove users [#0] from group [#1].", users, group);
+        final Object[] toLog = Util.forLog(users, group);
+        logger.debug("Tries to remove users [{}] from the group [{}].", toLog);
+        
+        final Set<PhrUser> groupUsers = group.getUsers();
+        groupUsers.removeAll(users);
+        group.setUsers(users);
+        
         entityManager.merge(group);
-        group.removeUsers(users);
-        logger.debug("Users [#0] was removed from group [#1].", users, group);
+        logger.debug("Users [{}] was removed from the group [{}].", toLog);
+    }
+
+    /**
+     * Returns a <code>PhrGroup</code> where the name attribute exactly match
+     * (case sensitive) the given <code>name</code>. If there is no matching
+     * group this method returns null.
+     *
+     * @param name the name for the group to search, it can not be null.
+     * @return a <code>PhrGroup</code> where the name attribute exactly match
+     * the given <code>name</code> or null for no match.
+     * @throws NullPointerException if the <code>name</code> argument is null.
+     */
+    @Override
+    public PhrGroup getGroupForName(String name) {
+
+        if (name == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The name argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final PhrGroup result = getGroupForNameExactMatch(name);
+        return result;
+    }
+
+    /**
+     * Returns a set that contains all the PHRS groups with the name matching
+     * a given JPSQ like patten.<br>
+     * The namePattern is a string literal or a string-valued
+     * input parameter in which an underscore (_) stands for any single
+     * character, a percent (%) character stands for any sequence of
+     * characters (including the empty sequence), and all other characters
+     * stand for themselves.
+     *
+     * @param namePattern the name pattern to search, it can not be null.
+     * @return a set that contains all the PHRS groups with the name matching
+     * a given JPSQ like patten.
+     */
+    @Override
+    public Set<PhrGroup> getGroupsForNamePattern(String namePattern) {
+
+        if (namePattern == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The namePattern argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final Query query = entityManager.createNamedQuery("findGroupForNamePattern");
+        final Query queryResult = query.setParameter("namePattern", namePattern);
+        final List resultList = queryResult.getResultList();
+
+        final Set<PhrGroup> result = new HashSet<PhrGroup>(resultList);
+        return result;
     }
 }

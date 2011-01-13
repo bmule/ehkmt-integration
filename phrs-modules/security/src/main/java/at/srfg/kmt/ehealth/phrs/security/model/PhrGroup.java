@@ -8,7 +8,9 @@ package at.srfg.kmt.ehealth.phrs.security.model;
 
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,8 +30,9 @@ import javax.persistence.Transient;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "findGroupForName", query = "SELECT g FROM PhrGroup AS g WHERE g.name = :name"),
-    @NamedQuery(name = "removeAllGroups", query = "DELETE FROM PhrGroup g"),
-    @NamedQuery(name = "removeGroupForName", query = "DELETE FROM PhrGroup g WHERE g.name = :name"),
+    @NamedQuery(name = "findGroupForNamePattern", query = "SELECT g FROM PhrGroup AS g WHERE g.name LIKE :namePattern"),
+    @NamedQuery(name = "removeAllGroups", query = "DELETE FROM PhrGroup AS g"),
+    @NamedQuery(name = "removeGroupForName", query = "DELETE FROM PhrGroup AS g WHERE g.name = :name"),
     @NamedQuery(name = "getAllGroups", query = "SELECT g FROM PhrGroup AS g")
 })
 public class PhrGroup implements Serializable {
@@ -71,9 +74,13 @@ public class PhrGroup implements Serializable {
     }
 
     /**
-     * Builds an Group instance.
+     * Builds an Group instance for a given name.
      */
     public PhrGroup(String name) {
+        if (name == null) {
+            throw new NullPointerException("The argument name can not be null.");
+        }
+
         this.name = name;
     }
 
@@ -108,7 +115,7 @@ public class PhrGroup implements Serializable {
         return name;
     }
 
-    @OneToMany
+    @OneToMany(cascade=CascadeType.ALL)
     public Set<PhrUser> getUsers() {
         return users;
     }
@@ -174,6 +181,9 @@ public class PhrGroup implements Serializable {
      * @see #setUsers(java.util.Set)
      */
     public void addUser(PhrUser user) {
+        if (users == null) {
+            users = new HashSet<PhrUser>();
+        }
         users.add(user);
     }
 
@@ -182,6 +192,9 @@ public class PhrGroup implements Serializable {
     }
 
     public void removeUsers(Set<PhrUser> usersToRemote) {
+        if (usersToRemote == null) {
+            return;           
+        }
         users.removeAll(usersToRemote);
     }
 
