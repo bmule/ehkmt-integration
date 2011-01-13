@@ -28,6 +28,13 @@ import javax.persistence.Lob;
 @Entity
 public class PhrItem implements Serializable {
 
+    /**
+     * A version number for this class so that serialization
+     * can occur without worrying about the underlying class
+     * changing between serialization and deserialization.
+     */
+    private static final long serialVersionUID = 5165L;    
+
     private Long id;
 
     private String name;
