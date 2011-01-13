@@ -28,3 +28,8 @@ Thumbs.db
 Desktop.ini
 *.bak
 *.bk
+
+
+# netbeans specific files
+# in this file placed on the top level project directroy are stored different machine specific informations (e.g. the Application Server) 
+profiles.xml
