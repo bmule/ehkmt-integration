@@ -31,5 +31,7 @@ Desktop.ini
 
 
 # netbeans specific files
-# in this file placed on the top level project directroy are stored different machine specific informations (e.g. the Application Server) 
+# in this file (profiles.xml)  placed on the top level project directroy are stored different machine specific informations (e.g. the Application Server) 
 profiles.xml
+nb-configuration.xml
+

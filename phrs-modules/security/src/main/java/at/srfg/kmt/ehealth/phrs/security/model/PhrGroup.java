@@ -15,9 +15,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 /**
@@ -64,7 +64,7 @@ public class PhrGroup implements Serializable {
     /**
      * All the user members in this group.
      */
-    private Set<PhrUser> users;
+    private Set<PhrUser> phrUsers;
 
     /**
      * Builds an Group instance.
@@ -115,9 +115,26 @@ public class PhrGroup implements Serializable {
         return name;
     }
 
-    @OneToMany(cascade=CascadeType.ALL)
-    public Set<PhrUser> getUsers() {
-        return users;
+    /**
+     * Replaces the already existent set of users (for this group)
+     * with a new set of users.
+     *
+     * @param users the new set of users.
+     * @see #addUsers(java.util.Set)
+     * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User)
+     */
+    public void setPhrUsers(Set<PhrUser> users) {
+        this.phrUsers = users;
+    }
+
+    @ManyToMany(mappedBy = "phrGroups", cascade=CascadeType.ALL)
+    public Set<PhrUser> getPhrUsers() {
+        return phrUsers;
+    }
+
+    @Transient
+    public boolean isGroupEmpty() {
+        return phrUsers == null ? true : phrUsers.isEmpty();
     }
 
     /**
@@ -148,59 +165,6 @@ public class PhrGroup implements Serializable {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * Replaces the already existent set of users (for this group)
-     * with a new set of users.
-     *
-     * @param users the new set of users.
-     * @see #addUsers(java.util.Set)
-     * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User)
-     */
-    public void setUsers(Set<PhrUser> users) {
-        this.users = users;
-    }
-
-    /**
-     * Appends the actual set of users with a new set of users.
-     *
-     * @param users the set of users to be appended.
-     * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User) 
-     * @see #setUsers(java.util.Set) 
-     */
-    public void addUsers(Set<PhrUser> users) {
-        this.users.addAll(users);
-    }
-
-    /**
-     * Add a singular user  to the actual user set.
-     *
-     * @param user the user to add.
-     * @see #addUsers(java.util.Set)
-     * @see #setUsers(java.util.Set)
-     */
-    public void addUser(PhrUser user) {
-        if (users == null) {
-            users = new HashSet<PhrUser>();
-        }
-        users.add(user);
-    }
-
-    public void removeUser(PhrUser user) {
-        users.remove(user);
-    }
-
-    public void removeUsers(Set<PhrUser> usersToRemote) {
-        if (usersToRemote == null) {
-            return;           
-        }
-        users.removeAll(usersToRemote);
-    }
-
-    @Transient
-    public boolean isGroupEmpty() {
-        return users == null ? true : users.isEmpty();
     }
 
     /**

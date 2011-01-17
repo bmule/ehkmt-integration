@@ -4,21 +4,25 @@
  * Date : Dec 15, 2010
  * User : mradules
  */
+
+
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.security.api.UserManager;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Stateless bean local scoped used to manage and manipulate
@@ -29,6 +33,8 @@ import org.slf4j.LoggerFactory;
 @Stateless
 @Local(UserManager.class)
 public class UserManagerBean implements UserManager {
+
+    private static final String ANONYMUS_NAME = "Anonymus";
 
     /**
      * The Logger instance. All log messages from this class
@@ -156,11 +162,14 @@ public class UserManagerBean implements UserManager {
 
     /**
      * Unregisters a given user, after this method call the 
-     * <code>userExist</code> method call returns null.  
+     * <code>userExist</code> for the removed user will cause return false. 
+     * If the user was not registered (in a previous action) 
+     * then this method has no effect.
      * 
      * @param user the user to remove, it can not be null.
      * @return the removed user.
      * @throws NullPointerException if the user argument is null.
+     * @see #removeUsers(java.util.Set) 
      * @see #userExist(at.srfg.kmt.ehealth.phrs.security.model.PhrUser) 
      */
     @Override
@@ -172,21 +181,39 @@ public class UserManagerBean implements UserManager {
             throw nullException;
         }
 
-        // I know is wird I merge before I delete but I must be sure that
-        // the user is in context.
-        entityManager.merge(user);
-        entityManager.remove(user);
-        
+        // mihai :
+        // only managed entities can be removed/manipulated
+        // so I need to add it in to the context (merge) before
+        // I remove it.
+        final PhrUser mergeResult = entityManager.merge(user);
+        entityManager.remove(mergeResult);
+
         return user;
     }
 
+    /**
+     * Removes all the registered users after this method call the 
+     * <code>areAnyUsersRegistered</code> for the removed user will cause 
+     * return false. 
+     */
     @Override
     public void removeAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        // FIXME : this is not the most efficent way to remove thigs, it can
+        // also be done in a singular bulk operation. 
+        final Query allUsersQuery = entityManager.createNamedQuery("getAllUsers");
+        // FIXME : for a lot of userd do pagging
+        final List<PhrUser> allUsers = allUsersQuery.getResultList();
+
+        for (PhrUser user : allUsers) {
+            entityManager.remove(user);
+        }
     }
 
     /**
      * Proves if the underlying persistence contains a given user.
+     * More precisely this test proves if the underlying persistence
+     * layer contains an user with the same name and family name with
+     * the specified user.
      *
      * @param user the group which the existence is to be tested.
      * @return true if the underlying persistence contains a given
@@ -196,6 +223,7 @@ public class UserManagerBean implements UserManager {
     @Override
     public boolean userExist(PhrUser user) {
 
+        // FIXME : consider the login name like unique identifier.
         if (user == null) {
             final NullPointerException nullException =
                     new NullPointerException("The Group argument can not be null.");
@@ -211,28 +239,187 @@ public class UserManagerBean implements UserManager {
         return result;
     }
 
+    /**
+     * Returns the anonymus user instance. 
+     * There is only one anonymus user instance, repetative call for this method
+     * will produce the same instance.
+     * 
+     * @return the anonymus user. 
+     */
     @Override
     public PhrUser getAnonymusUser() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        final Query anonymusQuery =
+                entityManager.createNamedQuery("findAnonymusUser");
+        PhrUser result;
+        try {
+            result = (PhrUser) anonymusQuery.getSingleResult();
+        } catch (NoResultException noResultException) {
+            result = new PhrUser(ANONYMUS_NAME, ANONYMUS_NAME);
+            result.setIsAnonymous(true);
+            entityManager.persist(result);
+        } catch (NonUniqueResultException nonUniqueResultException)  {
+            final UserException userException =
+                    new UserException("More Anonymus user deteceted, data is incosistent.");
+            throw userException;
+        }
+        
+        return result;
     }
 
+    /**
+     * Removes all the users from the given set. If the user set contains
+     * unregistered users then they will be ignored.
+     * 
+     * @param users the users to remove, it can not be null or empty set.
+     * @throws NullPointerException if the users argument is null.
+     * @throws IllegalArgumentException if the users argument is an empty set.
+     */
     @Override
-    public PhrUser removeUsers(Set<PhrUser> users) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void removeUsers(Set<PhrUser> users) {
+
+        if (users == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The users argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (users.isEmpty()) {
+            final IllegalArgumentException illegalException =
+                    new IllegalArgumentException("The users set can not be empty can not be null.");
+            logger.error(illegalException.getMessage(), illegalException);
+            throw illegalException;
+        }
+
+        logger.debug("Tries to removes users [{}].", users);
+        for (PhrUser user : users) {
+            removeUser(user);
+        }
+        logger.debug("Users [{}] was removed,", users);
     }
 
+    /**
+     * Returns all the users where the name match exactly a certain name.
+     * If there are no matchers for the given name then this method will
+     * return null.
+     * 
+     * @param name the name to match.
+     * @return all the users where the name match exactly a certain name.
+     * @throws NullPointerException if the name argument is null.
+     */
     @Override
     public Set<PhrUser> getUsersForName(String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (name == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The name argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final Query usersQuery =
+                entityManager.createNamedQuery("findUserForName");
+        usersQuery.setParameter("name", name);
+
+        final List usersList = usersQuery.getResultList();
+        final Set<PhrUser> result = new HashSet<PhrUser>();
+        result.addAll(usersList);
+        return result;
     }
 
+    /**
+     * Returns a set that contains all the PHRS users with the name matching
+     * a given JPSQ like patten.<br>
+     * The namePattern is a string literal or a string-valued
+     * input parameter in which an underscore (_) stands for any single
+     * character, a percent (%) character stands for any sequence of
+     * characters (including the empty sequence), and all other characters
+     * stand for themselves.
+     *
+     * @param namePattern the name pattern to search, it can not be null.
+     * @return a set that contains all the PHRS users with the name matching
+     * a given JPSQ like patten.
+     * @throws NullPointerException if the name argument is null.
+     */
     @Override
     public Set<PhrUser> getUsersForNamePattern(String namePattern) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        if (namePattern == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The namePattern argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+
+        final Query usersQuery =
+                entityManager.createNamedQuery("findUserForNamePattern");
+        usersQuery.setParameter("namePattern", namePattern);
+
+        final List usersList = usersQuery.getResultList();
+        final Set<PhrUser> result = new HashSet<PhrUser>();
+        result.addAll(usersList);
+        return result;
+
     }
 
     @Override
-    public Set<PhrUser> getUsersForNamePattern(String namePattern, String famillyNamePattern) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Set<PhrUser> getUsersForNamesPattern(String namePattern, String famillyNamePattern) {
+
+
+        if (namePattern == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The namePattern argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (famillyNamePattern == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The famillyNamePattern argument can not be null.");
+            logger.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+
+        final Query usersQuery =
+                entityManager.createNamedQuery("findUserForNameAndFamilyPattern");
+        usersQuery.setParameter("namePattern", namePattern);
+        usersQuery.setParameter("familyNamePattern", famillyNamePattern);
+
+        final List usersList = usersQuery.getResultList();
+        final Set<PhrUser> result = new HashSet<PhrUser>();
+        result.addAll(usersList);
+        return result;
+    }
+
+    /**
+     * Returns all the registered users packed in to a set.
+     * For a big amount of users this method may take a while.
+     * 
+     * @return all the registered users packed in to a set.
+     */
+    @Override
+    public Set<PhrUser> getAllUsers() {
+        final Query query = entityManager.createNamedQuery("getAllUsers");
+        // FIXME : for a lot of userd do pagging
+        final List resultList = query.getResultList();
+        final Set<PhrUser> result = new HashSet<PhrUser>();
+        result.addAll(resultList);
+
+        return result;
+    }
+
+    /**
+     * Proves if there is any registered users.
+     * 
+     * @return true if there is any registered users.
+     */
+    @Override
+    public boolean areAnyUsersRegistered() {
+        final Query query = entityManager.createNamedQuery("getAllUsers");
+        final List resultList = query.getResultList();
+        final boolean result = resultList.isEmpty();
+        return result;
     }
 }

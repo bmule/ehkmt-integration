@@ -214,9 +214,12 @@ public class RoleManagerBeanUnitTest {
         final PhrRole role = new PhrRole(newName);
         final boolean roleExist = roleManager.roleExist(role);
         assertFalse(roleExist);
-
+        
+        
         final PhrRole removeRole = roleManager.removeRole(role);
-        assertNull(removeRole);
+        
+        final boolean groupExistAfterRemove = roleManager.roleExist(removeRole);
+        assertFalse(groupExistAfterRemove);
     }
 
     /**
@@ -374,13 +377,14 @@ public class RoleManagerBeanUnitTest {
      */
     @Test
     public void testAssignUserToRole() {
+        final PhrRole role = addRole();
         final PhrUser user = createPhrUser();
-        final PhrRole role = createPhrRole();
+
         roleManager.assignUserToRole(user, role);
 
         final String name = role.getName();
         final PhrRole roleForName = roleManager.getRoleForName(name);
-        final Set<PhrUser> users = roleForName.getUsers();
+        final Set<PhrUser> users = roleForName.getPhrUsers();
         final int size = users.size();
 
         // I excpect only one user.
@@ -452,11 +456,26 @@ public class RoleManagerBeanUnitTest {
         final PhrUser user = createPhrUser();
         roleManager.assignUserToRole(user, role);
 
-        roleManager.removeUserFromRole(user, role);
+        // I retrive the group from the peristence layer,
+        // this group has the user set it.
+        final String groupName = role.getName();
+        final PhrRole persistedRole =
+                roleManager.getRoleForName(groupName);
+        final Set<PhrUser> phrUsers = persistedRole.getPhrUsers();
+        final int userCount = phrUsers.size();
+
+        // there is only one user registered on the previous statement
+        assertEquals(1, userCount);
+
+        // this is the registered user instance, it differ from the 'user' one 
+        // created with the createPhrUser because it is retreived from the
+        // persistence layer. The 'user' exist only in memory heap.
+        final PhrUser involvedUser = phrUsers.iterator().next();
+        roleManager.removeUserFromRole(involvedUser, persistedRole);
 
         final String name = role.getName();
-        final PhrRole roleForName = roleManager.getRoleForName(name);
-        final Set<PhrUser> users = roleForName.getUsers();
+        final PhrRole groupForName = roleManager.getRoleForName(name);
+        final Set<PhrUser> users = groupForName.getPhrUsers();
 
         assertTrue(users.isEmpty());
     }

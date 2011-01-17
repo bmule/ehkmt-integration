@@ -4,9 +4,12 @@
  * Date : Dec 24, 2010
  * User : mradules
  */
+
+
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import java.util.Set;
 import static org.junit.Assert.*;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrUser;
 import at.srfg.kmt.ehealth.phrs.security.api.UserManager;
@@ -26,8 +29,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-/**
 /**
  * Integration test for the GroupManagerBean.
  * More precisely this test build and deploy a test ejb jar that
@@ -174,12 +175,235 @@ public class UserManagerBeanUnitTest {
             throw exception;
         }
     }
-    
-   // @Test
+
+    /**
+     * Tests the <code>UserManager.removeUser(user)</code> method with a \
+     * valid user. More precisely this method registers a user, remove 
+     * users and prove if the remove was successfully, the user 
+     * existence is proved with the <code>UserManager.userExist(user)</code>.
+     * 
+     * @see UserManager#removeUser(at.srfg.kmt.ehealth.phrs.security.model.PhrUser) 
+     * @see UserManager#userExist(at.srfg.kmt.ehealth.phrs.security.model.PhrUser) 
+     */
+    @Test
     public void testRemoveUser() {
         final PhrUser user = addUser();
+
         userManager.removeUser(user);
         final boolean userExist = userManager.userExist(user);
-        assertTrue(userExist);
+        assertFalse(userExist);
+    }
+
+    /**
+     * Tests the <code>UserManager.removeUser(user)</code> method with a \
+     * null user and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see UserManager#removeUser(at.srfg.kmt.ehealth.phrs.security.model.PhrUser) 
+     */
+    @Test(expected = EJBException.class)
+    public void testRemoveUserWithNullUser() {
+        final PhrUser user = null;
+        try {
+            userManager.removeUser(user);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Tests the <code>UserManager.removeAllUsers()</code> method.
+     * More precisely this method add some an user, call the removeAll method
+     * and after this proves if there are any existing users, the test
+     * done with the <code>UserManager.getAllUsers()</code> and the result set 
+     * is proved if it is empty.
+     * 
+     * @see UserManager#removeAllUsers() 
+     * @see UserManager#getAllUsers() 
+     * @see UserManager#userExist(at.srfg.kmt.ehealth.phrs.security.model.PhrUser) 
+     */
+    @Test
+    public void testRemoveAllUsers() {
+        final PhrUser user = addUser();
+
+        userManager.removeAllUsers();
+        final Set<PhrUser> allUsers = userManager.getAllUsers();
+        final boolean noUsers = allUsers.isEmpty();
+        assertTrue("No users are expected after the removeAllUsers method call.", noUsers);
+        final boolean userExist = userManager.userExist(user);
+        assertFalse("The user can not exists after the removeAllUsers method call.", userExist);
+    }
+
+    /**
+     * Tests the <code>UserManager.getUsersForName(name)</code> method.
+     * More precisely this test add/remove a new user,retreive it
+     * using the <code>UserManager.getUsersForName(name)</code> method
+     * an prove it if this is correct. 
+     * 
+     * @see UserManager#getUsersForName(java.lang.String) 
+     */
+    @Test
+    public void testGetUsersForName() {
+        final PhrUser user = addUser();
+        final String name = user.getName();
+        final Set<PhrUser> usersForNameResult = userManager.getUsersForName(name);
+
+        final int userCount = usersForNameResult.size();
+
+        assertEquals(1, userCount);
+
+        final PhrUser newUser = usersForNameResult.iterator().next();
+        final String newUserName = newUser.getName();
+        assertEquals(user.getName(), newUserName);
+
+        final String newUserFamilyName = newUser.getFamilyName();
+        assertEquals(user.getFamilyName(), newUserFamilyName);
+    }
+
+    /**
+     * Tests the <code>UserManager.getUsersForName(name)</code> method
+     * with a wrong name.
+     * More precisely this test add/remove a new user,and tries to retreive it
+     * using the <code>UserManager.getUsersForName(name)</code> method
+     * with a name that does not match with any users an prove it if the result
+     * is correct. 
+     * 
+     * @see UserManager#getUsersForName(java.lang.String) 
+     */
+    @Test
+    public void testGetUsersForNameWithWrongName() {
+        final PhrUser user = addUser();
+        final String name = user.getName();
+        final Set<PhrUser> usersForNameResult =
+                userManager.getUsersForName(name + "XXXXX");
+
+        final boolean noUsers = usersForNameResult.isEmpty();
+        assertTrue(noUsers);
+    }
+
+    /**
+     * Tests the <code>UserManager.getUsersForName(name)</code> method with a 
+     * null argument and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see UserManager#getUsersForName(java.lang.String) 
+     */
+    @Test(expected = EJBException.class)
+    public void testGetUsersForNameWithNullName() {
+        final PhrUser user = addUser();
+        try {
+            userManager.getUsersForName(null);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Tests the <code>UserManager.getUsersForNamePattern(name)</code> method.
+     * More precisely this test add/remove a new user,retreive it
+     * using the <code>UserManager.getUsersForNamePattern(name)</code> method
+     * an prove it if this is correct. 
+     */
+    @Test
+    public void testGetUsersForNamesPattern() {
+        final PhrUser user = addUser();
+        final String name = user.getName();
+        final Set<PhrUser> usersForNameResult =
+                userManager.getUsersForNamePattern(name + "%");
+
+        final int userCount = usersForNameResult.size();
+
+        assertEquals(1, userCount);
+
+        final PhrUser newUser = usersForNameResult.iterator().next();
+        final String newUserName = newUser.getName();
+        assertEquals(user.getName(), newUserName);
+
+        final String newUserFamilyName = newUser.getFamilyName();
+        assertEquals(user.getFamilyName(), newUserFamilyName);
+    }
+
+    /**
+     * Tests the <code>UserManager.getUsersForNamePattern(name)</code> method 
+     * with a null argument and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see UserManager#getUsersForName(java.lang.String) 
+     */
+    @Test(expected = EJBException.class)
+    public void testGetUsersForNamePatternWithNullName() {
+        final PhrUser user = addUser();
+        try {
+            userManager.getUsersForNamePattern(null);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    @Test
+    public void testGetUsersForNameAndFamilyPattern() {
+        final PhrUser user = addUser();
+        final String name = user.getName();
+        final String nameFamily = user.getFamilyName();
+
+        final Set<PhrUser> usersForNameResult =
+                userManager.getUsersForNamesPattern(name + "%", nameFamily + "%");
+
+        final int userCount = usersForNameResult.size();
+        assertEquals(1, userCount);
+
+        final PhrUser newUser = usersForNameResult.iterator().next();
+        final String newUserName = newUser.getName();
+        assertEquals(user.getName(), newUserName);
+
+        final String newUserFamilyName = newUser.getFamilyName();
+        assertEquals(user.getFamilyName(), newUserFamilyName);
+    }
+
+    @Test
+    public void testGetUsersForNameAndFamilyPatternWithOherFamily() {
+        final PhrUser user = addUser();
+        final String name = user.getName();
+        final String nameFamily = user.getFamilyName();
+
+        final Set<PhrUser> usersForNameResult =
+                userManager.getUsersForNamesPattern(name + "%", nameFamily + "XXXX%");
+
+        final boolean noUsers = usersForNameResult.isEmpty();
+        assertTrue(noUsers);
+    }
+
+    @Test(expected = EJBException.class)
+    public void testGetUsersForNameAndFamilyPatternWithNull() {
+        final String name = null;
+        final String nameFamily = null;
+        try {
+            userManager.getUsersForNamesPattern(name, nameFamily);
+
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    @Test
+    public void testGetAnonymusUser() {
+        final PhrUser anonymusUser = userManager.getAnonymusUser();
+        assertNotNull(anonymusUser);
+        
+        final PhrUser newAnonymusUser = userManager.getAnonymusUser();
+        assertEquals(anonymusUser.getName(), newAnonymusUser.getName());
+        assertEquals(anonymusUser.getFamilyName(), newAnonymusUser.getFamilyName());
     }
 }

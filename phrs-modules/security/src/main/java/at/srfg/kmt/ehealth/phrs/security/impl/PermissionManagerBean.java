@@ -64,5 +64,4 @@ public class PermissionManagerBean implements PermissionManager {
     public boolean validate(PhrGroup role, Action action) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }

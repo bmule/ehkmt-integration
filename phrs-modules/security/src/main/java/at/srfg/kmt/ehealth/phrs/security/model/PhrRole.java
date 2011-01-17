@@ -2,6 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 package at.srfg.kmt.ehealth.phrs.security.model;
 
 
@@ -12,11 +14,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-
 
 /**
  * Generic representation for an user role.
@@ -64,7 +66,7 @@ public class PhrRole implements Serializable {
     /**
      * All the user members in this with this role.
      */
-    private Set<PhrUser> users;
+    private Set<PhrUser> phrUsers;
 
     /**
      * Builds an <code>PhrRole</code>PhrRole instance.
@@ -115,11 +117,7 @@ public class PhrRole implements Serializable {
         return name;
     }
 
-    @OneToMany(cascade = CascadeType.ALL)
-    public Set<PhrUser> getUsers() {
-        return users;
-    }
-
+    
     /**
      * Registers a new description for this Group instance.
      *
@@ -158,35 +156,18 @@ public class PhrRole implements Serializable {
      * @see #addUsers(java.util.Set)
      * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User)
      */
-    public void setUsers(Set<PhrUser> users) {
-        this.users = users;
+    public void setPhrUsers(Set<PhrUser> users) {
+        this.phrUsers = users;
     }
 
-    /**
-     * Appends the actual set of users with a new set of users.
-     *
-     * @param users the set of users to be appended.
-     * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User)
-     * @see #setUsers(java.util.Set)
-     */
-    public void addUsers(Set<PhrUser> users) {
-        this.users.addAll(users);
-    }
-
-    /**
-     * Add a singular user  to the actual user set.
-     *
-     * @param user the user to add.
-     * @see #addUsers(java.util.Set)
-     * @see #setUsers(java.util.Set)
-     */
-    public void addUser(PhrUser user) {
-        users.add(user);
+    @ManyToMany(mappedBy = "phrRoles", cascade=CascadeType.ALL)
+    public Set<PhrUser> getPhrUsers() {
+        return phrUsers;
     }
 
     @Transient
     public boolean isRoleEmpty() {
-        return users == null ? true : users.isEmpty();
+        return phrUsers == null ? true : phrUsers.isEmpty();
     }
 
     /**

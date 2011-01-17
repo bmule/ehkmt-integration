@@ -214,7 +214,9 @@ public class GroupManagerBeanUnitTest {
         assertFalse(groupExist);
 
         final PhrGroup removeGroup = groupManager.removeGroup(group);
-        assertNull(removeGroup);
+        
+        final boolean groupExistAfterRemove = groupManager.groupExist(removeGroup);
+        assertFalse(groupExistAfterRemove);
     }
 
     /**
@@ -379,7 +381,7 @@ public class GroupManagerBeanUnitTest {
 
         final String name = group.getName();
         final PhrGroup groupForName = groupManager.getGroupForName(name);
-        final Set<PhrUser> users = groupForName.getUsers();
+        final Set<PhrUser> users = groupForName.getPhrUsers();
         final int size = users.size();
 
         // I excpect only one user.
@@ -450,12 +452,27 @@ public class GroupManagerBeanUnitTest {
         final PhrGroup group = addGroup();
         final PhrUser user = createPhrUser();
         groupManager.assignUserToGroup(user, group);
-
-        groupManager.removeUserFromGroup(user, group);
+        
+        // I retrive the group from the peristence layer,
+        // this group has the user set it.
+        final String groupName = group.getName();
+        final PhrGroup persistedGroup =
+                groupManager.getGroupForName(groupName);
+        final Set<PhrUser> phrUsers = persistedGroup.getPhrUsers();
+        final int userCount = phrUsers.size();
+        
+        // there is only one user registered on the previous statement
+        assertEquals(1, userCount);
+        
+        // this is the registered user instance, it differ from the 'user' one 
+        // created with the createPhrUser because it is retreived from the
+        // persistence layer. The 'user' exist only in memory heap.
+        final PhrUser involvedUser = phrUsers.iterator().next();
+        groupManager.removeUserFromGroup(involvedUser, persistedGroup);
 
         final String name = group.getName();
         final PhrGroup groupForName = groupManager.getGroupForName(name);
-        final Set<PhrUser> users = groupForName.getUsers();
+        final Set<PhrUser> users = groupForName.getPhrUsers();
 
         assertTrue(users.isEmpty());
     }

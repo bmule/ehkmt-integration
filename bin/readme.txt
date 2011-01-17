@@ -24,3 +24,7 @@ phrs-deploy-geronimo.bash - deploy a resource on geronimo server.
 
 newPHRS_DB.bash - drops and recreate the phrs_storage database, it requires a 
                   postgres user named "phrs" and postgres administrator rights.
+                  This scripts presumes that your database has an user named
+                  postgres with superuser rights (in most of the systems this
+                  user is created when the database system is installed)
+

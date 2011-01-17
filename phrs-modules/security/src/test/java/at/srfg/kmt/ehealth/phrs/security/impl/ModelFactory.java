@@ -64,7 +64,7 @@ class ModelFactory {
 
         final StringBuffer famName = new StringBuffer();
         famName.append("Family_");
-        name.append(time);
+        famName.append(time);
 
         final PhrUser user = new PhrUser(name.toString(), famName.toString());
 

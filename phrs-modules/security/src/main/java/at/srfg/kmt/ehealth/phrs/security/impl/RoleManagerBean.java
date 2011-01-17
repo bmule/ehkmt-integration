@@ -75,41 +75,23 @@ public class RoleManagerBean implements RoleManager {
         }
 
         logger.debug("Tries add role [{}]", role);
-        final String name = role.getName();
-
-        final PhrRole oldRole;
-        try {
-            oldRole = getRoleForNameExactMatch(name);
-        } catch (NonUniqueResultException exception) {
-            final RoleException rException =
-                    new RoleException(exception);
-            rException.setRole(role);
-            logger.error("Duplicate role found for {}", role);
-            logger.error(rException.getMessage(), exception);
-            throw rException;
-        }
-
-        if (oldRole == null) {
+        final Long id = role.getId();
+        if (id == null) {
             entityManager.persist(role);
-            logger.debug("Role [{}] was persisted.", role);
+            logger.debug("The Role [{}] was persisted.", role);
             return true;
         }
 
-        final String newName = role.getName();
-        if (newName != null && !newName.isEmpty()) {
-            oldRole.setName(newName);
+        final PhrRole oldRole = entityManager.find(PhrRole.class, id);
+        if (oldRole == null) {
+            final RoleException roleException =
+                    new RoleException("Inconsistent Data Structure.");
+            roleException.setRole(role);
+            logger.error(roleException.getMessage(), roleException);
+            throw roleException;
         }
 
-        final String newDescription = role.getDescription();
-        if (newDescription != null && !newDescription.isEmpty()) {
-            oldRole.setDescription(newDescription);
-        }
-
-        final Set<PhrUser> newUsers = role.getUsers();
-        if (newUsers != null) {
-            // FIXME : I think I must remove the old one as well
-            oldRole.setUsers(newUsers);
-        }
+        entityManager.merge(role);
 
         logger.debug("Role [{}] was upadted.", role);
         return false;
@@ -199,7 +181,7 @@ public class RoleManagerBean implements RoleManager {
             // the reason for this is : the OneToMany lazy initialisation works
             // only in the same transtion/session - if the session is done
             // then the lazy initalisayion will fail.
-            result.getUsers().size();
+            result.getPhrUsers().size();
 
             return result;
         } catch (NoResultException exception) {
@@ -226,15 +208,24 @@ public class RoleManagerBean implements RoleManager {
             throw nullException;
         }
 
-        final String name = role.getName();
-        // mihai : I can also do a 'merge' to assign the entity to the
-        // actaul context.
-        final PhrRole oldRole = getRoleForNameExactMatch(name);
-        if (oldRole != null) {
-            entityManager.remove(oldRole);
+        final PhrRole managedRole = entityManager.merge(role);
+        final Set<PhrUser> users = managedRole.getPhrUsers();
+        if (users == null || users.isEmpty()) {
+            entityManager.remove(managedRole);
+            logger.debug("Group [{}] was removed.", managedRole);
+            return managedRole;
         }
 
-        return oldRole;
+        // removes the group from the user (the owner side).
+        for (PhrUser user : users) {
+            final Set<PhrRole> roles = user.getPhrRoles();
+            if (roles != null && !roles.isEmpty()) {
+                roles.remove(managedRole);
+            }
+        }
+
+        entityManager.remove(managedRole);
+        return managedRole;
     }
 
     /**
@@ -302,7 +293,7 @@ public class RoleManagerBean implements RoleManager {
     }
 
     @Override
-    public void assignUserToRole(PhrUser user, PhrRole role) {
+    public final void assignUserToRole(PhrUser user, PhrRole role) {
         if (user == null) {
             final NullPointerException nullException =
                     new NullPointerException("The user argument can not be null.");
@@ -319,16 +310,25 @@ public class RoleManagerBean implements RoleManager {
 
         final Object[] toLog = Util.forLog(user, role);
         logger.debug("Tries to assign user [{}] to role [{}].", toLog);
+        
+        // assign user to role (owner side)
+        final PhrUser managedUser = entityManager.merge(user);
+        final Set<PhrRole> phrRoles = managedUser.getPhrRoles();
+        final Set<PhrRole> roles = phrRoles == null
+                ? new HashSet<PhrRole>()
+                : phrRoles;
+        
+        final PhrRole managedRole = entityManager.merge(role);
+        roles.add(managedRole);
+        managedUser.setPhrRoles(roles);
 
-        final Set<PhrUser> actualUsers = role.getUsers();
-        final Set<PhrUser> users = actualUsers == null
+        // assign role to user (inverse side)
+        final Set<PhrUser> phrUsers = managedRole.getPhrUsers();
+        final Set<PhrUser> users = phrUsers == null
                 ? new HashSet<PhrUser>()
-                : actualUsers;
-        users.add(user);
-        role.setUsers(users);
+                : phrUsers;
+        managedRole.setPhrUsers(users);
 
-        entityManager.merge(user);
-        entityManager.merge(role);
 
         logger.debug("User [{}] was assined to role [{}].", toLog);
     }
@@ -360,25 +360,16 @@ public class RoleManagerBean implements RoleManager {
         final Object[] toLog = Util.forLog(users, role);
         logger.debug("Tries to assign users [{}] to role [{}].", toLog);
 
-
-        final Set<PhrUser> actualUsers = role.getUsers();
-        final Set<PhrUser> usrs = actualUsers == null
-                ? new HashSet<PhrUser>()
-                : actualUsers;
-
-        usrs.addAll(users);
-        role.setUsers(users);
         for (PhrUser user : users) {
-            entityManager.merge(user);
+            assignUserToRole(user, role);
         }
-        entityManager.merge(role);
 
         logger.debug("Users [{}] was assined to role [{}].", toLog);
 
     }
 
     @Override
-    public void removeUserFromRole(PhrUser user, PhrRole role) {
+    public final void removeUserFromRole(PhrUser user, PhrRole role) {
         if (user == null) {
             final NullPointerException nullException =
                     new NullPointerException("The user argument can not be null.");
@@ -396,17 +387,23 @@ public class RoleManagerBean implements RoleManager {
         final Object[] toLog = Util.forLog(user, role);
         logger.debug("Tries to remove user [{}] from role [{}].", toLog);
 
-        final Set<PhrUser> actualUsers = role.getUsers();
-        final Set<PhrUser> users = actualUsers == null
-                ? new HashSet<PhrUser>()
-                : actualUsers;
-        users.remove(user);
-        role.setUsers(users);
+        final PhrUser managedUser = entityManager.merge(user);
+        final Set<PhrRole> phrRoles = managedUser.getPhrRoles();
+        if (phrRoles == null || phrRoles.isEmpty()) {
+            logger.debug("There is no relation between the user [{}] and the role [{}], remove user has no effect.", toLog);
+            // I leave if there are no relations.
+            return;
+        }
 
-        entityManager.merge(user);
-        entityManager.remove(user);
+        // removes the user from the role (inverse side).
+        final PhrRole managedRole = entityManager.merge(role);
+        final Set<PhrUser> phrUsers = managedRole.getPhrUsers();
+        phrUsers.remove(managedUser);
+        managedRole.setPhrUsers(phrUsers);
 
-        entityManager.merge(role);
+        // removes the group from the user (owner)
+        phrRoles.remove(managedRole);
+        managedUser.setPhrRoles(phrRoles);
 
         logger.debug("User [{}] was removed from role [{}].", toLog);
     }
@@ -436,11 +433,9 @@ public class RoleManagerBean implements RoleManager {
 
         final Object[] toLog = Util.forLog(users, role);
         logger.debug("Tries to remove users [{}] from the role [{}].", toLog);
-
-        final Set<PhrUser> roleUsers = role.getUsers();
-        roleUsers.removeAll(users);
-        role.setUsers(users);
-
+        for (PhrUser user : users) {
+            removeUserFromRole(user, role);
+        }
         entityManager.merge(role);
         logger.debug("Users [{}] was removed from the role [{}].", toLog);
     }

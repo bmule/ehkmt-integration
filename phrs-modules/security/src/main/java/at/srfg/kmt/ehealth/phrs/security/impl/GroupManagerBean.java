@@ -78,41 +78,25 @@ public class GroupManagerBean implements GroupManager {
 
 
         logger.debug("Tries to add Group [{}]", group);
-        final String name = group.getName();
+        final Long id = group.getId();
 
-        final PhrGroup oldGroup;
-        try {
-            oldGroup = getGroupForNameExactMatch(name);
-        } catch (NonUniqueResultException exception) {
-            final GroupException gException =
-                    new GroupException(exception);
-            gException.setGroup(group);
-            logger.error("Duplicate group found for {}", group);
-            logger.error(gException.getMessage(), exception);
-            throw gException;
-        }
-
-        if (oldGroup == null) {
+        if (id == null) {
             entityManager.persist(group);
-            logger.debug("Group [{}] was persisted.", group);
+            logger.debug("The Group [{}] was persisted.", group);
             return true;
         }
+        final PhrGroup oldGroup =
+                entityManager.find(PhrGroup.class, id);
 
-        final String newName = group.getName();
-        if (newName != null && !newName.isEmpty()) {
-            oldGroup.setName(newName);
+        if (oldGroup == null) {
+            final GroupException groupException =
+                    new GroupException("Inconsistent Data Structure.");
+            groupException.setGroup(group);
+            logger.error(groupException.getMessage(), groupException);
+            throw groupException;
         }
 
-        final String newDescription = group.getDescription();
-        if (newDescription != null && !newDescription.isEmpty()) {
-            oldGroup.setDescription(newDescription);
-        }
-
-        final Set<PhrUser> newUsers = group.getUsers();
-        if (newUsers != null) {
-            // FIXME : I think I must remove the old one as well
-            oldGroup.setUsers(newUsers);
-        }
+        entityManager.merge(group);
 
         logger.debug("Group [{}] was upadted.", group);
         return false;
@@ -146,7 +130,7 @@ public class GroupManagerBean implements GroupManager {
             // the reason for this is : the OneToMany lazy initialisation works
             // only in the same transtion/session - if the session is done
             // then the lazy initalisayion will fail.
-            result.getUsers().size();
+            result.getPhrUsers().size();
             return result;
         } catch (NoResultException exception) {
             logger.debug("No group with the name [{}] found.", name);
@@ -184,7 +168,6 @@ public class GroupManagerBean implements GroupManager {
             logger.error(gException.getMessage(), exception);
             throw gException;
         }
-
     }
 
     /**
@@ -192,12 +175,15 @@ public class GroupManagerBean implements GroupManager {
      * otherwise this has no effect.
      *
      * @param group the group to remove, it can not be null.
-     * @return the removed group or null if the group to remove is not
-     * registered.
+     * @return the removed group.
      * @throws NullPointerException if the group argument is null.
      */
     @Override
     public PhrGroup removeGroup(PhrGroup group) {
+
+        // the reason why this method is final is because it is used by the 
+        // assignUsersToGroup(...) method.
+
 
         if (group == null) {
             final NullPointerException nullException =
@@ -206,15 +192,27 @@ public class GroupManagerBean implements GroupManager {
             throw nullException;
         }
 
-        final String name = group.getName();
-        // mihai : I can also do a 'merge' to assign the entity to the
-        // actaul context.
-        final PhrGroup oldGroup = getGroupForNameExactMatch(name);
-        if (oldGroup != null) {
-            entityManager.remove(oldGroup);
+        logger.debug("Tries to remove group [{}]", group);
+
+        final PhrGroup managedGroup = entityManager.merge(group);
+        final Set<PhrUser> users = managedGroup.getPhrUsers();
+        if (users == null || users.isEmpty()) {
+            entityManager.remove(managedGroup);
+            logger.debug("Group [{}] was removed.", managedGroup);
+            return managedGroup;
         }
 
-        return oldGroup;
+        // removes the group from the user (the owner side).
+        for (PhrUser user : users) {
+            final Set<PhrGroup> groups = user.getPhrGroups();
+            if (groups != null && !groups.isEmpty()) {
+                groups.remove(managedGroup);
+            }
+        }
+
+        entityManager.remove(managedGroup);
+        logger.debug("Group [{}] was removed.", managedGroup);
+        return managedGroup;
     }
 
     /**
@@ -234,11 +232,6 @@ public class GroupManagerBean implements GroupManager {
         for (PhrGroup group : groups) {
             entityManager.remove(group);
         }
-
-//        final Query groupQuery = entityManager.createNamedQuery("removeAllGroups");
-//        groupQuery.executeUpdate();
-//        entityManager.flush();
-//        logger.debug("All the PHRS groups are removed.");
     }
 
     /**
@@ -255,8 +248,10 @@ public class GroupManagerBean implements GroupManager {
     }
 
     @Override
-    public void assignUserToGroup(PhrUser user, PhrGroup group) {
+    public final void assignUserToGroup(PhrUser user, PhrGroup group) {
 
+        // the reason why this method is final is because it is used by the 
+        // assignUsersToGroup(...) method.
         if (user == null) {
             final NullPointerException nullException =
                     new NullPointerException("The user argument can not be null.");
@@ -274,15 +269,23 @@ public class GroupManagerBean implements GroupManager {
         final Object[] toLog = Util.forLog(user, group);
         logger.debug("Tries to assign user [{}] to group [{}].", toLog);
 
-        final Set<PhrUser> actualUsers = group.getUsers();
-        final Set<PhrUser> users = actualUsers == null
-                ? new HashSet<PhrUser>()
-                : actualUsers;
-        users.add(user);
-        group.setUsers(users);
+        // assign user to group (owner side)
+        final PhrUser managedUser = entityManager.merge(user);
+        final Set<PhrGroup> phrGroups = managedUser.getPhrGroups();
+        final Set<PhrGroup> groups = phrGroups == null
+                ? new HashSet<PhrGroup>()
+                : phrGroups;
 
-        entityManager.merge(user);
-        entityManager.merge(group);
+        final PhrGroup managedGroup = entityManager.merge(group);
+        groups.add(managedGroup);
+        managedUser.setPhrGroups(groups);
+
+        // assign group to user (inverse side)
+        final Set<PhrUser> phrUsers = managedGroup.getPhrUsers();
+        final Set<PhrUser> users = phrUsers == null
+                ? new HashSet<PhrUser>()
+                : phrUsers;
+        managedGroup.setPhrUsers(users);
 
         logger.debug("User [{}] was assined to group [{}].", toLog);
     }
@@ -314,24 +317,18 @@ public class GroupManagerBean implements GroupManager {
         final Object[] toLog = Util.forLog(users, group);
         logger.debug("Tries to assign users [{}] to group [{}].", toLog);
 
-
-        final Set<PhrUser> actualUsers = group.getUsers();
-        final Set<PhrUser> usrs = actualUsers == null
-                ? new HashSet<PhrUser>()
-                : actualUsers;
-
-        usrs.addAll(users);
-        group.setUsers(users);
         for (PhrUser user : users) {
-            entityManager.merge(user);
+            assignUserToGroup(user, group);
         }
-        entityManager.merge(group);
 
         logger.debug("Users [{}] was assined to group [{}].", toLog);
     }
 
     @Override
-    public void removeUserFromGroup(PhrUser user, PhrGroup group) {
+    public final void removeUserFromGroup(PhrUser user, PhrGroup group) {
+
+        // the reason why this method is final is because it is used by the 
+        // removeUsersFromGroup(...) method.
         if (user == null) {
             final NullPointerException nullException =
                     new NullPointerException("The user argument can not be null.");
@@ -349,17 +346,23 @@ public class GroupManagerBean implements GroupManager {
         final Object[] toLog = Util.forLog(user, group);
         logger.debug("Tries to remove user [{}] from group [{}].", toLog);
 
-        final Set<PhrUser> actualUsers = group.getUsers();
-        final Set<PhrUser> users = actualUsers == null
-                ? new HashSet<PhrUser>()
-                : actualUsers;
-        users.remove(user);
-        group.setUsers(users);
+        final PhrUser managedUser = entityManager.merge(user);
+        final Set<PhrGroup> phrGroups = managedUser.getPhrGroups();
+        if (phrGroups == null || phrGroups.isEmpty()) {
+            logger.debug("There is no relation between the user [{}] and the group [{}], remove user has no effect.", toLog);
+            // I leave if there are no relations.
+            return;
+        }
 
-        entityManager.merge(user);
-        entityManager.remove(user);
-        
-        entityManager.merge(group);
+        // removes the user from the group (inverse)
+        final PhrGroup managedGroup = entityManager.merge(group);
+        final Set<PhrUser> phrUsers = managedGroup.getPhrUsers();
+        phrUsers.remove(managedUser);
+        managedGroup.setPhrUsers(phrUsers);
+
+        // removes the group from the user (owner)
+        phrGroups.remove(managedGroup);
+        managedUser.setPhrGroups(phrGroups);
 
         logger.debug("User [{}] was removed from group [{}].", toLog);
     }
@@ -389,11 +392,11 @@ public class GroupManagerBean implements GroupManager {
 
         final Object[] toLog = Util.forLog(users, group);
         logger.debug("Tries to remove users [{}] from the group [{}].", toLog);
-        
-        final Set<PhrUser> groupUsers = group.getUsers();
-        groupUsers.removeAll(users);
-        group.setUsers(users);
-        
+
+        for (PhrUser user : users) {
+            removeUserFromGroup(user, group);
+        }
+
         entityManager.merge(group);
         logger.debug("Users [{}] was removed from the group [{}].", toLog);
     }
