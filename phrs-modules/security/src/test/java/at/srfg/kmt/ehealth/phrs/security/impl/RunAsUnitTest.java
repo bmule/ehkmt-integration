@@ -6,25 +6,33 @@
  */
 
 
-
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.security.model.PhrAction;
+import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.util.Util;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import java.net.MalformedURLException;
+import javax.ejb.EJB;
 import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.api.Run;
+import org.jboss.arquillian.api.RunModeType;
+import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
  * @author Mihai
  */
-public class RunAsUnitTest {
+@RunWith(Arquillian.class)
+@Run(RunModeType.IN_CONTAINER)
+    public class RunAsUnitTest {
 
     /**
      * The Logger instance. All log messages from this class
@@ -32,9 +40,19 @@ public class RunAsUnitTest {
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.UserManagerBeanUnitTest</code>.
      */
     private static final Logger logger =
-            LoggerFactory.getLogger(UserManagerBeanUnitTest.class);
+            LoggerFactory.getLogger(RunAsUnitTest.class);
 
+    /**
+     * The <code>MyService</code> instance to test.
+     */
+    @EJB
+    private MyService myService;
+
+    /**
+     * Builds a <code>RunAsUnitTest</code> instance.
+     */
     public RunAsUnitTest() {
+        // UNIMPLMEMENTED
     }
 
     /**
@@ -58,11 +76,12 @@ public class RunAsUnitTest {
         // at.srfg.kmt.ehealth.phrs.security are
         // added to the ejb jar (and to the classpath).
         // see the log for the ejb jar structure
-        ejbJar.addPackage(UserManagerBeanUnitTest.class.getPackage());
+        ejbJar.addPackage(RunAsUnitTest.class.getPackage());
 
         final Package apiPackage = Package.getPackage("at.srfg.kmt.ehealth.phrs.security.api");
         ejbJar.addPackage(apiPackage);
 
+        Class c = PhrAction.class;
         final Package modelPackage = Package.getPackage("at.srfg.kmt.ehealth.phrs.security.model");
         ejbJar.addPackage(modelPackage);
 
@@ -81,9 +100,11 @@ public class RunAsUnitTest {
         logger.debug(ejbStructure);
         return ejbJar;
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-     @Test
-     public void hello() {}
+
+    @Test
+    public void testSecureCall() {
+        final int value = 10;
+        final int doStuffResult = myService.doStuff(value);
+        assertEquals(value + 7, doStuffResult);
+    }
 }

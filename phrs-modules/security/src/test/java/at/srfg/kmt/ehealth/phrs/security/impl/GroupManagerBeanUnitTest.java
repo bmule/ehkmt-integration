@@ -1,20 +1,24 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Project :iCardea
+ * File : GroupManagerBeanUnitTest.java
+ * Date : Dec 24, 2010
+ * User : mradules
  */
 
 
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
 import java.util.Set;
 import static org.junit.Assert.*;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrGroup;
-import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrUser;
+import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrActor;
 
 import at.srfg.kmt.ehealth.phrs.security.api.GroupManager;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+
 import at.srfg.kmt.ehealth.phrs.util.Util;
 import org.jboss.arquillian.api.Run;
 import org.jboss.arquillian.api.RunModeType;
@@ -130,6 +134,7 @@ public class GroupManagerBeanUnitTest {
      * register operation was right done.
      *
      * @return the new created group.
+     * @see GroupManager#addGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      */
     private PhrGroup addGroup() {
         final PhrGroup group = createPhrGroup();
@@ -185,7 +190,7 @@ public class GroupManagerBeanUnitTest {
      * @see GroupManager#removeGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      * @see GroupManager#groupExist(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      */
-    @Test
+    //@Test
     public void testRemoveGroup() {
         final PhrGroup group = addGroup();
         final PhrGroup removeGroupResponse = groupManager.removeGroup(group);
@@ -206,7 +211,7 @@ public class GroupManagerBeanUnitTest {
      * @see GroupManager#removeGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      * @see GroupManager#groupExist(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      */
-    @Test
+    //@Test
     public void testRemoveGroupForUndegisterGroup() {
         final String newName = "Other Name_" + new Date().getTime();
         final PhrGroup group = new PhrGroup(newName);
@@ -214,7 +219,7 @@ public class GroupManagerBeanUnitTest {
         assertFalse(groupExist);
 
         final PhrGroup removeGroup = groupManager.removeGroup(group);
-        
+
         final boolean groupExistAfterRemove = groupManager.groupExist(removeGroup);
         assertFalse(groupExistAfterRemove);
     }
@@ -226,7 +231,7 @@ public class GroupManagerBeanUnitTest {
      * 
      * @see GroupManager#removeGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup)
      */
-    @Test(expected = EJBException.class)
+    //@Test(expected = EJBException.class)
     public void testRemoveGroupWithNullGroup() {
         final PhrGroup group = null;
         try {
@@ -366,72 +371,76 @@ public class GroupManagerBeanUnitTest {
     }
 
     /**
-     * Assigns a user to a group and prove if the operation was proper done.
+     * Assigns a actor to a group and prove if the operation was proper done.
      * This test tests the :
-     * GroupManager.assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, 
-     * at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) method.
+     * GroupManager.addActorToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup, 
+     * at.srfg.kmt.ehealth.phrs.security.model.PhrActor) method.
      * 
-     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     * @see GroupManager#addActorToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup, at.srfg.kmt.ehealth.phrs.security.model.PhrActor) 
      */
     @Test
-    public void testAssignUserToGroup() {
+    public void testAssignActorToGroup() {
+
+        // I use the fetcher to ensure that all the Group relations are fetched.
+        final Fetcher<PhrGroup> fetcher = FetcherFactory.getGroupFetcher();
+
         final PhrGroup group = addGroup();
-        final PhrUser user = createPhrUser();
-        groupManager.assignUserToGroup(user, group);
+        final PhrActor actor = createPhrActor();
+        groupManager.addActorToGroup(group, actor);
 
         final String name = group.getName();
-        final PhrGroup groupForName = groupManager.getGroupForName(name);
-        final Set<PhrUser> users = groupForName.getPhrUsers();
-        final int size = users.size();
+        final PhrGroup groupForName = groupManager.getGroupForName(name, fetcher);
+        final Set<PhrActor> actors = groupForName.getMembers();
+        final int size = actors.size();
 
-        // I excpect only one user.
+        // I excpect only one actor.
         assertEquals(1, size);
-        final String expectdName = user.getName();
-        final String expectdFamilyName = user.getFamilyName();
+        final String expectdName = actor.getName();
 
-        final PhrUser getUser = users.iterator().next();
+        final PhrActor getActor = actors.iterator().next();
 
-        final String getUserName = getUser.getName();
-        final String getUserFamilyName = getUser.getFamilyName();
+        final String getActorName = getActor.getName();
 
-        assertEquals(expectdName, getUserName);
-        assertEquals(expectdFamilyName, getUserFamilyName);
+        assertEquals(expectdName, getActorName);
+
+        assertTrue(!groupForName.isGroupEmpty());
     }
 
     /**
-     * Uses the  GroupManager.assignUserToGroup(user, group) with a null user
-     * and proves if an <code>EJBException</code> occurs
-     * (caused by a <code>NullPointerException</code>).
-     * 
-     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     * Tries to access "unfetched" elements and fails with an exception.
+     * More precisely this test adds(registers) a group and tries to access the
+     * actors associated to the group, the actors are lazy initialized relations
+     * and this action will raises an exception.
      */
-    @Test(expected = EJBException.class)
-    public void testAssignUserToGroupWithNullUser() {
+    @Test(expected = RuntimeException.class)
+    public void testGetGroupWithoutFetch() {
         final PhrGroup group = addGroup();
-        final PhrUser user = null;
+        final String name = group.getName();
+
+        final PhrGroup groupForName = groupManager.getGroupForName(name);
+        final Set<PhrActor> members = groupForName.getMembers();
+
         try {
-            groupManager.assignUserToGroup(user, group);
-        } catch (EJBException exception) {
-            final Throwable cause = exception.getCause();
-            final boolean isNullPointer = cause instanceof NullPointerException;
-            assertTrue("NullPointerException expected.", isNullPointer);
-            throw exception;
+            // here I try to get an unfetched 
+            members.size();
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
     }
 
     /**
-     * Uses the  GroupManager.assignUserToGroup(user, group) with a null group
+     * Uses the  GroupManager.assignActorToGroup(actor, group) with a null actor
      * and proves if an <code>EJBException</code> occurs
      * (caused by a <code>NullPointerException</code>).
      * 
-     * @see GroupManager#assignUserToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     * @see GroupManager#addActorToGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup, at.srfg.kmt.ehealth.phrs.security.model.PhrActor) 
      */
     @Test(expected = EJBException.class)
-    public void testAssignUserToGroupWithNullGroup() {
-        final PhrGroup group = null;
-        final PhrUser user = createPhrUser();
+    public void testAssignActorToGroupWithNullActor() {
+        final PhrGroup group = addGroup();
+        final PhrActor actor = null;
         try {
-            groupManager.assignUserToGroup(user, group);
+            groupManager.addActorToGroup(group, actor);
         } catch (EJBException exception) {
             final Throwable cause = exception.getCause();
             final boolean isNullPointer = cause instanceof NullPointerException;
@@ -441,70 +450,86 @@ public class GroupManagerBeanUnitTest {
     }
 
     /**
-     * Tests the GroupManager.removeUserFromGroup(user, group) method.
-     * More precisely this method adds a new user to a group, remove it
-     * and prove it if the remove is proper done.
+     * Uses the  GroupManager.removeActorFromGroup(actor, group) with a null group
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
      * 
-     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     * @see GroupManager#removeActorFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testRemoveActorFromGroupNullGroup() {
+        final PhrGroup group = null;
+        final PhrActor actor = createPhrActor();
+
+        groupManager.removeActorFromGroup(group, actor);
+    }
+
+    /**
+     * Uses the  GroupManager.removeActorFromGroup(actor, group) with a null actor
+     * and proves if an <code>EJBException</code> occurs
+     * (caused by a <code>NullPointerException</code>).
+     * 
+     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     */
+    @Test(expected = EJBException.class)
+    public void testRemoveActorFromGroupNullActor() {
+        final PhrGroup group = createPhrGroup();
+        final PhrActor actor = null;
+
+        try {
+            groupManager.removeActorFromGroup(group, actor);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+    }
+
+    /**
+     * Adds an actor remove it and prove it if the action was right done.
+     * This test test the removeActorFromGroup(managedGroup, actor) method.
+     * 
+     * @see GroupManager#removeActorFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrGroup, at.srfg.kmt.ehealth.phrs.security.model.PhrActor) 
+     * @see PhrGroup#isGroupEmpty() 
+     * @see PhrGroup#getMembers() 
      */
     @Test
-    public void testRemoveUserFromGroup() {
+    public void testRemoveActorFromGroup() {
         final PhrGroup group = addGroup();
-        final PhrUser user = createPhrUser();
-        groupManager.assignUserToGroup(user, group);
-        
-        // I retrive the group from the peristence layer,
-        // this group has the user set it.
-        final String groupName = group.getName();
-        final PhrGroup persistedGroup =
-                groupManager.getGroupForName(groupName);
-        final Set<PhrUser> phrUsers = persistedGroup.getPhrUsers();
-        final int userCount = phrUsers.size();
-        
-        // there is only one user registered on the previous statement
-        assertEquals(1, userCount);
-        
-        // this is the registered user instance, it differ from the 'user' one 
-        // created with the createPhrUser because it is retreived from the
-        // persistence layer. The 'user' exist only in memory heap.
-        final PhrUser involvedUser = phrUsers.iterator().next();
-        groupManager.removeUserFromGroup(involvedUser, persistedGroup);
+        final PhrActor actor = createPhrActor();
+        groupManager.addActorToGroup(group, actor);
 
+        // I use the fetcher to ensure that all the Group relations are fetched.
+        final Fetcher<PhrGroup> fetcher = FetcherFactory.getGroupFetcher();
         final String name = group.getName();
-        final PhrGroup groupForName = groupManager.getGroupForName(name);
-        final Set<PhrUser> users = groupForName.getPhrUsers();
+        final PhrGroup managedGroup = groupManager.getGroupForName(name, fetcher);
+        final Set<PhrActor> managedGroupMembers = managedGroup.getMembers();
 
-        assertTrue(users.isEmpty());
+        // I expect only one member
+        assertEquals(1, managedGroupMembers.size());
+        assertTrue(managedGroupMembers.contains(actor));
+
+        groupManager.removeActorFromGroup(managedGroup, actor);
+
+        final PhrGroup emptyGroup = groupManager.getGroupForName(name, fetcher);
+        assertTrue(emptyGroup.getMembers().isEmpty());
+        assertTrue(emptyGroup.isGroupEmpty());
     }
 
     /**
-     * Uses the  GroupManager.removeUserFromGroup(user, group) with a null group
-     * and proves if an <code>EJBException</code> occurs
-     * (caused by a <code>NullPointerException</code>).
-     * 
-     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
+     * Adds one group, removes all groups and removes all groups. 
+     * This test test the removeAllGroups(managedGroup, actor) method.
      */
-    @Test(expected = EJBException.class)
-    public void testRemoveUserFromGroupNullGroup() {
-        final PhrGroup group = null;
-        final PhrUser user = createPhrUser();
+    @Test
+    public void testRemoveAllActorFromGroup() {
+        final PhrGroup group = addGroup();
+        final PhrActor actor = createPhrActor();
+        groupManager.addActorToGroup(group, actor);
 
-        groupManager.removeUserFromGroup(user, group);
+        groupManager.removeAllGroups();
+
+        final Set<PhrGroup> allGroups = groupManager.getAllGroups();
+        assertTrue(allGroups.isEmpty());
     }
-
-    /**
-     * Uses the  GroupManager.removeUserFromGroup(user, group) with a null user
-     * and proves if an <code>EJBException</code> occurs
-     * (caused by a <code>NullPointerException</code>).
-     * 
-     * @see GroupManager#removeUserFromGroup(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrGroup) 
-     */
-    @Test(expected = EJBException.class)
-    public void testRemoveUserFromGroupNullUser() {
-        final PhrGroup group = createPhrGroup();
-        final PhrUser user = null;
-
-        groupManager.removeUserFromGroup(user, group);
-    }
-
 }

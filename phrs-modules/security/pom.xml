@@ -45,37 +45,6 @@
         <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
     </properties>
 
-
-    <repositories>
-        <repository>
-            <id>jboss-nexus-group-public</id>
-            <name>JBoss Repository Nexus Group Public</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>jboss-nexus</id>
-            <name>JBoss Repository Nexus</name>
-
-            <url>https://repository.jboss.org/nexus/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-    </repositories>
-
     <dependencies>
         
         <dependency>
@@ -100,13 +69,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>[1.6,)</version>
+            <version>(1.6.0,]</version>
         </dependency>
         
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>[1.6,)</version>
+            <version>(1.6.0,]</version>
             <scope>provided</scope>
         </dependency>
 

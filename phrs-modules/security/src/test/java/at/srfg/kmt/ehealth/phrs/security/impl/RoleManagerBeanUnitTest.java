@@ -9,13 +9,14 @@
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
-import at.srfg.kmt.ehealth.phrs.util.Util;
-import static org.junit.Assert.*;
-import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrUser;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrRole;
+import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrActor;
+import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
+import static org.junit.Assert.*;
 
+import at.srfg.kmt.ehealth.phrs.util.Util;
 import at.srfg.kmt.ehealth.phrs.security.api.RoleManager;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
 import java.util.Set;
 
@@ -214,10 +215,10 @@ public class RoleManagerBeanUnitTest {
         final PhrRole role = new PhrRole(newName);
         final boolean roleExist = roleManager.roleExist(role);
         assertFalse(roleExist);
-        
-        
+
+
         final PhrRole removeRole = roleManager.removeRole(role);
-        
+
         final boolean groupExistAfterRemove = roleManager.roleExist(removeRole);
         assertFalse(groupExistAfterRemove);
     }
@@ -258,6 +259,28 @@ public class RoleManagerBeanUnitTest {
         assertNotNull(roleForNameResponse);
         final String name = roleForNameResponse.getName();
         assertEquals(expected, name);
+    }
+
+    /**
+     * Tries to access "unfetched" elements and fails with an exception.
+     * More precisely this test adds(registers) a role and tries to access the
+     * actors associated to the role, the actors are lazy initialized relations
+     * and this action will raises an exception.
+     */
+    @Test(expected = RuntimeException.class)
+    public void testGetGroupWithoutFetch() {
+        final PhrRole role = addRole();
+        final String name = role.getName();
+
+        final PhrRole groupForName = roleManager.getRoleForName(name);
+        final Set<PhrActor> members = groupForName.getPhrActors();
+
+        try {
+            // here I try to get an unfetched 
+            members.size();
+        } catch (Exception exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     /**
@@ -313,7 +336,7 @@ public class RoleManagerBeanUnitTest {
         assertEquals(expected, size);
     }
 
-    @Test
+    //@Test
     public void testRolesForNamePatternWithWrongName() {
         final PhrRole role = addRole();
         final String name = role.getName();
@@ -369,72 +392,48 @@ public class RoleManagerBeanUnitTest {
     }
 
     /**
-     * Assigns a user to a role and prove if the operation was proper done.
+     * Assigns a actor to a role and prove if the operation was proper done.
      * This test tests the :
-     * RoleManager.assignUserToRole(user, role) method.
+     * RoleManager.assignActorToRole(actor, role) method.
      * 
-     * @see RoleManager#assignUserToRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
+     * @see RoleManager#assignActorToRole(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
      */
     @Test
-    public void testAssignUserToRole() {
+    public void testAssignActorToRole() {
         final PhrRole role = addRole();
-        final PhrUser user = createPhrUser();
+        final PhrActor actor = createPhrActor();
 
-        roleManager.assignUserToRole(user, role);
-
+        roleManager.assignActorToRole(actor, role);
         final String name = role.getName();
-        final PhrRole roleForName = roleManager.getRoleForName(name);
-        final Set<PhrUser> users = roleForName.getPhrUsers();
-        final int size = users.size();
+        final Fetcher<PhrRole> fetcher = FetcherFactory.getRoleFetcher();
+        final PhrRole roleForName = roleManager.getRoleForName(name, fetcher);
+        final Set<PhrActor> actors = roleForName.getPhrActors();
+        final int size = actors.size();
 
-        // I excpect only one user.
+        // I excpect only one actor.
         assertEquals(1, size);
-        final String expectdName = user.getName();
-        final String expectdFamilyName = user.getFamilyName();
+        final String expectdName = actor.getName();
 
-        final PhrUser getUser = users.iterator().next();
+        final PhrActor getActor = actors.iterator().next();
+        final String getActorName = getActor.getName();
 
-        final String getUserName = getUser.getName();
-        final String getUserFamilyName = getUser.getFamilyName();
-
-        assertEquals(expectdName, getUserName);
-        assertEquals(expectdFamilyName, getUserFamilyName);
+        assertEquals(expectdName, getActorName);
     }
 
     /**
-     * Uses the  RoleManager.assignUserToRole(user, role) with a null user
+     * Uses the  RoleManager.assignActorToRole(actor, role) with a null role
      * and proves if an <code>EJBException</code> occurs
      * (caused by a <code>NullPointerException</code>).
      * 
-     * @see RoleManager#assignUserToRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole)
+     * @see RoleManager#assignActorToRole(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
      */
     @Test(expected = EJBException.class)
-    public void testAssignUserToRoleWithNullUser() {
-        final PhrRole role = addRole();
-        final PhrUser user = null;
-        try {
-            roleManager.assignUserToRole(user, role);
-        } catch (EJBException exception) {
-            final Throwable cause = exception.getCause();
-            final boolean isNullPointer = cause instanceof NullPointerException;
-            assertTrue("NullPointerException expected.", isNullPointer);
-            throw exception;
-        }
-    }
-
-    /**
-     * Uses the  RoleManager.assignUserToRole(user, role) with a null role
-     * and proves if an <code>EJBException</code> occurs
-     * (caused by a <code>NullPointerException</code>).
-     * 
-     * @see RoleManager#assignUserToRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
-     */
-    @Test(expected = EJBException.class)
-    public void testAssignUserToRoleWithNullRole() {
+    public void testAssignActorToRoleWithNullRole() {
         final PhrRole role = null;
-        final PhrUser user = createPhrUser();
+        final PhrActor actor = createPhrActor();
+
         try {
-            roleManager.assignUserToRole(user, role);
+            roleManager.assignActorToRole(actor, role);
         } catch (EJBException exception) {
             final Throwable cause = exception.getCause();
             final boolean isNullPointer = cause instanceof NullPointerException;
@@ -444,69 +443,80 @@ public class RoleManagerBeanUnitTest {
     }
 
     /**
-     * Tests the RoleManager.removeUserFromRole(user, role) method.
-     * More precisely this method adds a new user to a role, remove it
+     * Tests the RoleManager.removeActorFromRole(actor, role) method.
+     * More precisely this method adds a new actor to a role, remove it
      * and prove it if the remove is proper done.
      * 
-     * @see RoleManager#removeUserFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
+     * @see RoleManager#removeActorFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
      */
     @Test
-    public void testRemoveUserFromRole() {
+    public void testRemoveActorFromRole() {
         final PhrRole role = addRole();
-        final PhrUser user = createPhrUser();
-        roleManager.assignUserToRole(user, role);
-
-        // I retrive the group from the peristence layer,
-        // this group has the user set it.
-        final String groupName = role.getName();
-        final PhrRole persistedRole =
-                roleManager.getRoleForName(groupName);
-        final Set<PhrUser> phrUsers = persistedRole.getPhrUsers();
-        final int userCount = phrUsers.size();
-
-        // there is only one user registered on the previous statement
-        assertEquals(1, userCount);
-
-        // this is the registered user instance, it differ from the 'user' one 
-        // created with the createPhrUser because it is retreived from the
-        // persistence layer. The 'user' exist only in memory heap.
-        final PhrUser involvedUser = phrUsers.iterator().next();
-        roleManager.removeUserFromRole(involvedUser, persistedRole);
-
+        final PhrActor actor = createPhrActor();
+        
+        roleManager.assignActorToRole(actor, role);
+        
         final String name = role.getName();
-        final PhrRole groupForName = roleManager.getRoleForName(name);
-        final Set<PhrUser> users = groupForName.getPhrUsers();
-
-        assertTrue(users.isEmpty());
+        final Fetcher<PhrRole> fetcher = FetcherFactory.getRoleFetcher();
+        final PhrRole managedRole = roleManager.getRoleForName(name, fetcher);
+        final Set<PhrActor> phrActors = managedRole.getPhrActors();
+        // I expect one one actor
+        assertEquals(1, phrActors.size());
+        assertFalse(managedRole.isRoleEmpty());
+        
+        final PhrActor managedActor =
+                managedRole.getPhrActors().iterator().next();
+        
+        roleManager.removeActorFromRole(managedActor, managedRole);
+        final PhrRole managedRoleAfterRemove =
+                roleManager.getRoleForName(name, fetcher);
+        
+        assertTrue(managedRoleAfterRemove.isRoleEmpty());
     }
 
     /**
-     * Uses the  RoleManager.removeUserFromRole(user, role) with a null role
+     * Uses the  RoleManager.removeActorFromRole(actor, role) with a null role
      * and proves if an <code>EJBException</code> occurs
      * (caused by a <code>NullPointerException</code>).
      * 
-     * @see RoleManager#removeUserFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
+     * @see RoleManager#removeActorFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
      */
     @Test(expected = EJBException.class)
-    public void testRemoveUserFromRoleNullRole() {
+    public void testRemoveActorFromRoleNullRole() {
         final PhrRole role = null;
-        final PhrUser user = createPhrUser();
+        final PhrActor actor = createPhrActor();
 
-        roleManager.removeUserFromRole(user, role);
+        try {
+            roleManager.removeActorFromRole(actor, role);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
+
     }
 
     /**
-     * Uses the  RoleManager.removeUserFromRole(user, role) with a null user
+     * Uses the  RoleManager.removeActorFromRole(actor, role) with a null actoractor
      * and proves if an <code>EJBException</code> occurs
      * (caused by a <code>NullPointerException</code>).
      * 
-     * @see RoleManager#removeUserFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrUser, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
+     * @see RoleManager#removeActorFromRole(at.srfg.kmt.ehealth.phrs.security.model.PhrActor, at.srfg.kmt.ehealth.phrs.security.model.PhrRole) 
      */
     @Test(expected = EJBException.class)
-    public void testRemoveUserFromRoleNullUser() {
+    public void testRemoveActorFromRoleNullActor() {
         final PhrRole role = createPhrRole();
-        final PhrUser user = null;
+        final PhrActor actor = null;
 
-        roleManager.removeUserFromRole(user, role);
+        try {
+            roleManager.removeActorFromRole(actor, role);
+        } catch (EJBException exception) {
+            final Throwable cause = exception.getCause();
+            final boolean isNullPointer = cause instanceof NullPointerException;
+            assertTrue("NullPointerException expected.", isNullPointer);
+            throw exception;
+        }
     }
+    
 }

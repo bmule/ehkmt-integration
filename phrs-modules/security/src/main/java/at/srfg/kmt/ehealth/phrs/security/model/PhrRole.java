@@ -17,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 /**
@@ -30,12 +29,12 @@ import javax.persistence.Transient;
  * @author Mihai
  */
 @Entity
-@NamedQueries({
-    @NamedQuery(name = "findRoleForName", query = "SELECT r FROM PhrRole AS r WHERE r.name = :name"),
-    @NamedQuery(name = "findRoleForNamePattern", query = "SELECT r FROM PhrRole AS r WHERE r.name LIKE :namePattern"),
-    @NamedQuery(name = "removeAllRoles", query = "DELETE FROM PhrRole AS g"),
-    @NamedQuery(name = "removeRoleForName", query = "DELETE FROM PhrRole AS r WHERE r.name = :name"),
-    @NamedQuery(name = "getAllRoles", query = "SELECT r FROM PhrRole AS r")
+@NamedQueries({@NamedQuery(name = "selectAllRoles", 
+                          query="SELECT r FROM PhrRole AS r"),
+               @NamedQuery(name="selectRoleForName", 
+                            query="SELECT r FROM PhrRole AS r WHERE r.name=:name"),
+               @NamedQuery(name="selectRolesForNamePattern", 
+                            query="SELECT r FROM PhrRole AS r WHERE r.name LIKE :name_pattern")
 })
 public class PhrRole implements Serializable {
 
@@ -62,11 +61,9 @@ public class PhrRole implements Serializable {
      * The role description.
      */
     private String description;
+    
+    private Set<PhrActor> phrActors;
 
-    /**
-     * All the user members in this with this role.
-     */
-    private Set<PhrUser> phrUsers;
 
     /**
      * Builds an <code>PhrRole</code>PhrRole instance.
@@ -156,18 +153,18 @@ public class PhrRole implements Serializable {
      * @see #addUsers(java.util.Set)
      * @see #addUser(at.srfg.kmt.ehealth.phrs.security.model.User)
      */
-    public void setPhrUsers(Set<PhrUser> users) {
-        this.phrUsers = users;
+    public void setPhrActors(Set<PhrActor> users) {
+        this.phrActors = users;
     }
 
     @ManyToMany(mappedBy = "phrRoles", cascade=CascadeType.ALL)
-    public Set<PhrUser> getPhrUsers() {
-        return phrUsers;
+    public Set<PhrActor> getPhrActors() {
+        return phrActors;
     }
 
     @Transient
     public boolean isRoleEmpty() {
-        return phrUsers == null ? true : phrUsers.isEmpty();
+        return phrActors == null ? true : phrActors.isEmpty();
     }
 
     /**

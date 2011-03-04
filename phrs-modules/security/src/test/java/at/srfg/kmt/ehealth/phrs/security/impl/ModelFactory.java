@@ -9,10 +9,12 @@
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Used to create model instances (defiend in the 
@@ -50,25 +52,54 @@ class ModelFactory {
     }
 
     /**
-     * Builds a <code>PhrUser</code> with a certain name and family name.
-     * The <code>PhrUser</code> name is formed from the 'Name_' prefix
+     * Builds a <code>PhrActor</code> with a certain name and description.
+     * The <code>PhrActor</code> name is formed from the 'Name_' prefix
      * followed by the actual time in milliseconds.
      *
-     * @return a <code>PhrUser</code> with a certain name and family.
+     * @return a <code>PhrActor</code> with a certain name and description.
      */
-    static PhrUser createPhrUser() {
+    static PhrActor createPhrActor() {
         final StringBuffer name = new StringBuffer();
         name.append("Name_");
         final long time = new Date().getTime();
         name.append(time);
 
-        final StringBuffer famName = new StringBuffer();
-        famName.append("Family_");
-        famName.append(time);
 
-        final PhrUser user = new PhrUser(name.toString(), famName.toString());
+        final PhrActor result = new PhrActor(name.toString());
+        final StringBuffer description = new StringBuffer();
+        description.append("Description_");
+        description.append(time);
+        
+        result.setDescription(description.toString());
 
-        return user;
+        return result;
+    }
+    
+    /**
+     * Builds a set of set that contains a lot of distinct
+     * <code>PhrActor</code> instances, each instance is build with the 
+     * <code>createPhrActor</code> method.
+     * 
+     * @param count the number of the distinct instances for the result set.
+     * @return a set of set that contains a lot of distinct
+     * <code>PhrActor</code> instances.
+     * @see #createPhrActor() 
+     */
+    static Set<PhrActor> createPhrActors(int count) {
+        
+        final Set<PhrActor> result = new HashSet<PhrActor>();
+        for (int i = 0;i < count; i++) {
+            final PhrActor actor = createPhrActor();
+            final String name = actor.getName();
+            actor.setName(name + "__" + i);
+            result.add(actor);
+            
+            final String description = actor.getDescription();
+            actor.setDescription(description + "__" + i);
+            result.add(actor);
+        }
+        
+        return result;
     }
 
     /**

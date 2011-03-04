@@ -5,9 +5,12 @@
 
 package at.srfg.kmt.ehealth.phrs.security.api;
 
+import at.srfg.kmt.ehealth.phrs.security.model.PhrAction;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrItem;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
+
 
 /**
  *
@@ -15,15 +18,15 @@ import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
  */
 public interface PermissionManager {
 
-    boolean validate(PhrUser user, Action action, Item item);
-    boolean validate(PhrUser user, Action action);
+    boolean validate(PhrActor user, PhrAction action, PhrItem item);
+    boolean validate(PhrActor user, PhrAction action);
 
-    boolean validate(PhrRole role, Action action, Item item);
-    boolean validate(PhrRole role, Action action);
+    boolean validate(PhrRole role, PhrAction action, PhrItem item);
+    boolean validate(PhrRole role, PhrAction action);
 
-    boolean validate(PhrGroup role, Action action, Item item);
-    boolean validate(PhrGroup role, Action action);
+    boolean validate(PhrGroup role, PhrAction action, PhrItem item);
+    boolean validate(PhrGroup role, PhrAction action);
 
-    PhrGroup getAllowdGroupFor(Action action, Item item);
-    PhrRole getAllowdRoleFor(Action action, Item item);
+    PhrGroup getAllowdGroupFor(PhrAction action, PhrItem item);
+    PhrRole getAllowdRoleFor(PhrAction action, PhrItem item);
 }

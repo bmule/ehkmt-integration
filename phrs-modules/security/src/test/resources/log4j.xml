@@ -29,18 +29,6 @@
         <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
         <param name="File" value="/tmp/phrs.security.log"/>
         <param name="Append" value="false"/>
-      <!-- In AS 5.0.x the server log threshold was set by a system                                                                                                                                       
-           property. In 5.1 and later we are instead using the system                                                                                                                                     
-           property to set the priority on the root logger (see <root/> below)                                                                                                                            
-      <param name="Threshold" value="${jboss.server.log.threshold}"/>                                                                                                                                     
-      -->                                                                                                                                                                                                 
-                                                                                                                                                                                                          
-      <!-- Rollover at midnight each day -->                                                                                                                                                              
-        <param name="DatePattern" value="'.'yyyy-MM-dd"/>
-                                                                                                                                                                                                          
-      <!-- Rollover at the top of each hour                                                                                                                                                               
-      <param name="DatePattern" value="'.'yyyy-MM-dd-HH"/>                                                                                                                                                
-      -->                                                                                                                                                                                                 
                                                                                                                                                                                                           
         <layout class="org.apache.log4j.PatternLayout">
          <!-- The default pattern: Date Priority [Category] (Thread) Message\n -->                                                                                                                        

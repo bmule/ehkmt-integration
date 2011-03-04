@@ -13,6 +13,6 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
  */
 enum RunAsConstants {
 
-    ROLES, GROUPS;
+    ROLES, GROUPS, ACTION;
 
 }

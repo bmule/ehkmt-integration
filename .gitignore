@@ -35,3 +35,11 @@ Desktop.ini
 profiles.xml
 nb-configuration.xml
 
+/phrs-modules/dataexcahnge/target/
+/phrs-modules/.idea/
+/phrs-modules/.settings/
+/phrs-modules/security/.settings/
+/phrs-modules/security/target/
+/phrs-modules/phrs-util/target/
+/phrs-modules/consenteditor/.settings/
+/phrs-modules/messaging/.settings/

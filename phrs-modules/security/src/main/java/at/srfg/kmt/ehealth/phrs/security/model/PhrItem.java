@@ -18,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 
+
 /**
  * Defines a generic piece of information.
  * An item can be everything (from an entire documents

@@ -5,9 +5,12 @@
 
 package at.srfg.kmt.ehealth.phrs.security.api;
 
+
+import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
 import java.util.Set;
+
 
 /**
  * Defines the functionality for the Group Manager service.
@@ -59,6 +62,7 @@ public interface GroupManager {
      * @return a Set that contains all the registered sets.
      */
     Set<PhrGroup> getAllGroups();
+    Set<PhrGroup> getAllGroups(Fetcher<PhrGroup> fetcher);
 
     /**
      * Returns a group for a given name, the group name attribute match
@@ -69,6 +73,7 @@ public interface GroupManager {
      * specified name.
      */
     PhrGroup getGroupForName(String name);
+    PhrGroup getGroupForName(String name, Fetcher<PhrGroup> fetcher);
 
     /**
      * Returns a set of <code>PhrGroup</code> where the group name match
@@ -79,10 +84,11 @@ public interface GroupManager {
      * a certain pattern
      */
     Set<PhrGroup> getGroupsForNamePattern(String namePattern);
+    Set<PhrGroup> getGroupsForNamePattern(String namePattern, Fetcher<PhrGroup> fetcher);
 
-    void assignUserToGroup(PhrUser user, PhrGroup group);
-    void assignUsersToGroup(Set<PhrUser> users, PhrGroup group);
+    void addActorToGroup(PhrGroup group, PhrActor actor);
+    void addActorsToGroup(PhrGroup group, Set<PhrActor> actors);
 
-    void removeUserFromGroup(PhrUser user, PhrGroup group);
-    void removeUsersFromGroup(Set<PhrUser> users, PhrGroup group);
+    void removeActorFromGroup(PhrGroup group, PhrActor actor);
+    void removeActorsFromGroup(PhrGroup group, Set<PhrActor> actors);
 }

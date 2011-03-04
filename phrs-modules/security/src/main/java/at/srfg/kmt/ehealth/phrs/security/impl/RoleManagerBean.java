@@ -10,8 +10,9 @@ package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.security.api.RoleManager;
+import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import at.srfg.kmt.ehealth.phrs.util.Util;
 import java.util.HashSet;
 import java.util.List;
@@ -41,7 +42,7 @@ public class RoleManagerBean implements RoleManager {
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.RoleManagerBean</code>.
      */
-    private static final Logger logger =
+    private static final Logger LOGGER =
             LoggerFactory.getLogger(RoleManagerBean.class);
 
     /**
@@ -49,6 +50,13 @@ public class RoleManagerBean implements RoleManager {
      */
     @PersistenceContext(unitName = "phrs_storage")
     private EntityManager entityManager;
+
+    /**
+     * The default constructor.
+     */
+    public RoleManagerBean() {
+        // UNIMPLMENTED
+    }
 
     /**
      * Registers a  role instance or update and existing one if
@@ -70,15 +78,15 @@ public class RoleManagerBean implements RoleManager {
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        logger.debug("Tries add role [{}]", role);
+        LOGGER.debug("Tries add role [{}]", role);
         final Long id = role.getId();
         if (id == null) {
             entityManager.persist(role);
-            logger.debug("The Role [{}] was persisted.", role);
+            LOGGER.debug("The Role [{}] was persisted.", role);
             return true;
         }
 
@@ -87,14 +95,79 @@ public class RoleManagerBean implements RoleManager {
             final RoleException roleException =
                     new RoleException("Inconsistent Data Structure.");
             roleException.setRole(role);
-            logger.error(roleException.getMessage(), roleException);
+            LOGGER.error(roleException.getMessage(), roleException);
             throw roleException;
         }
 
         entityManager.merge(role);
 
-        logger.debug("Role [{}] was upadted.", role);
+        LOGGER.debug("Role [{}] was upadted.", role);
         return false;
+    }
+
+    /**
+     * Return all the registered roles. <br/>
+     * <b>Note :</b> The resulted set of roles contains roles with
+     * all the lazy initialized relation <b>not loaded</b>, 
+     * any attempt to use/refer the role members (which are 
+     * lazy initialized) will ends in to an exception.
+     *
+     * @return all the registered roles.
+     * @see #getAllRoles(at.srfg.kmt.ehealth.phrs.security.model.Fetcher) 
+     * @see FetcherFactory#ROLE_FETCHER
+     */
+    @Override
+    public Set<PhrRole> getAllRoles() {
+        return getAllRoles(null);
+    }
+
+    /**
+     * Return all the registered roles. <br/>
+     * <b>Note :</b> The set of roles contains roles with
+     * all the lazy initialized relation <b>loaded</b> 
+     * according with the specified fetcher.
+     * If the fetcher is null then this method behavior is the same with the
+     * <code>getAllRoles</code> method.
+     *
+     * @return all the registered roles.
+     * @see #getAllRoles()
+     * @see FetcherFactory#ROLE_FETCHER
+     */
+    @Override
+    public final Set<PhrRole> getAllRoles(Fetcher<PhrRole> fetcher) {
+        // the reason why this method is final is becuase the
+        // getAllRoles is uses this method and I wnat to
+        // avoid commplication by overwriting
+
+        // FIXME : for big ammoutn of goups go pagging.
+        final Query query = entityManager.createNamedQuery("selectAllRoles");
+        final List resultList = query.getResultList();
+        final Set<PhrRole> roles = new HashSet<PhrRole>(resultList);
+        if (fetcher != null) {
+            for (PhrRole role : roles) {
+                fetcher.fetch(role);
+            }
+        }
+        return roles;
+    }
+
+    @Override
+    public final PhrRole getRoleForName(String name, Fetcher<PhrRole> fetcher) {
+        if (name == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The name argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final PhrRole result = getRoleForNameExactMatch(name);
+
+        if (fetcher != null) {
+            fetcher.fetch(result);
+        }
+
+        return result;
+
     }
 
     /**
@@ -109,45 +182,7 @@ public class RoleManagerBean implements RoleManager {
      */
     @Override
     public PhrRole getRoleForName(String name) {
-        if (name == null) {
-            final NullPointerException nullException =
-                    new NullPointerException("The name argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
-            throw nullException;
-        }
-
-        final PhrRole result = getRoleForNameExactMatch(name);
-        return result;
-    }
-
-    /**
-     * Returns a set that contains all the PHRS roles with the name matching
-     * a given JPSQ like patten.<br>
-     * The namePattern is a string literal or a string-valued
-     * input parameter in which an underscore (_) stands for any single
-     * character, a percent (%) character stands for any sequence of
-     * characters (including the empty sequence), and all other characters
-     * stand for themselves.
-     *
-     * @param namePattern the name pattern to search, it can not be null.
-     * @return a set that contains all the PHRS groups with the name matching
-     * a given JPSQ like patten.
-     */
-    @Override
-    public Set<PhrRole> getRolesForNamePattern(String namePattern) {
-        if (namePattern == null) {
-            final NullPointerException nullException =
-                    new NullPointerException("The namePattern argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
-            throw nullException;
-        }
-
-        final Query query = entityManager.createNamedQuery("findRoleForNamePattern");
-        final Query queryResult = query.setParameter("namePattern", namePattern);
-        final List resultList = queryResult.getResultList();
-
-        final Set<PhrRole> result = new HashSet<PhrRole>(resultList);
-        return result;
+        return getRoleForName(name, null);
     }
 
     /**
@@ -165,29 +200,116 @@ public class RoleManagerBean implements RoleManager {
         if (name == null) {
             final NullPointerException nullException =
                     new NullPointerException("The name argument ca not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        final Query query = entityManager.createNamedQuery("findRoleForName");
+        final Query query = entityManager.createNamedQuery("selectRoleForName");
         query.setParameter("name", name);
 
         try {
             final PhrRole result = (PhrRole) query.getSingleResult();
-
-            // mihai : 
-            // I call 'result.getUsers().size();' to ensure that
-            // that all the users are waking up when the group is retuned.
-            // the reason for this is : the OneToMany lazy initialisation works
-            // only in the same transtion/session - if the session is done
-            // then the lazy initalisayion will fail.
-            result.getPhrUsers().size();
-
             return result;
         } catch (NoResultException exception) {
-            logger.debug("No role with the name [{}] found.", name);
+            LOGGER.debug("No role with the name [{}] found.", name);
             return null;
         }
+    }
+
+    /**
+     * Returns a set that contains all the PHRS roles with the name matching
+     * a given JPSQ like patten.<br>
+     * The namePattern is a string literal or a string-valued
+     * input parameter in which an underscore (_) stands for any single
+     * character, a percent (%) character stands for any sequence of
+     * characters (including the empty sequence), and all other characters
+     * stand for themselves.
+     *
+     * @param namePattern the name pattern to search, it can not be null.
+     * @return a set that contains all the PHRS roles with the name matching
+     * a given JPSQ like patten.
+     */
+    @Override
+    public Set<PhrRole> getRolesForNamePattern(String namePattern) {
+        return getRolesForNamePattern(namePattern, null);
+    }
+
+    @Override
+    public final Set<PhrRole> getRolesForNamePattern(String namePattern,
+            Fetcher<PhrRole> fetcher) {
+
+        // the reason why this method is final is becuase the
+        // removeActorsFromRole is uses this method and I wnat to
+        // avoid commplication by overwriting
+
+        if (namePattern == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The namePattern argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final Query query =
+                entityManager.createNamedQuery("selectRolesForNamePattern");
+        final Query queryResult =
+                query.setParameter("name_pattern", namePattern);
+        final List resultList = queryResult.getResultList();
+
+        final Set<PhrRole> roles = new HashSet<PhrRole>(resultList);
+        if (fetcher != null) {
+            for (PhrRole role : roles) {
+                fetcher.fetch(role);
+            }
+        }
+
+        return roles;
+    }
+
+    /**
+     * Proves if the underlying persistence contains a given role.
+     *
+     * @param role the role which the existence is to be tested.
+     * @return true if the underlying persistence contains a given
+     * role, false other wise.
+     */
+    @Override
+    public boolean roleExist(PhrRole role) {
+        if (role == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The Role argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final Long id = role.getId();
+        if (id == null) {
+            return false;
+        }
+
+        final PhrRole result = entityManager.find(PhrRole.class, id);
+        return result != null;
+
+    }
+
+    /**
+     * Removes all the registered roles. After this the \
+     * <code>getAllRoles</code> method call will return an empty set.
+     */
+    @Override
+    public void removeAllRoles() {
+        final Query allRolesQuery =
+                entityManager.createNamedQuery("selectAllRoles");
+
+        final List<PhrRole> roles = allRolesQuery.getResultList();
+        // mihai :
+        // this may tahe while for a big number of roles.
+        // I try to do it on one fire using a bulk operation but
+        // the bulk delete have problems with the OneToMany.
+        for (PhrRole role : roles) {
+            entityManager.remove(role);
+        }
+
+        LOGGER.debug("All the PHRS roles are removed.");
     }
 
     /**
@@ -204,21 +326,21 @@ public class RoleManagerBean implements RoleManager {
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
         final PhrRole managedRole = entityManager.merge(role);
-        final Set<PhrUser> users = managedRole.getPhrUsers();
-        if (users == null || users.isEmpty()) {
+        final Set<PhrActor> actors = managedRole.getPhrActors();
+        if (actors == null || actors.isEmpty()) {
             entityManager.remove(managedRole);
-            logger.debug("Group [{}] was removed.", managedRole);
+            LOGGER.debug("Role [{}] was removed.", managedRole);
             return managedRole;
         }
 
-        // removes the group from the user (the owner side).
-        for (PhrUser user : users) {
-            final Set<PhrRole> roles = user.getPhrRoles();
+        // removes the role from the actor (the owner side).
+        for (PhrActor actor : actors) {
+            final Set<PhrRole> roles = actor.getPhrRoles();
             if (roles != null && !roles.isEmpty()) {
                 roles.remove(managedRole);
             }
@@ -228,215 +350,157 @@ public class RoleManagerBean implements RoleManager {
         return managedRole;
     }
 
-    /**
-     * Proves if the underlying persistence contains a given role.
-     *
-     * @param role the role which the existence is to be tested.
-     * @return true if the underlying persistence contains a given
-     * role, false other wise.
-     */
     @Override
-    public boolean roleExist(PhrRole role) {
-        if (role == null) {
+    public final void assignActorToRole(PhrActor actor, PhrRole role) {
+
+        // the reason why this method is final is becuase the
+        // assignActorsToRole is uses this method and I wnat to
+        // avoid commplication by overwriting
+
+        if (actor == null) {
             final NullPointerException nullException =
-                    new NullPointerException("The Role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
-            throw nullException;
-        }
-
-        final String name = role.getName();
-        try {
-            final PhrRole oldRole = getRoleForNameExactMatch(name);
-            return oldRole != null;
-        } catch (NonUniqueResultException exception) {
-            final RoleException rException = new RoleException(exception);
-            rException.setRole(role);
-            logger.error("Duplicate role found for {}", role);
-            logger.error(rException.getMessage(), exception);
-            throw rException;
-        }
-    }
-
-    /**
-     * Return all the registered roles.
-     *
-     * @return all the registered roles.
-     */
-    @Override
-    public Set<PhrRole> getAllRoles() {
-        // FIXME : for big ammoutn of goups go pagging.
-        final Query query = entityManager.createNamedQuery("getAllRoles");
-        final List resultList = query.getResultList();
-        final Set<PhrRole> result = new HashSet<PhrRole>(resultList);
-        return result;
-    }
-
-    /**
-     * Removes all the registered roles. After this the \
-     * <code>getAllRoles</code> method call will return an empty set.
-     */
-    @Override
-    public void removeAllRoles() {
-        final Query allRolesQuery =
-                entityManager.createNamedQuery("getAllRoles");
-
-        final List<PhrRole> roles = allRolesQuery.getResultList();
-        // mihai :
-        // this may tahe while for a big number of roles.
-        // I try to do it on one fire using a bulk operation but
-        // the bulk delete have problems with the OneToMany.
-        for (PhrRole role : roles) {
-            entityManager.remove(role);
-        }
-
-        logger.debug("All the PHRS roles are removed.");
-    }
-
-    @Override
-    public final void assignUserToRole(PhrUser user, PhrRole role) {
-        if (user == null) {
-            final NullPointerException nullException =
-                    new NullPointerException("The user argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+                    new NullPointerException("The actor argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        final Object[] toLog = Util.forLog(user, role);
-        logger.debug("Tries to assign user [{}] to role [{}].", toLog);
-        
-        // assign user to role (owner side)
-        final PhrUser managedUser = entityManager.merge(user);
-        final Set<PhrRole> phrRoles = managedUser.getPhrRoles();
+        final Object[] toLog = Util.forLog(actor, role);
+        LOGGER.debug("Tries to assign actor [{}] to role [{}].", toLog);
+
+        // assign actor to role (owner side)
+        final PhrActor managedActor = entityManager.merge(actor);
+        final Set<PhrRole> phrRoles = managedActor.getPhrRoles();
         final Set<PhrRole> roles = phrRoles == null
                 ? new HashSet<PhrRole>()
                 : phrRoles;
-        
+
         final PhrRole managedRole = entityManager.merge(role);
         roles.add(managedRole);
-        managedUser.setPhrRoles(roles);
+        managedActor.setPhrRoles(roles);
 
-        // assign role to user (inverse side)
-        final Set<PhrUser> phrUsers = managedRole.getPhrUsers();
-        final Set<PhrUser> users = phrUsers == null
-                ? new HashSet<PhrUser>()
-                : phrUsers;
-        managedRole.setPhrUsers(users);
+        // assign role to actor (inverse side)
+        final Set<PhrActor> phrActors = managedRole.getPhrActors();
+        final Set<PhrActor> actors = phrActors == null
+                ? new HashSet<PhrActor>()
+                : phrActors;
+        managedRole.setPhrActors(actors);
 
-
-        logger.debug("User [{}] was assined to role [{}].", toLog);
+        LOGGER.debug("Actor [{}] was assined to role [{}].", toLog);
     }
 
     @Override
-    public void assignUsersToRole(Set<PhrUser> users, PhrRole role) {
-
-        if (users == null) {
+    public void assignActorsToRole(Set<PhrActor> actors, PhrRole role) {
+        if (actors == null) {
             final NullPointerException nullException =
-                    new NullPointerException("The users argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+                    new NullPointerException("The actors argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        if (users.isEmpty()) {
+        if (actors.isEmpty()) {
             final IllegalArgumentException argumentException =
-                    new IllegalArgumentException("The users can not be an empty exception.");
-            logger.error(argumentException.getMessage(), argumentException);
+                    new IllegalArgumentException("The actors can not be an empty.");
+            LOGGER.error(argumentException.getMessage(), argumentException);
             throw argumentException;
         }
 
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        final Object[] toLog = Util.forLog(users, role);
-        logger.debug("Tries to assign users [{}] to role [{}].", toLog);
+        final Object[] toLog = Util.forLog(actors, role);
+        LOGGER.debug("Tries to assign actors [{}] to role [{}].", toLog);
 
-        for (PhrUser user : users) {
-            assignUserToRole(user, role);
+        for (PhrActor actor : actors) {
+            assignActorToRole(actor, role);
         }
 
-        logger.debug("Users [{}] was assined to role [{}].", toLog);
-
+        LOGGER.debug("Actors [{}] was assined to role [{}].", toLog);
     }
 
     @Override
-    public final void removeUserFromRole(PhrUser user, PhrRole role) {
-        if (user == null) {
+    public final void removeActorFromRole(PhrActor actor, PhrRole role) {
+
+        // the reason why this method is final is becuase the
+        // removeActorsFromRole is uses this method and I wnat to
+        // avoid commplication by overwriting
+        if (actor == null) {
             final NullPointerException nullException =
-                    new NullPointerException("The user argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+                    new NullPointerException("The actor argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        final Object[] toLog = Util.forLog(user, role);
-        logger.debug("Tries to remove user [{}] from role [{}].", toLog);
+        final Object[] toLog = Util.forLog(actor, role);
+        LOGGER.debug("Tries to remove actor [{}] from role [{}].", toLog);
 
-        final PhrUser managedUser = entityManager.merge(user);
-        final Set<PhrRole> phrRoles = managedUser.getPhrRoles();
+        final PhrActor managedActor = entityManager.merge(actor);
+        final Set<PhrRole> phrRoles = managedActor.getPhrRoles();
         if (phrRoles == null || phrRoles.isEmpty()) {
-            logger.debug("There is no relation between the user [{}] and the role [{}], remove user has no effect.", toLog);
+            LOGGER.debug("There is no relation between the actor [{}] and the role [{}], remove actor has no effect.", toLog);
             // I leave if there are no relations.
             return;
         }
 
-        // removes the user from the role (inverse side).
+        // removes the actor from the role (inverse side).
         final PhrRole managedRole = entityManager.merge(role);
-        final Set<PhrUser> phrUsers = managedRole.getPhrUsers();
-        phrUsers.remove(managedUser);
-        managedRole.setPhrUsers(phrUsers);
+        final Set<PhrActor> phrActors = managedRole.getPhrActors();
+        phrActors.remove(managedActor);
+        managedRole.setPhrActors(phrActors);
 
-        // removes the group from the user (owner)
+        // removes the role from the actor (owner)
         phrRoles.remove(managedRole);
-        managedUser.setPhrRoles(phrRoles);
+        managedActor.setPhrRoles(phrRoles);
 
-        logger.debug("User [{}] was removed from role [{}].", toLog);
+        LOGGER.debug("Actor [{}] was removed from role [{}].", toLog);
     }
 
     @Override
-    public void removeUsersFromRole(Set<PhrUser> users, PhrRole role) {
-        if (users == null) {
+    public void removeActorsFromRole(Set<PhrActor> actors, PhrRole role) {
+        if (actors == null) {
             final NullPointerException nullException =
-                    new NullPointerException("The users argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+                    new NullPointerException("The actors argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        if (users.isEmpty()) {
+        if (actors.isEmpty()) {
             final IllegalArgumentException argumentException =
-                    new IllegalArgumentException("The users can not be an empty exception.");
-            logger.error(argumentException.getMessage(), argumentException);
+                    new IllegalArgumentException("The actors can not be an empty.");
+            LOGGER.error(argumentException.getMessage(), argumentException);
             throw argumentException;
         }
 
         if (role == null) {
             final NullPointerException nullException =
                     new NullPointerException("The role argument can not be null.");
-            logger.error(nullException.getMessage(), nullException);
+            LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        final Object[] toLog = Util.forLog(users, role);
-        logger.debug("Tries to remove users [{}] from the role [{}].", toLog);
-        for (PhrUser user : users) {
-            removeUserFromRole(user, role);
+        final Object[] toLog = Util.forLog(actors, role);
+        LOGGER.debug("Tries to remove actors [{}] from the role [{}].", toLog);
+        for (PhrActor actor : actors) {
+            removeActorFromRole(actor, role);
         }
         entityManager.merge(role);
-        logger.debug("Users [{}] was removed from the role [{}].", toLog);
+        LOGGER.debug("Actors [{}] was removed from the role [{}].", toLog);
     }
 }

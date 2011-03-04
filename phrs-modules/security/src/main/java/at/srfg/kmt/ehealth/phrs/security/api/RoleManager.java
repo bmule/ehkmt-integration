@@ -7,8 +7,9 @@
 package at.srfg.kmt.ehealth.phrs.security.api;
 
 
+import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import java.util.Set;
 
 /**
@@ -60,6 +61,8 @@ public interface RoleManager {
      * @return a Set that contains all the registered roles.
      */
     Set<PhrRole> getAllRoles();
+    
+    Set<PhrRole> getAllRoles(Fetcher<PhrRole> fetcher);
 
     /**
      * Returns a group for a given name, the role name attribute match
@@ -70,6 +73,7 @@ public interface RoleManager {
      * specified name.
      */
     PhrRole getRoleForName(String name);
+    PhrRole getRoleForName(String name, Fetcher<PhrRole> fetcher);
 
     /**
      * Returns a set of <code>PhrRole</code> where the role name match
@@ -80,17 +84,18 @@ public interface RoleManager {
      * a certain pattern
      */
     Set<PhrRole> getRolesForNamePattern(String namePattern);
+    Set<PhrRole> getRolesForNamePattern(String namePattern, Fetcher<PhrRole> fetcher);
 
     /**
      * Returns a Set that contains all the registered roles.
      *
      * @return a Set that contains all the registered roles.
      */
-    void assignUserToRole(PhrUser user, PhrRole role);
+    void assignActorToRole(PhrActor actor, PhrRole role);
 
-    void assignUsersToRole(Set<PhrUser> users, PhrRole role);
+    void assignActorsToRole(Set<PhrActor> actors, PhrRole role);
 
-    void removeUserFromRole(PhrUser user, PhrRole role);
+    void removeActorFromRole(PhrActor actor, PhrRole role);
 
-    void removeUsersFromRole(Set<PhrUser> users, PhrRole role);
+    void removeActorsFromRole(Set<PhrActor> actors, PhrRole role);
 }

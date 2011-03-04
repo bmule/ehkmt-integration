@@ -8,11 +8,14 @@
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.security.api.RunAction;
 import static at.srfg.kmt.ehealth.phrs.security.impl.RunAsConstants.GROUPS;
 import static at.srfg.kmt.ehealth.phrs.security.impl.RunAsConstants.ROLES;
+import static at.srfg.kmt.ehealth.phrs.security.impl.RunAsConstants.ACTION;
 import at.srfg.kmt.ehealth.phrs.security.api.RunAs;
 import at.srfg.kmt.ehealth.phrs.security.api.RunAsGroup;
 import at.srfg.kmt.ehealth.phrs.security.api.RunAsRole;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrAction;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrGroup;
 import at.srfg.kmt.ehealth.phrs.security.model.PhrRole;
 import java.util.HashSet;
@@ -56,9 +59,15 @@ public class RunAsInterceptor {
         if (!roles.isEmpty()) {
             contextData.put(ROLES.toString(), roles);
         }
+        
+        final boolean isRunAction = target instanceof RunAction;
+        final PhrAction action = isRunAction
+                ? ((RunAction) target).getAction()
+                : null;
+        if (action != null) {
+            contextData.put(ACTION.toString(), action);
+        }
 
         return context.proceed();
     }
-    
-
 }

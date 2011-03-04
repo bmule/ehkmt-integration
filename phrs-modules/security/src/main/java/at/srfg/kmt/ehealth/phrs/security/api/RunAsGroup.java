@@ -9,7 +9,7 @@ import java.util.Set;
  *
  * @author mihai
  */
-public interface RunAsGroup {
+public interface RunAsGroup extends RunAction {
 
     /**
      * Returns the groups under a certain action can run.

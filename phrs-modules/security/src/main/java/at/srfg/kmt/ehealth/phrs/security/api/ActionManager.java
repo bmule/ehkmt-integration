@@ -10,7 +10,7 @@ package at.srfg.kmt.ehealth.phrs.security.api;
 
 
 import at.srfg.kmt.ehealth.phrs.security.model.PhrAction;
-import at.srfg.kmt.ehealth.phrs.security.model.PhrUser;
+import at.srfg.kmt.ehealth.phrs.security.model.PhrActor;
 import java.util.Set;
 
 /**
@@ -60,11 +60,11 @@ public interface ActionManager {
      */
     Set<PhrAction> getAllActions();
 
-    void assignUserToAction(PhrUser user, PhrAction Action);
+    void assignActorToAction(PhrActor actor, PhrAction Action);
 
-    void assignUsersToAction(Set<PhrUser> users, PhrAction Action);
+    void assignActorsToAction(Set<PhrActor> actors, PhrAction Action);
 
-    void removeUserFromAction(PhrUser user, PhrAction Action);
+    void removeActorFromAction(PhrActor actor, PhrAction Action);
 
-    void removeUsersFromAction(Set<PhrUser> users, PhrAction Action);
+    void removeActorsFromAction(Set<PhrActor> actors, PhrAction Action);
 }
