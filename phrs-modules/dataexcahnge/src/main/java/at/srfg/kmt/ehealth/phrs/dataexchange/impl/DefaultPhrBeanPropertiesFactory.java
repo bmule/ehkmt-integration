@@ -82,7 +82,7 @@ public final class DefaultPhrBeanPropertiesFactory
      * 
      * @return 
      */
-    static PhrBeanPropertiesFactory getInstance() {
+    public static PhrBeanPropertiesFactory getInstance() {
         return THIS;
     }
 
