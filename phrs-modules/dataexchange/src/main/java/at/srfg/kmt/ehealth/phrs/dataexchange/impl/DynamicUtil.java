@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
+import org.apache.commons.beanutils.BasicDynaClass;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
@@ -29,6 +30,21 @@ import org.apache.commons.beanutils.DynaProperty;
  */
 public class DynamicUtil {
 
+    /**
+     * Transforms a <code>DynamicClass</code> in to a <code>DynaClass</code>.
+     * The  <code>DynamicClass</code> to transform must have a non-null and
+     * non-empty name value otherwise an <code>IllegalArgumentException</code>
+     * raises.
+     * 
+     * @param dynamicClass the <code>DynamicClass</code> instance to be
+     * transformed, it can not be null.
+     * @return a <code>DynaClass</code> for the given <code>DynamicClass</code>.
+     * @throws NullPointerException if the <code>dynamicClass</code> argument is
+     * null.
+     * @throws IllegalArgumentException if the  <code>DynaClass</code> name
+     * properties is null or empty.
+     * @throws ClassNotFoundException by any kind of type matching.
+     */
     public static DynaClass get(DynamicClass dynamicClass) throws ClassNotFoundException {
 
         if (dynamicClass == null) {
@@ -41,8 +57,15 @@ public class DynamicUtil {
         for (DynamicPropertyType propertyType : propertyTypes) {
             props[dynaPropertyIndex++] = get(propertyType);
         }
-
-        return null;
+        
+        final String name = dynamicClass.getName();
+        if (name == null || name.isEmpty()) {
+            String msg = String.format("The Dynamic Class to transform %s name's attribute is null.", dynamicClass);
+            throw new IllegalArgumentException(msg);
+        }
+        
+        final BasicDynaClass result = new BasicDynaClass(name, null, props);
+        return result;
     }
 
     private static DynaProperty get(DynamicPropertyType type) throws ClassNotFoundException {
