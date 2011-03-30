@@ -76,7 +76,7 @@ public class GroupManagerBean implements GroupManager {
         
         if (!entityManager.contains(group)) {
             // for removed
-            entityManager.persist(id);
+            entityManager.persist(group);
             return true;
         }
         

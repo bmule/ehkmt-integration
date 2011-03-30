@@ -96,11 +96,15 @@
     <modules>
         <module>phrs-ear</module>
         <module>security</module>
-        <module>consenteditor</module>
+        <!--
+        <module>consenteditor</module>       
+        -->
         
+        <module>dataexchange</module>
         <module>simple-view</module>
+        
         <module>phrs-util</module>
-        <module>dataexcahnge</module>
+        
     </modules>
 
 

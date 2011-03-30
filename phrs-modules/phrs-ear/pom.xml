@@ -59,13 +59,6 @@
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>simple-view</artifactId>
-            <version>0.0.1</version>
-            <type>war</type>
-        </dependency>
-
-        <dependency>
-            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>phrs-util</artifactId>
             <version>0.0.1</version>
             <type>ejb</type>
@@ -73,9 +66,16 @@
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>dataexcahnge</artifactId>
+            <artifactId>dataexchange</artifactId>
             <version>0.0.1</version>
             <type>ejb</type>
+        </dependency>
+
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>simple-view</artifactId>
+            <version>0.0.1</version>
+            <type>war</type>
         </dependency>
 
     </dependencies>
@@ -89,16 +89,20 @@
                 <configuration>
                     <displayName>PHRS Enterprise archive</displayName>
                     <modules>
+                        <ejbModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
+                        </ejbModule>
+                        
+                        <ejbModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>dataexchange</artifactId>
+                        </ejbModule>
 
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>simple-view</artifactId>
                         </webModule>
-
-                        <ejbModule>
-                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-                            <artifactId>at.srfg.kmt.ehealth.phrs.security</artifactId>
-                        </ejbModule>
 
                     </modules>
                 </configuration>

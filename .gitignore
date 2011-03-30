@@ -34,7 +34,8 @@ Desktop.ini
 # in this file (profiles.xml)  placed on the top level project directroy are stored different machine specific informations (e.g. the Application Server) 
 profiles.xml
 nb-configuration.xml
-
+jboss4-netbeans-destinations-service.xml
+jboss-ds.xml
 
 /phrs-modules/dataexcahnge/target/
 /phrs-modules/.idea/
@@ -44,3 +45,7 @@ nb-configuration.xml
 /phrs-modules/phrs-util/target/
 /phrs-modules/consenteditor/.settings/
 /phrs-modules/messaging/.settings/
+/phrs-modules/phrs-ear/target/
+/phrs-modules/simple-view/target/
+/phrs-modules/consenteditor/target/
+/phrs-modules/dataexchange/target/

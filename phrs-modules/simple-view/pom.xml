@@ -29,37 +29,6 @@
         only for test purposes.
     </description>
 
-    <!--
-    FIXME : Move this on the paternt, the reposiotry is used overall.
-    -->
-    <repositories>
-        <repository>
-            <id>jboss-nexus-group-public</id>
-            <name>JBoss Repository Nexus Group Public</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>jboss-nexus</id>
-            <name>JBoss Repository Nexus</name>
-
-            <url>https://repository.jboss.org/nexus/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
@@ -93,6 +62,13 @@
             <version>0.0.1</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>dataexchange</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.jboss.jbossas</groupId>
@@ -101,6 +77,22 @@
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <!--
+                I do this because the simple view jat must be a Skinny war.
+                Most of the included jars can create conficts with the other 
+                existent jars (e.g. SAX parser).
+                -->
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+  </build>
 </project>
