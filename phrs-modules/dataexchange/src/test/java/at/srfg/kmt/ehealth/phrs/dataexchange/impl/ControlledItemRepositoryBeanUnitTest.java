@@ -116,7 +116,7 @@ public class ControlledItemRepositoryBeanUnitTest {
      * @return the persisted <code>ControlledItem</code>.
      */
     private ControlledItem createItem() {
-        final ControlledItem item = ModelFactory.createControlledItem();
+        final ControlledItem item = DummyModelFactory.createControlledItem();
         final boolean add = controlledItemRepository.add(item);
         assertTrue(add);
         final String codeSystem = item.getCodeSystem();
@@ -246,16 +246,16 @@ public class ControlledItemRepositoryBeanUnitTest {
     
     private TagTransporter addTag() {
                 // the next lines builds and register the tag
-        final String tagCode = ModelFactory.createUniqueString(".tag.code");
+        final String tagCode = DummyModelFactory.createUniqueString(".tag.code");
         final ControlledItem tag =
-                ModelFactory.createControlledItem("tag", tagCode);
+                DummyModelFactory.createControlledItem("tag", tagCode);
         final boolean addTag = controlledItemRepository.add(tag);
         assertTrue(addTag);
 
         // the next lines builds and register the item to be tag
-        final String toTagCode = ModelFactory.createUniqueString(".totag.code");
+        final String toTagCode = DummyModelFactory.createUniqueString(".totag.code");
         final ControlledItem toTag =
-                ModelFactory.createControlledItem("toTag", toTagCode);
+                DummyModelFactory.createControlledItem("toTag", toTagCode);
         final boolean addToTag = controlledItemRepository.add(toTag);
         assertTrue(addToTag);
 

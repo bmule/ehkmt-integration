@@ -31,10 +31,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Provides test for the <code>DymanicBeanRepository</code> implementation.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
+ * @see DymanicClassRepository
+ * @see DymanicClassRepositoryBean
  */
 @RunWith(Arquillian.class)
 @Run(RunModeType.IN_CONTAINER)
@@ -122,7 +125,7 @@ public class DymanicClassRepositoryBeanUnitTest {
      */
     @Test
     public void testCreateWithUri() {
-        final String uri = ModelFactory.createUniqueString("URI");
+        final String uri = DummyModelFactory.createUniqueString("URI");
         final DynamicClass create = dynanicClassRepository.create(uri);
         assertNotNull(create);
 
@@ -139,8 +142,8 @@ public class DymanicClassRepositoryBeanUnitTest {
      */
     @Test
     public void testCreateWithUriAndName() {
-        final String uri = ModelFactory.createUniqueString("URI");
-        final String name = ModelFactory.createUniqueString("name");
+        final String uri = DummyModelFactory.createUniqueString("URI");
+        final String name = DummyModelFactory.createUniqueString("name");
 
         final DynamicClass create = dynanicClassRepository.create(name, uri);
         assertNotNull(create);
@@ -177,10 +180,10 @@ public class DymanicClassRepositoryBeanUnitTest {
     public void testPersistDefaultModel() {
 
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createDefaultModelMap =
-                ModelFactory.createDefaultModelMap();
+                DummyModelFactory.createDefaultModelMap();
 
-        final String name = ModelFactory.createUniqueString("myName");
-        final String classURI = ModelFactory.createUniqueString("myURI");
+        final String name = DummyModelFactory.createUniqueString("myName");
+        final String classURI = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass dynamicClass =
                 at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory.buildDynamicClass(name, classURI, createDefaultModelMap);
 
@@ -257,7 +260,7 @@ public class DymanicClassRepositoryBeanUnitTest {
     private Object getMetadataValue(DynamicPropertyType type) {
         final String clazz = type.getType();
         if (Date.class.getName().equals(clazz)) {
-            return ModelFactory.DATE;
+            return DummyModelFactory.DATE;
         }
 
         if (Boolean.class.getName().equals(clazz)) {
@@ -273,9 +276,9 @@ public class DymanicClassRepositoryBeanUnitTest {
 
     @Test
     public void testPersistDefaultModelWithoutMetadata() {
-        final Set<DynamicPropertyType> typeSet = ModelFactory.createDefaultTypeSet();
-        final String name = ModelFactory.createUniqueString("myName");
-        final String classURI = ModelFactory.createUniqueString("myURI");
+        final Set<DynamicPropertyType> typeSet = DummyModelFactory.createDefaultTypeSet();
+        final String name = DummyModelFactory.createUniqueString("myName");
+        final String classURI = DummyModelFactory.createUniqueString("myURI");
 
 
         final DynamicClass dynamicClass =
@@ -301,8 +304,8 @@ public class DymanicClassRepositoryBeanUnitTest {
      */
     @Test
     public void testRemoveByURI() {
-        final String name = ModelFactory.createUniqueString("myName");
-        final String uri = ModelFactory.createUniqueString("myURI");
+        final String name = DummyModelFactory.createUniqueString("myName");
+        final String uri = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass create = dynanicClassRepository.create(name, uri);
         
         final DynamicClass remove = dynanicClassRepository.remove(create);
@@ -322,8 +325,8 @@ public class DymanicClassRepositoryBeanUnitTest {
      */
     @Test
     public void testRemoveByInstance() {
-        final String name = ModelFactory.createUniqueString("myName");
-        final String uri = ModelFactory.createUniqueString("myURI");
+        final String name = DummyModelFactory.createUniqueString("myName");
+        final String uri = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass create = dynanicClassRepository.create(name, uri);
         
         final DynamicClass get = dynanicClassRepository.get(uri);

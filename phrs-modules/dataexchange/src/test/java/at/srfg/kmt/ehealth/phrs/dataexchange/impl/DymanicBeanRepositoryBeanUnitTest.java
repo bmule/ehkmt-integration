@@ -17,7 +17,6 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.ejb.EJB;
@@ -38,6 +37,8 @@ import org.slf4j.LoggerFactory;
  * @version 0.1
  * @since 0.1
  * @author Mihai
+ * @see DymanicBeanRepository
+ * @see DymanicBeanRepositoryBean
  */
 @RunWith(Arquillian.class)
 @Run(RunModeType.IN_CONTAINER)
@@ -112,18 +113,38 @@ public class DymanicBeanRepositoryBeanUnitTest {
 
     /**
      * Create a new DynamicBean instance, add it and prove if the operation
-     * was successfully.
+     * was successfully. </br>
+     * More precisely this tests does :
+     * <ul>
+     * <li> it builds a <code>DynamicClass</code> based on a map of properties.
+     * This map (of properties) contains contains three properties(a string, 
+     * a boolean and a date).
+     * <li> it persist the class.
+     * <li> It builds a <code>DynamicBean</code> for the upper defined class.
+     * <li> It sets values for the bean properties 
+     * <li> It persist the bean (with the properties). 
+     * <li> It proves if the bean was persisted - by querying the repository for
+     * beans for a given class.
+     * <li> It obtains the last bean instance by querying the repository for
+     * the last version for a bean with given class.
+     * <li> It iterates over all the properties and proves if the properties are
+     * conform with the original one.
+     * </ul>
+     * Note : This test emphasis search for the  <b>last</b> bean version, 
+     * it does not test the bean history.
      * 
      * @see DymanicBeanRepository#add(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean) 
+     * @see DymanicBeanRepository#contains(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass) 
+     * @see DymanicBeanRepository#getForClass(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass)
      */
     @Test
-    public void testPrersist() {
+    public void testPrersistAndQuery() {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> defaultModelMap =
-                ModelFactory.createDefaultModelMap();
+                DummyModelFactory.createDefaultModelMap();
 
         // here I build an class instance.
-        final String name = ModelFactory.createUniqueString("myName");
-        final String classURI = ModelFactory.createUniqueString("myURI");
+        final String name = DummyModelFactory.createUniqueString("myName");
+        final String classURI = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass dynamicClass =
                 at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory.buildDynamicClass(name, classURI, defaultModelMap);
         
@@ -135,7 +156,7 @@ public class DymanicBeanRepositoryBeanUnitTest {
         
         // here I build the dynaimc bean
         final DynamicBean dynamicBean = 
-                ModelFactory.buildDefaultDynamicBean(getClass);
+                DummyModelFactory.buildDefaultDynamicBean(getClass);
         
         // and here I persist the bean
         beanRepository.add(dynamicBean);
@@ -166,8 +187,9 @@ public class DymanicBeanRepositoryBeanUnitTest {
             final String type = property.getType();
             final Serializable content = property.getContent();
             assertNotNull(content);
-            final Serializable valueForType = ModelFactory.getValueForType(type);
+            final Serializable valueForType = DummyModelFactory.getValueForType(type);
             assertEquals(valueForType, content);
         }
     }
+    
 }

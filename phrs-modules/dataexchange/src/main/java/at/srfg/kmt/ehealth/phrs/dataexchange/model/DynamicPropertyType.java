@@ -33,6 +33,16 @@ public class DynamicPropertyType implements Serializable {
     private DynamicClass dynamicClass;
     private Set<DynamicPropertyMetadata> metadatas;
 
+    public DynamicPropertyType() {
+        // UNIMPLEMENTED
+    }
+
+    public DynamicPropertyType(String name, String type, DynamicClass dynamicClass) {
+        this.name = name;
+        this.type = type;
+        this.dynamicClass = dynamicClass;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
@@ -76,4 +86,20 @@ public class DynamicPropertyType implements Serializable {
     public void setMetadatas(Set<DynamicPropertyMetadata> metadatas) {
         this.metadatas = metadatas;
     }
+
+    @Override
+    public String toString() {
+        final StringBuffer result = new StringBuffer();
+        result.append("DynamicPropertyType{name=");
+        result.append(name);
+        result.append(", type=");
+        result.append(type);
+        result.append(", dynamicClass=");
+        result.append(dynamicClass);
+        result.append("}");
+        
+        return result.toString();
+    }
+    
+    
 }
