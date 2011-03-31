@@ -233,7 +233,7 @@ public class DynamicUtil {
         return dynaBean;
     }
     
-    public static Set<DynaBean> getDynaBean(Set<DynamicBean> dynamicBeans) 
+    public static Set<DynaBean> getDynaBeans(Set<DynamicBean> dynamicBeans) 
             throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         
         if (dynamicBeans == null) {
@@ -255,7 +255,7 @@ public class DynamicUtil {
         return result;
     }
     
-    public static Set<DynaClass> getDynaClass(Set<DynamicClass> dynamicClasses) 
+    public static Set<DynaClass> getDynaClasses(Set<DynamicClass> dynamicClasses) 
             throws ClassNotFoundException {
 
         if (dynamicClasses == null) {
