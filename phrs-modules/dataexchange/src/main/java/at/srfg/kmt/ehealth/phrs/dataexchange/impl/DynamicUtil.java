@@ -52,7 +52,8 @@ public class DynamicUtil {
      * null.
      * @throws IllegalArgumentException if the  <code>DynaClass</code> name
      * properties is null or empty.
-     * @throws ClassNotFoundException by any kind of type matching.
+     * @throws ClassNotFoundException if any type can not be located in the 
+     * classpath.
      */
     public static DynaClass get(DynamicClass dynamicClass) throws ClassNotFoundException {
 
@@ -106,7 +107,8 @@ public class DynamicUtil {
      * @param classUri the class  URI for the new created
      * <code>DynamicClass</code>, it can not be null.
      * @return a <code>DynamicClass</code> based on a given bean class.
-     * @throws IntrospectionException 
+     * @throws IntrospectionException signals a exception during the class 
+     * introspection (clazz argument).
      * @throws NullPointerException if the <code>clazz</code> or 
      * <code>classUri</code> arguments are null.
      * @throws IllegalArgumentException if the <code>clazz</code> contains no
@@ -116,7 +118,7 @@ public class DynamicUtil {
         if (clazz == null) {
             throw new NullPointerException("The clazz argument can not be null.");
         }
-        
+
         if (classUri == null || classUri.isEmpty()) {
             throw new NullPointerException("The classUri argument can not be null.");
         }
@@ -131,8 +133,8 @@ public class DynamicUtil {
         final DynamicClass dynamicClass = new DynamicClass(classUri, className);
         final Set<DynamicPropertyType> types =
                 new HashSet<DynamicPropertyType>(methods.length);
-        
-        
+
+
         for (PropertyDescriptor propertyDescriptor : beanInfo.getPropertyDescriptors()) {
             final String name = propertyDescriptor.getName();
             if ("class".equals(name)) {
@@ -153,7 +155,7 @@ public class DynamicUtil {
                 } else if ("long".equals(type.getName())) {
                     type = Long.class;
                 } else {
-                    final String msg = 
+                    final String msg =
                             String.format("The promitive type %s is not supported", type.getName());
                     throw new IllegalArgumentException(msg);
                 }
@@ -208,10 +210,11 @@ public class DynamicUtil {
      * @throws NullPointerException if the <code>dynamicBean</code> argument is
      * null.
      * @throws InstantiationException if some bean properties can not be
-     * instantialised from any reasons.
+     * initialized from any reasons.
      * @throws IllegalArgumentException if the  <code>DynaClass</code> name
      * properties is null or empty.
-     * @throws ClassNotFoundException by any kind of type matching.
+     * @throws ClassNotFoundException if any type can not be located in the 
+     * classpath.
      */
     public static DynaBean get(DynamicBean dynamicBean) throws
             IllegalAccessException, ClassNotFoundException, InstantiationException {
@@ -232,50 +235,79 @@ public class DynamicUtil {
 
         return dynaBean;
     }
-    
-    public static Set<DynaBean> getDynaBeans(Set<DynamicBean> dynamicBeans) 
+
+    /**
+     * Transforms a set of <code>DynamicBean</code> in to a set of 
+     * <code>DynaBean</code>. If the input set contains at least one
+     * invalid <code>DynamicBean</code> instance then this method throws an
+     * exception. An invalid <code>DynamicBean</code> is a dynamic bean where 
+     * the properties can not be initialized/accessed. 
+     * 
+     * @param dynamicBeans the input set, it can not be null.
+     * @return a set of <code>DynamicBean</code> for the given set of
+     * <code>DynaBean</code>
+     * @throws InstantiationException if some bean properties can not be
+     * initialized from any reasons.
+     * @throws IllegalArgumentException if the  <code>DynaClass</code> name
+     * properties is null or empty.
+     * @throws ClassNotFoundException if any type can not be located in the 
+     * classpath.
+     */
+    public static Set<DynaBean> getDynaBeans(Set<DynamicBean> dynamicBeans)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        
+
         if (dynamicBeans == null) {
             throw new NullPointerException("The dynamicBeans argumetn can not e null.");
         }
-        
-        
+
+
         final Set<DynaBean> result = new HashSet<DynaBean>(dynamicBeans.size());
         if (result.isEmpty()) {
             return result;
         }
-        
-        for(DynamicBean dynamicBean : dynamicBeans) {
+
+        for (DynamicBean dynamicBean : dynamicBeans) {
             final DynaBean dynaBean = get(dynamicBean);
             // mihai : I preffer to break the loop if any bean is inproper.
             result.add(dynaBean);
         }
-        
+
         return result;
     }
-    
-    public static Set<DynaClass> getDynaClasses(Set<DynamicClass> dynamicClasses) 
+
+    /**
+     * Transforms a set of <code>DynamicClass</code> in to a set of 
+     * <code>DynaClass</code>. If the input set contains at least one
+     * invalid <code>DynamicClass</code> instance then this method throws an
+     * exception. An invalid <code>DynamicBean</code> is a dynamic class where 
+     * the properties can not be located in the class path. 
+     * 
+     * @param dynamicBeans the input set, it can not be null.
+     * @return a set of <code>DynamicClass</code> for the given set of
+     * <code>DynaClass</code>
+     * @throws ClassNotFoundException if any type can not be located in the 
+     * classpath.
+     */
+    public static Set<DynaClass> getDynaClasses(Set<DynamicClass> dynamicClasses)
             throws ClassNotFoundException {
 
         if (dynamicClasses == null) {
             throw new NullPointerException("The dynamicClasses argumetn can not e null.");
         }
-        
+
         final Set<DynaClass> result = new HashSet<DynaClass>(dynamicClasses.size());
         if (result.isEmpty()) {
             return result;
         }
-        
-        for(DynamicClass dynamicClass : dynamicClasses) {
+
+        for (DynamicClass dynamicClass : dynamicClasses) {
             final DynaClass dynaClass = get(dynamicClass);
             // mihai : I preffer to break the loop if any bean is inproper.
             result.add(dynaClass);
         }
-        
+
         return result;
     }
-    
 
     /**
      * Transforms a <code>DynaBean </code> in to a JSON string. </br>
