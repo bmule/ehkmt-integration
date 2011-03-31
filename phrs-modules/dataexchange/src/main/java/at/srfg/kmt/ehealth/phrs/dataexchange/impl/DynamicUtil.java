@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import net.sf.json.JSONObject;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.commons.beanutils.DynaProperty;
@@ -233,6 +232,50 @@ public class DynamicUtil {
 
         return dynaBean;
     }
+    
+    public static Set<DynaBean> getDynaBean(Set<DynamicBean> dynamicBeans) 
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        
+        if (dynamicBeans == null) {
+            throw new NullPointerException("The dynamicBeans argumetn can not e null.");
+        }
+        
+        
+        final Set<DynaBean> result = new HashSet<DynaBean>(dynamicBeans.size());
+        if (result.isEmpty()) {
+            return result;
+        }
+        
+        for(DynamicBean dynamicBean : dynamicBeans) {
+            final DynaBean dynaBean = get(dynamicBean);
+            // mihai : I preffer to break the loop if any bean is inproper.
+            result.add(dynaBean);
+        }
+        
+        return result;
+    }
+    
+    public static Set<DynaClass> getDynaClass(Set<DynamicClass> dynamicClasses) 
+            throws ClassNotFoundException {
+
+        if (dynamicClasses == null) {
+            throw new NullPointerException("The dynamicClasses argumetn can not e null.");
+        }
+        
+        final Set<DynaClass> result = new HashSet<DynaClass>(dynamicClasses.size());
+        if (result.isEmpty()) {
+            return result;
+        }
+        
+        for(DynamicClass dynamicClass : dynamicClasses) {
+            final DynaClass dynaClass = get(dynamicClass);
+            // mihai : I preffer to break the loop if any bean is inproper.
+            result.add(dynaClass);
+        }
+        
+        return result;
+    }
+    
 
     /**
      * Transforms a <code>DynaBean </code> in to a JSON string. </br>
