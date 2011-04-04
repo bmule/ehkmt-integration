@@ -4,11 +4,11 @@
  * Date : Dec 24, 2010
  * User : mradules
  */
-
-
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import static org.junit.Assert.*;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrActor;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrActors;
@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Integration test for the GroupManagerBean.
@@ -80,7 +81,7 @@ public class ActorManagerBeanUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "phrs.security.test.jar");
 
@@ -100,17 +101,25 @@ public class ActorManagerBeanUnitTest {
         final Package utilsPackage = Util.class.getPackage();
         ejbJar.addPackage(utilsPackage);
 
-
         // the test-persistence.xml file is in the classpath, it is added
         // to the deployed under the name persistence.xml.
         // I preffer to keep the test related JPA configuration separate
         // from the production (JPA) configuration.
         ejbJar.addManifestResource("test-persistence.xml", "persistence.xml");
 
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+
+        final String earStructure = ear.toString(true);
+        logger.debug("EAR jar structure on deploy is :");
+        logger.debug(earStructure);
+
         final String ejbStructure = ejbJar.toString(true);
         logger.debug("EJB jar structure on deploy is :");
         logger.debug(ejbStructure);
-        return ejbJar;
+        
+        return ear;
     }
 
     /**

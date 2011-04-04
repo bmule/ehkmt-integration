@@ -7,8 +7,11 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
-import java.util.Set;
+import java.io.File;
 import static org.junit.Assert.*;
+import java.util.Set;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import java.net.MalformedURLException;
@@ -23,6 +26,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Provides test for the <code>ControlledItemRepository</code> implementation.
@@ -43,6 +47,7 @@ public class ControlledItemRepositoryBeanUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ControlledItemRepositoryBeanUnitTest.class);
+
     /**
      * The <code>ControlledItemRepository</code> instance to test.
      */
@@ -67,7 +72,7 @@ public class ControlledItemRepositoryBeanUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "phrs.dataexchage.test.jar");
 
@@ -77,7 +82,7 @@ public class ControlledItemRepositoryBeanUnitTest {
         // at.srfg.kmt.ehealth.phrs.dataexchange.model are
         // added to the ejb jar (and to the classpath).
         // see the log for the ejb jar structure.
-        ejbJar.addPackage(DymanicClassRepositoryBeanUnitTest.class.getPackage());
+        ejbJar.addPackage(ControlledItemRepositoryBeanUnitTest.class.getPackage());
 
         final Package apiPackage = ControlledItemRepository.class.getPackage();
         ejbJar.addPackage(apiPackage);
@@ -92,10 +97,21 @@ public class ControlledItemRepositoryBeanUnitTest {
         // from the production (JPA) configuration.
         ejbJar.addManifestResource("test-persistence.xml", "persistence.xml");
 
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+        final File lib = ArchiveHelper.getCommonsBeanUtils();
+        ear.addLibraries(lib);
+
+        final String earStructure = ear.toString(true);
+        LOGGER.debug("EAR jar structure on deploy is :");
+        LOGGER.debug(earStructure);
+
         final String ejbStructure = ejbJar.toString(true);
         LOGGER.debug("EJB jar structure on deploy is :");
         LOGGER.debug(ejbStructure);
-        return ejbJar;
+        
+        return ear;
     }
 
     /**
@@ -150,7 +166,7 @@ public class ControlledItemRepositoryBeanUnitTest {
         final ControlledItem getItem =
                 controlledItemRepository.getByCodeSystemAndCode(codeSystem, code);
         assertNotNull(getItem);
-        
+
         // prove if I have the same item
         assertEquals(item, getItem);
     }
@@ -205,7 +221,7 @@ public class ControlledItemRepositoryBeanUnitTest {
         final TagTransporter transporter = addTag();
         final ControlledItem tag = transporter.getTag();
         final ControlledItem toTag = transporter.getToTag();
-        
+
         // I obtain the tagged item instance using the code and code system.
         // (tagged == a item tag with a given tag)
         final String toTagCodeSystem = toTag.getCodeSystem();
@@ -222,12 +238,14 @@ public class ControlledItemRepositoryBeanUnitTest {
 
         // here I obtain all the tags for a given item
         final ControlledItem getTag = tags.iterator().next();
-        
+
         assertEquals(tag, getTag);
     }
-    
-    private  class TagTransporter {
+
+    private class TagTransporter {
+
         private ControlledItem tag;
+
         private ControlledItem toTag;
 
         public TagTransporter(ControlledItem tag, ControlledItem toTag) {
@@ -243,9 +261,9 @@ public class ControlledItemRepositoryBeanUnitTest {
             return toTag;
         }
     }
-    
+
     private TagTransporter addTag() {
-                // the next lines builds and register the tag
+        // the next lines builds and register the tag
         final String tagCode = DummyModelFactory.createUniqueString(".tag.code");
         final ControlledItem tag =
                 DummyModelFactory.createControlledItem("tag", tagCode);
@@ -261,18 +279,18 @@ public class ControlledItemRepositoryBeanUnitTest {
 
         // I tag the item
         controlledItemRepository.tag(toTag, tag);
-        
-        final ControlledItem resTag = 
+
+        final ControlledItem resTag =
                 controlledItemRepository.getByCodeSystemAndCode(tag.getCodeSystem(), tag.getCode());
         assertNotNull(resTag);
-        
-        final ControlledItem resToTag = 
+
+        final ControlledItem resToTag =
                 controlledItemRepository.getByCodeSystemAndCode(toTag.getCodeSystem(), toTag.getCode());
         assertNotNull(resToTag);
-        
+
         return new TagTransporter(resTag, resToTag);
     }
-    
+
     /**
      * Create, persist, tag a given <code>ControlledItem</code> and untag it .
      * More precisely it create/persist a item, it tag it, untag it  
@@ -287,17 +305,17 @@ public class ControlledItemRepositoryBeanUnitTest {
     @Test
     public void testUntag() {
         final TagTransporter transporter = addTag();
-        
+
         final ControlledItem tag = transporter.getTag();
         final ControlledItem toTag = transporter.getToTag();
-        
+
         // removes the tag from the toTag item
         controlledItemRepository.untag(toTag, tag);
-        
+
         // no more tags for the given item
         final Set<ControlledItem> byTag = controlledItemRepository.getByTag(tag);
         assertTrue(byTag.isEmpty());
-        
+
         // the given itm has no more tags
         final Set<ControlledItem> tags = controlledItemRepository.getTags(toTag);
         assertTrue(tags.isEmpty());

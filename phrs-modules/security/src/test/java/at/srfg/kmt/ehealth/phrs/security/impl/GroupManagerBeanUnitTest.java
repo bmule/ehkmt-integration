@@ -4,13 +4,13 @@
  * Date : Dec 24, 2010
  * User : mradules
  */
-
-
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.security.model.Fetcher;
 import java.util.Set;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import static org.junit.Assert.*;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrGroup;
 import static at.srfg.kmt.ehealth.phrs.security.impl.ModelFactory.createPhrActor;
@@ -34,6 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Integration test for the GroupManagerBean.
@@ -83,7 +84,7 @@ public class GroupManagerBeanUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "phrs.security.test.jar");
 
@@ -109,10 +110,20 @@ public class GroupManagerBeanUnitTest {
         // from the production (JPA) configuration.
         ejbJar.addManifestResource("test-persistence.xml", "persistence.xml");
 
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+
+
+        final String earStructure = ear.toString(true);
+        logger.debug("EAR jar structure on deploy is :");
+        logger.debug(earStructure);
+
         final String ejbStructure = ejbJar.toString(true);
         logger.debug("EJB jar structure on deploy is :");
         logger.debug(ejbStructure);
-        return ejbJar;
+        
+        return ear;
     }
 
     /**

@@ -7,12 +7,13 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
-import at.srfg.kmt.ehealth.phrs.dataexchange.api.DymanicClassRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
@@ -30,8 +31,8 @@ import org.slf4j.LoggerFactory;
  * @author Mihai
  */
 @Stateless
-@Local(DymanicClassRepository.class)
-public class DymanicClassRepositoryBean implements DymanicClassRepository {
+@Local(DynamicClassRepository.class)
+public class DynamicClassRepositoryBean implements DynamicClassRepository {
 
     /**
      * Used to communicate with the underlying persistence layer.
@@ -42,14 +43,16 @@ public class DymanicClassRepositoryBean implements DymanicClassRepository {
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.DymanicClassRepositoryBean</code>.
+     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.DynamicClassRepositoryBean</code>.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(DymanicClassRepositoryBean.class);
+            LoggerFactory.getLogger(DynamicClassRepositoryBean.class);
 
     @Override
     public DynamicClass create() {
         final DynamicClass dynamicClass = new DynamicClass();
+        final String uri = DynamicUtil.createUniqueString("uri:");
+        dynamicClass.setUri(uri);
         entityManager.persist(dynamicClass);
 
         return dynamicClass;
@@ -76,7 +79,6 @@ public class DymanicClassRepositoryBean implements DymanicClassRepository {
         entityManager.persist(dynamicClass);
 
         return dynamicClass;
-
     }
 
     @Override
@@ -210,15 +212,6 @@ public class DymanicClassRepositoryBean implements DymanicClassRepository {
     }
 
     @Override
-    public Set<DynamicClass> get(Query query) {
-        final List resultList = query.getResultList();
-
-        final Set<DynamicClass> result = new HashSet<DynamicClass>();
-        result.addAll(resultList);
-        return result;
-    }
-
-    @Override
     public Set<DynamicClass> getForPrefix(String uri) {
         final Query query =
                 entityManager.createNamedQuery("selectDynamicClassByURIPrefix");
@@ -228,5 +221,10 @@ public class DymanicClassRepositoryBean implements DymanicClassRepository {
         final Set<DynamicClass> result = new HashSet<DynamicClass>();
         result.addAll(resultList);
         return result;
+    }
+
+    @Override
+    public List<DynamicClass> get(Map<String, ?> qbe) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -21,7 +21,7 @@
     </description>
 
     <properties>
-        <version.junit_junit>[4.8,)</version.junit_junit>
+        <version.junit_junit>4.8.1</version.junit_junit>
         <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
         <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -145,6 +145,50 @@
                     <ejbVersion>3.0</ejbVersion>
                     <generateClient>true</generateClient>
                 </configuration>
+            </plugin>
+            
+            <!--
+            This is just a workaround until the arkwilian is able to 
+            build archives based on pom files.
+            I use DynaBeans in the data exchange module and I want to
+            do test where classes from this artifact (DynaBeans) appears.
+            This is the reason why I use the maven-dependency-plugin to
+            copy the aritefact in to the 'target/ShrinkWrap' directory.
+            The Arquillian test load them from there using a File Input 
+            Stream.
+            The copy process take place on the test-compile phase.
+            
+            I know this is not the most elegant way to solve this problem but
+            it seams to be the fastest.
+            
+            As far as the Arquillian/ShrinkWrap team will includes this feaures
+            I will remove this element. More, it seams that the feaures are 
+            impelemented and they are in a pre-alpha pahase.
+            -->
+            
+             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>commons-beanutils</groupId>
+                                    <artifactId>commons-beanutils</artifactId>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/shrinwrap</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>

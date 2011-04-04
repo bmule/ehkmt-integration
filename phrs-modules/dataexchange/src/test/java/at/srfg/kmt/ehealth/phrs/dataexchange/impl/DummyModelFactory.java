@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
+
 
 /**
  * Used to build several <b>test</b> purposed data models.
@@ -38,7 +41,30 @@ final class DummyModelFactory {
      */
     private static final SimpleDateFormat DD_MM_YY_FORMAT =
             new SimpleDateFormat("dd.MM.yy");
+
     public static final Date DATE;
+
+    public static final String STRING_PROPERTY_NAME = "stringProperty";
+
+    public static final String STRING_PROPERTY_VALUE = "my value";
+
+    public static final String BOOLEAN_PROPERTY_NAME = "booleanProperty";
+
+    public static final Boolean BOOLEAN_PROPERTY_VALUE = Boolean.TRUE;
+
+    public static final String DATE_PROPERTY_NAME = "dateProperty";
+
+    public static final Date DATE_PROPERTY_VALUE;
+
+    public static final Set<String> PROPERTY_NAMES;
+
+    public static final Map<String, Serializable> PROPERTIES;
+
+    public static final Map<String, String> PROPERTY_TYPES;
+    
+    public static final Map<String, Serializable> TYPES_VALUE;
+    
+    public static final Map<String, Serializable> PROPERTY_VALUES;
 
     static {
         try {
@@ -46,6 +72,32 @@ final class DummyModelFactory {
         } catch (ParseException ex) {
             throw new RuntimeException(ex);
         }
+
+        DATE_PROPERTY_VALUE = DATE;
+        PROPERTY_NAMES = new HashSet<String>(3);
+        PROPERTY_NAMES.add(STRING_PROPERTY_NAME);
+        PROPERTY_NAMES.add(DATE_PROPERTY_NAME);
+        PROPERTY_NAMES.add(BOOLEAN_PROPERTY_NAME);
+
+        PROPERTIES = new HashMap<String, Serializable>(3);
+        PROPERTIES.put(STRING_PROPERTY_NAME, STRING_PROPERTY_VALUE);
+        PROPERTIES.put(BOOLEAN_PROPERTY_NAME, BOOLEAN_PROPERTY_VALUE);
+        PROPERTIES.put(DATE_PROPERTY_NAME, DATE_PROPERTY_VALUE);
+
+        PROPERTY_TYPES = new HashMap<String, String>(3);
+        PROPERTY_TYPES.put(STRING_PROPERTY_NAME, String.class.getName());
+        PROPERTY_TYPES.put(DATE_PROPERTY_NAME, Date.class.getName());
+        PROPERTY_TYPES.put(BOOLEAN_PROPERTY_NAME, Boolean.class.getName());
+        
+        PROPERTY_VALUES = new HashMap<String, Serializable>(3);
+        PROPERTY_VALUES.put(STRING_PROPERTY_NAME, STRING_PROPERTY_VALUE);
+        PROPERTY_VALUES.put(DATE_PROPERTY_NAME, DATE_PROPERTY_VALUE);
+        PROPERTY_VALUES.put(BOOLEAN_PROPERTY_NAME, BOOLEAN_PROPERTY_VALUE);
+        
+        TYPES_VALUE = new HashMap<String, Serializable>(3);
+        TYPES_VALUE.put(String.class.getName(), STRING_PROPERTY_VALUE);
+        TYPES_VALUE.put(Date.class.getName(), DATE_PROPERTY_VALUE);
+        TYPES_VALUE.put(Boolean.class.getName(), BOOLEAN_PROPERTY_VALUE);
     }
 
     /**
@@ -116,7 +168,8 @@ final class DummyModelFactory {
         final StringBuffer result = new StringBuffer();
         result.append(prefix);
         result.append(".");
-        result.append(new Date().getTime());
+        final UUID uuid = UUID.randomUUID();
+        result.append(uuid.toString());
         return result.toString();
     }
 
@@ -144,7 +197,7 @@ final class DummyModelFactory {
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
 
         final DynamicPropertyType stringProperty = new DynamicPropertyType();
-        stringProperty.setName("stringProperty");
+        stringProperty.setName(STRING_PROPERTY_NAME);
         stringProperty.setType(String.class.getName());
 
         final DynamicPropertyType dateProperty = new DynamicPropertyType();
@@ -152,7 +205,7 @@ final class DummyModelFactory {
         dateProperty.setType(Date.class.getName());
 
         final DynamicPropertyType booleanProperty = new DynamicPropertyType();
-        booleanProperty.setName("booleanProperty");
+        booleanProperty.setName(BOOLEAN_PROPERTY_NAME);
         booleanProperty.setType(Boolean.class.getName());
 
         final DynamicPropertyMetadata stringPropertyMetadata =
@@ -196,7 +249,7 @@ final class DummyModelFactory {
                 new HashSet<DynamicPropertyType>();
 
         final DynamicPropertyType stringProperty = new DynamicPropertyType();
-        stringProperty.setName("stringProperty");
+        stringProperty.setName(STRING_PROPERTY_NAME);
         stringProperty.setType(String.class.getName());
 
         final DynamicPropertyType dateProperty = new DynamicPropertyType();
@@ -232,55 +285,16 @@ final class DummyModelFactory {
 
     static DynamicBean createDynamicBean(DynamicClass dc) {
         final String name = createUniqueString("dynamic.bean.name");
-        return new DynamicBean(name, dc);
+        final String uri = createUniqueString("dynamic.bean.uri");
+        return new DynamicBean(uri, name, dc);
     }
 
-    static Serializable getValueForType(String type) {
-        if ("java.lang.String".equals(type)) {
-            return "my value";
-        }
-
-        if ("java.util.Date".equals(type)) {
-            return DummyModelFactory.DATE;
-        }
-
-        if ("java.lang.Boolean".equals(type)) {
-            return Boolean.TRUE;
-        }
-
-        return null;
+    static String getPropertyTypeForName(String propertyName) {
+        return PROPERTY_TYPES.get(propertyName);
     }
-    
-    static Serializable getValueForType(Class type) {
-        if (String.class.equals(type)) {
-            return "my value";
-        }
 
-        if (java.util.Date.class.equals(type)) {
-            return DummyModelFactory.DATE;
-        }
-
-        if (java.lang.Boolean.class.equals(type)) {
-            return Boolean.TRUE;
-        }
-
-        return null;
-    }
-    
-    static String getPropertyNameForType(String type) {
-        if ("java.lang.String".equals(type)) {
-            return "stringProperty";
-        }
-
-        if ("java.util.Date".equals(type)) {
-            return "dateProperty";
-        }
-
-        if ("java.lang.Boolean".equals(type)) {
-            return "booleanProperty";
-        }
-
-        return null;
+    static Serializable getPropertyValueForName(String propertyName) {
+        return PROPERTY_VALUES.get(propertyName);
     }
 
     static DynamicBean buildDefaultDynamicBean(DynamicClass clazz) {
@@ -289,11 +303,11 @@ final class DummyModelFactory {
         final Set<DynamicPropertyType> propertyTypes = clazz.getPropertyTypes();
         final Set<DynamicProperty> dynamicProperties =
                 new HashSet<DynamicProperty>(propertyTypes.size());
-        
+
         for (DynamicPropertyType propertyType : propertyTypes) {
             final String propName = propertyType.getName();
             final String propType = propertyType.getType();
-            final Serializable propValue = DummyModelFactory.getValueForType(propType);
+            final Serializable propValue = TYPES_VALUE.get(propType);
             final DynamicProperty dynamicProperty =
                     new DynamicProperty(propName, propType, propValue);
             // I set the owner side
@@ -302,9 +316,9 @@ final class DummyModelFactory {
         }
 
         // I set the inverse part
-        dynamicBean.setProperties(dynamicProperties);
-        
-        dynamicBean.setCreated(DummyModelFactory.DATE);
+        dynamicBean.setDynamicProperties(dynamicProperties);
+
+        dynamicBean.setCreateDate(DummyModelFactory.DATE);
         dynamicBean.setCanRead(Boolean.TRUE);
         dynamicBean.setCanWrite(Boolean.FALSE);
 

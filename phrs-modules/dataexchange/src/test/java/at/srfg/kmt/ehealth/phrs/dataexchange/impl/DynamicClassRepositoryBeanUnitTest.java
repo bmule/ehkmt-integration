@@ -8,6 +8,10 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
 import static org.junit.Assert.*;
+import java.io.File;
+import javax.ejb.EJBException;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import java.io.Serializable;
@@ -15,7 +19,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import at.srfg.kmt.ehealth.phrs.dataexchange.api.DymanicClassRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import java.net.MalformedURLException;
 import javax.ejb.EJB;
@@ -30,6 +34,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * Provides test for the <code>DymanicBeanRepository</code> implementation.
  * 
@@ -41,25 +46,26 @@ import org.slf4j.LoggerFactory;
  */
 @RunWith(Arquillian.class)
 @Run(RunModeType.IN_CONTAINER)
-public class DymanicClassRepositoryBeanUnitTest {
+public class DynamicClassRepositoryBeanUnitTest {
 
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.ActorManagerBeanUnitTest</code>.
+     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.DynamicClassRepositoryBeanUnitTest</code>.
      */
-    private static final Logger logger =
-            LoggerFactory.getLogger(DymanicClassRepositoryBeanUnitTest.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(DynamicClassRepositoryBeanUnitTest.class);
+
     /**
      * The <code>DymanicClassRepository</code> instance to test.
      */
     @EJB
-    private DymanicClassRepository dynanicClassRepository;
+    private DynamicClassRepository dynanicClassRepository;
 
     /**
      * Builds a <code>DymanicClassRepositoryBeanUnitTest</code> instance.
      */
-    public DymanicClassRepositoryBeanUnitTest() {
+    public DynamicClassRepositoryBeanUnitTest() {
         // UNIMPLEMENTED
     }
 
@@ -67,7 +73,7 @@ public class DymanicClassRepositoryBeanUnitTest {
      * Builds a <code>JavaArchive</code> that contains
      * all the required beans and libraries;
      * the Arquillian deploy it in to the running container
-     * under the name test.ebj when the test starts.
+     * under the name test.ear when the test starts. </br>
      *
      * @return a <code>JavaArchive</code> which contains the <code>MyService</code>
      * interface and the <code>MyServiceBean</code> class.
@@ -75,7 +81,7 @@ public class DymanicClassRepositoryBeanUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "phrs.dataexchage.test.jar");
 
@@ -85,14 +91,13 @@ public class DymanicClassRepositoryBeanUnitTest {
         // at.srfg.kmt.ehealth.phrs.dataexchange.model are
         // added to the ejb jar (and to the classpath).
         // see the log for the ejb jar structure.
-        ejbJar.addPackage(DymanicClassRepositoryBeanUnitTest.class.getPackage());
+        ejbJar.addPackage(DynamicClassRepositoryBeanUnitTest.class.getPackage());
 
-        final Package apiPackage = DymanicClassRepository.class.getPackage();
+        final Package apiPackage = DynamicClassRepository.class.getPackage();
         ejbJar.addPackage(apiPackage);
 
         final Package modelPackage = DynamicClass.class.getPackage();
         ejbJar.addPackage(modelPackage);
-
 
         // the test-persistence.xml file is in the classpath, it is added
         // to the deployed under the name persistence.xml.
@@ -100,16 +105,23 @@ public class DymanicClassRepositoryBeanUnitTest {
         // from the production (JPA) configuration.
         ejbJar.addManifestResource("test-persistence.xml", "persistence.xml");
 
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+        final File lib = ArchiveHelper.getCommonsBeanUtils();
+        ear.addLibraries(lib);
+
+        final String earStructure = ear.toString(true);
+        LOGGER.debug("EAR jar structure on deploy is :");
+        LOGGER.debug(earStructure);
+
         final String ejbStructure = ejbJar.toString(true);
-        logger.debug("EJB jar structure on deploy is :");
-        logger.debug(ejbStructure);
-        return ejbJar;
+        LOGGER.debug("EJB jar structure on deploy is :");
+        LOGGER.debug(ejbStructure);
+
+        return ear;
     }
 
-    /**
-     * Builds and persists an empty DynamicClass and after this it proves if this 
-     * was done properly.
-     */
     @Test
     public void testCreate() {
         final DynamicClass create = dynanicClassRepository.create();
@@ -198,14 +210,12 @@ public class DymanicClassRepositoryBeanUnitTest {
 
 
         final Set<DynamicPropertyType> propertyTypes = get.getPropertyTypes();
-        // the dummy bean contains only three properties
+        // the dummy bean class contains only three properties
         assertEquals(3, propertyTypes.size());
-
 
         for (DynamicPropertyType type : propertyTypes) {
             provePropertyType(type);
         }
-
     }
 
     private void provePropertyType(DynamicPropertyType type) {
@@ -297,6 +307,30 @@ public class DymanicClassRepositoryBeanUnitTest {
         assertEquals(3, propertyTypes.size());
     }
 
+    @Test(expected = EJBException.class)
+    public void testPersistWithNullURI() {
+        final DynamicClass dynamicClass = dynanicClassRepository.create();
+        assertNotNull(dynamicClass);
+
+        final boolean exits = dynanicClassRepository.exits(dynamicClass);
+        assertTrue(exits);
+        
+        dynamicClass.setUri(null);
+        
+        
+        dynanicClassRepository.persist(dynamicClass);
+    }
+
+    @Test(expected = EJBException.class)
+    public void testPersistWithSameURI() {
+        final DynamicClass dynamicClass = dynanicClassRepository.create();
+        assertNotNull(dynamicClass);
+        
+        final String uri = dynamicClass.getUri();
+        // here raises an exception becaus the uri is the same
+        dynanicClassRepository.create(uri);
+    }
+
     /**
      * Creates a <code>DynamicClass</code> remove it and proves if the class was
      * properly removed. The <code>DynamicClass</code> to remove is located
@@ -307,19 +341,19 @@ public class DymanicClassRepositoryBeanUnitTest {
         final String name = DummyModelFactory.createUniqueString("myName");
         final String uri = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass create = dynanicClassRepository.create(name, uri);
-        
+
         final DynamicClass remove = dynanicClassRepository.remove(create);
         assertNotNull(create);
-        
+
         final String removeURI = remove.getUri();
         assertNotNull(removeURI);
-        
+
         assertEquals(uri, removeURI);
-        
+
         final boolean exits = dynanicClassRepository.exits(uri);
         assertFalse(exits);
     }
-    
+
     /**
      * 
      */
@@ -328,18 +362,18 @@ public class DymanicClassRepositoryBeanUnitTest {
         final String name = DummyModelFactory.createUniqueString("myName");
         final String uri = DummyModelFactory.createUniqueString("myURI");
         final DynamicClass create = dynanicClassRepository.create(name, uri);
-        
+
         final DynamicClass get = dynanicClassRepository.get(uri);
         assertNotNull(create);
-        
+
         final DynamicClass remove = dynanicClassRepository.remove(get);
-        
-        
+
+
         final String removeURI = remove.getUri();
         assertNotNull(removeURI);
-        
+
         assertEquals(uri, removeURI);
-        
+
         final boolean exits = dynanicClassRepository.exits(uri);
         assertFalse(exits);
     }

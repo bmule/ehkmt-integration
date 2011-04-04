@@ -13,6 +13,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  *
@@ -75,5 +76,17 @@ public class ModelFactory {
         dynamicClass.setPropertyTypes(properties);
         
         return dynamicClass;
-    } 
+    }
+    
+    public static String buildUniqueString(String prefix) {
+        final StringBuffer result = new StringBuffer();
+        if (prefix != null) {
+            result.append(result);
+        }
+        final UUID randomUUID = UUID.randomUUID();
+        result.append("/");
+        result.append(randomUUID.toString());
+        
+        return result.toString();
+    }
 }

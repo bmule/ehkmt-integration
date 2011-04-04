@@ -8,6 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
 
+import java.io.File;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import static org.junit.Assert.*;
 import java.util.Set;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
@@ -46,11 +49,13 @@ public class VocabularyLoaderBeanUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VocabularyLoaderBeanUnitTest.class);
+
     /**
      * The <code>VocabularyLoader</code> instance to test.
      */
     @EJB
     private VocabularyLoader vocabularyLoader;
+
     /**
      * The <code>ControlledItemRepository</code> instance to test.
      */
@@ -75,7 +80,7 @@ public class VocabularyLoaderBeanUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "phrs.dataexchage.test.jar");
 
@@ -85,7 +90,7 @@ public class VocabularyLoaderBeanUnitTest {
         // at.srfg.kmt.ehealth.phrs.dataexchange.model are
         // added to the ejb jar (and to the classpath).
         // see the log for the ejb jar structure.
-        ejbJar.addPackage(DymanicClassRepositoryBeanUnitTest.class.getPackage());
+        ejbJar.addPackage(VocabularyLoaderBeanUnitTest.class.getPackage());
 
         final Package apiPackage = VocabularyLoader.class.getPackage();
         ejbJar.addPackage(apiPackage);
@@ -107,11 +112,21 @@ public class VocabularyLoaderBeanUnitTest {
         ejbJar.addResource("phrs.snomed-ct-tags-test.properties",
                 "phrs.snomed-ct-tags.properties");
 
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+        final File lib = ArchiveHelper.getCommonsBeanUtils();
+        ear.addLibraries(lib);
+
+        final String earStructure = ear.toString(true);
+        LOGGER.debug("EAR jar structure on deploy is :");
+        LOGGER.debug(earStructure);
 
         final String ejbStructure = ejbJar.toString(true);
         LOGGER.debug("EJB jar structure on deploy is :");
         LOGGER.debug(ejbStructure);
-        return ejbJar;
+        
+        return ear;
     }
 
     /**
@@ -153,9 +168,9 @@ public class VocabularyLoaderBeanUnitTest {
         assertEquals(chestPainCode, getChestPainCode);
 
         // prove the tagging
-        
+
         // frist I prove the tagged item
-        final Set<ControlledItem> byTag = 
+        final Set<ControlledItem> byTag =
                 controlledItemRepository.getByTag(symptomItem);
         // the test files contains two items and one tag the other, 
         // so I have only one tag. The symptom is the tag and 
@@ -173,7 +188,7 @@ public class VocabularyLoaderBeanUnitTest {
         // so I have only one tag. The symptom is the tag and 
         // the chest pain is the tagged item
         assertEquals(1, tags.size());
-        
+
         final ControlledItem tag = tags.iterator().next();
         assertEquals(symptomItem, tag);
     }
