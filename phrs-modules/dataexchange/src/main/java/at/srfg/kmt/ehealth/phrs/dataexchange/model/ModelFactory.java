@@ -5,8 +5,6 @@
  * Date : Mar 21, 2011
  * User : Mihai Radulescu
  */
-
-
 package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
 
@@ -14,6 +12,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+
 
 /**
  *
@@ -38,19 +37,19 @@ public class ModelFactory {
      * @return a <code>DynamicClass</code> for the given set of parameters.
      * @see #buildDynamicClass(java.lang.String, java.lang.String, java.util.Set) 
      */
-    public static DynamicClass buildDynamicClass(String name, String uri, 
+    public static DynamicClass buildDynamicClass(String name, String uri,
             Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> properties) {
-        
+
         final DynamicClass dynamicClass = new DynamicClass(uri, name);
-        final Set<Entry<DynamicPropertyType, Set<DynamicPropertyMetadata>>> entrySet = 
+        final Set<Entry<DynamicPropertyType, Set<DynamicPropertyMetadata>>> entrySet =
                 properties.entrySet();
-        
+
         for (Entry<DynamicPropertyType, Set<DynamicPropertyMetadata>> entry : entrySet) {
             final DynamicPropertyType propertyType = entry.getKey();
             // set the owner parts
             propertyType.setDynamicClass(dynamicClass);
-            
-            
+
+
             final Set<DynamicPropertyMetadata> metadatas = entry.getValue();
             for (DynamicPropertyMetadata metadata : metadatas) {
                 // set the owner part
@@ -58,35 +57,72 @@ public class ModelFactory {
             }
             propertyType.setMetadatas(metadatas);
         }
-        
+
         final Set<DynamicPropertyType> propertyTypes = properties.keySet();
         dynamicClass.setPropertyTypes(propertyTypes);
 
         return dynamicClass;
-    } 
-    
-    public static DynamicClass buildDynamicClass(String name, String uri, 
+    }
+
+    public static DynamicClass buildDynamicClass(String name, String uri,
             Set<DynamicPropertyType> properties) {
-        
+
         final DynamicClass dynamicClass = new DynamicClass(uri, name);
         for (DynamicPropertyType propertyType : properties) {
             // set the owner part
             propertyType.setDynamicClass(dynamicClass);
         }
         dynamicClass.setPropertyTypes(properties);
-        
+
         return dynamicClass;
     }
-    
+
+    /**
+     * Builds a unique string (URL like) based on a UUID, the string can have
+     * a given prefix. If the prefix is null or empty strings then it will be
+     * ignored. <br>
+     * The result string follows the following syntax : 
+     * <pre>prefix/UUID string</pre>.
+     * 
+     * @param prefix the prefix for the result string, if is null it will be 
+     * ignored.
+     * @return a unique string (URL like) based on a UUID..
+     * @see #buildUniqueString(java.lang.String) 
+     */
     public static String buildUniqueString(String prefix) {
+        return buildUniqueString(prefix, null);
+    }
+
+    /**
+     * Builds a unique string (URL like) based on a UUID, the string can have
+     * a given prefix and subfix. If the subfix or the prefix are null or empty 
+     * strings then they will be ignored. <br>
+     * The result string follows the following syntax : 
+     * <pre>prefix/UUID string/subfix</pre>.
+     * 
+     * @param prefix the prefix for the result string, if is null it will be 
+     * ignored.
+     * @param subfix the subfix for the result string, if is null it will be 
+     * ignored.
+     * @return a unique string (URL like) based on a UUID, the string can have
+     * a given prefix and subfix.
+     * @see #buildUniqueString(java.lang.String) 
+     */
+    public static String buildUniqueString(String prefix, String subfix) {
         final StringBuffer result = new StringBuffer();
-        if (prefix != null) {
-            result.append(result);
+        if (prefix != null && !prefix.isEmpty()) {
+            result.append(prefix);
+            result.append("/");
         }
+
         final UUID randomUUID = UUID.randomUUID();
-        result.append("/");
         result.append(randomUUID.toString());
-        
+
+        if (subfix != null && !subfix.isEmpty()) {
+            result.append("/");
+            result.append(subfix);
+        }
+
         return result.toString();
     }
 }

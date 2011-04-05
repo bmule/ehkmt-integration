@@ -11,6 +11,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class DynamicClassRepositoryBean implements DynamicClassRepository {
     @Override
     public DynamicClass create() {
         final DynamicClass dynamicClass = new DynamicClass();
-        final String uri = DynamicUtil.createUniqueString("uri:");
+        final String uri = ModelFactory.buildUniqueString("uri");
         dynamicClass.setUri(uri);
         entityManager.persist(dynamicClass);
 

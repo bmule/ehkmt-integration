@@ -8,7 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import java.io.Serializable;
+import java.util.Date;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
 import java.io.File;
@@ -153,7 +155,9 @@ public class DynamicBeanRepositoryBeanUnitTest {
      * conform with the original one.
      * </ul>
      * Note : This test emphasis search for the  <b>last</b> bean version, 
-     * it does not test the bean history.
+     * it does not test the bean history.<br>
+     * Note : This test emphasis the test for the dynamic properties, the default 
+     * ones are only superficial tested.
      * 
      * @see DymanicBeanRepository#add(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean) 
      * @see DymanicBeanRepository#contains(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass) 
@@ -251,6 +255,8 @@ public class DynamicBeanRepositoryBeanUnitTest {
      * <li> It persists the a <code>DynamicBean</code> for the upper defined
      * class for a number if times, each persist generates a new version.
      * <li> proves if the number of versions are correct.
+     * <li> proves if the date for the versions is always different because each 
+     * bean is created independent (the date must be different).
      * </ul>
      * 
      * @see DymanicBeanRepository#add(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean) 
@@ -277,19 +283,132 @@ public class DynamicBeanRepositoryBeanUnitTest {
 
         // here I build the dynaimc bean
         final DynaBean dynaBean = DynamicUtil.getNewInstance(getClass);
-        
+
         populateBean(dynaBean);
-        
+
         // here I add the bean 10 times, after this the bean repository will 
         // contain 10 verions of the given bean, ten verison for the same bean
         // type (class)
         final int amount = 10;
         for (int i = 0; i < amount; i++) {
+            // I do this just to be sure that the create date is different
+            // between the versions.
+            sleep(500);
             beanRepository.add(dynaBean);
         }
-        
+
         // get all the beans fot the given class, the repositry muat contin 10 verions.
         final Set<DynaBean> allForClass = beanRepository.getAllForClass(getClass);
         assertEquals(amount, allForClass.size());
+
+        // here I prove the date for all the bean isntace, the date must be 
+        // diffent.
+        Date lastDate = null;
+        for (DynaBean bean : allForClass) {
+            final Date date =
+                    (Date) bean.get(Constants.PHRS_BEAN_CREATE_DATE);
+            assertNotNull(date);
+            if (lastDate != null) {
+                final long time = date.getTime();
+                final long lastTime = lastDate.getTime();
+                // the time must be different
+                assertTrue(lastTime != time);
+            }
+
+            lastDate = date;
+        }
+    }
+
+    /**
+     * CAuses the current thread to sleep for a given number of milliseconds.
+     * 
+     * @param milsec the number of milliseconds.
+     */
+    private void sleep(long milsec) {
+        try {
+            final Thread currentThread = Thread.currentThread();
+            currentThread.sleep(milsec);
+        } catch (InterruptedException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+        }
+    }
+
+    /**
+     * Create a new DynamicBean instance,persist it and proves the value for the 
+     * Dynamic properties.
+     */
+    @Test
+    public void testDefaultProperties() throws DynamicPropertyTypeException, DynaClassException {
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> defaultModelMap =
+                DummyModelFactory.createDefaultModelMap();
+
+        // here I build an class instance.
+        final String name = ModelFactory.buildUniqueString("myName");
+        final String classURI = ModelFactory.buildUniqueString("myURI");
+        final DynamicClass dynamicClass =
+                ModelFactory.buildDynamicClass(name, classURI, defaultModelMap);
+
+        // here I add it.
+        classRepository.persist(dynamicClass);
+
+        // here I obtain the laready persisted class.
+        final DynamicClass getClass = classRepository.get(classURI);
+
+        // here I build the dynaimc bean
+        final DynaBean dynaBean = DynamicUtil.getNewInstance(getClass);
+        populateBean(dynaBean);
+
+        // and here I persist the bean
+        beanRepository.add(dynaBean);
+
+        // I prove if the repository contains a bean with the same class
+        final boolean contains = beanRepository.contains(getClass);
+        assertTrue(contains);
+
+        // here I get the last version for this bean (the bean is still empty 
+        // no properties was set).
+        final DynaBean beanForClass = beanRepository.getForClass(getClass);
+        assertNotNull(beanForClass);
+
+        // here I prove the bean URI
+        final String beanURI =
+                (String) beanForClass.get(Constants.PHRS_BEAN_URI);
+        assertNotNull(beanURI);
+
+        // here I prove the bean class URI, it must be simlar with the one 
+        // upper defined (beanClassURI)
+        final String beanClassURI =
+                (String) beanForClass.get(Constants.PHRS_BEAN_CLASS_URI);
+        assertNotNull(beanClassURI);
+        assertEquals(classURI, beanClassURI);
+
+        // here I prove the date, it must be non null
+        final Date createDate =
+                (Date) beanForClass.get(Constants.PHRS_BEAN_CREATE_DATE);
+        assertNotNull(createDate);
+        
+        // here I prove the version, it must 0 because I only add a singual for
+        // this bean.
+        final Long version = 
+                (Long) beanForClass.get(Constants.PHRS_BEAN_VERSION);
+        assertTrue(version.intValue() == 0);
+        
+        // by default this is false
+        final Boolean canRead = 
+                (Boolean) beanForClass.get(Constants.PHRS_BEAN_CANREAD);
+        assertNotNull(canRead);
+        assertFalse(canRead.booleanValue());
+        
+        // by default this is false
+        final Boolean canWrite = 
+                (Boolean) beanForClass.get(Constants.PHRS_BEAN_CANWRITE);
+        assertNotNull(canWrite);
+        assertFalse(canWrite.booleanValue());
+        
+        // by default this is false
+        final Boolean canUse = 
+                (Boolean) beanForClass.get(Constants.PHRS_BEAN_CANUSE);
+        assertNotNull(canUse);
+        assertFalse(canUse.booleanValue());
     }
 }

@@ -9,6 +9,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import static org.apache.commons.io.FileUtils.readFileToString;
@@ -56,12 +57,12 @@ public class DynamicUtil {
         new DynaProperty(Constants.PHRS_BEAN_NAME, String.class),
         new DynaProperty(Constants.PHRS_BEAN_URI, String.class),
         new DynaProperty(Constants.PHRS_BEAN_VERSION, Long.class),
-        new DynaProperty(Constants.PHRS_BEAN_CREATE_DATE, Long.class),
+        new DynaProperty(Constants.PHRS_BEAN_CREATE_DATE, Date.class),
         new DynaProperty(Constants.PHRS_BEAN_CREATOR, String.class),
         new DynaProperty(Constants.PHRS_BEAN_OWNER, String.class),
-        new DynaProperty(Constants.PHRS_BEAN_CANREAD, String.class),
-        new DynaProperty(Constants.PHRS_BEAN_CANWRITE, String.class),
-        new DynaProperty(Constants.PHRS_BEAN_CANUSE, String.class)
+        new DynaProperty(Constants.PHRS_BEAN_CANREAD, Boolean.class),
+        new DynaProperty(Constants.PHRS_BEAN_CANWRITE, Boolean.class),
+        new DynaProperty(Constants.PHRS_BEAN_CANUSE, Boolean.class)
     };
 
     /**
@@ -289,6 +290,8 @@ public class DynamicUtil {
 
         final DynamicClass dynamicClass = dynamicBean.getDynamicClass();
         final DynaBean dynaBean = getNewInstance(dynamicClass);
+        
+        addDefaultProprties(dynaBean, dynamicBean);
 
         final Set<DynamicProperty> properties = dynamicBean.getDynamicProperties();
         for (DynamicProperty property : properties) {
@@ -298,6 +301,67 @@ public class DynamicUtil {
         }
 
         return dynaBean;
+    }
+    
+    
+    static void addDefaultProprties(DynaBean dynaBean, DynamicBean dynamicBean) {
+        // FIXME : use this method over all
+        
+        final DynamicClass dynamicClass = dynamicBean.getDynamicClass();
+        if (dynamicClass == null) {
+            throw new IllegalArgumentException("No dynamic class for the dynamic bean.");
+        }
+
+        final String classUri = dynamicClass.getUri();
+        if (classUri == null) {
+            throw new IllegalArgumentException("No dynamic class uri must be a non null/non empty string.");
+        }
+        dynaBean.set(Constants.PHRS_BEAN_CLASS_URI, classUri);
+        
+        final String name = dynamicBean.getName();
+        if (name != null) {
+            dynaBean.set(Constants.PHRS_BEAN_NAME, name);
+        }
+        
+        final String uri = dynamicBean.getUri();
+        dynaBean.set(Constants.PHRS_BEAN_URI, uri);
+        
+        final Long uriVersion = dynamicBean.getUriVersion();
+        dynaBean.set(Constants.PHRS_BEAN_VERSION, uriVersion);
+
+        final Date createDate = dynamicBean.getCreateDate();
+        dynaBean.set(Constants.PHRS_BEAN_CREATE_DATE, createDate);
+        
+        final String creatorURI = dynamicBean.getCreatorURI();
+        if (creatorURI != null) {
+            dynaBean.set(Constants.PHRS_BEAN_CREATOR, creatorURI);
+        }
+
+        final String ownerURI = dynamicBean.getOwnerURI();
+        if (ownerURI != null) {
+            dynaBean.set(Constants.PHRS_BEAN_OWNER, ownerURI);    
+        }
+        
+        final Boolean canRead = dynamicBean.getCanRead();
+        if (canRead != null) {
+            dynaBean.set(Constants.PHRS_BEAN_CANREAD, canRead);
+        } else {
+            dynaBean.set(Constants.PHRS_BEAN_CANREAD, Boolean.FALSE);
+        }
+        
+        final Boolean canWrite = dynamicBean.getCanWrite();
+        if (canWrite != null) {
+            dynaBean.set(Constants.PHRS_BEAN_CANWRITE, canWrite);
+        } else {
+            dynaBean.set(Constants.PHRS_BEAN_CANWRITE, Boolean.FALSE);
+        }
+        
+        final Boolean canUse = dynamicBean.getCanUse();
+        if (canUse != null) {
+            dynaBean.set(Constants.PHRS_BEAN_CANUSE, canUse);
+        } else {
+            dynaBean.set(Constants.PHRS_BEAN_CANUSE, Boolean.FALSE);
+        }
     }
 
     /**
@@ -446,15 +510,6 @@ public class DynamicUtil {
         msg.delete(msg.length() - 2, msg.length());
 
         return msg.toString();
-    }
-    
-    static String createUniqueString(String prefix) {
-        final StringBuffer result = new StringBuffer();
-        result.append(prefix);
-        result.append("/");
-        final UUID uuid = UUID.randomUUID();
-        result.append(uuid.toString());
-        return result.toString();
     }
     
     static boolean contains(DynaBean dynaBean, String property) {

@@ -135,7 +135,7 @@ public class DynamicBean implements Serializable {
     private DynamicClass dynamicClass;
 
     /**
-     * The date when this bean was created.
+     * The date when this bean was created, it can not be null.
      */
     private Date createDate;
 
@@ -163,6 +163,11 @@ public class DynamicBean implements Serializable {
      * True if it can be involved in any kind of activities.
      */
     private Boolean canUse;
+    
+    /**
+     * True if this bean is marked as deleted.
+     */
+    private Boolean isDeleted;
 
     /**
      * Builds a <code>DynamicBean</code> instance.
@@ -264,6 +269,7 @@ public class DynamicBean implements Serializable {
         this.canWrite = canWrite;
     }
 
+    @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     public Date getCreateDate() {
         return createDate;
@@ -314,6 +320,16 @@ public class DynamicBean implements Serializable {
         this.uri = uri;
     }
 
+    public Boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public void setIsDeleted(Boolean isDeleted) {
+        this.isDeleted = isDeleted;
+    }
+    
+    
+
     @Override
     public String toString() {
         final StringBuffer result = new StringBuffer();
@@ -325,6 +341,8 @@ public class DynamicBean implements Serializable {
         result.append(uriVersion);
         result.append(", dynamicClass=");
         result.append(dynamicClass);
+        result.append(", isDeleted=");
+        result.append(isDeleted);
         result.append(", created=");
         result.append(createDate);
         result.append(", ownerURI=");

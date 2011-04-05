@@ -17,6 +17,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicProperty;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -36,7 +37,11 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Provides methods for manage and manipulation of a specific kind of
+ * <code>DynaBeans</code> named Phr-DynaBeans. A Phr-DynaBean is a 
+ * <code>DynaBeans</code> that contains a certain set of 
+ *  
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -173,7 +178,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
      * <code>DynamicUtil.createUniqueString</code>).
      * <li> PHRS_BEAN_VERSION - if the specified <code>DynaBean</code> does not
      * contains this property then it create one according with the already
-     * existing version.
+     * existing version(s).
      * <li> PHRS_BEAN_CREATE_DATE if the specified <code>DynaBean</code> does not
      * contains this property then the current date is used.
      * <li> PHRS_BEAN_CREATOR - if the specified <code>DynaBean</code> 
@@ -199,7 +204,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_URI)) {
             beanURI = (String) dynaBean.get(Constants.PHRS_BEAN_URI);
         } else {
-            beanURI = DynamicUtil.createUniqueString("phrsBean");
+            beanURI = ModelFactory.buildUniqueString("phrsBean");
         }
         final String uriMsg =
                 String.format("%s = %s", Constants.PHRS_BEAN_URI, beanURI);
@@ -210,9 +215,9 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_NAME)) {
             beanName = (String) dynaBean.get(Constants.PHRS_BEAN_NAME);
         } else {
-            beanName = DynamicUtil.createUniqueString("phrsBeanName");
+            beanName = ModelFactory.buildUniqueString("phrsBeanName");
         }
-        dynamicBean.setUri(beanName);
+        dynamicBean.setName(beanName);
         final String beanNameMsg =
                 String.format("%s = %s", Constants.PHRS_BEAN_NAME, beanName);
         LOGGER.debug(beanNameMsg);
@@ -235,7 +240,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         }
         dynamicBean.setCreateDate(createDate);
         final String createDateMsg =
-                String.format("%s = %s", Constants.PHRS_BEAN_CREATE_DATE, beanName);
+                String.format("%s = %s", Constants.PHRS_BEAN_CREATE_DATE, createDate);
         LOGGER.debug(createDateMsg);
 
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CREATOR)) {
