@@ -56,6 +56,7 @@ public class DynamicUtil {
         new DynaProperty(Constants.PHRS_BEAN_NAME, String.class),
         new DynaProperty(Constants.PHRS_BEAN_URI, String.class),
         new DynaProperty(Constants.PHRS_BEAN_VERSION, Long.class),
+        new DynaProperty(Constants.PHRS_BEAN_CREATE_DATE, Long.class),
         new DynaProperty(Constants.PHRS_BEAN_CREATOR, String.class),
         new DynaProperty(Constants.PHRS_BEAN_OWNER, String.class),
         new DynaProperty(Constants.PHRS_BEAN_CANREAD, String.class),
@@ -259,10 +260,7 @@ public class DynamicUtil {
         final String classURI = dynamicClass.getUri();
         result.set(Constants.PHRS_BEAN_CLASS_URI, classURI);
         
-        
-        
         return result;
-
     }
 
     /**

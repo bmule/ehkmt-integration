@@ -38,33 +38,44 @@ public final class Constants {
     public static final String PHRS_CODESYSTEM = "2.16.840.1.113883.6.96.1.1";
 
     /**
-     * The phrsBean (instance) Uri. This is a default phrs bean properties, all 
-     * the phrs bean will have this property.
+     * The phrsBean (instance) Uri. 
+     * This is a default phrs bean property, all the phrs bean will have this 
+     * property.
      * 
      */
     public static final String PHRS_BEAN_URI = "_phrsBeanUri";
 
     /**
      * The phrsBean class (type for the instance) Uri.
-     * This is a default phrs bean properties, all the phrs bean will have 
-     * this property.
+     * This is a default phrs bean property, all the phrs bean will have this 
+     * property.
      * 
      */
     public static final String PHRS_BEAN_CLASS_URI = "_phrsBeanClassURI";
 
     /**
-     * The phrsBean (instance) name. This is a default phrs bean properties, all 
-     * the phrs bean will have this property.
+     * The phrsBean (instance) name. 
+     * This is a default phrs bean property, all the phrs bean will have this 
+     * property.
      * 
      */
     public static final String PHRS_BEAN_NAME = "_phrsBeanName";
 
     /**
-     * The phrsBean (instance) version. This is a default phrs bean properties, all 
-     * the phrs bean will have this property.
+     * The phrsBean (instance) version (a bean can have more than one version). 
+     * This is a default phrs bean property, all the phrs bean will have this 
+     * property.
      * 
      */
     public static final String PHRS_BEAN_VERSION = "_phrsBeanVersion";
+
+    /**
+     * The phrsBean (instance) create date.
+     * This is a default phrs bean property, all the phrs bean will have this 
+     * property.
+     * 
+     */
+    public static final String PHRS_BEAN_CREATE_DATE = "_phrsBeanCreateDate";
 
     /**
      * The phrsBean (instance) owner. This is a default phrs bean properties, 

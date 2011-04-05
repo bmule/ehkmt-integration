@@ -18,6 +18,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicProperty;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -94,7 +95,6 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final DynamicBean dynamicBean = new DynamicBean();
         dynamicBean.setDynamicClass(dynamicClass);
 
-        // solves the rest of the propeties
         solveDefaultProperties(bean, dynamicBean);
 
         final Set<DynamicPropertyType> propertyTypes = dynamicClass.getPropertyTypes();
@@ -162,12 +162,36 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
 
     /**
      * Extracts the default dynabean properties from an given <code>DynaBean</code>
-     * and populates with them an other <code>DynamicBean</code>.
-     * 
+     * and populates with them an other <code>DynamicBean</code>. 
+     * More precisely this method take care of the following properties :
+     * <ul>
+     * <li> PHRS_BEAN_URI - if the specified <code>DynaBean</code> does not
+     * contains this property then it create one (using the 
+     * <code>DynamicUtil.createUniqueString</code>).
+     * <li> PHRS_BEAN_NAME the - if the specified <code>DynaBean</code> does not
+     * contains this property then it create one (using the 
+     * <code>DynamicUtil.createUniqueString</code>).
+     * <li> PHRS_BEAN_VERSION - if the specified <code>DynaBean</code> does not
+     * contains this property then it create one according with the already
+     * existing version.
+     * <li> PHRS_BEAN_CREATE_DATE if the specified <code>DynaBean</code> does not
+     * contains this property then the current date is used.
+     * <li> PHRS_BEAN_CREATOR - if the specified <code>DynaBean</code> 
+     * contains this property then this property is not persisted. 
+     * <li> PHRS_BEAN_OWNER -  if the specified <code>DynaBean</code> 
+     * contain this property then this property is not persisted. 
+     * <li> PHRS_BEAN_CANWRITE - if the specified <code>DynaBean</code> 
+     * contains this property then this property is is set on false. 
+     * <li> PHRS_BEAN_CANREAD - if the specified <code>DynaBean</code> does not
+     * contains this property then this property is set on false. 
+     * <li> PHRS_BEAN_CANUSE - if the specified <code>DynaBean</code> does not
+     * contains this property then this property is set on false. 
+     * </ul>
      * 
      * @param dynaBean the dynabean instance - from there the default properties
      * are obtained.
      * @param dynamicBean the DynamicBean here are the default properties stored.
+     * @see Constants
      */
     private void solveDefaultProperties(DynaBean dynaBean, DynamicBean dynamicBean) {
 
@@ -192,7 +216,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final String beanNameMsg =
                 String.format("%s = %s", Constants.PHRS_BEAN_NAME, beanName);
         LOGGER.debug(beanNameMsg);
-        
+
         // I don't care if the user tries to set the verion.
         // the version is managed by the system not by the user.
         final DynamicClass dynamicClass = dynamicBean.getDynamicClass();
@@ -202,6 +226,17 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final String beanVersionMsg =
                 String.format("%s = %s", Constants.PHRS_BEAN_VERSION, version);
         LOGGER.debug(beanVersionMsg);
+
+        final Date createDate;
+        if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CREATE_DATE)) {
+            createDate = (Date) dynaBean.get(Constants.PHRS_BEAN_CREATE_DATE);
+        } else {
+            createDate = new Date();
+        }
+        dynamicBean.setCreateDate(createDate);
+        final String createDateMsg =
+                String.format("%s = %s", Constants.PHRS_BEAN_CREATE_DATE, beanName);
+        LOGGER.debug(createDateMsg);
 
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CREATOR)) {
             final String creatorURI =
@@ -262,12 +297,12 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
                 String.format("%s = %s", Constants.PHRS_BEAN_CANUSE, canUse);
         LOGGER.debug(canUseMsg);
     }
-    
+
     private int getLastVersion(DynamicClass dynamicClass) {
-        final Query query = 
+        final Query query =
                 entityManager.createNamedQuery("countDynamicBeanByDynamicClass");
         query.setParameter("dynamic_class", dynamicClass);
-        
+
         final Long result = (Long) query.getSingleResult();
         return result.intValue();
     }
@@ -431,11 +466,11 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         query.setParameter("dynamic_class", clazz);
 
         final List resultList = query.getResultList();
-        
+
 
         final Set<DynamicBean> beans = new HashSet<DynamicBean>();
         beans.addAll(resultList);
-        
+
         final Set<DynaBean> dynaBeans = DynamicUtil.getDynaBeans(beans);
         return dynaBeans;
     }
