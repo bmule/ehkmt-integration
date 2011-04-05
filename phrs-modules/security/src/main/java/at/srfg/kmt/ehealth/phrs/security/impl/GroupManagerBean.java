@@ -4,8 +4,6 @@
  * Date : Dec 15, 2010
  * User : mradules
  */
-
-
 package at.srfg.kmt.ehealth.phrs.security.impl;
 
 
@@ -26,6 +24,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Stateless bean local scoped used to manage and manipulate
@@ -73,13 +72,12 @@ public class GroupManagerBean implements GroupManager {
             entityManager.persist(group);
             return true;
         }
-        
-        if (!entityManager.contains(group)) {
-            // for removed
+        final PhrGroup find = entityManager.find(PhrGroup.class, id);
+        if (find == null) {
             entityManager.persist(group);
             return true;
         }
-        
+
         entityManager.merge(group);
         return false;
     }
