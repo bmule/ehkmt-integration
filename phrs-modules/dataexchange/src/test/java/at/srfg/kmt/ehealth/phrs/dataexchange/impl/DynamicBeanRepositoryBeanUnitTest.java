@@ -335,7 +335,23 @@ public class DynamicBeanRepositoryBeanUnitTest {
 
     /**
      * Create a new DynamicBean instance,persist it and proves the value for the 
-     * Dynamic properties.
+     * Dynamic properties. More precisely this test does :
+     * <ul>
+     * <li> it builds a <code>DynamicClass</code> based on a map of properties.
+     * This map (of properties) contains contains three properties(a string, 
+     * a boolean and a date).
+     * <li> it persist the class.
+     * <li> It builds a <code>DynamicBean</code> for the upper defined class.
+     * <li> It persists the upper defined bean.
+     * <li> Gains the bean (upper persisted) from the bean repository.
+     * <li> Proves all the default properties. The default properties are in
+     * them default form.
+     * </ul>
+     * 
+     * @see DymanicBeanRepository#add(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicBean) 
+     * @see DymanicBeanRepository#contains(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass) 
+     * @see DymanicBeanRepository#getForClass(at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass)
+     * @see DynamicUtil#DEFAULT_PHRS_BEAN_PROPERTIES
      */
     @Test
     public void testDefaultProperties() throws DynamicPropertyTypeException, DynaClassException {
@@ -386,6 +402,8 @@ public class DynamicBeanRepositoryBeanUnitTest {
         final Date createDate =
                 (Date) beanForClass.get(Constants.PHRS_BEAN_CREATE_DATE);
         assertNotNull(createDate);
+        // the create date must be smaller or equal with the actaul date.
+        assertTrue(createDate.getTime() <= new Date().getTime());
         
         // here I prove the version, it must 0 because I only add a singual for
         // this bean.
