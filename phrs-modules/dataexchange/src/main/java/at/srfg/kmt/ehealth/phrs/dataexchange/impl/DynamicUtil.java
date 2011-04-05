@@ -11,7 +11,6 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynaClassException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicPropertyTypeException;
