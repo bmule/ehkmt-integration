@@ -283,7 +283,11 @@ public class DynamicBeanRepositoryBeanUnitTest {
 
         // here I build the dynaimc bean
         final DynaBean dynaBean = DynamicUtil.getNewInstance(getClass);
+        
+        // This is the URI for the bean, all its version wil cary the same URI.
+        final String beanURI = ModelFactory.buildUniqueString("mySpecialURI");
 
+        dynaBean.set(Constants.PHRS_BEAN_URI, beanURI);
         populateBean(dynaBean);
 
         // here I add the bean 10 times, after this the bean repository will 
@@ -314,6 +318,12 @@ public class DynamicBeanRepositoryBeanUnitTest {
                 // the time must be different
                 assertTrue(lastTime != time);
             }
+
+            // all the bean's versions will carry the same URI
+            // only the version is different.
+            final String beanVersionURI = 
+                    (String) bean.get(Constants.PHRS_BEAN_URI);
+            assertEquals(beanURI, beanVersionURI);
 
             lastDate = date;
         }

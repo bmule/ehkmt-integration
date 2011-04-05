@@ -16,8 +16,9 @@
     <url>http://maven.apache.org</url>
     <name>Personal Health System Framework Data Exchange</name>
     <description>
-        Personal Health System Framework Security package provide an unified way
-        to exchange information.
+        Personal Health System Framework Data Exchange package provides 
+        classes and interfaces used to exhange information between different 
+        sources in an unified way (semantic interporable).
     </description>
 
     <properties>
