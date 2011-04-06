@@ -59,20 +59,28 @@ The actual implementation is uses the JBoss 5.1.0 GA.
 In order to install the PHRS system you need to download the JBoss 5.1.0 GA
 on your local machine on a know location. 
 
-After this change the "jboss.home" and "jboss.domain.home" maven properties
-from the pom file located <PHRS-SSOURCES>/phrs-modules/phrs-ear/pom.xml
-according to your needs.
-
-By example :
-    <properties>
-        <jboss.home><MY-JBOSS>/jboss-5.1.0.GA</jboss.home>
-        <jboss.domain.home><MY-JBOSS>/jboss-5.1.0.GA/server/default</jboss.domain.home>
-    </properties>
 
 
-This configuration anounces maven that my jBoss application server is installed on
-'<MY-JBOSS>/jboss-5.1.0.GA' and my application server domain (configuration) is
-located in <MY-JBOSS>/jboss-5.1.0.GA/server/default.
+Install the phrs enterprise archive
+
+This steep requres the packaging, plase be sure that the packaging sequence is done
+before you can procced with this.
+The enterprise (archive)  deployment requires information about your JBoss location, you can
+specify them by altering the file : <PHRS-SSOURCES>/phrs-modules/phrs-ear/pom.xml
+(not recommeded) or you can specify this properties like command line parameters.
+Use -Djboss.home=<MY-JBOSS HOME> and -Djboss.domain.home=<MY-JBOSS APPLCATION DOMAIN>
+for this, both parameters are required.
+The maven deploly command (for the case with command line paramters) looks like this :
+
+mvn cargo:deploy -Djboss.home=<YOUR JBOSS HOME> -Djboss.domain.home=<YOUR JBOSS APPLCATION DOMAIN>
+
+If you choose to alter the pom file (not recommeded) the command like will look like this :
+
+mvn cargo:deploy
+
+
+
+Extra configurations
 
 The actual implementation requires a JDBC connection accessible under the JNDI 
 name : phrs-Datasource.
@@ -90,11 +98,4 @@ copy the postgres driver located in the
 in to
 <MY-JBOSS>/jboss-5.1.0.GA/server/default/lib
 directory.
-
-
-after all this configuration are done run go in to the 
-<PHRS-SSOURCES>/phrs-modules/phrs-ear directory and run 
-
-mvn cargo:deploy
-
 
