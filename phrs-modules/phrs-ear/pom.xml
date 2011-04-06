@@ -71,12 +71,12 @@
             <type>ejb</type>
         </dependency>
 
-<!--        <dependency>
+        <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>pcc09ws</artifactId>
             <version>0.0.1</version>
             <type>war</type>
-        </dependency>-->
+        </dependency>
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
@@ -112,10 +112,10 @@
                             <artifactId>dataexchange</artifactId>
                         </ejbModule>
 
-<!--                        <webModule>
+                        <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>pcc09ws</artifactId>
-                        </webModule>-->
+                        </webModule>
 
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file was auto-generated from WSDL -->
+<!-- by the Apache Axis2 version: 1.5.1  Built on : Oct 19, 2009 (10:59:00 EDT) -->
+<serviceGroup>
+    <service name="QUPC_AR004040UV_Service">
+        <messageReceivers>
+            <messageReceiver mep="http://www.w3.org/ns/wsdl/in-out" class="at.srfg.kmt.ehealth.phrs.dataexchange.wsdl.QUPC_AR004040UV_ServiceMessageReceiverInOut"/>
+        </messageReceivers>
+        <parameter name="ServiceClass">at.srfg.kmt.ehealth.phrs.dataexchange.wsdl.QUPC_AR004040UV_ServiceSkeleton</parameter>
+        <parameter name="useOriginalwsdl">true</parameter>
+        <parameter name="modifyUserWSDLPortAddress">true</parameter>
+        <operation name="QUPC_AR004040UV_QUPC_IN043100UV" mep="http://www.w3.org/ns/wsdl/in-out" namespace="urn:hl7-org:v3">
+            <actionMapping>urn:hl7-org:v3:QUPC_IN043100UV01</actionMapping>
+            <outputActionMapping>urn:hl7-org:v3:MCCI_IN000002UV01</outputActionMapping>
+        </operation>
+    </service>
+</serviceGroup>

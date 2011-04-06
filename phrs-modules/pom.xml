@@ -91,7 +91,15 @@
             
         </plugins>
     </build>
-
+    
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
     <modules>
         <module>phrs-ear</module>
@@ -104,7 +112,8 @@
         <module>simple-view</module>
         
         <module>phrs-util</module>
-        
+        <module>pcc09ws</module>
+<!--        <module>pcc10WS</module>-->
     </modules>
 
 

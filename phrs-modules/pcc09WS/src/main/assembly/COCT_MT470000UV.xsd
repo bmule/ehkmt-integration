@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT040200UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT090000UV01.xsd"/>
+    <xs:complexType name="COCT_MT470000UV.Consent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element maxOccurs="unbounded" name="responsibleParty" nillable="true" type="COCT_MT470000UV.ResponsibleParty"/>
+            <xs:element maxOccurs="unbounded" name="performer" nillable="true" type="COCT_MT470000UV.Performer"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="ActClassConsent" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT470000UV.Performer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="time" type="TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CS"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedEntity" nillable="true" type="COCT_MT090000UV01.AssignedEntity"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationPhysicalPerformer" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT470000UV.ResponsibleParty">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="time" type="TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CS"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="responsibleParty" nillable="true" type="COCT_MT040200UV01.ResponsibleParty"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationResponsibleParty" use="required"/>
+    </xs:complexType>
+</xs:schema>

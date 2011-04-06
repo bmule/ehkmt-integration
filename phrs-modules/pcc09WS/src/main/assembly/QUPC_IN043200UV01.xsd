@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:mif="urn:hl7-org:v3/mif" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Source Information
+     Rendered by: RoseTree 4.2.31
+     Rendered on: 
+This document was rendered into XML using software provided to HL7 by Beeler Consulting LLC.
+ PubDB to MIF Transform: $RCSfile: PubDbXmlToMIF.xsl,v $ $Revision: 1.11 $ $Date: 2007/10/19 05:55:13 $
+  Fix names transform: $Id: FixMifNames.xsl 7634 2009-03-23 00:42:50Z wbeeler $
+  HTML to MIF Markup transform: $Id: HtmlToMIFMarkup.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Base transform: $Id: ConvertBase.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+ Generated using schema builder version: 3.2.4 and DynamicMifToXSD.xsl version: 1.4
+ Dynamic MIF to Schema Transform: $Id: DynamicMifToXsd.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Static MIF to Schema Transform: $Id: StaticMifToXsd.xsl 8126 2009-08-06 21:22:20Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="MCCI_MT000300UV01.xsd"/>
+    <xs:include schemaLocation="MFMI_MT700712UV01.xsd"/>
+    <xs:include schemaLocation="REPC_MT004000UV01.xsd"/>
+    <xs:include schemaLocation="QUPC_MT040300UV01.xsd"/>
+    <xs:element name="QUPC_IN043200UV01">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="QUPC_IN043200UV01.MCCI_MT000300UV01.Message">
+                    <xs:attribute fixed="XML_1.0" name="ITSVersion" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="QUPC_IN043200UV01.MCCI_MT000300UV01.Message">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="id" type="II"/>
+            <xs:element name="creationTime" type="TS"/>
+            <xs:element minOccurs="0" name="securityText" type="ST"/>
+            <xs:element minOccurs="0" name="versionCode" type="CS"/>
+            <xs:element name="interactionId" type="II"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="profileId" type="II"/>
+            <xs:element name="processingCode" type="CS"/>
+            <xs:element name="processingModeCode" type="CS"/>
+            <xs:element name="acceptAckCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="attachmentText" type="ED"/>
+            <xs:element maxOccurs="unbounded" name="receiver" type="MCCI_MT000300UV01.Receiver"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="respondTo" nillable="true" type="MCCI_MT000300UV01.RespondTo"/>
+            <xs:element name="sender" type="MCCI_MT000300UV01.Sender"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="attentionLine" nillable="true" type="MCCI_MT000300UV01.AttentionLine"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="acknowledgement" nillable="true" type="MCCI_MT000300UV01.Acknowledgement"/>
+            <xs:element name="controlActProcess" type="QUPC_IN043200UV01.MFMI_MT700712UV01.ControlActProcess"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+    </xs:complexType>
+    <xs:complexType name="QUPC_IN043200UV01.MFMI_MT700712UV01.ControlActProcess">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reasonCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="overseer" nillable="true" type="MFMI_MT700712UV01.Overseer"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="authorOrPerformer" nillable="true" type="MFMI_MT700712UV01.AuthorOrPerformer"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="dataEnterer" nillable="true" type="MFMI_MT700712UV01.DataEnterer"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="informationRecipient" nillable="true" type="MFMI_MT700712UV01.InformationRecipient"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subject" nillable="true" type="QUPC_IN043200UV01.MFMI_MT700712UV01.Subject1"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reasonOf" nillable="true" type="MFMI_MT700712UV01.Reason"/>
+            <xs:element name="queryAck" type="MFMI_MT700712UV01.QueryAck"/>
+            <xs:element minOccurs="0" name="parameterList" nillable="true" type="QUPC_MT040300UV01.ParameterList"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="ActClassControlAct" use="required"/>
+        <xs:attribute name="moodCode" type="x_ActMoodIntentEvent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="QUPC_IN043200UV01.MFMI_MT700712UV01.Subject1">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="registrationEvent" nillable="true" type="QUPC_IN043200UV01.MFMI_MT700712UV01.RegistrationEvent"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUPC_IN043200UV01.MFMI_MT700712UV01.RegistrationEvent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="author" nillable="true" type="MFMI_MT700712UV01.Author2"/>
+            <xs:element name="custodian" nillable="true" type="MFMI_MT700712UV01.Custodian"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="inFulfillmentOf" nillable="true" type="MFMI_MT700712UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="definition" nillable="true" type="MFMI_MT700712UV01.Definition"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="replacementOf" nillable="true" type="MFMI_MT700712UV01.ReplacementOf"/>
+            <xs:element name="subject2" type="QUPC_IN043200UV01.MFMI_MT700712UV01.Subject5"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRegistration" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="QUPC_IN043200UV01.MFMI_MT700712UV01.Subject5">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="careProvisionEvent" nillable="true" type="REPC_MT004000UV01.CareProvisionEvent"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+</xs:schema>

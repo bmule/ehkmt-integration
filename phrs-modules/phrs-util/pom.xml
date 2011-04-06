@@ -18,7 +18,6 @@
     </description>
 
     <properties>
-        <version.junit_junit>4.8.2</version.junit_junit>
         <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
         <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,12 +27,6 @@
 
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${version.junit_junit}</version>
-            <scope>test</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>

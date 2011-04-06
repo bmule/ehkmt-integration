@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+HMD was rendered into XML using software provided to HL7 by Beeler Consulting LLC.
+ HMD to MIF Transform: $Id: RoseTreeHmdToMIFStaticModel.xsl 7657 2009-03-27 04:11:34Z wbeeler $
+  Base transform: $Id: ConvertBase.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  HTML To MIF markup: $Id: HtmlToMIFMarkup.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+ Flat to Serialization Transform: $Id: MIFStaticModelFlatToSerialization.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+ Fix Names Transform: $Id: FixMifNames.xsl 7634 2009-03-23 00:42:50Z wbeeler $
+  Base transform: $Id: ConvertBase.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT090400UV.xsd"/>
+    <xs:include schemaLocation="COCT_MT090000UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT050000UV.xsd"/>
+    <xs:include schemaLocation="COCT_MT090100UV01.xsd"/>
+    <xs:include schemaLocation="REPC_MT000300UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT230100UV.xsd"/>
+    <xs:include schemaLocation="REPC_MT000100UV01.xsd"/>
+    <xs:complexType name="REPC_MT000200UV01.ActDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRoot" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ActIntent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element minOccurs="0" name="inFulfillmentOf" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000200UV01.Component4"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="fulfillment" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="componentOf" nillable="true" type="REPC_MT000200UV01.Component3"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRoot" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.AdministerableMaterial">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="administerableMaterialKind" type="REPC_MT000200UV01.MaterialKind"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassAdministerableMaterial" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Annotation">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="text" type="ST"/>
+            <xs:element name="statusCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="author" nillable="true" type="REPC_MT000200UV01.Author6"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRoot" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Author">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element name="time" type="TS"/>
+            <xs:element name="modeCode" type="CE"/>
+            <xs:element name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:choice>
+                <xs:element name="assignedEntity" nillable="true" type="COCT_MT090000UV01.AssignedEntity"/>
+                <xs:element name="patient" nillable="true" type="COCT_MT050000UV.Patient"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationAuthorOriginator" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Author6">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element name="time" type="TS"/>
+            <xs:element name="modeCode" type="CE"/>
+            <xs:element name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedParty" nillable="true" type="COCT_MT090400UV.AssignedParty"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationAuthorOriginator" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.CarePlan">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="title" type="ST"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="author" nillable="true" type="REPC_MT000200UV01.Author"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="dataEnterer" nillable="true" type="REPC_MT000200UV01.DataEnterer"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="verifier" nillable="true" type="REPC_MT000200UV01.Verifier"/>
+            <xs:element minOccurs="0" name="participant" nillable="true" type="REPC_MT000200UV01.Participant"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="finalGoal" nillable="true" type="REPC_MT000200UV01.FinalGoal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="definition" nillable="true" type="REPC_MT000200UV01.Definition1"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component1" nillable="true" type="REPC_MT000200UV01.Component"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component2" nillable="true" type="REPC_MT000200UV01.Component10"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component3" nillable="true" type="REPC_MT000200UV01.Component7"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassCareProvision" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="patientInstructions" nillable="true" type="REPC_MT000200UV01.PatientInstructions"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component10">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:choice>
+                <xs:element name="actIntent" nillable="true" type="REPC_MT000200UV01.ActIntent"/>
+                <xs:element name="encounterIntent" nillable="true" type="REPC_MT000200UV01.EncounterIntent"/>
+                <xs:element name="observationIntent" nillable="true" type="REPC_MT000200UV01.ObservationIntent"/>
+                <xs:element name="procedureIntent" nillable="true" type="REPC_MT000200UV01.ProcedureIntent"/>
+                <xs:element name="substanceAdministrationIntent" nillable="true" type="REPC_MT000200UV01.SubstanceAdministrationIntent"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute name="contextConductionInd" type="bl" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component13">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:choice>
+                <xs:element name="actDefinition" nillable="true" type="REPC_MT000200UV01.ActDefinition"/>
+                <xs:element name="encounterDefinition" nillable="true" type="REPC_MT000200UV01.EncounterDefinition"/>
+                <xs:element name="observationDefinition" nillable="true" type="REPC_MT000200UV01.ObservationDefinition"/>
+                <xs:element name="procedureDefinition" nillable="true" type="REPC_MT000200UV01.ProcedureDefinition"/>
+                <xs:element name="substanceAdministrationDefinition" nillable="true" type="REPC_MT000200UV01.SubstanceAdministrationDefinition"/>
+                <xs:element name="supplyEvent" nillable="true" type="REPC_MT000200UV01.SupplyEvent"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:element name="guideline" nillable="true" type="REPC_MT000200UV01.Guideline"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component3">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:choice>
+                <xs:element name="actIntent" nillable="true" type="REPC_MT000200UV01.ActIntent"/>
+                <xs:element name="encounterIntent" nillable="true" type="REPC_MT000200UV01.EncounterIntent"/>
+                <xs:element name="observationIntent" nillable="true" type="REPC_MT000200UV01.ObservationIntent"/>
+                <xs:element name="procedureIntent" nillable="true" type="REPC_MT000200UV01.ProcedureIntent"/>
+                <xs:element name="substanceAdministrationIntent" nillable="true" type="REPC_MT000200UV01.SubstanceAdministrationIntent"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component4">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:choice>
+                <xs:element name="actIntent" nillable="true" type="REPC_MT000200UV01.ActIntent"/>
+                <xs:element name="encounterIntent" nillable="true" type="REPC_MT000200UV01.EncounterIntent"/>
+                <xs:element name="observationIntent" nillable="true" type="REPC_MT000200UV01.ObservationIntent"/>
+                <xs:element name="procedureIntent" nillable="true" type="REPC_MT000200UV01.ProcedureIntent"/>
+                <xs:element name="substanceAdministrationIntent" nillable="true" type="REPC_MT000200UV01.SubstanceAdministrationIntent"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Component7">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:element name="carePlan" nillable="true" type="REPC_MT000200UV01.CarePlan"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute name="contextConductionInd" type="bl" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Conditions">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="conjunctionCode" type="CS"/>
+            <xs:element minOccurs="0" name="seperatableInd" type="BL"/>
+            <xs:choice>
+                <xs:element name="criterion" nillable="true" type="REPC_MT000200UV01.Criterion"/>
+                <xs:element name="criterionGroup" nillable="true" type="REPC_MT000200UV01.CriterionGroup"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipConditional" use="required"/>
+        <xs:attribute default="ON" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Consumable">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:choice>
+                <xs:element name="administerableMaterial" type="REPC_MT000200UV01.AdministerableMaterial"/>
+                <xs:element name="medication" type="COCT_MT230100UV.Medication"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="typeCode" type="ParticipationConsumable" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Criterion">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element name="value" type="ANY"/>
+            <xs:element name="interpretationCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="precondition" nillable="true" type="REPC_MT000200UV01.Precondition2"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventCriterion" use="required"/>
+        <xs:attribute default="false" name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.CriterionGroup">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRoot" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventCriterion" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.DataEnterer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="time" type="TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationDataEntryPerson" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Definition1">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="guideline" nillable="true" type="REPC_MT000200UV01.Guideline"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipInstantiatesMaster" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.EncounterDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassEncounter" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.EncounterIntent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element minOccurs="0" name="inFulfillmentOf" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000200UV01.Component4"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="fulfillment" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="componentOf" nillable="true" type="REPC_MT000200UV01.Component3"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassEncounter" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.FinalGoal">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="observationGoal" nillable="true" type="REPC_MT000200UV01.ObservationGoal"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasFinalObjective" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Goal">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="observationGoal" nillable="true" type="REPC_MT000200UV01.ObservationGoal"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasGoal" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Guideline">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="title" type="ST"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element maxOccurs="unbounded" name="author" nillable="true" type="REPC_MT000200UV01.Author6"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="finalGoal" nillable="true" type="REPC_MT000200UV01.FinalGoal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component1" nillable="true" type="REPC_MT000200UV01.Component"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component2" nillable="true" type="REPC_MT000200UV01.Component13"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component3" nillable="true" type="REPC_MT000200UV01.Component2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassCareProvision" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.InFulfillmentOf">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:choice>
+                <xs:choice>
+                    <xs:element name="observation" nillable="true" type="REPC_MT000100UV01.Observation"/>
+                    <xs:element name="substanceAdministration" nillable="true" type="REPC_MT000100UV01.SubstanceAdministration"/>
+                    <xs:element name="supply" nillable="true" type="REPC_MT000100UV01.Supply"/>
+                    <xs:element name="procedure" nillable="true" type="REPC_MT000100UV01.Procedure"/>
+                    <xs:element name="encounter" nillable="true" type="REPC_MT000100UV01.Encounter"/>
+                    <xs:element name="act" nillable="true" type="REPC_MT000100UV01.Act"/>
+                    <xs:element name="organizer" nillable="true" type="REPC_MT000100UV01.Organizer"/>
+                </xs:choice>
+                <xs:element name="actReference" nillable="true" type="REPC_MT000100UV01.ActReference"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipFulfills" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.InFulfillmentOf2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:choice>
+                <xs:element name="actDefinition" nillable="true" type="REPC_MT000200UV01.ActDefinition"/>
+                <xs:element name="encounterDefinition" nillable="true" type="REPC_MT000200UV01.EncounterDefinition"/>
+                <xs:element name="observationDefinition" nillable="true" type="REPC_MT000200UV01.ObservationDefinition"/>
+                <xs:element name="procedureDefinition" nillable="true" type="REPC_MT000200UV01.ProcedureDefinition"/>
+                <xs:element name="substanceAdministrationDefinition" nillable="true" type="REPC_MT000200UV01.SubstanceAdministrationDefinition"/>
+                <xs:element name="supplyEvent" nillable="true" type="REPC_MT000200UV01.SupplyEvent"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipFulfills" use="required"/>
+        <xs:attribute default="ON" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.MaterialKind">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="code" type="CE"/>
+            <xs:element minOccurs="0" name="desc" type="ST"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="materialPart" nillable="true" type="REPC_MT000200UV01.MaterialPart"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="EntityClassMaterial" use="required"/>
+        <xs:attribute name="determinerCode" type="EntityDeterminerDetermined" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.MaterialKind2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="code" type="CE"/>
+            <xs:element minOccurs="0" name="desc" type="ST"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="EntityClassMaterial" use="required"/>
+        <xs:attribute name="determinerCode" type="EntityDeterminerDetermined" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.MaterialPart">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="partMaterialKind" type="REPC_MT000200UV01.MaterialKind2"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="RoleClassPartitive" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ObservationDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element minOccurs="0" name="derivationExpr" type="ST"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="effectiveTime" type="SXCM_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="repeatNumber" type="IVL_INT"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element minOccurs="0" name="value" type="ANY"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="methodCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="targetSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ObservationGoal">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element name="effectiveTime" type="IVL_TS"/>
+            <xs:element name="value" type="ANY"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodGoal" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ObservationIntent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element minOccurs="0" name="derivationExpr" type="ST"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="effectiveTime" type="SXCM_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="repeatNumber" type="IVL_INT"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element minOccurs="0" name="value" type="ANY"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="methodCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="targetSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element minOccurs="0" name="inFulfillmentOf" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000200UV01.Component4"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="fulfillment" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="componentOf" nillable="true" type="REPC_MT000200UV01.Component3"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Participant">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element name="assignedParty" nillable="true" type="COCT_MT090400UV.AssignedParty"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationParticipation" use="required"/>
+        <xs:attribute name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.PatientInstructions">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassProcedure" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Performer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="functionCode" type="CD"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element name="assignedParty" nillable="true" type="COCT_MT090400UV.AssignedParty"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationPhysicalPerformer" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Performer2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationPhysicalPerformer" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.PlannedReview">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="effectiveTime" type="SXCM_TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassReview" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Precondition2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="conjunctionCode" type="CS"/>
+            <xs:element minOccurs="0" name="seperatableInd" type="BL"/>
+            <xs:element name="criterion" nillable="true" type="REPC_MT000200UV01.Criterion"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasPre-condition" use="required"/>
+        <xs:attribute default="ON" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="false" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ProcedureDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="methodCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="approachSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="targetSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassProcedure" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.ProcedureIntent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="uncertaintyCode" type="CE"/>
+            <xs:element minOccurs="0" name="languageCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="methodCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="approachSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="targetSiteCode" type="CD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element minOccurs="0" name="inFulfillmentOf" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000200UV01.Component4"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="fulfillment" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="componentOf" nillable="true" type="REPC_MT000200UV01.Component3"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassProcedure" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Reason2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="concern" nillable="true" type="REPC_MT000300UV01.Concern"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipReason" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Subject">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="plannedReview" nillable="true" type="REPC_MT000200UV01.PlannedReview"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Subject2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="annotation" nillable="true" type="REPC_MT000200UV01.Annotation"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.SubstanceAdministrationDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="effectiveTime" type="SXCM_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="repeatNumber" type="IVL_INT"/>
+            <xs:element minOccurs="0" name="routeCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="approachSiteCode" type="CD"/>
+            <xs:element minOccurs="0" name="doseQuantity" type="IVL_PQ"/>
+            <xs:element minOccurs="0" name="rateQuantity" type="IVL_PQ"/>
+            <xs:element minOccurs="0" name="maxDoseQuantity" type="RTO_PQ_PQ"/>
+            <xs:element minOccurs="0" name="administrationUnitCode" type="CE"/>
+            <xs:element name="consumable" type="REPC_MT000200UV01.Consumable"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassSubstanceAdministration" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.SubstanceAdministrationIntent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="text" type="ED"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="effectiveTime" type="SXCM_TS"/>
+            <xs:element minOccurs="0" name="availabilityTime" type="TS"/>
+            <xs:element minOccurs="0" name="priorityCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="confidentialityCode" type="CE"/>
+            <xs:element minOccurs="0" name="repeatNumber" type="IVL_INT"/>
+            <xs:element minOccurs="0" name="routeCode" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="approachSiteCode" type="CD"/>
+            <xs:element minOccurs="0" name="doseQuantity" type="IVL_PQ"/>
+            <xs:element minOccurs="0" name="rateQuantity" type="IVL_PQ"/>
+            <xs:element minOccurs="0" name="maxDoseQuantity" type="RTO_PQ_PQ"/>
+            <xs:element minOccurs="0" name="administrationUnitCode" type="CE"/>
+            <xs:element name="consumable" type="REPC_MT000200UV01.Consumable"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="performer" nillable="true" type="REPC_MT000200UV01.Performer2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element minOccurs="0" name="inFulfillmentOf" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000200UV01.Component4"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="fulfillment" nillable="true" type="REPC_MT000200UV01.InFulfillmentOf"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="componentOf" nillable="true" type="REPC_MT000200UV01.Component3"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassSubstanceAdministration" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodIntent" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.SupplyEvent">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="code" type="CD"/>
+            <xs:element minOccurs="0" name="derivationExpr" type="ST"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="goal" nillable="true" type="REPC_MT000200UV01.Goal"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="reason" nillable="true" type="REPC_MT000200UV01.Reason2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="conditions" nillable="true" type="REPC_MT000200UV01.Conditions"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf1" nillable="true" type="REPC_MT000200UV01.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf2" nillable="true" type="REPC_MT000200UV01.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassSupply" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+        <xs:attribute name="negationInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000200UV01.Verifier">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="time" type="TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationVerifier" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+</xs:schema>
