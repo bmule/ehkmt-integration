@@ -39,6 +39,8 @@ import org.slf4j.LoggerFactory;
  * (Daily Activity Observation)".
  * <li> listRisks - list all the risks factors. All the risks factors living are
  * all the vocabulary items tagged with "risk".
+ * <li> listVitalSigns - list all the risks factors. All the risks factors living are
+ * all the vocabulary items tagged with "Vital signs".
  * </ul>
  * @version 0.1
  * @since 0.1
@@ -73,6 +75,11 @@ public class VocabularyServlet extends HttpServlet {
 
         if ("listSymptoms".equalsIgnoreCase(q)) {
             listSymptoms(response);
+            return;
+        }
+        
+        if ("listVitalSigns".equalsIgnoreCase(q)) {
+            listVitalSigns(response);
             return;
         }
         
