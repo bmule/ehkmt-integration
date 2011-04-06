@@ -71,6 +71,13 @@
             <type>ejb</type>
         </dependency>
 
+<!--        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>pcc09ws</artifactId>
+            <version>0.0.1</version>
+            <type>war</type>
+        </dependency>-->
+
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>simple-view</artifactId>
@@ -88,6 +95,12 @@
                 <artifactId>maven-ear-plugin</artifactId>
                 <configuration>
                     <displayName>PHRS Enterprise archive</displayName>
+                    <!--
+                    This allows me to store all the thrid party libraries in the
+                    EAR/lib dir. 
+                    All the thrid party libraries are java modules.
+                    -->
+                    <defaultJavaBundleDir>lib</defaultJavaBundleDir>
                     <modules>
                         <ejbModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
@@ -99,10 +112,16 @@
                             <artifactId>dataexchange</artifactId>
                         </ejbModule>
 
+<!--                        <webModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>pcc09ws</artifactId>
+                        </webModule>-->
+
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>simple-view</artifactId>
                         </webModule>
+                        
 
                     </modules>
                 </configuration>
