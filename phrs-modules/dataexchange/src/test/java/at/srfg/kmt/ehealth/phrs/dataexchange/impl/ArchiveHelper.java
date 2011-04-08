@@ -12,7 +12,13 @@ import java.io.File;
 
 
 /**
- *
+ * Encapsulates the path to the <code>commons-beanutils-1.8.3.jar</code> file.
+ * This file is is required during tests, more precisely this file is add (like
+ * library) to the dynamic builded ear file(s) required for tests. The maven 
+ * copy the file on the path. Maven take care about the file location and coping.<br>
+ * The abstract file path is : 
+ * ".../target/shrinwrap/commons-beanutils-1.8.3.jar".
+ *  
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -26,6 +32,13 @@ class ArchiveHelper {
         // UNIMPLEMETNED
     }
 
+    /**
+     * Returns the path to the <code>commons-beanutils-1.8.3.jar</code> file.
+     * The abstract file path is : 
+     * ".../target/shrinwrap/commons-beanutils-1.8.3.jar".
+     * 
+     * @return the path to the <code>commons-beanutils-1.8.3.jar</code> file.
+     */
     static File getCommonsBeanUtils() {
         final StringBuffer filePath = new StringBuffer();
         filePath.append("target");
