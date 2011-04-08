@@ -36,6 +36,7 @@ profiles.xml
 nb-configuration.xml
 jboss4-netbeans-destinations-service.xml
 jboss-ds.xml
+jboss-web
 
 /phrs-modules/dataexcahnge/target/
 /phrs-modules/.idea/
