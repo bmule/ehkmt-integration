@@ -18,7 +18,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * This web service end point is able to process PCC09 queries.
+ *  
  * @version 0.1
  * @since 0.1
  * @author Mihai
