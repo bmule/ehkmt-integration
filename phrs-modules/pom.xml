@@ -143,8 +143,9 @@
         <module>simple-view</module>
         
         <module>phrs-util</module>
+        
         <module>pcc09ws</module>
-<!--        <module>pcc10WS</module>-->
+        <module>pcc10WS</module>
     </modules>
 
 

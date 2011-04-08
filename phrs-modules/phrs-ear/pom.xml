@@ -80,6 +80,13 @@
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>pcc10ws</artifactId>
+            <version>0.0.1</version>
+            <type>war</type>
+        </dependency>
+
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>simple-view</artifactId>
             <version>0.0.1</version>
             <type>war</type>
@@ -115,6 +122,11 @@
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>pcc09ws</artifactId>
+                        </webModule>
+
+                        <webModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>pcc10ws</artifactId>
                         </webModule>
 
                         <webModule>
