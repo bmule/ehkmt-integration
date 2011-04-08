@@ -18,8 +18,57 @@
     <description>
         This the module able to get involved in PCC09 transactions.
     </description>
+          
+    <properties>
+        <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
+        <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
+    <dependencies>        
+    
+        <dependency>
+            <groupId>org.hl7.v3</groupId>
+            <artifactId>QUPC_AR004040UV_Service</artifactId>
+            <version>0.1</version>
+        </dependency>
 
+    
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+    
     <build>
+        <plugins>
+            <plugin>
+                <!--
+                I do this because the simple view jat must be a Skinny war.
+                Most of the included jars can create conficts with the other 
+                existent jars (e.g. SAX parser).
+                The only one library needed here is the :
+                QUPC_AR004040UV_Service-0.1.jar -this is needed for xml jaxb
+                parsing.
+                -->
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingIncludes>WEB-INF/lib/QUPC_AR004040UV_Service*.jar,**/*.xml,**/*.properties,**/*.class,**/*.png,**/*.css,**/*.js,**/*.jsp</packagingIncludes>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+
 </project>

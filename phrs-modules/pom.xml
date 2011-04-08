@@ -38,6 +38,9 @@
 
     <repositories>
         <repository>
+            <!--
+            TODO : This reposiotry goes deprecated. Change it with an actaul one.
+            -->
             <id>jboss-nexus-group-public</id>
             <name>JBoss Repository Nexus Group Public</name>
             <url>https://repository.jboss.org/nexus/content/groups/public</url>
@@ -51,6 +54,10 @@
         </repository>
 
         <repository>
+            <!--
+            TODO : This reposiotry goes deprecated. Change it with an actaul one.
+            -->
+
             <id>jboss-nexus</id>
             <name>JBoss Repository Nexus</name>
 
@@ -63,8 +70,32 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+        </repository>
 
     </repositories>
+    
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <plugins>

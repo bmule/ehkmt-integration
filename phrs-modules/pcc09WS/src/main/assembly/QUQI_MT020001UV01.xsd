@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+HMD was rendered into XML using software provided to HL7 by Beeler Consulting LLC.
+ HMD to MIF Transform: $Id: RoseTreeHmdToMIFStaticModel.xsl 7657 2009-03-27 04:11:34Z wbeeler $
+  Base transform: $Id: ConvertBase.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  HTML To MIF markup: $Id: HtmlToMIFMarkup.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+ Flat to Serialization Transform: $Id: MIFStaticModelFlatToSerialization.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+ Fix Names Transform: $Id: FixMifNames.xsl 7634 2009-03-23 00:42:50Z wbeeler $
+  Base transform: $Id: ConvertBase.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+  Package Id Conversion: $Id: TransformPackageIds.xsl 7375 2009-01-26 19:26:53Z wbeeler $
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT090300UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT090100UV01.xsd"/>
+    <xs:include schemaLocation="MCAI_MT900001UV01.xsd"/>
+    <xs:complexType name="QUQI_MT020001UV01.AuthorOrPerformer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:choice>
+                <xs:element name="assignedDevice" nillable="true" type="COCT_MT090300UV01.AssignedDevice"/>
+                <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="x_ParticipationAuthorPerformer" use="required"/>
+        <xs:attribute default="AP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUQI_MT020001UV01.DataEnterer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationDataEntryPerson" use="required"/>
+        <xs:attribute default="AP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUQI_MT020001UV01.InformationRecipient">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationInformationRecipient" use="required"/>
+        <xs:attribute default="AP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUQI_MT020001UV01.Overseer">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ED"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="modeCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureCode" type="CE"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="x_ParticipationVrfRespSprfWit" use="required"/>
+        <xs:attribute default="AP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUQI_MT020001UV01.Reason">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="detectedIssueEvent" nillable="true" type="MCAI_MT900001UV01.DetectedIssueEvent"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipReason" use="required"/>
+        <xs:attribute name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="QUQI_MT020001UV01.SortControl">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+            <xs:element minOccurs="0" name="elementName" type="SC"/>
+            <xs:element minOccurs="0" name="directionCode" type="CS"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+    </xs:complexType>
+</xs:schema>

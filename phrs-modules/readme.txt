@@ -63,18 +63,26 @@ on your local machine on a know location.
 
 Install the phrs enterprise archive
 
-This steep requres the packaging, plase be sure that the packaging sequence is done
-before you can procced with this.
-The enterprise (archive)  deployment requires information about your JBoss location, you can
-specify them by altering the file : <PHRS-SSOURCES>/phrs-modules/phrs-ear/pom.xml
-(not recommeded) or you can specify this properties like command line parameters.
-Use -Djboss.home=<MY-JBOSS HOME> and -Djboss.domain.home=<MY-JBOSS APPLCATION DOMAIN>
-for this, both parameters are required.
-The maven deploly command (for the case with command line paramters) looks like this :
+This steep requires the packaging, please be sure that the packaging sequence is done
+before you can proceed with this.
+The enterprise (archive)  deployment requires information about your JBoss location, 
+you can specify them by altering the file : 
+
+<PHRS-SSOURCES>/phrs-modules/phrs-ear/pom.xml
+
+or you can specify this properties like command line parameters. This parameters are :
+-Djboss.home=<MY-JBOSS HOME> 
+and 
+
+-Djboss.domain.home=<MY-JBOSS APPLCATION DOMAIN>
+
+, both parameters are required.
+
+The maven deploy command (for the case with command line parameters) looks like this :
 
 mvn cargo:deploy -Djboss.home=<YOUR JBOSS HOME> -Djboss.domain.home=<YOUR JBOSS APPLCATION DOMAIN>
 
-If you choose to alter the pom file (not recommeded) the command like will look like this :
+If you choose to alter the pom file (not recommended) the command like will look like this :
 
 mvn cargo:deploy
 

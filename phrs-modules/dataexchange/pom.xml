@@ -142,7 +142,7 @@
             </plugin>
             
             <!--
-            This is just a workaround until the arkwilian is able to 
+            This is just a workaround until the arquillian is able to 
             build archives based on pom files.
             I use DynaBeans in the data exchange module and I want to
             do test where classes from this artifact (DynaBeans) appears.

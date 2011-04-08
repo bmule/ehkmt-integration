@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT150003UV03.xsd"/>
+    <xs:include schemaLocation="COCT_MT150002UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT040200UV01.xsd"/>
+    <xs:complexType name="COCT_MT910000UV.CareGiver">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CE"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element name="careGiverRelatedPerson" nillable="true" type="COCT_MT910000UV.RelatedPerson"/>
+            <xs:element minOccurs="0" name="careGiverScoper" nillable="true" type="COCT_MT910000UV.SubjectPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassCaregiver" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.Employee">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="jobClassCode" type="CE"/>
+            <xs:element minOccurs="0" name="employeeSubjectPerson" nillable="true" type="COCT_MT910000UV.SubjectPerson"/>
+            <xs:element name="employerOrganization" nillable="true" type="COCT_MT150003UV03.Organization"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassEmployee" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.OtherIDs">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="scopingOrganization" nillable="true" type="COCT_MT150002UV01.Organization"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="RoleClassRoot" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.PersonalRelationship">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element name="code" type="CE"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element name="relationshipHolder" nillable="true" type="COCT_MT910000UV.RelatedPerson"/>
+            <xs:element minOccurs="0" name="personalRelationshipWith" nillable="true" type="COCT_MT910000UV.SubjectPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassPersonalRelationship" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.RelatedPerson">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="name" type="PN"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="telecom" type="TEL"/>
+            <xs:element minOccurs="0" name="administrativeGenderCode" type="CE"/>
+            <xs:element minOccurs="0" name="birthTime" type="TS"/>
+            <xs:element minOccurs="0" name="deceasedTime" type="TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="addr" type="AD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="asOtherIDs" nillable="true" type="COCT_MT910000UV.OtherIDs"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="EntityClassPerson" use="required"/>
+        <xs:attribute name="determinerCode" type="EntityDeterminerSpecific" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.Student">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="id" type="II"/>
+            <xs:element minOccurs="0" name="statusCode" type="CS"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="student" nillable="true" type="COCT_MT910000UV.SubjectPerson"/>
+            <xs:element name="schoolOrganization" nillable="true" type="COCT_MT150003UV03.Organization"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassStudent" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT910000UV.SubjectPerson">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="id" type="II"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="name" type="PN"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="EntityClassPerson" use="required"/>
+        <xs:attribute name="determinerCode" type="EntityDeterminerSpecific" use="required"/>
+    </xs:complexType>
+</xs:schema>

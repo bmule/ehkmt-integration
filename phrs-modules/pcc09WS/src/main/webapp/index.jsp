@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2>Hello World!</h2>
+<h2>Personal Health System Framework PCC09 web service</h2>
 </body>
 </html>
