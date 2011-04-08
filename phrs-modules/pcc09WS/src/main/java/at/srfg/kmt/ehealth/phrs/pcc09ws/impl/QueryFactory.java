@@ -12,17 +12,27 @@ import java.io.InputStream;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import org.hl7.v3.AcknowledgementType;
+import org.hl7.v3.CS;
 import org.hl7.v3.MCCIIN000002UV01;
+import org.hl7.v3.MCCIMT000200UV01Acknowledgement;
+import org.hl7.v3.ObjectFactory;
 import org.hl7.v3.QUPCIN043100UV01;
 
 
 /**
- *
+ * Contains a set of common used methods used to create and manipulate 
+ * PCC09 queries (QUPCIN043100UV01) and the related acknowledge 
+ * (MCCIIN000002UV01).
+ * 
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
  */
 public class QueryFactory {
+
+    private static final String ALWAYS = "AL";
 
     /**
      * The file used to build an empty <code>QUPCIN043100UV01</code> query.
@@ -33,6 +43,11 @@ public class QueryFactory {
      * The file used to build an empty <code>MCCIIN000002UV01</code> acknowledge.
      */
     private final static String PCC9_EMPTY_OUTPUT_FILE = "PCC-9-Empty-Output.xml";
+
+    /**
+     * The only instance for <code>ObjectFactory</code> - JAXB related.
+     */
+    private final static ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
     /**
      * Builds an empty PCC09 (QUPCIN043100UV01) query based on a default template,
@@ -88,4 +103,50 @@ public class QueryFactory {
         return inputStream;
 
     }
+
+    public static MCCIIN000002UV01 buildMCCIIN000002UV01WithAcceptAckCodeError() throws JAXBException {
+        final MCCIIN000002UV01 result = buildMCCIIN000002UV01();
+        // Coded Simple Value
+        // Coded data in its simplest form, where only the code is not
+        // predetermined.
+        // CE = Code Error
+
+        final CS cs = new CS();
+        cs.setCode("CE");
+
+        result.setAcceptAckCode(cs);
+
+        return result;
+    }
+
+    public static void setAcceptAckCodeError(MCCIIN000002UV01 result) {
+
+        final MCCIMT000200UV01Acknowledgement akAcknowledgement =
+                OBJECT_FACTORY.createMCCIMT000200UV01Acknowledgement();
+
+        final AcknowledgementType typeCode = AcknowledgementType.CE;
+        akAcknowledgement.setTypeCode(typeCode);
+        result.getAcknowledgement().add(akAcknowledgement);
+    }
+
+    /**
+     * Returns true if the specified <code>QUPCIN043100UV01</code> contains an
+     * "always" acknowledge code.
+     * 
+     * @param query the query to prove.
+     * @return true if the specified <code>QUPCIN043100UV01</code> contains an
+     * "always" acknowledge code.
+     * @throws NullPointerException if the <code>query</code> argument is null.
+     */
+    public static boolean isAcknowledgementAlways(QUPCIN043100UV01 query) {
+
+        if (query == null) {
+            throw new NullPointerException("The query can nul be null.");
+        }
+
+        final CS acceptAckCodeCS = query.getAcceptAckCode();
+        final String acceptAckCode = acceptAckCodeCS.getCode();
+        return ALWAYS.equals(acceptAckCode);
+    }
+
 }

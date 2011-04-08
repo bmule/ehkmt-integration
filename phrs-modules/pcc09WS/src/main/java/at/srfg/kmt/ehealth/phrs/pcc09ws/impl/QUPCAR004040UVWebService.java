@@ -44,7 +44,7 @@ public class QUPCAR004040UVWebService implements QUPCAR004040UVPortType {
      */
     @Override
     public MCCIIN000002UV01 qupcAR004040UVQUPCIN043100UV(QUPCIN043100UV01 body) {
-        LOGGER.debug("Query {} was received. The query preocess starts.", body);
+        LOGGER.debug("Query [{}] was received. The query preocess starts.", body);
         
         if (body == null) {
             final NullPointerException nullException =
@@ -53,10 +53,14 @@ public class QUPCAR004040UVWebService implements QUPCAR004040UVPortType {
             throw nullException;
         }
         
+        final QUPCIN043100UV01Processor processor =
+                new QUPCIN043100UV01Processor();
+        processor.process(body);
+        
         try {
             final MCCIIN000002UV01 ack = QueryFactory.buildMCCIIN000002UV01();
             final Object [] toLog  = {body, ack};
-            LOGGER.debug("The query {} was succesfully procesed, its acknowledge is  {}", toLog);
+            LOGGER.debug("The query [{}] was succesfully procesed, its acknowledge is  [{}]", toLog);
             return ack;
         } catch (JAXBException exception) {
             LOGGER.error(exception.getMessage(), exception);
