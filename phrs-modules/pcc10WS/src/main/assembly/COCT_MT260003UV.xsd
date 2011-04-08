@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:complexType name="COCT_MT260003UV.AssignedEntity">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="id" type="II"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="RoleClassAssignedEntity" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Author">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="assignedEntity" nillable="true" type="COCT_MT260003UV.AssignedEntity"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationAuthorOriginator" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Consumable">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="manufacturedProduct" type="COCT_MT260003UV.ManufacturedProduct"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="typeCode" type="ParticipationConsumable" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Definition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="detectedMedicationIssueDefinition" nillable="true" type="COCT_MT260003UV.DetectedMedicationIssueDefinition"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipInstantiatesMaster" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.DetectedMedicationIssue">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CS"/>
+            <xs:element minOccurs="0" name="value" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="definition" nillable="true" type="COCT_MT260003UV.Definition"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subject" nillable="true" type="COCT_MT260003UV.Subject2"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="mitigatedBy" nillable="true" type="COCT_MT260003UV.Mitigates"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="subjectOf" nillable="true" type="COCT_MT260003UV.Subject"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="ActClassDetectedIssue" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.DetectedMedicationIssueDefinition">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="effectiveTime" type="IVL_TS"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassDetectedIssue" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodDefinition" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Location">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="pharmacy" nillable="true" type="COCT_MT260003UV.Pharmacy"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationTargetLocation" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Management">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CS"/>
+            <xs:element minOccurs="0" name="author" nillable="true" type="COCT_MT260003UV.Author"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassRoot" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.ManufacturedMaterialKind">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="code" type="CE"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="EntityClassManufacturedMaterial" use="required"/>
+        <xs:attribute name="determinerCode" type="EntityDeterminerDetermined" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.ManufacturedProduct">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="manufacturedMaterialKind" nillable="true" type="COCT_MT260003UV.ManufacturedMaterialKind"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassManufacturedProduct" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Mitigates">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="management" nillable="true" type="COCT_MT260003UV.Management"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipMitigates" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.OtherMedication">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="consumable" type="COCT_MT260003UV.Consumable"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassSubstanceAdministration" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.OtherSupply">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="TS"/>
+            <xs:element minOccurs="0" name="quantity" type="PQ"/>
+            <xs:element minOccurs="0" name="expectedUseTime" type="IVL_TS"/>
+            <xs:element minOccurs="0" name="location" nillable="true" type="COCT_MT260003UV.Location"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassSupply" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Pharmacy">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="telecom" type="TEL"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="RoleClassDedicatedServiceDeliveryLocation" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.SeverityObservation">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CS"/>
+            <xs:element name="value" type="CE"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="classCode" type="ActClassObservation" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Subject">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="severityObservation" nillable="true" type="COCT_MT260003UV.SeverityObservation"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="COCT_MT260003UV.Subject2">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:choice>
+                <xs:element name="otherMedication" nillable="true" type="COCT_MT260003UV.OtherMedication"/>
+                <xs:element name="otherSupply" nillable="true" type="COCT_MT260003UV.OtherSupply"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasSubject" use="required"/>
+    </xs:complexType>
+</xs:schema>

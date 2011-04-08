@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT150003UV03.xsd"/>
+    <xs:include schemaLocation="COCT_MT030203UV07.xsd"/>
+    <xs:complexType name="COCT_MT040203UV01.NotificationParty">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element maxOccurs="unbounded" name="id" type="II"/>
+            <xs:element minOccurs="0" name="code" type="CE"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="addr" type="AD"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="telecom" type="TEL"/>
+            <xs:choice>
+                <xs:element name="contactOrganization" nillable="true" type="COCT_MT150003UV03.Organization"/>
+                <xs:element name="contactPerson" nillable="true" type="COCT_MT030203UV07.Person"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="RoleClassContact" use="required"/>
+    </xs:complexType>
+</xs:schema>

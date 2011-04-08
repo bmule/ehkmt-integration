@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="urn:hl7-org:v3" xmlns:ex="urn:hl7-org/v3-example" attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="urn:hl7-org:v3">
+    <xs:annotation>
+        <xs:documentation>Generated using schema builder version 3.2.4. Stylesheets:
+
+StaticMifToXsd.xsl version 2.0</xs:documentation>
+    </xs:annotation>
+    <xs:include schemaLocation="infrastructureRoot.xsd"/>
+    <xs:include schemaLocation="COCT_MT040200UV01.xsd"/>
+    <xs:include schemaLocation="COCT_MT090100UV01.xsd"/>
+    <xs:complexType name="REPC_MT000400UV01.ActCategory">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="author" nillable="true" type="REPC_MT000400UV01.Author5"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000400UV01.Component4"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="ActClassCategory" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000400UV01.ActList">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element name="code" type="CD"/>
+            <xs:element minOccurs="0" name="effectiveTime" type="IVL_TS"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="author" nillable="true" type="REPC_MT000400UV01.Author5"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="custodian" nillable="true" type="REPC_MT000400UV01.Custodian"/>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="component" nillable="true" type="REPC_MT000400UV01.Component4"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="classCode" type="ActClassWorkingList" use="required"/>
+        <xs:attribute name="moodCode" type="ActMoodEventOccurrence" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000400UV01.Author5">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="noteText" type="ST"/>
+            <xs:element name="time" type="TS"/>
+            <xs:element name="modeCode" type="CE"/>
+            <xs:element name="signatureCode" type="CS"/>
+            <xs:element minOccurs="0" name="signatureText" type="ED"/>
+            <xs:element name="assignedPerson" nillable="true" type="COCT_MT090100UV01.AssignedPerson"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationAuthorOriginator" use="required"/>
+        <xs:attribute default="OP" name="contextControlCode" type="ContextControl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000400UV01.Component4">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="sequenceNumber" type="INT"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ActRelationshipHasComponent" use="required"/>
+        <xs:attribute default="AN" name="contextControlCode" type="ContextControl" use="optional"/>
+        <xs:attribute default="true" name="contextConductionInd" type="bl" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="REPC_MT000400UV01.Custodian">
+        <xs:sequence>
+            <xs:group ref="InfrastructureRootElements"/>
+            <xs:element minOccurs="0" name="time" type="IVL_TS"/>
+            <xs:element name="responsibleParty" nillable="true" type="COCT_MT040200UV01.ResponsibleParty"/>
+        </xs:sequence>
+        <xs:attributeGroup ref="InfrastructureRootAttributes"/>
+        <xs:attribute name="nullFlavor" type="NullFlavor" use="optional"/>
+        <xs:attribute name="typeCode" type="ParticipationCustodian" use="required"/>
+    </xs:complexType>
+</xs:schema>
