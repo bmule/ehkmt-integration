@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
 
+import java.io.IOException;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
@@ -40,7 +41,7 @@ public class QUPCAR004040UVWebServiceExample {
      * @param args no arguments required
      * @throws JAXBException 
      */
-    public static void main(String... args) throws JAXBException {
+    public static void main(String... args) throws JAXBException, IOException {
         final QUPCAR004040UVService service =
                 new QUPCAR004040UVService();
         // here I obtain the service.
@@ -50,11 +51,16 @@ public class QUPCAR004040UVWebServiceExample {
         setDefaultEndPointURI(portType);
 
         // builds a query
-        final QUPCIN043100UV01 query = QueryFactory.buildQUPCIN043100UV01();
+        //final QUPCIN043100UV01 query = QueryFactory.buildQUPCIN043100UV01();
+        final QUPCIN043100UV01 query = Pcc9QueryFactory.buildQuery();
 
         // sends the query and poves if the ack is not null
         final MCCIIN000002UV01 ack =
                 portType.qupcAR004040UVQUPCIN043100UV(query);
+        if (ack == null) {
+            throw new IllegalStateException("Tests fails, non null arknowledge was expected");
+        }
+        
         System.out.println("Acknowledge : " + ack);
 
     }

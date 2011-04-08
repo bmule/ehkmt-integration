@@ -1,8 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/*
  * Project :iCardea
  * File : ArchiveHelper.java 
  * Encoding : UTF-8
@@ -21,7 +17,7 @@ import java.io.File;
  * @since 0.1
  * @author Mihai
  */
-public class ArchiveHelper {
+class ArchiveHelper {
 
     /**
      * Don't let anyone to instantiate this class.
