@@ -144,8 +144,8 @@
         
         <module>phrs-util</module>
         
-        <module>pcc09ws</module>
-        <module>pcc10ws</module>
+        <module>pcc09WS</module>
+        <module>pcc10WS</module>
     </modules>
 
 
