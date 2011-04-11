@@ -125,7 +125,7 @@ public class VocabularyLoaderBeanUnitTest {
         final String ejbStructure = ejbJar.toString(true);
         LOGGER.debug("EJB jar structure on deploy is :");
         LOGGER.debug(ejbStructure);
-        
+
         return ear;
     }
 
@@ -192,6 +192,31 @@ public class VocabularyLoaderBeanUnitTest {
         final ControlledItem tag = tags.iterator().next();
         assertEquals(symptomItem, tag);
     }
-    
 
+    /**
+     * Loads a few times the same configuration files, the number of imported
+     * items must remain constants (2). </br>
+     * This test does not prove the loaded item content it only proves the total 
+     * items count - it must remain constant.
+     */
+    @Test
+    public void testRepetitiveLoad() {
+        for (int i = 0; i < 9; i++) {
+            vocabularyLoader.load();
+        }
+
+        // this details (codes) are according with (the test file) 
+        // phrs.snomed-ct.properties
+        final String SNOMED = Constants.SNOMED;
+        final String syntomCode = "19019007";
+        final String syntomDisplayName = "Symptom";
+        final String chestPainCode = "29857009";
+        final String chestPainDisplayName = "Chest pain";
+        
+        // here I obtain all the items wiht SNOMED like code system
+        // the config files contains only two item with this code.
+        final Set<ControlledItem> byCodeSystem = 
+                controlledItemRepository.getByCodeSystem(SNOMED);
+        assertEquals(2, byCodeSystem.size());
+    }
 }

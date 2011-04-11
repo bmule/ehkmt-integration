@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.VocabularyLoader;
@@ -35,6 +36,7 @@ import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Used to load all the controlled vocabulary items and the related tags 
@@ -79,17 +81,18 @@ import org.slf4j.LoggerFactory;
 public class VocabularyLoaderBean implements VocabularyLoader {
 
     private Map<String, String> codeSystemNames;
-    
 
     /**
      * The name for the properties file that contains the controlled items.
      */
     private String SNOMEND_FILE = "phrs.snomed-ct.properties";
+
     /**
      * The name for the properties file that contains the controlled items tag 
      * relations.
      */
     private String SNOMEND_TAG_FILE = "phrs.snomed-ct-tags.properties";
+
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -97,7 +100,7 @@ public class VocabularyLoaderBean implements VocabularyLoader {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VocabularyLoaderBean.class);
-    
+
     @PostConstruct
     public void init() {
         codeSystemNames = new HashMap<String, String>();
@@ -105,11 +108,13 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         codeSystemNames.put(Constants.LOINC, "LOINC");
         codeSystemNames.put(Constants.RXNORM, "RXNORM");
     }
+
     /**
      * Used to persist the controlled items.
      */
     @EJB
     private ControlledItemRepository controlledItemRepository;
+
     @Resource
     private UserTransaction transaction;
 
@@ -188,15 +193,15 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         for (Map.Entry entry : properties.entrySet()) {
             String input = (String) entry.getKey();
             final int indexOf = input.indexOf("@");
-            if(indexOf == -1) {
+            if (indexOf == -1) {
                 // ignore the invalid (formated) insput
-                LOGGER.error("The [{}] key can not be proess",input);
+                LOGGER.error("The [{}] key can not be proess", input);
                 continue;
             }
-            
+
             final String codeSystemCode = input.substring(0, indexOf).trim();
             final String code = input.substring(indexOf + 1).trim();
-            
+
             final String label = (String) entry.getValue();
 
             if (label == null) {
@@ -220,26 +225,25 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         }
         transaction.commit();
     }
-    
+
     private void addToRepository(ControlledItem controlledItem) {
         final String codeSystem = controlledItem.getCodeSystem();
         final String code = controlledItem.getCode();
-        final ControlledItem managedItem = 
+        final ControlledItem managedItem =
                 controlledItemRepository.getByCodeSystemAndCode(codeSystem, code);
         if (managedItem == null) {
             controlledItemRepository.add(controlledItem);
             return;
         }
-        
+
         final String prefLabel = controlledItem.getPrefLabel();
         final String managedPrefLabel = managedItem.getPrefLabel();
         if (managedPrefLabel != null && managedPrefLabel.equals(prefLabel)) {
             return;
         }
-        
+
         managedItem.setPrefLabel(prefLabel);
     }
-    
 
     /**
      * Associates tags on controlled items for a given <code>Properties</code>
@@ -259,45 +263,55 @@ public class VocabularyLoaderBean implements VocabularyLoader {
             LOGGER.error(nullException.getMessage(), nullException);
         }
 
+        // Mihai :
+        // This BMT hurts the "small unit" transaction rule
+        // The reason to harm this rule is simplicity
+        // This solution has a disatvantage - by any exception I lose all the 
+        // tags. 
+        // The ideal solution will be one transaction per item/tag.
         transaction.begin();
         for (Map.Entry entry : properties.entrySet()) {
-            final String codeItem = (String) entry.getKey();
-            String codeTag = (String) entry.getValue();
-            if (codeTag == null) {
+            final String codeItem = entry.getKey().toString().trim();
+
+            String codeTags = (String) entry.getValue();
+            if (codeTags == null) {
                 final String msg =
                         String.format("The tag code property for tagged item %s can not be null.", codeItem);
                 final NullPointerException nullException =
                         new NullPointerException(msg);
                 LOGGER.error(msg, nullException);
             }
-            // just to be sure that all the spaces are out.
-            codeTag = codeTag.trim();
-            
 
-            final ControlledItem item =
-                    controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, codeItem);
-            if (item == null) {
-                LOGGER.warn("No item with code {} was found in the repository. "
-                        + "Tagging operation fails becuase the tagged item is not pressent.");
-            }
+            final Set<String> tags = getTags(codeTags);
+            for (String tagCode : tags) {
+                // just to be sure that all the spaces are out.
+                codeTags = codeTags.trim();
 
-            final ControlledItem tag =
-                    controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, codeTag);
-            if (tag == null) {
-                LOGGER.warn("No item with code {} was found in the repository. "
-                        + "Tagging operation fails becuase the tag item is not pressent.");
-            }
-            
-            if (item != null && tag != null) {
-                final boolean tagExist = controlledItemRepository.tagExist(item, tag);
-                if (!tagExist) {
-                    controlledItemRepository.tag(item, tag);
+                final ControlledItem item =
+                        controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, codeItem);
+                if (item == null) {
+                    LOGGER.warn("No item with code {} was found in the repository. "
+                            + "Tagging operation fails becuase the tagged item is not pressent.");
+                }
+
+                final ControlledItem tag =
+                        controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, tagCode);
+                if (tag == null) {
+                    LOGGER.warn("No item with code {} was found in the repository. "
+                            + "Tagging operation fails becuase the tag item is not pressent.");
+                }
+
+                if (item != null && tag != null) {
+                    final boolean tagExist = controlledItemRepository.tagExist(item, tag);
+                    if (!tagExist) {
+                        controlledItemRepository.tag(item, tag);
+                    }
                 }
             }
         }
         transaction.commit();
     }
-    
+
     /**
      * Transforms a string list ',' tokenised in to a Set of strings.
      * 
@@ -306,12 +320,12 @@ public class VocabularyLoaderBean implements VocabularyLoader {
      */
     private Set<String> getTags(String tags) {
         final Set<String> result = new HashSet<String>();
-        for (StringTokenizer st = new StringTokenizer(tags, ","); st.hasMoreTokens(); ) {
+        for (StringTokenizer st = new StringTokenizer(tags, ","); st.hasMoreTokens();) {
             final String tagCode = st.nextElement().toString().trim();
             result.add(tagCode);
         }
-        
+
         return result;
-        
+
     }
 }
