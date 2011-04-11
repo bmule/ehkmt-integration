@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>dataexchange_ws</artifactId>
+    <version>0.0.1</version>
+    <packaging>war</packaging>
+    <url>https://github.com/bmule/ehkmt-integration</url>
+    <name>Personal Health System Framework Data Exchange Web Servives</name>
+    <description>
+        Web Services for the Data exchnage module.
+    </description>
+    
+    
+    <properties>
+        <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
+        <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <dependencies>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>5.1.0.GA</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!--dyna beans-->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.8.3</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
+        
+        
+        <dependency>
+            <!--
+            I need this because I choose to use Postgres for test; 
+            Postgres throws some Postgres specific exceptions, without
+            this on Postgres specific exceptions I will only see a 
+            ClassNotFoundExcpetion.
+            -->
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.0-801.jdbc4</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>dataexchange</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>phrs-util</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>2.2-beta-1</version>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <finalName>dataexchange_ws</finalName>
+        <plugins>
+            <plugin>
+                <!--
+                I do this because the simple view jat must be a Skinny war.
+                Most of the included jars can create conficts with the other 
+                existent jars (e.g. SAX parser).
+                The only one library needed here is the :
+                QUPC_AR004040UV_Service-0.1.jar -this is needed for xml jaxb
+                parsing.
+                -->
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1.1</version>
+                <configuration>
+                    <packagingIncludes>WEB-INF/lib/resteasy-jaxrs*.jar, WEB-INF/lib/jaxrs-api-*.jar,WEB-INF/lib/scannotation-*.jar,**/*.xml,**/*.properties,**/*.class,**/*.png,**/*.css,**/*.js,**/*.jsp</packagingIncludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
