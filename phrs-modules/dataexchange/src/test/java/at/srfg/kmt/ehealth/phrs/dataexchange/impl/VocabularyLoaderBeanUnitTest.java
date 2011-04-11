@@ -108,8 +108,9 @@ public class VocabularyLoaderBeanUnitTest {
         // This file contains the items to load.
         ejbJar.addResource("phrs.test.properties",
                 "phrs.contr-vocabulary-items.properties");
+        
         // This file contains the tag relations for the loaded relations.
-        ejbJar.addResource("phrs.git tags-test.properties",
+        ejbJar.addResource("phrs.tags-test.properties",
                 "phrs.tags.properties");
 
         final EnterpriseArchive ear =
