@@ -189,8 +189,9 @@ public class VocabularyLoaderBean implements VocabularyLoader {
             LOGGER.error(nullException.getMessage(), nullException);
         }
 
-        transaction.begin();
+
         for (Map.Entry entry : properties.entrySet()) {
+            transaction.begin();
             String input = (String) entry.getKey();
             final int indexOf = input.indexOf("@");
             if (indexOf == -1) {
@@ -222,8 +223,8 @@ public class VocabularyLoaderBean implements VocabularyLoader {
             // controlledItemRepository.add(controlledItem);
             // care about duplicates
             addToRepository(controlledItem);
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     private void addToRepository(ControlledItem controlledItem) {
@@ -231,6 +232,7 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         final String code = controlledItem.getCode();
         final ControlledItem managedItem =
                 controlledItemRepository.getByCodeSystemAndCode(codeSystem, code);
+
         if (managedItem == null) {
             controlledItemRepository.add(controlledItem);
             return;
@@ -269,33 +271,45 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         // This solution has a disatvantage - by any exception I lose all the 
         // tags. 
         // The ideal solution will be one transaction per item/tag.
-        transaction.begin();
+        
         for (Map.Entry entry : properties.entrySet()) {
-            final String codeItem = entry.getKey().toString().trim();
+            transaction.begin();
+            
+            final String taggedInput = entry.getKey().toString().trim();
+            final CodeTransporter taggedCodeTransporter = getCodeTransporter(taggedInput);
 
-            String codeTags = (String) entry.getValue();
-            if (codeTags == null) {
+            String tagInputs = (String) entry.getValue();
+            if (tagInputs == null) {
                 final String msg =
-                        String.format("The tag code property for tagged item %s can not be null.", codeItem);
+                        String.format("The tag code property for tagged item %s can not be null.", taggedInput);
                 final NullPointerException nullException =
                         new NullPointerException(msg);
                 LOGGER.error(msg, nullException);
             }
 
-            final Set<String> tags = getTags(codeTags);
-            for (String tagCode : tags) {
+            final Set<String> tags = getTags(tagInputs);
+            for (String tagInput : tags) {
                 // just to be sure that all the spaces are out.
-                codeTags = codeTags.trim();
+                tagInputs = tagInputs.trim();
+                
+                
+                final String taggedCodeSystem = taggedCodeTransporter.getCodeSystem();
+                final String taggedCode = taggedCodeTransporter.getCode();
 
+                // obtains the tagged
                 final ControlledItem item =
-                        controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, codeItem);
+                        controlledItemRepository.getByCodeSystemAndCode(taggedCodeSystem, taggedCode);
                 if (item == null) {
                     LOGGER.warn("No item with code {} was found in the repository. "
                             + "Tagging operation fails becuase the tagged item is not pressent.");
                 }
 
+                final CodeTransporter tagCodeTransporter = getCodeTransporter(tagInput);
+                final String tagCodeSystem = tagCodeTransporter.getCodeSystem();
+                final String tagCode = tagCodeTransporter.code;
+                
                 final ControlledItem tag =
-                        controlledItemRepository.getByCodeSystemAndCode(Constants.SNOMED, tagCode);
+                        controlledItemRepository.getByCodeSystemAndCode(tagCodeSystem, tagCode);
                 if (tag == null) {
                     LOGGER.warn("No item with code {} was found in the repository. "
                             + "Tagging operation fails becuase the tag item is not pressent.");
@@ -308,8 +322,46 @@ public class VocabularyLoaderBean implements VocabularyLoader {
                     }
                 }
             }
+            
+            transaction.commit();
         }
-        transaction.commit();
+        
+    }
+    
+    public CodeTransporter getCodeTransporter(String input) {
+        final int indexOf = input.indexOf("@");
+            if (indexOf == -1) {
+                // ignore the invalid (formated) insput
+                LOGGER.error("The [{}] key can not be proess", input);
+                return null;
+            }
+
+            final String codeSystemCode = input.substring(0, indexOf).trim();
+            final String code = input.substring(indexOf + 1).trim();
+            return new CodeTransporter(codeSystemCode, code);
+    }
+    
+    private static class CodeTransporter {
+        private final String code;
+        private final String codeSystem;
+
+        public CodeTransporter(String codeSystem, String code) {
+             this.code = code;
+             this.codeSystem = codeSystem;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getCodeSystem() {
+            return codeSystem;
+        }
+
+        @Override
+        public String toString() {
+            return "CodeTransporter{" + "code=" + code + ", codeSystem=" + codeSystem + '}';
+        }
     }
 
     /**

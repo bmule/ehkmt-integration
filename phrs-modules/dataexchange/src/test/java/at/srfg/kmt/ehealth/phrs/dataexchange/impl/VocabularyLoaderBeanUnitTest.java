@@ -144,6 +144,14 @@ public class VocabularyLoaderBeanUnitTest {
         final String syntomDisplayName = "Symptom";
         final String chestPainCode = "29857009";
         final String chestPainDisplayName = "Chest pain";
+        final String heartBeatCode = "8867-4";
+        final String heartBeatDisplayName = "Heart Beat";
+
+        // here I gain all the items wiht SNOMED code system, they must be two 
+        // according wiht config files.
+        final Set<ControlledItem> bySNOMEDCodeSystem =
+                controlledItemRepository.getByCodeSystem(Constants.SNOMED);
+        assertEquals(2, bySNOMEDCodeSystem.size());
 
         // proves the symptom item
         final ControlledItem symptomItem =
@@ -166,6 +174,24 @@ public class VocabularyLoaderBeanUnitTest {
 
         final String getChestPainCode = chestPainItem.getCode();
         assertEquals(chestPainCode, getChestPainCode);
+
+        // here I gain all the items wiht LOINC code system, they must be only 
+        // one  according wiht config files.
+        final Set<ControlledItem> byLOINCCodeSystem =
+                controlledItemRepository.getByCodeSystem(Constants.LOINC);
+        assertEquals(1, byLOINCCodeSystem.size());
+
+        // proves the heart beat item
+        final ControlledItem heartBeatItem =
+                controlledItemRepository.getByCodeSystemAndCode(Constants.LOINC, heartBeatCode);
+        assertNotNull(heartBeatItem);
+        
+        final String heartBeatPrefLabel = heartBeatItem.getPrefLabel();
+        assertEquals(heartBeatDisplayName, heartBeatPrefLabel);
+        
+        final String getHeartBeatCode = heartBeatItem.getCode();
+        assertEquals(heartBeatCode, getHeartBeatCode);
+
 
         // prove the tagging
 
@@ -212,10 +238,10 @@ public class VocabularyLoaderBeanUnitTest {
         final String syntomDisplayName = "Symptom";
         final String chestPainCode = "29857009";
         final String chestPainDisplayName = "Chest pain";
-        
+
         // here I obtain all the items wiht SNOMED like code system
         // the config files contains only two item with this code.
-        final Set<ControlledItem> byCodeSystem = 
+        final Set<ControlledItem> byCodeSystem =
                 controlledItemRepository.getByCodeSystem(SNOMED);
         assertEquals(2, byCodeSystem.size());
     }

@@ -13,6 +13,8 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
  * @version 0.1
  * @since 0.1
  * @author Mihai
+ * @deprecated This is the old coutch db constant use the 
+ * at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants instead.
  */
 public final class PhrBeanConstants {
 
