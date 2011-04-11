@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItemTag;
@@ -21,6 +22,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -39,12 +41,13 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ControlledItemRepositoryBean.class);
+
     /**
      * Used to communicate with the underlying persistence layer.
      */
     @PersistenceContext(unitName = "phrs_storage")
     private EntityManager entityManager;
-    
+
     @Override
     public boolean add(ControlledItem item) {
         if (item == null) {
@@ -53,78 +56,78 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         final boolean contains = entityManager.contains(item);
-        
+
         if (contains) {
             entityManager.merge(item);
             return false;
         }
-        
+
         final Long id = item.getId();
         if (id == null) {
             entityManager.persist(item);
             return true;
         }
-        
+
         final ControlledItem find = entityManager.find(ControlledItem.class, id);
         if (find == null) {
             entityManager.persist(item);
             return true;
         }
-        
+
         entityManager.merge(item);
         return false;
     }
-    
+
     @Override
     public boolean contains(ControlledItem item) {
         final boolean contains = entityManager.contains(item);
-        
+
         if (contains) {
             return true;
         }
-        
+
         final Long id = item.getId();
         if (id == null) {
             return false;
         }
-        
+
         final ControlledItem find = entityManager.find(ControlledItem.class, id);
-        
+
         return find == null;
     }
-    
+
     @Override
     public boolean contains(String codeSystem, String code) {
         final ControlledItem result =
                 getByCodeSystemAndCode(codeSystem, code);
         return result != null;
     }
-    
+
     @Override
     public Set<ControlledItem> get(Query query) {
         final List resultList = query.getResultList();
-        
+
         final Set<ControlledItem> results = new HashSet<ControlledItem>();
         results.addAll(resultList);
-        
+
         return results;
     }
-    
+
     @Override
     public Set<ControlledItem> getByCodeSystem(String codeSystem) {
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemByCodeSystem");
         query.setParameter("code_system", codeSystem);
         final List resultList = query.getResultList();
-        
+
         final Set<ControlledItem> results = new HashSet<ControlledItem>(resultList.size());
         results.addAll(resultList);
-        
+
         return results;
     }
-    
+
     @Override
     public final ControlledItem getByCodeSystemAndCode(String codeSystem, String code) {
         final Query query =
@@ -139,41 +142,41 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             LOGGER.debug("No item with the code system {} and code {}");
             LOGGER.debug(exception.getMessage(), exception);
         }
-        
+
         return null;
     }
-    
+
     @Override
     public ControlledItem remove(ControlledItem item) {
-        
+
         if (item == null) {
             final NullPointerException nullException =
                     new NullPointerException("The item argument can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         final boolean contains = entityManager.contains(item);
-        
+
         if (contains) {
             entityManager.remove(item);
             return item;
         }
-        
+
         final Long id = item.getId();
         if (id == null) {
             return null;
         }
-        
+
         final ControlledItem find = entityManager.find(ControlledItem.class, id);
         if (find == null) {
             return null;
         }
-        
+
         entityManager.remove(item);
         return find;
     }
-    
+
     @Override
     public void update(ControlledItem item) {
         if (item == null) {
@@ -182,101 +185,101 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         final boolean contains = entityManager.contains(item);
-        
+
         if (contains) {
             entityManager.merge(item);
             return;
         }
-        
+
         final Long id = item.getId();
         if (id == null) {
             return;
         }
-        
+
         final ControlledItem merge = entityManager.merge(item);
     }
-    
+
     @Override
     public final Set<ControlledItem> getByTag(ControlledItem tag) {
-        
+
         if (tag == null) {
             final NullPointerException nullException =
                     new NullPointerException("The tag argument can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         final Long id = tag.getId();
         if (id == null) {
             return new HashSet<ControlledItem>();
         }
         final ControlledItem findItem =
                 entityManager.find(ControlledItem.class, id);
-        
+
         if (findItem == null) {
             return new HashSet<ControlledItem>();
         }
-        
+
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemTagByTagging");
         query.setParameter("tagging", tag);
-        
+
         final List resultList = query.getResultList();
         final Set<ControlledItem> result =
                 new HashSet<ControlledItem>(resultList.size());
         result.addAll(resultList);
-        
+
         return result;
     }
-    
+
     @Override
     public final Set<ControlledItem> getTags(ControlledItem item) {
-        
+
         if (item == null) {
             final NullPointerException nullException =
                     new NullPointerException("The item argument can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         final Long id = item.getId();
         if (id == null) {
             return new HashSet<ControlledItem>();
         }
         final ControlledItem findItem =
                 entityManager.find(ControlledItem.class, id);
-        
+
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemTagByTagged");
         query.setParameter("tagged", findItem);
-        
+
         final List resultList = query.getResultList();
         final Set<ControlledItem> result =
                 new HashSet<ControlledItem>(resultList.size());
         result.addAll(resultList);
-        
+
         return result;
     }
-    
+
     @Override
     public void tag(ControlledItem tagged, ControlledItem tagging) {
-        
+
         if (tagged == null && tagging == null) {
             final NullPointerException nullException =
                     new NullPointerException("The tagged or tagging can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-        
+
         if (!tagExists(tagged, tagging)) {
             final ControlledItemTag tag = new ControlledItemTag(tagged, tagging);
             entityManager.persist(tag);
         } else {
             LOGGER.warn("Tag relation already exists.");
         }
-        
+
     }
 
     /**
@@ -297,16 +300,16 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
                 entityManager.createNamedQuery("selectControlledItemTagByTaggedAndTagging");
         query.setParameter("tagged", tagged);
         query.setParameter("tagging", tagging);
-        
+
         try {
             query.getSingleResult();
         } catch (NoResultException exception) {
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public void removeAllTags(ControlledItem tagged) {
         final Set<ControlledItem> tags = getTags(tagged);
@@ -314,17 +317,56 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             entityManager.remove(tag);
         }
     }
-    
+
     @Override
     public void untag(ControlledItem tagged, ControlledItem tagging) {
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemTagByTaggedAndTagging");
         query.setParameter("tagged", tagged);
         query.setParameter("tagging", tagging);
-        
+
         final List<ControlledItemTag> resultList = query.getResultList();
         for (ControlledItemTag tag : resultList) {
             entityManager.remove(tag);
         }
+    }
+
+    /**
+     * Proves the existence for a certain tag relation.
+     * The relation is defined by two participants the "tagged" and "tagging".
+     * The tagged is the item that get tagged.
+     * The tagging is the tag.
+     * 
+     * @param tagged the tagged item, it can not be null.
+     * @param tagging the tag, it can not be null.
+     * @return true if the tag relation defined with the tagged and tagging
+     * elements exists.
+     */
+    @Override
+    public boolean tagExist(ControlledItem tagged, ControlledItem tagging) {
+
+        if (tagged == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The tagged argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        if (tagging == null) {
+            final NullPointerException nullException =
+                    new NullPointerException("The tagging argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+
+        final Query query =
+                entityManager.createNamedQuery("countTagByTaggedAndTagging");
+        query.setParameter("tagged", tagged);
+        query.setParameter("tagging", tagging);
+
+        final Long tagsCount = (Long) query.getSingleResult();
+
+        return tagsCount.intValue() > 0;
+
     }
 }

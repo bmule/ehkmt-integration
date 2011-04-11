@@ -100,6 +100,16 @@ public interface ControlledItemRepository {
     Set<ControlledItem> getTags(ControlledItem controlledItem);
 
     void tag(ControlledItem tagged, ControlledItem tagging);
+    
+    /**
+     * Proves if the tag relation exits for the given tagged and tagging items.
+     * The tagged is the item that get taggged and the tagging in the tag.
+     * 
+     * @param tagged the item that get tagged.
+     * @param tagging the involved tag.
+     * @return true if the <code>tagged</code> item is tagged with a certain tag.
+     */
+    boolean tagExist(ControlledItem tagged, ControlledItem tagging);
     void untag(ControlledItem tagged, ControlledItem tagging);
     void removeAllTags(ControlledItem tagged);
 }

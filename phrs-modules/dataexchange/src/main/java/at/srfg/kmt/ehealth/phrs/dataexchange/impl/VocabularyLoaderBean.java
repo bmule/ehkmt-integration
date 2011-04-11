@@ -239,8 +239,6 @@ public class VocabularyLoaderBean implements VocabularyLoader {
         
         managedItem.setPrefLabel(prefLabel);
     }
-            
-    
     
 
     /**
@@ -289,11 +287,13 @@ public class VocabularyLoaderBean implements VocabularyLoader {
                 LOGGER.warn("No item with code {} was found in the repository. "
                         + "Tagging operation fails becuase the tag item is not pressent.");
             }
-
+            
             if (item != null && tag != null) {
-                controlledItemRepository.tag(item, tag);
+                final boolean tagExist = controlledItemRepository.tagExist(item, tag);
+                if (!tagExist) {
+                    controlledItemRepository.tag(item, tag);
+                }
             }
-
         }
         transaction.commit();
     }

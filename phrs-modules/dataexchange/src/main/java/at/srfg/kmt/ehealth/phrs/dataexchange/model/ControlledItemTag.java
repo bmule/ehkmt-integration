@@ -46,7 +46,9 @@ import javax.persistence.OneToOne;
                @NamedQuery(name="selectControlledItemTagByTagged", 
                            query="SELECT tag.tagging FROM ControlledItemTag AS tag WHERE tag.tagged=:tagged"),
                @NamedQuery(name="selectControlledItemTagByTaggedAndTagging", 
-                           query="SELECT tag FROM ControlledItemTag AS tag WHERE tag.tagged=:tagged AND tag.tagging=:tagging")
+                           query="SELECT tag FROM ControlledItemTag AS tag WHERE tag.tagged=:tagged AND tag.tagging=:tagging"),
+               @NamedQuery(name="countTagByTaggedAndTagging", 
+                           query="SELECT COUNT(tag) FROM ControlledItemTag AS tag WHERE tag.tagged=:tagged AND tag.tagging=:tagging")
 })
 
 public class ControlledItemTag implements Serializable {

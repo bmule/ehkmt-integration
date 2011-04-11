@@ -192,4 +192,6 @@ public class VocabularyLoaderBeanUnitTest {
         final ControlledItem tag = tags.iterator().next();
         assertEquals(symptomItem, tag);
     }
+    
+
 }
