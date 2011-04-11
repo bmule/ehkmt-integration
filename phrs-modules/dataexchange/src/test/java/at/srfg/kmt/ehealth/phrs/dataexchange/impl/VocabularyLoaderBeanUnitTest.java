@@ -106,11 +106,11 @@ public class VocabularyLoaderBeanUnitTest {
         ejbJar.addManifestResource("test-persistence.xml", "persistence.xml");
 
         // This file contains the items to load.
-        ejbJar.addResource("phrs.snomed-ct-test.properties",
-                "phrs.snomed-ct.properties");
+        ejbJar.addResource("phrs.test.properties",
+                "phrs.contr-vocabulary-items.properties");
         // This file contains the tag relations for the loaded relations.
-        ejbJar.addResource("phrs.snomed-ct-tags-test.properties",
-                "phrs.snomed-ct-tags.properties");
+        ejbJar.addResource("phrs.git tags-test.properties",
+                "phrs.tags.properties");
 
         final EnterpriseArchive ear =
                 ShrinkWrap.create(EnterpriseArchive.class, "test.ear");

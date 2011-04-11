@@ -85,13 +85,13 @@ public class VocabularyLoaderBean implements VocabularyLoader {
     /**
      * The name for the properties file that contains the controlled items.
      */
-    private String SNOMEND_FILE = "phrs.snomed-ct.properties";
+    private String SNOMEND_FILE = "phrs.contr-vocabulary-items.properties";
 
     /**
      * The name for the properties file that contains the controlled items tag 
      * relations.
      */
-    private String SNOMEND_TAG_FILE = "phrs.snomed-ct-tags.properties";
+    private String SNOMEND_TAG_FILE = "phrs.tags.properties";
 
     /**
      * The Logger instance. All log messages from this class
