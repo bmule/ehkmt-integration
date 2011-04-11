@@ -146,6 +146,8 @@
         
         <module>pcc09WS</module>
         <module>pcc10WS</module>
+        <module>pcc09service</module>
+        <module>dataexchange_ws</module>
     </modules>
 
 

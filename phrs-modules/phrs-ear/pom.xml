@@ -70,6 +70,13 @@
             <version>0.0.1</version>
             <type>ejb</type>
         </dependency>
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>dataexchange_ws</artifactId>
+            <version>0.0.1</version>
+            <type>war</type>
+        </dependency>
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
@@ -77,6 +84,14 @@
             <version>0.0.1</version>
             <type>war</type>
         </dependency>
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>pcc09service</artifactId>
+            <version>0.0.1</version>
+            <type>ejb</type>
+        </dependency>
+
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
@@ -118,12 +133,17 @@
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>dataexchange</artifactId>
                         </ejbModule>
+                        
+                        <webModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>dataexchange_ws</artifactId>
+                        </webModule>
 
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>pcc09ws</artifactId>
                         </webModule>
-
+                        
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>pcc10ws</artifactId>
