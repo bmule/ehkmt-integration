@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
-
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItemTag;
@@ -22,7 +21,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  *
@@ -41,7 +39,6 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ControlledItemRepositoryBean.class);
-
     /**
      * Used to communicate with the underlying persistence layer.
      */
@@ -134,7 +131,6 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
                 entityManager.createNamedQuery("selectControlledItemCodeSystemAndCode");
         query.setParameter("code_system", codeSystem);
         query.setParameter("code", code);
-        ;
         try {
             final ControlledItem result = (ControlledItem) query.getSingleResult();
             return result;
@@ -144,6 +140,54 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
         }
 
         return null;
+    }
+
+    @Override
+    public Set<ControlledItem> getByPrefLabel(String prefLabel) {
+        
+        if (prefLabel == null) {
+            final NullPointerException nullException = 
+                    new NullPointerException("The prefLabelArgumetn can not be null or empty");
+            LOGGER.error(prefLabel);
+            throw nullException;
+        }
+        
+        final Query query =
+                entityManager.createNamedQuery("selectControlledItemByPrefLabel");
+        query.setParameter("pref_label", prefLabel);
+
+        final List resultList = query.getResultList();
+        final Set<ControlledItem> result =
+                new HashSet<ControlledItem>(resultList.size());
+        result.addAll(resultList);
+
+        return result;
+    }
+
+    @Override
+    public Set<ControlledItem> getByPrefLabelPrefix(String prefLabelPrefix) {
+        
+        if (prefLabelPrefix == null) {
+            final NullPointerException nullException = 
+                    new NullPointerException("The prefLabelPrefix can not be null or empty");
+            LOGGER.error(prefLabelPrefix);
+            throw nullException;
+        }
+        
+        final StringBuffer patern = new StringBuffer();
+        patern.append("%");
+        patern.append(prefLabelPrefix);
+        
+        final Query query =
+                entityManager.createNamedQuery("selectControlledItemByPrefLabel");
+        query.setParameter("pref_label_prefix", patern.toString());
+
+        final List resultList = query.getResultList();
+        final Set<ControlledItem> result =
+                new HashSet<ControlledItem>(resultList.size());
+        result.addAll(resultList);
+
+        return result;
     }
 
     @Override

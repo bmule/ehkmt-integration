@@ -87,6 +87,10 @@ public interface ControlledItemRepository {
      */
     Set<ControlledItem> getByCodeSystem(String codeSystem);
     
+    Set<ControlledItem> getByPrefLabel(String prefLabel);
+    
+    Set<ControlledItem> getByPrefLabelPrefix(String prefLabelPrefix);
+    
     /**
      * Returns all the <code>ControlledItem</code> that use a certain code system.
      * 
