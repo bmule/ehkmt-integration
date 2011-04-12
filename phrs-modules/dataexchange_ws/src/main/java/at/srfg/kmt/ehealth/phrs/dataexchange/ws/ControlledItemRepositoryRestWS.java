@@ -57,6 +57,7 @@ public class ControlledItemRepositoryRestWS {
         final VocabularyLoader vocabularyLoader;
         try {
             vocabularyLoader = JBossJNDILookup.lookupLocal(VocabularyLoader.class);
+            vocabularyLoader.load();
         } catch (NamingException namingException) {
             LOGGER.error(namingException.getMessage(), namingException);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
