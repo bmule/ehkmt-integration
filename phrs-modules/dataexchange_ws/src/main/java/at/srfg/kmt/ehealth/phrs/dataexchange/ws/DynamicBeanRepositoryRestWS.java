@@ -9,7 +9,9 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
+import java.util.Set;
 import javax.naming.NamingException;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -17,8 +19,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response.Status;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.beanutils.DynaBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +71,12 @@ public class DynamicBeanRepositoryRestWS {
     @Path("/persist")
     @Produces("application/json")
     public Response persist(@FormParam("dynaBean") String dynaBean) {
+
+        if (dynaBean == null && dynaBean.isEmpty()) {
+            LOGGER.error("This dynabean JSON representation [{}] is not valid", dynaBean);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
         LOGGER.debug("Tries to persists {}", dynaBean);
         final JSONObject json;
         try {
@@ -89,7 +100,7 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(namingException.getMessage(), namingException);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        
+
         final boolean classExits = classRepository.exits(classURI.toString());
         if (!classExits) {
             LOGGER.error("The class with URI [{}] is not register in the repository.", classURI);
@@ -104,20 +115,121 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
+        final DynaBean newBean = DynamicUtil.fromJSONString(dynaBean);
+        LOGGER.debug("Tries to persist bean : {}", dynaBean);
+        beanRepository.add(newBean);
+        LOGGER.debug("The bean [{}] was succefully persisted.", dynaBean);
+        // FIXME : return the uRI for the peristed bean
         return Response.status(Status.OK).build();
     }
 
+    /**
+     * GET based web service used to obtain all version for a bean, the
+     * bean is identified after its (unique) class URI. </br>
+     * This web service can be access on :  
+     * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getAllForClass
+     * 
+     * @return a JSON array that contains all beans versions.
+     */
     @GET
     @Path("/getAllForClass")
     @Produces("application/json")
-    public Response getAllForClass() {
-        return Response.status(Status.OK).build();
+    public Response getAllForClass(@QueryParam("class_uri") String classUri) {
+        if (classUri == null && classUri.isEmpty()) {
+            LOGGER.error("This classUri  [{}] is not valid", classUri);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        final DynamicClassRepository classRepository;
+        try {
+            classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final boolean classExits = classRepository.exits(classUri.toString());
+        if (!classExits) {
+            LOGGER.error("The class with URI [{}] is not register in the repository.", classUri);
+            return Response.status(Status.NO_CONTENT).build();
+        }
+
+        final DynamicBeanRepository beanRepository;
+        try {
+            beanRepository = JBossJNDILookup.lookupLocal(DynamicBeanRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final Set<DynaBean> forClass;
+        try {
+            forClass = beanRepository.getAllForClass(classUri);
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+        
+        final JSONArray array = new JSONArray();
+        for (DynaBean dynaBean : forClass) {
+            final String json = DynamicUtil.toString(dynaBean);
+            array.add(json);
+        }
+      
+        LOGGER.debug("Return beans {}.", array);
+        return Response.ok(array.toString()).build();
     }
 
+    /**
+     * GET based web service used to obtain the last version for a bean, the
+     * bean is identified after its (unique) class URI. </br>
+     * This web service can be access on :  
+     * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getLastForClass
+     * 
+     * @return a JSON string that contains the last last version for a bean.
+     */
     @GET
     @Path("/getLastForClass")
     @Produces("application/json")
-    public Response getLastForClass() {
-        return Response.status(Status.OK).build();
+    public Response getLastForClass(@QueryParam("class_uri") String classUri) {
+        if (classUri == null && classUri.isEmpty()) {
+            LOGGER.error("This classUri  [{}] is not valid", classUri);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        final DynamicClassRepository classRepository;
+        try {
+            classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final boolean classExits = classRepository.exits(classUri.toString());
+        if (!classExits) {
+            LOGGER.error("The class with URI [{}] is not register in the repository.", classUri);
+            return Response.status(Status.NO_CONTENT).build();
+        }
+
+        final DynamicBeanRepository beanRepository;
+        try {
+            beanRepository = JBossJNDILookup.lookupLocal(DynamicBeanRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final DynaBean forClass;
+        try {
+            forClass = beanRepository.getForClass(classUri);
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+        
+        final String jsonBean = DynamicUtil.toString(forClass);
+        LOGGER.debug("The bean {} is return.", jsonBean);
+
+        return Response.ok(jsonBean).build();
     }
 }
