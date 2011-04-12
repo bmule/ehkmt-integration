@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
-
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.VocabularyLoader;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
@@ -26,10 +25,18 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Provides web services for the <code>VocabularyLoader</code> and
- * <code>ControlledItemRepository</code>.
+ * <code>ControlledItemRepository</code>. </br>
+ * This class exposes :
+ * <ul>
+ * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/load - used to 
+ * load all the default vocabulary terms.
+ * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/get - used to get 
+ * all the controlled vocabulary terms that have a certain code system. 
+ * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForTag - 
+ * used to get all the controlled vocabulary terms that have a certain tag.
+ * </ul>
  *
  * @author Mihai
  */
@@ -51,8 +58,16 @@ public class ControlledItemRepositoryRestWS {
         // UNIMPLEMENTD
     }
 
+    /**
+     * GET based web service used to load all the default vocabulary terms.
+     * 
+     * @return <code>javax.ws.rs.core.Response.Status.OK</code> if the operation 
+     * is successfully or <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code> 
+     * by any kind of error.
+     */
     @GET
     @Path("/load")
+    @Produces("application/json")
     public Response load() {
         final VocabularyLoader vocabularyLoader;
         try {
