@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * Provides web services for the <code>DynamicBeanRepository</code>. </br>
  * This class exposes :
  * <ul>
- * <li> <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist
+ * <li> <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist used to persist a 
  * <li> <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getAllForClass
  * <li> <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getLastForClass
  * </ul>
@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 public class DynamicBeanRepositoryRestWS {
 
     public static final String CLASS_URI_PROPERTY = "class_uri";
+    
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
