@@ -179,7 +179,7 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
         patern.append(prefLabelPrefix);
         
         final Query query =
-                entityManager.createNamedQuery("selectControlledItemByPrefLabel");
+                entityManager.createNamedQuery("selectControlledItemByPrefLabelPrefix");
         query.setParameter("pref_label_prefix", patern.toString());
 
         final List resultList = query.getResultList();
