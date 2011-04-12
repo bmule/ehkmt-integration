@@ -270,7 +270,9 @@ final class DummyModelFactory {
     static ControlledItem createControlledItem() {
 
         final String code = createUniqueString("code");
-        final ControlledItem controlledItem = new ControlledItem(Constants.SNOMED, "SNOMED", code);
+        final String prefLabel = createUniqueString("prefferedLabel");
+        final ControlledItem controlledItem = 
+                new ControlledItem(Constants.SNOMED, "SNOMED", code, prefLabel);
 
 
         return controlledItem;
