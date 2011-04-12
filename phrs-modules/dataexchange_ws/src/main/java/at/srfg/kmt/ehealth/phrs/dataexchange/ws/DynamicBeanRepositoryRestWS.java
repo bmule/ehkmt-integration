@@ -36,7 +36,10 @@ import org.slf4j.LoggerFactory;
  * <li> <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getLastForClass
  * </ul>
  *
+ * @version 0.1
+ * @since 0.1
  * @author Mihai
+ * @see DynamicBeanRepository
  */
 @Path("/dynamic_bean_repository")
 public class DynamicBeanRepositoryRestWS {
@@ -62,11 +65,17 @@ public class DynamicBeanRepositoryRestWS {
      * POST based web service used to persist a given dynamic bean JSON 
      * serialized. </br>
      * This web service can be access on :  
-     * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist
+     * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist.
      * 
      * @return <code>javax.ws.rs.core.Response.Status.OK</code> if the operation 
-     * is successfully or <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code> 
-     * by any kind of error.
+     * is successfully.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
+     * If the dyna bean JSON representation (the <code>dynaBean</code> argument)
+     * does not contains a  property named "class_uri" that contains the URI for
+     * an existent class then this method returns :
+     * <code>javax.ws.rs.core.Response.Status.BAD_REQUEST</code>.
      */
     @POST
     @Path("/persist")
@@ -131,6 +140,9 @@ public class DynamicBeanRepositoryRestWS {
      * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getAllForClass
      * 
      * @return a JSON array that contains all beans versions.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
      */
     @GET
     @Path("/getAllForClass")
@@ -188,6 +200,9 @@ public class DynamicBeanRepositoryRestWS {
      * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/getLastForClass
      * 
      * @return a JSON string that contains the last last version for a bean.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
      */
     @GET
     @Path("/getLastForClass")

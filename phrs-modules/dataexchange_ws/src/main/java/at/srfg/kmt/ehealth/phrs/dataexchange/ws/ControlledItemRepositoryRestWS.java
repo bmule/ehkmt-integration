@@ -38,6 +38,8 @@ import org.slf4j.LoggerFactory;
  * used to get all the controlled vocabulary terms that have a certain tag.
  * </ul>
  *
+ * @version 0.1
+ * @since 0.1
  * @author Mihai
  */
 @Path("/controlled_item_repository")
@@ -62,8 +64,10 @@ public class ControlledItemRepositoryRestWS {
      * GET based web service used to load all the default vocabulary terms.
      * 
      * @return <code>javax.ws.rs.core.Response.Status.OK</code> if the operation 
-     * is successfully or <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code> 
-     * by any kind of error.
+     * is successfully.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
      */
     @GET
     @Path("/load")
@@ -106,11 +110,21 @@ public class ControlledItemRepositoryRestWS {
      * <JBOSS URI>/dataexchange_ws/controlled_item_repository/get
      * 
      * @return returns an array of JSON objects that match the given criteria.
+     * An empty array signals no matches for the criteria.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
      */
     @GET
     @Produces("application/json")
     @Path("/get")
     public Response getForCodeAndCodeSystem(@QueryParam("q") String q) {
+
+        if (q == null && q.isEmpty()) {
+            LOGGER.error("This query  [{}] is not valid", q);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
         final int indexOf = q.indexOf(":");
         final String code;
         final String codeSystem;
@@ -169,12 +183,22 @@ public class ControlledItemRepositoryRestWS {
      * This web service can be access on : 
      * <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForTag
      * 
-     * @return returns an array of JSON objects that match the given criteria.
+     * @return returns an array of JSON representation for all the items tagged
+     * with a certain tag.
+     * An empty array signals no matches for the criteria.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
      */
     @GET
     @Produces("application/json")
     @Path("/getForTag")
     public Response getForTag(@QueryParam("q") String q) {
+
+        if (q == null && q.isEmpty()) {
+            LOGGER.error("This query  [{}] is not valid", q);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
 
         final int indexOf = q.indexOf(":");
         if (indexOf == -1) {
