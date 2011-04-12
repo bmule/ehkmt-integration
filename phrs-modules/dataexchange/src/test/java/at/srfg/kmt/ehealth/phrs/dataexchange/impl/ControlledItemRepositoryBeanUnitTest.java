@@ -27,7 +27,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Provides test for the <code>ControlledItemRepository</code> implementation.
  * 
@@ -47,7 +46,6 @@ public class ControlledItemRepositoryBeanUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ControlledItemRepositoryBeanUnitTest.class);
-
     /**
      * The <code>ControlledItemRepository</code> instance to test.
      */
@@ -110,7 +108,7 @@ public class ControlledItemRepositoryBeanUnitTest {
         final String ejbStructure = ejbJar.toString(true);
         LOGGER.debug("EJB jar structure on deploy is :");
         LOGGER.debug(ejbStructure);
-        
+
         return ear;
     }
 
@@ -245,7 +243,6 @@ public class ControlledItemRepositoryBeanUnitTest {
     private class TagTransporter {
 
         private ControlledItem tag;
-
         private ControlledItem toTag;
 
         public TagTransporter(ControlledItem tag, ControlledItem toTag) {
@@ -319,5 +316,35 @@ public class ControlledItemRepositoryBeanUnitTest {
         // the given itm has no more tags
         final Set<ControlledItem> tags = controlledItemRepository.getTags(toTag);
         assertTrue(tags.isEmpty());
+    }
+
+    /**
+     * Tests the getByPrefLabel method. More precisely this test add a controlled
+     * item with a given pref label and after this it search it using its pref 
+     * label.
+     */
+    @Test
+    public void testGetByPrefLabel() {
+        final ControlledItem item = createItem();
+        final String prefLabel = item.getPrefLabel();
+        final Set<ControlledItem> byPrefLabel = 
+                controlledItemRepository.getByPrefLabel(prefLabel);
+        assertNotNull(byPrefLabel);
+        assertEquals(1, byPrefLabel.size());
+    }
+    
+     /**
+     * Tests the getByPrefLabel method. More precisely this test add a controlled
+     * item with a given pref label and after this it search it using its pref 
+     * label prefix.
+     */
+    @Test
+    public void testGetByPrefLabelPrefix() {
+        final ControlledItem item = createItem();
+        final String prefLabel = item.getPrefLabel();
+        final Set<ControlledItem> byPrefLabel = 
+                controlledItemRepository.getByPrefLabelPrefix(prefLabel);
+        assertNotNull(byPrefLabel);
+        assertEquals(1, byPrefLabel.size());
     }
 }
