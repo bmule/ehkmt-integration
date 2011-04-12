@@ -202,7 +202,7 @@ public class ControlledItemRepositoryRestWS {
                     String.format("No matching tags with code system [%s] and code [%s] found.", codeSystem, code);
             LOGGER.error(msg);
 
-            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+            return Response.status(Status.BAD_REQUEST).build();
         }
 
         final Set<ControlledItem> itemsByTag = itemRepository.getByTag(tag);
