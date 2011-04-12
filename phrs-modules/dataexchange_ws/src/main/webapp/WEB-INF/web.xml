@@ -22,6 +22,6 @@
     
     <context-param>
         <param-name>resteasy.resources</param-name>
-        <param-value>at.srfg.kmt.ehealth.phrs.dataexchange.ws.ControlledItemRepositoryRestWS</param-value>
+        <param-value>at.srfg.kmt.ehealth.phrs.dataexchange.ws.ControlledItemRepositoryRestWS, at.srfg.kmt.ehealth.phrs.dataexchange.ws.DynamicBeanRepositoryRestWS</param-value>
     </context-param>
 </web-app>
