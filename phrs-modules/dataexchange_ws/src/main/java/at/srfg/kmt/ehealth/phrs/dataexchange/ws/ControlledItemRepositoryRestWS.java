@@ -36,6 +36,12 @@ import org.slf4j.LoggerFactory;
  * all the controlled vocabulary terms that have a certain code system. 
  * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForTag - 
  * used to get all the controlled vocabulary terms that have a certain tag.
+ * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForPrefLabel - 
+ * used to get all the controlled vocabulary where the prefered label match 
+ * exact a given String.
+ * <li> <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForPrefLabelPrefix - 
+ * used to get all the controlled vocabulary where the prefered label starts 
+ * with a given String.
  * </ul>
  *
  * @version 0.1
@@ -250,5 +256,103 @@ public class ControlledItemRepositoryRestWS {
 
 
         return result;
+    }
+
+    /**
+     * GET based web service used to  obtain all the controlled vocabulary
+     * items which have a certain pref. label (exact match). </br>
+     * This web service returns an array of JSON objects where each element 
+     * follows the following syntax :
+     * <pre>
+     * {"code":"XXX",
+     *  "codeSystem":"XXX",
+     *  "prefLabel":"XXX"}
+     * </pre>
+     * If there are no matching elements for the given query then this
+     * web service returns an empty array.<br>
+     * This web service can be access on : 
+     * <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForPrefLabel
+     * 
+     * @return returns an array of JSON representation for all the items which
+     * have a certain pref. label.
+     * An empty array signals no matches for the criteria.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
+     */
+    @GET
+    @Produces("application/json")
+    @Path("/getForPrefLabel")
+    public Response getForPrefLabel(@QueryParam("q") String q) {
+        if (q == null && q.isEmpty()) {
+            LOGGER.error("This query  [{}] is not valid", q);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        final ControlledItemRepository itemRepository;
+        try {
+            itemRepository = JBossJNDILookup.lookupLocal(ControlledItemRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final Set<ControlledItem> byPrefLabel = itemRepository.getByPrefLabel(q);
+        final JSONArray jsonArray = new JSONArray();
+        for (ControlledItem item : byPrefLabel) {
+            final JSONObject json = get(item);
+            jsonArray.add(json);
+        }
+
+        return Response.ok(jsonArray.toString()).build();
+    }
+
+    /**
+     * GET based web service used to  obtain all the controlled vocabulary
+     * items which have a certain pref. label that starts with a given prefix. </br>
+     * This web service returns an array of JSON objects where each element 
+     * follows the following syntax :
+     * <pre>
+     * {"code":"XXX",
+     *  "codeSystem":"XXX",
+     *  "prefLabel":"XXX"}
+     * </pre>
+     * If there are no matching elements for the given query then this
+     * web service returns an empty array.<br>
+     * This web service can be access on : 
+     * <JBOSS URI>/dataexchange_ws/controlled_item_repository/getForPrefLabelPrefix
+     * 
+     * @return returns an array of JSON representation for all the items which
+     * have a certain pref. label that starts with a given prefix.
+     * An empty array signals no matches for the criteria.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
+     */
+    @GET
+    @Produces("application/json")
+    @Path("/getForPrefLabelPrefix")
+    public Response getForPrefLabelPrefix(@QueryParam("q") String q) {
+        if (q == null && q.isEmpty()) {
+            LOGGER.error("This query  [{}] is not valid", q);
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        final ControlledItemRepository itemRepository;
+        try {
+            itemRepository = JBossJNDILookup.lookupLocal(ControlledItemRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final Set<ControlledItem> byPrefLabel = itemRepository.getByPrefLabel(q);
+        final JSONArray jsonArray = new JSONArray();
+        for (ControlledItem item : byPrefLabel) {
+            final JSONObject json = get(item);
+            jsonArray.add(json);
+        }
+
+        return Response.ok(jsonArray.toString()).build();
     }
 }
