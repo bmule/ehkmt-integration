@@ -30,7 +30,11 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "selectControlledItemByCodeSystem", query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system"),
-    @NamedQuery(name = "selectControlledItemCodeSystemAndCode", query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system AND ci.code= :code")
+    @NamedQuery(name = "selectControlledItemCodeSystemAndCode", query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system AND ci.code= :code"),
+    @NamedQuery(name = "selectControlledItemByPrefLabel", 
+                query="SELECT ci FROM ControlledItem AS ci WHERE ci.prefLabel=:pref_label"),
+    @NamedQuery(name = "selectControlledItemByPrefLabelPrefix", 
+                query="SELECT ci FROM ControlledItem AS ci WHERE ci.prefLabel LIKE :pref_label_prefix")
 })
 public class ControlledItem implements Serializable {
 
