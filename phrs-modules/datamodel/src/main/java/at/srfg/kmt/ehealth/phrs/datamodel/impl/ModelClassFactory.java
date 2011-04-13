@@ -36,7 +36,16 @@ public final class ModelClassFactory {
     }
 
     /**
-     * Builds a map used to describe the Blood Pressure Observation class.
+     * Builds a map used to describe the Blood Pressure Observation class. This 
+     * class contains only the following properties :
+     * <ul>
+     * <li>CLASS_URI - type : java.lang.String
+     * <li>BLOOD_PREASURE_DIASTOLIC : java.lang.String
+     * <li>BLOOD_PREASURE_SYSTOLIC : java.lang.String
+     * <li>HEART_RATE : java.lang.String
+     * <li>OBSERVATION_DATE : java.lang.String
+     * <li>
+     * </ul>
      * 
      * @return a map used to describe the Blood Pressure Observation class.
      */
@@ -54,7 +63,7 @@ public final class ModelClassFactory {
 
         final DynamicPropertyType diastolicProperty = new DynamicPropertyType();
         diastolicProperty.setName(BLOOD_PREASURE_DIASTOLIC);
-        diastolicProperty.setType(Long.class.getName());
+        diastolicProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> diastolicMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(diastolicProperty, diastolicMetadatas);
@@ -62,7 +71,7 @@ public final class ModelClassFactory {
 
         final DynamicPropertyType systolicProperty = new DynamicPropertyType();
         systolicProperty.setName(BLOOD_PREASURE_SYSTOLIC);
-        systolicProperty.setType(Long.class.getName());
+        systolicProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> systolicMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(systolicProperty, systolicMetadatas);
@@ -82,6 +91,14 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> obsDateMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(obsDateProperty, obsDateMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
 
         return result;
     }
@@ -130,6 +147,20 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(measureSystemProperty, measureSystemMetadatas);
 
+        final DynamicPropertyType observationDate = new DynamicPropertyType();
+        observationDate.setName(OBSERVATION_DATE);
+        observationDate.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> observationDateMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(observationDate, observationDateMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
 
         return result;
     }
@@ -147,10 +178,9 @@ public final class ModelClassFactory {
         filer.add(Constants.BODY_WEIGHT);
         filer.add(Constants.HEIGHT);
         filer.add(Constants.MEASURE_SYSTEM);
-        
+
         return filer.contains(propertyName);
     }
-    
 
     /**
      * Builds a map used to describe the Activity of Daily Living class.
@@ -175,19 +205,19 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(activityCategoryProperty, activityCategoryMetadatas);
 
+        final DynamicPropertyType activityCodeProperty = new DynamicPropertyType();
+        activityCodeProperty.setName(ACTIVITY_CODE);
+        activityCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityCodeProperty, activityCodeMetadatas);
+
         final DynamicPropertyType activityDurationCodeProperty = new DynamicPropertyType();
         activityDurationCodeProperty.setName(ACTIVITY_DURATION_CODE);
-        activityDurationCodeProperty.setType(Date.class.getName());
+        activityDurationCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityDurationCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(activityDurationCodeProperty, activityDurationCodeMetadatas);
-
-        final DynamicPropertyType activityFeatureProperty = new DynamicPropertyType();
-        activityFeatureProperty.setName(ACTIVITY_FEATURE);
-        activityFeatureProperty.setType(String.class.getName());
-        final Set<DynamicPropertyMetadata> activityFeatureMetadatas =
-                new HashSet<DynamicPropertyMetadata>();
-        result.put(activityFeatureProperty, activityFeatureMetadatas);
 
         final DynamicPropertyType isActivityAssistedProperty = new DynamicPropertyType();
         isActivityAssistedProperty.setName(IS_ACTIVITY_ASSISTED);
@@ -198,14 +228,14 @@ public final class ModelClassFactory {
 
         final DynamicPropertyType scoreProperty = new DynamicPropertyType();
         scoreProperty.setName(SCORE);
-        scoreProperty.setType(Integer.class.getName());
+        scoreProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> scorePropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(scoreProperty, scorePropertyMetadatas);
 
         final DynamicPropertyType valueActivityProperty = new DynamicPropertyType();
         valueActivityProperty.setName(VALUE_ACTIVITY);
-        valueActivityProperty.setType(Integer.class.getName());
+        valueActivityProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> valueActivityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(valueActivityProperty, valueActivityMetadatas);
@@ -273,7 +303,7 @@ public final class ModelClassFactory {
 
         final DynamicPropertyType medicationQuantityProperty = new DynamicPropertyType();
         medicationQuantityProperty.setName(MEDICATION_QUANTITY);
-        medicationQuantityProperty.setType(Long.class.getName());
+        medicationQuantityProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationQuantityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(medicationQuantityProperty, medicationQuantityMetadatas);
@@ -286,14 +316,21 @@ public final class ModelClassFactory {
         result.put(medicationQuantityUnitProperty, medicationQuantityunitMetadatas);
 
         final DynamicPropertyType medicationReasonKeywordCodesProperty = new DynamicPropertyType();
-        medicationReasonKeywordCodesProperty.setName(MEDICATION_REASON_KEYWORD_CODE);
+        medicationReasonKeywordCodesProperty.setName(MEDICATION_REASON_KEYWORD_CODES);
         medicationReasonKeywordCodesProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationReasonKeywordCodesMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(medicationReasonKeywordCodesProperty, medicationReasonKeywordCodesMetadatas);
 
+        final DynamicPropertyType medicationReasonPrimaryKeywordCodeProperty = new DynamicPropertyType();
+        medicationReasonPrimaryKeywordCodeProperty.setName(MEDICATION_REASON_PRIMARY_KEYWORD);
+        medicationReasonPrimaryKeywordCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> medicationReasonPrimaryKeywordCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(medicationReasonPrimaryKeywordCodeProperty, medicationReasonPrimaryKeywordCodeMetadatas);
+
         final DynamicPropertyType medicationStatusProperty = new DynamicPropertyType();
-        medicationStatusProperty.setName(MEDICATION_REASON_KEYWORD_CODE);
+        medicationStatusProperty.setName(MEDICATION_STATUS);
         medicationStatusProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationStatusMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -307,7 +344,7 @@ public final class ModelClassFactory {
         result.put(dateStartProperty, dateStartMetadatas);
 
         final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
-        dateEndProperty.setName(OBSERVATION_DATE_START);
+        dateEndProperty.setName(OBSERVATION_DATE_END);
         dateEndProperty.setType(Date.class.getName());
         final Set<DynamicPropertyMetadata> dateEndMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -326,6 +363,266 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> prescribedByRoleMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(prescribedByRoleProperty, prescribedByRoleMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
+
+        return result;
+    }
+
+    /**
+     * Builds a map used to describe the Medication Activity.
+     * 
+     * @return a map used to describe the Medication Activity.
+     */
+    public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createProblemsModelMap() {
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
+                new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
+
+        final DynamicPropertyType issueTypeCodeProperty = new DynamicPropertyType();
+        issueTypeCodeProperty.setName(ISSUE_TYPE_CODE);
+        issueTypeCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> issueTypeCodePropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(issueTypeCodeProperty, issueTypeCodePropertyMetadatas);
+
+        final DynamicPropertyType issueCodeProperty = new DynamicPropertyType();
+        issueCodeProperty.setName(ISSUE_CODE);
+        issueCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> issueCodePropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(issueCodeProperty, issueCodePropertyMetadatas);
+
+        final DynamicPropertyType isActiveStatusProperty = new DynamicPropertyType();
+        isActiveStatusProperty.setName(IS_ACTIVE);
+        isActiveStatusProperty.setType(Boolean.class.getName());
+        final Set<DynamicPropertyMetadata> isActiveStatusMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(isActiveStatusProperty, isActiveStatusMetadatas);
+
+
+        final DynamicPropertyType dateStartProperty = new DynamicPropertyType();
+        dateStartProperty.setName(OBSERVATION_DATE_START);
+        dateStartProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateStartMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateStartProperty, dateStartMetadatas);
+
+        final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
+        dateEndProperty.setName(OBSERVATION_DATE_END);
+        dateEndProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateEndMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateEndProperty, dateEndMetadatas);
+
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
+
+        return result;
+    }
+
+    public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createRiskFactorModelMap() {
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
+                new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
+
+        final DynamicPropertyType riskFactorTypeProperty = new DynamicPropertyType();
+        riskFactorTypeProperty.setName(RISK_FACTOR_TYPE);
+        riskFactorTypeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> riskFactorTypeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(riskFactorTypeProperty, riskFactorTypeMetadatas);
+
+        final DynamicPropertyType riskFactorCodeProperty = new DynamicPropertyType();
+        riskFactorCodeProperty.setName(RISK_FACTOR_TYPE);
+        riskFactorCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> riskFactorCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(riskFactorCodeProperty, riskFactorCodeMetadatas);
+
+        final DynamicPropertyType isActiveProperty = new DynamicPropertyType();
+        isActiveProperty.setName(IS_ACTIVE);
+        isActiveProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> risActivePropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(isActiveProperty, risActivePropertyMetadatas);
+
+        final DynamicPropertyType riskFactorDurationProperty = new DynamicPropertyType();
+        riskFactorDurationProperty.setName(IS_ACTIVE);
+        riskFactorDurationProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> riskFactorDurationMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(riskFactorDurationProperty, riskFactorDurationMetadatas);
+
+
+        final DynamicPropertyType hasContrFactorsProperty = new DynamicPropertyType();
+        hasContrFactorsProperty.setName(HAS_CONTRIBUTION_FACTORS);
+        hasContrFactorsProperty.setType(Boolean.class.getName());
+        final Set<DynamicPropertyMetadata> hasContrFactorsMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(hasContrFactorsProperty, hasContrFactorsMetadatas);
+
+        final DynamicPropertyType treatmentsCodesProperty = new DynamicPropertyType();
+        treatmentsCodesProperty.setName(TREATMENTS_CODES);
+        treatmentsCodesProperty.setType(HashSet.class.getName());
+        final Set<DynamicPropertyMetadata> treatmentsCodesPropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(treatmentsCodesProperty, treatmentsCodesPropertyMetadatas);
+
+        final DynamicPropertyType treatmentStatementPrimaryProperty = new DynamicPropertyType();
+        treatmentStatementPrimaryProperty.setName(TRATMENTS_STATEMENT_PRIMARY);
+        treatmentStatementPrimaryProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> treatmentStatementPrimaryPropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(treatmentStatementPrimaryProperty, treatmentStatementPrimaryPropertyMetadatas);
+
+        final DynamicPropertyType dateStartProperty = new DynamicPropertyType();
+        dateStartProperty.setName(OBSERVATION_DATE_START);
+        dateStartProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateStartMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateStartProperty, dateStartMetadatas);
+
+        final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
+        dateEndProperty.setName(OBSERVATION_DATE_END);
+        dateEndProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateEndMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateEndProperty, dateEndMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
+
+        return result;
+    }
+
+    public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createActivityItemModelMap() {
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
+                new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
+
+
+        final DynamicPropertyType activityCategoryProperty = new DynamicPropertyType();
+        activityCategoryProperty.setName(ACTIVITY_CATEGORY);
+        activityCategoryProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityCategoryPropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityCategoryProperty, activityCategoryPropertyMetadatas);
+
+        final DynamicPropertyType activityCodeProperty = new DynamicPropertyType();
+        activityCodeProperty.setName(ACTIVITY_CODE);
+        activityCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityCodePropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityCodeProperty, activityCodePropertyMetadatas);
+
+        final DynamicPropertyType activityNameProperty = new DynamicPropertyType();
+        activityNameProperty.setName(ACTIVITY_NAME);
+        activityNameProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityNameMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityNameProperty, activityNameMetadatas);
+
+        final DynamicPropertyType assessmentIndicatorProperty = new DynamicPropertyType();
+        assessmentIndicatorProperty.setName(ACTIVITY_NAME);
+        assessmentIndicatorProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> assessmentIndicatorPropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(assessmentIndicatorProperty, assessmentIndicatorPropertyMetadatas);
+
+        final DynamicPropertyType isActiveStatusProperty = new DynamicPropertyType();
+        isActiveStatusProperty.setName(IS_ACTIVE);
+        isActiveStatusProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> isActiveStatusMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(isActiveStatusProperty, isActiveStatusMetadatas);
+
+        final DynamicPropertyType activityFeatureProperty = new DynamicPropertyType();
+        activityFeatureProperty.setName(ACTIVITY_FEATURE);
+        activityFeatureProperty.setType(HashMap.class.getName());
+        final Set<DynamicPropertyMetadata> activityFeatureMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityFeatureProperty, activityFeatureMetadatas);
+
+        final DynamicPropertyType activityFrequencyCodeProperty = new DynamicPropertyType();
+        activityFrequencyCodeProperty.setName(ACTIVITY_FREQUENCY_FEATURE);
+        activityFrequencyCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityFrequencyCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityFrequencyCodeProperty, activityFrequencyCodeMetadatas);
+
+        final DynamicPropertyType dateStartProperty = new DynamicPropertyType();
+        dateStartProperty.setName(OBSERVATION_DATE_START);
+        dateStartProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateStartMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateStartProperty, dateStartMetadatas);
+
+        final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
+        dateEndProperty.setName(OBSERVATION_DATE_END);
+        dateEndProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> dateEndMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(dateEndProperty, dateEndMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
+        return result;
+    }
+
+    public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createActivityLevelModelMap() {
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
+                new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
+
+        final DynamicPropertyType activityLevelIndicatorProperty = new DynamicPropertyType();
+        activityLevelIndicatorProperty.setName(ACTIVITY_MOD_INDICATOR);
+        activityLevelIndicatorProperty.setType(Integer.class.getName());
+        final Set<DynamicPropertyMetadata> activityLevelIndicatorMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityLevelIndicatorProperty, activityLevelIndicatorMetadatas);
+
+        final DynamicPropertyType activityMoodIndicatorProperty = new DynamicPropertyType();
+        activityMoodIndicatorProperty.setName(ACTIVITY_MOD_INDICATOR);
+        activityMoodIndicatorProperty.setType(Integer.class.getName());
+        final Set<DynamicPropertyMetadata> activityMoodIndicatorMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityMoodIndicatorProperty, activityMoodIndicatorMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
+        final DynamicPropertyType obsDateProperty = new DynamicPropertyType();
+        obsDateProperty.setName(OBSERVATION_DATE);
+        obsDateProperty.setType(Date.class.getName());
+        final Set<DynamicPropertyMetadata> obsDateDateMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(obsDateProperty, obsDateDateMetadatas);
+
+
+
 
         return result;
     }
