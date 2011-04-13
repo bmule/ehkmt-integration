@@ -592,7 +592,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
 
         final Query query =
                 entityManager.createNamedQuery("selectDynamicClassByURI");
-        query.setParameter("dynamic_class", classURI);
+        query.setParameter("uri", classURI);
 
         // mihai : this functionality exist already in the DunaClassRepository
         // but I dont wnat to create a dependedecy
