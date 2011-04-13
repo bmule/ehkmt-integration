@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+  
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>datamodel</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
+    <url>http://maven.apache.org</url>
+    <name>Personal Health System Framework Data Models</name>
+    <description>
+        Personal Health System Framework Data Models package contains all the 
+        data models used to expres the PHRS Bussiness.
+    </description>
+  
+    <properties>
+        <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
+        <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+    
+    
+    <dependencies>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!--dyna beans-->
+        
+        <dependency>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>dataexcahnge</artifactId>
+            <version>0.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>5.1.0.GA</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        
+    </dependencies>
+    
+
+</project>
