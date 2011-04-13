@@ -7,9 +7,13 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
+import at.srfg.kmt.ehealth.phrs.datamodel.impl.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
 import java.util.Set;
 import javax.naming.NamingException;
@@ -24,8 +28,11 @@ import javax.ws.rs.core.Response.Status;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.DynaBean;
+import org.apache.commons.beanutils.DynaProperty;
+import org.jboss.cache.config.Dynamic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Provides web services for the <code>DynamicBeanRepository</code>. </br>
@@ -45,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class DynamicBeanRepositoryRestWS {
 
     public static final String CLASS_URI_PROPERTY = "class_uri";
-    
+
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -53,13 +60,6 @@ public class DynamicBeanRepositoryRestWS {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DynamicBeanRepositoryRestWS.class);
-
-    @GET
-    @Path("/test")
-    @Produces("application/json")
-    public Response test() {
-        return Response.status(Status.OK).build();
-    }
 
     /**
      * POST based web service used to persist a given dynamic bean JSON 
@@ -97,7 +97,7 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.BAD_REQUEST).build();
         }
 
-        final Object classURI = json.get(CLASS_URI_PROPERTY);
+        final String classURI = (String) json.get(CLASS_URI_PROPERTY);
         if (classURI == null) {
             LOGGER.error("This dynabean JSON representation [{}] does not have a class_uri property", dynaBean);
             return Response.status(Status.BAD_REQUEST).build();
@@ -111,7 +111,7 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        final boolean classExits = classRepository.exits(classURI.toString());
+        final boolean classExits = classRepository.exits(classURI.trim());
         if (!classExits) {
             LOGGER.error("The class with URI [{}] is not register in the repository.", classURI);
             return Response.status(Status.BAD_REQUEST).build();
@@ -125,13 +125,36 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        final DynaBean newBean = DynamicUtil.fromJSONString(dynaBean);
-        LOGGER.debug("Tries to persist bean : {}", dynaBean);
-        beanRepository.add(newBean);
-        LOGGER.debug("The bean [{}] was succefully persisted.", dynaBean);
+        final DynamicClass dynamicClass = classRepository.get(classURI.trim());
+        final DynaBean newDynaBean;
+        try {
+            newDynaBean = DynamicUtil.getNewInstance(dynamicClass);
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+        final DynaBean jsonBean = DynamicUtil.fromJSONString(dynaBean);
+
+        // cpoy all the json dyna mean in the new bean
+        final DynaProperty[] dynaProperties =
+                jsonBean.getDynaClass().getDynaProperties();
+
+        for (DynaProperty dynaProperty : dynaProperties) {
+            final String name = dynaProperty.getName();
+            if (ModelClassFactory.isBodyWeighProperty(name)) {
+                final Object contnet = jsonBean.get(name);
+                newDynaBean.set(name, contnet);
+            }
+        }
+
+        LOGGER.debug("Tries to persist bean : {}", DynamicUtil.toString(newDynaBean));
+        beanRepository.add(newDynaBean);
+        LOGGER.debug("The bean [{}] was succefully persisted.", DynamicUtil.toString(newDynaBean));
         // FIXME : return the uRI for the peristed bean
         return Response.status(Status.OK).build();
     }
+    
+    
 
     /**
      * GET based web service used to obtain all version for a bean, the
@@ -182,13 +205,13 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(exception.getMessage(), exception);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        
+
         final JSONArray array = new JSONArray();
         for (DynaBean dynaBean : forClass) {
             final String json = DynamicUtil.toString(dynaBean);
             array.add(json);
         }
-      
+
         LOGGER.debug("Return beans {}.", array);
         return Response.ok(array.toString()).build();
     }
@@ -242,7 +265,7 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(exception.getMessage(), exception);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        
+
         final String jsonBean = DynamicUtil.toString(forClass);
         LOGGER.debug("The bean {} is return.", jsonBean);
 
