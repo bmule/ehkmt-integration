@@ -4,16 +4,21 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
+
+import at.srfg.kmt.ehealth.phrs.datamodel.impl.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
-import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
+import at.srfg.kmt.ehealth.phrs.datamodel.impl.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
+import java.util.Map;
 import java.util.Set;
 import javax.naming.NamingException;
-import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.Produces;
@@ -22,6 +27,7 @@ import javax.ws.rs.core.Response.Status;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Provides web services for the <code>DynamicClassRepositoryRestWS</code>.
@@ -97,5 +103,61 @@ public class DynamicClassRepositoryRestWS {
         // FIXME : add all the properties 
 
         return Response.ok(result.toString()).build();
+    }
+
+    /**
+     * GET based web service used to obtain load all the PHRS default classes.</br>
+     * This classes are :
+     * <ul>
+     * <li> Body Weight Class
+     * <li> Blood Pleasure class
+     * <li> Body Weight
+     * <li> Medication
+     * </ul>
+     * This web service can be access on :  
+     * <JBOSS URI>/dataexchange_ws/dynamic_class_repository/loadDefaultClasses
+     * 
+     * @return if the operation was successfully :
+     * <code>javax.ws.rs.core.Response.Status.OK</code> is returned.  <br>
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>
+     */
+    @GET
+    @Path("/loadDefaultClasses")
+    @Produces("application/json")
+    public Response loadDefaultClasses() {
+
+        final DynamicClassRepository classRepository;
+        try {
+            classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
+        } catch (NamingException namingException) {
+            LOGGER.error(namingException.getMessage(), namingException);
+            return Response.status(Status.INTERNAL_SERVER_ERROR).build();
+        }
+
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bodyWeighModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass bodyWeighDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.BODY_WEIGHT_CLASS_NAME,
+                Constants.BODY_WEIGHT_CLASS_URI, bodyWeighModelMap);
+        registerClass(classRepository, bodyWeighDynamicClass);
+
+        return Response.status(Status.OK).build();
+    }
+
+    private void registerClass(DynamicClassRepository classRepository,
+            DynamicClass dynamicClass) {
+        final String uri = dynamicClass.getUri();
+        final String name = dynamicClass.getName();
+        final boolean bodyWeighClassExists =
+                classRepository.exits(Constants.BODY_WEIGHT_CLASS_URI);
+
+        if (!bodyWeighClassExists) {
+            classRepository.persist(dynamicClass);
+            LOGGER.debug("Persist the class with this URI [{}].", uri);
+        } else {
+            LOGGER.debug("The class with this URI [{}] was already registered.", uri);
+        }
     }
 }
