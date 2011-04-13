@@ -82,14 +82,14 @@ public final class Constants {
      * all the phrs bean will have this property.
      * 
      */
-    public static final String PHRS_BEAN_OWNER = "_phrsBeanOwner";
+    public static final String PHRS_BEAN_OWNER = "_phrsBeanOwnerUri";
 
     /**
      * The phrsBean (instance) creator. This is a default phrs bean properties,
      * all the phrs bean will have this property.
      * 
      */
-    public static final String PHRS_BEAN_CREATOR = "_phrsBeanOwner";
+    public static final String PHRS_BEAN_CREATOR = "_phrsBeanCreatorUri";
 
     /**
      * The phrsBean (instance) can read flag. This is a default phrs bean 
@@ -111,6 +111,17 @@ public final class Constants {
      * 
      */
     public static final String PHRS_BEAN_CANUSE = "_phrsBeanCanUse";
+
+    /**
+     * This is the reference the corresponding EHR records. 
+     */
+    public static final String PHRS_REFERES_TO_SOURCE_URI = 
+            "_phrsBeanRefersToSourceUri";
+    
+    /**
+     * Marks the deleted beans.
+     */
+    public static final String PHRS_BEAN_IS_DELETED = "_phrsIsDeleted";
 
     /**
      * Don't let anyone to instantiate this class.
