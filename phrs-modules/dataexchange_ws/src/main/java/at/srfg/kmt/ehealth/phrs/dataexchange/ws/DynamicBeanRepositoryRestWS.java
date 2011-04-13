@@ -12,7 +12,6 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
 import at.srfg.kmt.ehealth.phrs.datamodel.impl.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
 import java.util.Set;
@@ -29,7 +28,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaProperty;
-import org.jboss.cache.config.Dynamic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -257,7 +255,7 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(namingException.getMessage(), namingException);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-
+        
         final DynaBean forClass;
         try {
             forClass = beanRepository.getForClass(classUri);
