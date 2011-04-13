@@ -61,7 +61,9 @@ public class DynamicUtil {
         new DynaProperty(Constants.PHRS_BEAN_OWNER, String.class),
         new DynaProperty(Constants.PHRS_BEAN_CANREAD, Boolean.class),
         new DynaProperty(Constants.PHRS_BEAN_CANWRITE, Boolean.class),
-        new DynaProperty(Constants.PHRS_BEAN_CANUSE, Boolean.class)
+        new DynaProperty(Constants.PHRS_BEAN_CANUSE, Boolean.class),
+        new DynaProperty(Constants.PHRS_BEAN_IS_DELETED, Boolean.class),
+        new DynaProperty(Constants.PHRS_REFERES_TO_SOURCE_URI, String.class)
     };
 
     /**
