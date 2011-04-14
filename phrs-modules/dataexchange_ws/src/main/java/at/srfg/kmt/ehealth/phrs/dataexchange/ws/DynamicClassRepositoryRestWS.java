@@ -139,12 +139,57 @@ public class DynamicClassRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
+        // ActivityOfDailyLiving
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityOfDailyModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass activityOfDailyDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_NAME,
+                Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_URI, activityOfDailyModelMap);
+        registerClass(classRepository, activityOfDailyDynamicClass);
+
+        // ActivityItem
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityItemModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass activityItemDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.ACTIVITY_ITEM_CLASS_NAME,
+                Constants.ACTIVITY_ITEM_CLASS_URI, activityItemModelMap);
+        registerClass(classRepository, activityItemDynamicClass);
+
+        // ActivityLevel
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityLevelModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass activityLevelDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.ACTIVITY_LEVEL_CLASS_URI,
+                Constants.ACTIVITY_LEVEL_CLASS_URI, activityLevelModelMap);
+        registerClass(classRepository, activityLevelDynamicClass);
+
+        // BloodPressure
+                final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bloodPreasureModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass bloodPreasureDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.BLOOD_PREASURE_CLASS_URI,
+                Constants.BLOOD_PREASURE_CLASS_URI, bloodPreasureModelMap);
+        registerClass(classRepository, activityOfDailyDynamicClass);
+
+        // BodyWeight
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bodyWeighModelMap =
                 ModelClassFactory.createBodyWeighModelMap();
         final DynamicClass bodyWeighDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.BODY_WEIGHT_CLASS_NAME,
                 Constants.BODY_WEIGHT_CLASS_URI, bodyWeighModelMap);
         registerClass(classRepository, bodyWeighDynamicClass);
+
+        // medication
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> medicationModelMap =
+                ModelClassFactory.createBodyWeighModelMap();
+        final DynamicClass medicationDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.MEDICATION_CLASS_NAME,
+                Constants.MEDICATION_CLASS_URI, medicationModelMap);
+        registerClass(classRepository, medicationDynamicClass);
+
+
+
+
 
         return Response.status(Status.OK).build();
     }

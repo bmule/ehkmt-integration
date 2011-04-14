@@ -11,8 +11,6 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 import static at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants.*;
 import java.util.Date;
 import java.util.HashSet;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -26,6 +24,110 @@ import java.util.Set;
  * @author Mihai
  */
 public final class ModelClassFactory {
+
+    private static final Set<String> bodyWeighPropertyNames;
+
+    private static final Set<String> activityLevelPropertyNames;
+
+    private static final Set<String> activityItemPropertyNames;
+
+    private static final Set<String> activityOfDailyLivingPropertyNames;
+
+    private static final Set<String> bloodPreasurePropertyNames;
+
+    private static final Set<String> riskFactorsPropertyNames;
+
+    private static final Set<String> medicationsPropertyNames;
+
+    private static final Set<String> problemsPropertyNames;
+
+    static {
+        bodyWeighPropertyNames = new HashSet<String>();
+        bodyWeighPropertyNames.add(CLASS_URI);
+        bodyWeighPropertyNames.add(BODY_BMI);
+        bodyWeighPropertyNames.add(BODY_WEIGHT);
+        bodyWeighPropertyNames.add(HEIGHT);
+        bodyWeighPropertyNames.add(MEASURE_SYSTEM);
+        bodyWeighPropertyNames.add(OBSERVATION_DATE);
+        bodyWeighPropertyNames.add(COMMENT);
+
+        activityLevelPropertyNames = new HashSet<String>();
+        activityLevelPropertyNames.add(CLASS_URI);
+        activityLevelPropertyNames.add(ACTIVITY_MOD_INDICATOR);
+        activityLevelPropertyNames.add(ACTIVITY_LAVEL_INDICATOR);
+        activityLevelPropertyNames.add(COMMENT);
+        activityLevelPropertyNames.add(OBSERVATION_DATE);
+
+        activityOfDailyLivingPropertyNames = new HashSet<String>();
+        activityOfDailyLivingPropertyNames.add(CLASS_URI);
+        activityOfDailyLivingPropertyNames.add(ACTIVITY_CATEGORY);
+        activityOfDailyLivingPropertyNames.add(ACTIVITY_CODE);
+        activityOfDailyLivingPropertyNames.add(ACTIVITY_DURATION_CODE);
+        activityOfDailyLivingPropertyNames.add(IS_ACTIVITY_ASSISTED);
+        activityOfDailyLivingPropertyNames.add(SCORE);
+        activityOfDailyLivingPropertyNames.add(VALUE_ACTIVITY);
+
+        bloodPreasurePropertyNames = new HashSet<String>();
+        bloodPreasurePropertyNames.add(CLASS_URI);
+        bloodPreasurePropertyNames.add(BLOOD_PREASURE_DIASTOLIC);
+        bloodPreasurePropertyNames.add(BLOOD_PREASURE_SYSTOLIC);
+        bloodPreasurePropertyNames.add(HEART_RATE);
+        bloodPreasurePropertyNames.add(OBSERVATION_DATE);
+        bloodPreasurePropertyNames.add(COMMENT);
+
+        riskFactorsPropertyNames = new HashSet<String>();
+        riskFactorsPropertyNames.add(CLASS_URI);
+        riskFactorsPropertyNames.add(RISK_FACTOR_TYPE);
+        riskFactorsPropertyNames.add(RISK_FACTOR_CODE);
+        riskFactorsPropertyNames.add(IS_ACTIVE);
+        riskFactorsPropertyNames.add(RISK_FACTOR_DURATION);
+        riskFactorsPropertyNames.add(HAS_CONTRIBUTION_FACTORS);
+        riskFactorsPropertyNames.add(TREATMENTS_CODES);
+        riskFactorsPropertyNames.add(TRATMENTS_STATEMENT_PRIMARY);
+        riskFactorsPropertyNames.add(OBSERVATION_DATE_START);
+        riskFactorsPropertyNames.add(OBSERVATION_DATE_END);
+        riskFactorsPropertyNames.add(COMMENT);
+
+        medicationsPropertyNames = new HashSet<String>();
+        medicationsPropertyNames.add(CLASS_URI);
+        medicationsPropertyNames.add(MEDICATION_ACTIVITY);
+        medicationsPropertyNames.add(MEDICATION_CODE);
+        medicationsPropertyNames.add(MEDICATION_FREQENCY_INTERVAL);
+        medicationsPropertyNames.add(MEDICATION_QUANTITY);
+        medicationsPropertyNames.add(MEDICATION_FREQENCY_TIMEOFDAY);
+        medicationsPropertyNames.add(MEDICATION_NAME_TEXT);
+        medicationsPropertyNames.add(MEDICATION_QUANTITY);
+        medicationsPropertyNames.add(MEDICATION_QUANTITY_UNIT);
+        medicationsPropertyNames.add(MEDICATION_REASON_KEYWORD_CODES);
+        medicationsPropertyNames.add(MEDICATION_REASON_PRIMARY_KEYWORD);
+        medicationsPropertyNames.add(MEDICATION_STATUS);
+        medicationsPropertyNames.add(OBSERVATION_DATE_START);
+        medicationsPropertyNames.add(OBSERVATION_DATE_END);
+        medicationsPropertyNames.add(PRESCRIBED_BY);
+        medicationsPropertyNames.add(PRESCRIBED_BY_ROLE);
+        medicationsPropertyNames.add(COMMENT);
+
+        problemsPropertyNames = new HashSet<String>();
+        problemsPropertyNames.add(CLASS_URI);
+        problemsPropertyNames.add(ISSUE_TYPE_CODE);
+        problemsPropertyNames.add(ISSUE_CODE);
+        problemsPropertyNames.add(IS_ACTIVE);
+        problemsPropertyNames.add(OBSERVATION_DATE_START);
+        problemsPropertyNames.add(OBSERVATION_DATE_END);
+        problemsPropertyNames.add(COMMENT);
+
+        activityItemPropertyNames = new HashSet<String>();
+        activityItemPropertyNames.add(CLASS_URI);
+        activityItemPropertyNames.add(ACTIVITY_CATEGORY);
+        activityItemPropertyNames.add(ACTIVITY_CODE);
+        activityItemPropertyNames.add(ACTIVITY_NAME);
+        activityItemPropertyNames.add(IS_ACTIVE);
+        activityItemPropertyNames.add(ACTIVITY_FEATURE);
+        activityItemPropertyNames.add(ACTIVITY_FREQUENCY_FEATURE);
+        activityItemPropertyNames.add(OBSERVATION_DATE_START);
+        activityItemPropertyNames.add(OBSERVATION_DATE_END);
+        activityItemPropertyNames.add(COMMENT);
+    }
 
     /**
      * Don't let anybody to instantiate this class.
@@ -104,6 +206,16 @@ public final class ModelClassFactory {
     }
 
     /**
+     * Proves if the specified name is a legal BloodPressure class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isBloodPressureProperty(String propertyName) {
+        return bloodPreasurePropertyNames.contains(propertyName);
+    }
+
+    /**
      * Builds a map used to describe the Body Weigh class.
      * 
      * @return a map used to describe the Body Weigh class.
@@ -172,14 +284,7 @@ public final class ModelClassFactory {
      * @return true if the specified name is a legal BodyWeigh class property.
      */
     public static boolean isBodyWeighProperty(String propertyName) {
-
-        final Set<String> filer = new HashSet<String>();
-        filer.add(Constants.BODY_BMI);
-        filer.add(Constants.BODY_WEIGHT);
-        filer.add(Constants.HEIGHT);
-        filer.add(Constants.MEASURE_SYSTEM);
-
-        return filer.contains(propertyName);
+        return bodyWeighPropertyNames.contains(propertyName);
     }
 
     /**
@@ -241,6 +346,16 @@ public final class ModelClassFactory {
         result.put(valueActivityProperty, valueActivityMetadatas);
 
         return result;
+    }
+
+    /**
+     * Proves if the specified name is a legal ActivityOfDailyLiving class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isActivityOfDailyLivingProperty(String propertyName) {
+        return activityOfDailyLivingPropertyNames.contains(propertyName);
     }
 
     /**
@@ -376,6 +491,16 @@ public final class ModelClassFactory {
     }
 
     /**
+     * Proves if the specified name is a legal Medication class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isMedicationProperty(String propertyName) {
+        return medicationsPropertyNames.contains(propertyName);
+    }
+
+    /**
      * Builds a map used to describe the Medication Activity.
      * 
      * @return a map used to describe the Medication Activity.
@@ -383,6 +508,13 @@ public final class ModelClassFactory {
     public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createProblemsModelMap() {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
+
+        final DynamicPropertyType classUriProperty = new DynamicPropertyType();
+        classUriProperty.setName(CLASS_URI);
+        classUriProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> classUriMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(classUriProperty, classUriMetadatas);
 
         final DynamicPropertyType issueTypeCodeProperty = new DynamicPropertyType();
         issueTypeCodeProperty.setName(ISSUE_TYPE_CODE);
@@ -432,6 +564,16 @@ public final class ModelClassFactory {
         return result;
     }
 
+    /**
+     * Proves if the specified name is a legal Medication class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isProblemsProperty(String propertyName) {
+        return problemsPropertyNames.contains(propertyName);
+    }
+
     public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createRiskFactorModelMap() {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
@@ -444,7 +586,7 @@ public final class ModelClassFactory {
         result.put(riskFactorTypeProperty, riskFactorTypeMetadatas);
 
         final DynamicPropertyType riskFactorCodeProperty = new DynamicPropertyType();
-        riskFactorCodeProperty.setName(RISK_FACTOR_TYPE);
+        riskFactorCodeProperty.setName(RISK_FACTOR_CODE);
         riskFactorCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -458,7 +600,7 @@ public final class ModelClassFactory {
         result.put(isActiveProperty, risActivePropertyMetadatas);
 
         final DynamicPropertyType riskFactorDurationProperty = new DynamicPropertyType();
-        riskFactorDurationProperty.setName(IS_ACTIVE);
+        riskFactorDurationProperty.setName(RISK_FACTOR_CODE);
         riskFactorDurationProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorDurationMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -511,6 +653,16 @@ public final class ModelClassFactory {
         return result;
     }
 
+    /**
+     * Proves if the specified name is a legal Risk Factor class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isRiskFactorProperty(String propertyName) {
+        return riskFactorsPropertyNames.contains(propertyName);
+    }
+
     public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createActivityItemModelMap() {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
@@ -538,7 +690,7 @@ public final class ModelClassFactory {
         result.put(activityNameProperty, activityNameMetadatas);
 
         final DynamicPropertyType assessmentIndicatorProperty = new DynamicPropertyType();
-        assessmentIndicatorProperty.setName(ACTIVITY_NAME);
+        assessmentIndicatorProperty.setName(ACTIVITY_ASSEMENT_INDICATOR);
         assessmentIndicatorProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> assessmentIndicatorPropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -589,12 +741,22 @@ public final class ModelClassFactory {
         return result;
     }
 
+    /**
+     * Proves if the specified name is a legal Activity Item class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isActivityItemProperty(String propertyName) {
+        return activityItemPropertyNames.contains(propertyName);
+    }
+
     public static Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> createActivityLevelModelMap() {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
 
         final DynamicPropertyType activityLevelIndicatorProperty = new DynamicPropertyType();
-        activityLevelIndicatorProperty.setName(ACTIVITY_MOD_INDICATOR);
+        activityLevelIndicatorProperty.setName(ACTIVITY_LAVEL_INDICATOR);
         activityLevelIndicatorProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> activityLevelIndicatorMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -622,8 +784,16 @@ public final class ModelClassFactory {
         result.put(obsDateProperty, obsDateDateMetadatas);
 
 
-
-
         return result;
+    }
+
+    /**
+     * Proves if the specified name is a legal Activity Item class property. 
+     * 
+     * @param propertyName the property to prove.
+     * @return true if the specified name is a legal BodyWeigh class property.
+     */
+    public static boolean isActivityLevelProperty(String propertyName) {
+        return activityLevelPropertyNames.contains(propertyName);
     }
 }

@@ -28,6 +28,16 @@ public class Constants {
 
     public static String ACTIVITY_OF_DAILY_LIVING_CLASS_NAME = "Activity Of Daily Living";
 
+    public static String ACTIVITY_ITEM_CLASS_URI =
+            "at.srfg.kmt.ehealth.phrs.datamodel.impl.ActivityItem";
+
+    public static String ACTIVITY_ITEM_CLASS_NAME = "Activity Item";
+
+    public static String ACTIVITY_LEVEL_CLASS_URI =
+            "at.srfg.kmt.ehealth.phrs.datamodel.impl.ActivityLevel";
+
+    public static String ACTIVITY_LEVEL_CLASS_NAME = "Activity Level";
+
     public static String BLOOD_PREASURE_CLASS_URI =
             "at.srfg.kmt.ehealth.phrs.datamodel.impl.BloodPressure";
 
@@ -41,12 +51,17 @@ public class Constants {
     public static String MEDICATION_CLASS_URI =
             "at.srfg.kmt.ehealth.phrs.datamodel.impl.Medication";
 
-    public static String MEDICATION_CLASS_NAME = "MEDICATION";
+    public static String MEDICATION_CLASS_NAME = "Medication";
 
     public static String PROBLEMS_CLASS_URI =
-            "at.srfg.kmt.ehealth.phrs.datamodel.impl.Probmels";
+            "at.srfg.kmt.ehealth.phrs.datamodel.impl.Probmel";
 
     public static String PROBLEMS_CLASS_NAME = "Problems and Symptoms";
+
+    public static String RISK_CLASS_URI =
+            "at.srfg.kmt.ehealth.phrs.datamodel.impl.Risk";
+
+    public static String RISK_CLASS_NAME = "Risk";
 
     public static String CLASS_URI = "class_uri";
 
@@ -73,6 +88,8 @@ public class Constants {
     public static String ACTIVITY_CODE = "activityCode";
 
     public static String ACTIVITY_NAME = "activityName";
+    
+    public static String ACTIVITY_ASSEMENT_INDICATOR = "assessmentIndicator";
 
     public static String ACTIVITY_DURATION_CODE = "activityDurationCode";
 
@@ -131,6 +148,8 @@ public class Constants {
     public static String RISK_FACTOR_TYPE = "riskFactorType";
 
     public static String RISK_FACTOR_CODE = "riskFactorCode";
+    
+    public static String RISK_FACTOR_DURATION = "riskFactorDuration";
 
     public static String HAS_CONTRIBUTION_FACTORS = "hasContributingFactors";
 

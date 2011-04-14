@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
@@ -139,10 +140,44 @@ public class DynamicBeanRepositoryRestWS {
 
         for (DynaProperty dynaProperty : dynaProperties) {
             final String name = dynaProperty.getName();
-            if (ModelClassFactory.isBodyWeighProperty(name)) {
-                final Object contnet = jsonBean.get(name);
-                newDynaBean.set(name, contnet);
+            // FIXME : I do this because like a hot fix for the review
+            // under normal circumstances I it a bean does not match the class
+            // an exception must raises.
+            if (Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_URI.equals(classURI)) {
+                if (ModelClassFactory.isActivityOfDailyLivingProperty(name)) {
+                    final Object contnet = jsonBean.get(name);
+                    newDynaBean.set(name, contnet);
+                }
             }
+            
+            if (Constants.BLOOD_PREASURE_CLASS_URI.equals(classURI)) {
+                if (ModelClassFactory.isBloodPressureProperty(name)) {
+                    final Object contnet = jsonBean.get(name);
+                    newDynaBean.set(name, contnet);
+                }
+            }
+
+            if (Constants.BODY_WEIGHT_CLASS_URI.equals(classURI)) {
+                if (ModelClassFactory.isBodyWeighProperty(name)) {
+                    final Object contnet = jsonBean.get(name);
+                    newDynaBean.set(name, contnet);
+                }
+            }
+            
+            if (Constants.MEDICATION_CLASS_URI.equals(classURI)) {
+                if (ModelClassFactory.isMedicationProperty(name)) {
+                    final Object contnet = jsonBean.get(name);
+                    newDynaBean.set(name, contnet);
+                }
+            }
+
+            if (Constants.PROBLEMS_CLASS_URI.equals(classURI)) {
+                if (ModelClassFactory.isProblemsProperty(name)) {
+                    final Object contnet = jsonBean.get(name);
+                    newDynaBean.set(name, contnet);
+                }
+            }
+
         }
 
         LOGGER.debug("Tries to persist bean : {}", DynamicUtil.toString(newDynaBean));
@@ -151,8 +186,6 @@ public class DynamicBeanRepositoryRestWS {
         // FIXME : return the uRI for the peristed bean
         return Response.status(Status.OK).build();
     }
-    
-    
 
     /**
      * GET based web service used to obtain all version for a bean, the
@@ -255,7 +288,7 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(namingException.getMessage(), namingException);
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
-        
+
         final DynaBean forClass;
         try {
             forClass = beanRepository.getForClass(classUri);
