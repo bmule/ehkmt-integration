@@ -121,7 +121,7 @@ public final class Constants {
     /**
      * Marks the deleted beans.
      */
-    public static final String PHRS_BEAN_IS_DELETED = "_phrsIsDeleted";
+    public static final String PHRS_BEAN_IS_DELETED = "_phrsBeanIsDeleted";
 
     /**
      * Don't let anyone to instantiate this class.
