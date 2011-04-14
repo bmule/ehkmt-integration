@@ -187,10 +187,6 @@ public class DynamicClassRepositoryRestWS {
                 Constants.MEDICATION_CLASS_URI, medicationModelMap);
         registerClass(classRepository, medicationDynamicClass);
 
-
-
-
-
         return Response.status(Status.OK).build();
     }
 
