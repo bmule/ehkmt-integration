@@ -195,13 +195,14 @@ public class DynamicClassRepositoryRestWS {
         final String uri = dynamicClass.getUri();
         final String name = dynamicClass.getName();
         final boolean bodyWeighClassExists =
-                classRepository.exits(Constants.BODY_WEIGHT_CLASS_URI);
+                classRepository.exits(uri);
 
+        String [] toLog = {uri, name};
         if (!bodyWeighClassExists) {
             classRepository.persist(dynamicClass);
-            LOGGER.debug("Persist the class with this URI [{}].", uri);
+            LOGGER.debug("Persist the class with this URI [{}] and name [{}].", toLog);
         } else {
-            LOGGER.debug("The class with this URI [{}] was already registered.", uri);
+            LOGGER.debug("The class with this URI [{}] and Name [{}] was already registered.", toLog);
         }
     }
 }
