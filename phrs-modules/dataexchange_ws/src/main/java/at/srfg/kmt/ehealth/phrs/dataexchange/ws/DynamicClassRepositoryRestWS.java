@@ -159,7 +159,7 @@ public class DynamicClassRepositoryRestWS {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityLevelModelMap =
                 ModelClassFactory.createBodyWeighModelMap();
         final DynamicClass activityLevelDynamicClass =
-                ModelFactory.buildDynamicClass(Constants.ACTIVITY_LEVEL_CLASS_URI,
+                ModelFactory.buildDynamicClass(Constants.ACTIVITY_LEVEL_CLASS_NAME,
                 Constants.ACTIVITY_LEVEL_CLASS_URI, activityLevelModelMap);
         registerClass(classRepository, activityLevelDynamicClass);
 
