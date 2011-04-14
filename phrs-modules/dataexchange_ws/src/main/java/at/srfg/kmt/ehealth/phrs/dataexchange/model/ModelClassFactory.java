@@ -5,10 +5,10 @@
  * Date : Apr 12, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.datamodel.impl;
+package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
 
-import static at.srfg.kmt.ehealth.phrs.datamodel.impl.Constants.*;
+import static at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants.*;
 import java.util.Date;
 import java.util.HashSet;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;

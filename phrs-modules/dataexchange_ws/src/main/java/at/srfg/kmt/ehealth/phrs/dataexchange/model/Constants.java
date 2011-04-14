@@ -5,7 +5,7 @@
  * Date : Apr 12, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.datamodel.impl;
+package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
 
 /**

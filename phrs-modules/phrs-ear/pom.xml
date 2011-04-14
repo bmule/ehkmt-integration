@@ -56,14 +56,6 @@
             <version>0.1-SNAPSHOT</version>
             <type>ejb</type>
         </dependency>
-
-        <dependency>
-            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>phrs-util</artifactId>
-            <version>0.0.1</version>
-            <type>ejb</type>
-        </dependency>
-
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>dataexchange</artifactId>
@@ -153,7 +145,6 @@
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>simple-view</artifactId>
                         </webModule>
-                        
 
                     </modules>
                 </configuration>

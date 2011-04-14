@@ -5,7 +5,7 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
 
-import at.srfg.kmt.ehealth.phrs.datamodel.impl.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 
@@ -13,7 +13,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
-import at.srfg.kmt.ehealth.phrs.datamodel.impl.ModelClassFactory;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
 import java.util.Map;
 import java.util.Set;

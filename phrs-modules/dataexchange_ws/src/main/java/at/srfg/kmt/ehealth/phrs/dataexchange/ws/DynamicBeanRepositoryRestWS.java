@@ -12,7 +12,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
-import at.srfg.kmt.ehealth.phrs.datamodel.impl.ModelClassFactory;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
 import java.util.Set;
 import javax.naming.NamingException;

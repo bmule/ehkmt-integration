@@ -137,8 +137,10 @@
         <!--
         <module>consenteditor</module>       
         -->
+         <module>dataexchange</module>
+   
+        <module>dataexchange_ws</module>
         
-        <module>dataexchange</module>
         <module>simple-view</module>
         
         <module>phrs-util</module>
@@ -146,8 +148,8 @@
         <module>pcc09WS</module>
         <module>pcc10WS</module>
         <module>pcc09service</module>
-        <module>dataexchange_ws</module>
-    <module>datamodel</module>
+        
+        
   </modules>
 
 
