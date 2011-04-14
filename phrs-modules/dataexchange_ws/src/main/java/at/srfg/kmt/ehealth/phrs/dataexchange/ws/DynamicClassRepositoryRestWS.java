@@ -1,6 +1,9 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Project :iCardea
+ * File : DynamicClassRepositoryRestWS.java
+ * Encoding : UTF-8
+ * Date : Mar 22, 2011
+ * User : Mihai Radulescu
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
