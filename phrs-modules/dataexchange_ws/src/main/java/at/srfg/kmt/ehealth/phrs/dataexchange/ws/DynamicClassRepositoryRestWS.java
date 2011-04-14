@@ -167,7 +167,7 @@ public class DynamicClassRepositoryRestWS {
                 final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bloodPreasureModelMap =
                 ModelClassFactory.createBodyWeighModelMap();
         final DynamicClass bloodPreasureDynamicClass =
-                ModelFactory.buildDynamicClass(Constants.BLOOD_PREASURE_CLASS_URI,
+                ModelFactory.buildDynamicClass(Constants.BLOOD_PREASURE_CLASS_NAME,
                 Constants.BLOOD_PREASURE_CLASS_URI, bloodPreasureModelMap);
         registerClass(classRepository, bloodPreasureDynamicClass);
 
@@ -181,7 +181,7 @@ public class DynamicClassRepositoryRestWS {
 
         // medication
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> medicationModelMap =
-                ModelClassFactory.createBodyWeighModelMap();
+                ModelClassFactory.createMedicationModelMap();
         final DynamicClass medicationDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.MEDICATION_CLASS_NAME,
                 Constants.MEDICATION_CLASS_URI, medicationModelMap);
