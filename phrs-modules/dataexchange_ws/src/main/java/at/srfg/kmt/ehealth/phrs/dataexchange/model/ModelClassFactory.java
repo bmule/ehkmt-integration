@@ -177,6 +177,20 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(activityDurationCodeProperty, activityDurationCodeMetadatas);
 
+        final DynamicPropertyType activityFrequencyCodeProperty = new DynamicPropertyType();
+        activityFrequencyCodeProperty.setName(ACTIVITY_FREQUENCY_CODE);
+        activityFrequencyCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityFrequencyCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityDurationCodeProperty, activityFrequencyCodeMetadatas);
+
+        final DynamicPropertyType activityNameProperty = new DynamicPropertyType();
+        activityNameProperty.setName(ACTIVITY_NAME);
+        activityNameProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityNameMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityNameProperty, activityNameMetadatas);
+
         final DynamicPropertyType isActivityAssistedProperty = new DynamicPropertyType();
         isActivityAssistedProperty.setName(IS_ACTIVITY_ASSISTED);
         isActivityAssistedProperty.setType(Boolean.class.getName());
@@ -191,12 +205,27 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(scoreProperty, scorePropertyMetadatas);
 
+        final DynamicPropertyType moodIndicatorProperty = new DynamicPropertyType();
+        moodIndicatorProperty.setName(MOOD_INDICATOR);
+        moodIndicatorProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> moodIndicatorMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(moodIndicatorProperty, moodIndicatorMetadatas);
+
         final DynamicPropertyType valueActivityProperty = new DynamicPropertyType();
         valueActivityProperty.setName(VALUE_ACTIVITY);
         valueActivityProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> valueActivityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(valueActivityProperty, valueActivityMetadatas);
+
+        final DynamicPropertyType commentProperty = new DynamicPropertyType();
+        commentProperty.setName(COMMENT);
+        commentProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> commentMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(commentProperty, commentMetadatas);
+
 
         return result;
     }
@@ -503,7 +532,7 @@ public final class ModelClassFactory {
         result.put(activityFeatureProperty, activityFeatureMetadatas);
 
         final DynamicPropertyType activityFrequencyCodeProperty = new DynamicPropertyType();
-        activityFrequencyCodeProperty.setName(ACTIVITY_FREQUENCY_FEATURE);
+        activityFrequencyCodeProperty.setName(ACTIVITY_FREQUENCY_CODE);
         activityFrequencyCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityFrequencyCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
