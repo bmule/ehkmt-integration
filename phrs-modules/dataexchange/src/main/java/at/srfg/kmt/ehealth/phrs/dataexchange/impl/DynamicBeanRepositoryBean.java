@@ -264,8 +264,8 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final Boolean canRead;
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CANREAD)) {
             final String canReadStr =
-                    (String) dynaBean.get(Constants.PHRS_BEAN_CANREAD);
-            canRead = Boolean.valueOf(uriMsg);
+                    dynaBean.get(Constants.PHRS_BEAN_CANREAD).toString();
+            canRead = Boolean.valueOf(canReadStr);
         } else {
             canRead = Boolean.FALSE;
         }
@@ -278,7 +278,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final boolean canWrite;
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CANWRITE)) {
             final String canUseStr =
-                    (String) dynaBean.get(Constants.PHRS_BEAN_CANWRITE);
+                    dynaBean.get(Constants.PHRS_BEAN_CANWRITE).toString();
             canWrite = Boolean.valueOf(canUseStr);
         } else {
             canWrite = false;
@@ -291,7 +291,7 @@ public class DynamicBeanRepositoryBean implements DynamicBeanRepository {
         final boolean canUse;
         if (DynamicUtil.contains(dynaBean, Constants.PHRS_BEAN_CANUSE)) {
             final String canUseStr =
-                    (String) dynaBean.get(Constants.PHRS_BEAN_CANUSE);
+                    dynaBean.get(Constants.PHRS_BEAN_CANUSE).toString();
             canUse = Boolean.valueOf(canUseStr);
 
         } else {
