@@ -348,6 +348,10 @@ public class DynamicBeanRepositoryRestWS {
         for (DynaProperty property : dynaProperties) {
             final String name = property.getName();
             Object value = forClass.get(name);
+            if (value == null) {
+                continue;
+            }
+            
             final Class type = property.getType();
             if (Date.class.equals(type)) {
                 value = dateFormat.format((Date) value).toString();
