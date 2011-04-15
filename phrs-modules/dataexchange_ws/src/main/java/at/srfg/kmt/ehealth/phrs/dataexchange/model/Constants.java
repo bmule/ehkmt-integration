@@ -93,7 +93,8 @@ public class Constants {
 
     public static String ACTIVITY_FEATURE = "activityFeature";
 
-    public static String ACTIVITY_FREQUENCY_FEATURE = "activityFrequencyCode";
+    public static String ACTIVITY_FREQUENCY_CODE = "activityFrequencyCode";
+    
 
     public static String ACTIVITY_MOD_INDICATOR = "activityMoodIndicator";
 
