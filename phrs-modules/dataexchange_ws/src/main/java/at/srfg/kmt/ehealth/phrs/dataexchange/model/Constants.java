@@ -63,7 +63,6 @@ public class Constants {
 
     public static String RISK_CLASS_NAME = "Risk";
 
-
     public static String COMMENT = "comment";
 
     public static String BLOOD_PREASURE_DIASTOLIC = "bpDiastolic";
@@ -161,4 +160,6 @@ public class Constants {
     public static String TREATMENTS_CODES = "treatmentStatmentCodes";
 
     public static String TRATMENTS_STATEMENT_PRIMARY = "treatmentStatementPrimary";
+    
+    public static String MOOD_INDICATOR = "moodIndicator";
 }
