@@ -149,7 +149,7 @@ public class DynamicClassRepositoryRestWS {
 
         // ActivityItem
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityItemModelMap =
-                ModelClassFactory.createBodyWeighModelMap();
+                ModelClassFactory.createActivityItemModelMap();
         final DynamicClass activityItemDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.ACTIVITY_ITEM_CLASS_NAME,
                 Constants.ACTIVITY_ITEM_CLASS_URI, activityItemModelMap);
@@ -157,7 +157,7 @@ public class DynamicClassRepositoryRestWS {
 
         // ActivityLevel
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityLevelModelMap =
-                ModelClassFactory.createBodyWeighModelMap();
+                ModelClassFactory.createActivityLevelModelMap();
         final DynamicClass activityLevelDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.ACTIVITY_LEVEL_CLASS_NAME,
                 Constants.ACTIVITY_LEVEL_CLASS_URI, activityLevelModelMap);
@@ -165,7 +165,7 @@ public class DynamicClassRepositoryRestWS {
 
         // BloodPressure
                 final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bloodPreasureModelMap =
-                ModelClassFactory.createBodyWeighModelMap();
+                ModelClassFactory.createBloodPressureModelMap();
         final DynamicClass bloodPreasureDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.BLOOD_PREASURE_CLASS_NAME,
                 Constants.BLOOD_PREASURE_CLASS_URI, bloodPreasureModelMap);
@@ -189,7 +189,7 @@ public class DynamicClassRepositoryRestWS {
 
         // medication
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> riskModelMap =
-                ModelClassFactory.createMedicationModelMap();
+                ModelClassFactory.createRiskFactorModelMap();
         final DynamicClass riskDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.RISK_CLASS_NAME,
                 Constants.RISK_CLASS_URI, riskModelMap);
