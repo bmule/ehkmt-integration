@@ -164,7 +164,7 @@ public class DynamicClassRepositoryRestWS {
         registerClass(classRepository, activityLevelDynamicClass);
 
         // BloodPressure
-                final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bloodPreasureModelMap =
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> bloodPreasureModelMap =
                 ModelClassFactory.createBloodPressureModelMap();
         final DynamicClass bloodPreasureDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.BLOOD_PREASURE_CLASS_NAME,
@@ -194,7 +194,7 @@ public class DynamicClassRepositoryRestWS {
                 ModelFactory.buildDynamicClass(Constants.RISK_CLASS_NAME,
                 Constants.RISK_CLASS_URI, riskModelMap);
         registerClass(classRepository, riskDynamicClass);
-        
+
         // Problems
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> problemsModelMap =
                 ModelClassFactory.createProblemsModelMap();
@@ -213,7 +213,7 @@ public class DynamicClassRepositoryRestWS {
         final boolean bodyWeighClassExists =
                 classRepository.exits(uri);
 
-        String [] toLog = {uri, name};
+        String[] toLog = {uri, name};
         if (!bodyWeighClassExists) {
             classRepository.persist(dynamicClass);
             LOGGER.debug("Persist the class with this URI [{}] and Name [{}].", toLog);
