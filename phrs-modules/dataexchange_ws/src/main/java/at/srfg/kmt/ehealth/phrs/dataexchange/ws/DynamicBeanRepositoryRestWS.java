@@ -104,8 +104,10 @@ public class DynamicBeanRepositoryRestWS {
     @Path("/persist")
     @Produces("application/json")
     public Response persist(@FormParam("dynaBean") String dynaBean) {
+        
+        LOGGER.debug("Input {}", dynaBean == null ? "NULL" : dynaBean );
 
-        if (dynaBean == null && !dynaBean.isEmpty()) {
+        if (dynaBean == null || !dynaBean.isEmpty()) {
             LOGGER.error("This dynabean JSON representation can not be null or empty string.");
             return Response.status(Status.BAD_REQUEST).build();
         }
