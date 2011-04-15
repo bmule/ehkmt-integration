@@ -157,6 +157,7 @@ public class DynamicBeanRepositoryRestWS {
         // I need this for type convesion. The from json conversion is not 
         // working always.
         final Map<String, Class> properties = getProperties(newDynaBean);
+        LOGGER.debug("Used class : ", properties);
 
         for (DynaProperty dynaProperty : dynaProperties) {
 
