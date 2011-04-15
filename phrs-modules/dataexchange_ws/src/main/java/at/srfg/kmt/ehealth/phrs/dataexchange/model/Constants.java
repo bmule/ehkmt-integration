@@ -54,7 +54,7 @@ public class Constants {
     public static String MEDICATION_CLASS_NAME = "Medication";
 
     public static String PROBLEMS_CLASS_URI =
-            "at.srfg.kmt.ehealth.phrs.datamodel.impl.Probmel";
+            "at.srfg.kmt.ehealth.phrs.datamodel.impl.Problem";
 
     public static String PROBLEMS_CLASS_NAME = "Problems and Symptoms";
 
@@ -112,11 +112,11 @@ public class Constants {
 
     public static String MEDICATION_CODE = "medicationCode";
 
-    public static String MEDICATION_FREQENCY_INTERVAL = "medicationFrequencyInterval";
+    public static String MEDICATION_FREQUENCY_INTERVAL = "medicationFrequencyInterval";
 
-    public static String MEDICATION_FREQENCY_TIMEOFDAY = "medicationFrequencyTimeOfDay";
+    public static String MEDICATION_FREQUENCY_TIMEOFDAY = "medicationFrequencyTimeOfDay";
     
-    public static String MEDICATION_FREQENCY_QUANTITY = "medicationFrequencyQuantity";
+    public static String MEDICATION_FREQUENCY_QUANTITY = "medicationFrequencyQuantity";
 
     public static String MEDICATION_NAME_TEXT = "medicationNameText";
 
