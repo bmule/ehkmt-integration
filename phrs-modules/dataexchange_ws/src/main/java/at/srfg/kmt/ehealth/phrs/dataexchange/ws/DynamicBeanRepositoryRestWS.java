@@ -8,13 +8,14 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
 
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelClassFactory;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import javax.naming.NamingException;
 import javax.ws.rs.FormParam;
@@ -27,6 +28,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response.Status;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.DynaProperty;
 import org.slf4j.Logger;
@@ -50,7 +52,17 @@ import org.slf4j.LoggerFactory;
 @Path("/dynamic_bean_repository")
 public class DynamicBeanRepositoryRestWS {
 
-    public static final String CLASS_URI_PROPERTY = "class_uri";
+    /**
+     * It registers the <code>PatternBasedDateConverter</code> to the 
+     * <code>org.apache.commons.beanutils.ConvertUtils.ConvertUtils</code>.
+     * This is used to convert string to date.
+     */
+    static {
+        final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        PatternBasedDateConverter dateConverter =
+                new PatternBasedDateConverter(pattern);
+        ConvertUtils.register(dateConverter, java.util.Date.class);
+    }
 
     /**
      * The Logger instance. All log messages from this class
@@ -81,8 +93,8 @@ public class DynamicBeanRepositoryRestWS {
     @Produces("application/json")
     public Response persist(@FormParam("dynaBean") String dynaBean) {
 
-        if (dynaBean == null && dynaBean.isEmpty()) {
-            LOGGER.error("This dynabean JSON representation [{}] is not valid", dynaBean);
+        if (dynaBean == null && !dynaBean.isEmpty()) {
+            LOGGER.error("This dynabean JSON representation can not be null or empty string.");
             return Response.status(Status.BAD_REQUEST).build();
         }
 
@@ -95,10 +107,14 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(rte.getMessage(), rte);
             return Response.status(Status.BAD_REQUEST).build();
         }
-
-        final String classURI = (String) json.get(CLASS_URI_PROPERTY);
-        if (classURI == null) {
-            LOGGER.error("This dynabean JSON representation [{}] does not have a class_uri property", dynaBean);
+                
+        final String classURI = json.getString(Constants.PHRS_BEAN_CLASS_URI);
+        // FIXME : Padawan, there are more elegant ways to prove the null value.
+        if (classURI == null 
+                || "null".equals(classURI) 
+                || classURI.trim().isEmpty()) {
+            final Object [] toLog = {dynaBean, Constants.PHRS_BEAN_CLASS_URI}; 
+            LOGGER.error("This dynabean JSON representation [{}] does not have a [{}] property.", toLog);
             return Response.status(Status.BAD_REQUEST).build();
         }
 
@@ -138,45 +154,35 @@ public class DynamicBeanRepositoryRestWS {
         final DynaProperty[] dynaProperties =
                 jsonBean.getDynaClass().getDynaProperties();
 
+        // I need this for type convesion. The from json conversion is not 
+        // working always.
+        final Map<String, Class> properties = getProperties(newDynaBean);
+
         for (DynaProperty dynaProperty : dynaProperties) {
+
             final String name = dynaProperty.getName();
-            // FIXME : I do this because like a hot fix for the review
-            // under normal circumstances I it a bean does not match the class
+            final Class propertyClass = properties.get(name);
+            
+            // FIXME : This is just a hot fix for the review.
+            // Under normal circumstances if a bean does not match its class
             // an exception must raises.
-            if (Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_URI.equals(classURI)) {
-                if (ModelClassFactory.isActivityOfDailyLivingProperty(name)) {
-                    final Object contnet = jsonBean.get(name);
-                    newDynaBean.set(name, contnet);
-                }
-            }
+            // In the next version this check must be removed
+            if (propertyClass == null) {
+                LOGGER.debug("Property [{}] ignored, it does belong to the declared class.", name);
+                continue;
+            } 
             
-            if (Constants.BLOOD_PREASURE_CLASS_URI.equals(classURI)) {
-                if (ModelClassFactory.isBloodPressureProperty(name)) {
-                    final Object contnet = jsonBean.get(name);
-                    newDynaBean.set(name, contnet);
-                }
-            }
-
-            if (Constants.BODY_WEIGHT_CLASS_URI.equals(classURI)) {
-                if (ModelClassFactory.isBodyWeighProperty(name)) {
-                    final Object contnet = jsonBean.get(name);
-                    newDynaBean.set(name, contnet);
-                }
-            }
+            final Object content = json.get(name);
+            final Object handleMsg[] = {name, propertyClass.getName(), content };
+            LOGGER.debug("Try to handle property [{}] with type [{}] and content [{}].", handleMsg);
             
-            if (Constants.MEDICATION_CLASS_URI.equals(classURI)) {
-                if (ModelClassFactory.isMedicationProperty(name)) {
-                    final Object contnet = jsonBean.get(name);
-                    newDynaBean.set(name, contnet);
-                }
-            }
+            final Object value = content == null
+                    ? null
+                    : ConvertUtils.convert(content.toString(), propertyClass);
 
-            if (Constants.PROBLEMS_CLASS_URI.equals(classURI)) {
-                if (ModelClassFactory.isProblemsProperty(name)) {
-                    final Object contnet = jsonBean.get(name);
-                    newDynaBean.set(name, contnet);
-                }
-            }
+            final Object toLog[] = {name, value};
+            LOGGER.debug("Property [{}] value [{}] was persisted.", toLog);
+            newDynaBean.set(name, value);
 
         }
 
@@ -184,8 +190,23 @@ public class DynamicBeanRepositoryRestWS {
         beanRepository.add(newDynaBean);
         LOGGER.debug("The bean [{}] was succefully persisted.", DynamicUtil.toString(newDynaBean));
         // FIXME : return the uRI for the peristed bean
+
         return Response.status(Status.OK).build();
     }
+    
+    private Map<String, Class> getProperties(DynaBean bean) {
+        final DynaProperty[] dynaProperties = 
+                bean.getDynaClass().getDynaProperties();
+        final Map<String, Class> result = new HashMap<String, Class>();
+        for (DynaProperty property : dynaProperties) {
+            final String name = property.getName();
+            final Class type = property.getType();
+            result.put(name, type);
+        }
+        
+        return result;
+    }
+    
 
     /**
      * GET based web service used to obtain all version for a bean, the
@@ -208,6 +229,8 @@ public class DynamicBeanRepositoryRestWS {
         }
 
         final DynamicClassRepository classRepository;
+
+
         try {
             classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
         } catch (NamingException namingException) {
@@ -222,6 +245,8 @@ public class DynamicBeanRepositoryRestWS {
         }
 
         final DynamicBeanRepository beanRepository;
+
+
         try {
             beanRepository = JBossJNDILookup.lookupLocal(DynamicBeanRepository.class);
         } catch (NamingException namingException) {
@@ -268,6 +293,8 @@ public class DynamicBeanRepositoryRestWS {
         }
 
         final DynamicClassRepository classRepository;
+
+
         try {
             classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
         } catch (NamingException namingException) {
@@ -282,6 +309,8 @@ public class DynamicBeanRepositoryRestWS {
         }
 
         final DynamicBeanRepository beanRepository;
+
+
         try {
             beanRepository = JBossJNDILookup.lookupLocal(DynamicBeanRepository.class);
         } catch (NamingException namingException) {

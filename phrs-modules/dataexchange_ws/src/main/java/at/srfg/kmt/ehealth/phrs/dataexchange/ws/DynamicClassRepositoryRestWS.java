@@ -187,6 +187,22 @@ public class DynamicClassRepositoryRestWS {
                 Constants.MEDICATION_CLASS_URI, medicationModelMap);
         registerClass(classRepository, medicationDynamicClass);
 
+        // medication
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> riskModelMap =
+                ModelClassFactory.createMedicationModelMap();
+        final DynamicClass riskDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.RISK_CLASS_NAME,
+                Constants.RISK_CLASS_URI, riskModelMap);
+        registerClass(classRepository, riskDynamicClass);
+        
+        // Problems
+        final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> problemsModelMap =
+                ModelClassFactory.createProblemsModelMap();
+        final DynamicClass problemsDynamicClass =
+                ModelFactory.buildDynamicClass(Constants.PROBLEMS_CLASS_NAME,
+                Constants.PROBLEMS_CLASS_URI, problemsModelMap);
+        registerClass(classRepository, problemsDynamicClass);
+
         return Response.status(Status.OK).build();
     }
 
@@ -200,7 +216,7 @@ public class DynamicClassRepositoryRestWS {
         String [] toLog = {uri, name};
         if (!bodyWeighClassExists) {
             classRepository.persist(dynamicClass);
-            LOGGER.debug("Persist the class with this URI [{}] and name [{}].", toLog);
+            LOGGER.debug("Persist the class with this URI [{}] and Name [{}].", toLog);
         } else {
             LOGGER.debug("The class with this URI [{}] and Name [{}] was already registered.", toLog);
         }
