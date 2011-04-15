@@ -356,8 +356,6 @@ public class DynamicBeanRepositoryRestWS {
         }
         LOGGER.debug("The JSON bean {} is return.", result.toString());
 
-        
-
         return Response.ok(result.toString()).build();
     }
 }
