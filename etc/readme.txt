@@ -36,6 +36,14 @@ This file is only for developing/testing purpose.
 
 
 
+phrs_mes-service.xml
+
+This file is used to configurate the JBoss application server JMS queue, more preciselly
+this file is used to defines a JMS queue named phrs_queue (JNDI : /queue/phrs_queue). 
+This file is JBoss 5.1.X  specific.
+To use it please copy it in the <JBoss_Home>/server/defaut and restart the Jboss server.
+
+
 
 QUPC_AR004040UV_Service.jar and QUPC_AR004040UV_Service-sources.jar
 This are the generated classes for the QUPC_AR004040UV_Service, the classes are generated with the wsconsume tool from JBoss distribution.
