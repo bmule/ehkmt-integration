@@ -46,6 +46,14 @@ class PatternBasedDateConverter implements Converter {
             if (o == null) {
                 return null;
             }
+            
+            if ("null".equals(o)) {
+                return null;
+            }
+            
+            if (o.toString().trim().isEmpty()) {
+                return null;
+            }
 
             if (o instanceof String && type == Date.class) {
                 final Date result;
