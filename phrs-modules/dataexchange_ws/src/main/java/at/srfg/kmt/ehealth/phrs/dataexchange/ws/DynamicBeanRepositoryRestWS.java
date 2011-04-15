@@ -57,11 +57,17 @@ public class DynamicBeanRepositoryRestWS {
      * <code>org.apache.commons.beanutils.ConvertUtils.ConvertUtils</code>.
      * This is used to convert string to date.
      */
-    static {
+    {
         final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
         PatternBasedDateConverter dateConverter =
                 new PatternBasedDateConverter(pattern);
         ConvertUtils.register(dateConverter, java.util.Date.class);
+        
+        final HashMapConverter hashMapConverter = new HashMapConverter();
+        ConvertUtils.register(hashMapConverter, java.util.HashMap.class);
+        
+        final HashSetConverter hashSetConverter = new HashSetConverter();
+        ConvertUtils.register(hashSetConverter, java.util.HashSet.class);
     }
 
     /**

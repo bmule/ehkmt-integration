@@ -43,24 +43,24 @@ class PatternBasedDateConverter implements Converter {
     @Override
     public Object convert(Class type, Object o) {
 
-        if (o == null) {
-            return null;
-        }
-
-        if (o instanceof String && type == Date.class) {
-            final Date result;
-            try {
-                result = dateFormat.parse(o.toString());
-            } catch (ParseException ex) {
-                LOGGER.error("The date [{}] can not be converted.", o);
-                LOGGER.error(ex.getMessage(), ex);
+            if (o == null) {
                 return null;
             }
-            
-            return result;
-        }
 
-        return null;
+            if (o instanceof String && type == Date.class) {
+                final Date result;
+                try {
+                    result = dateFormat.parse(o.toString());
+                } catch (ParseException ex) {
+                    LOGGER.error("The date [{}] can not be converted.", o);
+                    LOGGER.error(ex.getMessage(), ex);
+                    return null;
+                }
+
+                return result;
+            }
+
+            return null;
 
 
     }
