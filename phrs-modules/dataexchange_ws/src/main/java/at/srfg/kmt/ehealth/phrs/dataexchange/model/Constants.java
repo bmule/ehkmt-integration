@@ -115,6 +115,8 @@ public class Constants {
     public static String MEDICATION_FREQENCY_INTERVAL = "medicationFrequencyInterval";
 
     public static String MEDICATION_FREQENCY_TIMEOFDAY = "medicationFrequencyTimeOfDay";
+    
+    public static String MEDICATION_FREQENCY_QUANTITY = "medicationFrequencyQuantity";
 
     public static String MEDICATION_NAME_TEXT = "medicationNameText";
 
