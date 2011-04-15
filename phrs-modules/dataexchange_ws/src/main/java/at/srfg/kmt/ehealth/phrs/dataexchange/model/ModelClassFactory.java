@@ -254,21 +254,21 @@ public final class ModelClassFactory {
         result.put(medicationCodeProperty, medicationCodeMetadatas);
 
         final DynamicPropertyType medicationFrequencyIntervalProperty = new DynamicPropertyType();
-        medicationFrequencyIntervalProperty.setName(MEDICATION_FREQENCY_INTERVAL);
+        medicationFrequencyIntervalProperty.setName(MEDICATION_FREQUENCY_INTERVAL);
         medicationFrequencyIntervalProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationFrequencyIntervalMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(medicationFrequencyIntervalProperty, medicationFrequencyIntervalMetadatas);
 
-        final DynamicPropertyType medicationFrequencyProperty = new DynamicPropertyType();
-        medicationFrequencyProperty.setName(MEDICATION_QUANTITY);
-        medicationFrequencyProperty.setType(String.class.getName());
+        final DynamicPropertyType medicationFrequencyQuantityProperty = new DynamicPropertyType();
+        medicationFrequencyQuantityProperty.setName(MEDICATION_FREQUENCY_QUANTITY);
+        medicationFrequencyQuantityProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationFrequencyQuantityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        result.put(medicationFrequencyProperty, medicationFrequencyQuantityMetadatas);
+        result.put(medicationFrequencyQuantityProperty, medicationFrequencyQuantityMetadatas);
 
         final DynamicPropertyType medicationFrequencyTimeOfDayProperty = new DynamicPropertyType();
-        medicationFrequencyTimeOfDayProperty.setName(MEDICATION_FREQENCY_TIMEOFDAY);
+        medicationFrequencyTimeOfDayProperty.setName(MEDICATION_FREQUENCY_TIMEOFDAY);
         medicationFrequencyTimeOfDayProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> medicationFrequencyTimeOfDayMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
@@ -343,6 +343,7 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> prescribedByRoleMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(prescribedByRoleProperty, prescribedByRoleMetadatas);
+
 
         final DynamicPropertyType commentProperty = new DynamicPropertyType();
         commentProperty.setName(COMMENT);
