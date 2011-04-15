@@ -495,13 +495,6 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(assessmentIndicatorProperty, assessmentIndicatorPropertyMetadatas);
 
-        final DynamicPropertyType isActiveStatusProperty = new DynamicPropertyType();
-        isActiveStatusProperty.setName(IS_ACTIVE);
-        isActiveStatusProperty.setType(String.class.getName());
-        final Set<DynamicPropertyMetadata> isActiveStatusMetadatas =
-                new HashSet<DynamicPropertyMetadata>();
-        result.put(isActiveStatusProperty, isActiveStatusMetadatas);
-
         final DynamicPropertyType activityFeatureProperty = new DynamicPropertyType();
         activityFeatureProperty.setName(ACTIVITY_FEATURE);
         activityFeatureProperty.setType(HashMap.class.getName());
@@ -515,6 +508,27 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> activityFrequencyCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(activityFrequencyCodeProperty, activityFrequencyCodeMetadatas);
+
+        final DynamicPropertyType activityIsActiveProperty = new DynamicPropertyType();
+        activityIsActiveProperty.setName(IS_ACTIVE);
+        activityIsActiveProperty.setType(Boolean.class.getName());
+        final Set<DynamicPropertyMetadata> activityIsActiveMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityIsActiveProperty, activityIsActiveMetadatas);
+
+        final DynamicPropertyType activityDurationProperty = new DynamicPropertyType();
+        activityDurationProperty.setName(ACTIVITY_DURATION_CODE);
+        activityDurationProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> activityDurationMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(activityDurationProperty, activityDurationMetadatas);
+
+        final DynamicPropertyType moodIndicatorProperty = new DynamicPropertyType();
+        moodIndicatorProperty.setName(MOOD_INDICATOR);
+        moodIndicatorProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> moodIndicatorMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(moodIndicatorProperty, moodIndicatorMetadatas);
 
         final DynamicPropertyType dateStartProperty = new DynamicPropertyType();
         dateStartProperty.setName(OBSERVATION_DATE_START);
