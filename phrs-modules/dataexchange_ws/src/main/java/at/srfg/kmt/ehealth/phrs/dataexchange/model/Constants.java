@@ -63,7 +63,6 @@ public class Constants {
 
     public static String RISK_CLASS_NAME = "Risk";
 
-    public static String CLASS_URI = "class_uri";
 
     public static String COMMENT = "comment";
 
