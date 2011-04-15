@@ -14,6 +14,9 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -51,6 +54,9 @@ import org.slf4j.LoggerFactory;
  */
 @Path("/dynamic_bean_repository")
 public class DynamicBeanRepositoryRestWS {
+    
+    private final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private final DateFormat dateFormat;
 
     /**
      * It registers the <code>PatternBasedDateConverter</code> to the 
@@ -58,7 +64,7 @@ public class DynamicBeanRepositoryRestWS {
      * This is used to convert string to date.
      */
     {
-        final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+        dateFormat = new SimpleDateFormat(pattern);
         PatternBasedDateConverter dateConverter =
                 new PatternBasedDateConverter(pattern);
         ConvertUtils.register(dateConverter, java.util.Date.class);
@@ -163,7 +169,7 @@ public class DynamicBeanRepositoryRestWS {
         // I need this for type convesion. The from json conversion is not 
         // working always.
         final Map<String, Class> properties = getProperties(newDynaBean);
-        LOGGER.debug("Used class : ", properties);
+        LOGGER.debug("Used class : {}", properties.toString());
 
         for (DynaProperty dynaProperty : dynaProperties) {
 
@@ -333,9 +339,25 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        final String jsonBean = DynamicUtil.toJSONString(forClass);
-        LOGGER.debug("The bean {} is return.", jsonBean);
+        LOGGER.debug("Tries to parse bean {} in to JSON.", DynamicUtil.toString(forClass) );
+        JSONObject result = new JSONObject();
+        final DynaProperty[] dynaProperties = forClass.getDynaClass().getDynaProperties();
+        // FIXME : this is a hot fix for the review
+        // for some reasons the @!*&%?! date is wrong processes (by default),
+        // Use the JSON processors to customize this
+        for (DynaProperty property : dynaProperties) {
+            final String name = property.getName();
+            Object value = forClass.get(name);
+            final Class type = property.getType();
+            if (Date.class.equals(type)) {
+                value = dateFormat.format((Date) value).toString();
+            }
+            result.put(name, value);
+        }
+        LOGGER.debug("The JSON bean {} is return.", result.toString());
 
-        return Response.ok(jsonBean).build();
+        
+
+        return Response.ok(result.toString()).build();
     }
 }
