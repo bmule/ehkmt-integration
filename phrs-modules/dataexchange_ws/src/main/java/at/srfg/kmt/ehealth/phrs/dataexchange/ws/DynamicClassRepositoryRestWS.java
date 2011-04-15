@@ -141,7 +141,7 @@ public class DynamicClassRepositoryRestWS {
 
         // ActivityOfDailyLiving
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> activityOfDailyModelMap =
-                ModelClassFactory.createBodyWeighModelMap();
+                ModelClassFactory.createActivityOfDailyLivingModelMap();
         final DynamicClass activityOfDailyDynamicClass =
                 ModelFactory.buildDynamicClass(Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_NAME,
                 Constants.ACTIVITY_OF_DAILY_LIVING_CLASS_URI, activityOfDailyModelMap);
