@@ -264,7 +264,7 @@ public class DynamicBeanRepositoryRestWS {
 
         final JSONArray array = new JSONArray();
         for (DynaBean dynaBean : forClass) {
-            final String json = DynamicUtil.toString(dynaBean);
+            final String json = DynamicUtil.toJSONString(dynaBean);
             array.add(json);
         }
 
@@ -326,7 +326,7 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        final String jsonBean = DynamicUtil.toString(forClass);
+        final String jsonBean = DynamicUtil.toJSONString(forClass);
         LOGGER.debug("The bean {} is return.", jsonBean);
 
         return Response.ok(jsonBean).build();
