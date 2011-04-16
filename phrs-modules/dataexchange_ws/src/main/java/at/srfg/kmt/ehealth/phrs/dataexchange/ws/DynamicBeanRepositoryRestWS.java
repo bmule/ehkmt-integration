@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.naming.NamingException;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -103,7 +104,8 @@ public class DynamicBeanRepositoryRestWS {
     @POST
     @Path("/persist")
     @Produces("application/json")
-    public Response persist(@FormParam("dynaBean") String dynaBean) {
+    @Consumes("application/json")
+    public Response persist(String dynaBean) {
         
         LOGGER.debug("Input {}", dynaBean == null ? "NULL" : dynaBean );
 
