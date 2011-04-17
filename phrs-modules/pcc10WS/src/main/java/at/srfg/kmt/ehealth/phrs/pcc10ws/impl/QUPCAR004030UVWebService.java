@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import javax.jws.WebService;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
@@ -18,7 +19,11 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This web service end point is able to process PCC10 queries.
+ * This web service end point is able to process PCC10 queries. </br>
+ * The main purpose for this class is a test one, this calss is able to accept 
+ * PCC10 requests and to log them using the using the underlying logging 
+ * mechanisms. If the request is successfully logged then a PCC10 specific 
+ * acknowledge is send it back.
  * 
  * @version 0.1
  * @since 0.1
@@ -34,9 +39,49 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(QUPCAR004030UVWebService.class);
+    
+    /**
+     * Used to create PCC10 specific acknowledges.
+     */
+    private final static PCC10AcknowledgeFactory ACKNOWLEDGE_FACTORY;
+    
+    /**
+     * Used to initialize the <code>ACKNOWLEDGE_FACTORY</code>.
+     */
+    static {
+        // FIXME : this construct can create problems on application server with 
+        // mutiple JVMs. use life cycle method in the future.
+        ACKNOWLEDGE_FACTORY = new PCC10AcknowledgeFactory();
+    }
+    
+    
+    /**
+     * Builds a <code>QUPCAR004030UVWebService</code> instance.
+     */
+    public QUPCAR004030UVWebService() {
+        // UNIMPLEMENED
+    }
 
+    /**
+     * Receive the PCC10 request and log it (using the underlying logging 
+     * mechanisms).
+     * 
+     * @param request the incoming request.
+     * @return an success (PCC10 specific) acknowledge.
+     */
     @Override
-    public MCCIIN000002UV01 qupcAR004030UVQUPCIN043200UV(QUPCIN043200UV01 qpcnv) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public MCCIIN000002UV01 qupcAR004030UVQUPCIN043200UV(QUPCIN043200UV01 request) {
+        LOGGER.debug("Query [{}] was received. The query preocess starts.", request);
+        
+        final MCCIIN000002UV01 acknoledge;
+        try {
+            acknoledge = ACKNOWLEDGE_FACTORY.build();
+        } catch (PCC10BuildException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            // FIXME : notify the client, padawan.
+            return null;
+        }
+        
+        return acknoledge;
     }
 }
