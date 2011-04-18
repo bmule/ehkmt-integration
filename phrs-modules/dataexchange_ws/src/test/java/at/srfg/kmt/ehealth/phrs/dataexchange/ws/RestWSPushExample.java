@@ -44,7 +44,7 @@ public class RestWSPushExample {
 
     private static void push(File jsonFile) throws Exception {
         final String uri =
-                "http://localhost:8080/dataexchange_ws/dynamic_bean_repository/persist";
+                "http://localhost:8080/dataexchange_ws/dynamic_bean_repository/push";
         System.out.println("Send POST request on : " + uri);
         
         final String json = 
