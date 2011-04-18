@@ -17,6 +17,8 @@ import java.util.List;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import org.hl7.v3.*;
+import org.jboss.resteasy.client.ClientRequest;
+import org.jboss.resteasy.client.ClientResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +54,12 @@ class QUPCIN043100UV01Processor {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(QUPCIN043100UV01Processor.class);
+    
+    /**
+     * This is the end point where the pcc10 transaction can be triggered.
+     */
+    private static final String PC10_NOTIFY_END_POINT = 
+            "http://localhost:8080/pcc10ws/restws/pcc10/notify";
 
     /**
      * The acknowledge for this processes, the acknowledge result after a query
@@ -81,14 +89,14 @@ class QUPCIN043100UV01Processor {
      * argument is null.
      */
     void process(QUPCIN043100UV01 qupcin043100UV01) {
-        
+
         if (qupcin043100UV01 == null) {
-            final NullPointerException nullException = 
+            final NullPointerException nullException =
                     new NullPointerException("The qupcin043100UV01 argument can not be null");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
-
+        
         boolean isAcknowledgementAlways =
                 QueryFactory.isAcknowledgementAlways(qupcin043100UV01);
         if (isAcknowledgementAlways) {
@@ -104,14 +112,17 @@ class QUPCIN043100UV01Processor {
                 qupcin043100UV01.getReceiver();
         process(receivers);
 
-        final QUPCIN043100UV01QUQIMT020001UV01ControlActProcess controlActProcess = 
+        final QUPCIN043100UV01QUQIMT020001UV01ControlActProcess controlActProcess =
                 qupcin043100UV01.getControlActProcess();
 
         final List<QUPCMT040300UV01ParameterList> parameterList =
                 controlActProcess.getQueryByParameter().getValue().getParameterList();
+        String toNotify = null;
         for (QUPCMT040300UV01ParameterList param : parameterList) {
-            process(param);
+            toNotify = process(param);
         }
+        
+        sendNotiffy(toNotify);
     }
 
     private void process(MCCIMT000100UV01Sender sender) {
@@ -128,7 +139,9 @@ class QUPCIN043100UV01Processor {
     private void process(MCCIMT000100UV01Receiver receiver) {
     }
 
-    private void process(QUPCMT040300UV01ParameterList parameter) {
+    private String process(QUPCMT040300UV01ParameterList parameter) {
+        
+        final StringBuffer result = new StringBuffer();
 
         // the patient id for this list element, the list can contain more
         // patients.
@@ -137,6 +150,8 @@ class QUPCIN043100UV01Processor {
                 String.format("Patient id :%s ", toString(patientIdIntanceId));
         LOGGER.debug(patientIdMsg);
         // send this to EM
+        result.append(patientIdIntanceId.getExtension());
+        result.append("-");
 
 
         final QUPCMT040300UV01CareProvisionCode provisionCode =
@@ -148,7 +163,7 @@ class QUPCIN043100UV01Processor {
                 toString(provCodeConceptDescriptor));
         LOGGER.debug(provCodeMsg);
         // send this to EM
-
+        result.append(provCodeConceptDescriptor.getCode());
 
         // obtains the Care Provision Reasons (it can be 0..*)
         // This element identifies the reason why the result was recorded.
@@ -157,7 +172,7 @@ class QUPCIN043100UV01Processor {
 
         if (careProvisionReasons.isEmpty()) {
             LOGGER.warn("No care provision reason available.");
-            return;
+            return null;
         }
 
         // I know that I have only one reason.
@@ -177,7 +192,7 @@ class QUPCIN043100UV01Processor {
         final List<JAXBElement<? extends QTY>> careRecordIntervals =
                 careRecordTimePeriod.getValue().getRest();
 
-        final StringBuffer careRecordTimePeriodMsg = 
+        final StringBuffer careRecordTimePeriodMsg =
                 new StringBuffer("Care Record Time Period : ");
         // iterate over all Care Record Time Period intervals
         for (JAXBElement<? extends QTY> interval : careRecordIntervals) {
@@ -200,7 +215,7 @@ class QUPCIN043100UV01Processor {
         }
         LOGGER.debug(careRecordTimePeriodMsg.toString());
         // send this to EM
-        
+
 
         // obtains the Clinical Statement Time Period
         final QUPCMT040300UV01ClinicalStatementTimePeriod clinicalStatementTimePeriod =
@@ -208,7 +223,7 @@ class QUPCIN043100UV01Processor {
 
         final List<JAXBElement<? extends QTY>> clinicalStatementIntervals =
                 clinicalStatementTimePeriod.getValue().getRest();
-        final StringBuffer clinicalStatementMsg = 
+        final StringBuffer clinicalStatementMsg =
                 new StringBuffer("Clinical Statement Time Period : ");
         // iterate over all Clinical Statements Time Period intervals
         for (JAXBElement<? extends QTY> interval : clinicalStatementIntervals) {
@@ -261,6 +276,8 @@ class QUPCIN043100UV01Processor {
         LOGGER.debug(personNameMsg);
 
         authorizePerson(pn);
+        
+        return  result.toString();
     }
 
     private boolean provePerson(PN pn, String name) {
@@ -383,5 +400,34 @@ class QUPCIN043100UV01Processor {
      */
     MCCIIN000002UV01 getMCCIIN000002UV01() {
         return acknowledgement;
+    }
+
+    private void sendNotiffy(String toSend) {
+        LOGGER.debug("Send GET request on : {}", PC10_NOTIFY_END_POINT);
+
+        final ClientRequest request = new ClientRequest(PC10_NOTIFY_END_POINT);
+        request.queryParameter("q", toSend);
+
+        final ClientResponse response;
+        try {
+            response = request.get();
+        } catch (Exception exception) {
+            final String msg = 
+                    PC10_NOTIFY_END_POINT + " GET request can not be solved.";
+            final IllegalStateException illegalException =
+                    new IllegalStateException(exception);
+            LOGGER.error(msg, illegalException);
+            throw illegalException;
+        }
+
+        final int statusCode = response.getStatus();
+        LOGGER.debug("Status Code = {}", statusCode);
+        if (statusCode != 200) {
+            String msg = PC10_NOTIFY_END_POINT + " GET request can not be solved.";
+            final IllegalStateException illegalException =
+                    new IllegalStateException(msg);
+            LOGGER.error(msg, illegalException);
+            throw illegalException;
+        }
     }
 }
