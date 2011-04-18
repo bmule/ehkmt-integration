@@ -8,7 +8,10 @@
 package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
@@ -16,6 +19,7 @@ import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004040UVPortType;
 import org.hl7.v3.QUPCAR004040UVService;
 import org.hl7.v3.QUPCIN043100UV01;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -42,8 +46,11 @@ public class QUPCAR004040UVWebServiceExample {
      * @throws JAXBException 
      */
     public static void main(String... args) throws JAXBException, IOException {
+//        final QUPCAR004040UVService service =
+//                new QUPCAR004040UVService();
         final QUPCAR004040UVService service =
-                new QUPCAR004040UVService();
+                getQUPCAR004040UVService();
+        final URL wSDLDocumentLocation = service.getWSDLDocumentLocation();
         // here I obtain the service.
         final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
 
@@ -64,11 +71,23 @@ public class QUPCAR004040UVWebServiceExample {
         System.out.println("Acknowledge : " + ack);
 
     }
+    
+    private static QUPCAR004040UVService getQUPCAR004040UVService() 
+            throws MalformedURLException {
+        
+        final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
+        final URL url = new URL("file:/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/phrs-modules/pcc09WS/src/main/assembly/QUPC_AR004040UV_Service.wsdl");
+        final QUPCAR004040UVService result = new QUPCAR004040UVService(url,qName);
+        return result;
+    }
 
     private static void setDefaultEndPointURI(QUPCAR004040UVPortType portType) {
         final BindingProvider bp = (BindingProvider) portType;
         final Map<String, Object> reqContext = bp.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
                 "http://127.0.0.1:8080/pcc09ws/QUPCAR004040UV_Service");
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+                "http://127.0.0.1:8080/pcc09ws/QUPCAR004040UV_Service");
+        
     }
 }
