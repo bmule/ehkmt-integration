@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
 
-import javax.ws.rs.core.MediaType;
 import org.jboss.resteasy.client.ClientRequest;
 import org.jboss.resteasy.client.ClientResponse;
 
