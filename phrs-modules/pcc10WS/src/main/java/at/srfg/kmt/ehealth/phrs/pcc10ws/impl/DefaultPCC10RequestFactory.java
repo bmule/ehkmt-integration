@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.util.Map;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
+import net.sf.json.JSONObject;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * @since 0.1
  * @author Mihai
  */
-final class DefaultPCC10RequestFactory implements PCC10Factory<QUPCIN043200UV01, String, String> {
+final class DefaultPCC10RequestFactory implements PCC10Factory<QUPCIN043200UV01> {
 
     /**
      * The Logger instance. All log messages from this class
@@ -92,19 +93,5 @@ final class DefaultPCC10RequestFactory implements PCC10Factory<QUPCIN043200UV01,
         }
 
         return inputStream;
-    }
-
-    /**
-     * This method is similar with the <code>build</code>, the configuration is 
-     * ignored.
-     * 
-     * @param config the configuration, it is ignored.
-     * @return an empty PCC10 (QUPCIN043200UV01) query.
-     * @throws PCC10BuildException by any XML parsing problem encounter during
-     * the template parsing.
-     */
-    @Override
-    public QUPCIN043200UV01 build(Map<String, String> config) throws PCC10BuildException {
-        return build();
     }
 }
