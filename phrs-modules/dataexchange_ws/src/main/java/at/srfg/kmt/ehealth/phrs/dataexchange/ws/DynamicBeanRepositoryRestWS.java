@@ -139,7 +139,7 @@ public class DynamicBeanRepositoryRestWS {
         return result;
     }
 
-    public Response persistJSON(String dynaBean) {
+    private Response persistJSON(String dynaBean) {
         LOGGER.debug("Tries to persists {}", dynaBean);
         final JSONObject json;
         try {
