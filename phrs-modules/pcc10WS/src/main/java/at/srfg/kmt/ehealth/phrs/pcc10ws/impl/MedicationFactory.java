@@ -12,17 +12,18 @@ import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
 
@@ -35,11 +36,24 @@ import org.hl7.v3.*;
  */
 class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 
+    private final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+    private final DateFormat dateFormat;
+
+    /**
+     * It registers the <code>PatternBasedDateConverter</code> to the 
+     * <code>org.apache.commons.beanutils.ConvertUtils.ConvertUtils</code>.
+     * This is used to convert string to date.
+     */
+    {
+        dateFormat = new SimpleDateFormat(pattern);
+    }
+
     private final static String PCC10_OUTPUT_FILE = "PCC-10-Empty-Input.xml";
 
     private final static ObjectFactory OBJECT_FACTORY = new ObjectFactory();
-    
-    private Set<DynaBean> medication; 
+
+    private Set<DynaBean> medication;
 
     MedicationFactory() {
         // UNIMPLEMENTED
@@ -50,7 +64,6 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-
     Set<DynaBean> getMedication() {
         return medication;
     }
@@ -58,8 +71,6 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
     void setMedication(Set<DynaBean> medication) {
         this.medication = medication;
     }
-    
-    
 
     private QUPCIN043200UV01 build(String labeledDrugName, float dose,
             String doseUnit, XDocumentSubstanceMood mood) throws JAXBException {
@@ -143,6 +154,94 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         }
 
         return query;
+    }
+
+    private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(DynaBean medication) {
+        final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+                OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
+
+        // get the substance admin
+        final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JE =
+                pertinentInformation.getSubstanceAdministration();
+
+        final POCDMT000040SubstanceAdministration substanceAdministration =
+                substanceAdministration_JE == null
+                ? new POCDMT000040SubstanceAdministration()
+                : substanceAdministration_JE.getValue();
+        final XDocumentSubstanceMood moodCode = XDocumentSubstanceMood.EVN;
+        substanceAdministration.setMoodCode(moodCode);
+
+        final String labeledDrugName =
+                (String) medication.get("medicationNameText");
+        final POCDMT000040Consumable pocdmt000040Consumable =
+                buildPOCDMT000040Consumable(labeledDrugName);
+        substanceAdministration.setConsumable(pocdmt000040Consumable);
+
+        final Double dose =
+                (Double) medication.get("medicationQuantity");
+
+        final String doseUnit =
+                (String) medication.get("medicationQuantityUnit");
+
+        final IVLPQ ivlpq = buildIVLPQ(dose.floatValue(), doseUnit);
+        substanceAdministration.setDoseQuantity(ivlpq);
+
+        //FIXME : I am not sure about this.
+        // for the moment I add the
+        final List<II> templateIds = buildTemplateIds();
+        substanceAdministration.getTemplateId().addAll(templateIds);
+
+        final CE ce = buildRouteCode();
+        substanceAdministration.setRouteCode(ce);
+
+        final CS statusCode = buildStatusCodeActive();
+        substanceAdministration.setStatusCode(statusCode);
+
+        // The code element is used to supply a code that describes the
+        // substanceAdminstration act or may describe the method of
+        // medication administration, such as by intravenous injection.
+        final CD code = buildCode();
+        substanceAdministration.setCode(code);
+
+        // A top level <substanceAdministration> element must be uniquely identified.
+        // If there is no explicit identifier for this observation in the source
+        // EMR system, a GUID may be used for the root attribute,
+        // and the extension may be omitted.
+        // Although HL7 allows for multiple identifiers, this profile requires
+        // that one and only one be used. Subordinate <substanceAdministration>
+        // elements may, but need not be uniquely identified.
+        final II id = buildUUIDBasedId();
+        substanceAdministration.getId().add(id);
+
+        final Date dateStart = (Date) medication.get("observationDateStart");
+        Date dateEnd = (Date) medication.get("observationDateEnd");
+        dateEnd = dateEnd == null ? new Date() : dateEnd;
+
+        final SXCMTS startStopTime = buildTimePeriod(dateEnd, dateEnd);
+
+
+        //final List<SXCMTS> frequency = buildExactTimePeriod();
+        // final List<SXCMTS> frequency = buildUnexactTimePeriods();
+        //final List<SXCMTS> frequency = buildUnexactAMTimePeriod();
+        final List<SXCMTS> frequency = buildUnexactEvningTimePeriod();
+        substanceAdministration.getEffectiveTime().add(startStopTime);
+        substanceAdministration.getEffectiveTime().addAll(frequency);
+
+        List<POCDMT000040EntryRelationship> entryRelationship =
+                substanceAdministration.getEntryRelationship();
+
+        final List<POCDMT000040EntryRelationship> instructions =
+                buildInstructions();
+
+        entryRelationship.addAll(instructions);
+
+        if (substanceAdministration_JE == null) {
+            final JAXBElement<POCDMT000040SubstanceAdministration> newSubstanceAdministration_JE =
+                    OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5SubstanceAdministration(substanceAdministration);
+            pertinentInformation.setSubstanceAdministration(newSubstanceAdministration_JE);
+        }
+
+        return pertinentInformation;
     }
 
     /**
@@ -347,6 +446,27 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         return result;
     }
 
+    private SXCMTS buildTimePeriod(Date begin, Date end) {
+        final IVLTS resul = new IVLTS();
+
+
+        IVXBTS ivxbts = new IVXBTS();
+        final String beginStr = dateFormat.format(begin);
+        ivxbts.setValue(beginStr);
+
+        JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(ivxbts);
+        //IVXBTS ivxbts = new IVXBTS();
+        final String endStr = dateFormat.format(end);
+        ivxbts.setValue(endStr);
+
+
+        JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(ivxbts);
+        resul.getRest().add(ivltsLow);
+        resul.getRest().add(ivltsHigh);
+
+        return resul;
+    }
+
     private EIVLEvent buildDinerEvent() {
         final EIVLEvent event = OBJECT_FACTORY.createEIVLEvent();
         event.setDisplayName("Evening meal");
@@ -425,8 +545,10 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         final UUID uuid = UUID.randomUUID();
         final II result = new II();
 
-        result.setRoot(uuid.toString());
-        result.setExtension("");
+        //result.setRoot(uuid.toString());
+        //FIXME : this must be unique. This value '12122' origins from the 
+        // SRDC tempalte.
+        result.setExtension("12122");
 
         return result;
     }
