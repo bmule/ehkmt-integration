@@ -130,7 +130,7 @@ public class DynamicClassRepositoryRestWS {
     @Path("/loadDefaultClasses")
     @Produces("application/json")
     public Response loadDefaultClasses() {
-
+        
         final DynamicClassRepository classRepository;
         try {
             classRepository = JBossJNDILookup.lookupLocal(DynamicClassRepository.class);
