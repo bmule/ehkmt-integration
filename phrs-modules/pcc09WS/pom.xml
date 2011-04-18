@@ -48,7 +48,21 @@
             <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>2.2-beta-1</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <version>2.4</version>
+            <classifier>jdk15</classifier>
+        </dependency>
 
+        
     </dependencies>
     
     <build>
@@ -65,7 +79,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.1.1</version>
                 <configuration>
-                    <packagingIncludes>WEB-INF/lib/QUPC_AR004040UV_Service*.jar,**/*.xml,**/*.properties,**/*.class,**/*.png,**/*.css,**/*.js,**/*.jsp</packagingIncludes>
+                    <packagingIncludes>WEB-INF/lib/QUPC_AR004040UV_Service*.jar,WEB-INF/lib/resteasy-jaxrs*.jar, WEB-INF/lib/jaxrs-api-*.jar,WEB-INF/lib/scannotation-*.jar,WEB-INF/lib/commons-*.jar,**/*.xml,**/*.properties,**/*.class,**/*.png,**/*.css,**/*.js,**/*.jsp</packagingIncludes>
                 </configuration>
             </plugin>
         </plugins>
