@@ -55,8 +55,9 @@ import org.slf4j.LoggerFactory;
  */
 @Path("/dynamic_bean_repository")
 public class DynamicBeanRepositoryRestWS {
-    
+
     private final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
     private final DateFormat dateFormat;
 
     /**
@@ -69,10 +70,10 @@ public class DynamicBeanRepositoryRestWS {
         PatternBasedDateConverter dateConverter =
                 new PatternBasedDateConverter(pattern);
         ConvertUtils.register(dateConverter, java.util.Date.class);
-        
+
         final HashMapConverter hashMapConverter = new HashMapConverter();
         ConvertUtils.register(hashMapConverter, java.util.HashMap.class);
-        
+
         final HashSetConverter hashSetConverter = new HashSetConverter();
         ConvertUtils.register(hashSetConverter, java.util.HashSet.class);
     }
@@ -87,7 +88,34 @@ public class DynamicBeanRepositoryRestWS {
 
     /**
      * POST based web service used to persist a given dynamic bean JSON 
-     * serialized. </br>
+     * serialized. The (JSON) object to serialize is specified like form 
+     * parameter named <code>dynaBean</code>.</br>
+     * This web service can be access on :  
+     * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/push.
+     * 
+     * @return <code>javax.ws.rs.core.Response.Status.OK</code> if the operation 
+     * is successfully.
+     * If the backend can not process the query from any reason then this 
+     * method returns a :
+     * <code>javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR</code>.
+     * If the dyna bean JSON representation (the <code>dynaBean</code> argument)
+     * does not contains a  property named "class_uri" that contains the URI for
+     * an existent class then this method returns :
+     * <code>javax.ws.rs.core.Response.Status.BAD_REQUEST</code>.
+     * @see persit
+     */
+    @POST
+    @Path("/push")
+    @Produces("application/json")
+    public Response push(@FormParam("dynaBean") String dynaBean) {
+        final Response result = persistJSON(dynaBean);
+        return result;
+    }
+
+    /**
+     * POST based web service used to persist a given dynamic bean JSON 
+     * serialized.  The (JSON) object to serialize is contained body request 
+     * body.</br>
      * This web service can be access on :  
      * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist.
      * 
@@ -100,20 +128,18 @@ public class DynamicBeanRepositoryRestWS {
      * does not contains a  property named "class_uri" that contains the URI for
      * an existent class then this method returns :
      * <code>javax.ws.rs.core.Response.Status.BAD_REQUEST</code>.
+     * @see push
      */
     @POST
     @Path("/persist")
     @Produces("application/json")
     @Consumes("application/json")
     public Response persist(String dynaBean) {
-        
-        LOGGER.debug("Input {}", dynaBean == null ? "NULL" : dynaBean );
+        final Response result = persistJSON(dynaBean);
+        return result;
+    }
 
-        if (dynaBean == null || !dynaBean.isEmpty()) {
-            LOGGER.error("This dynabean JSON representation can not be null or empty string.");
-            return Response.status(Status.BAD_REQUEST).build();
-        }
-
+    public Response persistJSON(String dynaBean) {
         LOGGER.debug("Tries to persists {}", dynaBean);
         final JSONObject json;
         try {
@@ -123,13 +149,13 @@ public class DynamicBeanRepositoryRestWS {
             LOGGER.error(rte.getMessage(), rte);
             return Response.status(Status.BAD_REQUEST).build();
         }
-                
+
         final String classURI = json.getString(Constants.PHRS_BEAN_CLASS_URI);
         // FIXME : Padawan, there are more elegant ways to prove the null value.
-        if (classURI == null 
-                || "null".equals(classURI) 
+        if (classURI == null
+                || "null".equals(classURI)
                 || classURI.trim().isEmpty()) {
-            final Object [] toLog = {dynaBean, Constants.PHRS_BEAN_CLASS_URI}; 
+            final Object[] toLog = {dynaBean, Constants.PHRS_BEAN_CLASS_URI};
             LOGGER.error("This dynabean JSON representation [{}] does not have a [{}] property.", toLog);
             return Response.status(Status.BAD_REQUEST).build();
         }
@@ -179,7 +205,7 @@ public class DynamicBeanRepositoryRestWS {
 
             final String name = dynaProperty.getName();
             final Class propertyClass = properties.get(name);
-            
+
             // FIXME : This is just a hot fix for the review.
             // Under normal circumstances if a bean does not match its class
             // an exception must raises.
@@ -187,12 +213,12 @@ public class DynamicBeanRepositoryRestWS {
             if (propertyClass == null) {
                 LOGGER.debug("Property [{}] ignored, it does belong to the declared class.", name);
                 continue;
-            } 
-            
+            }
+
             final Object content = json.get(name);
-            final Object handleMsg[] = {name, propertyClass.getName(), content };
+            final Object handleMsg[] = {name, propertyClass.getName(), content};
             LOGGER.debug("Try to handle property [{}] with type [{}] and content [{}].", handleMsg);
-            
+
             final Object value = content == null
                     ? null
                     : ConvertUtils.convert(content.toString(), propertyClass);
@@ -210,9 +236,9 @@ public class DynamicBeanRepositoryRestWS {
 
         return Response.status(Status.OK).build();
     }
-    
+
     private Map<String, Class> getProperties(DynaBean bean) {
-        final DynaProperty[] dynaProperties = 
+        final DynaProperty[] dynaProperties =
                 bean.getDynaClass().getDynaProperties();
         final Map<String, Class> result = new HashMap<String, Class>();
         for (DynaProperty property : dynaProperties) {
@@ -220,10 +246,9 @@ public class DynamicBeanRepositoryRestWS {
             final Class type = property.getType();
             result.put(name, type);
         }
-        
+
         return result;
     }
-    
 
     /**
      * GET based web service used to obtain all version for a bean, the
@@ -343,7 +368,7 @@ public class DynamicBeanRepositoryRestWS {
             return Response.status(Status.INTERNAL_SERVER_ERROR).build();
         }
 
-        LOGGER.debug("Tries to parse bean {} in to JSON.", DynamicUtil.toString(forClass) );
+        LOGGER.debug("Tries to parse bean {} in to JSON.", DynamicUtil.toString(forClass));
         JSONObject result = new JSONObject();
         final DynaProperty[] dynaProperties = forClass.getDynaClass().getDynaProperties();
         // FIXME : this is a hot fix for the review
@@ -355,7 +380,7 @@ public class DynamicBeanRepositoryRestWS {
             if (value == null) {
                 continue;
             }
-            
+
             final Class type = property.getType();
             if (Date.class.equals(type)) {
                 value = dateFormat.format((Date) value).toString();
