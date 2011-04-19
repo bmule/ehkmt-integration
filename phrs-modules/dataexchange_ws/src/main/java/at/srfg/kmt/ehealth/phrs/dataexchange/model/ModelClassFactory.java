@@ -281,9 +281,10 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(medicationNameProperty, medicationNameMetadatas);
 
+        // FIXME : this is wrong this must be a double !
         final DynamicPropertyType medicationQuantityProperty = new DynamicPropertyType();
         medicationQuantityProperty.setName(MEDICATION_QUANTITY);
-        medicationQuantityProperty.setType(String.class.getName());
+        medicationQuantityProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> medicationQuantityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(medicationQuantityProperty, medicationQuantityMetadatas);
@@ -352,6 +353,43 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(commentProperty, commentMetadatas);
 
+        final DynamicPropertyType manufacturedProductClassCodeProperty = 
+                new DynamicPropertyType();
+        manufacturedProductClassCodeProperty.setName(MANUFACTURED_PRODUCT_CLASS_CODE);
+        manufacturedProductClassCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> manufacturedProductClassCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(manufacturedProductClassCodeProperty, manufacturedProductClassCodeMetadatas);
+
+        final DynamicPropertyType manufacturedLabeledDrugClassCodeProperty = 
+                new DynamicPropertyType();
+        manufacturedLabeledDrugClassCodeProperty.setName(MANUFACTURED_LABELED_DRUG_CLASS_CODE);
+        manufacturedLabeledDrugClassCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> manufacturedLabeledDeterminerCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(manufacturedLabeledDrugClassCodeProperty, manufacturedLabeledDeterminerCodeMetadatas);
+
+        final DynamicPropertyType manufacturedLabeledDrugDeterminerCodeProperty = 
+                new DynamicPropertyType();
+        manufacturedLabeledDrugDeterminerCodeProperty.setName(MANUFACTURED_LABELED_DRUG_DETERMINER_CODE);
+        manufacturedLabeledDrugDeterminerCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> manufacturedLabeledDrugDeterminerCodeMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(manufacturedLabeledDrugDeterminerCodeProperty, manufacturedLabeledDrugDeterminerCodeMetadatas);
+
+        final DynamicPropertyType drugCodeSystemProperty = new DynamicPropertyType();
+        drugCodeSystemProperty.setName(DRUG_CODE_SYSTEM);
+        drugCodeSystemProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> drugCodeSystemMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(drugCodeSystemProperty, drugCodeSystemMetadatas);
+
+        final DynamicPropertyType drugCodeProperty = new DynamicPropertyType();
+        drugCodeProperty.setName(DRUG_CODE);
+        drugCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> drugCodeMetadata =
+                new HashSet<DynamicPropertyMetadata>();
+        result.put(drugCodeProperty, drugCodeMetadata);
 
         return result;
     }
