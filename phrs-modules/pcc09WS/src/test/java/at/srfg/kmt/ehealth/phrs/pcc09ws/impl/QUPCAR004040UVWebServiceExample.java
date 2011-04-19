@@ -7,8 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
-
-import java.io.File;
+import static at.srfg.kmt.ehealth.phrs.pcc09ws.impl.Constants.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -75,8 +74,11 @@ public class QUPCAR004040UVWebServiceExample {
     private static QUPCAR004040UVService getQUPCAR004040UVService() 
             throws MalformedURLException {
         
-        final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
-        final URL url = new URL("file:/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/phrs-modules/pcc09WS/src/main/assembly/QUPC_AR004040UV_Service.wsdl");
+        final QName qName = 
+                new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
+        final ClassLoader classLoader = 
+                QUPCAR004040UVWebServiceExample.class.getClassLoader();
+        final URL url = classLoader.getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
         final QUPCAR004040UVService result = new QUPCAR004040UVService(url,qName);
         return result;
     }
@@ -84,10 +86,7 @@ public class QUPCAR004040UVWebServiceExample {
     private static void setDefaultEndPointURI(QUPCAR004040UVPortType portType) {
         final BindingProvider bp = (BindingProvider) portType;
         final Map<String, Object> reqContext = bp.getRequestContext();
-        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                "http://127.0.0.1:8080/pcc09ws/QUPCAR004040UV_Service");
-        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
-                "http://127.0.0.1:8080/pcc09ws/QUPCAR004040UV_Service");
-        
+        System.out.println("Service Edn point :" + DEFAULT_PCC_09_END_POINT);
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, DEFAULT_PCC_09_END_POINT);        
     }
 }
