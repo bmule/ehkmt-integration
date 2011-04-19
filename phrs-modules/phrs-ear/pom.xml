@@ -48,7 +48,6 @@
         <jboss.domain.home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA/server/default</jboss.domain.home>
     </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
