@@ -135,7 +135,9 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             final ControlledItem result = (ControlledItem) query.getSingleResult();
             return result;
         } catch (NoResultException exception) {
-            LOGGER.debug("No item with the code system {} and code {}");
+            
+            LOGGER.debug("No item with the code system {} and code {}", 
+                    new Object []{code, codeSystem});
             LOGGER.debug(exception.getMessage(), exception);
         }
 
