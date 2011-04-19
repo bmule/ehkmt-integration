@@ -29,7 +29,7 @@ public class Constants {
     static {
         final ClassLoader classLoader = Constants.class.getClassLoader();
         final InputStream stream = 
-                classLoader.getResourceAsStream("constants.properites");
+                classLoader.getResourceAsStream("constants.properties");
         final Properties properties = new Properties();
         if (stream != null) {
             try {
