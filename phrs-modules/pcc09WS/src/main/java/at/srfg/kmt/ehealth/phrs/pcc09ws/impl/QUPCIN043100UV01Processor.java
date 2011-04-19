@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
 
+import static at.srfg.kmt.ehealth.phrs.pcc09ws.impl.Constants.PC10_NOTIFY_END_POINT;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -58,8 +59,8 @@ class QUPCIN043100UV01Processor {
     /**
      * This is the end point where the pcc10 transaction can be triggered.
      */
-    private static final String PC10_NOTIFY_END_POINT = 
-            "http://localhost:8080/pcc10ws/restws/pcc10/notify";
+//    private static final String PC10_NOTIFY_END_POINT = 
+//            "http://localhost:8080/pcc10ws/restws/pcc10/notify";
 
     /**
      * The acknowledge for this processes, the acknowledge result after a query
