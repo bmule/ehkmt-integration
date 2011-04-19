@@ -84,14 +84,6 @@
             <version>0.0.1</version>
             <type>war</type>
         </dependency>
-        
-        <dependency>
-            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>pcc09service</artifactId>
-            <version>0.0.1</version>
-            <type>ejb</type>
-        </dependency>
-
 
         <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
