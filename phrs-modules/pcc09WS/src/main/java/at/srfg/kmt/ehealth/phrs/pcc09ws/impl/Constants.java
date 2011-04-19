@@ -37,7 +37,7 @@ public class Constants {
     static {
         final ClassLoader classLoader = Constants.class.getClassLoader();
         final InputStream stream =
-                classLoader.getResourceAsStream("constants.properites");
+                classLoader.getResourceAsStream("constants.properties");
         final Properties properties = new Properties();
         if (stream != null) {
             try {
@@ -50,7 +50,7 @@ public class Constants {
         final String wsdlPCC09key = "pcc09EndPoint";
         DEFAULT_PCC_09_END_POINT = properties.contains(wsdlPCC09key)
                 ? properties.getProperty(wsdlPCC09key).toString()
-                : "http://127.0.0.1:8080/pcc10ws/QUPCAR004030UV_Service";
+                : "http://127.0.0.1:8080/pcc09ws/QUPCAR004040UV_Service";
 
         final String restPCC10key = "pcc10notifyEndPoint";
         PC10_NOTIFY_END_POINT = properties.contains(restPCC10key)
