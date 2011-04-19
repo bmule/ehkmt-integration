@@ -9,6 +9,7 @@ package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
 import static at.srfg.kmt.ehealth.phrs.pcc09ws.impl.Constants.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -86,7 +87,7 @@ public class QUPCAR004040UVWebServiceExample {
     private static void setDefaultEndPointURI(QUPCAR004040UVPortType portType) {
         final BindingProvider bp = (BindingProvider) portType;
         final Map<String, Object> reqContext = bp.getRequestContext();
-        System.out.println("Service Edn point :" + DEFAULT_PCC_09_END_POINT);
+        System.out.println("Service End point :" + DEFAULT_PCC_09_END_POINT);
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, DEFAULT_PCC_09_END_POINT);        
     }
 }
