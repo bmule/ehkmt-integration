@@ -13,8 +13,8 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
+import java.net.MalformedURLException;
 import java.util.Map;
-import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingProvider;
 import org.hl7.v3.*;
 
@@ -41,11 +41,15 @@ public class QUPCAR004030UVWebServiceExample {
      * 
      * @param args no arguments required.
      * @throws PCC10BuildException by if the request can not be properly 
-     * builded. 
+     * builded.
+     * @throws MalformedURLException if the URL to the WSLD service file can not
+     * be located via a standard URL.
      */
-    public static void main(String... args) throws PCC10BuildException {
-        final QUPCAR004030UVService service =
-                new QUPCAR004030UVService();
+    public static void main(String... args) throws 
+            PCC10BuildException, MalformedURLException {
+        //final QUPCAR004030UVService service = new QUPCAR004030UVService();
+        final QUPCAR004030UVService service = 
+                NotifyRestWS.getQUPCAR004040UVService();
 
         // here I obtain the service (proxy).
         final QUPCAR004030UVPortType portType = service.getQUPCAR004030UVPort();
