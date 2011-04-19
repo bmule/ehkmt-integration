@@ -8,10 +8,15 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
+import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.DEFAULT_PCC_10_END_POINT;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Map;
 import java.util.Set;
 import javax.naming.NamingException;
 import javax.ws.rs.GET;
@@ -20,11 +25,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import net.sf.json.JSONObject;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.ws.BindingProvider;
 import org.apache.commons.beanutils.DynaBean;
+import org.hl7.v3.MCCIIN000002UV01;
+import org.hl7.v3.QUPCAR004030UVPortType;
+import org.hl7.v3.QUPCAR004030UVService;
 import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import javax.xml.namespace.QName;
 
 
 /**
@@ -49,8 +61,10 @@ public class NotifyRestWS {
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.NotifyRestWS</code>.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(NotifyRestWS.class);
-    
-    private static final MedicationFactory medicationFactory = new MedicationFactory();
+
+    private static final MedicationFactory MEDICATION_FACTORY = new MedicationFactory();
+
+//    private static final String PCC_10_END_POINT = "http://localhost:8080/icardea-caremanager-ws/services/QUPC_AR004030UV_Service.QUPC_AR004030UV_ServiceHttpSoap12Endpoint/";
 
     /**
      * GET based REST full web service used to trigger a PCC10 transaction.<br>
@@ -75,44 +89,31 @@ public class NotifyRestWS {
         LOGGER.debug("User id : {}", userId);
         String provisionCode = q.substring(indexOf + 1, q.length());
         LOGGER.debug("Provision Code  : {}", provisionCode);
-        //process(provisionCode);
+        process(provisionCode);
 
         return Response.status(Status.OK).build();
     }
 
     private void process(String code) {
-        LOGGER.debug("Tries to ");
-
+        LOGGER.debug("Tries to use {}", code);
         if ("COBSCAT".equals(code)) {
-            solveMedication();
-            return;
-        }
+            final QUPCIN043200UV01 medication = solveMedication();
 
-        if ("MEDCCAT".equals(code)) {
+            try {
+                toWriteInTemp(medication, "medication");
+            } catch (Exception exception) {
+                LOGGER.debug("Can not create a log for medication");
+            }
+            
+            sendPCC10(medication, DEFAULT_PCC_10_END_POINT);
 
-            return;
-        }
-
-        if ("CONDLIST".equals(code)) {
-            return;
-        }
-
-        if ("PROBLIST".equals(code)) {
-            return;
-        }
-
-        if ("INTOLIST".equals(code)) {
-            return;
-        }
-
-        if ("MEDLIST".equals(code)) {
             return;
         }
     }
-    
-        private QUPCIN043200UV01 solveMedication() {
+
+    private QUPCIN043200UV01 solveMedication() {
         final DynamicBeanRepository beanRepository;
-        
+
         try {
             beanRepository = JBossJNDILookup.lookupLocal(DynamicBeanRepository.class);
         } catch (NamingException namingException) {
@@ -130,21 +131,83 @@ public class NotifyRestWS {
             LOGGER.error(exception.getMessage(), exception);
             return null;
         }
-        
+
         LOGGER.debug("Try to generate medications for :");
         for (DynaBean medication : allMedications) {
             LOGGER.debug(DynamicUtil.toString(medication));
         }
-        
-        medicationFactory.setMedication(allMedications);
+
+        MEDICATION_FACTORY.setMedication(allMedications);
         final QUPCIN043200UV01 build;
         try {
-            build = medicationFactory.build();
+            build = MEDICATION_FACTORY.build();
         } catch (PCC10BuildException buildException) {
             LOGGER.error(buildException.getMessage(), buildException);
             return null;
         }
-        
+
         return build;
+    }
+
+    private void toWriteInTemp(Object toMarshal, String name) throws JAXBException {
+        final String tempDir = System.getProperty("java.io.tmpdir");
+        final JAXBContext context =
+                JAXBContext.newInstance(org.hl7.v3.MCCIIN000002UV01.class);
+
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        final File destiantion =
+                new File(tempDir + File.separatorChar + name + ".xml");
+        marshaller.marshal(toMarshal, destiantion);
+        LOGGER.debug("The " + name + " was persisted on : " + destiantion.getAbsolutePath());
+    }
+
+    private void sendPCC10(QUPCIN043200UV01 request, String endpoint) {
+
+        LOGGER.debug("Tries to send the request {} on the end point {}",
+                new Object[]{request, endpoint});
+
+        //final QUPCAR004030UVService service = new QUPCAR004030UVService();
+        final QUPCAR004030UVService service;
+        try {
+            service = getQUPCAR004040UVService();
+        } catch (MalformedURLException exception) {
+            LOGGER.error("The Proxy for the end {} point can not be build.", endpoint);
+            LOGGER.error(exception.getMessage(), exception);
+            return;
+        }
+
+        // here I obtain the service (proxy).
+        final QUPCAR004030UVPortType portType = service.getQUPCAR004030UVPort();
+        final DefaultPCC10RequestFactory requestFactory =
+                new DefaultPCC10RequestFactory();
+
+        // I set the end point for the 
+        setEndPointURI(portType, endpoint);
+
+        final MCCIIN000002UV01 ack =
+                portType.qupcAR004030UVQUPCIN043200UV(request);
+        LOGGER.debug("Acknoledge from endpoint {} is {} ", new Object[]{endpoint, ack});
+
+    }
+
+    /**
+     * JBoss specific way to customize the WSDL client (end point address).
+     * 
+     * @param portType the client to be customized.
+     */
+    private void setEndPointURI(QUPCAR004030UVPortType portType, String endpoint) {
+        final BindingProvider bp = (BindingProvider) portType;
+        final Map<String, Object> reqContext = bp.getRequestContext();
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
+    }
+
+    static QUPCAR004030UVService getQUPCAR004040UVService() throws MalformedURLException {
+
+        final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
+        final URL url = NotifyRestWS.class.getClassLoader().getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
+//        final URL url = new URL("file:/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/phrs-modules/pcc09WS/src/main/assembly/QUPC_AR004040UV_Service.wsdl");
+        final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
+        return result;
     }
 }
