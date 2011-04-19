@@ -9,4 +9,20 @@
         <servlet-name>QUPCAR004030UVWebService</servlet-name>
         <url-pattern>/QUPCAR004030UV_Service</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>Resteasy</servlet-name>
+        <servlet-class>org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Resteasy</servlet-name>
+        <url-pattern>/restws/*</url-pattern>
+    </servlet-mapping>
+    
+    <context-param>
+        <param-name>resteasy.resources</param-name>
+        <param-value>at.srfg.kmt.ehealth.phrs.pcc10ws.impl.NotifyRestWS</param-value>
+    </context-param>
+
 </web-app>
