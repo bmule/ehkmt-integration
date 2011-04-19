@@ -86,7 +86,7 @@ public class Constants {
     public static String ACTIVITY_CODE = "activityCode";
 
     public static String ACTIVITY_NAME = "activityName";
-    
+
     public static String ACTIVITY_ASSEMENT_INDICATOR = "assessmentIndicator";
 
     public static String ACTIVITY_DURATION_CODE = "activityDurationCode";
@@ -94,7 +94,6 @@ public class Constants {
     public static String ACTIVITY_FEATURE = "activityFeature";
 
     public static String ACTIVITY_FREQUENCY_CODE = "activityFrequencyCode";
-    
 
     public static String ACTIVITY_MOD_INDICATOR = "activityMoodIndicator";
 
@@ -115,7 +114,7 @@ public class Constants {
     public static String MEDICATION_FREQUENCY_INTERVAL = "medicationFrequencyInterval";
 
     public static String MEDICATION_FREQUENCY_TIMEOFDAY = "medicationFrequencyTimeOfDay";
-    
+
     public static String MEDICATION_FREQUENCY_QUANTITY = "medicationFrequencyQuantity";
 
     public static String MEDICATION_NAME_TEXT = "medicationNameText";
@@ -149,7 +148,7 @@ public class Constants {
     public static String RISK_FACTOR_TYPE = "riskFactorType";
 
     public static String RISK_FACTOR_CODE = "riskFactorCode";
-    
+
     public static String RISK_FACTOR_DURATION = "riskFactorDuration";
 
     public static String HAS_CONTRIBUTION_FACTORS = "hasContributingFactors";
@@ -163,6 +162,22 @@ public class Constants {
     public static String TREATMENTS_CODES = "treatmentStatmentCodes";
 
     public static String TRATMENTS_STATEMENT_PRIMARY = "treatmentStatementPrimary";
-    
+
     public static String MOOD_INDICATOR = "moodIndicator";
+
+    public static String MANUFACTURED_PRODUCT_CLASS_CODE
+            = "manufacturedProductClassCode";
+
+    public static String MANUFACTURED_LABELED_DRUG_CLASS_CODE =
+            "manufacturedLabeledDrugClassCode";
+
+    public static String MANUFACTURED_LABELED_DRUG_DETERMINER_CODE =
+            "manufacturedLabeledDrugDeterminerCode";
+    
+    public static String DRUG_CODE_SYSTEM = "drugCodeSystem";
+    public static String DRUG_CODE_SYSTEM_NAME = "drugCodeSystemName";
+    public static String DRUG_CODE = "drugCode";
+    public static String DRUG_TEXT = "drugText";
+    public static String drug = "drugText";
+    
 }
