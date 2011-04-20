@@ -25,7 +25,6 @@ import org.hl7.v3.QUPCIN043100UV01;
  * @author Mihai
  */
 final class Pcc9QueryFactory {
-
     private final static String FILE = "pcc09query.properties";
 
     /**
@@ -64,25 +63,25 @@ final class Pcc9QueryFactory {
                 getProperty(properties, "maximumHistoryStatements");
         final String patientAdministrativeGender =
                 getProperty(properties, "patientAdministrativeGender");
-        final String patientBirthTime = 
+        final String patientBirthTime =
                 getProperty(properties, "patientBirthTime");
         final String patientID = getProperty(properties, "patientID");
         final String patientName = getProperty(properties, "patientName");
         final String patientSurname = getProperty(properties, "patientSurname");
-        
-        final QUPCIN043100UV01 query = 
-                QueryFactory.buildQUPCIN043100UV01(careProvisionCode, 
-                careProvisionReason, 
-                careRecordTimePeriodBegin, 
-                careRecordTimePeriodEnd, 
-                clinicalStatementTimePeriodBegin, 
-                clinicalStatementTimePeriodEnd, 
-                includeCarePlanAttachment, 
-                maximumHistoryStatements, 
-                patientAdministrativeGender, 
-                patientBirthTime, 
-                patientID, 
-                patientName, 
+
+        final QUPCIN043100UV01 query =
+                QueryFactory.buildQUPCIN043100UV01(careProvisionCode,
+                careProvisionReason,
+                careRecordTimePeriodBegin,
+                careRecordTimePeriodEnd,
+                clinicalStatementTimePeriodBegin,
+                clinicalStatementTimePeriodEnd,
+                includeCarePlanAttachment,
+                maximumHistoryStatements,
+                patientAdministrativeGender,
+                patientBirthTime,
+                patientID,
+                patientName,
                 patientSurname);
 
         return query;
