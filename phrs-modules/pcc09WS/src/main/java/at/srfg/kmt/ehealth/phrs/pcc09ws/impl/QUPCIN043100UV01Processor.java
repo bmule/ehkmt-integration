@@ -407,7 +407,9 @@ class QUPCIN043100UV01Processor {
         LOGGER.debug("Send GET request on : {}", PC10_NOTIFY_END_POINT);
 
         final ClientRequest request = new ClientRequest(PC10_NOTIFY_END_POINT);
+        // FIXME : j'toh nohh use constants here
         request.queryParameter("q", toSend);
+        request.queryParameter("sender", "pcc09");
 
         final ClientResponse response;
         try {
