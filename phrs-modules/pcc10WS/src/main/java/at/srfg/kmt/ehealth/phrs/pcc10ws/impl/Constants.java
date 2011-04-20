@@ -16,7 +16,7 @@ import java.util.Properties;
 /**
  * Contains all the constants used in the PCC10 WS module.
  * The value for some contains can be configurated via a properties file named
- * 'configuration.properties' placed in the classpath.
+ * 'configuration.properties' placed in the class-path.
  *
  * @version 0.1
  * @since 0.1
@@ -53,4 +53,9 @@ public class Constants {
                 properties.getProperty(key, 
                 "http://127.0.0.1:8080/pcc10ws/QUPCAR004030UV_Service").toString().trim();;
     }
+    
+    /**
+     * This property can not be configurated.
+     */
+    static final String PCC10_OUTPUT_FILE = "PCC-10-Empty-Input.xml";
 }
