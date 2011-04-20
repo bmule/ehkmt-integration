@@ -9,7 +9,6 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.api;
 
 
 import java.util.Set;
-import org.jboss.jms.client.delegate.ClientConnectionDelegate.getExceptionListener_N4742818582415724694;
 
 
 /**
@@ -20,8 +19,8 @@ import org.jboss.jms.client.delegate.ClientConnectionDelegate.getExceptionListen
  * @since 0.1
  * @author Mihai
  */
-public interface Processor <RESULT_TYPE> {
-    
+public interface Processor<RESULT_TYPE> {
+
     /**
      * Decides if a certain input can be processed.
      * 
@@ -29,7 +28,7 @@ public interface Processor <RESULT_TYPE> {
      * @return true if the specified input can be processed with this processor.
      */
     boolean canProcess(Object input);
-    
+
     /**
      * Process the input.
      * 
@@ -40,17 +39,22 @@ public interface Processor <RESULT_TYPE> {
      * @see #getExceptions() 
      */
     boolean process(Object input);
-    
+
     /**
+     * Returns a set that contains all the exception that may happen during the 
+     * processing. It is not defined here how the processor must react if there
+     * are not exception (during the processing), this will be done by the 
+     * implementation. 
      * 
-     * @return 
+     * @return a set that contains all the exception that may happen during the 
+     * processing.
      */
     Set<Exception> getExceptions();
-    
+
     /**
+     * Returns the process result for this processor.
      * 
-     * @return 
+     * @return the process result for this processor.
      */
     RESULT_TYPE getResult();
-    
 }
