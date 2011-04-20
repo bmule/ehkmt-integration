@@ -20,11 +20,13 @@ import org.hl7.v3.*;
 
 
 /**
- *
+ * Use one of the PCC10Factory implementation.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
  */
+@Deprecated
 final class QueryFactory {
 
     /**
@@ -42,28 +44,33 @@ final class QueryFactory {
      * template parsing.
      */
     static QUPCIN043200UV01 buildQUPCIN043200UV01() throws JAXBException {
-        final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
-        final Unmarshaller unmarshaller = context.createUnmarshaller();
-        final InputStream inputStream = getStream(PCC10_EMPTY_OUTPUT_FILE);
-
-        final QUPCIN043200UV01 result =
-                (QUPCIN043200UV01) unmarshaller.unmarshal(inputStream);
-
+        final QUPCIN043200UV01 result = buildQUPCIN043200UV01(PCC10_EMPTY_OUTPUT_FILE);
         return result;
     }
-
+    
+    static QUPCIN043200UV01 buildQUPCIN043200UV01(String fileName) throws JAXBException {
+        final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
+        final Unmarshaller unmarshaller = context.createUnmarshaller();
+        final InputStream inputStream = getStream(fileName);
+        
+        final QUPCIN043200UV01 result =
+                (QUPCIN043200UV01) unmarshaller.unmarshal(inputStream);
+        
+        return result;
+    }
+    
     private static InputStream getStream(String name) {
         final ClassLoader classLoader =
                 QueryFactory.class.getClassLoader();
-
+        
         final InputStream inputStream =
                 classLoader.getResourceAsStream(name);
         if (inputStream == null) {
-            final String msg = 
+            final String msg =
                     String.format("The %s must be placed in the classpath", name);
             throw new IllegalStateException(msg);
         }
-
+        
         return inputStream;
     }
 }

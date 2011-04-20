@@ -7,8 +7,11 @@
  */
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
-
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.DEFAULT_PCC_10_END_POINT;
+import at.srfg.kmt.ehealth.phrs.pcc10ws.api.Processor;
+import at.srfg.kmt.ehealth.phrs.util.Util;
+import java.util.ArrayList;
+import java.util.List;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.impl.DynamicUtil;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
@@ -38,7 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.namespace.QName;
 
-
 /**
  * This REST web service is call when a PCC10 transaction is required.
 </br>
@@ -61,43 +63,78 @@ public class NotifyRestWS {
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.NotifyRestWS</code>.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(NotifyRestWS.class);
-
     private static final MedicationFactory MEDICATION_FACTORY = new MedicationFactory();
+    private final List<Processor> processors;
 
-//    private static final String PCC_10_END_POINT = "http://localhost:8080/icardea-caremanager-ws/services/QUPC_AR004030UV_Service.QUPC_AR004030UV_ServiceHttpSoap12Endpoint/";
+    /**
+     * Builds a <code>NotifyRestWS</code> instance.
+     */
+    public NotifyRestWS() {
+        processors = new ArrayList<Processor>();
+        processors.add(new MedicationPorcessor());
+    }
+
     /**
      * GET based REST full web service used to trigger a PCC10 transaction.<br>
      * This web service can be access on :  
      * <JBOSS URI>/pcc10ws/restws/pcc10/notify?q=XXX
      * 
-     * @param q JSON object that contains information about the PCC09 request.
+     * @param sender used to identify the sender.
+     * @param q the query. Its syntax is user id - care provision code.
+     * 
      * @return <code>javax.ws.rs.core.Response.Status.OK</code>, always.
      */
     @GET
     @Path("/notify")
     @Produces("application/json")
-    public Response notify(@QueryParam("sender") String sender, @QueryParam("q") String q) {
-        LOGGER.debug("Tries to process input : {} from sender : {}", new Object[]{sender, q});
-
+    public Response notify(@QueryParam("sender") String sender,
+            @QueryParam("q") String q) {
+        final Object[] forLog = Util.forLog(sender, q);
+        LOGGER.debug("Tries to process input : {} from sender : {}", forLog);
 
         final int indexOf = q.indexOf("-");
         if (indexOf == -1) {
-            return Response.status(Status.OK).build();
+            LOGGER.error("Bad syntax for the request");
+            return Response.status(Status.BAD_REQUEST).build();
         }
 
         final String userId = q.substring(0, indexOf);
         LOGGER.debug("User id : {}", userId);
         String provisionCode = q.substring(indexOf + 1, q.length());
         LOGGER.debug("Provision Code  : {}", provisionCode);
-        
-        //FIXME : make this a constant !
-        if ("pcc09".equals(sender)) {
-            sendDefaultFile(provisionCode + "-default.xml");
-            return Response.status(Status.OK).build();
-        }
-        //        process(provisionCode);
 
-        return Response.status(Status.OK).build();
+        // this is just a hot fox for the review, it only sends a default file
+        // according wiht an paramter.
+        if ("pcc09".equals(sender)) {
+            final FileBasedProcessor processor = new FileBasedProcessor();
+            processor.process(q);
+            final Set<Exception> exceptions = processor.getExceptions();
+            logExceptions(exceptions);
+            final Response result = processor.getResult();
+            return result;
+        }
+
+        Response result = Response.status(Status.NOT_FOUND).build();
+        for (Processor processor : processors) {
+            final boolean canProcess = processor.canProcess(q);
+            if (canProcess) {
+                processor.process(q);
+                result = (Response) processor.getResult();
+                final Set<Exception> exceptions = processor.getExceptions();
+                logExceptions(exceptions);
+                break;
+            }
+        }
+
+        // process(provisionCode);
+
+        return result;
+    }
+
+    private void logExceptions(Set<Exception> exceptions) {
+        for (Exception exception : exceptions) {
+            LOGGER.error(exception.getMessage(), exception);
+        }
     }
 
     private void process(String code) {
@@ -194,7 +231,6 @@ public class NotifyRestWS {
         final MCCIIN000002UV01 ack =
                 portType.qupcAR004030UVQUPCIN043200UV(request);
         LOGGER.debug("Acknoledge from endpoint {} is {} ", new Object[]{endpoint, ack});
-
     }
 
     /**
@@ -217,14 +253,17 @@ public class NotifyRestWS {
         return result;
     }
 
-    private void sendDefaultFile(String fileName) {
-        final QUPCIN043200UV01 buildQUPCIN043200UV01;
+    private QUPCIN043200UV01 getFromFile(String fileName) {
+        final QUPCIN043200UV01 qupcIN043200UV01;
         try {
-             buildQUPCIN043200UV01 = 
-                QueryFactory.buildQUPCIN043200UV01(fileName);
+            qupcIN043200UV01 =
+                    QueryFactory.buildQUPCIN043200UV01(fileName);
+
         } catch (JAXBException exception) {
             LOGGER.error(exception.getMessage(), exception);
-            return;
+            return null;
         }
+
+        return qupcIN043200UV01;
     }
 }

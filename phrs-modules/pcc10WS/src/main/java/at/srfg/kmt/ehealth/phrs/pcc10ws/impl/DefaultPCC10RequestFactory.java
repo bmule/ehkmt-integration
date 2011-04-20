@@ -10,7 +10,10 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
+import at.srfg.kmt.ehealth.phrs.pcc10ws.api.Processor;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Unmarshaller;
 import org.hl7.v3.*;
@@ -39,12 +42,13 @@ final class DefaultPCC10RequestFactory implements PCC10Factory<QUPCIN043200UV01>
      * The file used to build an empty <code>QUPCIN043200UV01</code> acknowledge.
      */
     private final static String PCC10_EMPTY_INPUT_FILE = "PCC-10-Empty-Input.xml";
+    
+
 
     /**
      * Builds a <code>DefaultPCC10ResponseFactory</code> instance.
      */
     DefaultPCC10RequestFactory() {
-        // UNIMPLEMENTED
     }
     
     /**
