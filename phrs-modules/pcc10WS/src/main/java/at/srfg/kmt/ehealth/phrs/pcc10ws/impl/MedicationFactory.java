@@ -8,8 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
+import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
 import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
@@ -34,12 +35,14 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Used to build Medication according with the HL7 v3. <br>
+ * This class can not be extended.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
  */
-class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
+final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 
     /**
      * The Logger instance. All log messages from this class
@@ -49,29 +52,44 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MedicationFactory.class);
 
-    private final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    /**
+     * JAX-B object factory- used to build jax-b object 'hanged' in the
+     * element(s) tree.
+     */
+    private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
-    private final DateFormat dateFormat;
+    private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
+    private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
 
     /**
-     * It registers the <code>PatternBasedDateConverter</code> to the 
-     * <code>org.apache.commons.beanutils.ConvertUtils.ConvertUtils</code>.
-     * This is used to convert string to date.
+     * All medication to be transformed medication according with the HL7 v3.
      */
-    {
-        dateFormat = new SimpleDateFormat(pattern);
-    }
-
-    private final static String PCC10_OUTPUT_FILE = "PCC-10-Empty-Input.xml";
-
-    private final static ObjectFactory OBJECT_FACTORY = new ObjectFactory();
-
     private Set<DynaBean> medications;
 
+    /**
+     * Builds a <code>MedicationFactory</code> instance.
+     */
     MedicationFactory() {
-        // UNIMPLEMENTED
     }
 
+    Set<DynaBean> getMedication() {
+        return medications;
+    }
+
+    void setMedication(Set<DynaBean> medication) {
+        this.medications = medication;
+    }
+
+    /**
+     * Builds a  PCC10 (<code>QUPCIN043200UV01</code>) that contains all the 
+     * medication specified with the <code>setMedication</code> method.
+     * 
+     * @return a  PCC10 (<code>QUPCIN043200UV01</code>) that contains all the 
+     * medication specified with the <code>setMedication</code> method.
+     * @throws PCC10BuildException if the medication can not be builded from any
+     * reasons.
+     */
     @Override
     public QUPCIN043200UV01 build() throws PCC10BuildException {
 
@@ -108,14 +126,6 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         return query;
     }
 
-    Set<DynaBean> getMedication() {
-        return medications;
-    }
-
-    void setMedication(Set<DynaBean> medication) {
-        this.medications = medication;
-    }
-
     private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(DynaBean medication) {
         final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                 OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
@@ -131,18 +141,13 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         final XDocumentSubstanceMood moodCode = XDocumentSubstanceMood.EVN;
         substanceAdministration.setMoodCode(moodCode);
 
-        final String labeledDrugName =
-                (String) medication.get("medicationNameText");
         final POCDMT000040Consumable pocdmt000040Consumable =
                 buildPOCDMT000040Consumable(medication);
         substanceAdministration.setConsumable(pocdmt000040Consumable);
 
         final Double dose =
                 (Double) medication.get("medicationQuantity");
-        // FIXME : this is because the class definition is wrong (BUG).
-        // This is a bug, dose is from type string. 
         final float doseFloat = dose.floatValue();
-
 
         final String doseUnit =
                 (String) medication.get("medicationQuantityUnit");
@@ -163,12 +168,8 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         final CS statusCode = buildCS(medStatus);
         substanceAdministration.setStatusCode(statusCode);
 
-        // The code element is used to supply a code that describes the
-        // substanceAdminstration act or may describe the method of
-        // medication administration, such as by intravenous injection.
-        // FIXME : ask the UI for it
-        final CD code = buildCode();
-        substanceAdministration.setCode(code);
+        // FIXME care about substance administration 
+        // substanceAdministration.setCode(code);
 
         // A top level <substanceAdministration> element must be uniquely identified.
         // If there is no explicit identifier for this observation in the source
@@ -236,7 +237,7 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         // FIXMe get this from UI.
         labeledDrug.setClassCode(EntityClassManufacturedMaterial.MMAT);
         labeledDrug.setDeterminerCode(EntityDeterminerDetermined.KIND);
-        
+
         manufacturedProduct.setManufacturedLabeledDrug(labeledDrug);
 
         consumable.setManufacturedProduct(manufacturedProduct);
@@ -266,20 +267,29 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
      *
      * @return
      */
+//    private IVLPQ buildIVLPQ(float dose, String doseUnit) {
+//
+//        // this is the doseQuantity
+//        final IVLPQ ivlpq = new IVLPQ();
+//        final IVXBPQ physicalQuantity = buildPhysicalQuantity_IVXBPQ(dose, doseUnit);
+//
+//        final JAXBElement<IVXBPQ> ivlpqHigh =
+//                OBJECT_FACTORY.createIVLPQHigh(physicalQuantity);
+//
+//        final JAXBElement<IVXBPQ> ivlpqLow =
+//                OBJECT_FACTORY.createIVLPQLow(physicalQuantity);
+//
+//        ivlpq.getRest().add(ivlpqHigh);
+//        ivlpq.getRest().add(ivlpqLow);
+//
+//        return ivlpq;
+//    }
+    
     private IVLPQ buildIVLPQ(float dose, String doseUnit) {
 
-        // this is the doseQuantity
         final IVLPQ ivlpq = new IVLPQ();
-        final IVXBPQ physicalQuantity = buildPhysicalQuantity_IVXBPQ(dose, doseUnit);
-
-        final JAXBElement<IVXBPQ> ivlpqHigh =
-                OBJECT_FACTORY.createIVLPQHigh(physicalQuantity);
-
-        final JAXBElement<IVXBPQ> ivlpqLow =
-                OBJECT_FACTORY.createIVLPQLow(physicalQuantity);
-
-        ivlpq.getRest().add(ivlpqHigh);
-        ivlpq.getRest().add(ivlpqLow);
+        ivlpq.setValue(String.valueOf(dose));
+        ivlpq.setUnit(doseUnit);
 
         return ivlpq;
     }
@@ -505,16 +515,6 @@ class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         cs.setCode(code);
         cs.setDisplayName(dispalyName);
         return cs;
-    }
-
-    private CD buildCode() {
-        final CD cd = new CD();
-        cd.setCode("");
-        cd.setDisplayName("");
-        cd.setCodeSystem("");
-        cd.setCodeSystemName("");
-
-        return cd;
     }
 
     private II buildUUIDBasedId() {
