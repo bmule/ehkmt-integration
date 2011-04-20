@@ -65,7 +65,6 @@ public class NotifyRestWS {
     private static final MedicationFactory MEDICATION_FACTORY = new MedicationFactory();
 
 //    private static final String PCC_10_END_POINT = "http://localhost:8080/icardea-caremanager-ws/services/QUPC_AR004030UV_Service.QUPC_AR004030UV_ServiceHttpSoap12Endpoint/";
-
     /**
      * GET based REST full web service used to trigger a PCC10 transaction.<br>
      * This web service can be access on :  
@@ -77,8 +76,9 @@ public class NotifyRestWS {
     @GET
     @Path("/notify")
     @Produces("application/json")
-    public Response notify(@QueryParam("q") String q) {
-        LOGGER.debug("Tries to process input : {}", q);
+    public Response notify(@QueryParam("sender") String sender, @QueryParam("q") String q) {
+        LOGGER.debug("Tries to process input : {} from sender : {}", new Object[]{sender, q});
+
 
         final int indexOf = q.indexOf("-");
         if (indexOf == -1) {
@@ -89,7 +89,13 @@ public class NotifyRestWS {
         LOGGER.debug("User id : {}", userId);
         String provisionCode = q.substring(indexOf + 1, q.length());
         LOGGER.debug("Provision Code  : {}", provisionCode);
-        process(provisionCode);
+        
+        //FIXME : make this a constant !
+        if ("pcc09".equals(sender)) {
+            sendDefaultFile(provisionCode + "-default.xml");
+            return Response.status(Status.OK).build();
+        }
+        //        process(provisionCode);
 
         return Response.status(Status.OK).build();
     }
@@ -104,7 +110,7 @@ public class NotifyRestWS {
             } catch (Exception exception) {
                 LOGGER.debug("Can not create a log for medication");
             }
-            
+
             sendPCC10(medication, DEFAULT_PCC_10_END_POINT);
 
             return;
@@ -209,5 +215,16 @@ public class NotifyRestWS {
 //        final URL url = new URL("file:/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/phrs-modules/pcc09WS/src/main/assembly/QUPC_AR004040UV_Service.wsdl");
         final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
         return result;
+    }
+
+    private void sendDefaultFile(String fileName) {
+        final QUPCIN043200UV01 buildQUPCIN043200UV01;
+        try {
+             buildQUPCIN043200UV01 = 
+                QueryFactory.buildQUPCIN043200UV01(fileName);
+        } catch (JAXBException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return;
+        }
     }
 }
