@@ -8,10 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.api;
 
 
-import java.util.Map;
-import net.sf.json.JSONObject;
-
-
 /**
  * Defines ways how a PCC 10(<code>QUPCIN043200UV01</code>) transaction 
  * request/response acknowledge are builded.
