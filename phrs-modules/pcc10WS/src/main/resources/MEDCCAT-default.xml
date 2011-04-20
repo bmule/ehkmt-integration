@@ -9,7 +9,7 @@
     <acceptAckCode code='AL'/>
     <receiver typeCode="RCV">
         <device determinerCode="INSTANCE">
-            <id/>
+            <id root='1' extension='CarePlanEngine'/>
             <name/>
             <telecom value='1' />
             <manufacturerModelName/>
@@ -18,7 +18,7 @@
     </receiver>
     <sender typeCode="SND">
         <device determinerCode="INSTANCE">
-            <id/>
+            <id root='1' extension='PHR'/>
             <name/>
             <telecom value='1' />
             <manufacturerModelName/>
@@ -58,7 +58,7 @@
                                     </name>
                                     <administrativeGenderCode code='M' displayName=''
 										codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
-                                    <birthTime value='195303111010'/>
+                                    <birthTime value='19530422153118'/>
                                 </patientPerson>
                             </patient>
                         </recordTarget>
@@ -216,7 +216,30 @@
                                     <high value='200710101010'/>
                                 </effectiveTime>
                                 <value xsi:type='CD' code='C0577368' 
-									codeSystem='2.16.840.1.113883.6.96' displayName='Does ride a bicycle' codeSystemName='SNOMED CT'>
+									codeSystem='UMLS' displayName='Does ride a bicycle' codeSystemName='UMLS'>
+                                    <originalText>
+                                        <reference value=' '/>
+                                    </originalText>
+                                </value>
+                            </observation>
+                        </pertinentInformation3>
+                        <pertinentInformation3>
+                            <observation classCode='OBS' moodCode='EVN' negationInd='false'>
+                                <templateId root='2.16.840.1.113883.10.20.1.28'/>
+                                <templateId root='1.3.6.1.4.1.19376.1.5.3.1.4.5'/>
+                                <id root=' ' extension=' '/>
+                                <code code='409586006' displayName='Complaint'
+									codeSystem='2.16.840.1.113883.6.96' codeSystemName='SNOMED CT'/>
+                                <text>
+                                    <reference value=' '/>
+                                </text>
+                                <statusCode code='completed'/>
+                                <effectiveTime>
+                                    <low value='201010101010'/>
+                                    <high value='201010101010'/>
+                                </effectiveTime>
+                                <value xsi:type='CD' code='C0578131' 
+									codeSystem='UMLS' displayName='Ability to mobilize' codeSystemName='UMLS'>
                                     <originalText>
                                         <reference value=' '/>
                                     </originalText>
@@ -236,10 +259,10 @@
                                 <statusCode code='completed'/>
                                 <effectiveTime>
                                     <low value='199225091010'/>
-                                    <high value='200710101010'/>
+                                    <high value='201010101010'/>
                                 </effectiveTime>
                                 <value xsi:type='CD' code='C0558919' 
-									codeSystem='2.16.840.1.113883.6.96' displayName='Stress at work' codeSystemName='SNOMED CT'>
+									codeSystem='UMLS' displayName='Stress at work' codeSystemName='UMLS'>
                                     <originalText>
                                         <reference value=' '/>
                                     </originalText>
@@ -261,8 +284,8 @@
                                     <low value='199225091010'/>
                                     <high value='200710101010'/>
                                 </effectiveTime>
-                                <value xsi:type='CD' code='8517006' 
-									codeSystem='2.16.840.1.113883.6.96' displayName='Ex-smoker' codeSystemName='SNOMED CT'>
+                                <value xsi:type='CD' code='C0337671' 
+									codeSystem='UMLS' displayName='Ex-smoker' codeSystemName='UMLS'>
                                     <originalText>
                                         <reference value=' '/>
                                     </originalText>

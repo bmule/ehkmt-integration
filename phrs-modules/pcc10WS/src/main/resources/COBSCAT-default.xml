@@ -9,7 +9,7 @@
     <acceptAckCode code='AL'/>
     <receiver typeCode="RCV">
         <device determinerCode="INSTANCE">
-            <id/>
+            <id root='1' extension='CarePlanEngine'/>
             <name/>
             <telecom value='1' />
             <manufacturerModelName/>
@@ -18,7 +18,7 @@
     </receiver>
     <sender typeCode="SND">
         <device determinerCode="INSTANCE">
-            <id/>
+            <id root='1' extension='PHR'/>
             <name/>
             <telecom value='1' />
             <manufacturerModelName/>
@@ -58,7 +58,7 @@
                                     </name>
                                     <administrativeGenderCode code='M' displayName=''
 										codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
-                                    <birthTime value='195303111010'/>
+                                    <birthTime value='19530422153118'/>
                                 </patientPerson>
                             </patient>
                         </recordTarget>
@@ -73,8 +73,8 @@
                                     <reference value='#xxx'/>
                                 </text>
                                 <statusCode code='completed'/>
-                                <effectiveTime value='201010101010'/>
-                                <value xsi:type='PQ' value='180' unit='mm'/>
+                                <effectiveTime value='200912101010'/>
+                                <value xsi:type='PQ' value='70' unit='mm'/>
                             </observation>	      
                         </pertinentInformation3>
                         <pertinentInformation3>
@@ -88,8 +88,8 @@
                                     <reference value='#xxx'/>
                                 </text>
                                 <statusCode code='completed'/>
-                                <effectiveTime value='201010101010'/>
-                                <value xsi:type='PQ' value='180' unit='mm'/>
+                                <effectiveTime value='200912101010'/>
+                                <value xsi:type='PQ' value='120' unit='mm'/>
                             </observation>	      
                         </pertinentInformation3>
                         <pertinentInformation3>
@@ -103,7 +103,7 @@
                                     <reference value='#xxx'/>
                                 </text>
                                 <statusCode code='completed'/>
-                                <effectiveTime value='201010101010'/>
+                                <effectiveTime value='200912101010'/>
                                 <value xsi:type='PQ' value='70' unit='kg'/>
                             </observation>	      
                         </pertinentInformation3>
