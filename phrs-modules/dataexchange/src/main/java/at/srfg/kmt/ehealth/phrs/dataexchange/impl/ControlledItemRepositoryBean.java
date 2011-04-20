@@ -137,7 +137,7 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
         } catch (NoResultException exception) {
             
             LOGGER.debug("No item with the code system {} and code {}", 
-                    new Object []{code, codeSystem});
+                    new Object []{codeSystem, code});
             LOGGER.debug(exception.getMessage(), exception);
         }
 
