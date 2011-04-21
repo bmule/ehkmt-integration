@@ -1,8 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/*
  * Project :iCardea
  * File : QUPCAR004030UVServiceUtil.java 
  * Encoding : UTF-8
@@ -31,7 +27,9 @@ import org.slf4j.LoggerFactory;
 import javax.xml.namespace.QName;
 
 /**
- *
+ * Contains a set of common used methods all related with the PCC10 
+ * (<code>QUPCIN043200UV01</code>) transactions.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -43,16 +41,52 @@ final class QUPCAR004030UVServiceUtil {
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.QUPCAR004030UVServiceUtil</code>.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(QUPCAR004030UVServiceUtil.class);
+    private static final Logger LOGGER = 
+            LoggerFactory.getLogger(QUPCAR004030UVServiceUtil.class);
+    
+    
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private QUPCAR004030UVServiceUtil() {
+        // UNIMPLEMENTED
+    }
 
+    /**
+     * Builds a service proxy for a pcc10 end point. By using this proxy you
+     * can use java api to send/receive soap based request and responses with a 
+     * given end-point.
+     * 
+     * @return a service proxy for a pcc10 end point.
+     * @throws MalformedURLException if the wsdl (service descriptor) file can 
+     * not be located.
+     */
     private static QUPCAR004030UVService getQUPCAR004040UVService() throws MalformedURLException {
         final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
-        final URL url = NotifyRestWS.class.getClassLoader().getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
+        final URL url = 
+                QUPCAR004030UVServiceUtil.class.getClassLoader().getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
         final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
         return result;
     }
 
+    /**
+     * Sends a <code>QUPCIN043200UV01</code> (pcc10 request) to the given end
+     * point.
+     * 
+     * @param request the pcc10 request to send, it can not be null.
+     * @param endpoint the end point where the pcc10 request will be send, 
+     * it can not be null.
+     * @throws NullPointerException if request or/and endpoint arguments are 
+     * null or empty strings.
+     */
     static void sendPCC10(QUPCIN043200UV01 request, String endpoint) {
+        
+        if (request == null || endpoint == null) {
+            final NullPointerException nullException = 
+                    new NullPointerException("The request and/or the endpoitn argument can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
 
         LOGGER.debug("Tries to send the request {} on the end point {}",
                 Util.forLog(request, endpoint));
@@ -92,6 +126,10 @@ final class QUPCAR004030UVServiceUtil {
     }
 
     static void toWriteInTemp(Object toMarshal, String name) throws JAXBException {
+        
+        // FIXME : this action can be restricted by a JAAS securicy policy,
+        // please consider this in the future, Padawn, the way to the dark
+        // side is always the ealy one.
         final String tempDir = System.getProperty("java.io.tmpdir");
         final JAXBContext context =
                 JAXBContext.newInstance(org.hl7.v3.MCCIIN000002UV01.class);
@@ -101,9 +139,23 @@ final class QUPCAR004030UVServiceUtil {
         final File destiantion =
                 new File(tempDir + File.separatorChar + name + ".xml");
         marshaller.marshal(toMarshal, destiantion);
-        LOGGER.debug("The " + name + " was persisted on : " + destiantion.getAbsolutePath());
+        LOGGER.debug("The {} was persisted on : {} ",  
+                Util.forLog(name, destiantion.getAbsolutePath()));
     }
 
+    /**
+     * Builds a <code>QUPCIN043200UV01</code> (pcc10 request) based on a given
+     * serialized input. This serialized input is loaded with the current 
+     * classloader.
+     * 
+     * @param fileName the name for the resource that contains the pcc10 request
+     * in serialized form. It can not be null.
+     * @return pcc10 request) based on a given serialized input.
+     * @throws NullPointerException if the <code>fileName</code> argument is 
+     * null.
+     * @throws JAXBException if the serialized form (SOAP) can not be 
+     * un-marshaled properly.
+     */
     static QUPCIN043200UV01 buildQUPCIN043200UV01(String fileName) throws JAXBException {
         final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
         final Unmarshaller unmarshaller = context.createUnmarshaller();
@@ -115,6 +167,15 @@ final class QUPCAR004030UVServiceUtil {
         return result;
     }
 
+    /**
+     * Load a resource by using the current classloader and returns an input
+     * stream for it. If the resource can not be located then this methods
+     * returns null.
+     * 
+     * @param name the name for the resource to locate.d
+     * @return the input stream for a given resource, or null if the specified
+     * resource can not be located in the current classpath.
+     */
     private static InputStream getStream(String name) {
         final ClassLoader classLoader =
                 QUPCAR004030UVServiceUtil.class.getClassLoader();
