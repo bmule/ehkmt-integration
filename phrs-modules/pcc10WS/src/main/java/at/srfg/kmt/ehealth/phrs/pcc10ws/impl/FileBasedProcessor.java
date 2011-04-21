@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Builds and sends SOAP based messages by using some files (where the messages
+ * are serialized).
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -137,7 +139,6 @@ final class FileBasedProcessor implements Processor<Response> {
                 LOGGER.error(jaxbe.getMessage(), jaxbe);
             }
         }
-
 
         result = Response.status(Status.OK).build();
         return true;
