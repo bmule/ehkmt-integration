@@ -63,7 +63,7 @@ final class QUPCAR004030UVServiceUtil {
      * @throws MalformedURLException if the wsdl (service descriptor) file can 
      * not be located.
      */
-    private static QUPCAR004030UVService getQUPCAR004040UVService() throws MalformedURLException {
+    static QUPCAR004030UVService getQUPCAR004040UVService() throws MalformedURLException {
         final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
         final URL url = 
                 QUPCAR004030UVServiceUtil.class.getClassLoader().getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
