@@ -21,7 +21,15 @@ import javax.persistence.OneToMany;
 /**
  * Defines a controlled item.
  * A controlled item represents an item that belongs in to a controlled vocabulary.
- * It can be described with at least two components : code and code system.
+ * It can be described with at least two components : code and code system. </br>
+ * This Entity defines the following named queries :
+ * <ul>
+ * <li> selectControlledItemByCodeSystem
+ * <li> selectControlledItemCodeSystemAndCode
+ * <li> countControlledItemCodeSystemAndCode
+ * <li> selectControlledItemByPrefLabel
+ * <li> selectControlledItemByPrefLabelPrefix
+ * </ul>
  * 
  * @version 0.1
  * @since 0.1
@@ -30,7 +38,10 @@ import javax.persistence.OneToMany;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "selectControlledItemByCodeSystem", query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system"),
-    @NamedQuery(name = "selectControlledItemCodeSystemAndCode", query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system AND ci.code= :code"),
+    @NamedQuery(name = "selectControlledItemCodeSystemAndCode", 
+                query="SELECT ci FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system AND ci.code= :code"),
+    @NamedQuery(name = "countControlledItemCodeSystemAndCode", 
+                query="SELECT COUNT(ci) FROM ControlledItem AS ci WHERE ci.codeSystem= :code_system AND ci.code= :code"),
     @NamedQuery(name = "selectControlledItemByPrefLabel", 
                 query="SELECT ci FROM ControlledItem AS ci WHERE ci.prefLabel=:pref_label"),
     @NamedQuery(name = "selectControlledItemByPrefLabelPrefix", 
