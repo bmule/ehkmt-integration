@@ -49,7 +49,7 @@ public class QUPCAR004030UVWebServiceExample {
             PCC10BuildException, MalformedURLException {
         //final QUPCAR004030UVService service = new QUPCAR004030UVService();
         final QUPCAR004030UVService service = 
-                NotifyRestWS.getQUPCAR004040UVService();
+                QUPCAR004030UVServiceUtil.getQUPCAR004040UVService();
 
         // here I obtain the service (proxy).
         final QUPCAR004030UVPortType portType = service.getQUPCAR004030UVPort();
