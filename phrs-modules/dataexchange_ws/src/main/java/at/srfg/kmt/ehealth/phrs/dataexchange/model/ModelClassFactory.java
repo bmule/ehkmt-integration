@@ -7,14 +7,13 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
-
 import static at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants.*;
+import static at.srfg.kmt.ehealth.phrs.dataexchange.model.MetadataFactory.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 
 /**
  * Builds severals map used to build dynamic classes.
@@ -55,6 +54,7 @@ public final class ModelClassFactory {
         diastolicProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> diastolicMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        diastolicMetadatas.add(buildDiastolicCode());
         result.put(diastolicProperty, diastolicMetadatas);
 
 
@@ -63,6 +63,7 @@ public final class ModelClassFactory {
         systolicProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> systolicMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        systolicMetadatas.add(buildSystolicCode());
         result.put(systolicProperty, systolicMetadatas);
 
 
@@ -71,6 +72,7 @@ public final class ModelClassFactory {
         heartRateProperty.setType(Integer.class.getName());
         final Set<DynamicPropertyMetadata> heartRateMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        heartRateMetadatas.add(buildHeartBeatCode());
         result.put(heartRateProperty, heartRateMetadatas);
 
 
@@ -87,7 +89,6 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> commentMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(commentProperty, commentMetadatas);
-
 
         return result;
     }
@@ -106,6 +107,7 @@ public final class ModelClassFactory {
         bodyBMIProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> bodyBMIMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        
         result.put(bodyBMIProperty, bodyBMIMetadatas);
 
         final DynamicPropertyType bodyWeightProperty = new DynamicPropertyType();
@@ -113,6 +115,7 @@ public final class ModelClassFactory {
         bodyWeightProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> bodyWeightMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        bodyWeightMetadatas.add(buildBodyWeightCode());
         result.put(bodyWeightProperty, bodyWeightMetadatas);
 
         final DynamicPropertyType heightProperty = new DynamicPropertyType();
@@ -120,6 +123,7 @@ public final class ModelClassFactory {
         heightProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> heightMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        heightMetadatas.add(buildBodyHeightCode());
         result.put(heightProperty, heightMetadatas);
 
         final DynamicPropertyType measureSystemProperty = new DynamicPropertyType();
@@ -142,7 +146,6 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> commentMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(commentProperty, commentMetadatas);
-
 
         return result;
     }
@@ -353,7 +356,7 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(commentProperty, commentMetadatas);
 
-        final DynamicPropertyType manufacturedProductClassCodeProperty = 
+        final DynamicPropertyType manufacturedProductClassCodeProperty =
                 new DynamicPropertyType();
         manufacturedProductClassCodeProperty.setName(MANUFACTURED_PRODUCT_CLASS_CODE);
         manufacturedProductClassCodeProperty.setType(String.class.getName());
@@ -361,7 +364,7 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(manufacturedProductClassCodeProperty, manufacturedProductClassCodeMetadatas);
 
-        final DynamicPropertyType manufacturedLabeledDrugClassCodeProperty = 
+        final DynamicPropertyType manufacturedLabeledDrugClassCodeProperty =
                 new DynamicPropertyType();
         manufacturedLabeledDrugClassCodeProperty.setName(MANUFACTURED_LABELED_DRUG_CLASS_CODE);
         manufacturedLabeledDrugClassCodeProperty.setType(String.class.getName());
@@ -369,7 +372,7 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(manufacturedLabeledDrugClassCodeProperty, manufacturedLabeledDeterminerCodeMetadatas);
 
-        final DynamicPropertyType manufacturedLabeledDrugDeterminerCodeProperty = 
+        final DynamicPropertyType manufacturedLabeledDrugDeterminerCodeProperty =
                 new DynamicPropertyType();
         manufacturedLabeledDrugDeterminerCodeProperty.setName(MANUFACTURED_LABELED_DRUG_DETERMINER_CODE);
         manufacturedLabeledDrugDeterminerCodeProperty.setType(String.class.getName());
