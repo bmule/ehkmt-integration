@@ -47,7 +47,7 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.VocabularyServlet</code>.
+     * is <code>at.srfg.kmt.ehealth.phrs.MedicationFactory</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MedicationFactory.class);
