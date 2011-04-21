@@ -91,16 +91,23 @@ final class VitalSignsProcessor implements Processor<Response> {
 
     @Override
     public boolean process(Object input) {
-        final QUPCIN043200UV01 medication;
+        final QUPCIN043200UV01 vitalSigns;
         try {
-            medication = buildMedication();
+            vitalSigns = buildMedication();
         } catch (Exception exception) {
             LOGGER.error(exception.getMessage(), exception);
             exceptions.add(exception);
             return false;
         }
 
-        QUPCAR004030UVServiceUtil.sendPCC10(medication, DEFAULT_PCC_10_END_POINT);
+        QUPCAR004030UVServiceUtil.sendPCC10(vitalSigns, DEFAULT_PCC_10_END_POINT);
+
+        try {
+            QUPCAR004030UVServiceUtil.toWriteInTemp(vitalSigns, "vital-signs");
+        } catch (Exception exception) {
+            // I dont care !
+        }
+        
         result = Response.status(Status.OK).build();
         return exceptions.isEmpty();
 
