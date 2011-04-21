@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItemTag;
@@ -103,16 +104,6 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
     }
 
     @Override
-    public Set<ControlledItem> get(Query query) {
-        final List resultList = query.getResultList();
-
-        final Set<ControlledItem> results = new HashSet<ControlledItem>();
-        results.addAll(resultList);
-
-        return results;
-    }
-
-    @Override
     public Set<ControlledItem> getByCodeSystem(String codeSystem) {
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemByCodeSystem");
@@ -135,9 +126,9 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
             final ControlledItem result = (ControlledItem) query.getSingleResult();
             return result;
         } catch (NoResultException exception) {
-            
-            LOGGER.debug("No item with the code system {} and code {}", 
-                    new Object []{codeSystem, code});
+
+            LOGGER.debug("No item with the code system {} and code {}",
+                    new Object[]{codeSystem, code});
             LOGGER.debug(exception.getMessage(), exception);
         }
 
@@ -146,14 +137,14 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
 
     @Override
     public Set<ControlledItem> getByPrefLabel(String prefLabel) {
-        
+
         if (prefLabel == null) {
-            final NullPointerException nullException = 
+            final NullPointerException nullException =
                     new NullPointerException("The prefLabelArgumetn can not be null or empty");
             LOGGER.error(prefLabel);
             throw nullException;
         }
-        
+
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemByPrefLabel");
         query.setParameter("pref_label", prefLabel);
@@ -168,18 +159,18 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
 
     @Override
     public Set<ControlledItem> getByPrefLabelPrefix(String prefLabelPrefix) {
-        
+
         if (prefLabelPrefix == null) {
-            final NullPointerException nullException = 
+            final NullPointerException nullException =
                     new NullPointerException("The prefLabelPrefix can not be null or empty");
             LOGGER.error(prefLabelPrefix);
             throw nullException;
         }
-        
+
         final StringBuffer patern = new StringBuffer();
         patern.append("%");
         patern.append(prefLabelPrefix);
-        
+
         final Query query =
                 entityManager.createNamedQuery("selectControlledItemByPrefLabelPrefix");
         query.setParameter("pref_label_prefix", patern.toString());
@@ -414,5 +405,34 @@ public class ControlledItemRepositoryBean implements ControlledItemRepository {
 
         return tagsCount.intValue() > 0;
 
+    }
+
+    /**
+     * Proves the existence for a given item, the item is identified after its 
+     * code system code - code pair.
+     * 
+     * @param codeSystemCode the code system for the item that presence is to
+     * be proved, it can not by null.
+     * @param code the code for the item that presence is to
+     * be proved, it can not by null.
+     * @throws NullPointerException if the <code>code</code> or 
+     * <code>codeSystemCode</code> argument is null.
+     */
+    @Override
+    public boolean itemExists(String codeSystemCode, String code) {
+        
+        if (codeSystemCode == null || code == null) {
+            final NullPointerException nullException = 
+                    new NullPointerException("The codeSystemCode or the code arguments can not be null.");
+            LOGGER.error(nullException.getMessage(), nullException);
+            throw nullException;
+        }
+        
+        final Query query =
+                entityManager.createNamedQuery("countControlledItemCodeSystemAndCode");
+        query.setParameter("code_system", codeSystemCode);
+        query.setParameter("code", code);
+        final Long singleResult = (Long) query.getSingleResult();
+        return singleResult.longValue() > 0;
     }
 }
