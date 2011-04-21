@@ -10,7 +10,8 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.api;
 
 /**
  * Defines ways how a PCC 10(<code>QUPCIN043200UV01</code>) transaction 
- * request/response acknowledge are builded.
+ * request/response acknowledge are builded. The result type must be specified
+ * like type parameter.
  * 
  * @param RESULT_TYPE the builded result type.
  * @version 0.1
