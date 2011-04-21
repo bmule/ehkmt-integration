@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
+
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.DEFAULT_PCC_10_END_POINT;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynaClassException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
@@ -25,6 +26,7 @@ import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  *
  * @version 0.1
@@ -36,12 +38,15 @@ class MedicationPorcessor implements Processor<Response> {
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.NotifyRestWS</code>.
+     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.MedicationPorcessor</code>.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotifyRestWS.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MedicationPorcessor.class);
+
     private static final MedicationFactory MEDICATION_FACTORY =
             new MedicationFactory();
+
     private Response result;
+
     private Set<Exception> exceptions;
 
     /**
@@ -55,10 +60,24 @@ class MedicationPorcessor implements Processor<Response> {
     @Override
     public boolean canProcess(Object input) {
         if (input == null) {
+            LOGGER.warn("Null input can not be processed.");
             return false;
         }
 
-        return false;
+        if (!(input instanceof String)) {
+            LOGGER.warn("Non String input can not be processed.");
+            return false;
+        }
+
+        final String in = input.toString();
+        final int indexOf = in.indexOf("-");
+        if (indexOf == -1) {
+            LOGGER.warn("This input [{}] has the wrong syntax", in);
+            return false;
+        }
+        
+        final boolean isMedList = in.endsWith("MEDLIST");
+        return isMedList;
     }
 
     @Override
@@ -81,7 +100,7 @@ class MedicationPorcessor implements Processor<Response> {
             exceptions.add(exception);
             return false;
         }
-        
+
         QUPCAR004030UVServiceUtil.sendPCC10(medication, DEFAULT_PCC_10_END_POINT);
         result = Response.status(Status.OK).build();
         return exceptions.isEmpty();
