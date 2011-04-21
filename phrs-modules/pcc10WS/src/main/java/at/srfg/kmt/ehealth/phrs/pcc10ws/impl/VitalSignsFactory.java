@@ -163,7 +163,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
             final Object bodyBMIValue = vitalSign.get("bodyBMI");
 
             final REPCMT004000UV01PertinentInformation5 bodyBMI =
-                    buildPertinentInformation(bodyBMIValue, "m/l2", statusActive, 
+                    buildPertinentInformation(bodyBMIValue, "m/l2", statusActive,
                     observationDate, bodyWeightMetadata, "bodyBMI");
             results.add(bodyBMI);
 
@@ -175,7 +175,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
 
             final Object heightValue = vitalSign.get("height");
             final REPCMT004000UV01PertinentInformation5 height =
-                    buildPertinentInformation(heightValue, "cm", statusActive, 
+                    buildPertinentInformation(heightValue, "cm", statusActive,
                     observationDate, bodyWeightMetadata, "height");
             results.add(height);
         }
@@ -183,19 +183,19 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         if (isBloodPressure) {
             final Object bpDiastolicValue = vitalSign.get("bpDiastolic");
             final REPCMT004000UV01PertinentInformation5 bpDiastolic =
-                    buildPertinentInformation(bpDiastolicValue, "mm/hg", 
+                    buildPertinentInformation(bpDiastolicValue, "mm/hg",
                     statusActive, observationDate, bloodPessureMetadata, "bpDiastolic");
             results.add(bpDiastolic);
 
             final Object bpSystolicValue = vitalSign.get("bpSystolic");
             final REPCMT004000UV01PertinentInformation5 bpSystolic =
-                    buildPertinentInformation(bpSystolicValue, "mm/hg", 
+                    buildPertinentInformation(bpSystolicValue, "mm/hg",
                     statusActive, observationDate, bloodPessureMetadata, "bpSystolic");
             results.add(bpSystolic);
 
             final Object bpHeartRateValue = vitalSign.get("bpHeartRate");
             final REPCMT004000UV01PertinentInformation5 bpHeartRate =
-                    buildPertinentInformation(bpHeartRateValue, "min", 
+                    buildPertinentInformation(bpHeartRateValue, "min",
                     statusActive, observationDate, bloodPessureMetadata, "bpHeartRate");
             results.add(bpHeartRate);
         }
@@ -203,19 +203,11 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         return results;
     }
 
-    private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(Object value, 
+    private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(Object value,
             String unit, String status, Date date, Map<String, DynamicPropertyMetadata> metadata, String property) {
-        final REPCMT004000UV01PertinentInformation5 pertinentInformation =
-                OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
-
-        // get the observation
-        final JAXBElement<POCDMT000040Observation> observation_JE =
-                pertinentInformation.getObservation();
 
         final POCDMT000040Observation observation =
-                observation_JE == null
-                ? new POCDMT000040Observation()
-                : observation_JE.getValue();
+                OBJECT_FACTORY.createPOCDMT000040Observation();
 
         // FIXME : ask the ui for it
         observation.setClassCode(ActClassObservation.OBS);
@@ -227,26 +219,31 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
 
         // here I got the bodyweight metadata and the code is metadata
         final DynamicPropertyMetadata metaCode = metadata.get(property);
-        
-        final String codeMetada = metaCode == null 
-                ? value.toString() 
-                :  metaCode.getValue().toString();
-        
+
+        final String codeMetada = metaCode == null
+                ? value.toString()
+                : metaCode.getValue().toString();
+
         CD code = buildCode(codeMetada);
         observation.setCode(code);
 
         final IVLTS effectiveTime = new IVLTS();
         effectiveTime.setValue(dateFormat.format(date));
-        observation.setCode(code);
+        observation.setEffectiveTime(effectiveTime);
 
         final PQ qunatity = new PQ();
         qunatity.setValue(value.toString());
         qunatity.setUnit(unit);
-        observation.setCode(code);
+        observation.getValue().add(qunatity);
 
         final CS statusCode = buildStatus(status);
         observation.setStatusCode(statusCode);
 
+        final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+                OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
+        final JAXBElement<POCDMT000040Observation> observation_je = 
+                OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5Observation(observation);
+        pertinentInformation.setObservation(observation_je);
         return pertinentInformation;
     }
 
@@ -265,29 +262,22 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         return statusCode;
     }
 
-    private InputStream getStream(String name) {
-        final ClassLoader classLoader =
-                DefaultPCC10RequestFactory.class.getClassLoader();
-
-        final InputStream inputStream =
-                classLoader.getResourceAsStream(name);
-        if (inputStream == null) {
-            final String msg =
-                    String.format("The %s must be placed in the classpath", name);
-            throw new IllegalStateException(msg);
-        }
-
-        return inputStream;
-    }
-
     private List<II> buildTemplateIds() {
-        final List<II> templateIds = new ArrayList<II>(2);
-        final II normalDosing = new II();
-        normalDosing.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13");
-        normalDosing.setExtension("2.16.840.1.113883.10.20.1.31");
-        normalDosing.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13.2");
-        templateIds.add(normalDosing);
-        return templateIds;
+        final List<II> iis = new ArrayList<II>(2);
+        
+        final II ii1 = new II();
+        ii1.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13");
+        iis.add(ii1);
+        
+        final II ii2 = new II();
+        ii2.setExtension("2.16.840.1.113883.10.20.1.31");
+        iis.add(ii2);
+        
+        final II ii3 = new II();
+        ii3.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13.2");
+        iis.add(ii3);
+
+        return iis;
     }
 
     private String[] codeSystemAndCode(String in) {
@@ -295,7 +285,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
 
         final int indexOf = in.indexOf(":");
         result[0] = in.substring(0, indexOf);
-        result[1] = in.substring(indexOf, in.length());
+        result[1] = in.substring(indexOf + 1, in.length());
         // I know I can use the scanner ot the String split :).
         return result;
     }
@@ -317,7 +307,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         final DynamicClass dynamicClass = classRepository.get(classURI);
         final Set<DynamicPropertyType> propertyTypes =
                 dynamicClass.getPropertyTypes();
-        
+
         for (DynamicPropertyType propertyType : propertyTypes) {
             final String propertyName = propertyType.getName();
             final Set<DynamicPropertyMetadata> metadatas =
