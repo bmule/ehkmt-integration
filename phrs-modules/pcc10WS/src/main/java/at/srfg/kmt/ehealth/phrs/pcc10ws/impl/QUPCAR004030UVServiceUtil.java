@@ -28,7 +28,9 @@ import javax.xml.namespace.QName;
 
 /**
  * Contains a set of common used methods all related with the PCC10 
- * (<code>QUPCIN043200UV01</code>) transactions.
+ * (<code>QUPCIN043200UV01</code>) transactions. <br>
+ * This is a <i>util</i> class and it can not be instantiated. The only way to 
+ * use it is trough its methods.
  * 
  * @version 0.1
  * @since 0.1
