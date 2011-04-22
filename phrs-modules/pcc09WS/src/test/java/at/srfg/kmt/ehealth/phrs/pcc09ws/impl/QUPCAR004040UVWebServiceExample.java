@@ -9,7 +9,6 @@ package at.srfg.kmt.ehealth.phrs.pcc09ws.impl;
 
 import static at.srfg.kmt.ehealth.phrs.pcc09ws.impl.Constants.*;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
