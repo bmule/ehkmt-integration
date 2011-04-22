@@ -164,6 +164,7 @@ public final class ModelClassFactory {
         activityCategoryProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCategoryMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        activityCategoryMetadatas.add(MetadataFactory.buildSystolicCode());
         result.put(activityCategoryProperty, activityCategoryMetadatas);
 
         final DynamicPropertyType activityCodeProperty = new DynamicPropertyType();
@@ -171,6 +172,7 @@ public final class ModelClassFactory {
         activityCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        activityCodeMetadatas.add(MetadataFactory.buildIsObservationValue());
         result.put(activityCodeProperty, activityCodeMetadatas);
 
         final DynamicPropertyType activityDurationCodeProperty = new DynamicPropertyType();
@@ -411,6 +413,7 @@ public final class ModelClassFactory {
         issueTypeCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> issueTypeCodePropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        issueTypeCodePropertyMetadatas.add(buildIsObservationCode());
         result.put(issueTypeCodeProperty, issueTypeCodePropertyMetadatas);
 
         final DynamicPropertyType issueCodeProperty = new DynamicPropertyType();
@@ -418,6 +421,7 @@ public final class ModelClassFactory {
         issueCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> issueCodePropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        issueCodePropertyMetadatas.add(buildIsObservationValue());
         result.put(issueCodeProperty, issueCodePropertyMetadatas);
 
         final DynamicPropertyType isActiveStatusProperty = new DynamicPropertyType();
@@ -433,6 +437,7 @@ public final class ModelClassFactory {
         dateStartProperty.setType(Date.class.getName());
         final Set<DynamicPropertyMetadata> dateStartMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        dateStartMetadatas.add(buildIsObservationEfectiveDate());
         result.put(dateStartProperty, dateStartMetadatas);
 
         final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
@@ -463,6 +468,7 @@ public final class ModelClassFactory {
         riskFactorTypeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorTypeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        riskFactorTypeMetadatas.add(MetadataFactory.buildIsObservationCode());
         result.put(riskFactorTypeProperty, riskFactorTypeMetadatas);
 
         final DynamicPropertyType riskFactorCodeProperty = new DynamicPropertyType();
@@ -470,22 +476,22 @@ public final class ModelClassFactory {
         riskFactorCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        riskFactorCodeMetadatas.add(MetadataFactory.buildIsObservationValue());
         result.put(riskFactorCodeProperty, riskFactorCodeMetadatas);
 
         final DynamicPropertyType isActiveProperty = new DynamicPropertyType();
         isActiveProperty.setName(IS_ACTIVE);
         isActiveProperty.setType(String.class.getName());
-        final Set<DynamicPropertyMetadata> risActivePropertyMetadatas =
+        final Set<DynamicPropertyMetadata> isActivePropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        result.put(isActiveProperty, risActivePropertyMetadatas);
+        result.put(isActiveProperty, isActivePropertyMetadatas);
 
         final DynamicPropertyType riskFactorDurationProperty = new DynamicPropertyType();
-        riskFactorDurationProperty.setName(RISK_FACTOR_CODE);
+        riskFactorDurationProperty.setName(RISK_FACTOR_DURATION);
         riskFactorDurationProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorDurationMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         result.put(riskFactorDurationProperty, riskFactorDurationMetadatas);
-
 
         final DynamicPropertyType hasContrFactorsProperty = new DynamicPropertyType();
         hasContrFactorsProperty.setName(HAS_CONTRIBUTION_FACTORS);
@@ -513,6 +519,7 @@ public final class ModelClassFactory {
         dateStartProperty.setType(Date.class.getName());
         final Set<DynamicPropertyMetadata> dateStartMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        dateStartMetadatas.add(MetadataFactory.buildIsObservationEfectiveDate());
         result.put(dateStartProperty, dateStartMetadatas);
 
         final DynamicPropertyType dateEndProperty = new DynamicPropertyType();
