@@ -168,4 +168,55 @@ final class MetadataFactory {
 
         return result;
     }
+
+    /**
+     * Builds an observation code annotation, properties annotated with this 
+     * represents the code element from a observation (in the HL7 V.3 
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * 
+     * @return an observation code annotation.
+     */
+    static DynamicPropertyMetadata buildIsObservationCode() {
+        final DynamicPropertyMetadata result =
+                new DynamicPropertyMetadata();
+        // FIXME : use constants here
+        result.setName("isObservationCode");
+        result.setValue(Boolean.TRUE);
+
+        return result;
+    }
+
+    /**
+     * Builds an observation value annotation, properties annotated with this 
+     * represents the value element from a observation (in the HL7 V.3 
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * 
+     * @return an observation code annotation.
+     */
+    static DynamicPropertyMetadata buildIsObservationValue() {
+        final DynamicPropertyMetadata result =
+                new DynamicPropertyMetadata();
+        // FIXME : use constants here
+        result.setName("isObservationValue");
+        result.setValue(Boolean.TRUE);
+
+        return result;
+    }
+
+    /**
+     * Builds an observation effective annotation, properties annotated with this 
+     * represents the effective element from a observation (in the HL7 V.3 
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * 
+     * @return an observation code annotation.
+     */
+    static DynamicPropertyMetadata buildIsObservationEfectiveDate() {
+        final DynamicPropertyMetadata result =
+                new DynamicPropertyMetadata();
+        // FIXME : use constants here
+        result.setName("isObservationEfectiveDate");
+        result.setValue(Boolean.TRUE);
+
+        return result;
+    }
 }
