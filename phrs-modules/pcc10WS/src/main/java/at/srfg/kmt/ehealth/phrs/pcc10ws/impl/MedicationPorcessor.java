@@ -75,7 +75,7 @@ class MedicationPorcessor implements Processor<Response> {
             LOGGER.warn("This input [{}] has the wrong syntax", in);
             return false;
         }
-        
+
         final boolean isMedList = in.endsWith("MEDLIST");
         return isMedList;
     }
@@ -102,6 +102,13 @@ class MedicationPorcessor implements Processor<Response> {
         }
 
         QUPCAR004030UVServiceUtil.sendPCC10(medication, DEFAULT_PCC_10_END_POINT);
+
+        try {
+            QUPCAR004030UVServiceUtil.toWriteInTemp(medication, "medication");
+        } catch (Exception exception) {
+            // I dont care !
+        }
+
         result = Response.status(Status.OK).build();
         return exceptions.isEmpty();
     }
