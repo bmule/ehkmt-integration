@@ -1,8 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/*
  * Project :iCardea
  * File : ProblemsFactroy.java 
  * Encoding : UTF-8
@@ -14,6 +10,11 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.QUPCAR004030UVServiceUtil.buildQUPCIN043200UV01;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
+import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
 import java.text.DateFormat;
@@ -21,7 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -56,6 +59,12 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
     private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
+    
+    private Map<String, String> propertiesNames;
+    
+    ProblemFactroy() {
+        
+    }
 
     /**
      * All problems to be transformed according with the HL7 v3.
@@ -118,10 +127,13 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         CD code = buildCode(issueTypeCode);
         observation.setCode(code);
 
-        final Date observationDate = (Date) problem.get("observationDate");
+        final Date dateStart = (Date) problem.get("observationDateStart");
+
         final IVLTS effectiveTime = new IVLTS();
-        effectiveTime.setValue(dateFormat.format(observationDate));
+        effectiveTime.setValue(dateFormat.format(dateStart));
         observation.setEffectiveTime(effectiveTime);
+
+        // FIXME : do I need to care about the end date ?
 
         final String issueCode = (String) problem.get("issueCode");
         final CD value = buildValue(issueCode);
@@ -196,5 +208,70 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         iis.add(ii2);
 
         return iis;
+    }
+
+    /**
+     * Extracts the needed metadatas for a given class (identified after its 
+     * unique URI) from the underlying persistence layer and organize them in to
+     * a map. More precisely this methods extracts all the
+     * metadata(s) with the name "code" for all the properties for a given class
+     * and store them in  to a map, in this map the key is the properties name 
+     * and like value the code metadata value if there is one. If a property 
+     * does not have metadata named "code" then this property name does not appears
+     * in the resulted table. If the underlying persistence layer does not 
+     * contains a clas for the given URI then this method returns an empty map.
+     * 
+     * @param classURI the class UIR to be analyzed.
+     * @return a map that contains like key the property name and like value
+     * the corresponding metadata (with the name "code").
+     */
+    private Map<String, DynamicPropertyMetadata> getObservationCodeMetadata(String classURI) {
+        final Map<String, DynamicPropertyMetadata> result = getMetadata(classURI, "isObservationCode");
+        return result;
+    }
+
+    private Map<String, DynamicPropertyMetadata> getObservationValueMetadata(String classURI) {
+        final Map<String, DynamicPropertyMetadata> result =
+                getMetadata(classURI, "isObservationValue");
+        return result;
+    }
+
+    private Map<String, DynamicPropertyMetadata> getObservationEfectiveDateMetadata(String classURI) {
+        final Map<String, DynamicPropertyMetadata> result =
+                getMetadata(classURI, "isObservationEfectiveDate");
+        return result;
+    }
+
+    private Map<String, DynamicPropertyMetadata> getMetadata(String classURI, String metaName) {
+
+        final DynamicClassRepository classRepository;
+        final Map<String, DynamicPropertyMetadata> result =
+                new HashMap<String, DynamicPropertyMetadata>();
+        try {
+            classRepository = lookupLocal(DynamicClassRepository.class);
+
+        } catch (Exception exception) {
+            LOGGER.error("The metada can not be located, this can affect the functionality");
+            LOGGER.error(exception.getMessage(), exception);
+            return result;
+        }
+
+        final DynamicClass dynamicClass = classRepository.get(classURI);
+        final Set<DynamicPropertyType> propertyTypes =
+                dynamicClass.getPropertyTypes();
+
+        for (DynamicPropertyType propertyType : propertyTypes) {
+            final String propertyName = propertyType.getName();
+            final Set<DynamicPropertyMetadata> metadatas =
+                    propertyType.getMetadatas();
+            for (DynamicPropertyMetadata metadata : metadatas) {
+                final String metadataName = metadata.getName();
+                if (metaName.equals(metadataName)) {
+                    result.put(propertyName, metadata);
+                }
+            }
+        }
+
+        return result;
     }
 }
