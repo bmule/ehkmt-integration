@@ -18,7 +18,6 @@ import java.util.Map;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -64,7 +63,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
     private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
 
     /**
-     * All vital signs to be transformed saccording with the HL7 v3.
+     * All vital signs to be transformed according with the HL7 v3.
      */
     private Set<DynaBean> vitalSigns;
 
@@ -79,6 +78,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
     private final Map<String, DynamicPropertyMetadata> bloodPessureMetadata;
 
     VitalSignsFactory() {
+        // FIXEM : use constants here.
         bodyWeightMetadata =
                 getCodeMetadata("at.srfg.kmt.ehealth.phrs.datamodel.impl.BodyWeight");
         bloodPessureMetadata =
@@ -124,7 +124,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         this.vitalSigns = medication;
     }
 
-    private CD buildCode(final String codeSystemAndCode) {
+    private CD buildCode(String codeSystemAndCode) {
 
         if (!codeSystemAndCode.contains(":")) {
             final CS statusCode = new CS();
@@ -290,6 +290,21 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         return result;
     }
 
+    /**
+     * Extracts the needed metadatas for a given class (identified after its 
+     * unique URI) from the underlying persistence layer and organize them in to
+     * a map. More precisely this methods extracts all the
+     * metadata(s) with the name "code" for all the properties for a given class
+     * and store them in  to a map, in this map the key is the properties name 
+     * and like value the code metadata value if there is one. If a property 
+     * does not have metadata named "code" then this property name does not appears
+     * in the resulted table. If the underlying persistence layer does not 
+     * contains a clas for the given URI then this method returns an empty map.
+     * 
+     * @param classURI the class UIR to be analyzed.
+     * @return a map that contains like key the property name and like value
+     * the corresponding metadata (with the name "code").
+     */
     private Map<String, DynamicPropertyMetadata> getCodeMetadata(String classURI) {
 
         final DynamicClassRepository classRepository;
