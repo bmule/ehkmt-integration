@@ -187,6 +187,7 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 
         final SXCMTS startStopTime = buildTimePeriod(dateStart, dateEnd);
         substanceAdministration.getEffectiveTime().add(startStopTime);
+        
 
         final String timeOfDay =
                 (String) medication.get("medicationFrequencyTimeOfDay");
