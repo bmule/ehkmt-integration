@@ -140,7 +140,7 @@ class QUPCIN043100UV01Processor {
     private void process(MCCIMT000100UV01Receiver receiver) {
     }
 
-    private String process(QUPCMT040300UV01ParameterList parameter) {
+    private String processAll(QUPCMT040300UV01ParameterList parameter) {
         
         final StringBuffer result = new StringBuffer();
 
@@ -277,6 +277,41 @@ class QUPCIN043100UV01Processor {
         LOGGER.debug(personNameMsg);
 
         authorizePerson(pn);
+        
+        return  result.toString();
+    }
+    
+    /**
+     * Care only about the patient id and care provision code.
+     * 
+     * @param parameter
+     * @return 
+     */
+    private String process(QUPCMT040300UV01ParameterList parameter) {
+        
+        final StringBuffer result = new StringBuffer();
+
+        // the patient id for this list element, the list can contain more
+        // patients.
+        final II patientIdIntanceId = parameter.getPatientId().getValue();
+        final String patientIdMsg =
+                String.format("Patient id :%s ", toString(patientIdIntanceId));
+        LOGGER.debug(patientIdMsg);
+        // send this to EM
+        result.append(patientIdIntanceId.getExtension());
+        result.append("-");
+
+
+        final QUPCMT040300UV01CareProvisionCode provisionCode =
+                parameter.getCareProvisionCode().getValue();
+
+        // obtains the Care Provision Code (it can be 0..1)
+        final CD provCodeConceptDescriptor = provisionCode.getValue();
+        final String provCodeMsg = String.format("Care Provision Code : %s",
+                toString(provCodeConceptDescriptor));
+        LOGGER.debug(provCodeMsg);
+        // send this to EM
+        result.append(provCodeConceptDescriptor.getCode());
         
         return  result.toString();
     }
