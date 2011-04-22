@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
+
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.Processor;
 import at.srfg.kmt.ehealth.phrs.util.Util;
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class NotifyRestWS {
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.NotifyRestWS</code>.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(NotifyRestWS.class);
-    
+
     /**
      * The chain of processor used to process the service input.
      */
@@ -56,6 +57,9 @@ public class NotifyRestWS {
     public NotifyRestWS() {
         processors = new ArrayList<Processor>();
         processors.add(new MedicationPorcessor());
+        // it handles the blood preasure and body weight
+        processors.add(new VitalSignsProcessor()); 
+        //processors.add(new ProblemProcessor());
     }
 
     /**
@@ -73,19 +77,9 @@ public class NotifyRestWS {
     @Produces("application/json")
     public Response notify(@QueryParam("sender") String sender,
             @QueryParam("q") String q) {
-        final Object[] forLog = Util.forLog(sender, q);
+
+        final Object[] forLog = Util.forLog(q, sender);
         LOGGER.debug("Tries to process input : {} from sender : {}", forLog);
-
-        final int indexOf = q.indexOf("-");
-        if (indexOf == -1) {
-            LOGGER.error("Bad syntax for the request");
-            return Response.status(Status.BAD_REQUEST).build();
-        }
-
-        final String userId = q.substring(0, indexOf);
-        LOGGER.debug("User id : {}", userId);
-        String provisionCode = q.substring(indexOf + 1, q.length());
-        LOGGER.debug("Provision Code  : {}", provisionCode);
 
         // this is just a hot fox for the review, it only sends a default file
         // according wiht an paramter.
@@ -97,6 +91,22 @@ public class NotifyRestWS {
             final Response result = processor.getResult();
             return result;
         }
+
+        if (q == null) {
+            LOGGER.warn("No query to process.");
+            return Response.status(Status.NO_CONTENT).build();
+        }
+        
+        final int indexOf = q.indexOf("-");
+        if (indexOf == -1) {
+            LOGGER.error("Bad syntax for the request");
+            return Response.status(Status.BAD_REQUEST).build();
+        }
+
+        final String userId = q.substring(0, indexOf);
+        LOGGER.debug("User id : {}", userId);
+        String provisionCode = q.substring(indexOf + 1, q.length());
+        LOGGER.debug("Provision Code  : {}", provisionCode);
 
         Response result = Response.status(Status.NOT_FOUND).build();
         for (Processor processor : processors) {
