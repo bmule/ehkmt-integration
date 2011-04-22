@@ -172,7 +172,8 @@ final class MetadataFactory {
     /**
      * Builds an observation code annotation, properties annotated with this 
      * represents the code element from a observation (in the HL7 V.3 
-     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile. </br>
+     * The name for this metadata is "isObservationCode" and its type is boolean.
      * 
      * @return an observation code annotation.
      */
@@ -189,7 +190,8 @@ final class MetadataFactory {
     /**
      * Builds an observation value annotation, properties annotated with this 
      * represents the value element from a observation (in the HL7 V.3 
-     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile. </br>
+     * The name for this metadata is "isObservationValue" and its type is boolean.
      * 
      * @return an observation code annotation.
      */
@@ -206,7 +208,8 @@ final class MetadataFactory {
     /**
      * Builds an observation effective annotation, properties annotated with this 
      * represents the effective element from a observation (in the HL7 V.3 
-     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile.
+     * assumption) following the "1.3.6.1.4.1.19376.1.5.3.1.4.5" profile. </br>
+     * The name for this metadata is "isObservationEfectiveDate" and its type is boolean.
      * 
      * @return an observation code annotation.
      */
