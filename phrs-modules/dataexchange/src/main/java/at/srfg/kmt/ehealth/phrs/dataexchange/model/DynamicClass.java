@@ -21,27 +21,45 @@ import javax.persistence.OneToMany;
 
 
 /**
- * This entity is used to define and store a class.</br>
- * The class is used to define types.</br>
- * A type can be defined by a set of properties associated with an unique URI.</br>
- * Every property is a pair key-value. </br>
+ * This entity is used to a class.  A class is used to define types.
+ * A type can be defined by a set of properties and an unique URI. The property
+ * are used to define properties types, each property type can must have a name,
+ * a URI and a type. Each property type can also have none, one or more 
+ * metadata(s). <br>
  * This entity defines two named queries : 
  * <ul>
  * <li> selectDynamicClassByURI - search all the <code>DynamicClass</code> where 
  * the URI match exacts a given URI.
  * <li> selectDynamicClassByURIPrefix - search all the <code>DynamicClass</code> where 
  * the URI match starts with a given prefix.
- * </ul>
+ * <li> selectPropertyForClassAndMedataXXX - search all the properties
+ * for a given where where the property has a given metadata.
+ * </ul> <br>
+ * FIXME : find a better way to avoid the two time join but care about the old
+ * Knutism "premature optimization is the root of all evil".
  *
  * @version 0.1
  * @since 0.1
  * @author Mihai
+ * @see DynamicPropertyType
  */
 @NamedQueries({
     @NamedQuery(name = "selectDynamicClassByURI",
-    query = "SELECT dc FROM DynamicClass AS dc WHERE dc.uri=:uri"),
+                query = "SELECT dc FROM DynamicClass AS dc WHERE dc.uri=:uri"),
     @NamedQuery(name = "selectDynamicClassByURIPrefix",
-    query = "SELECT dc FROM DynamicClass AS dc WHERE dc.uri LIKE uri")
+                query = "SELECT dc FROM DynamicClass AS dc WHERE dc.uri LIKE uri"),
+    @NamedQuery(name="selectPropertyForClassAndMedataByUri", 
+                query="SELECT propType FROM DynamicClass AS dc "
+                    + " JOIN dc.propertyTypes AS propType "
+                    + " JOIN propType.metadatas AS meta_data "
+                    + " WHERE dc.uri=:class_uri AND"
+                    +       " meta_data.uri=:meta_data_uri"), 
+    @NamedQuery(name="selectPropertyForClassAndMedataByName", 
+                query="SELECT propType FROM DynamicClass AS dc "
+                    + " JOIN dc.propertyTypes AS propType "
+                    + " JOIN propType.metadatas AS meta_data "
+                    + " WHERE dc.uri=:class_uri AND"
+                    +       " meta_data.name=:meta_data_name")
 })
 @Entity
 public class DynamicClass implements Serializable {
@@ -162,5 +180,17 @@ public class DynamicClass implements Serializable {
 
     public void setPropertyTypes(Set<DynamicPropertyType> propertyTypes) {
         this.propertyTypes = propertyTypes;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder result = new StringBuilder();
+        result.append("DynamicClass{uri=");
+        result.append(uri);
+        result.append(", name=");
+        result.append(name);
+        result.append("}");
+        
+        return result.toString();
     }
 }
