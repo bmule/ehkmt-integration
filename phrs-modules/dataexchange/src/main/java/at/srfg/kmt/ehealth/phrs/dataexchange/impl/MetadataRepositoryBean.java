@@ -121,7 +121,7 @@ public class MetadataRepositoryBean implements MetadataRepository {
         final Query query =
                 entityManager.createNamedQuery("selectPropertyForClassAndMedataByUri");
         query.setParameter("class_uri", classUri);
-        query.setParameter("meta_data_name", metadataUri);
+        query.setParameter("meta_data_uri", metadataUri);
 
         final List<DynamicPropertyType> resultList = query.getResultList();
         result.addAll(resultList);
