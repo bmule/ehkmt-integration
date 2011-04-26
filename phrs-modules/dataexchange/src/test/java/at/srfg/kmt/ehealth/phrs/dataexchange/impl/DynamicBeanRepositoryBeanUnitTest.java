@@ -8,10 +8,10 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.impl;
 
 
+import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.Constants;
 import java.io.Serializable;
 import java.util.Date;
-import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ModelFactory;
 import java.io.File;
 import org.jboss.shrinkwrap.api.Archive;
@@ -41,6 +41,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 
 /**
