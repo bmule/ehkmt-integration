@@ -18,7 +18,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
- *
+ * Define a singular property type.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -89,7 +90,7 @@ public class DynamicPropertyType implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         result.append("DynamicPropertyType{name=");
         result.append(name);
         result.append(", type=");

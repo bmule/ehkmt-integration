@@ -1,8 +1,4 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-/*
  * Project :iCardea
  * File : DynamicProperty.java
  * Encoding : UTF-8
@@ -12,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
 import java.io.Serializable;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,10 +15,13 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 /**
- *
+ * Defines a singular property.
+ * 
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
+ * @see DynamicClass
  */
 @Entity
 public class DynamicProperty implements Serializable {
@@ -92,7 +90,7 @@ public class DynamicProperty implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         result.append("DynamicProperty{name=");
         result.append(name);
         result.append(", type=");

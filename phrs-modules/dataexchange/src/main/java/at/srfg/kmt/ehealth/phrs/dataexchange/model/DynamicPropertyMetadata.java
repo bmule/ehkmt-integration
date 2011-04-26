@@ -76,4 +76,19 @@ public class DynamicPropertyMetadata implements Serializable {
     public void setPropertyType(DynamicPropertyType propertyType) {
         this.propertyType = propertyType;
     }
+
+    @Override
+    public String toString() {
+        
+        final StringBuilder result = new StringBuilder();
+        result.append("DynamicPropertyMetadata{name=");
+        result.append(name);
+        result.append(", uri=");
+        result.append(uri);
+        result.append(", value=");
+        result.append(value);
+        result.append("}");
+        
+        return result.toString();
+    }
 }
