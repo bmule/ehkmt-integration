@@ -90,6 +90,8 @@ public class DynamicBeanRepositoryRestWS {
      * POST based web service used to persist a given dynamic bean JSON 
      * serialized. The (JSON) object to serialize is specified like form 
      * parameter named <code>dynaBean</code>.</br>
+     * This service is used to serialize singular bean instances. For a list of
+     * beans this method must be call repetitively (once per bean instance).
      * This web service can be access on :  
      * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/push.
      * 
@@ -116,6 +118,7 @@ public class DynamicBeanRepositoryRestWS {
      * POST based web service used to persist a given dynamic bean JSON 
      * serialized.  The (JSON) object to serialize is contained body request 
      * body.</br>
+     * This service is used to serialize singular bean instances.
      * This web service can be access on :  
      * <JBOSS URI>/dataexchange_ws/dynamic_bean_repository/persist.
      * 
