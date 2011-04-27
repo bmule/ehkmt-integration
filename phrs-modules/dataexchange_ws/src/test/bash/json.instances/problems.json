@@ -15,6 +15,7 @@
     "comment": null,
     "isActiveStatus": true,
     "issueCode": "UMLS:C0013404",
+    // UMLS:C1457887 == Symptom
     "issueTypeCode": "UMLS:C1457887",
     "observationDateEnd": null,
     "observationDateStart": "2011-04-22T11:12:00Z",
