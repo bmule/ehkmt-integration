@@ -191,7 +191,7 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         // FIXME : do I need to care about the end date ?
 
         // final String issueCode = (String) problem.get("issueCode");
-        final String codeValuePropName = getCodePropertyName(problem);
+        final String codeValuePropName = getValuePropertyName(problem);
         final String issueCode = (String) problem.get(codeValuePropName);
         final CD value = buildValue(issueCode);
         observation.getValue().add(value);
