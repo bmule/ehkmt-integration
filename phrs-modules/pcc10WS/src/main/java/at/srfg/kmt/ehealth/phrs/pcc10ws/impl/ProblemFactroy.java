@@ -8,12 +8,12 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
-import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
-import javax.xml.bind.JAXBException;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.QUPCAR004030UVServiceUtil.buildQUPCIN043200UV01;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
 import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
+import javax.xml.bind.JAXBException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.MetadataRepository;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
@@ -179,8 +179,12 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         //final String issueTypeCode = (String) problem.get("issueTypeCode");
         final String codePropName = getCodePropertyName(problem);
         final String issueTypeCode = (String) problem.get(codePropName);
-        final CD code = buildCode(issueTypeCode);
-        observation.setCode(code);
+        if (issueTypeCode == null) {
+            LOGGER.error("The property {} is null. This can influence the result message !", codePropName);
+        } else {
+            final CD code = buildCode(issueTypeCode);
+            observation.setCode(code);
+        }
 
         final Date dateStart = (Date) problem.get("observationDateStart");
 
@@ -193,8 +197,12 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         // final String issueCode = (String) problem.get("issueCode");
         final String codeValuePropName = getValuePropertyName(problem);
         final String issueCode = (String) problem.get(codeValuePropName);
-        final CD value = buildValue(issueCode);
-        observation.getValue().add(value);
+        if (issueCode == null) {
+            LOGGER.error("The property {} is null. This can influence the result message !", codeValuePropName);
+        } else {
+            final CD value = buildValue(issueCode);
+            observation.getValue().add(value);
+        }
 
         // FIXME : ask the UI about teh status
         final String statusActive = "UMLS:C0205177";
