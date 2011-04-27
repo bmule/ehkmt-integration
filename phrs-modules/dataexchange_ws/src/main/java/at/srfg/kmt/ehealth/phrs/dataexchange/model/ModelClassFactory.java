@@ -166,7 +166,6 @@ public final class ModelClassFactory {
         activityCategoryProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCategoryMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        activityCategoryMetadatas.add(MetadataFactory.buildSystolicCode());
         result.put(activityCategoryProperty, activityCategoryMetadatas);
 
         final DynamicPropertyType activityCodeProperty = new DynamicPropertyType();
@@ -174,7 +173,7 @@ public final class ModelClassFactory {
         activityCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        activityCodeMetadatas.add(MetadataFactory.buildIsObservationValue());
+        activityCodeMetadatas.add(MetadataFactory.buildIsObservationCode());
         result.put(activityCodeProperty, activityCodeMetadatas);
 
         final DynamicPropertyType activityDurationCodeProperty = new DynamicPropertyType();
@@ -224,6 +223,7 @@ public final class ModelClassFactory {
         valueActivityProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> valueActivityMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        valueActivityMetadatas.add(MetadataFactory.buildIsObservationValue());
         result.put(valueActivityProperty, valueActivityMetadatas);
 
         final DynamicPropertyType commentProperty = new DynamicPropertyType();
