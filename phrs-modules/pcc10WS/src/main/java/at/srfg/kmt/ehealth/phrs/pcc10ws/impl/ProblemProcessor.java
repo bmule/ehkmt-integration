@@ -12,8 +12,8 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
-import at.srfg.kmt.ehealth.phrs.pcc10ws.api.Processor;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.DEFAULT_PCC_10_END_POINT;
+import at.srfg.kmt.ehealth.phrs.pcc10ws.api.Processor;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynaClassException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicBeanRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicPropertyTypeException;
@@ -36,22 +36,23 @@ import javax.ws.rs.core.Response.Status;
  * @since 0.1
  * @author Mihai
  */
-final class ProblemProcessor implements Processor<Response>  {
-        /**
+final class ProblemProcessor implements Processor<Response> {
+
+    /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.ProblemProcessor</code>.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(ProblemProcessor.class);
 
-    private static final ProblemFactroy PROBLEMS_FACTORY = new ProblemFactroy();
+    private static final ProblemFactroy PROBLEM_FACTORY = new ProblemFactroy();
 
     private Set<Exception> exceptions;
 
     private Response result;
 
     /**
-     * Builds a <code>VitalSignsProcessor</code> instance.
+     * Builds a <code>ProblemProcessor</code> instance.
      */
     ProblemProcessor() {
         result = Response.status(Status.NOT_MODIFIED).build();
@@ -109,7 +110,7 @@ final class ProblemProcessor implements Processor<Response>  {
         } catch (Exception exception) {
             // I dont care !
         }
-        
+
         result = Response.status(Status.OK).build();
         return exceptions.isEmpty();
 
@@ -127,15 +128,23 @@ final class ProblemProcessor implements Processor<Response>  {
         }
 
 
+        final Set<DynaBean> all = new HashSet<DynaBean> ();
+
         // FIXME : use the constats here
         final String problemsURI =
                 "at.srfg.kmt.ehealth.phrs.datamodel.impl.Problem";
         final Set<DynaBean> allProbems = beanRepository.getAllForClass(problemsURI);
+        all.addAll(allProbems);
+        
+        // FIXME : use the constats here
+        final String risksURI =
+                "at.srfg.kmt.ehealth.phrs.datamodel.impl.Risk";
+        final Set<DynaBean> allRisks = beanRepository.getAllForClass(problemsURI);
+        all.addAll(allRisks);
 
-        PROBLEMS_FACTORY.setProblems(allProbems);
+        PROBLEM_FACTORY.setProblems(all);
 
-        final QUPCIN043200UV01 build = PROBLEMS_FACTORY.build();
+        final QUPCIN043200UV01 build = PROBLEM_FACTORY.build();
         return build;
     }
-
 }
