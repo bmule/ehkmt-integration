@@ -19,7 +19,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.model;
  * @author Mihai
  */
 final class MetadataFactory {
-
+    
     /**
      * Don't let anybody to instantiate this class.
      */
