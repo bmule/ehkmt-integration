@@ -168,6 +168,11 @@ public class DynamicBean implements Serializable {
      * True if this bean is marked as deleted.
      */
     private Boolean isDeleted;
+    
+    /**
+     * Used to indicate the bean origin (e.g. EHR system)
+     */
+    private String refersToSource;
 
     /**
      * Builds a <code>DynamicBean</code> instance.
@@ -327,7 +332,14 @@ public class DynamicBean implements Serializable {
     public void setIsDeleted(Boolean isDeleted) {
         this.isDeleted = isDeleted;
     }
-    
+
+    public String getRefersToSource() {
+        return refersToSource;
+    }
+
+    public void setRefersToSource(String refersToSource) {
+        this.refersToSource = refersToSource;
+    }
     
 
     @Override
@@ -347,6 +359,8 @@ public class DynamicBean implements Serializable {
         result.append(createDate);
         result.append(", ownerURI=");
         result.append(ownerURI);
+        result.append(", refersToSource=");
+        result.append(refersToSource);
         result.append(", canRead=");
         result.append(canRead);
         result.append(", canWrite=");
