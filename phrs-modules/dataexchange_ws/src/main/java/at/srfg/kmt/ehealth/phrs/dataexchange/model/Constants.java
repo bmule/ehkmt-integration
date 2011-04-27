@@ -143,7 +143,7 @@ public class Constants {
 
     public static String ISSUE_CODE = "issueCode";
 
-    public static String IS_ACTIVE = "isActiveStartus";
+    public static String IS_ACTIVE = "isActiveStatus";
 
     public static String RISK_FACTOR_TYPE = "riskFactorType";
 
