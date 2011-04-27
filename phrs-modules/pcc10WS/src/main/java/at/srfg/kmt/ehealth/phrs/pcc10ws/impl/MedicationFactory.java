@@ -35,7 +35,8 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Used to build Medication according with the HL7 v3. <br>
+ * Used to build Medication objects according with the HL7 v3 standards
+ * from a given <code>DynaBean</code>. </br>
  * This class can not be extended.
  * 
  * @version 0.1

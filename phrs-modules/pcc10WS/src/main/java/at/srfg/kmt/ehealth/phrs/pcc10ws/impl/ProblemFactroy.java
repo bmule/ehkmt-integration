@@ -35,7 +35,10 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Used to build Problems and Risks objects according with the HL7 v3 standards
+ * from a given <code>DynaBean</code>. </br>
+ * This class can not be extended.
+ *  
  * @version 0.1
  * @since 0.1
  * @author Mihai
