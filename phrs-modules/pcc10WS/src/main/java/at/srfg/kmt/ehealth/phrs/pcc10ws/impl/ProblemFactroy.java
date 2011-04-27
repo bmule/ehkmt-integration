@@ -1,20 +1,21 @@
 /*
  * Project :iCardea
- * File : ProblemsFactroy.java 
+ * File : ProblemFactroy.java 
  * Encoding : UTF-8
- * Date : Apr 21, 2011
+ * Date : Apr 25, 2011
  * User : Mihai Radulescu
  */
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
+import javax.xml.bind.JAXBException;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.QUPCAR004030UVServiceUtil.buildQUPCIN043200UV01;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
 import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
-import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicClass;
-import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyMetadata;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.MetadataRepository;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
 import java.text.DateFormat;
@@ -27,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
@@ -41,6 +41,14 @@ import org.slf4j.LoggerFactory;
  * @author Mihai
  */
 final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
+
+    public static final String IS_OBSERVATION_CODE = "isObservationCode";
+
+    public static final String IS_OBSERVATION_VALUE = "isObservationValue";
+
+    public static final String PROBLEM_URI = "at.srfg.kmt.ehealth.phrs.datamodel.impl.Problem";
+
+    public static final String RISK_URI = "at.srfg.kmt.ehealth.phrs.datamodel.impl.Risk";
 
     /**
      * The Logger instance. All log messages from this class
@@ -59,17 +67,63 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
     private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
-    
-    private Map<String, String> propertiesNames;
-    
-    ProblemFactroy() {
-        
-    }
 
     /**
      * All problems to be transformed according with the HL7 v3.
      */
     private Set<DynaBean> problems;
+
+    private Map<String, String> problemsMeta;
+
+    private Map<String, String> riskMeta;
+
+    /**
+     * Builds a <code>ProblemFactroy</code> instance.
+     */
+    ProblemFactroy() {
+        problemsMeta = new HashMap<String, String>();
+        riskMeta = new HashMap<String, String>();
+        solveMetadata();
+        LOGGER.debug("The Problem class metadata : ", problems);
+        LOGGER.debug("The Risk class metadata : ", riskMeta);
+    }
+
+    private void solveMetadata() {
+        final MetadataRepository metadataRepository;
+        try {
+            metadataRepository = lookupLocal(MetadataRepository.class);
+
+        } catch (Exception exception) {
+            LOGGER.error("The metada can not be located, this can affect the functionality");
+            LOGGER.error(exception.getMessage(), exception);
+            return;
+        }
+
+        final Set<DynamicPropertyType> problemObsCode =
+                metadataRepository.getByMetadataName(PROBLEM_URI, IS_OBSERVATION_CODE);
+        // FIXME : the key values is overwrite 
+        for (DynamicPropertyType propertyType : problemObsCode) {
+            problemsMeta.put(IS_OBSERVATION_CODE, propertyType.getName());
+        }
+
+        final Set<DynamicPropertyType> problemObsValue =
+                metadataRepository.getByMetadataName(PROBLEM_URI, IS_OBSERVATION_VALUE);
+        for (DynamicPropertyType propertyType : problemObsValue) {
+            problemsMeta.put(IS_OBSERVATION_VALUE, propertyType.getName());
+        }
+
+        final Set<DynamicPropertyType> riskObsCode =
+                metadataRepository.getByMetadataName(RISK_URI, IS_OBSERVATION_CODE);
+        for (DynamicPropertyType propertyType : riskObsCode) {
+            riskMeta.put(IS_OBSERVATION_CODE, propertyType.getName());
+        }
+
+        final Set<DynamicPropertyType> riskObsValue =
+                metadataRepository.getByMetadataName(RISK_URI, IS_OBSERVATION_VALUE);
+        for (DynamicPropertyType propertyType : riskObsValue) {
+            riskMeta.put(IS_OBSERVATION_VALUE, propertyType.getName());
+        }
+    }
 
     @Override
     public QUPCIN043200UV01 build() throws PCC10BuildException {
@@ -93,13 +147,12 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
                 subject2.getCareProvisionEvent();
 
         for (DynaBean problem : problems) {
-            final REPCMT004000UV01PertinentInformation5 information =
+            REPCMT004000UV01PertinentInformation5 information =
                     buildPertinentInformation(problem);
             careProvisionEvent.getPertinentInformation3().add(information);
         }
 
         return query;
-
     }
 
     Set<DynaBean> getProblems() {
@@ -123,8 +176,10 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         final List<II> templateIds = buildTemplateIds();
         observation.getTemplateId().addAll(templateIds);
 
-        final String issueTypeCode = (String) problem.get("issueTypeCode");
-        CD code = buildCode(issueTypeCode);
+        //final String issueTypeCode = (String) problem.get("issueTypeCode");
+        final String codePropName = getCodePropertyName(problem);
+        final String issueTypeCode = (String) problem.get(codePropName);
+        final CD code = buildCode(issueTypeCode);
         observation.setCode(code);
 
         final Date dateStart = (Date) problem.get("observationDateStart");
@@ -135,7 +190,9 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
 
         // FIXME : do I need to care about the end date ?
 
-        final String issueCode = (String) problem.get("issueCode");
+        // final String issueCode = (String) problem.get("issueCode");
+        final String codeValuePropName = getCodePropertyName(problem);
+        final String issueCode = (String) problem.get(codeValuePropName);
         final CD value = buildValue(issueCode);
         observation.getValue().add(value);
 
@@ -152,48 +209,38 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         return pertinentInformation;
     }
 
-    private CD buildCode(String status) {
-
-        if (!status.contains(":")) {
-            final CD code = new CD();
-            code.setDisplayName(status);
-            return code;
+    private String getCodePropertyName(DynaBean bean) {
+        final Object type = bean.get("_phrsBeanClassURI");
+        if (PROBLEM_URI.equals(type)) {
+            final String result = problemsMeta.get(IS_OBSERVATION_CODE);
+            return result;
         }
 
-        final String[] statusCodes = codeSystemAndCode(status);
-        final CD code = new CD();
-        code.setCode(statusCodes[1]);
-        code.setCodeSystem(statusCodes[0]);
-        return code;
-    }
-
-    private CS buildStatus(String status) {
-
-        if (!status.contains(":")) {
-            final CS statusCode = new CS();
-            statusCode.setDisplayName(status);
-            return statusCode;
+        if (RISK_URI.equals(type)) {
+            final String result = riskMeta.get(IS_OBSERVATION_CODE);
+            return result;
         }
 
-        final String[] statusCodes = codeSystemAndCode(status);
-        final CS statusCode = new CS();
-        statusCode.setCode(statusCodes[1]);
-        statusCode.setCodeSystem(statusCodes[0]);
-        return statusCode;
+        final String msg =
+                String.format("The actual type %s is not supported", type);
+        throw new IllegalArgumentException(msg);
     }
 
-    private CD buildValue(String status) {
-        return buildCode(status);
-    }
+    private String getValuePropertyName(DynaBean bean) {
+        final Object type = bean.get("_phrsBeanClassURI");
+        if (PROBLEM_URI.equals(type)) {
+            final String result = problemsMeta.get(IS_OBSERVATION_VALUE);
+            return result;
+        }
 
-    private String[] codeSystemAndCode(String in) {
-        final String[] result = new String[2];
+        if (RISK_URI.equals(type)) {
+            final String result = riskMeta.get(IS_OBSERVATION_VALUE);
+            return result;
+        }
 
-        final int indexOf = in.indexOf(":");
-        result[0] = in.substring(0, indexOf);
-        result[1] = in.substring(indexOf + 1, in.length());
-        // I know I can use the scanner ot the String split :).
-        return result;
+        final String msg =
+                String.format("The actual type %s is not supported", type);
+        throw new IllegalArgumentException(msg);
     }
 
     private List<II> buildTemplateIds() {
@@ -210,68 +257,79 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         return iis;
     }
 
-    /**
-     * Extracts the needed metadatas for a given class (identified after its 
-     * unique URI) from the underlying persistence layer and organize them in to
-     * a map. More precisely this methods extracts all the
-     * metadata(s) with the name "code" for all the properties for a given class
-     * and store them in  to a map, in this map the key is the properties name 
-     * and like value the code metadata value if there is one. If a property 
-     * does not have metadata named "code" then this property name does not appears
-     * in the resulted table. If the underlying persistence layer does not 
-     * contains a clas for the given URI then this method returns an empty map.
-     * 
-     * @param classURI the class UIR to be analyzed.
-     * @return a map that contains like key the property name and like value
-     * the corresponding metadata (with the name "code").
-     */
-    private Map<String, DynamicPropertyMetadata> getObservationCodeMetadata(String classURI) {
-        final Map<String, DynamicPropertyMetadata> result = getMetadata(classURI, "isObservationCode");
-        return result;
+    private CD buildCode(String status) {
+
+        if (!status.contains(":")) {
+            final CD code = new CD();
+            code.setDisplayName(status);
+            return code;
+        }
+
+        final String[] statusCodes = codeSystemAndCode(status);
+        final CD code = new CD();
+        code.setCode(statusCodes[1]);
+        code.setCodeSystem(statusCodes[0]);
+
+        final String prefLabel = getPrefLabel(statusCodes[0], statusCodes[1]);
+        code.setDisplayName(prefLabel);
+
+        return code;
     }
 
-    private Map<String, DynamicPropertyMetadata> getObservationValueMetadata(String classURI) {
-        final Map<String, DynamicPropertyMetadata> result =
-                getMetadata(classURI, "isObservationValue");
-        return result;
-    }
-
-    private Map<String, DynamicPropertyMetadata> getObservationEfectiveDateMetadata(String classURI) {
-        final Map<String, DynamicPropertyMetadata> result =
-                getMetadata(classURI, "isObservationEfectiveDate");
-        return result;
-    }
-
-    private Map<String, DynamicPropertyMetadata> getMetadata(String classURI, String metaName) {
-
-        final DynamicClassRepository classRepository;
-        final Map<String, DynamicPropertyMetadata> result =
-                new HashMap<String, DynamicPropertyMetadata>();
+    private String getPrefLabel(String codeSystemCode, String code) {
+        // FIXME : repeated look up can cause performance !
+        final ControlledItemRepository itemRepository;
         try {
-            classRepository = lookupLocal(DynamicClassRepository.class);
+            itemRepository = lookupLocal(ControlledItemRepository.class);
 
         } catch (Exception exception) {
-            LOGGER.error("The metada can not be located, this can affect the functionality");
             LOGGER.error(exception.getMessage(), exception);
-            return result;
+            return codeSystemCode + ":" + code;
+        }
+        final ControlledItem item =
+                itemRepository.getByCodeSystemAndCode(codeSystemCode, code);
+
+        if (item == null) {
+            final String msg =
+                    String.format("No controlled item for code %s and code system code %s", code, codeSystemCode);
+            LOGGER.warn(msg);
         }
 
-        final DynamicClass dynamicClass = classRepository.get(classURI);
-        final Set<DynamicPropertyType> propertyTypes =
-                dynamicClass.getPropertyTypes();
+        return item != null ? item.getPrefLabel() : codeSystemCode + ":" + code;
 
-        for (DynamicPropertyType propertyType : propertyTypes) {
-            final String propertyName = propertyType.getName();
-            final Set<DynamicPropertyMetadata> metadatas =
-                    propertyType.getMetadatas();
-            for (DynamicPropertyMetadata metadata : metadatas) {
-                final String metadataName = metadata.getName();
-                if (metaName.equals(metadataName)) {
-                    result.put(propertyName, metadata);
-                }
-            }
+    }
+
+    private CS buildStatus(String status) {
+
+        if (!status.contains(":")) {
+            final CS statusCode = new CS();
+            statusCode.setDisplayName(status);
+            return statusCode;
         }
 
+        final String[] statusCodes = codeSystemAndCode(status);
+        final CS statusCode = new CS();
+        statusCode.setCodeSystem(statusCodes[0]);
+        statusCode.setCode(statusCodes[1]);
+
+        final String prefLabel = getPrefLabel(statusCodes[0], statusCodes[1]);
+        statusCode.setDisplayName(prefLabel);
+
+
+        return statusCode;
+    }
+
+    private String[] codeSystemAndCode(String in) {
+        final String[] result = new String[2];
+
+        final int indexOf = in.indexOf(":");
+        result[0] = in.substring(0, indexOf);
+        result[1] = in.substring(indexOf + 1, in.length());
+        // I know I can use the scanner ot the String split :).
         return result;
+    }
+
+    private CD buildValue(String status) {
+        return buildCode(status);
     }
 }
