@@ -47,42 +47,57 @@ final class Pcc9QueryFactory {
 
         final String careProvisionCode =
                 getProperty(properties, "careProvisionCode");
-        final String careProvisionReason =
-                getProperty(properties, "careProvisionReason");
-        final String careRecordTimePeriodBegin =
-                getProperty(properties, "careRecordTimePeriodBegin");
-        final String careRecordTimePeriodEnd =
-                getProperty(properties, "careRecordTimePeriodEnd");
-        final String clinicalStatementTimePeriodBegin =
-                getProperty(properties, "clinicalStatementTimePeriodBegin");
-        final String clinicalStatementTimePeriodEnd =
-                getProperty(properties, "clinicalStatementTimePeriodEnd");
-        final String includeCarePlanAttachment =
-                getProperty(properties, "includeCarePlanAttachment");
-        final String maximumHistoryStatements =
-                getProperty(properties, "maximumHistoryStatements");
-        final String patientAdministrativeGender =
-                getProperty(properties, "patientAdministrativeGender");
-        final String patientBirthTime =
-                getProperty(properties, "patientBirthTime");
+//        final String careProvisionReason =
+//                getProperty(properties, "careProvisionReason");
+//        final String careRecordTimePeriodBegin =
+//                getProperty(properties, "careRecordTimePeriodBegin");
+//        final String careRecordTimePeriodEnd =
+//                getProperty(properties, "careRecordTimePeriodEnd");
+//        final String clinicalStatementTimePeriodBegin =
+//                getProperty(properties, "clinicalStatementTimePeriodBegin");
+//        final String clinicalStatementTimePeriodEnd =
+//                getProperty(properties, "clinicalStatementTimePeriodEnd");
+//        final String includeCarePlanAttachment =
+//                getProperty(properties, "includeCarePlanAttachment");
+//        final String maximumHistoryStatements =
+//                getProperty(properties, "maximumHistoryStatements");
+//        final String patientAdministrativeGender =
+//                getProperty(properties, "patientAdministrativeGender");
+//        final String patientBirthTime =
+//                getProperty(properties, "patientBirthTime");
         final String patientID = getProperty(properties, "patientID");
-        final String patientName = getProperty(properties, "patientName");
-        final String patientSurname = getProperty(properties, "patientSurname");
+//        final String patientName = getProperty(properties, "patientName");
+//        final String patientSurname = getProperty(properties, "patientSurname");
+
+//        final QUPCIN043100UV01 query =
+//                QueryFactory.buildQUPCIN043100UV01(careProvisionCode,
+//                careProvisionReason,
+//                careRecordTimePeriodBegin,
+//                careRecordTimePeriodEnd,
+//                clinicalStatementTimePeriodBegin,
+//                clinicalStatementTimePeriodEnd,
+//                includeCarePlanAttachment,
+//                maximumHistoryStatements,
+//                patientAdministrativeGender,
+//                patientBirthTime,
+//                patientID,
+//                patientName,
+//                patientSurname);
 
         final QUPCIN043100UV01 query =
                 QueryFactory.buildQUPCIN043100UV01(careProvisionCode,
-                careProvisionReason,
-                careRecordTimePeriodBegin,
-                careRecordTimePeriodEnd,
-                clinicalStatementTimePeriodBegin,
-                clinicalStatementTimePeriodEnd,
-                includeCarePlanAttachment,
-                maximumHistoryStatements,
-                patientAdministrativeGender,
-                patientBirthTime,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 patientID,
-                patientName,
-                patientSurname);
+                null,
+                null);
 
         return query;
     }
