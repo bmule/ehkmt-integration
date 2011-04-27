@@ -47,11 +47,11 @@ import org.apache.commons.beanutils.DynaProperty;
  * @author Mihai
  */
 public class DynamicUtil {
-    
+
     /**
      * The default properties for all the dyna beans.
      */
-    private static final DynaProperty[] DEFAULT_PHRS_BEAN_PROPERTIES= {
+    private static final DynaProperty[] DEFAULT_PHRS_BEAN_PROPERTIES = {
         new DynaProperty(Constants.PHRS_BEAN_CLASS_URI, String.class),
         new DynaProperty(Constants.PHRS_BEAN_NAME, String.class),
         new DynaProperty(Constants.PHRS_BEAN_URI, String.class),
@@ -104,12 +104,12 @@ public class DynamicUtil {
                 throw propException;
             }
         }
-        
+
         // here I copy the default properites array in the array for the new 
         // formed class.
-        System.arraycopy(DEFAULT_PHRS_BEAN_PROPERTIES, 0, props, 
+        System.arraycopy(DEFAULT_PHRS_BEAN_PROPERTIES, 0, props,
                 propertyTypes.size(), DEFAULT_PHRS_BEAN_PROPERTIES.length);
-        
+
 
         final String uri = dynamicClass.getUri();
         if (uri == null || uri.isEmpty()) {
@@ -211,7 +211,7 @@ public class DynamicUtil {
         if (types.isEmpty()) {
             throw new IllegalArgumentException("No accesors methods found methods found.");
         }
-        
+
         dynamicClass.setPropertyTypes(types);
 
         return dynamicClass;
@@ -258,10 +258,10 @@ public class DynamicUtil {
 
             throw exception;
         }
-        
+
         final String classURI = dynamicClass.getUri();
         result.set(Constants.PHRS_BEAN_CLASS_URI, classURI);
-        
+
         return result;
     }
 
@@ -291,7 +291,7 @@ public class DynamicUtil {
 
         final DynamicClass dynamicClass = dynamicBean.getDynamicClass();
         final DynaBean dynaBean = getNewInstance(dynamicClass);
-        
+
         addDefaultProprties(dynaBean, dynamicBean);
 
         final Set<DynamicProperty> properties = dynamicBean.getDynamicProperties();
@@ -303,11 +303,10 @@ public class DynamicUtil {
 
         return dynaBean;
     }
-    
-    
+
     static void addDefaultProprties(DynaBean dynaBean, DynamicBean dynamicBean) {
         // FIXME : use this method over all
-        
+
         final DynamicClass dynamicClass = dynamicBean.getDynamicClass();
         if (dynamicClass == null) {
             throw new IllegalArgumentException("No dynamic class for the dynamic bean.");
@@ -318,21 +317,21 @@ public class DynamicUtil {
             throw new IllegalArgumentException("No dynamic class uri must be a non null/non empty string.");
         }
         dynaBean.set(Constants.PHRS_BEAN_CLASS_URI, classUri);
-        
+
         final String name = dynamicBean.getName();
         if (name != null) {
             dynaBean.set(Constants.PHRS_BEAN_NAME, name);
         }
-        
+
         final String uri = dynamicBean.getUri();
         dynaBean.set(Constants.PHRS_BEAN_URI, uri);
-        
+
         final Long uriVersion = dynamicBean.getUriVersion();
         dynaBean.set(Constants.PHRS_BEAN_VERSION, uriVersion);
 
         final Date createDate = dynamicBean.getCreateDate();
         dynaBean.set(Constants.PHRS_BEAN_CREATE_DATE, createDate);
-        
+
         final String creatorURI = dynamicBean.getCreatorURI();
         if (creatorURI != null) {
             dynaBean.set(Constants.PHRS_BEAN_CREATOR, creatorURI);
@@ -340,29 +339,35 @@ public class DynamicUtil {
 
         final String ownerURI = dynamicBean.getOwnerURI();
         if (ownerURI != null) {
-            dynaBean.set(Constants.PHRS_BEAN_OWNER, ownerURI);    
+            dynaBean.set(Constants.PHRS_BEAN_OWNER, ownerURI);
         }
-        
+
+        final String refersToSource = dynamicBean.getRefersToSource();
+        if (refersToSource != null) {
+            dynaBean.set(Constants.PHRS_REFERES_TO_SOURCE_URI, refersToSource);
+        }
+
         final Boolean canRead = dynamicBean.getCanRead();
         if (canRead != null) {
             dynaBean.set(Constants.PHRS_BEAN_CANREAD, canRead);
         } else {
             dynaBean.set(Constants.PHRS_BEAN_CANREAD, Boolean.FALSE);
         }
-        
+
         final Boolean canWrite = dynamicBean.getCanWrite();
         if (canWrite != null) {
             dynaBean.set(Constants.PHRS_BEAN_CANWRITE, canWrite);
         } else {
             dynaBean.set(Constants.PHRS_BEAN_CANWRITE, Boolean.FALSE);
         }
-        
+
         final Boolean canUse = dynamicBean.getCanUse();
         if (canUse != null) {
             dynaBean.set(Constants.PHRS_BEAN_CANUSE, canUse);
         } else {
             dynaBean.set(Constants.PHRS_BEAN_CANUSE, Boolean.FALSE);
         }
+
     }
 
     /**
@@ -512,7 +517,7 @@ public class DynamicUtil {
 
         return msg.toString();
     }
-    
+
     static boolean contains(DynaBean dynaBean, String property) {
         final DynaClass dynaClass = dynaBean.getDynaClass();
         final DynaProperty dynaProperty = dynaClass.getDynaProperty(property);
@@ -522,7 +527,7 @@ public class DynamicUtil {
         final Object value = dynaBean.get(property);
         return value != null;
     }
-    
+
     /**
      * Returns the default count of private properties.
      * 
@@ -532,11 +537,11 @@ public class DynamicUtil {
     static int getDefaultPropertiesCount() {
         return DEFAULT_PHRS_BEAN_PROPERTIES.length;
     }
-    
+
     static DynaProperty getDefaultDynaProperty(int index) {
         return DEFAULT_PHRS_BEAN_PROPERTIES[index];
     }
-    
+
     static List<DynaProperty> getDefaultDynaProperties() {
         final List<DynaProperty> asList = Arrays.asList(DEFAULT_PHRS_BEAN_PROPERTIES);
         final List<DynaProperty> result = Collections.unmodifiableList(asList);
