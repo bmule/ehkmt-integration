@@ -59,7 +59,7 @@ public class NotifyRestWS {
         processors.add(new MedicationPorcessor());
         // it handles the blood preasure and body weight
         processors.add(new VitalSignsProcessor()); 
-        //processors.add(new ProblemProcessor());
+        processors.add(new ProblemProcessor());
     }
 
     /**
@@ -83,14 +83,14 @@ public class NotifyRestWS {
 
         // this is just a hot fox for the review, it only sends a default file
         // according wiht an paramter.
-        if ("pcc09".equals(sender)) {
-            final FileBasedProcessor processor = new FileBasedProcessor();
-            processor.process(q);
-            final Set<Exception> exceptions = processor.getExceptions();
-            logExceptions(exceptions);
-            final Response result = processor.getResult();
-            return result;
-        }
+//        if ("pcc09".equals(sender)) {
+//            final FileBasedProcessor processor = new FileBasedProcessor();
+//            processor.process(q);
+//            final Set<Exception> exceptions = processor.getExceptions();
+//            logExceptions(exceptions);
+//            final Response result = processor.getResult();
+//            return result;
+//        }
 
         if (q == null) {
             LOGGER.warn("No query to process.");
