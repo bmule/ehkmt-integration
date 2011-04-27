@@ -141,7 +141,7 @@ public class Constants {
 
     public static String ISSUE_TYPE_CODE = "issueTypeCode";
 
-    public static String ISSUE_CODE = "issueType";
+    public static String ISSUE_CODE = "issueCode";
 
     public static String IS_ACTIVE = "isActiveStartus";
 
