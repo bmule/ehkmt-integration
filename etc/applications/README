@@ -1,0 +1,19 @@
+
+--------------------------------------
+phrsmonitor*.war - sample application
+
+-http://localhost:6060/phrsmonitor
+-application is setup for port 6060
+-applicaton listens for JBOSS PHRS core server on 7070 - this can be changed in the the web.xml configuration
+-Tomcat 5.5,  avoid Tomcat 6 for now...
+-Also see the related tomcat related server.xml and catalina.sh
+.....Tomcat URIEncoding="UTF-8", running server port 6060
+
+--------------------------------------
+Database
+-Postgresql 9+ was been used.
+-There is some sample data stored as compressed, tar, plain (for reading)
+
+--------------------------------------
+Application related resources
+*.zip - 
