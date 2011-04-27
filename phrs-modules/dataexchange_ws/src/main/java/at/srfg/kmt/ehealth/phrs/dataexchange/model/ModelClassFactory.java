@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.model;
 
+
 import static at.srfg.kmt.ehealth.phrs.dataexchange.model.Constants.*;
 import static at.srfg.kmt.ehealth.phrs.dataexchange.model.MetadataFactory.*;
 import java.util.Date;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
 
 /**
  * Builds severals map used to build dynamic classes.
@@ -107,7 +109,7 @@ public final class ModelClassFactory {
         bodyBMIProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> bodyBMIMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        
+
         result.put(bodyBMIProperty, bodyBMIMetadatas);
 
         final DynamicPropertyType bodyWeightProperty = new DynamicPropertyType();
@@ -408,6 +410,14 @@ public final class ModelClassFactory {
         final Map<DynamicPropertyType, Set<DynamicPropertyMetadata>> result =
                 new HashMap<DynamicPropertyType, Set<DynamicPropertyMetadata>>();
 
+        final DynamicPropertyType issueCodeProperty = new DynamicPropertyType();
+        issueCodeProperty.setName(ISSUE_CODE);
+        issueCodeProperty.setType(String.class.getName());
+        final Set<DynamicPropertyMetadata> issueCodePropertyMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        issueCodePropertyMetadatas.add(buildIsObservationValue());
+        result.put(issueCodeProperty, issueCodePropertyMetadatas);
+
         final DynamicPropertyType issueTypeCodeProperty = new DynamicPropertyType();
         issueTypeCodeProperty.setName(ISSUE_TYPE_CODE);
         issueTypeCodeProperty.setType(String.class.getName());
@@ -416,13 +426,6 @@ public final class ModelClassFactory {
         issueTypeCodePropertyMetadatas.add(buildIsObservationCode());
         result.put(issueTypeCodeProperty, issueTypeCodePropertyMetadatas);
 
-        final DynamicPropertyType issueCodeProperty = new DynamicPropertyType();
-        issueCodeProperty.setName(ISSUE_CODE);
-        issueCodeProperty.setType(String.class.getName());
-        final Set<DynamicPropertyMetadata> issueCodePropertyMetadatas =
-                new HashSet<DynamicPropertyMetadata>();
-        issueCodePropertyMetadatas.add(buildIsObservationValue());
-        result.put(issueCodeProperty, issueCodePropertyMetadatas);
 
         final DynamicPropertyType isActiveStatusProperty = new DynamicPropertyType();
         isActiveStatusProperty.setName(IS_ACTIVE);
