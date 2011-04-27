@@ -35,9 +35,10 @@ public class RestWSPushExample {
         final File dir = new File(JSON_FILES_DIRECOTRY);
         final File[] files = dir.listFiles();
         for (File file : files) {
-            System.out.println("Process : " + file);
-            if (!file.getName().startsWith(".")) {
+            System.out.println("Tries to process : " + file);
+            if (file.getName().endsWith(".json") ) {
                 push(file);
+                System.out.println(file + " was proecssed.");
             }
         }
     }
