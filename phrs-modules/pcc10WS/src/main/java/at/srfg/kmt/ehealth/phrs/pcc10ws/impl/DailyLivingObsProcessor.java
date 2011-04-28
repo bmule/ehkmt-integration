@@ -74,7 +74,7 @@ final class DailyLivingObsProcessor implements Processor<Response> {
             return false;
         }
 
-        final boolean isMedList = in.endsWith("RISKLIST");
+        final boolean isMedList = in.endsWith("ODLS");
         return isMedList;
     }
 
