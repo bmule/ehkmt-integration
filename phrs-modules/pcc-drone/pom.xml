@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+  
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>pcc-drone</artifactId>
+    <version>0.0.1</version>
+    <name>PCC10 Swing Drone</name>    
+    <url>https://github.com/bmule/ehkmt-integration</url>
+    <description>
+        Swing based User interface able to render parts from a pcc10 request.
+        It has only test / demonstration purposes.
+    </description>
+  
+    <dependencies>
+    </dependencies>
+</project>
