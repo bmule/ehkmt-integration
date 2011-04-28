@@ -8,6 +8,8 @@
 package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 
 
+import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
+import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.QUPCAR004030UVServiceUtil.buildQUPCIN043200UV01;
 import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
 import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
@@ -131,6 +133,9 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         final CD code = new CD();
         code.setCode(codeAndCodeSystem[1]);
         code.setCodeSystem(codeAndCodeSystem[0]);
+        
+        final String prefLabel = getPrefLabel(codeAndCodeSystem[0], codeAndCodeSystem[1]);
+        code.setDisplayName(prefLabel);
         return code;
     }
 
@@ -236,7 +241,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
 
         final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                 OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
-        final JAXBElement<POCDMT000040Observation> observation_je = 
+        final JAXBElement<POCDMT000040Observation> observation_je =
                 OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5Observation(observation);
         pertinentInformation.setObservation(observation_je);
         return pertinentInformation;
@@ -259,15 +264,15 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
 
     private List<II> buildTemplateIds() {
         final List<II> iis = new ArrayList<II>(2);
-        
+
         final II ii1 = new II();
         ii1.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13");
         iis.add(ii1);
-        
+
         final II ii2 = new II();
         ii2.setExtension("2.16.840.1.113883.10.20.1.31");
         iis.add(ii2);
-        
+
         final II ii3 = new II();
         ii3.setExtension("1.3.6.1.4.1.19376.1.5.3.1.4.13.2");
         iis.add(ii3);
@@ -331,5 +336,28 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         }
 
         return result;
+    }
+
+    private String getPrefLabel(String codeSystemCode, String code) {
+        // FIXME : repeated look up can cause performance !
+        final ControlledItemRepository itemRepository;
+        try {
+            itemRepository = lookupLocal(ControlledItemRepository.class);
+
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            return codeSystemCode + ":" + code;
+        }
+        final ControlledItem item =
+                itemRepository.getByCodeSystemAndCode(codeSystemCode, code);
+
+        if (item == null) {
+            final String msg =
+                    String.format("No controlled item for code %s and code system code %s", code, codeSystemCode);
+            LOGGER.warn(msg);
+        }
+
+        return item != null ? item.getPrefLabel() : codeSystemCode + ":" + code;
+
     }
 }
