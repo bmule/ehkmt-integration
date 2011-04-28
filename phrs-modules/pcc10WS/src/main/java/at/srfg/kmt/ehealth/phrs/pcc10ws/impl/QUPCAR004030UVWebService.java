@@ -54,7 +54,6 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
         ACKNOWLEDGE_FACTORY = new PCC10AcknowledgeFactory();
     }
     
-    
     /**
      * Builds a <code>QUPCAR004030UVWebService</code> instance.
      */
@@ -72,6 +71,7 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
     @Override
     public MCCIIN000002UV01 qupcAR004030UVQUPCIN043200UV(QUPCIN043200UV01 request) {
         LOGGER.debug("Query [{}] was received. The query preocess starts.", request);
+        PCC10DroneAgent.send(request);
         
         final MCCIIN000002UV01 acknoledge;
         try {
