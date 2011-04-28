@@ -59,8 +59,8 @@ public class NotifyRestWS {
         processors.add(new MedicationPorcessor());
         // it handles the blood preasure and body weight
         processors.add(new VitalSignsProcessor()); 
-        // FIXME : risks must be separate.
         processors.add(new ProblemProcessor());
+        processors.add(new RiskProcessor());
         processors.add(new DailyLivingObsProcessor());
     }
 
