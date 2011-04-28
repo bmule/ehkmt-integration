@@ -18,8 +18,6 @@ import java.util.Map;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.DynamicClassRepository;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10BuildException;
 import at.srfg.kmt.ehealth.phrs.pcc10ws.api.PCC10Factory;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -58,10 +56,6 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
      * element(s) tree.
      */
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
-
-    private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
-    private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
 
     /**
      * All vital signs to be transformed according with the HL7 v3.
@@ -229,7 +223,7 @@ final class VitalSignsFactory implements PCC10Factory<QUPCIN043200UV01> {
         observation.setCode(code);
 
         final IVLTS effectiveTime = new IVLTS();
-        effectiveTime.setValue(dateFormat.format(date));
+        effectiveTime.setValue(Util.formatForPCCMessage(date));
         observation.setEffectiveTime(effectiveTime);
 
         final PQ qunatity = new PQ();

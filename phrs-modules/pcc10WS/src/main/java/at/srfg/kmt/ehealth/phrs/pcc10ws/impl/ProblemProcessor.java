@@ -135,7 +135,7 @@ final class ProblemProcessor implements Processor<Response> {
         // FIXME : use the constats here
         final String risksURI =
                 "at.srfg.kmt.ehealth.phrs.datamodel.impl.Risk";
-        final Set<DynaBean> allRisks = beanRepository.getAllForClass(problemsURI);
+        final Set<DynaBean> allRisks = beanRepository.getAllForClass(risksURI);
         all.addAll(allRisks);
 
         PROBLEM_FACTORY.setProblems(all);

@@ -61,7 +61,7 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 
     private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-    private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
+    //private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
 
     /**
      * All medication to be transformed medication according with the HL7 v3.
@@ -440,12 +440,12 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         final IVLTS resul = new IVLTS();
 
         final IVXBTS ivxbtsBegin = new IVXBTS();
-        final String beginStr = dateFormat.format(begin);
+        final String beginStr = Util.formatForPCCMessage(begin);
         ivxbtsBegin.setValue(beginStr);
         JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(ivxbtsBegin);
 
         final IVXBTS ivxbtsEnd = new IVXBTS();
-        final String endStr = dateFormat.format(end);
+        final String endStr = Util.formatForPCCMessage(end);
         ivxbtsEnd.setValue(endStr);
         JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(ivxbtsEnd);
 

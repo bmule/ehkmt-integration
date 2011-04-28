@@ -87,8 +87,8 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         problemsMeta = new HashMap<String, String>();
         riskMeta = new HashMap<String, String>();
         solveMetadata();
-        LOGGER.debug("The Problem class metadata : ", problems);
-        LOGGER.debug("The Risk class metadata : ", riskMeta);
+        LOGGER.debug("The Problem class metadata : {} ", problems);
+        LOGGER.debug("The Risk class metadata : {} ", riskMeta);
     }
 
     private void solveMetadata() {
@@ -192,7 +192,7 @@ final class ProblemFactroy implements PCC10Factory<QUPCIN043200UV01> {
         final Date dateStart = (Date) problem.get("observationDateStart");
 
         final IVLTS effectiveTime = new IVLTS();
-        effectiveTime.setValue(dateFormat.format(dateStart));
+        effectiveTime.setValue(Util.formatForPCCMessage(dateStart));
         observation.setEffectiveTime(effectiveTime);
 
         // FIXME : do I need to care about the end date ?
