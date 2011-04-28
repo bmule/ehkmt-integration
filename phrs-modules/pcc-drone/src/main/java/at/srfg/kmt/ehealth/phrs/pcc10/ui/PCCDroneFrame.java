@@ -73,14 +73,6 @@ final class PCCDroneFrame {
     private JPanel buildMainPanel() {
         final JPanel resut = new JPanel(new BorderLayout());
         resut.add(new JScrollPane(messagesList), BorderLayout.CENTER);
-        resut.add(buildActionPanel(), BorderLayout.SOUTH);
-
-        return resut;
-    }
-
-    private JPanel buildActionPanel() {
-        final JPanel resut = new JPanel(new BorderLayout());
-        resut.add(new JButton(new ReloadAction("Reload")));
 
         return resut;
     }
