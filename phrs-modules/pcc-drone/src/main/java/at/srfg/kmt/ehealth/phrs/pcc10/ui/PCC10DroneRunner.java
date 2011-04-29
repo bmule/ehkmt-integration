@@ -31,7 +31,7 @@ public final class PCC10DroneRunner {
      * 
      */
     public static void start() {
-        final PCCDroneFrame droneFrame = new PCCDroneFrame();
+        final PCCDroneFrame droneFrame = new PCCDroneFrame("PCC 10 Drone", 1984);
         droneFrame.show();
     }
 }
