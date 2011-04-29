@@ -62,7 +62,6 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
     private static final String pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     //private static final DateFormat dateFormat = new SimpleDateFormat(pattern);
-
     /**
      * All medication to be transformed medication according with the HL7 v3.
      */
@@ -150,8 +149,9 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
                 (Double) medication.get("medicationQuantity");
         final float doseFloat = dose.floatValue();
 
-        final String doseUnit =
+        final String doseUnitStr =
                 (String) medication.get("medicationQuantityUnit");
+        final String doseUnit = getPrefLabel(doseUnitStr);
 
         final IVLPQ ivlpq = buildIVLPQ(doseFloat, doseUnit);
         substanceAdministration.setDoseQuantity(ivlpq);
@@ -188,7 +188,7 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 
         final SXCMTS startStopTime = buildTimePeriod(dateStart, dateEnd);
         substanceAdministration.getEffectiveTime().add(startStopTime);
-        
+
 
         final String timeOfDay =
                 (String) medication.get("medicationFrequencyTimeOfDay");
@@ -286,7 +286,6 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
 //
 //        return ivlpq;
 //    }
-    
     private IVLPQ buildIVLPQ(float dose, String doseUnit) {
 
         final IVLPQ ivlpq = new IVLPQ();
@@ -568,6 +567,22 @@ final class MedicationFactory implements PCC10Factory<QUPCIN043200UV01> {
         return result;
     }
 
+    private String getPrefLabel(String codeSystemCodeAndCode) {
+        if (codeSystemCodeAndCode.indexOf(":") == -1) {
+            return codeSystemCodeAndCode;
+        }
+        // FIXME : repeated look up can cause performance !
+        final ControlledItem contentItem = 
+                getContentItem(codeSystemCodeAndCode);
+
+        if (contentItem == null) {
+            return codeSystemCodeAndCode;
+        }
+        
+        return contentItem.getPrefLabel();
+    }
+
+    
     private ControlledItem getContentItem(String in) {
         final int indexOf = in.indexOf(":");
         String codeStystemCode = in.substring(0, indexOf);
