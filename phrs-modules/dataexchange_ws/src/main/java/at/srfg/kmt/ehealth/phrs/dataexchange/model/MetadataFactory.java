@@ -168,6 +168,26 @@ final class MetadataFactory {
 
         return result;
     }
+    
+    /**
+     * Build a metatada able to express the Body Mass Index (BMI)
+     * in UMTS code system. </br>
+     * This metadata name is "code".
+     * 
+     * @return a metatada able to express the Body Height (in lying) in LOINC
+     * code system.
+     */
+    static DynamicPropertyMetadata buildBodyMassIndexCode() {
+        final DynamicPropertyMetadata result =
+                new DynamicPropertyMetadata();
+        // FIXME : use constants here
+        result.setName("code");
+        result.setValue("UMLS:C1305855");
+
+        return result;
+    }
+    
+    
 
     /**
      * Builds an observation code annotation, properties annotated with this 
