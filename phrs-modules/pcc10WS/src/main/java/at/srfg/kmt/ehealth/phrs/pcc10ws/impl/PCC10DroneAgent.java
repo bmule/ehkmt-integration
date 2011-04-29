@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.pcc10ws.impl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Socket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,22 +19,34 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.JAXBElement;
 import org.hl7.v3.ANY;
 import org.hl7.v3.CD;
+import org.hl7.v3.CE;
 import org.hl7.v3.COCTMT050000UVPatient;
 import org.hl7.v3.COCTMT050000UVPerson;
+import org.hl7.v3.CS;
+import org.hl7.v3.EN;
 import org.hl7.v3.II;
+import org.hl7.v3.IVLPQ;
 import org.hl7.v3.IVLTS;
+import org.hl7.v3.IVXBTS;
+import org.hl7.v3.POCDMT000040Consumable;
+import org.hl7.v3.POCDMT000040LabeledDrug;
+import org.hl7.v3.POCDMT000040ManufacturedProduct;
 import org.hl7.v3.POCDMT000040Observation;
 import org.hl7.v3.POCDMT000040SubstanceAdministration;
 import org.hl7.v3.PQ;
+import org.hl7.v3.QTY;
 import org.hl7.v3.QUPCIN043200UV01;
 import org.hl7.v3.QUPCIN043200UV01MFMIMT700712UV01ControlActProcess;
 import org.hl7.v3.QUPCIN043200UV01MFMIMT700712UV01Subject1;
 import org.hl7.v3.QUPCIN043200UV01MFMIMT700712UV01Subject5;
 import org.hl7.v3.REPCMT004000UV01PertinentInformation5;
 import org.hl7.v3.REPCMT004000UV01RecordTarget;
+import org.hl7.v3.SXCMTS;
 
 
 /**
@@ -221,9 +234,6 @@ final class PCC10DroneAgent {
         return result.toString();
     }
 
-    private static void processMedication(REPCMT004000UV01PertinentInformation5 information) {
-    }
-
     private static boolean isVitalSign(POCDMT000040Observation information) {
         final List<II> templateIDs = information.getTemplateId();
         final Set<String> mustBe = new HashSet<String>();
@@ -254,5 +264,124 @@ final class PCC10DroneAgent {
         }
 
         return toTest.containsAll(mustBe);
+    }
+
+    private static void processMedication(REPCMT004000UV01PertinentInformation5 information) {
+        send("Incoming medication with the following characteristics : ", PORT, HOST);
+        final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_je =
+                information.getSubstanceAdministration();
+        final POCDMT000040SubstanceAdministration substanceAdministration =
+                substanceAdministration_je.getValue();
+
+        final CE routeCode = substanceAdministration.getRouteCode();
+        String routeMsg = String.format("Substance route : %s", toString(routeCode));
+        send(routeMsg, PORT, HOST);
+
+        final IVLPQ doseQuantity = substanceAdministration.getDoseQuantity();
+        String doseQuantityMsg = String.format("Dose Quantity : %s", toString(doseQuantity));
+        send(doseQuantityMsg, PORT, HOST);
+
+        final CS statusCode = substanceAdministration.getStatusCode();
+        final String statusCodeMsg =
+                String.format("Medication starus : %s", toString(statusCode));
+        send(statusCodeMsg, PORT, HOST);
+
+        final List<SXCMTS> effectiveTimes = substanceAdministration.getEffectiveTime();
+        processEffectiveTimes(effectiveTimes);
+        
+        final POCDMT000040Consumable consumable = substanceAdministration.getConsumable();
+        final POCDMT000040ManufacturedProduct manufacturedProduct = 
+                consumable.getManufacturedProduct();
+        final POCDMT000040LabeledDrug manufacturedLabeledDrug = 
+                manufacturedProduct.getManufacturedLabeledDrug();
+        final EN name = manufacturedLabeledDrug.getName();
+        
+        
+        final Serializable medName = name.getContent().get(0);
+        send("Medication name : " + medName, PORT, HOST);
+        
+    }
+
+    private static void processEffectiveTimes(List<SXCMTS> effectiveTimes) {
+        if (effectiveTimes.isEmpty()) {
+            send("No time reated information", PORT, HOST);
+            return;
+        }
+
+        final IVLTS effectiveTime = (IVLTS) effectiveTimes.get(0);
+        final List<JAXBElement<? extends QTY>> rest = effectiveTime.getRest();
+        if (rest.isEmpty()) {
+            send("No time reated information", PORT, HOST);
+            return;
+        }
+
+        if (rest.size() >= 1) {
+            final JAXBElement<? extends QTY> lowTime_je = rest.get(0);
+            final IVXBTS lowTime = (IVXBTS) lowTime_je.getValue();
+            final String lowTimeValue = lowTime.getValue();
+            Date date;
+            try {
+                date = MESSAGE_DATE_FORMAT.parse(lowTimeValue);
+            } catch (ParseException ex) {
+                // just for the demo
+                date = new Date();
+            }
+            final String lowTimeMsg =
+                    String.format("Medication from date : %s", DATE_FORMAT.format(date));
+            send(lowTimeMsg, PORT, HOST);
+
+        }
+
+        if (rest.size() == 2) {
+            final JAXBElement<? extends QTY> hightTime_je = rest.get(0);
+            final IVXBTS hightTime = (IVXBTS) hightTime_je.getValue();
+            final String hightTimeValue = hightTime.getValue();
+
+            Date date;
+            try {
+                date = MESSAGE_DATE_FORMAT.parse(hightTimeValue);
+            } catch (ParseException exception) {
+                // just for the demo
+                date = new Date();
+            }
+
+            final String hightTimeMsg =
+                    String.format("Medication until date : %s", DATE_FORMAT.format(date));
+            send(hightTimeMsg, PORT, HOST);
+        }
+
+
+        effectiveTime.getRest().get(1);
+    }
+
+    private static String toString(CE ce) {
+        final StringBuilder result = new StringBuilder();
+        result.append(ce.getDisplayName());
+        result.append("(");
+        result.append(ce.getCodeSystem());
+        result.append(":");
+        result.append(ce.getCode());
+        result.append(")");
+        return result.toString();
+    }
+
+    private static String toString(CS cs) {
+        final StringBuilder result = new StringBuilder();
+        result.append(cs.getDisplayName());
+        result.append("(");
+        result.append(cs.getCodeSystem());
+        result.append(":");
+        result.append(cs.getCode());
+        result.append(")");
+
+        return result.toString();
+    }
+
+    private static String toString(IVLPQ ivlpq) {
+        final StringBuilder result = new StringBuilder();
+        result.append(ivlpq.getValue());
+        result.append(" ");
+        result.append(ivlpq.getUnit());
+        return result.toString();
     }
 }
