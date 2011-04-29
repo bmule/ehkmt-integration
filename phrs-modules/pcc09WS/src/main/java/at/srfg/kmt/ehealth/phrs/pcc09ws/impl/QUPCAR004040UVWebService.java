@@ -58,6 +58,8 @@ public class QUPCAR004040UVWebService implements QUPCAR004040UVPortType {
                 new QUPCIN043100UV01Processor();
         processor.process(body);
         
+        PCC09DroneAgent.send(body);
+        
         try {
             final MCCIIN000002UV01 ack = QueryFactory.buildMCCIIN000002UV01();
             final Object [] toLog  = {body, ack};
