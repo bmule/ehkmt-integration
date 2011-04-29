@@ -123,22 +123,12 @@ final class ProblemProcessor implements Processor<Response> {
             return null;
         }
 
-
-        final Set<DynaBean> all = new HashSet<DynaBean> ();
-
         // FIXME : use the constats here
         final String problemsURI =
                 "at.srfg.kmt.ehealth.phrs.datamodel.impl.Problem";
         final Set<DynaBean> allProbems = beanRepository.getAllForClass(problemsURI);
-        all.addAll(allProbems);
-        
-        // FIXME : use the constats here
-        final String risksURI =
-                "at.srfg.kmt.ehealth.phrs.datamodel.impl.Risk";
-        final Set<DynaBean> allRisks = beanRepository.getAllForClass(risksURI);
-        all.addAll(allRisks);
 
-        PROBLEM_FACTORY.setProblems(all);
+        PROBLEM_FACTORY.setProblems(allProbems);
 
         final QUPCIN043200UV01 build = PROBLEM_FACTORY.build();
         return build;
