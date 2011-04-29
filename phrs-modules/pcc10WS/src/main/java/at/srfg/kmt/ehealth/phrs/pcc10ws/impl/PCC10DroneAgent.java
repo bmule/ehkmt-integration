@@ -153,7 +153,7 @@ final class PCC10DroneAgent {
     }
 
     private static void processObservation(REPCMT004000UV01PertinentInformation5 information) {
-        send("Incomming informations with the following characteristics : ", PORT, HOST);
+        send("Incoming information with the following characteristics : ", PORT, HOST);
         final JAXBElement<POCDMT000040Observation> observation_je =
                 information.getObservation();
         final POCDMT000040Observation observation = observation_je.getValue();
