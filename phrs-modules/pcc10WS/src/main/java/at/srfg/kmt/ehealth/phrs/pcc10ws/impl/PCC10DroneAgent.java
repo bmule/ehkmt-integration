@@ -49,11 +49,11 @@ final class PCC10DroneAgent {
     private final static int PORT = 1984;
 
     private final static String HOST = "localhost";
-    
-    private final static SimpleDateFormat MESSAGE_DATE_FORMAT = 
+
+    private final static SimpleDateFormat MESSAGE_DATE_FORMAT =
             new SimpleDateFormat("yyyyMMddHHmmss");
-    
-    private final static SimpleDateFormat DATE_FORMAT = 
+
+    private final static SimpleDateFormat DATE_FORMAT =
             new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss");
 
     static void send(QUPCIN043200UV01 qupcin043200uv01) {
@@ -131,30 +131,23 @@ final class PCC10DroneAgent {
     }
 
     private static void process(List<REPCMT004000UV01PertinentInformation5> informations) {
-        final StringBuilder result = new StringBuilder();
         for (REPCMT004000UV01PertinentInformation5 information5 : informations) {
             process(information5);
         }
     }
 
     private static void process(REPCMT004000UV01PertinentInformation5 information) {
-        final StringBuilder result = new StringBuilder();
         final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration =
                 information.getSubstanceAdministration();
-        
-        if (isVitalSign(information)){
-            send("This Observation is a (HL7 V3) Vital Sign.", PORT, HOST);
-        }
 
-        if (isProblem(information)){
-            send("This Observation is a (HL7 V3) Problem.", PORT, HOST);
-        }
 
         final boolean isMedication = substanceAdministration != null;
         if (isMedication) {
             processMedication(information);
         } else {
             processObservation(information);
+            send(" ", PORT, HOST);
+            send(" ", PORT, HOST);
         }
     }
 
@@ -163,6 +156,17 @@ final class PCC10DroneAgent {
         final JAXBElement<POCDMT000040Observation> observation_je =
                 information.getObservation();
         final POCDMT000040Observation observation = observation_je.getValue();
+
+        if (isVitalSign(observation)) {
+            send("This Observation is a (HL7 V3) Vital Sign.", PORT, HOST);
+        }
+
+        if (isProblem(observation)) {
+            send("This Observation is a (HL7 V3) Problem.", PORT, HOST);
+        }
+
+
+
         final CD code = observation.getCode();
         send("Code : " + toString(code), PORT, HOST);
 
@@ -202,51 +206,52 @@ final class PCC10DroneAgent {
     private static String toString(IVLTS ivlts) {
         final StringBuilder result = new StringBuilder();
         final String value = ivlts.getValue();
-        
+
         Date fromMessage;
         try {
             fromMessage = MESSAGE_DATE_FORMAT.parse(value);
         } catch (ParseException exception) {
             fromMessage = new Date();
         }
-        
+
         final String format = DATE_FORMAT.format(fromMessage);
-        
+
         result.append(format);
         return result.toString();
     }
 
     private static void processMedication(REPCMT004000UV01PertinentInformation5 information) {
     }
-    
-    private static boolean isVitalSign(REPCMT004000UV01PertinentInformation5 information) {
+
+    private static boolean isVitalSign(POCDMT000040Observation information) {
         final List<II> templateIDs = information.getTemplateId();
         final Set<String> mustBe = new HashSet<String>();
         mustBe.add("1.3.6.1.4.1.19376.1.5.3.1.4.13");
         mustBe.add("2.16.840.1.113883.10.20.1.31");
         mustBe.add("1.3.6.1.4.1.19376.1.5.3.1.4.13.2");
-        
+
         final Set<String> toTest = new HashSet<String>();
         for (II ii : templateIDs) {
+
             final String extension = ii.getExtension();
             toTest.add(extension);
         }
-        
+
         return toTest.containsAll(mustBe);
     }
-    
-    private static boolean isProblem(REPCMT004000UV01PertinentInformation5 information) {
+
+    private static boolean isProblem(POCDMT000040Observation information) {
         final List<II> templateIDs = information.getTemplateId();
         final Set<String> mustBe = new HashSet<String>();
         mustBe.add("2.16.840.1.113883.10.20.1.28");
         mustBe.add("1.3.6.1.4.1.19376.1.5.3.1.4.5");
-        
+
         final Set<String> toTest = new HashSet<String>();
         for (II ii : templateIDs) {
             final String extension = ii.getExtension();
             toTest.add(extension);
         }
-        
+
         return toTest.containsAll(mustBe);
     }
 }
