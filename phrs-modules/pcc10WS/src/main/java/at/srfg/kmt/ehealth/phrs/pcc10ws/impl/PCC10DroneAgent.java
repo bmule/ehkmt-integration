@@ -110,6 +110,7 @@ final class PCC10DroneAgent {
 
         final String patientMsg = toString(patient);
         send(patientMsg, PORT, HOST);
+        send(" ", PORT, HOST);
 
         final List<REPCMT004000UV01PertinentInformation5> pertinentInformation3 =
                 subject2.getCareProvisionEvent().getPertinentInformation3();
