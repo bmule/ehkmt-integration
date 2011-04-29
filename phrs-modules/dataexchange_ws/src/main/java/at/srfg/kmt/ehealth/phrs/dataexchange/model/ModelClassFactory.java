@@ -510,6 +510,14 @@ public final class ModelClassFactory {
                 new HashSet<DynamicPropertyMetadata>();
         result.put(treatmentsCodesProperty, treatmentsCodesPropertyMetadatas);
 
+        final DynamicPropertyType riskFactorAttributesProperty = new DynamicPropertyType();
+        riskFactorAttributesProperty.setName(RISK_FACTRORS_ATTRIBUTES);
+        riskFactorAttributesProperty.setType(HashMap.class.getName());
+        final Set<DynamicPropertyMetadata> riskFactorAttributesMetadatas =
+                new HashSet<DynamicPropertyMetadata>();
+        riskFactorAttributesMetadatas.add(MetadataFactory.buildIsObservationCode());
+        result.put(treatmentsCodesProperty, riskFactorAttributesMetadatas);
+
         final DynamicPropertyType treatmentStatementPrimaryProperty = new DynamicPropertyType();
         treatmentStatementPrimaryProperty.setName(TRATMENTS_STATEMENT_PRIMARY);
         treatmentStatementPrimaryProperty.setType(String.class.getName());
