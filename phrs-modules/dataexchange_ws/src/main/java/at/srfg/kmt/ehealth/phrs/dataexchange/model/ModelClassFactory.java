@@ -109,7 +109,7 @@ public final class ModelClassFactory {
         bodyBMIProperty.setType(Double.class.getName());
         final Set<DynamicPropertyMetadata> bodyBMIMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-
+        bodyBMIMetadatas.add(MetadataFactory.buildBodyMassIndexCode());
         result.put(bodyBMIProperty, bodyBMIMetadatas);
 
         final DynamicPropertyType bodyWeightProperty = new DynamicPropertyType();
