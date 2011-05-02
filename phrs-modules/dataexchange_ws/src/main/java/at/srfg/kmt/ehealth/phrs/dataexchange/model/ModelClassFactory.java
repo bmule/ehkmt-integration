@@ -479,7 +479,6 @@ public final class ModelClassFactory {
         riskFactorCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> riskFactorCodeMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
-        riskFactorCodeMetadatas.add(MetadataFactory.buildIsObservationValue());
         result.put(riskFactorCodeProperty, riskFactorCodeMetadatas);
 
         final DynamicPropertyType isActiveProperty = new DynamicPropertyType();
