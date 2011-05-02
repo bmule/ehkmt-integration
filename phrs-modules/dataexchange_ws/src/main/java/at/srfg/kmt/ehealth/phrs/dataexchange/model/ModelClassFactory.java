@@ -560,6 +560,7 @@ public final class ModelClassFactory {
         activityCategoryProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCategoryPropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        activityCategoryPropertyMetadatas.add(MetadataFactory.buildIsObservationCode());
         result.put(activityCategoryProperty, activityCategoryPropertyMetadatas);
 
         final DynamicPropertyType activityCodeProperty = new DynamicPropertyType();
@@ -567,6 +568,7 @@ public final class ModelClassFactory {
         activityCodeProperty.setType(String.class.getName());
         final Set<DynamicPropertyMetadata> activityCodePropertyMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
+        activityCodePropertyMetadatas.add(MetadataFactory.buildIsObservationValue());
         result.put(activityCodeProperty, activityCodePropertyMetadatas);
 
         final DynamicPropertyType activityNameProperty = new DynamicPropertyType();
