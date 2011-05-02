@@ -13,6 +13,7 @@ import static at.srfg.kmt.ehealth.phrs.pcc10ws.impl.Constants.PCC10_OUTPUT_FILE;
 import static at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup.lookupLocal;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.ControlledItemRepository;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
+import java.util.Collection;
 import javax.xml.bind.JAXBException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.model.DynamicPropertyType;
 import at.srfg.kmt.ehealth.phrs.dataexchange.api.MetadataRepository;
@@ -74,13 +75,13 @@ final class RiskFactroy implements PCC10Factory<QUPCIN043200UV01> {
      */
     private Set<DynaBean> risks;
 
-    private Map<String, String> metadata;
+    private Map<String, Object> metadata;
 
     /**
      * Builds a <code>ProblemFactroy</code> instance.
      */
     RiskFactroy() {
-        metadata = new HashMap<String, String>();
+        metadata = new HashMap<String, Object>();
         solveMetadata();
         LOGGER.debug("The Risk class metadata : {} ", metadata);
     }
@@ -131,9 +132,9 @@ final class RiskFactroy implements PCC10Factory<QUPCIN043200UV01> {
                 subject2.getCareProvisionEvent();
 
         for (DynaBean problem : risks) {
-            REPCMT004000UV01PertinentInformation5 information =
-                    buildPertinentInformation(problem);
-            careProvisionEvent.getPertinentInformation3().add(information);
+            final List<REPCMT004000UV01PertinentInformation5> informations = 
+                    buildPertinentInformations(problem);
+            careProvisionEvent.getPertinentInformation3().addAll(informations);
         }
 
         return query;
@@ -147,7 +148,40 @@ final class RiskFactroy implements PCC10Factory<QUPCIN043200UV01> {
         this.risks = problems;
     }
 
-    private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(DynaBean risk) {
+    private List<REPCMT004000UV01PertinentInformation5> buildPertinentInformations(DynaBean risk) {
+        List<REPCMT004000UV01PertinentInformation5> result =
+                new ArrayList<REPCMT004000UV01PertinentInformation5>();
+
+        // FIXME : this aproach is only for the review.
+        // The actaul implmementation treates treates the this property
+        // like a map and because the property is annotated wiht 
+        // isValue metada all the map values will inherit this.
+        // I am not sure if this is the correct behaviour but it seams to 
+        // satisfy the actaul implementation.
+
+        // final String issueCode = (String) problem.get("issueCode");
+        final String codeValuePropName = getValuePropertyName(risk).toString();
+        final Map issueCode = (Map) risk.get(codeValuePropName);
+        if (issueCode == null) {
+            LOGGER.error("The risk {} is null. This can influence the result message !", codeValuePropName);
+            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+                    buildPertinentInformation(risk, null);
+            result.add(pertinentInformation);
+            return result;
+        }
+        
+        final Collection values = issueCode.values();
+        for (Object value : values) {
+            final CD cd = buildValue(value.toString());
+            final REPCMT004000UV01PertinentInformation5 pertinentInformation = 
+                    buildPertinentInformation(risk, cd);
+            result.add(pertinentInformation);
+        }
+
+        return result;
+    }
+
+    private REPCMT004000UV01PertinentInformation5 buildPertinentInformation(DynaBean risk, CD value) {
 
         final POCDMT000040Observation observation =
                 OBJECT_FACTORY.createPOCDMT000040Observation();
@@ -178,13 +212,7 @@ final class RiskFactroy implements PCC10Factory<QUPCIN043200UV01> {
 
         // FIXME : do I need to care about the end date ?
 
-        // final String issueCode = (String) problem.get("issueCode");
-        final String codeValuePropName = getValuePropertyName(risk);
-        final String issueCode = (String) risk.get(codeValuePropName);
-        if (issueCode == null) {
-            LOGGER.error("The risk {} is null. This can influence the result message !", codeValuePropName);
-        } else {
-            final CD value = buildValue(issueCode);
+        if (value != null) {
             observation.getValue().add(value);
         }
 
@@ -202,29 +230,13 @@ final class RiskFactroy implements PCC10Factory<QUPCIN043200UV01> {
     }
 
     private String getCodePropertyName(DynaBean bean) {
-        final Object type = bean.get("_phrsBeanClassURI");
-
-        if (CLASS_URI.equals(type)) {
-            final String result = metadata.get(IS_OBSERVATION_CODE);
-            return result;
-        }
-
-        final String msg =
-                String.format("The actual type %s is not supported", type);
-        throw new IllegalArgumentException(msg);
+        final String result = (String) metadata.get(IS_OBSERVATION_CODE);
+        return result;
     }
 
     private String getValuePropertyName(DynaBean bean) {
-        final Object type = bean.get("_phrsBeanClassURI");
-
-        if (CLASS_URI.equals(type)) {
-            final String result = metadata.get(IS_OBSERVATION_VALUE);
-            return result;
-        }
-
-        final String msg =
-                String.format("The actual type %s is not supported", type);
-        throw new IllegalArgumentException(msg);
+        final String result = (String) metadata.get(IS_OBSERVATION_VALUE);
+        return result;
     }
 
     private List<II> buildTemplateIds() {
