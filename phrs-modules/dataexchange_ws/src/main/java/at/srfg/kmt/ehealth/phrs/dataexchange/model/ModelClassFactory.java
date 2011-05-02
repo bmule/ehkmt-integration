@@ -515,7 +515,7 @@ public final class ModelClassFactory {
         final Set<DynamicPropertyMetadata> riskFactorAttributesMetadatas =
                 new HashSet<DynamicPropertyMetadata>();
         riskFactorAttributesMetadatas.add(MetadataFactory.buildIsObservationValue());
-        result.put(treatmentsCodesProperty, riskFactorAttributesMetadatas);
+        result.put(riskFactorAttributesProperty, riskFactorAttributesMetadatas);
 
         final DynamicPropertyType treatmentStatementPrimaryProperty = new DynamicPropertyType();
         treatmentStatementPrimaryProperty.setName(TRATMENTS_STATEMENT_PRIMARY);
