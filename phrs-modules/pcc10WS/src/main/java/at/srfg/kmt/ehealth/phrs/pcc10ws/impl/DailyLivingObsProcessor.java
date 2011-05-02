@@ -124,9 +124,9 @@ final class DailyLivingObsProcessor implements Processor<Response> {
         }
 
         // FIXME : use the constats here
-        final String obsURI =
+        final String odlURI =
                 "at.srfg.kmt.ehealth.phrs.datamodel.impl.ActivityOfDailyLiving";
-        final Set<DynaBean> allObs = beanRepository.getAllForClass(obsURI);
+        final Set<DynaBean> allObs = beanRepository.getAllForClass(odlURI);
         OBS_FACTORY.setObservations(allObs);
 
         final QUPCIN043200UV01 build = OBS_FACTORY.build();
