@@ -13,13 +13,16 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.ws;
 
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-import java.util.StringTokenizer;
+import net.sf.json.JSONObject;
 import org.apache.commons.beanutils.Converter;
 
 
 /**
- *
+ * Transforms a JSON like object in to a Map. Each JOSN property name is used 
+ * like key and the property.
+ * 
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -32,25 +35,25 @@ class HashMapConverter implements Converter {
             return null;
         }
 
-        
+
         if (o instanceof String && type == HashMap.class) {
-            
-            final StringBuffer strRepresentation = 
-                    new StringBuffer(o.toString());
-            strRepresentation.deleteCharAt(0);
-            strRepresentation.deleteCharAt(strRepresentation.length() - 1);
-            
+
             final Map result = new HashMap();
-            if (strRepresentation.toString().isEmpty()) {
+            final String content = (String) o;
+            
+            if (content.trim().isEmpty()) {
                 return result;
             }
             
-            for (StringTokenizer entries = new StringTokenizer(strRepresentation.toString(), ","); 
-                    entries.hasMoreElements();) {
-                final String entry = entries.nextToken();
-                System.out.println("-->" + entry);
-                final String[] keyAndValue = entry.split(":");
-                result.put(keyAndValue[0], keyAndValue[1]);
+            final JSONObject json = JSONObject.fromObject(o);
+            if (json.isEmpty()) {
+                return result;
+            }
+            
+            for (final Iterator keys = json.keys(); keys.hasNext();) {
+                final String key =  keys.next().toString();
+                final Object value = json.get(key);
+                result.put(key, value);
             }
 
             return result;
@@ -58,5 +61,18 @@ class HashMapConverter implements Converter {
 
         return null;
 
+    }
+
+    private String removeQuotes(String in) {
+        final StringBuilder result = new StringBuilder(in);
+        if (in.startsWith("\"")) {
+            result.deleteCharAt(0);
+        }
+
+        if (in.endsWith("\"")) {
+            result.deleteCharAt(result.length() - 1);
+        }
+
+        return result.toString();
     }
 }
