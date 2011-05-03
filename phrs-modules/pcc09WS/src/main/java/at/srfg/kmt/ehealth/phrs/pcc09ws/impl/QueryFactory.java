@@ -65,6 +65,8 @@ class QueryFactory {
         CARE_PROVISION_CODES.put("HISTMEDLIST", "All Historical Medications");
         CARE_PROVISION_CODES.put("IMMUCAT", "All Immunizations");
         CARE_PROVISION_CODES.put("PSVCCAT", "All professional service entries");
+        // I add this (ODLS) proves if this is correct
+        CARE_PROVISION_CODES.put("ODLS", "All Observations Of daily livings");
     }
 
     /**
