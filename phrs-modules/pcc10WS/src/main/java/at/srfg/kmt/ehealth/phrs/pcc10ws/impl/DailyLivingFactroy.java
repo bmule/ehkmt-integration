@@ -68,15 +68,17 @@ final class DailyLivingFactroy implements PCC10Factory<QUPCIN043200UV01> {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(DailyLivingFactroy.class);
 
-    private Map<String, String> metdata;
+    private Map<String, String> obsOfDailyLivingMetdata;
+    private Map<String, String> activityItemMetdata;
 
     /**
      * Builds a <code>DailyLivingFactroy</code> instance.
      */
     DailyLivingFactroy() {
-        metdata = new HashMap<String, String>();
+        obsOfDailyLivingMetdata = new HashMap<String, String>();
         solveMetadata();
-        LOGGER.debug("The Class metadata : {}", metdata);
+        LOGGER.debug("Observation Of DailyLiving metadata : {}", obsOfDailyLivingMetdata);
+        LOGGER.debug("Observation Of DailyLiving metadata : {}", activityItemMetdata);
     }
 
     private void solveMetadata() {
@@ -94,13 +96,13 @@ final class DailyLivingFactroy implements PCC10Factory<QUPCIN043200UV01> {
                 metadataRepository.getByMetadataName(CLASS_URI, IS_OBSERVATION_CODE);
         // FIXME : the key values is overwrite 
         for (DynamicPropertyType propertyType : obsCode) {
-            metdata.put(IS_OBSERVATION_CODE, propertyType.getName());
+            obsOfDailyLivingMetdata.put(IS_OBSERVATION_CODE, propertyType.getName());
         }
 
         final Set<DynamicPropertyType> obsValue =
                 metadataRepository.getByMetadataName(CLASS_URI, IS_OBSERVATION_VALUE);
         for (DynamicPropertyType propertyType : obsValue) {
-            metdata.put(IS_OBSERVATION_VALUE, propertyType.getName());
+            obsOfDailyLivingMetdata.put(IS_OBSERVATION_VALUE, propertyType.getName());
         }
     }
 
@@ -201,7 +203,7 @@ final class DailyLivingFactroy implements PCC10Factory<QUPCIN043200UV01> {
     private String getCodePropertyName(DynaBean bean) {
         final Object type = bean.get("_phrsBeanClassURI");
         if (CLASS_URI.equals(type)) {
-            final String result = metdata.get(IS_OBSERVATION_CODE);
+            final String result = obsOfDailyLivingMetdata.get(IS_OBSERVATION_CODE);
             return result;
         }
 
@@ -213,7 +215,7 @@ final class DailyLivingFactroy implements PCC10Factory<QUPCIN043200UV01> {
     private String getValuePropertyName(DynaBean bean) {
         final Object type = bean.get("_phrsBeanClassURI");
         if (CLASS_URI.equals(type)) {
-            final String result = metdata.get(IS_OBSERVATION_VALUE);
+            final String result = obsOfDailyLivingMetdata.get(IS_OBSERVATION_VALUE);
             return result;
         }
 

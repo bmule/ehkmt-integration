@@ -122,12 +122,17 @@ final class DailyLivingObsProcessor implements Processor<Response> {
             LOGGER.error(namingException.getMessage(), namingException);
             return null;
         }
+        
+        final Set<DynaBean> all = new HashSet<DynaBean>();
 
         // FIXME : use the constats here
         final String odlURI =
                 "at.srfg.kmt.ehealth.phrs.datamodel.impl.ActivityOfDailyLiving";
         final Set<DynaBean> allObs = beanRepository.getAllForClass(odlURI);
-        OBS_FACTORY.setObservations(allObs);
+        all.addAll(allObs);
+
+//        all.addAll(allActivityItems);
+        OBS_FACTORY.setObservations(all);
 
         final QUPCIN043200UV01 build = OBS_FACTORY.build();
         return build;
