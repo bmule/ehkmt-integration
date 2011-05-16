@@ -35,8 +35,6 @@
         <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
         <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
     <dependencies>
