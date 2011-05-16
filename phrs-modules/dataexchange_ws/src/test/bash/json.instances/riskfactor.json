@@ -31,7 +31,9 @@
     },
     "riskFactorCode": "UMLS:C0337664",
     "riskFactorDuration": "PHRS.CS:5_to_10_year",
-    "riskFactorType": null,
+    // mihai : I add this value, before was null
+    // UMLS:C1457887 == Symptom
+    "riskFactorType": "UMLS:C1457887",
     "treatmentStatementPrimary": null,
     "treatmentStatmentCodes": [
             

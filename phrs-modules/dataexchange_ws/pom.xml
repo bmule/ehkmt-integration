@@ -22,8 +22,6 @@
         <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
         <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
 
@@ -41,12 +39,11 @@
             <version>1.6.1</version>
             <scope>provided</scope>
         </dependency>
-
-
+        
         <dependency>
             <groupId>org.jboss.jbossas</groupId>
             <artifactId>jboss-as-client</artifactId>
-            <version>5.1.0.GA</version>
+            <version>6.0.0.Final</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
@@ -64,6 +61,40 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-api</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-spi</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-jbossas-remote-6</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
         
         
         <dependency>
@@ -98,6 +129,18 @@
             <artifactId>resteasy-jaxrs</artifactId>
             <version>2.2-beta-1</version>
         </dependency>
+        
+        
+        <dependency> 
+        <!--
+            Arquillian needs this, this is the reason why the scope is test.
+        -->
+            <groupId>javax.enterprise</groupId> 
+            <artifactId>cdi-api</artifactId> 
+            <version>1.0-SP1</version>  
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     
     <build>
@@ -116,6 +159,54 @@
                     <packagingIncludes>WEB-INF/lib/resteasy-jaxrs*.jar, WEB-INF/lib/jaxrs-api-*.jar,WEB-INF/lib/scannotation-*.jar,**/*.xml,**/*.properties,**/*.class,**/*.png,**/*.css,**/*.js,**/*.jsp</packagingIncludes>
                 </configuration>
             </plugin>
+            
+                        <!--
+            This is just a workaround until the arquillian is able to 
+            build archives based on pom files.
+            I use DynaBeans in the data exchange module and I want to
+            do test where classes from this artifact (DynaBeans) appears.
+            This is the reason why I use the maven-dependency-plugin to
+            copy the aritefact in to the 'target/ShrinkWrap' directory.
+            The Arquillian test load them from there using a File Input 
+            Stream.
+            The copy process take place on the test-compile phase.
+            
+            I know this is not the most elegant way to solve this problem but
+            it seams to be the fastest.
+            
+            As far as the Arquillian/ShrinkWrap team will includes this feaures
+            I will remove this element. More, it seams that the feaures are 
+            impelemented and they are in a pre-alpha pahase.
+            -->
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.sf.json-lib</groupId>
+                                    <artifactId>json-lib</artifactId>
+                                    <classifier>jdk15</classifier>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/to_lib</outputDirectory>
+                                </artifactItem>
+                                                                
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            
         </plugins>
     </build>
 </project>

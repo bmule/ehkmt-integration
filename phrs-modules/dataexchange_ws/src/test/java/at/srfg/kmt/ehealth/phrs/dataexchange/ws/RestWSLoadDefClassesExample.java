@@ -42,8 +42,5 @@ public class RestWSLoadDefClassesExample {
             String msg = uri + " POST request can not be solved.";
             throw new IllegalStateException(msg);
         }
-
     }
-
-    
 }
