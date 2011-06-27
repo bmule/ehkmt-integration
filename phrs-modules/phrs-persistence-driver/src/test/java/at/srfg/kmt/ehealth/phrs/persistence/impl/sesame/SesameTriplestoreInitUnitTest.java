@@ -58,7 +58,10 @@ public class SesameTriplestoreInitUnitTest {
     @Before
     public void initSiute() throws GenericRepositoryException {
         triplestore = new SesameTriplestore();
-        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(new LoadRdfPostConstruct());
+        final String loadFile = "startup.test.rdf";
+        final LoadRdfPostConstruct loadRdfPostConstruct = 
+                new LoadRdfPostConstruct(loadFile);
+        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
@@ -76,11 +79,20 @@ public class SesameTriplestoreInitUnitTest {
     }
 
     @Test
-    public void aaa() throws TripleException, GenericRepositoryException {
+    public void testInit() throws TripleException, GenericRepositoryException {
+        final String subject = "http://www.icardea.at/phrs/instances/codeSystem/snomed";
+        // The loaded file startup.test.rdf contains only two triples with the 
+        // given subject.
         final Iterable<Triple> forSubject = 
-                triplestore.getForSubject("http://www.icardea.at/phrs/instances/DoingHousework");
+                triplestore.getForSubject(subject);
+        
+        int count = 0;
         for (Triple triple : forSubject) {
-            System.out.println("===>" + triple);
+            count++;
         }
+        assertEquals(2, count);
+        
+        final boolean exists = triplestore.exists(subject);
+        assertTrue(exists);
     }
 }
