@@ -55,7 +55,6 @@ public class SesameTriplestoreUnitTest {
     @Before
     public void initSiute() throws GenericRepositoryException {
         triplestore = new SesameTriplestore();
-        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(new LoadRdfPostConstruct());
     }
 
     /**
@@ -307,10 +306,4 @@ public class SesameTriplestoreUnitTest {
                 triplestore.exists(SUBJECT, SUBJECT, VALUE, LITERAL);
         assertFalse(exists);
     }
-    
-        @Test
-    public void aaa() throws TripleException, GenericRepositoryException {
-            ((GenericTriplestoreLifecycle)triplestore).init();
-        }
-
 }
