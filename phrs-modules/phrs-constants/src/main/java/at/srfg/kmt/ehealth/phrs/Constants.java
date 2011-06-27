@@ -24,8 +24,6 @@ import java.util.Properties;
  */
 public class Constants {
 
-    public static final String COMMENT = "comment";
-
     public static final String ICARDEA_NS = "http://www.icardea.at/phrs";
 
     public static final String STATUS_NS = getICardeaResource("status");
@@ -171,10 +169,10 @@ public class Constants {
     public static final String ICARDEA_HL7V3_VALUE = ICARDEA_HL7V3_NS + "#value";
     public static final String ICARDEA_HL7V3_UNIT = ICARDEA_HL7V3_NS + "#unit";
 
-    public static final String ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PREASURE =
+    public static final String ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE =
             ICARDEA_NS + "/instances/SystolicBloodPressure";
 
-    public static final String ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PREASURE =
+    public static final String ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE =
             ICARDEA_NS + "/instances/DiastolicBloodPressure";
 
     
