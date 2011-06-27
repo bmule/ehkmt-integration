@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import org.openrdf.repository.RepositoryException;
 
 
 /**
@@ -34,8 +35,8 @@ public class VitalSignClientExample {
                 Constants.MM_HG);
         
         final Iterable<Triple> vitalSigns = client.getVitalSigns();
-        for (Triple vitalSign : vitalSigns ) {
-            System.out.println(vitalSign);
-        }
+//        for (Triple vitalSign : vitalSigns ) {
+//            System.out.println(vitalSign);
+//        }
     }
 }

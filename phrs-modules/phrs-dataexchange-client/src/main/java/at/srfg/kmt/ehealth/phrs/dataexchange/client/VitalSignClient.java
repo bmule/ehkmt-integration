@@ -98,7 +98,7 @@ public class VitalSignClient {
                 RESOURCE);
     }
 
-    Iterable<Triple> getVitalSigns() throws TripleException, RepositoryException {
+    Iterable<Triple> getVitalSigns() throws TripleException {
         final Iterable<Triple> forSubject = triplestore.getForSubject(SUBJECT);
         return forSubject;
     }
