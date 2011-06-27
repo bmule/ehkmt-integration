@@ -96,11 +96,7 @@ public class SesameTriplestore
 
     @Override
     public void init() {
-        System.out.println("postconst --->" + postconst);
         injectConnection();
-
-        
-        
         for (Runnable r : postconst) {
             r.run();
         }
