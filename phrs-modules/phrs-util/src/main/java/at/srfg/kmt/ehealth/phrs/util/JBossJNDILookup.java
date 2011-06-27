@@ -4,14 +4,16 @@
  * Date : Dec 22, 2010
  * User : mradules
  */
-
-
 package at.srfg.kmt.ehealth.phrs.util;
 
 
 import java.util.Properties;
+import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NameClassPair;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+
 
 /**
  * A lot of methods used for the JNDI lookups.
@@ -191,9 +193,45 @@ public final class JBossJNDILookup {
 
 
         final InitialContext ctx = new InitialContext();
+
+
+
         final Object result = ctx.lookup(encName);
 
         return (T) result;
+    }
+
+    public static String listContext() throws NamingException {
+        final InitialContext ctx = new InitialContext();
+        final String result = listContext(ctx, "");
+        return result;
+    }
+
+    public static String listContext(String pathContext) throws NamingException {
+        final InitialContext ctx = new InitialContext();
+        final String result = listContext(ctx, pathContext);
+        return result;
+    }
+
+    public static String listContext(Context envCtx, String pathContext) throws NamingException {
+        final StringBuilder result = new StringBuilder();
+        result.append("[");
+        for (NamingEnumeration<NameClassPair> list = envCtx.list(pathContext);
+                list.hasMoreElements();) {
+            final NameClassPair next = list.next();
+            result.append("[Name : ");
+            result.append(next.getName());
+            result.append(", ");
+
+            result.append("Class Name : ");
+            result.append(next.getClassName());
+            result.append("], ");
+        }
+        
+        result.delete(result.length() - 2, result.length());
+        result.append("]");
+
+        return result.toString();
     }
 
     /**

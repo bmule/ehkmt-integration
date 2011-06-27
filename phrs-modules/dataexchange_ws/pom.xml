@@ -95,8 +95,7 @@
             <scope>test</scope>
         </dependency>
 
-        
-        
+               
         <dependency>
             <!--
             I need this because I choose to use Postgres for test; 
@@ -140,6 +139,14 @@
             <version>1.0-SP1</version>  
             <scope>test</scope>
         </dependency>
+        
+        
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
     
@@ -160,7 +167,7 @@
                 </configuration>
             </plugin>
             
-                        <!--
+            <!--
             This is just a workaround until the arquillian is able to 
             build archives based on pom files.
             I use DynaBeans in the data exchange module and I want to
@@ -196,6 +203,14 @@
                                     <groupId>net.sf.json-lib</groupId>
                                     <artifactId>json-lib</artifactId>
                                     <classifier>jdk15</classifier>
+                                    <overWrite>false</overWrite>
+                                    <outputDirectory>${project.build.directory}/to_lib</outputDirectory>
+                                </artifactItem>
+                                                                
+                                <artifactItem>
+                                    <groupId>commons-httpclient</groupId>
+                                    <artifactId>commons-httpclient</artifactId>
+                                    <version>3.1</version>
                                     <overWrite>false</overWrite>
                                     <outputDirectory>${project.build.directory}/to_lib</outputDirectory>
                                 </artifactItem>

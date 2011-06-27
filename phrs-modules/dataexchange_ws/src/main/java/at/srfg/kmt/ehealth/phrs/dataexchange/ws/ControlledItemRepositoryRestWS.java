@@ -13,6 +13,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.model.ControlledItem;
 import at.srfg.kmt.ehealth.phrs.util.JBossJNDILookup;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ejb.EJB;
 import javax.naming.NamingException;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
@@ -58,6 +59,11 @@ public class ControlledItemRepositoryRestWS {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ControlledItemRepositoryRestWS.class);
+    
+    
+    @EJB
+    private VocabularyLoader vocabularyLoader;
+    
 
     /**
      * Builds a <code>ControlledItemRepositoryRestWS</code> instance.
@@ -65,6 +71,8 @@ public class ControlledItemRepositoryRestWS {
     public ControlledItemRepositoryRestWS() {
         // UNIMPLEMENTD
     }
+    
+    
 
     /**
      * GET based web service used to load all the default vocabulary terms.
@@ -79,6 +87,9 @@ public class ControlledItemRepositoryRestWS {
     @Path("/load")
     @Produces("application/json")
     public Response load() {
+        
+        //System.out.println("vocabularyLoader-->" + vocabularyLoader);
+        
         final VocabularyLoader vocabularyLoader;
         try {
             vocabularyLoader = JBossJNDILookup.lookupLocal(VocabularyLoader.class);

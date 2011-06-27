@@ -95,6 +95,9 @@ final  class ODLFactory implements PCC10Factory<QUPCIN043200UV01> {
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
+        
+        final COCTMT050000UVPatient patient = careProvisionEvent.getRecordTarget().getValue().getPatient().getValue();
+       PN name = patient.  getPatientPerson().getValue().getName().get(0);
 
         final List<REPCMT004000UV01PertinentInformation5> pertinentInformations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
@@ -106,6 +109,8 @@ final  class ODLFactory implements PCC10Factory<QUPCIN043200UV01> {
         }
 
         careProvisionEvent.getPertinentInformation3().addAll(pertinentInformations);
+        
+        
 
         return query;
     }
@@ -214,7 +219,8 @@ final  class ODLFactory implements PCC10Factory<QUPCIN043200UV01> {
                     OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5SubstanceAdministration(substanceAdministration);
             pertinentInformation.setSubstanceAdministration(newSubstanceAdministration_JE);
         }
-
+        final ED text = new ED();
+        
         return pertinentInformation;
     }
 

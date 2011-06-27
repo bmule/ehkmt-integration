@@ -1,0 +1,24 @@
+{
+    "class": "at.srfg.kmt.ehealth.phrs.presentation.model.observation.ObsBloodPressureA01",
+    "id": 32,
+    "_phrsBeanCanRead": true,
+    "_phrsBeanCanUse": true,
+    "_phrsBeanCanWrite": true,
+    "_phrsBeanClassURI": "at.srfg.kmt.ehealth.phrs.datamodel.impl.BloodPressure",
+    "_phrsBeanCreateDate": "2011-04-22T11:03:22Z",
+    "_phrsBeanCreatorUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanIsDeleted": false,
+    "_phrsBeanName": null,
+    "_phrsBeanOwnerUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanRefersToSourceUri": null,
+    "_phrsBeanUri": "phrs_uuid_61aea70f-9015-4982-92b8-e07c835b022e",
+    "bpDiastolic": 80,
+    "bpHeartRate": 83,
+    "bpSystolic": 135,
+    "comment": null,
+    "observationDate": "2011-04-22T11:02:00Z",
+    "ownerUser": {
+        "class": "User",
+        "id": 15
+    }
+}

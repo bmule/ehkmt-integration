@@ -1,0 +1,40 @@
+{
+    "class": "at.srfg.kmt.ehealth.phrs.presentation.model.patientdata.MedicationSummary",
+    "id": 27,
+    "_phrsBeanCanRead": true,
+    "_phrsBeanCanUse": true,
+    "_phrsBeanCanWrite": true,
+    "_phrsBeanClassURI": "at.srfg.kmt.ehealth.phrs.datamodel.impl.Medication",
+    "_phrsBeanCreateDate": "2011-04-22T10:25:39Z",
+    "_phrsBeanCreatorUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanIsDeleted": false,
+    "_phrsBeanName": null,
+    "_phrsBeanOwnerUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanRefersToSourceUri": "ehr.phrtestgenerated",
+    "_phrsBeanUri": "phrs_uuid_119ad761-338e-4077-8c62-27cbd100eb7d",
+    "comment": null,
+    "medicationActivity": null,
+    "medicationCode": null,
+    "medicationFrequencyInterval": "PHRS.CS:frequency_per_day",
+    "medicationFrequencyQuantity": "1",
+    "medicationFrequencyTimeOfDay": "PHRS.CS:when_timeofday_morning",
+    "medicationNameText": "Nomexor",
+    "medicationQuantity": "5",
+    "medicationQuantityUnit": "UMLS:C0439210",
+    "medicationReasonComment": null,
+    "medicationReasonKeywordCodes": [
+            
+    ],
+    "medicationReasonPrimaryKeywordCode": "UMLS:C0020538",
+    "medicationRoute": null,
+    "medicationStatus": "PHRS.CS:S0016",
+    "observationDateEnd": null,
+    "observationDateStart": "2009-11-19T23:00:00Z",
+    "ownerUser": {
+        "class": "User",
+        "id": 15
+    },
+    "prescribedByPersonId": null,
+    "prescribedByPersonName": "Dr. --------",
+    "prescribedByPersonRole": null
+}

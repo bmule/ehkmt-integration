@@ -23,8 +23,6 @@
         <version.org.jboss.arquillian>1.0.0.Alpha4</version.org.jboss.arquillian>
         <version.org.jboss.shrinkwrap>1.0.0-alpha-11</version.org.jboss.shrinkwrap>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.deploy.server>JBoss4</netbeans.hint.deploy.server>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>        
@@ -61,7 +59,58 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+        
+        
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-api</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-spi</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap</groupId>
+            <artifactId>shrinkwrap-impl-base</artifactId>
+            <version>${version.org.jboss.shrinkwrap}</version>
+            <scope>test</scope>
+        </dependency>
 
+
+        <dependency>
+            <groupId>org.jboss.arquillian</groupId>
+            <artifactId>arquillian-junit</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-jbossas-remote-6</artifactId>
+            <version>${version.org.jboss.arquillian}</version>
+            <scope>test</scope>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>6.0.0.Final</version>
+            <type>pom</type>
+        </dependency>
+
+        <!--
+        arquillian needs this, this is the reason why the scope is test.
+        -->
+        <dependency> 
+            <groupId>javax.enterprise</groupId> 
+            <artifactId>cdi-api</artifactId> 
+            <version>1.0-SP1</version>  
+            <scope>test</scope>
+        </dependency>
         
     </dependencies>
     

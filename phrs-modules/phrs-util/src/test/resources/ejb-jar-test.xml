@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns="http://java.sun.com/xml/ns/javaee" version="3.0" metadata-complete="false">  
+    <description>
+      EJBs for test application.
+    </description>
+    <enterprise-beans>
+        <session>
+            <ejb-name>MyServiceBean</ejb-name> 
+            <ejb-class>at.srfg.kmt.ehealth.phrs.util.MyServiceBean</ejb-class>
+            <ejb-local-ref>
+                <ejb-ref-name>MyServiceBean</ejb-ref-name> 
+                <local>at.srfg.kmt.ehealth.phrs.util.MyService</local>
+                <local-jndi-name>phrs/MyUser</local-jndi-name>
+            </ejb-local-ref>
+        </session>
+    </enterprise-beans>
+
+</ejb-jar> 

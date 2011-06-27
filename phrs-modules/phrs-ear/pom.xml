@@ -44,8 +44,8 @@
     </repositories>
 
     <properties>
-        <jboss.home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA</jboss.home>
-        <jboss.domain.home>/Volumes/Data/lab0/jBoss/jboss-5.1.0.GA/server/default</jboss.domain.home>
+        <jboss.home>/Volumes/Data/lab0/jBoss/jboss-6.0.0.Final</jboss.home>
+        <jboss.domain.home>/Volumes/Data/lab0/jBoss/jboss-6.0.0.Final/server/default</jboss.domain.home>
     </properties>
 
     <dependencies>
@@ -56,7 +56,7 @@
             <type>ejb</type>
         </dependency>
         
-         <dependency>
+        <dependency>
             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
             <artifactId>phrs-util</artifactId>
             <version>0.0.1</version>
@@ -129,6 +129,17 @@
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>dataexchange_ws</artifactId>
                         </webModule>
+                        
+                        <ejbModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>vocabulary</artifactId>
+                        </ejbModule>
+                        
+                        <webModule>
+                            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+                            <artifactId>vocabulary_ws</artifactId>
+                        </webModule>
+
 
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
@@ -139,11 +150,13 @@
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>pcc10ws</artifactId>
                         </webModule>
+                        
 
                         <webModule>
                             <groupId>at.srfg.kmt.ehealth.phrs</groupId>
                             <artifactId>simple-view</artifactId>
                         </webModule>
+                        
 
                     </modules>
                 </configuration>

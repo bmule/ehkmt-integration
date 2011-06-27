@@ -1,0 +1,26 @@
+{
+    "class": "at.srfg.kmt.ehealth.phrs.presentation.model.observation.ObsIssue",
+    "id": 35,
+    "_phrsBeanCanRead": true,
+    "_phrsBeanCanUse": true,
+    "_phrsBeanCanWrite": true,
+    "_phrsBeanClassURI": "at.srfg.kmt.ehealth.phrs.datamodel.impl.Problem",
+    "_phrsBeanCreateDate": "2011-04-22T11:12:25Z",
+    "_phrsBeanCreatorUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanIsDeleted": false,
+    "_phrsBeanName": null,
+    "_phrsBeanOwnerUri": "phrsuid_default_user_patient_andreas",
+    "_phrsBeanRefersToSourceUri": null,
+    "_phrsBeanUri": "phrs_uuid_87e40eae-1514-4304-a96d-7c01be66da9f",
+    "comment": null,
+    "isActiveStatus": true,
+    "issueCode": "UMLS:C0013404",
+    // UMLS:C1457887 == Symptom
+    "issueTypeCode": "UMLS:C1457887",
+    "observationDateEnd": null,
+    "observationDateStart": "2011-04-22T11:12:00Z",
+    "ownerUser": {
+        "class": "User",
+        "id": 15
+    }
+}

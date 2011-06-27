@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+  
+  
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>phrs-dataexchange-client</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>Personal Health System Framework Data Exchange Clinet</name>
+    <description>
+        This modules uses the persistence driver to access information from the 
+        underlying persistence layer. 
+        This is just an example.
+    </description>
+    <inceptionYear>2011</inceptionYear>
+  
+    <properties>
+        <log4j.version>1.6.1</log4j.version>
+    </properties>
+
+  
+    <dependencies>
+        
+        <dependency>
+            <artifactId>phrs-constants</artifactId>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <artifactId>phrs-persistence-driver</artifactId>
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${log4j.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+</project>

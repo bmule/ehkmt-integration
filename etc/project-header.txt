@@ -1,0 +1,7 @@
+/*
+ * Project :iCardea
+ * File : ${name}.java
+ * Encoding : ${encoding}
+ * Date : ${date}
+ * User : Mihai Radulescu
+ */

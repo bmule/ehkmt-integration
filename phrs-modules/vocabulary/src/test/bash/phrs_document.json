@@ -1,0 +1,10 @@
+{
+    "_id": "_design/phrsdocument",
+    "views" : {
+        "phrsitem" : {
+            "map" : "function(doc){ emit(doc._id, doc._rev)}"
+         }
+    }
+}
+
+

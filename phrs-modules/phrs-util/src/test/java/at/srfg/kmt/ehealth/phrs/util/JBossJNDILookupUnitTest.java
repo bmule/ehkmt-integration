@@ -2,8 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
 package at.srfg.kmt.ehealth.phrs.util;
 
 
@@ -14,7 +12,9 @@ import org.jboss.arquillian.junit.Arquillian;
 import java.util.Properties;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * This test suite is used to test the <code>JBossJNDILookup</code>
@@ -48,7 +49,7 @@ public class JBossJNDILookupUnitTest {
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.GroupManagerBeanUnitTest</code>.
      */
-    private static final Logger logger =
+    private static final Logger LOGGER =
             LoggerFactory.getLogger(JBossJNDILookupUnitTest.class);
 
     /**
@@ -70,7 +71,8 @@ public class JBossJNDILookupUnitTest {
      * from any reasons.
      */
     @Deployment
-    public static JavaArchive createDeployment() throws MalformedURLException {
+    public static Archive<?> createDeployment() throws MalformedURLException {
+        
         final JavaArchive ejbJar =
                 ShrinkWrap.create(JavaArchive.class, "test.jar");
 
@@ -79,12 +81,23 @@ public class JBossJNDILookupUnitTest {
         // to the ejb jar (and to the classpath).
         // see the log for the ejb jar structure
         ejbJar.addPackage(JBossJNDILookupUnitTest.class.getPackage());
+        
+        
+        ejbJar.addManifestResource("ejb-jar-test.xml", "ejb-jar.xml");
+
+        final EnterpriseArchive ear =
+                ShrinkWrap.create(EnterpriseArchive.class, "test.ear");
+        ear.addModule(ejbJar);
+
+        final String earStructure = ear.toString(true);
+        LOGGER.debug("EAR jar structure on deploy is :");
+        LOGGER.debug(earStructure);
 
         final String ejbStructure = ejbJar.toString(true);
-        logger.debug("EJB jar structure on deploy is :");
-        logger.debug(ejbStructure);
-
-        return ejbJar;
+        LOGGER.debug("EJB jar structure on deploy is :");
+        LOGGER.debug(ejbStructure);
+        
+        return ear;
     }
 
     /**
@@ -135,14 +148,14 @@ public class JBossJNDILookupUnitTest {
      * context.
      * @see JBossJNDILookup#lookup(java.lang.String, java.util.Hashtable)
      */
-    @Test
+    //@Test
     public void testLookupWithDefaultProperties() throws NamingException {
         final int explected = 10;
 
         final Context initialContext = new InitialContext();
 
         final MyService service =
-                (MyService) initialContext.lookup("test/MyServiceBean/local");
+                (MyService) initialContext.lookup("MyServiceBean/local");
 
         final long result = service.doStuff(explected);
 
@@ -170,15 +183,16 @@ public class JBossJNDILookupUnitTest {
     @Test
     public void testLookupWithString() throws NamingException {
         final int explected = 10;
-        final String name = JBossENCBuilder.getENCNameLocal("test", MyService.class);
 
         final MyService service =
                 JBossJNDILookup.lookup("test/MyServiceBean/local");
         final long result = service.doStuff(explected);
+        
+        final String listContext = JBossJNDILookup.listContext("java:comp/env/phrs");
 
         Assert.assertEquals(explected + 1, result);
     }
-
+    
     /**
      * Does a lookup using a wrong name, a NamingException occurs.
      *
