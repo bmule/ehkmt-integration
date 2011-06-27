@@ -13,18 +13,23 @@ import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.rio.RDFFormat;
 import at.srfg.kmt.ehealth.phrs.Constants;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Used to load a specific RDF/XML file in to the underlying persistence layer. 
+ *  
  * @version 0.1
  * @since 0.1
  * @author mradules
  */
 public class LoadRdfPostConstruct implements Runnable {
 
+    /**
+     * The Sesame specific connection.
+     */
     RepositoryConnection connection;
 
     /**
@@ -32,22 +37,34 @@ public class LoadRdfPostConstruct implements Runnable {
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct</code>..
      */
-    private static final Logger LOGGER = 
+    private static final Logger LOGGER =
             LoggerFactory.getLogger(LoadRdfPostConstruct.class);
+
+    /**
+     * The 
+     */
+    private final String fileName;
+
+    public LoadRdfPostConstruct() {
+        this(null);
+    }
+
+    public LoadRdfPostConstruct(String fileName) {
+        this.fileName = fileName == null ? "startup.rdf" :  fileName;
+    }
 
     @Override
     public void run() {
         final InputStream resourceAsStream =
-                getClass().getClassLoader().getResourceAsStream("startup.rdf");
-        if (resourceAsStream != null) {
+                getClass().getClassLoader().getResourceAsStream(fileName);
+        if (resourceAsStream == null) {
+            LOGGER.warn("The initial data set can not be located. No resource with name " + fileName + " found in calsspath.");
             return;
         }
         
         try {
             connection.add(resourceAsStream, Constants.ICARDEA_NS, RDFFormat.RDFXML);
             connection.commit();
-            LOGGER.debug("is empty? " + connection.isEmpty());
-
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
