@@ -35,8 +35,8 @@ public class VitalSignClientExample {
                 Constants.MM_HG);
         
         final Iterable<Triple> vitalSigns = client.getVitalSigns();
-//        for (Triple vitalSign : vitalSigns ) {
-//            System.out.println(vitalSign);
-//        }
+        for (Triple vitalSign : vitalSigns ) {
+            System.out.println(vitalSign);
+        }
     }
 }
