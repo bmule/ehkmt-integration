@@ -17,6 +17,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
+import org.openrdf.repository.RepositoryException;
 
 
 /**
@@ -46,8 +47,10 @@ public class VitalSignClient {
      */
     VitalSignClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
+        final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct("startup.test.rdf");
         // I load the need instances.
-        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(new LoadRdfPostConstruct());
+        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
+        ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
     void addVitalSign(String codeURI, String note, String date,
@@ -95,8 +98,10 @@ public class VitalSignClient {
                 RESOURCE);
     }
 
-    Iterable<Triple> getVitalSigns() throws TripleException {
+    Iterable<Triple> getVitalSigns() throws TripleException, RepositoryException {
         final Iterable<Triple> forSubject = triplestore.getForSubject(SUBJECT);
         return forSubject;
     }
+    
+    
 }
