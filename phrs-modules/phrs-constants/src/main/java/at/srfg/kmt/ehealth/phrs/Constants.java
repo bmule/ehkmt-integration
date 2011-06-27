@@ -31,31 +31,31 @@ public class Constants {
     public static String STATUS_NS = getICardeaResource("status");
 
     public static String STATUS_STATE = STATUS_NS + "#statusState";
-    
+
     /**
      * This is an instance URI.
      */
     public static String STATUS_COMPELETE =
             getICardeaResource("status/instance/Complete");
-    
+
     /**
      * This is an instance URI.
      */
     public static String STATUS_INCOMPELETE =
             getICardeaResource("status/instance/Incomplete");
-    
+
     /**
      * This is an instance URI.
      */
     public static String STATUS_RUNNING =
             getICardeaResource("status/instance/Runnig");
-    
+
     /**
      * This is an instance URI.
      */
     public static String STATUS_INTERRUPTED =
             getICardeaResource("status/instance/Interrupted");
-    
+
     public static String CODE_NS = getICardeaResource("code");
 
     public static String CODE = CODE_NS + "#code";
@@ -92,8 +92,6 @@ public class Constants {
 
     public static String BLOOD_PRESSURE_DIASTOLIC = BLOOD_PRESSURE_NS + "#bpDiastolic";
 
-    public static String BLOOD_PRESSURE_SYSTOLIC = BLOOD_PRESSURE_NS + "#bpSystolic";
-
     public static String HEART_NS = getICardeaResource("heart");
 
     public static String HEART_RATE = HEART_NS + "#bpHeartRate";
@@ -116,139 +114,72 @@ public class Constants {
 
     public static String MEASURE_SYSTEM_QUANTITY = MEASURE_SYSTEM_NS + "#mSystemQuantity";
     
+
+    public static String ICARDEA_INSTANCES_NS = ICARDEA_NS + "/instances";
+    
+    public static String ICARDEA_INSTANCES_MESURE_SYSTEM_NS = 
+            ICARDEA_INSTANCES_NS + "/MeasureSystem";
+
     /**
      * This is an instance URI.
      */
-    public static String MM_HG =
-            getICardeaResource("MeasureSystem/instance/MmHg");
-    
+    public static String MM_HG = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#MmHg";
+
     /**
      * This is an instance URI.
      */
-    public static String MILLIGRAMS =
-            getICardeaResource("MeasureSystem/instance/Milligram");
-    
+    public static String MILLIGRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Milligram";
+
     /**
      * This is an instance URI.
      */
-    public static String TABLET =
-            getICardeaResource("MeasureSystem/instance/Tablet");
-    
+    public static String TABLET = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Tablet";
+
     /**
      * This is an instance URI.
      */
-    public static String PILL =
-            getICardeaResource("MeasureSystem/instance/Pill");
-    
+    public static String PILL = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Pill";
+
     /**
      * This is an instance URI.
      */
-    public static String CENTIMETER =
-            getICardeaResource("MeasureSystem/instance/Centimeter");
-    
+    public static String CENTIMETER = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Centimeter";
+
     /**
      * This is an instance URI.
      */
-    public static String METER =
-            getICardeaResource("MeasureSystem/instance/Meter");
-    
+    public static String METER = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Meter";
+
     /**
      * This is an instance URI.
      */
-    public static String KILOGRAM =
-            getICardeaResource("MeasureSystem/instance/Kilogram");
-    
+    public static String KILOGRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Kilogram";
+
     /**
      * This is an instance URI.
      */
-    public static String GRAM =
-            getICardeaResource("MeasureSystem/instance/Gram");
+    public static String GRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Gram";
     
+    
+    public static String ICARDEA_HL7V3_NS = ICARDEA_NS + "/hl7V3";
 
-    public static String ACTIVITY_NS = getICardeaResource("activity");
+    public static String ICARDEA_HL7V3_TEMPLATE_ID_ROOT = ICARDEA_HL7V3_NS + "#templIdRoot";
 
-    public static String ACTIVITY_CATEGORY = ACTIVITY_NS + "#activityCategory";
+    public static String ICARDEA_HL7V3_CODE = ICARDEA_HL7V3_NS + "#code";
+    
+    public static String ICARDEA_HL7V3_EFFECTIVE_TIME = ICARDEA_HL7V3_NS + "#effectiveTime";
+    public static String ICARDEA_HL7V3_VALUE = ICARDEA_HL7V3_NS + "#value";
+    public static String ICARDEA_HL7V3_UNIT = ICARDEA_HL7V3_NS + "#unit";
 
-    public static String ACTIVITY_ASSEMENT_INDICATOR = ACTIVITY_NS + "#assessmentIndicator";
+    public static String ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PREASURE =
+            ICARDEA_NS + "/instances/SystolicBloodPressure";
 
-    public static String ACTIVITY_DURATION_CODE = ACTIVITY_NS + "#activityDurationCode";
+    public static String ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PREASURE =
+            ICARDEA_NS + "/instances/DiastolicBloodPressure";
 
-    public static String ACTIVITY_FEATURE = ACTIVITY_NS + "#activityFeature";
-
-    public static String ACTIVITY_FREQUENCY_CODE = ACTIVITY_NS + "#activityFrequencyCode";
-
-    public static String ACTIVITY_MOD_INDICATOR = ACTIVITY_NS + "#activityMoodIndicator";
-
-    public static String SCORE = "score";
-
-    public static String VALUE_ACTIVITY = "valueActivity";
-
-    public static String MEDICATION_NS = getICardeaResource("medications");
-
-    public static String MEDICATION_ACTIVITY = MEDICATION_NS + "#medicationActivity";
-
-    public static String MEDICATION_CODE = MEDICATION_NS + "#medicationCode";
-
-    public static String MEDICATION_FREQUENCY_INTERVAL = MEDICATION_NS + "#medicationFrequencyInterval";
-
-    public static String MEDICATION_FREQUENCY_TIMEOFDAY = MEDICATION_NS + "medicationFrequencyTimeOfDay";
-
-    public static String MEDICATION_FREQUENCY_QUANTITY = MEDICATION_NS + "medicationFrequencyQuantity";
-
-    public static String MEDICATION_NAME_TEXT = MEDICATION_NS + "#medicationNameText";
-
-    public static String MEDICATION_REASON_COMMENT = MEDICATION_NS + "#medicationReasonComment";
-
-    public static String MEDICATION_REASON_KEYWORD_CODES = MEDICATION_NS + "#medicationReasonKeywordCodes";
-
-    public static String MEDICATION_REASON_PRIMARY_KEYWORD = MEDICATION_NS + "#medicationReasonPrimaryKeywordCode";
-
-    public static String OBSERVATION_DATE_START = MEDICATION_NS + "#observationDateStart";
-
-    public static String OBSERVATION_DATE_END = MEDICATION_NS + "#observationDateEnd";
-
-    public static String PRESCRIBED_BY = MEDICATION_NS + "#prescribedByPerson";
-
-    public static String PRESCRIBED_BY_ROLE = MEDICATION_NS + "#prescribedByRole";
-
-    public static String MANUFACTURED_PRODUCT_CLASS_CODE =
-            MEDICATION_NS + "manufacturedProductClassCode";
-
-    public static String MANUFACTURED_LABELED_DRUG_CLASS_CODE =
-            MEDICATION_NS + "#manufacturedLabeledDrugClassCode";
-
-    public static String MANUFACTURED_LABELED_DRUG_DETERMINER_CODE =
-            MEDICATION_NS + "#manufacturedLabeledDrugDeterminerCode";
-
-    public static String DRUG_CODE_SYSTEM = MEDICATION_NS + "#drugCodeSystem";
-
-    public static String DRUG_CODE_SYSTEM_NAME = MEDICATION_NS + "#drugCodeSystemName";
-
-    public static String DRUG_CODE = MEDICATION_NS + "#drugCode";
-
-    public static String DRUG_TEXT = MEDICATION_NS + "#drugText";
-
-    public static String RISK_NS = getICardeaResource("risk");
-
-    public static String RISK_FACTOR_TYPE = RISK_NS + "#riskFactorType";
-
-    public static String RISK_FACTOR_CODE = RISK_NS + "#riskFactorCode";
-
-    public static String RISK_FACTOR_DURATION = RISK_NS + "#riskFactorDuration";
-
-    public static String HAS_CONTRIBUTION_FACTORS = RISK_NS + "#hasContributingFactors";
-
-    public static String CONTRIBUTION_FACTORS_CODES = RISK_NS + "#contributingFactorCodes";
-
-    public static String RISK_FACTRORS_ATTRIBUTES = RISK_NS + "#riskFactorAttributes";
-
-    public static String IS_TREADED = RISK_NS + "#isTreated";
-
-    public static String TREATMENTS_CODES = RISK_NS + "#treatmentStatmentCodes";
-
-    public static String TRATMENTS_STATEMENT_PRIMARY = RISK_NS + "#treatmentStatementPrimary";
-
-    public static String MOOD_INDICATOR = RISK_NS + "#moodIndicator";
+    
+    public static String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
+    public static String SKOS_NOTE = SKOS_NS + "#note";
 
     /**
      * Used to load the default values for the constants - if this is required.
