@@ -22,13 +22,13 @@ public class VitalSignClientExample {
         
         final VitalSignClient client = new VitalSignClient();
         
-        client.addVitalSign(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PREASURE,
+        client.addVitalSign(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
                 "100",
                 Constants.MM_HG);
 
-        client.addVitalSign(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PREASURE,
+        client.addVitalSign(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE,
                 "Free text note for diasystolic.",
                 "201006010000",
                 "80",
