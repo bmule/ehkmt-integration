@@ -70,37 +70,42 @@
     </rdf:Description>
 
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/MmHg">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
         <skos:prefLabel>Milimeter Hg</skos:prefLabel>
         <skos:notation>mm[Hg]</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Milligram">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Bps">
+        <skos:prefLabel>Beat per secons</skos:prefLabel>
+        <skos:notation>bps</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Milligram">
         <skos:prefLabel>milligram</skos:prefLabel>
         <skos:notation>mg</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Centimeter">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Centimeter">
         <skos:prefLabel>centimeter</skos:prefLabel>
         <skos:notation>cm</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Meter">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Meter">
         <skos:prefLabel>meter</skos:prefLabel>
         <skos:notation>m</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Kilogram">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Kilogram">
         <skos:prefLabel>kilogram</skos:prefLabel>
         <skos:notation>kg</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Gram">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Gram">
         <skos:prefLabel>gram</skos:prefLabel>
         <skos:notation>kg</skos:notation>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem/Tablet">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Tablet">
         <skos:prefLabel>tablet</skos:prefLabel>
         <skos:altLabel>pill</skos:altLabel>
     </rdf:Description>
