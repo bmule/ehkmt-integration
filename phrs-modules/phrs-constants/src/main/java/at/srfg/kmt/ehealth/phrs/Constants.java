@@ -205,12 +205,4 @@ public class Constants {
 
         return result.toString();
     }
-
-    private static String getICardeaResource(String resouce, String separator) {
-        final StringBuilder result = new StringBuilder(ICARDEA_NS);
-        result.append(separator);
-        result.append(resouce);
-
-        return result.toString();
-    }
 }
