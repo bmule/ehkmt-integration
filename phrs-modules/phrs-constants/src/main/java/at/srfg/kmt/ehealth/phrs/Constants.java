@@ -207,33 +207,6 @@ public class Constants {
     
     public static final String ICARDEA_STATUS_SUSPENDED = 
             ICARDEA_NS + "/instances/Suspended";
-    
-    public static final String ICARDEA_MILLIMETER = 
-            ICARDEA_NS + "/instances/MeasureSystem#Millimeter";
-    
-    public static final String ICARDEA_CENTIMETER = 
-            ICARDEA_NS + "/instances/MeasureSystem#Centimeter";
-    
-    public static final String ICARDEA_MM_HG = 
-            ICARDEA_NS + "/instances/MeasureSystem#MmHg";
-    
-    public static final String ICARDEA_BPS = 
-            ICARDEA_NS + "/instances/MeasureSystem#Bps";
-    
-    public static final String ICARDEA_MILIGRAM = 
-            ICARDEA_NS + "/instances/MeasureSystem#Milligram";
-    
-    public static final String ICARDEA_METER = 
-            ICARDEA_NS + "/instances/MeasureSystem#Meter";
-    
-    public static final String ICARDEA_KILOGRAM = 
-            ICARDEA_NS + "/instances/MeasureSystem#Kilogram";
-    
-    public static final String ICARDEA_GRAM = 
-            ICARDEA_NS + "/instances/MeasureSystem#Gram";
-    
-    public static final String ICARDEA_TABLET = 
-            ICARDEA_NS + "/instances/MeasureSystem#Tablet";
 
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
     public static final String SKOS_NOTE = SKOS_NS + "#note";
