@@ -132,24 +132,6 @@
     </dependencies>
 
     <modules>
-        <module>phrs-ear</module>
-        <module>security</module>
-        <!--
-        <module>consenteditor</module>       
-        -->
-        <module>dataexchange</module>
-   
-        <module>dataexchange_ws</module>
-        
-        <module>simple-view</module>
-        
-        <module>phrs-util</module>
-        
-        <module>pcc09WS</module>
-        <module>pcc10WS</module>
-        <module>pcc-drone</module>
-        <module>vocabulary</module>
-        <module>vocabulary_ws</module>
         <module>phrs-constants</module>
         <module>phrs-persistence-driver</module>
         <module>phrs-dataexchange-client</module>
