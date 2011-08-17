@@ -17,7 +17,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
-import org.openrdf.repository.RepositoryException;
 
 
 /**
@@ -59,17 +58,17 @@ public class VitalSignClient {
 
         triplestore.persist(SUBJECT,
                 Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
-                "1.3.6.1.4.1.19376.1.5.3.1.4.13",
+                Constants.SIMPLE_OBSERVATIONS,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
                 Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
-                "1.3.6.1.4.1.19376.1.5.3.1.4.13.2",
+                Constants.VITAL_SIGNS_OBSERVATIONS,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
                 Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
-                "2.16.840.1.113883.10.20.1.31",
+                Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
@@ -97,11 +96,9 @@ public class VitalSignClient {
                 unitURI,
                 RESOURCE);
     }
-
+    
     Iterable<Triple> getVitalSigns() throws TripleException {
         final Iterable<Triple> forSubject = triplestore.getForSubject(SUBJECT);
         return forSubject;
     }
-    
-    
 }
