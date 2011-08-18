@@ -302,6 +302,19 @@ public class Constants {
     
     public static final String HL7V3_DATE_START = ICARDEA_HL7V3_NS + "#dateStart";
     public static final String HL7V3_DATE_END = ICARDEA_HL7V3_NS + "#dateEnd";
+    
+    public static final String HL7V3_FEVER = ICARDEA_NS + "/instances/Fever";
+    public static final String HL7V3_PALPITATION = ICARDEA_NS + "/instances/Palpitations";
+    public static final String HL7V3_FATIQUE = ICARDEA_NS + "/instances/Fatigue-Symptom";
+    public static final String HL7V3_WEIGHT_INCREASED = ICARDEA_NS + "/instances/WeightIncreased";
+    public static final String HL7V3_BRUSING = ICARDEA_NS + "/instances/BruisingSymptom";
+    public static final String HL7V3_TEMPORRALY_LOSS_OF_SPEECH = 
+            ICARDEA_NS + "/instances/TemporarayLossOfSpeech";
+    
+    /**
+     * Describes an observation as risk.
+     */
+    public static final String HL7V3_RISK_OF = ICARDEA_NS + "/instances/RiskOf";
 
 
     /**
