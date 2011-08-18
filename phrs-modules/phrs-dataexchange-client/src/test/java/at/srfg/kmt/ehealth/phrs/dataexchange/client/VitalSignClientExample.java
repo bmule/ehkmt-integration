@@ -34,6 +34,18 @@ public class VitalSignClientExample {
                 "80",
                 Constants.MM_HG);
         
+        client.addVitalSign(Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
+                "Free text note for body height.",
+                "201006010000",
+                "180",
+                Constants.CENTIMETER);
+        
+        client.addVitalSign(Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
+                "Free text note for body weight.",
+                "201006010000",
+                "80",
+                Constants.KILOGRAM);
+        
         final Iterable<Triple> vitalSigns = client.getVitalSigns();
         for (Triple vitalSign : vitalSigns ) {
             System.out.println(vitalSign);
