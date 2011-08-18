@@ -55,24 +55,6 @@ This is the file used in production, change it carefully !
         <icadyCodeSystem:codeSystemName>IHEActCode</icadyCodeSystem:codeSystemName>
     </rdf:Description>
 
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Complete">
-        <skos:prefLabel>complete</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Inomplete">
-        <skos:prefLabel>inomplete</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Running">
-        <skos:prefLabel>running</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Interrupt">
-        <skos:prefLabel>interrupt</skos:prefLabel>
-    </rdf:Description>
-
-
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
         <skos:prefLabel>Milimeter Hg</skos:prefLabel>
         <skos:notation>mm[Hg]</skos:notation>
@@ -91,6 +73,11 @@ This is the file used in production, change it carefully !
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Centimeter">
         <skos:prefLabel>centimeter</skos:prefLabel>
         <skos:notation>cm</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Millimeter">
+        <skos:prefLabel>millimeter</skos:prefLabel>
+        <skos:notation>mm</skos:notation>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Meter">
@@ -803,9 +790,20 @@ This is the file used in production, change it carefully !
         </icadyCode:code>
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Aborted">
-        <skos:prefLabel>Aborted</skos:prefLabel>
+        <skos:prefLabel>Operation abandoned</skos:prefLabel>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AbortedULMSCode">
+                <icadyCode:codeValue>C0393135</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Suspended">
+        <skos:prefLabel>Operation abandoned</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SuspendedULMSCode">
                 <icadyCode:codeValue>C1705537</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
