@@ -32,7 +32,7 @@ public interface GenericTriplestore {
             throws TripleException;
 
     String persist(String predicate, String value, ValueType valueType) throws TripleException;
-
+    
     void delete(String subject, String predicate, String value, ValueType valueType) throws TripleException;
 
     void delete(String subject, String predicate) throws TripleException;
@@ -52,6 +52,8 @@ public interface GenericTriplestore {
 
     Iterable<Triple> getForPath(List<PathElement> path) throws TripleException;
 
+    
+    // TODO: think about this
     Object getForQuery(String query) 
             throws GenericRepositoryException, GenericQueryException;
 }
