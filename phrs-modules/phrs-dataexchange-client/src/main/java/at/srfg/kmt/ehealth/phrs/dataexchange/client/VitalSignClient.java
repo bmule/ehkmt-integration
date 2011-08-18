@@ -31,7 +31,7 @@ public class VitalSignClient {
     /**
      * The unique subject for the vital signs.
      */
-    private static final String SUBJECT = 
+    private static final String SUBJECT =
             "http://www.icardea.at/phrs/instances/example/MyVitalSignEntry";
 
     /**
@@ -55,7 +55,9 @@ public class VitalSignClient {
     void addVitalSign(String codeURI, String note, String date,
             String value, String unitURI) throws TripleException {
 
-
+        
+        // TODO : add the class here
+        
         triplestore.persist(SUBJECT,
                 Constants.HL7V3_TEMPLATE_ID_ROOT,
                 Constants.SIMPLE_OBSERVATIONS,
@@ -96,7 +98,7 @@ public class VitalSignClient {
                 unitURI,
                 RESOURCE);
     }
-    
+
     Iterable<Triple> getVitalSigns() throws TripleException {
         final Iterable<Triple> forSubject = triplestore.getForSubject(SUBJECT);
         return forSubject;
