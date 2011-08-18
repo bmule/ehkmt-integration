@@ -26,33 +26,36 @@ public class Constants {
 
     public static final String ICARDEA_NS = "http://www.icardea.at/phrs";
 
-    public static final String STATUS_NS = getICardeaResource("status");
-
-    public static final String STATUS_STATE = STATUS_NS + "#statusState";
-
     /**
      * This is an instance URI.
      */
     public static final String STATUS_COMPELETE =
-            getICardeaResource("status/instance/Complete");
+            getICardeaResource("/instance/Complete");
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_INCOMPELETE =
-            getICardeaResource("status/instance/Incomplete");
+            getICardeaResource("/instance/Incomplete");
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_RUNNING =
-            getICardeaResource("status/instance/Runnig");
+            getICardeaResource("/instance/Runnig");
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_INTERRUPTED =
             getICardeaResource("status/instance/Interrupted");
+    
+   public static final String STATUS_ABORTED = 
+            ICARDEA_NS + "/instances/Aborted";
+    
+    public static final String STATUS_SUSPENDED = 
+            ICARDEA_NS + "/instances/Suspended";
+
 
     public static final String CODE_NS = getICardeaResource("code");
 
@@ -134,13 +137,23 @@ public class Constants {
     
     public static final String ICARDEA_HL7V3_NS = ICARDEA_NS + "/hl7V3";
 
-    public static final String ICARDEA_HL7V3_TEMPLATE_ID_ROOT = ICARDEA_HL7V3_NS + "#templIdRoot";
+    /**
+     * The Root template Id property.
+     */
+    public static final String HL7V3_TEMPLATE_ID_ROOT = ICARDEA_HL7V3_NS + "#templIdRoot";
 
-    public static final String ICARDEA_HL7V3_CODE = ICARDEA_HL7V3_NS + "#code";
+    /**
+     * The establish code property.
+     */
+    public static final String HL7V3_CODE = ICARDEA_HL7V3_NS + "#code";
+
+    public static final String EFFECTIVE_TIME = ICARDEA_HL7V3_NS + "#effectiveTime";
+    public static final String HL7V3_VALUE = ICARDEA_HL7V3_NS + "#value";
+    public static final String HL7V3_UNIT = ICARDEA_HL7V3_NS + "#unit";
     
-    public static final String ICARDEA_HL7V3_EFFECTIVE_TIME = ICARDEA_HL7V3_NS + "#effectiveTime";
-    public static final String ICARDEA_HL7V3_VALUE = ICARDEA_HL7V3_NS + "#value";
-    public static final String ICARDEA_HL7V3_UNIT = ICARDEA_HL7V3_NS + "#unit";
+    public static final String HL7V3_START_DATE = ICARDEA_HL7V3_NS + "#startDate";
+    public static final String HL7V3_END_DATE = ICARDEA_HL7V3_NS + "#endDate";
+    public static final String HL7V3_VALUE_CODE = ICARDEA_HL7V3_NS + "#valueCode";
 
     /**
      * The URI for the instance used to define Systolic Blood Pressure in 
@@ -180,14 +193,6 @@ public class Constants {
      * IHE acceptation.<br/>
      * This is a Vital Sign.
      */
-    public static final String ICARDEA_INSTANCE_ = 
-            ICARDEA_NS + "/instances/BodyWeight";
-
-    /**
-     * The URI for the instance used to define Body Weight in 
-     * IHE acceptation.<br/>
-     * This is a Vital Sign.
-     */
     public static final String ICARDEA_INSTANCE_BODY_MASS_INDEX = 
             ICARDEA_NS + "/instances/BodyMassIndex";
     
@@ -199,14 +204,15 @@ public class Constants {
     public static final String ICARDEA_INSTANCE_BODY_HEIGHT = 
             ICARDEA_NS + "/instances/BodyHeightMeasure";
     
-    public static final String ICARDEA_STATUS_ACTIVE = 
-            ICARDEA_NS + "/instances/Active";
+    /**
+     * The URI for the instance used to define Body Height Measure in 
+     * IHE acceptation.<br/>
+     * This is a Vital Sign.
+     */
+    public static final String ICARDEA_INSTANCE_BODY_WEIGHT = 
+            ICARDEA_NS + "/instances/BodyWeight";
     
-    public static final String ICARDEA_STATUS_ABORTED = 
-            ICARDEA_NS + "/instances/Aborted";
     
-    public static final String ICARDEA_STATUS_SUSPENDED = 
-            ICARDEA_NS + "/instances/Suspended";
 
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
     public static final String SKOS_NOTE = SKOS_NS + "#note";
@@ -249,6 +255,54 @@ public class Constants {
      * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.1.12.3.6</url>
      */
     public static final String ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT = "2.16.840.1.113883.10.20.1.31";
+    
+    /**
+     * Describes the process of establishing a problem like condition.
+     */
+    public static final String HL7V3_CONDITION = 
+            ICARDEA_NS + "/instances/Problem/Condition";
+
+    /**
+     * Describes the process of establishing a problem like symptom.
+     */
+    public static final String HL7V3_SYMPTOM = 
+            ICARDEA_NS + "/instances/Problem/Symptom";
+
+    /**
+     * Describes the process of establishing a problem like finding.
+     */
+    public static final String HL7V3_FINDING = 
+            ICARDEA_NS + "/instances/Problem/Finding";
+
+    /**
+     * Describes the process of establishing a problem like functional limitation.
+     */
+    public static final String HL7V3_FUNCTIONAL_LIMITATION = 
+            ICARDEA_NS + "/instances/Problem/FunctionalLimitation";
+
+    /**
+     * Describes the process of establishing a problem like complaint.
+     */
+    public static final String HL7V3_COMPILANT = 
+            ICARDEA_NS + "/instances/Problem/Complaint";
+
+    /**
+     * Describes the process of establishing a problem entry like problem.
+     */
+    public static final String HL7V3_PROBLEM = 
+            ICARDEA_NS + "/instances/Problem/Problem";
+    
+    /**
+     * Describes the process of establishing a problem entry like diagnosis.
+     */
+    public static final String HL7V3_DIAGNOSIS = 
+            ICARDEA_NS + "/instances/Problem/Diagnosis";
+    
+    public static final String HL7V3_STATUS = ICARDEA_HL7V3_NS + "#status";
+    
+    public static final String HL7V3_DATE_START = ICARDEA_HL7V3_NS + "#dateStart";
+    public static final String HL7V3_DATE_END = ICARDEA_HL7V3_NS + "#dateEnd";
+
 
     /**
      * Used to load the default values for the constants - if this is required.
