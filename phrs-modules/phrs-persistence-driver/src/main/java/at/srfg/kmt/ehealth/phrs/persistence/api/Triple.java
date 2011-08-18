@@ -15,15 +15,24 @@ package at.srfg.kmt.ehealth.phrs.persistence.api;
  * @author mradules
  */
 public final class Triple {
-    
+
     private final String subject;
+
     private final String predicate;
+
     private final String value;
-    
+
+    private final ValueType valueType;
+
     public Triple(String subject, String predicate, String value) {
+        this(subject, predicate, value, null);
+    }
+
+    public Triple(String subject, String predicate, String value, ValueType type) {
         this.subject = subject;
         this.predicate = predicate;
         this.value = value;
+        this.valueType = type;
     }
 
     public String getPredicate() {
@@ -38,6 +47,9 @@ public final class Triple {
         return value;
     }
 
+    public ValueType getValueType() {
+        return valueType;
+    }
 
     @Override
     public String toString() {
