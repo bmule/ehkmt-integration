@@ -90,8 +90,7 @@ final class TripleIterableResult implements Iterable<Triple> {
                 final URI predicate = statement.getPredicate();
                 final Value object = statement.getObject();
                 final Triple result = 
-                        new Triple(subject.stringValue(), 
-                        predicate.stringValue(), 
+                        new Triple(subject.stringValue(), predicate.stringValue(), 
                         object == null ? null : object.stringValue());
                 return result;
             } catch (RepositoryException repositoryException) {
