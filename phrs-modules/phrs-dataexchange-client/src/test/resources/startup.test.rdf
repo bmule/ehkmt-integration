@@ -53,23 +53,6 @@
     </rdf:Description>
 
 
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Complete">
-        <skos:prefLabel>complete</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Inomplete">
-        <skos:prefLabel>inomplete</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Running">
-        <skos:prefLabel>running</skos:prefLabel>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/status/Interrupt">
-        <skos:prefLabel>interrupt</skos:prefLabel>
-    </rdf:Description>
-
-
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
         <skos:prefLabel>Milimeter Hg</skos:prefLabel>
         <skos:notation>mm[Hg]</skos:notation>
@@ -803,6 +786,17 @@
         <skos:prefLabel>Aborted</skos:prefLabel>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AbortedULMSCode">
+                <icadyCode:codeValue>C1705537</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Suspended">
+        <skos:prefLabel>Operation abandoned</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SuspendedULMSCode">
                 <icadyCode:codeValue>C1705537</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -1617,6 +1611,31 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Incomplete">
+        <skos:prefLabel>Incomplete</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/IncompleteULMSCode">
+                <icadyCode:codeValue>C0205257</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Runnig">
+        <skos:prefLabel>Runnig</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RunnigPHRSCode">
+                <icadyCode:codeValue>running</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RiskOf">
         <skos:prefLabel>Risk of</skos:prefLabel>
         <icadyCode:code>
@@ -1654,7 +1673,7 @@
         <skos:prefLabel>Completed</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/MedicationStatus</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CompletedPHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Completed">
                 <icadyCode:codeValue>S0017</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -2314,14 +2333,22 @@
     
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
-        <rdfs:label xml:lang="en">Vital Sign</rdfs:label>
-        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular vital sign.</rdfs:comment>
+        <rdfs:label xml:lang="en">HL7 V3 Vital Sign</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 vital sign.</rdfs:comment>
     </rdfs:Class>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/Observation">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 V3 Observation</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 observation.</rdfs:comment>
+    </rdfs:Class>
+
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#templIdRoot">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
-        <rdfs:label xml:lang="en">Root Template ID</rdfs:label>
+        <rdfs:label xml:lang="en">HL7 V3 Root Template ID</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">The template id used to indetify the message like a certain one (e.g. IHE Survey Observation )</rdfs:comment>
     </rdf:Property>
@@ -2330,6 +2357,7 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">HL7 Code</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The Code and Code System infromation used to unique identify an item</rdfs:comment>
     </rdf:Property>
@@ -2338,16 +2366,18 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">Short Note</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">a short note</rdfs:comment>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#status">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
-        <rdfs:label xml:lang="en">Status</rdfs:label>
+        <rdfs:label xml:lang="en">HL7 V3 Status</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
-        <rdfs:comment xml:lang="en">Indicates the status</rdfs:comment>
+        <rdfs:comment xml:lang="en">Indicates the HL7 V3 status</rdfs:comment>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#effectiveTime">
@@ -2372,6 +2402,38 @@
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The unit for the involved value (from a measurement)</rdfs:comment>
+    </rdf:Property>
+
+
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/Observation">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 Observation</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 observation.</rdfs:comment>
+    </rdfs:Class>
+    
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#valueCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">The Start Date</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:comment xml:lang="en">The start date for a HL7 V3 observation</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#startDate">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">The Start Date</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">The start date for a HL7 V3 observation</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#endDate">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">The End Date</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
     </rdf:Property>
 
 
