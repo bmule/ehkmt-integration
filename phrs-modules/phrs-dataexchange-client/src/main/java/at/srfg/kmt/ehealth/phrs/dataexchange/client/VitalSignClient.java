@@ -57,22 +57,22 @@ public class VitalSignClient {
 
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
+                Constants.HL7V3_TEMPLATE_ID_ROOT,
                 Constants.SIMPLE_OBSERVATIONS,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
+                Constants.HL7V3_TEMPLATE_ID_ROOT,
                 Constants.VITAL_SIGNS_OBSERVATIONS,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_TEMPLATE_ID_ROOT,
+                Constants.HL7V3_TEMPLATE_ID_ROOT,
                 Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_CODE,
+                Constants.HL7V3_CODE,
                 codeURI,
                 RESOURCE);
 
@@ -82,17 +82,17 @@ public class VitalSignClient {
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_EFFECTIVE_TIME,
+                Constants.EFFECTIVE_TIME,
                 date,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_VALUE,
+                Constants.HL7V3_VALUE,
                 value,
                 LITERAL);
 
         triplestore.persist(SUBJECT,
-                Constants.ICARDEA_HL7V3_UNIT,
+                Constants.HL7V3_UNIT,
                 unitURI,
                 RESOURCE);
     }
