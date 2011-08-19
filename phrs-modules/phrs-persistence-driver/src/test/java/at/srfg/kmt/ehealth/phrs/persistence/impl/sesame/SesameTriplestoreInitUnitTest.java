@@ -8,8 +8,8 @@
 package at.srfg.kmt.ehealth.phrs.persistence.impl.sesame;
 
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import static org.junit.Assert.*;
+import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.After;
