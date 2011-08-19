@@ -45,12 +45,12 @@ public class LoadRdfPostConstruct implements Runnable {
      */
     private final String fileName;
 
-    public LoadRdfPostConstruct() {
-        this(null);
-    }
-
     public LoadRdfPostConstruct(String fileName) {
-        this.fileName = fileName == null ? "startup.rdf" :  fileName;
+        if (fileName == null) {
+            throw new NullPointerException("The Filename can not be null.");
+        }
+        
+        this.fileName = fileName;
     }
 
     @Override
