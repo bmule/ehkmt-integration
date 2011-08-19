@@ -212,10 +212,11 @@ public class Constants {
     public static final String ICARDEA_INSTANCE_BODY_WEIGHT = 
             ICARDEA_NS + "/instances/BodyWeight";
     
-    
 
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
     public static final String SKOS_NOTE = SKOS_NS + "#note";
+    public static final String SKOS_RELATED = SKOS_NS + "#related";
+
     
     /**
      * Provides collating information. <br/>
