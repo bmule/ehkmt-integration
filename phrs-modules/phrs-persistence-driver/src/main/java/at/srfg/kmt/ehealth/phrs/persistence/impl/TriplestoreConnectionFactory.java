@@ -31,6 +31,15 @@ import org.slf4j.LoggerFactory;
  * @author mradules
  */
 public final class TriplestoreConnectionFactory {
+    
+    /**
+     * The Logger instance. All log messages from this class
+     * are routed through this member. The Logger name space
+     * is <code>at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory</code>.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(SesameTriplestore.class);
+
 
     /**
      * The configuration file name.
@@ -49,13 +58,6 @@ public final class TriplestoreConnectionFactory {
         }
     }
 
-    /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory</code>.
-     */
-    private static final Logger LOGGER =
-            LoggerFactory.getLogger(SesameTriplestore.class);
 
     private final XMLConfiguration configuration;
 
@@ -83,7 +85,11 @@ public final class TriplestoreConnectionFactory {
         
         final List<String> filesToLoad = 
                 configuration.getList("postconstruct.loadfiles");
+        System.out.println("Load files : " + filesToLoad);
+        LOGGER.debug("Load files : " + filesToLoad);
+
         for (String fileToLoad : filesToLoad) {
+            
             final LoadRdfPostConstruct loadRdf = new LoadRdfPostConstruct(fileToLoad);
             ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdf);
         }
