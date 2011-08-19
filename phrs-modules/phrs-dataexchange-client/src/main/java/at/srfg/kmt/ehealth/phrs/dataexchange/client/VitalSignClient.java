@@ -38,7 +38,9 @@ public class VitalSignClient {
     private final GenericTriplestore triplestore;
 
     /**
-     * Builds a <code>VitalSignClient</code> instance.
+     * Builds a <code>VitalSignClient</code> instance. <br/>
+     * <b>Note : </b> This constructor builds its own individual connection 
+     * (and don't) share it with the rest of the applications.
      * 
      * @throws GenericRepositoryException if the underlying persistence layer 
      * can not be initialized from any reasons.
@@ -46,19 +48,12 @@ public class VitalSignClient {
      */
     VitalSignClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
-        final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct();
+        final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct("startup.test.rdf");
         // I load the need instances.
         ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
-    /**
-     * Builds a <code>VitalSignClient</code> instance.
-     * 
-     * @throws GenericRepositoryException if the underlying persistence layer 
-     * can not be initialized from any reasons.
-     * @throws TripleException 
-     */
     VitalSignClient(GenericTriplestore triplestore) throws GenericRepositoryException, TripleException {
         this.triplestore = triplestore;
     }
