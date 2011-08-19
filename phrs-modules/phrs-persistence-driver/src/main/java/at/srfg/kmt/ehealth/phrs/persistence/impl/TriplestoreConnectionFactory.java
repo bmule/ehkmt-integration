@@ -73,6 +73,7 @@ public final class TriplestoreConnectionFactory {
                 configuration =
                         new XMLConfiguration(CONFIG_FILE);
             } catch (ConfigurationException e) {
+                LOGGER.warn("The configutation file named {} can not be located in the classpath.", CONFIG_FILE);
                 LOGGER.warn(e.getMessage(), e);
                 final GenericRepositoryException exception =
                         new GenericRepositoryException(e);
@@ -85,7 +86,6 @@ public final class TriplestoreConnectionFactory {
         
         final List<String> filesToLoad = 
                 configuration.getList("postconstruct.loadfiles");
-        System.out.println("Load files : " + filesToLoad);
         LOGGER.debug("Load files : " + filesToLoad);
 
         for (String fileToLoad : filesToLoad) {
