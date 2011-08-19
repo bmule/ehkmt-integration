@@ -1,0 +1,99 @@
+<QUPC_IN043200UV01 xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<id root='1' extension='1'/>
+	<creationTime value='201011111111'/>
+	<interactionId extension='QUPC_IN043200UV' root='2.16.840.1.113883.5'/>
+	<processingCode code='D'/>
+	<processingModeCode code='T'/>
+	<acceptAckCode code='AL'/>
+	<receiver typeCode="RCV">
+		<device determinerCode="INSTANCE">
+			<id root='1' extension='CarePlanEngine'/>
+			<name/>
+			<telecom value='1' />
+			<manufacturerModelName/>
+			<softwareName/>
+		</device>
+	</receiver>
+	<sender typeCode="SND">
+		<device determinerCode="INSTANCE">
+			<id root='1' extension='EHR'/>
+			<name/>
+			<telecom value='1' />
+			<manufacturerModelName/>
+			<softwareName/>
+		</device>
+	</sender>
+	<controlActProcess moodCode="EVN">
+		<id root='1' extension='1'/>
+		<code code='QUPC_TE043200UV'/>
+		<effectiveTime value='1'/>
+		<authorOrPerformer typeCode='1'></authorOrPerformer>
+		<subject>
+			<registrationEvent>
+				<statusCode code='active'/>
+				<custodian>
+					<assignedEntity>
+						<id root='1' extension='1'/>
+						<addr></addr>
+						<telecom></telecom>
+						<assignedOrganization>
+							<name></name>
+						</assignedOrganization>
+					</assignedEntity>
+				</custodian>
+				<subject2>
+					<careProvisionEvent>
+						<recordTarget>
+							<patient>
+								<id root='1' extension='149202063491'/>
+								<addr></addr>
+								<telecom value='1' use='1'/>
+								<statusCode code='active'/>
+								<patientPerson>
+									<name>
+										<given>Jane</given>
+										<family>Mayr</family>
+									</name>
+									<administrativeGenderCode code='F' displayName=''
+										codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
+									<birthTime value='19730422153118'/>
+								</patientPerson>
+							</patient>
+						</recordTarget>
+
+						<pertinentInformation3>
+							<substanceAdministration typeCode='SBADM' moodCode='EVN' negationInd='true'>
+								<templateId root='1.3.6.1.4.1.19376.1.5.3.1.4.7.1'/>
+								<id root='' extension='12122'/>
+								<text><reference value='#xxx'/></text>
+								<statusCode code='completed'/>
+								<effectiveTime><low value='199910101010'/><high value='201106101010'/></effectiveTime>
+								<routeCode code='PO' codeSystem='2.16.840.1.113883.5.112' displayName='oral' codeSystemName='HL7 RouteOfAdministration Vocabulary '/>
+								<doseQuantity value='7.5' units='mg'/>
+								<consumable typeCode='CSM'>
+									<manufacturedProduct classCode='MANU'>
+										<manufacturedLabeledDrug classCode='MMAT' determinerCode='KIND'>
+											<code code='C0110591' codeSystem='2.16.840.1.113883.6.86' codeSystemName='UMLS'>
+												<originalText>Concor</originalText>
+											</code>
+										</manufacturedLabeledDrug>
+									</manufacturedProduct>
+								</consumable>
+							</substanceAdministration>		    
+						</pertinentInformation3>
+
+					</careProvisionEvent>
+				</subject2>
+			</registrationEvent>
+		</subject>
+		<queryAck>
+			<queryId root='1' extension='11'/>
+			<statusCode code='1'/>
+			<queryResponseCode code='1'/>
+			<resultCurrentQuantity value='1'/>
+			<resultRemainingQuantity value='1'/>
+		</queryAck>
+	</controlActProcess>
+</QUPC_IN043200UV01>
+
