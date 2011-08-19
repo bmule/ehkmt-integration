@@ -50,11 +50,11 @@ public final class MultiIterable implements Iterable<Triple> {
      * null.
      */
     public void addIterable(Iterable<Triple> iterable) {
-       
+
         if (iterable == null) {
             throw new NullPointerException("The iterable argument can not be null.");
         }
-        
+
         iterables.add(iterable);
     }
 
@@ -72,7 +72,7 @@ public final class MultiIterable implements Iterable<Triple> {
         /**
          * Holds all the iterators.
          */
-        private final Iterator<Iterable<Triple>> mainIterator;
+        private Iterator<Iterable<Triple>> mainIterator;
 
         /**
          * The current iterator. This is used for the current iteration.
@@ -89,14 +89,19 @@ public final class MultiIterable implements Iterable<Triple> {
          * null.
          */
         private InternIterator(List<Iterable<Triple>> iterables) {
-            
+
             if (iterables == null) {
-                throw  new NullPointerException("The iterable can not be null");
+                throw new NullPointerException("The iterable can not be null");
             }
-            
+
             mainIterator = iterables.iterator();
-            final Iterable<Triple> nextIterable = mainIterator.next();
-            currentIterator = nextIterable.iterator();
+
+            if (mainIterator.hasNext()) {
+                final Iterable<Triple> nextIterable = mainIterator.next();
+                currentIterator = nextIterable.iterator();
+            } else {
+                mainIterator = null;
+            }
         }
 
         @Override
