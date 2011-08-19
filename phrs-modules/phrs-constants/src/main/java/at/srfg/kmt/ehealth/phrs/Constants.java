@@ -339,8 +339,11 @@ public class Constants {
     public static final String RDFS_TYPE = 
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     
-    public static final String RDFS_CLASS = 
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#class";
+    /**
+     * The rdf class for a vital sign in the PHRS acceptation.
+     */
+    public static final String PHRS_VITAL_SIGN_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/VitalSign";
     
     /**
      * Describes an observation as risk.
