@@ -42,8 +42,6 @@ public class SesameTriplestoreInitUnitTest {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SesameTriplestoreInitUnitTest.class);
 
-    
-
     private GenericTriplestore triplestore;
 
     /**
