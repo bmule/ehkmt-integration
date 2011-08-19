@@ -217,11 +217,35 @@ public class Constants {
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
     public static final String SKOS_NOTE = SKOS_NS + "#note";
     
+    /**
+     * Provides collating information. <br/>
+     * This is a iCarea PHRS specific property.
+     */
     public static final String ITEM_ORDER = ICARDEA_NS + "#itemOrder";
-    
+
+    /**
+     * The date when a resource was created in iCarea PHRS context. <br/>
+     * This is a iCarea PHRS specific property.
+     */
     public static final String CREATE_DATE = ICARDEA_NS + "#createDate";
+
+    /**
+     * The date when a resource was updated in iCarea PHRS context. <br/>
+     * This is a iCarea PHRS specific property.
+     */
     public static final String UPDATE_DATE = ICARDEA_NS + "#updateDate";
+    
+    /**
+     * The user (entity) responsible for a given resource. <br/>
+     * This is a iCarea PHRS specific property.
+     */
     public static final String OWNER = ICARDEA_NS + "#owner";
+
+    /**
+     * Hols information about the origin for a given resource, in the
+     * iCarea PHRS context. <br/>
+     * This is a iCarea PHRS specific property.
+     */
     public static final String CREATOR = ICARDEA_NS + "#creator";
     
     
@@ -310,6 +334,13 @@ public class Constants {
     public static final String HL7V3_BRUSING = ICARDEA_NS + "/instances/BruisingSymptom";
     public static final String HL7V3_TEMPORRALY_LOSS_OF_SPEECH = 
             ICARDEA_NS + "/instances/TemporarayLossOfSpeech";
+    
+    
+    public static final String RDFS_TYPE = 
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
+    
+    public static final String RDFS_CLASS = 
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#class";
     
     /**
      * Describes an observation as risk.
