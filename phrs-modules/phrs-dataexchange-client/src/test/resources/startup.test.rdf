@@ -2336,13 +2336,6 @@
         <rdfs:label xml:lang="en">HL7 V3 Vital Sign</rdfs:label>
         <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 vital sign.</rdfs:comment>
     </rdfs:Class>
-    
-    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/Observation">
-        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
-        <rdfs:label xml:lang="en">HL7 V3 Observation</rdfs:label>
-        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 observation.</rdfs:comment>
-    </rdfs:Class>
-
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#templIdRoot">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
