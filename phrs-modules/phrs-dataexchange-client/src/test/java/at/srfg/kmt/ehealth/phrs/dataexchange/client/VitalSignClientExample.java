@@ -4,6 +4,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
@@ -27,8 +28,6 @@ public class VitalSignClientExample {
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
         final VitalSignClient client = new VitalSignClient(triplestore);
-
-
 
         client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
@@ -66,6 +65,7 @@ public class VitalSignClientExample {
         // TAKE CARE !!!!!!
         // This lines wipe out everithing alfter the client example ends its 
         // main method.
-        client.cleanEnviroment();
+        ((GenericTriplestoreLifecycle) triplestore).shutdown();
+        ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
     }
 }
