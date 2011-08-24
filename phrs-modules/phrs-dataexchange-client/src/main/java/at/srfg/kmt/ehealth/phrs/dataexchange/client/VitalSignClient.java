@@ -10,6 +10,8 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
+import java.util.HashMap;
+import java.util.Map;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -79,7 +81,6 @@ public class VitalSignClient {
         // this can help to find a vial sign, there are alos other way 
         // to do this (e.g. using the know templateRootID, for more )
         // information about this please consult the documentation)
-
         triplestore.persist(subject,
                 Constants.RDFS_TYPE,
                 Constants.PHRS_VITAL_SIGN_CLASS,
@@ -145,6 +146,12 @@ public class VitalSignClient {
         return subject;
     }
 
+    /**
+     * Returns all the vital sings for all the users.
+     * 
+     * @return all the vital sings for all the users.
+     * @throws TripleException by any kind of triplestore related error.
+     */
     Iterable<Triple> getVitalSigns() throws TripleException {
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS, RESOURCE);
@@ -169,7 +176,19 @@ public class VitalSignClient {
     Iterable<Triple> getVitalSignsForUser(String userId) throws TripleException {
 
         final Iterable<String> resources =
-                triplestore.getForPredicateAndValue(Constants.OWNER, userId, LITERAL);
+                triplestore.getForPredicateAndValue(OWNER, userId, LITERAL);
+        
+        final Map<String, String> queryMap = new HashMap<String, String>();
+        // like this I indetify the type
+        queryMap.put(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS);
+        queryMap.put(OWNER, userId);
+        
+        // here I search for all resources with 
+        // rdf type == vital sign 
+        // and
+        // owner == user id
+        final Iterable<String> resurces = 
+                triplestore.getForPredicatesAndValues(queryMap);
 
         final MultiIterable result = new MultiIterable();
 
@@ -179,17 +198,5 @@ public class VitalSignClient {
         }
 
         return result;
-    }
-
-    /**
-     * Clean all the changes from all previous sessions 
-     * (done with all the clients).
-     * 
-     * @throws GenericRepositoryException by any kind of exception related with 
-     * the underlying triplestore.
-     */
-    void cleanEnviroment() throws GenericRepositoryException {
-        ((GenericTriplestoreLifecycle) triplestore).shutdown();
-        ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
     }
 }
