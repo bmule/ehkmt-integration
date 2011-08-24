@@ -53,7 +53,7 @@ public class TermClientUnitTest {
     public void initSuite() throws GenericRepositoryException {
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
-        triplestore = connectionFactory.getTriplestore();
+        triplestore = connectionFactory.getTriplestore();        
         termClient = new TermClient(triplestore);
     }
 
@@ -63,7 +63,7 @@ public class TermClientUnitTest {
      * 
      * @throws GenericRepositoryException 
      */
-    //@After
+    @After
     public void shutdownSuite() throws GenericRepositoryException {
         ((GenericTriplestoreLifecycle) triplestore).shutdown();
         ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
