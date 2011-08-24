@@ -2429,5 +2429,4 @@
         <rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
     </rdf:Property>
 
-
 </rdf:RDF>
