@@ -22,13 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-
-
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.openrdf.model.Statement;
@@ -74,6 +70,20 @@ public class SesameTriplestore
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SesameTriplestore.class);
 
+    /**
+     * Builds a <code>SesameTriplestore</code> instance using the default 
+     * configuration. The default configuration implies :
+     * <ul>
+     * <li> The triplestore is a memory seal
+     * <li> The dump file for this memory sail is defined with the 
+     * <code>DEFAULT_FILE_DUMP</code> constant.
+     * </ul>
+     * 
+     * @throws GenericRepositoryException by any (triplestore) repository
+     * related  exception.
+     * @see #DEFAULT_FILE_DUMP
+     * @see #getDefaultDumpDirectory()
+     */
     public SesameTriplestore() throws GenericRepositoryException {
         connection = getConnection(null);
         valueFactory = connection.getValueFactory();
@@ -640,6 +650,13 @@ public class SesameTriplestore
         return !isOpen;
     }
 
+    /**
+     * Returns the default file dump directory path. For this implementation
+     * this path point to : 
+     * User Home Directory (operating system dependent)/.generictriplestore/sesame
+     * 
+     * @return the default file dump directory path.
+     */
     private static String getDefaultDumpDirectory() {
         final String dir = System.getProperty("user.home");
         
