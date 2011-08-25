@@ -19,11 +19,12 @@ import java.util.List;
  */
 public final class DateUtil {
     
-    private static DateFormat OUTPUT_FORMAT= new SimpleDateFormat("yyyyMMddHms");
+    private static DateFormat OUTPUT_FORMAT= new SimpleDateFormat("yyyyMMddHm");
     
     private static final List<DateFormat> formats;
     static {
         formats = new ArrayList<DateFormat>();
+        formats.add(new SimpleDateFormat("yyyyMMddHms"));
         formats.add(OUTPUT_FORMAT);
         formats.add(new SimpleDateFormat("yyyyMMdd"));
         formats.add(new SimpleDateFormat("yyyyMM"));
