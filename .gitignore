@@ -49,7 +49,6 @@ jboss-web
 /phrs-modules/phrs-util/target/
 /phrs-modules/consenteditor/.settings/
 /phrs-modules/messaging/.settings/
-/phrs-modules/phrs-ear/target/
-/phrs-modules/simple-view/target/
-/phrs-modules/consenteditor/target/
-/phrs-modules/dataexchange/target/
+/phrs-modules/phrs-constants/target/
+/phrs-modules/phrs-dataexchange-client/target/
+/phrs-modules/phrs-persistence-driver/target/
