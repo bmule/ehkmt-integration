@@ -19,6 +19,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,7 +55,10 @@ public class SesameTriplestoreUnitTest {
      */
     @Before
     public void initSiute() throws GenericRepositoryException {
-        triplestore = new SesameTriplestore();
+        // The connection factory allows me to configure the connection.
+        final TriplestoreConnectionFactory connectionFactory = 
+                TriplestoreConnectionFactory.getInstance();
+        triplestore = connectionFactory.getTriplestore();
     }
 
     /**
