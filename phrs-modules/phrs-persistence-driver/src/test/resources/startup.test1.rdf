@@ -1,0 +1,14 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:icady="http://www.icardea.at/phrs/"
+    xmlns:icadyCode="http://www.icardea.at/phrs/code"
+    xmlns:icadyCodeSystem="http://www.icardea.at/phrs/codeSystem">
+
+    <!--LOINC code system-->
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc">
+        <icadyCodeSystem:codeSystemCode>2.16.840.1.113883.6.1</icadyCodeSystem:codeSystemCode>
+        <icadyCodeSystem:codeSystemName>LOINC</icadyCodeSystem:codeSystemName>
+    </rdf:Description>
+</rdf:RDF>
