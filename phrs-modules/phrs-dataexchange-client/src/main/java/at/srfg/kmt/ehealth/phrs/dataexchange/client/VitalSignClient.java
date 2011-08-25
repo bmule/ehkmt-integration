@@ -8,11 +8,13 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
+import java.util.Date;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import java.util.HashMap;
 import java.util.Map;
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
@@ -61,7 +63,23 @@ public class VitalSignClient {
     }
 
     /**
-     * Adds a vital sign resource and return the URI for this resource.
+     * Adds a vital sign resource and return the URI for this resource. <br/>
+     * This method generates twelve triples, this triples are pointing for the 
+     * properties :
+     * <ol>
+     * <li> owner
+     * <li> rdf type
+     * <li> create date
+     * <li> creator
+     * <li> template root id1
+     * <li> template root id2
+     * <li> template root id3
+     * <li> HL7 V3 code
+     * <li> SKOS note
+     * <li> effective time
+     * <li> unit
+     * <li> value for the unit
+     * </ol>
      * 
      * @param user
      * @param codeURI
@@ -91,7 +109,7 @@ public class VitalSignClient {
         // for the HL7 V3 message)
         triplestore.persist(subject,
                 Constants.CREATE_DATE,
-                "201006010000",
+                DateUtil.getFormatedDate(new Date()),
                 LITERAL);
 
         // I preffer to hang a specific name for the Creator only for test 
