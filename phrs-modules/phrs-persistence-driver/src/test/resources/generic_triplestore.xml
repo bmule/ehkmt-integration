@@ -9,6 +9,29 @@
 -->
 
 <triplestore-definition>
+    
+    <memorysail>
+        <!--
+        The memorysail element is used to configure a triple store from type
+        memory sail.
+        -->
+        <filedump>
+            <!--
+            The filedump element is used to specify the location wher the 
+            memory sail will dump its conntet.
+            If the path starts with a path separator character then the path 
+            is absolute.
+            If the path starts with a string then the path is relative to the 
+            location where the triplestore application starts.
+            If the path starts with ${TEMP_DIR} then the location is relative to 
+            the temporary direcotry.
+            If the path starts with ${HOME_DIR} then the location is relative to 
+            aclual user home the temporary direcotry.
+            -->
+            ${HOME_DIR}/.icardea/test/sesame
+        </filedump>
+    </memorysail>
+
     <postconstruct>
         <!--
         The postconstruct element is used to configure events related with the 

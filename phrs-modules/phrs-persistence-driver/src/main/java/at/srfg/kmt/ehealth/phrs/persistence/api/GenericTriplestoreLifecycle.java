@@ -17,6 +17,7 @@ package at.srfg.kmt.ehealth.phrs.persistence.api;
 public interface GenericTriplestoreLifecycle {
     void init() throws GenericRepositoryException;
     void shutdown() throws GenericRepositoryException;
+    boolean isClosed() throws GenericRepositoryException;;
     void cleanEnvironment() throws GenericRepositoryException;
     
     void addToPostconstruct(Runnable runnable);

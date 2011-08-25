@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.openrdf.model.Statement;
@@ -54,6 +55,10 @@ import org.slf4j.LoggerFactory;
  */
 public class SesameTriplestore
         implements GenericTriplestore, GenericTriplestoreLifecycle {
+    public static final String TEMP_DIR = "${TEMP_DIR}";
+    public static final String HOME_DIR = "${HOME_DIR}";
+
+    private static final String DEFAULT_FILE_DUMP = getDefaultDumpDirectory();
 
     private final RepositoryConnection connection;
 
@@ -164,8 +169,17 @@ public class SesameTriplestore
 
     private RepositoryConnection getConnection(Configuration configuration)
             throws GenericRepositoryException {
-        // FIXME : do this via the configuration 
-        final File dataDir = new File("/tmp/iCardea/triplestore/sasame");
+
+        final String confDataDirStr = configuration == null
+                ? DEFAULT_FILE_DUMP
+                : configuration.getString("memorysail.filedump") == null
+                ? DEFAULT_FILE_DUMP
+                : configuration.getString("memorysail.filedump");
+        
+        final String dumpDirStr = solveVars(confDataDirStr);
+        LOGGER.debug("The actual data dump directory is {}", dumpDirStr);
+
+        final File dataDir = new File(dumpDirStr);
         final Repository repository = new SailRepository(new MemoryStore(dataDir));
         try {
             repository.initialize();
@@ -175,6 +189,34 @@ public class SesameTriplestore
             LOGGER.error(repositoryException.getMessage(), repositoryException);
             throw new GenericRepositoryException(repositoryException);
         }
+    }
+
+    /**
+     * 
+     * @param input
+     * @return 
+     */
+    private String solveVars(String input) {
+        if (!input.startsWith(TEMP_DIR) && !input.startsWith(HOME_DIR)) {
+            return input;
+        }
+        
+        final StringBuilder in = new StringBuilder(input);
+        in.delete(0, 12);
+        
+        final StringBuilder result = new StringBuilder();
+        final String dir = input.startsWith(TEMP_DIR) 
+                ? System.getProperty("java.io.tmpdir")
+                : System.getProperty("user.home");
+
+        result.append(dir);
+        if (!dir.endsWith(File.separator)) {
+            result.append(File.separator);
+        }
+        result.append(in);
+        
+
+        return result.toString();
     }
 
     @Override
@@ -584,5 +626,31 @@ public class SesameTriplestore
     @Override
     public void deleteForSubject(String subject) throws TripleException {
         delete(subject, null);
+    }
+
+    @Override
+    public boolean isClosed() throws GenericRepositoryException {
+        final boolean isOpen;
+        try {
+            isOpen = connection.isOpen();
+        } catch (RepositoryException ex) {
+            LOGGER.error(ex.getMessage(), ex);
+            throw new GenericRepositoryException(ex);
+        }
+        return !isOpen;
+    }
+
+    private static String getDefaultDumpDirectory() {
+        final String dir = System.getProperty("user.home");
+        
+        final StringBuilder resut = new StringBuilder(dir);
+        if (!dir.endsWith(File.separator)) {
+            resut.append(File.separator);
+        }
+        resut.append(".generictriplestore");
+        resut.append(File.separator);
+        resut.append("sesame");
+
+        return resut.toString();
     }
 }

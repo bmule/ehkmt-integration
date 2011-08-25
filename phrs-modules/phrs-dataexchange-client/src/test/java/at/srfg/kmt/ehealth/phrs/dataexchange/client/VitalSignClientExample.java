@@ -13,7 +13,8 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 /**
  * Runnable class able to add and list on the standard output vital signs.
  * To use this class from maven environment use :
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test</br>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test<br/>
+ * <b>Nota Benne</b> This example also clean the environment.
  * 
  * Take care the does not compile the classes.
  * @author mradules

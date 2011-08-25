@@ -15,6 +15,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.XMLConfiguration;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author mradules
  */
 public final class TriplestoreConnectionFactory {
-    
+
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -39,7 +40,6 @@ public final class TriplestoreConnectionFactory {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SesameTriplestore.class);
-
 
     /**
      * The configuration file name.
@@ -50,6 +50,7 @@ public final class TriplestoreConnectionFactory {
      * The unique instance for this factory.
      */
     private static final TriplestoreConnectionFactory THIS;
+
     static {
         try {
             THIS = new TriplestoreConnectionFactory();
@@ -58,10 +59,9 @@ public final class TriplestoreConnectionFactory {
         }
     }
 
-
     private final XMLConfiguration configuration;
 
-    private final GenericTriplestore triplestore;
+    private GenericTriplestore triplestore;
 
     private TriplestoreConnectionFactory() throws GenericRepositoryException {
         final ClassLoader classLoader = getClass().getClassLoader();
@@ -82,21 +82,21 @@ public final class TriplestoreConnectionFactory {
         }
 
         // TODO : The triplestore type will be according with the configuration  
-        triplestore = new SesameTriplestore();
-        
-        final List<String> filesToLoad = 
+        triplestore = new SesameTriplestore(configuration);
+
+        final List<String> filesToLoad =
                 configuration.getList("postconstruct.loadfiles");
         LOGGER.debug("Load files : " + filesToLoad);
 
         for (String fileToLoad : filesToLoad) {
-            
+
             final LoadRdfPostConstruct loadRdf = new LoadRdfPostConstruct(fileToLoad);
             ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdf);
         }
-        
+
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
-    
+
     /**
      * Returns the unique instance for this factory.
      * 
@@ -112,6 +112,19 @@ public final class TriplestoreConnectionFactory {
      * @return a connection to the triplestore.
      */
     public synchronized GenericTriplestore getTriplestore() {
+        try {
+            final boolean isClosed =
+                    ((GenericTriplestoreLifecycle) triplestore).isClosed();
+            if (isClosed) {
+                triplestore = new SesameTriplestore();
+            }
+
+        } catch (GenericRepositoryException exception) {
+            // not nice
+            throw new RuntimeException(exception);
+        }
+
         return triplestore;
     }
+    
 }
