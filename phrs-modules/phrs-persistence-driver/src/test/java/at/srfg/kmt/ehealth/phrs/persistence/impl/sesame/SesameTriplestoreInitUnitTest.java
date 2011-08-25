@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author mradules
  * @see SesameTriplestore
  */
+@Deprecated
 public class SesameTriplestoreInitUnitTest {
     
     
