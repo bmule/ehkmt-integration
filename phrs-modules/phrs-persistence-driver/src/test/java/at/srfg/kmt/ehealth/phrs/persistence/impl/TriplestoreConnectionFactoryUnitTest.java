@@ -28,10 +28,15 @@ import org.slf4j.LoggerFactory;
  */
 public class TriplestoreConnectionFactoryUnitTest {
 
-    public static final String VALID_SUBJECT =
+    public static final String FIRST_VALID_RESOURCE =
             "http://www.icardea.at/phrs/instances/codeSystem/snomed";
+    
+    public static final String SECOND_VALID_RESOURCE =
+            "http://www.icardea.at/phrs/instances/codeSystem/Loinc";
+    
+    
     public static final String INVALID_SUBJECT =
-            "http://www.icardea.at/phrs/instances/codeSystem/other_snowmed"
+            "http://www.icardea.at/phrs/instances/codeSystem/other_snomed"
             + "";
     /**
      * The Logger instance. All log messages from this class
@@ -81,7 +86,8 @@ public class TriplestoreConnectionFactoryUnitTest {
      */
     @Test
     public void testInit() throws TripleException, GenericRepositoryException {
-        testContent(triplestore);
+        testContent(FIRST_VALID_RESOURCE, triplestore);
+        testContent(SECOND_VALID_RESOURCE, triplestore);
     }
 
     /**
@@ -93,11 +99,11 @@ public class TriplestoreConnectionFactoryUnitTest {
      * @param triplestore the triplestore to prove.
      * @throws TripleException  by any triplestro related exception.
      */
-    private void testContent(GenericTriplestore triplestore) throws TripleException {
+    private void testContent(String resourceURI, GenericTriplestore triplestore) throws TripleException {
         // The loaded file startup.test.rdf contains only two triples with the 
         // given subject.
         final Iterable<Triple> forValidSubject =
-                triplestore.getForSubject(VALID_SUBJECT);
+                triplestore.getForSubject(resourceURI);
 
         int validCount = 0;
         for (Triple triple : forValidSubject) {
@@ -107,7 +113,7 @@ public class TriplestoreConnectionFactoryUnitTest {
         // the loaded rdf file contains olny 2 triples
         assertEquals(2, validCount);
 
-        final boolean validExists = triplestore.exists(VALID_SUBJECT);
+        final boolean validExists = triplestore.exists(resourceURI);
         assertTrue(validExists);
 
         final Iterable<Triple> forInvalidSubject =
@@ -146,6 +152,7 @@ public class TriplestoreConnectionFactoryUnitTest {
             triplestore = connectionFactory.getTriplestore();
         }
 
-        testContent(triplestore);
+        testContent(FIRST_VALID_RESOURCE, triplestore);
+        testContent(SECOND_VALID_RESOURCE, triplestore);
     }
 }
