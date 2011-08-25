@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.persistence.impl.sesame;
 
 
+import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import org.junit.Before;
@@ -53,12 +54,10 @@ public class SesameTriplestoreInitUnitTest {
      */
     @Before
     public void initSiute() throws GenericRepositoryException {
-        triplestore = new SesameTriplestore();
-        final String loadFile = "startup.test.rdf";
-        final LoadRdfPostConstruct loadRdfPostConstruct = 
-                new LoadRdfPostConstruct(loadFile);
-        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
-        ((GenericTriplestoreLifecycle) triplestore).init();
+        // The connection factory allows me to configure the connection.
+        final TriplestoreConnectionFactory connectionFactory = 
+                TriplestoreConnectionFactory.getInstance();
+        triplestore = connectionFactory.getTriplestore();
     }
 
     /**
