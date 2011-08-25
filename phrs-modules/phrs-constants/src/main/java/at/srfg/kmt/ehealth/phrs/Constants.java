@@ -347,6 +347,12 @@ public class Constants {
             "http://www.icardea.at/phrs/types/1.0/VitalSign";
     
     /**
+     * The rdf class for a vital sign in the PHRS acceptation.
+     */
+    public static final String PHRS_OBSERVATION_ENTRY_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/Observation";
+    
+    /**
      * Describes an observation as risk.
      */
     public static final String HL7V3_RISK_OF = ICARDEA_NS + "/instances/RiskOf";
