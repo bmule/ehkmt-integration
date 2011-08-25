@@ -91,7 +91,7 @@ public final class TriplestoreConnectionFactory {
 
             final LoadRdfPostConstruct loadRdf = new LoadRdfPostConstruct(fileToLoad);
             ((GenericTriplestoreLifecycle) result).addToPostconstruct(loadRdf);
-            LOGGER.debug("File : {} is schedulled to be loaded", filesToLoad);
+            LOGGER.debug("File : {} is schedulled to be loaded", fileToLoad);
         }
         LOGGER.debug("The files set {} was succefully loaded.", filesToLoad);
 
