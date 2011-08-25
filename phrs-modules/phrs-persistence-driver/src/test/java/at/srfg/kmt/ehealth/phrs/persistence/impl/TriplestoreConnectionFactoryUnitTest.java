@@ -81,6 +81,19 @@ public class TriplestoreConnectionFactoryUnitTest {
      */
     @Test
     public void testInit() throws TripleException, GenericRepositoryException {
+        testContent(triplestore);
+    }
+
+    /**
+     * Proves the default content for a given triple store. <br/>
+     * More precisely this methods knows what a given triplestore must contains;
+     * this because the triplestore load during its init process a known 
+     * rdf file.
+     * 
+     * @param triplestore the triplestore to prove.
+     * @throws TripleException  by any triplestro related exception.
+     */
+    private void testContent(GenericTriplestore triplestore) throws TripleException {
         // The loaded file startup.test.rdf contains only two triples with the 
         // given subject.
         final Iterable<Triple> forValidSubject =
@@ -90,7 +103,7 @@ public class TriplestoreConnectionFactoryUnitTest {
         for (Triple triple : forValidSubject) {
             validCount++;
         }
-        
+
         // the loaded rdf file contains olny 2 triples
         assertEquals(2, validCount);
 
@@ -99,7 +112,7 @@ public class TriplestoreConnectionFactoryUnitTest {
 
         final Iterable<Triple> forInvalidSubject =
                 triplestore.getForSubject(INVALID_SUBJECT);
-        int  invalidCount = 0;
+        int invalidCount = 0;
         for (Triple triple : forInvalidSubject) {
             invalidCount++;
         }
@@ -107,5 +120,32 @@ public class TriplestoreConnectionFactoryUnitTest {
 
         final boolean invalidExists = triplestore.exists(INVALID_SUBJECT);
         assertFalse(invalidExists);
+    }
+
+    /**
+     * Initialize and shutdown a triplestore a few times without to purge its 
+     * local resources.
+     * 
+     * @throws TripleException
+     * @throws GenericRepositoryException 
+     */
+    @Test
+    public void testRepetativeInitWithoutCleanEnviroment() 
+        throws TripleException, GenericRepositoryException {
+
+        ((GenericTriplestoreLifecycle) triplestore).shutdown();
+
+        // here I init and shutdown the triplestore connectionn times
+        // the enviroment remains the same (the environment includes the 
+        // file dump). 
+        // The start up rdf files are loaded and loaded but the content 
+        // reamains the same
+        for (int i = 0; i < 9; i++) {
+            final TriplestoreConnectionFactory connectionFactory =
+                    TriplestoreConnectionFactory.getInstance();
+            triplestore = connectionFactory.getTriplestore();
+        }
+
+        testContent(triplestore);
     }
 }
