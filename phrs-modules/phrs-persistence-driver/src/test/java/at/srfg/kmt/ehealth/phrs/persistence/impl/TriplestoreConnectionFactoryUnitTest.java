@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.persistence.impl;
 
-
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import org.junit.Test;
@@ -20,15 +19,20 @@ import org.junit.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
- *
+ * Contains test related with the lifecycle phases for a generic triplestore.
+ * 
  * @version 0.1
  * @since 0.1
  * @author mradules
  */
 public class TriplestoreConnectionFactoryUnitTest {
 
+    public static final String VALID_SUBJECT =
+            "http://www.icardea.at/phrs/instances/codeSystem/snomed";
+    public static final String INVALID_SUBJECT =
+            "http://www.icardea.at/phrs/instances/codeSystem/other_snowmed"
+            + "";
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -36,10 +40,10 @@ public class TriplestoreConnectionFactoryUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(TriplestoreConnectionFactoryUnitTest.class);
-
     private GenericTriplestore triplestore;
 
     /**
+     * Initialize the genric triple store according with a given configuration.
      * Runs before any test from this suite and prepare the environment for the
      * next running test.
      * 
@@ -67,21 +71,41 @@ public class TriplestoreConnectionFactoryUnitTest {
         triplestore = null;
     }
 
+    /**
+     * Initialize the triplestore according with a given configuration file.
+     * The configuration file is named : "generic_triplestore.xml" and it must 
+     * be placed in the classpath.
+     * 
+     * @throws TripleException
+     * @throws GenericRepositoryException 
+     */
     @Test
     public void testInit() throws TripleException, GenericRepositoryException {
-        final String subject = "http://www.icardea.at/phrs/instances/codeSystem/snomed";
         // The loaded file startup.test.rdf contains only two triples with the 
         // given subject.
-        final Iterable<Triple> forSubject =
-                triplestore.getForSubject(subject);
+        final Iterable<Triple> forValidSubject =
+                triplestore.getForSubject(VALID_SUBJECT);
 
-        int count = 0;
-        for (Triple triple : forSubject) {
-            count++;
+        int validCount = 0;
+        for (Triple triple : forValidSubject) {
+            validCount++;
         }
-        assertEquals(2, count);
+        
+        // the loaded rdf file contains olny 2 triples
+        assertEquals(2, validCount);
 
-        final boolean exists = triplestore.exists(subject);
-        assertTrue(exists);
+        final boolean validExists = triplestore.exists(VALID_SUBJECT);
+        assertTrue(validExists);
+
+        final Iterable<Triple> forInvalidSubject =
+                triplestore.getForSubject(INVALID_SUBJECT);
+        int  invalidCount = 0;
+        for (Triple triple : forInvalidSubject) {
+            invalidCount++;
+        }
+        assertEquals(0, invalidCount);
+
+        final boolean invalidExists = triplestore.exists(INVALID_SUBJECT);
+        assertFalse(invalidExists);
     }
 }
