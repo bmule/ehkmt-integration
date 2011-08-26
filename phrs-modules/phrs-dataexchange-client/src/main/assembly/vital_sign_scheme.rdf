@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 V3 Vital Sign</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 vital sign.</rdfs:comment>
+    </rdfs:Class>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#templIdRoot">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">HL7 V3 Root Template ID</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">The template id used to indetify the message like a certain one (e.g. IHE Survey Observation )</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#code">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">HL7 Code</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:comment xml:lang="en">The Code and Code System infromation used to unique identify an item</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#note">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Short Note</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">a short note</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#status">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">HL7 V3 Status</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:comment xml:lang="en">Indicates the HL7 V3 status</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#effectiveTime">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Effective time</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">The effective time must follow the format yyyymmddhhss (e.g. 201006010000)</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#value">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">The Value</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:comment xml:lang="en">The value for a measurement</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#unit">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">The Unit</rdfs:label>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:comment xml:lang="en">The unit for the involved value (from a measurement)</rdfs:comment>
+    </rdf:Property>
+
+</rdf:RDF>
