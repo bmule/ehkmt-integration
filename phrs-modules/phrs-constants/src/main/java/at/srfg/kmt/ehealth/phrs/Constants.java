@@ -352,6 +352,9 @@ public class Constants {
     public static final String RDF_RESOURCE = 
             "http://www.w3.org/2000/01/rdf-schema#Resource";
     
+    public static final String RDF_DOMAIN = 
+            "http://www.w3.org/2000/01/rdf-schema#domain";
+    
     /**
      * The rdf class for a vital sign in the PHRS acceptation.
      */
