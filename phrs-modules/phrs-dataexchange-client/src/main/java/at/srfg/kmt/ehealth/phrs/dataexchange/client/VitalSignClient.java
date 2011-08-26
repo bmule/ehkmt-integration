@@ -219,6 +219,5 @@ public class VitalSignClient {
     }
     
     void updateVitalSign(String uri, String predicate, String value) throws TripleException {
-        
     }
 }
