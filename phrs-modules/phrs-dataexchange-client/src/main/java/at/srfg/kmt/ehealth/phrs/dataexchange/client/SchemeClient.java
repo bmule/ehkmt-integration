@@ -5,10 +5,12 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
+import java.util.Map;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -88,7 +90,18 @@ public final class SchemeClient {
         return result;
     }
     
-    Set<String> getAllPropertiesForClass(String uri) {
-        return null;
+    Set<String> getAllPropertiesForClass(String classURI) throws TripleException {
+        
+        final Map<String, String> query = new HashMap<String, String>();
+        query.put(RDFS_TYPE, RDF_PROPERTY_TYPE);
+        query.put(RDF_DOMAIN, classURI);
+        
+        final Iterable<String> properties = triplestore.getForPredicatesAndValues(query);
+        final Set<String> result = new HashSet<String>();
+        for (String property : properties) {
+            result.add(property);
+        }
+        
+        return result;
     }
 }
