@@ -26,15 +26,20 @@ import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 
 
 /**
- * Used to persist and retrieve vital signs information. 
+ * Used to persist and retrieve vital signs information. <br/>
+ * This class can not be extended. 
  * 
  * @version 0.1
  * @since 0.1
  * @author mradules
  */
-public class VitalSignClient {
+public final class VitalSignClient {
 
-    private static final String CREATORN_NAME = "VitalSignPlainClient";
+    /**
+     * Holds the name for the creator, the instance responsible to create vital 
+     * signs instances with this client. 
+     */
+    private static final String CREATORN_NAME = VitalSignClient.class.getName();
 
     /**
      * Used to persist/retrieve informations from the persistence layer.
@@ -44,7 +49,7 @@ public class VitalSignClient {
     /**
      * Builds a <code>VitalSignClient</code> instance. <br/>
      * <b>Note : </b> This constructor builds its own individual connection 
-     * (and don't) share it with the rest of the applications.
+     * (and it  does not) share it with the rest of the applications.
      * 
      * @throws GenericRepositoryException if the underlying persistence layer 
      * can not be initialized from any reasons.
@@ -58,7 +63,19 @@ public class VitalSignClient {
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
-    VitalSignClient(GenericTriplestore triplestore) throws GenericRepositoryException, TripleException {
+    /**
+     * Builds a <code>VitalSignClient</code> instance for a given triplestrore.
+     * 
+     * @param triplestore the triplestore instance, it can not be null.
+     * @throws NullPointerException if the <code>triplestore</code> 
+     * argument is null. 
+     */
+    VitalSignClient(GenericTriplestore triplestore) {
+        
+        if (triplestore == null) {
+            throw new NullPointerException("The triplestore");
+        }
+        
         this.triplestore = triplestore;
     }
 
