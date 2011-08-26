@@ -547,8 +547,9 @@ public class SesameTriplestore
         try {
             final RepositoryResult<Statement> statements =
                     connection.getStatements(subjectURI, predicateURI, null, true);
-            //TODO : DON't return null/.
-            return null;
+            final StatementValueIterableResult result = 
+                    new StatementValueIterableResult(statements);
+            return result;
 
         } catch (Exception exception) {
             LOGGER.debug(exception.getMessage(), exception);
