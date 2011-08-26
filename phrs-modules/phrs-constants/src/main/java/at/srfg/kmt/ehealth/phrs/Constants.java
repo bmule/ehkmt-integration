@@ -340,6 +340,12 @@ public class Constants {
     public static final String RDFS_TYPE = 
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     
+    public static final String RDFS_RANGE = 
+            "http://www.w3.org/2000/01/rdf-schema#range";
+    
+    public static final String RDF_PROPERTY_TYPE =
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property";
+    
     /**
      * The rdf class for a vital sign in the PHRS acceptation.
      */
