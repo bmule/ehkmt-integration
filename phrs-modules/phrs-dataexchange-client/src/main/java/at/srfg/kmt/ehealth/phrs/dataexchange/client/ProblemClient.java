@@ -22,7 +22,8 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 
 
 /**
- * Used to persist and retrieve vital signs information. 
+ * Used to persist and retrieve vital signs information. <br/>
+ * This class can not be extended. 
  * 
  * @version 0.1
  * @since 0.1
@@ -30,7 +31,11 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
  */
 public class ProblemClient {
 
-    private static final String CREATORN_NAME = "ProblemPlainClient";
+    /**
+     * Holds the name for the creator, the instance responsible to create vital 
+     * signs instances with this client. 
+     */
+    private static final String CREATOR_NAME = ProblemClient.class.getName();;
 
     /**
      * Used to persist/retrieve informations from the persistence layer.
@@ -54,7 +59,19 @@ public class ProblemClient {
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
-    ProblemClient(GenericTriplestore triplestore) throws GenericRepositoryException, TripleException {
+    /**
+     * Builds a <code>ProblemClient</code> instance for a given triplestrore.
+     * 
+     * @param triplestore the triplestore instance, it can not be null.
+     * @throws NullPointerException if the <code>triplestore</code> 
+     * argument is null. 
+     */
+    ProblemClient(GenericTriplestore triplestore) {
+        
+        if (triplestore == null) {
+            throw new NullPointerException("The triplestore");
+        }
+        
         this.triplestore = triplestore;
     }
 
@@ -150,7 +167,4 @@ public class ProblemClient {
 
         return result;
     }
-
-    
-    
 }

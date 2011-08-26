@@ -55,7 +55,7 @@ public final class VitalSignClient {
      * can not be initialized from any reasons.
      * @throws TripleException 
      */
-    VitalSignClient() throws GenericRepositoryException, TripleException {
+    public VitalSignClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
         final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct("startup.test.rdf");
         // I load the need instances.
@@ -70,7 +70,7 @@ public final class VitalSignClient {
      * @throws NullPointerException if the <code>triplestore</code> 
      * argument is null. 
      */
-    VitalSignClient(GenericTriplestore triplestore) {
+    public VitalSignClient(GenericTriplestore triplestore) {
         
         if (triplestore == null) {
             throw new NullPointerException("The triplestore");
@@ -107,7 +107,7 @@ public final class VitalSignClient {
      * @return the URI for the new added vital sign (resource).
      * @throws TripleException 
      */
-    String addVitalSign(String user, String codeURI, String note, String date,
+    public String addVitalSign(String user, String codeURI, String note, String date,
             String value, String unitURI) throws TripleException {
 
         final String subject =
@@ -187,7 +187,7 @@ public final class VitalSignClient {
      * @return all the vital sings for all the users.
      * @throws TripleException by any kind of triplestore related error.
      */
-    Iterable<Triple> getVitalSigns() throws TripleException {
+    public Iterable<Triple> getVitalSigns() throws TripleException {
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS, RESOURCE);
 
@@ -208,7 +208,7 @@ public final class VitalSignClient {
      * @return
      * @throws TripleException 
      */
-    Iterable<Triple> getVitalSignsForUser(String userId) throws TripleException {
+    public Iterable<Triple> getVitalSignsForUser(String userId) throws TripleException {
 
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(OWNER, userId, LITERAL);
@@ -235,6 +235,6 @@ public final class VitalSignClient {
         return result;
     }
     
-    void updateVitalSign(String uri, String predicate, String value) throws TripleException {
+    public void updateVitalSign(String uri, String predicate, String value) throws TripleException {
     }
 }

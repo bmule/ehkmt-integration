@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * This class can not be extended.
  * 
@@ -23,13 +24,11 @@ public final class SchemeClient {
     
     private final GenericTriplestore triplestore;
     
-    
     public SchemeClient(GenericTriplestore triplestore) {
         this.triplestore = triplestore;
     }
     
-    
-    boolean propertyExists(String propertyURI) throws TripleException {
+    public boolean propertyExists(String propertyURI) throws TripleException {
         final boolean exists = triplestore.exists(propertyURI);
         if (!exists) {
             return false;
@@ -50,7 +49,7 @@ public final class SchemeClient {
         return false;
     }
     
-    Set<String> getPropertyTypes(String propertyURI) throws TripleException {
+    public Set<String> getPropertyTypes(String propertyURI) throws TripleException {
         
         final boolean exists = triplestore.exists(propertyURI);
         if (!exists) {
@@ -68,29 +67,29 @@ public final class SchemeClient {
         return result;
     }
     
-    boolean isPropertyLiteral(Set<String> propertyTypes) {
+    public boolean isPropertyLiteral(Set<String> propertyTypes) {
         final boolean result = propertyTypes.contains(RDF_LITERAL);
         return result;
     }
     
-    boolean isPropertyLiteral(String propertyURI) throws TripleException {
+    public boolean isPropertyLiteral(String propertyURI) throws TripleException {
         final Set<String> propertyTypes = getPropertyTypes(propertyURI);
         final boolean result = isPropertyLiteral(propertyTypes);
         return result;
     }
     
-    boolean isPropertyResource(Set<String> propertyTypes) {
+    public boolean isPropertyResource(Set<String> propertyTypes) {
         final boolean result = !propertyTypes.contains(RDF_LITERAL);
         return result;
     }
     
-    boolean isPropertyResource(String propertyURI) throws TripleException {
+    public boolean isPropertyResource(String propertyURI) throws TripleException {
         final Set<String> propertyTypes = getPropertyTypes(propertyURI);
         final boolean result = isPropertyResource(propertyTypes);
         return result;
     }
     
-    Set<String> getAllPropertiesForClass(String classURI) throws TripleException {
+    public Set<String> getAllPropertiesForClass(String classURI) throws TripleException {
         
         final Map<String, String> query = new HashMap<String, String>();
         query.put(RDFS_TYPE, RDF_PROPERTY_TYPE);

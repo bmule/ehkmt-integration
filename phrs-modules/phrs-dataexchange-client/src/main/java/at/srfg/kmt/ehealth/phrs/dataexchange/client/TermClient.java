@@ -8,11 +8,11 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-import at.srfg.kmt.ehealth.phrs.Constants;
+import static at.srfg.kmt.ehealth.phrs.Constants.*;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 
 
@@ -33,10 +33,9 @@ public final class TermClient {
         this.triplestore = triplestore;
     }
 
-    Iterable<Triple> getTermsRelatedWith(String resourceURI) throws TripleException {
+    public Iterable<Triple> getTermsRelatedWith(String resourceURI) throws TripleException {
         final Iterable<String> resources = 
-                triplestore.getForPredicateAndValue(Constants.SKOS_RELATED, 
-                resourceURI, ValueType.RESOURCE);
+                triplestore.getForPredicateAndValue(SKOS_RELATED, resourceURI, RESOURCE);
         
         final MultiIterable result = new MultiIterable();
         for (String resource : resources) {
