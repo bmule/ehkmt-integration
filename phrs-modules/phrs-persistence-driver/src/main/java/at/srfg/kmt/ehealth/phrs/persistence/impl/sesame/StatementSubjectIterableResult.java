@@ -10,10 +10,6 @@ package at.srfg.kmt.ehealth.phrs.persistence.impl.sesame;
 
 import java.util.Iterator;
 import org.openrdf.model.Statement;
-import org.openrdf.query.Binding;
-import org.openrdf.query.BindingSet;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.TupleQueryResult;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
 import org.slf4j.Logger;
