@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -73,14 +72,22 @@ public class VitalSignClientUnitTest {
         triplestore = null;
     }
 
+    /**
+     * Adds a vital signs for an owner and tests if all the properties for the 
+     * vial sign was properly set.
+     * 
+     * @throws TripleException by any triplestore related exeception. 
+     * If this exception occurs then this test fails.
+     * @see VitalSignClient#addVitalSign(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String) 
+     */
     @Test
     public void testAddVitalSignForOwner() throws TripleException {
-        final String resourceURI = 
+        final String resourceURI =
                 vitalSignClient.addVitalSign(owner,
-                                            ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
-                                            "Free text note for systolic.",
-                                            "201006010000",
-                                            "100", MM_HG);
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                "100", MM_HG);
         assertNotNull(resourceURI);
 
         final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsForUser(owner);
@@ -92,40 +99,135 @@ public class VitalSignClientUnitTest {
             if (predicate.equals(OWNER)) {
                 assertEquals(owner, value);
             }
-            
+
             if (predicate.equals(RDFS_TYPE)) {
                 assertEquals(PHRS_VITAL_SIGN_CLASS, value);
             }
-            
+
             if (predicate.equals(CREATE_DATE)) {
                 assertNotNull(value);
             }
-            
+
             if (predicate.equals(HL7V3_TEMPLATE_ID_ROOT)) {
                 rootIds.add(value);
             }
-            
+
             if (predicate.equals(HL7V3_CODE)) {
                 assertEquals(ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE, value);
             }
-            
+
             if (predicate.equals(SKOS_NOTE)) {
                 assertEquals("Free text note for systolic.", value);
             }
-            
+
             if (predicate.equals(EFFECTIVE_TIME)) {
                 assertEquals("201006010000", value);
             }
-            
+
             if (predicate.equals(HL7V3_VALUE)) {
-                assertEquals("100",value);
+                assertEquals("100", value);
             }
-            
+
             if (predicate.equals(HL7V3_UNIT)) {
-                assertEquals(MM_HG,value);
+                assertEquals(MM_HG, value);
+            }
+
+            count++;
+        }
+
+        final Set<String> expectedRootId = new HashSet<String>();
+        // all this three describes a vital sign
+        expectedRootId.add(SIMPLE_OBSERVATIONS);
+        expectedRootId.add(VITAL_SIGNS_OBSERVATIONS);
+        expectedRootId.add(ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
+        assertEquals(expectedRootId, rootIds);
+
+        // the vial sign has 12 tripels, see the documentaion for VitalSignClient
+        assertEquals(12, count);
+
+        final boolean exists = triplestore.exists(resourceURI);
+        assertTrue(exists);
+        final Iterable<String> forOwner =
+                triplestore.getForPredicateAndValue(OWNER, owner, ValueType.LITERAL);
+
+        count = 0;
+        for (String resource : forOwner) {
+            count++;
+        }
+
+        // I expect only one vital sign for this owner
+        assertEquals(1, count);
+    }
+
+    /**
+     * Updates a properties for a given vital signs and prove is this operation 
+     * was successfully.
+     * 
+     * @throws TripleException by any triplestore related exeception. 
+     * If this exception occurs then this test fails.
+     * @see VitalSignClient#updateVitalSign(java.lang.String, java.lang.String, java.lang.String) 
+     */
+    @Test
+    public void testUpdateVitalSignForOwner() throws TripleException {
+        final String resourceURI =
+                vitalSignClient.addVitalSign(owner,
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                "100", MM_HG);
+        assertNotNull(resourceURI);
+        final String newValue = "200";
+        // this update only two properties the HL7V3_VALUE and the UPDATE_DATE,
+        // the vitalSignClient set the UPDATE_DATE (to the cuurent date) efery 
+        // time when a resource get updated.
+        vitalSignClient.updateVitalSign(resourceURI, HL7V3_VALUE, newValue);
+
+        final Iterable<Triple> properties = vitalSignClient.getVitalSignsForUser(owner);
+        Set<String> rootIds = new HashSet<String>();
+        for (Triple triple : properties) {
+            final String predicate = triple.getPredicate();
+            final String value = triple.getValue();
+
+            if (predicate.equals(OWNER)) {
+                assertEquals(owner, value);
+            }
+
+            if (predicate.equals(RDFS_TYPE)) {
+                assertEquals(PHRS_VITAL_SIGN_CLASS, value);
+            }
+
+            if (predicate.equals(CREATE_DATE)) {
+                assertNotNull(value);
+            }
+
+            if (predicate.equals(HL7V3_TEMPLATE_ID_ROOT)) {
+                rootIds.add(value);
+            }
+
+            if (predicate.equals(HL7V3_CODE)) {
+                assertEquals(ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE, value);
+            }
+
+            if (predicate.equals(SKOS_NOTE)) {
+                assertEquals("Free text note for systolic.", value);
+            }
+
+            if (predicate.equals(EFFECTIVE_TIME)) {
+                assertEquals("201006010000", value);
+            }
+
+            if (predicate.equals(HL7V3_VALUE)) {
+                // this property was changed
+                assertEquals("200", value);
+            }
+
+            if (predicate.equals(HL7V3_UNIT)) {
+                assertEquals(MM_HG, value);
             }
             
-            count++;
+            if (predicate.equals(UPDATE_DATE)) {
+                assertNotNull(value);
+            }
         }
         
         final Set<String> expectedRootId = new HashSet<String>();
@@ -134,21 +236,7 @@ public class VitalSignClientUnitTest {
         expectedRootId.add(VITAL_SIGNS_OBSERVATIONS);
         expectedRootId.add(ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
         assertEquals(expectedRootId, rootIds);
-        
-        // the vial sign has 12 tripels, see the documentaion for VitalSignClient
-        assertEquals(12,count);
-        
-        final boolean exists = triplestore.exists(resourceURI);
-        assertTrue(exists);
-        final Iterable<String> forOwner = 
-                triplestore.getForPredicateAndValue(OWNER, owner, ValueType.LITERAL);
-        
-        count = 0;
-        for (String resource : forOwner) {
-            count++;
-        }
-        
-        // I expect only one vital sign for this owner
-        assertEquals(1,count);
+
+
     }
 }
