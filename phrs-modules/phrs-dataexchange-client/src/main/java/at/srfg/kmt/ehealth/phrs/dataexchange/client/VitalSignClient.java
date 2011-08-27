@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-
 import java.util.Date;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
@@ -20,10 +19,10 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
-
 
 /**
  * Used to persist and retrieve vital signs information. <br/>
@@ -40,11 +39,11 @@ public final class VitalSignClient {
      * signs instances with this client. 
      */
     private static final String CREATORN_NAME = VitalSignClient.class.getName();
-
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
+    private final SchemeClient schemeClient;
 
     /**
      * Builds a <code>VitalSignClient</code> instance. <br/>
@@ -61,6 +60,8 @@ public final class VitalSignClient {
         // I load the need instances.
         ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
         ((GenericTriplestoreLifecycle) triplestore).init();
+
+        schemeClient = new SchemeClient(triplestore);
     }
 
     /**
@@ -71,12 +72,14 @@ public final class VitalSignClient {
      * argument is null. 
      */
     public VitalSignClient(GenericTriplestore triplestore) {
-        
+
         if (triplestore == null) {
             throw new NullPointerException("The triplestore");
         }
-        
+
         this.triplestore = triplestore;
+
+        schemeClient = new SchemeClient(triplestore);
     }
 
     /**
@@ -212,17 +215,17 @@ public final class VitalSignClient {
 
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(OWNER, userId, LITERAL);
-        
+
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
         queryMap.put(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS);
         queryMap.put(OWNER, userId);
-        
+
         // here I search for all resources with 
         // rdf type == vital sign 
         // and
         // owner == user id
-        final Iterable<String> resurces = 
+        final Iterable<String> resurces =
                 triplestore.getForPredicatesAndValues(queryMap);
 
         final MultiIterable result = new MultiIterable();
@@ -234,7 +237,51 @@ public final class VitalSignClient {
 
         return result;
     }
-    
-    public void updateVitalSign(String uri, String predicate, String value) throws TripleException {
+
+    public void updateVitalSign(String resourceURI, String predicate, String newValue)
+            throws TripleException {
+        final boolean resourceExists = triplestore.exists(resourceURI);
+        if (!resourceExists) {
+            final String msg =
+                    String.format("There is no resource for this URI %s ", resourceURI);
+            throw new IllegalArgumentException(msg);
+        }
+
+        final boolean propertyExists = schemeClient.propertyExists(predicate);
+        if (!propertyExists) {
+            final String msg =
+                    String.format("The predicate %s does not exists like property", predicate);
+            throw new IllegalArgumentException(msg);
+        }
+
+        // TODO : this mode to detect the value type is not the best one,
+        // it has its limitations. E.G. no Bnode is supported, no expicit
+        // classes are supported.
+        // I chose to se this simple (and limited) solution becuase I it fits 
+        // the needs for the Vital Sign
+        final boolean isPropertyLiteral = schemeClient.isPropertyLiteral(predicate);
+        final ValueType type = isPropertyLiteral
+                ? ValueType.LITERAL
+                : ValueType.RESOURCE;
+
+        triplestore.delete(resourceURI, predicate);
+        triplestore.persist(resourceURI, predicate, newValue, type);
+
+        // NOTA BENE : the update operatin is responsible for the UPDATE_DATE property.
+        // More preciselly the update must set the updated date to the date when
+        // the resource was modified.
+        setUpdateDate(resourceURI);
     }
+
+    private void setUpdateDate(String resourceURI) throws TripleException {
+        final boolean updateDateExists = triplestore.exists(resourceURI, UPDATE_DATE);
+        if (updateDateExists) {
+            triplestore.delete(resourceURI, UPDATE_DATE);
+        }
+        
+        final String newDate = DateUtil.getFormatedDate(new Date());
+        triplestore.persist(resourceURI, UPDATE_DATE, newDate, LITERAL);
+    }
+        
+
 }
