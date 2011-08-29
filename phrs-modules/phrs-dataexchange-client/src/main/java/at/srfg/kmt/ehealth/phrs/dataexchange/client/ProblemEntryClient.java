@@ -215,7 +215,7 @@ public final class ProblemEntryClient {
     }
 
     /**
-     * Returns all the Vital Signs for a given user.
+     * Returns all the Problem Entries for a given user.
      * 
      * @param userId
      * @return
@@ -265,7 +265,7 @@ public final class ProblemEntryClient {
         // it has its limitations. E.G. no Bnode is supported, no expicit
         // classes are supported.
         // I chose to se this simple (and limited) solution becuase I it fits 
-        // the needs for the Vital Sign
+        // the needs for the Problem Entries
         final boolean isPropertyLiteral = schemeClient.isPropertyLiteral(predicate);
         final ValueType type = isPropertyLiteral
                 ? LITERAL
