@@ -282,6 +282,28 @@ public class Constants {
     public static final String ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT = "2.16.840.1.113883.10.20.1.31";
     
     /**
+     * The unique id for "Problem Entry" in the IHE acceptation.<br/>
+     * In most of the cases this is used like value (of type literal) for a 
+     * property named templIdRoot.
+
+     * 
+     * @see #ICARDEA_HL7V3_TEMPLATE_ID_ROOT
+     * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5</url>
+     */
+    public static final String PROBLEM_ENTRY = "1.3.6.1.4.1.19376.1.5.3.1.4.5";
+    
+    /**
+     * The unique id for "Problem Entry" in the IHE acceptation.<br/>
+     * In most of the cases this is used like value (of type literal) for a 
+     * property named templIdRoot.
+
+     * 
+     * @see #ICARDEA_HL7V3_TEMPLATE_ID_ROOT
+     * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5</url>
+     */
+    public static final String PROBLEM_OBSERVATION = "2.16.840.1.113883.10.20.1.28";
+    
+    /**
      * Describes the process of establishing a problem like condition.
      */
     public static final String HL7V3_CONDITION = 
