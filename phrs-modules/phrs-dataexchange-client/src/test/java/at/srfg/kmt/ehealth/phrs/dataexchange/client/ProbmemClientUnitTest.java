@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  *
  * @version 0.1
@@ -33,10 +32,10 @@ import org.slf4j.LoggerFactory;
  * @author mradules
  */
 public class ProbmemClientUnitTest {
+
     public static final String NOTE = "Free text note for the problem.";
     public static final String START_DATE = "201006010000";
     public static final String END_DATE = "201007010000";
-
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -92,10 +91,9 @@ public class ProbmemClientUnitTest {
                 HL7V3_SYMPTOM,
                 STATUS_COMPELETE,
                 START_DATE,
-                END_DATE, 
+                END_DATE,
                 NOTE,
-                HL7V3_FEVER
-                );
+                HL7V3_FEVER);
         assertNotNull(resourceURI);
 
         final Iterable<Triple> observations = problemClient.getProblemEntriesForUser(USER);
@@ -188,9 +186,8 @@ public class ProbmemClientUnitTest {
                 START_DATE,
                 END_DATE,
                 NOTE,
-                HL7V3_FEVER
-                );
-        
+                HL7V3_FEVER);
+
         assertNotNull(resourceURI);
         // this update only two properties the HL7V3_VALUE_CODE and the UPDATE_DATE,
         // the problemClient set the UPDATE_DATE (to the cuurent date) efery 
@@ -200,10 +197,10 @@ public class ProbmemClientUnitTest {
         final Iterable<Triple> properties = problemClient.getProblemEntriesForUser(USER);
         Set<String> rootIds = new HashSet<String>();
         for (Triple triple : properties) {
-            
+
             final String predicate = triple.getPredicate();
             final String value = triple.getValue();
-            
+
             if (predicate.equals(OWNER)) {
                 assertEquals(USER, value);
             }
@@ -262,17 +259,123 @@ public class ProbmemClientUnitTest {
                 START_DATE,
                 END_DATE,
                 NOTE,
-                HL7V3_FEVER
-                );
+                HL7V3_FEVER);
         assertNotNull(resourceURI);
-        
+
         problemClient.deleteProblemEntry(resourceURI);
-         int counter = 0;
+        int counter = 0;
         final Iterable<Triple> triples = problemClient.getProblemEntries();
         for (Triple triple : triples) {
             counter++;
         }
-       
+
         assertEquals(0, counter);
+    }
+
+    @Test
+    public void testAddProblemEntry_Condition() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_CONDITION,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+    }
+
+    @Test
+    public void testAddProblemEntry_Symptom() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_SYMPTOM,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+
+    }
+
+    @Test
+    public void testAddProblemEntry_Finding() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_FINDING,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+    }
+
+    @Test
+    public void testAddProblemEntry_Complaint() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_COMPILANT,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+
+    }
+
+    @Test
+    public void testAddProblemEntry_FunctionalLimitation() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_FUNCTIONAL_LIMITATION,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+
+    }
+
+    @Test
+    public void testAddProblemEntry_Problem() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_PROBLEM,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+
+    }
+
+    @Test
+    public void testAddProblemEntry_Diagnosis() throws TripleException {
+        final String resourceURI =
+                problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_DIAGNOSIS,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+        assertNotNull(resourceURI);
+    }
+
+    @Test
+    public void testAddProblemEntry_Risk() throws TripleException {
+        // I am not sure about this
     }
 }
