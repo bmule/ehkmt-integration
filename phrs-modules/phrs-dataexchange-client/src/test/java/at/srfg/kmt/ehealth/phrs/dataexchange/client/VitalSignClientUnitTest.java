@@ -40,7 +40,7 @@ public class VitalSignClientUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VitalSignClientUnitTest.class);
-    private static final String owner = VitalSignClientUnitTest.class.getName();
+    private static final String USER = VitalSignClientUnitTest.class.getName();
     private GenericTriplestore triplestore;
     private VitalSignClient vitalSignClient;
 
@@ -83,21 +83,21 @@ public class VitalSignClientUnitTest {
     @Test
     public void testAddVitalSignForOwner() throws TripleException {
         final String resourceURI =
-                vitalSignClient.addVitalSign(owner,
+                vitalSignClient.addVitalSign(USER,
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
                 "100", MM_HG);
         assertNotNull(resourceURI);
 
-        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsForUser(owner);
+        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsForUser(USER);
         int count = 0;
         Set<String> rootIds = new HashSet<String>();
         for (Triple vitalSign : vitalSigns) {
             final String predicate = vitalSign.getPredicate();
             final String value = vitalSign.getValue();
             if (predicate.equals(OWNER)) {
-                assertEquals(owner, value);
+                assertEquals(USER, value);
             }
 
             if (predicate.equals(RDFS_TYPE)) {
@@ -148,7 +148,7 @@ public class VitalSignClientUnitTest {
         final boolean exists = triplestore.exists(resourceURI);
         assertTrue(exists);
         final Iterable<String> forOwner =
-                triplestore.getForPredicateAndValue(OWNER, owner, ValueType.LITERAL);
+                triplestore.getForPredicateAndValue(OWNER, USER, ValueType.LITERAL);
 
         count = 0;
         for (String resource : forOwner) {
@@ -170,7 +170,7 @@ public class VitalSignClientUnitTest {
     @Test
     public void testUpdateVitalSignForOwner() throws TripleException {
         final String resourceURI =
-                vitalSignClient.addVitalSign(owner,
+                vitalSignClient.addVitalSign(USER,
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
@@ -182,14 +182,14 @@ public class VitalSignClientUnitTest {
         // time when a resource get updated.
         vitalSignClient.updateVitalSign(resourceURI, HL7V3_VALUE, newValue);
 
-        final Iterable<Triple> properties = vitalSignClient.getVitalSignsForUser(owner);
+        final Iterable<Triple> properties = vitalSignClient.getVitalSignsForUser(USER);
         Set<String> rootIds = new HashSet<String>();
         for (Triple triple : properties) {
             final String predicate = triple.getPredicate();
             final String value = triple.getValue();
 
             if (predicate.equals(OWNER)) {
-                assertEquals(owner, value);
+                assertEquals(USER, value);
             }
 
             if (predicate.equals(RDFS_TYPE)) {
@@ -241,7 +241,7 @@ public class VitalSignClientUnitTest {
     @Test
     public void testDeleteVitalSign() throws TripleException {
         final String resourceURI =
-                vitalSignClient.addVitalSign(owner,
+                vitalSignClient.addVitalSign(USER,
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
