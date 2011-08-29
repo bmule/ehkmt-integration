@@ -25,9 +25,8 @@ public class DateUtilUnitTest {
     public void testToString_yyyyMMddHms() {
         final String formatedDate = DateUtil.getFormatedDate(new Date());
         assertNotNull(formatedDate);
-        final int length = formatedDate.trim().length();
-        // the lenght for the date is always 12
-        assertTrue(11 >= length);
+        final Date result = DateUtil.getFormatedDate(formatedDate);
+        assertNotNull(result);
     }
     
     @Test
