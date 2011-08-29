@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-
 import static org.junit.Assert.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -23,7 +22,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * This Test Suite proves the functionality for the <code>SchemeClient</code>. 
  * 
@@ -32,6 +30,7 @@ import org.slf4j.LoggerFactory;
  * @see SchemeClient
  */
 public class SchemeClientUnitTest {
+
     public static final String RIGHT_PROPERTY = "http://www.icardea.at/phrs/hl7V3#endDate";
     public static final String WRONG_PROPERTY = "http://www.icardea.at/phrs/hl7V3#XXXXXXXXXXXXXXXXXXX";
     public static Set<String> CLASS_PROPERTIES;
@@ -49,7 +48,7 @@ public class SchemeClientUnitTest {
      * (with a certain syntax).  
      */
     static {
-        CLASS_PROPERTIES=new HashSet<String>();
+        CLASS_PROPERTIES = new HashSet<String>();
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#status");
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#note");
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#unit");
@@ -58,8 +57,6 @@ public class SchemeClientUnitTest {
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#templIdRoot");
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#value");
     }
-    
-    
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -68,10 +65,9 @@ public class SchemeClientUnitTest {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SchemeClientUnitTest.class);
     private GenericTriplestore triplestore;
-    private  SchemeClient schemeClient;
+    private SchemeClient schemeClient;
 
-    
-        /**
+    /**
      * Runs before any test from this suite and prepare the environment for the
      * next running test.
      * 
@@ -98,7 +94,7 @@ public class SchemeClientUnitTest {
         ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
         triplestore = null;
     }
-    
+
     /**
      * It proves if a given (class) property exists or not. The property is 
      * loaded during the startup process.
@@ -107,16 +103,15 @@ public class SchemeClientUnitTest {
      */
     @Test
     public void testPropertyExists() throws TripleException {
-        final boolean rightPropertyExists = 
+        final boolean rightPropertyExists =
                 schemeClient.propertyExists(RIGHT_PROPERTY);
-       assertTrue(rightPropertyExists);
-      
-       final boolean wrongPropertyExists = 
+        assertTrue(rightPropertyExists);
+
+        final boolean wrongPropertyExists =
                 schemeClient.propertyExists(WRONG_PROPERTY);
-       assertFalse(wrongPropertyExists);
+        assertFalse(wrongPropertyExists);
     }
-    
-  
+
     /**
      * Gets all the types (ranges) for a given property and prove is this are 
      * correct.
@@ -126,36 +121,36 @@ public class SchemeClientUnitTest {
     @Test
     public void testGetPropertyType() throws TripleException {
         // all the ranges for this property
-        final Set<String> ranges = 
+        final Set<String> ranges =
                 schemeClient.getPropertyTypes(RIGHT_PROPERTY);
         assertFalse(ranges.isEmpty());
         assertTrue(ranges.contains(RDF_LITERAL));
         // I know thar the property is a literal
         assertTrue(schemeClient.isPropertyLiteral(ranges));
     }
-    
+
     @Test
     public void testIsLiteralPropertyType() throws TripleException {
         // all the ranges for this property
-        final Set<String> ranges = 
+        final Set<String> ranges =
                 schemeClient.getPropertyTypes(RIGHT_PROPERTY);
         final boolean isLiteral = schemeClient.isPropertyLiteral(ranges);
         assertTrue(isLiteral);
-        
+
         final boolean isResource = schemeClient.isPropertyResource(ranges);
         assertFalse(isResource);
     }
-    
+
     @Test
     public void testAllClassPropertiesType() throws TripleException {
-        final Set<String> allPropertiesForClass = 
+        final Set<String> allPropertiesForClass =
                 schemeClient.getAllPropertiesForClass(CLASS_URI);
         assertFalse(allPropertiesForClass.isEmpty());
-        
+
         final int propertiesCount = allPropertiesForClass.size();
         // I know that the this calss has 7 properties.
         assertEquals(CLASS_PROPERTIES.size(), propertiesCount);
-        
+
         assertEquals(CLASS_PROPERTIES, allPropertiesForClass);
     }
 }
