@@ -248,8 +248,13 @@ public class VitalSignClientUnitTest {
                 "100", MM_HG);
         assertNotNull(resourceURI);
         
-        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSigns();
-        
         vitalSignClient.deleteVitalSign(resourceURI);
+         int counter = 0;
+        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSigns();
+        for (Triple vitalSign : vitalSigns) {
+            counter++;
+        }
+       
+        assertEquals(0, counter);
     }
 }
