@@ -46,7 +46,7 @@ public class ProblemClientExample {
                 "Free text note for the problem.",
                 Constants.HL7V3_TEMPORRALY_LOSS_OF_SPEECH);
 
-        final Iterable<Triple> problems = client.getProblemEntries();
+        final Iterable<Triple> problems = client.getProblemEntriesForUser(owner);
 
         for (Triple problem : problems) {
             System.out.println(problem);
