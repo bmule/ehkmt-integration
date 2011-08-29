@@ -2429,4 +2429,18 @@
         <rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#code">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The HL7 V3 code</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#codeSystem">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource2"/>
+        <rdfs:comment xml:lang="en">The code system</rdfs:comment>
+    </rdf:Property>
+
 </rdf:RDF>
