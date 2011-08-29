@@ -26,25 +26,27 @@ public class ProblemClientExample {
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
-        final ProblemClient client = new ProblemClient();
+        final ProblemEntryClient client = new ProblemEntryClient();
 
         // this adds a problem-symptom named fever
-        client.addProblem(owner, Constants.HL7V3_SYMPTOM,
+        client.addProblemEntry(owner, 
+                Constants.HL7V3_SYMPTOM,
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201007010000",
                 "Free text note for the problem.",
-                Constants.HL7V3_FEVER);
+                Constants.HL7V3_FEVER
+                );
 
         // this adds a problem-symptom named temp loss of speech
-        client.addProblem(owner, Constants.HL7V3_SYMPTOM,
+        client.addProblemEntry(owner, Constants.HL7V3_SYMPTOM,
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201007010000",
                 "Free text note for the problem.",
                 Constants.HL7V3_TEMPORRALY_LOSS_OF_SPEECH);
 
-        final Iterable<Triple> problems = client.getObservations();
+        final Iterable<Triple> problems = client.getProblemEntries();
 
         for (Triple problem : problems) {
             System.out.println(problem);
