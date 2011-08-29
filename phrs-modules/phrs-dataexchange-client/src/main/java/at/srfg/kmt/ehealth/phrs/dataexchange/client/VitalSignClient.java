@@ -98,6 +98,10 @@ public final class VitalSignClient {
      * properties :
      * <ol>
      * <li> owner
+     * <li> create date
+     * <li> update date 
+     * <li> creator
+     * <li> owner
      * <li> rdf type
      * <li> create date
      * <li> creator
@@ -223,9 +227,6 @@ public final class VitalSignClient {
      */
     public Iterable<Triple> getVitalSignsForUser(String userId) throws TripleException {
 
-        final Iterable<String> resources =
-                triplestore.getForPredicateAndValue(OWNER, userId, LITERAL);
-
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
         queryMap.put(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS);
@@ -235,7 +236,7 @@ public final class VitalSignClient {
         // rdf type == vital sign 
         // and
         // owner == user id
-        final Iterable<String> resurces =
+        final Iterable<String> resources =
                 triplestore.getForPredicatesAndValues(queryMap);
 
         final MultiIterable result = new MultiIterable();
