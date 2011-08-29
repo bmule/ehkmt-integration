@@ -224,19 +224,32 @@ public class VitalSignClientUnitTest {
             if (predicate.equals(HL7V3_UNIT)) {
                 assertEquals(MM_HG, value);
             }
-            
+
             if (predicate.equals(UPDATE_DATE)) {
                 assertNotNull(value);
             }
         }
-        
+
         final Set<String> expectedRootId = new HashSet<String>();
         // all this three describes a vital sign
         expectedRootId.add(SIMPLE_OBSERVATIONS);
         expectedRootId.add(VITAL_SIGNS_OBSERVATIONS);
         expectedRootId.add(ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
         assertEquals(expectedRootId, rootIds);
+    }
 
-
+    @Test
+    public void testDeleteVitalSign() throws TripleException {
+        final String resourceURI =
+                vitalSignClient.addVitalSign(owner,
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                "100", MM_HG);
+        assertNotNull(resourceURI);
+        
+        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSigns();
+        
+        vitalSignClient.deleteVitalSign(resourceURI);
     }
 }
