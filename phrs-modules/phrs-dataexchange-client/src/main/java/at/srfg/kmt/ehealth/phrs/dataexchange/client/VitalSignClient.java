@@ -23,6 +23,9 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 /**
  * Used to persist and retrieve vital signs information. <br/>
@@ -34,6 +37,13 @@ import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
  */
 public final class VitalSignClient {
 
+    /**
+     * The Logger instance. All log messages from this class
+     * are routed through this member. The Logger name space
+     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.QUPCAR004030UVServiceUtil</code>.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(VitalSignClient.class);
     /**
      * Holds the name for the creator, the instance responsible to create vital 
      * signs instances with this client. 
@@ -278,10 +288,23 @@ public final class VitalSignClient {
         if (updateDateExists) {
             triplestore.delete(resourceURI, UPDATE_DATE);
         }
-        
+
         final String newDate = DateUtil.getFormatedDate(new Date());
         triplestore.persist(resourceURI, UPDATE_DATE, newDate, LITERAL);
     }
-        
 
+    public void deleteVitalSign(String resourceURI) throws TripleException {
+        
+        if (resourceURI == null) {
+            throw new NullPointerException("The resourceURI argument can not be null.");
+        }
+
+        final boolean exists = triplestore.exists(resourceURI);
+        if (!exists) {
+            LOGGER.warn("No resource for this {} URI, remove has no effect.", resourceURI);
+            return;
+        }
+        
+        triplestore.deleteForSubject(resourceURI);
+    }
 }
