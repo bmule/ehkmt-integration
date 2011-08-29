@@ -27,7 +27,7 @@ public class DateUtilUnitTest {
         assertNotNull(formatedDate);
         final int length = formatedDate.trim().length();
         // the lenght for the date is always 12
-        assertEquals(12, length);
+        assertTrue(11 >= length);
     }
     
     @Test
