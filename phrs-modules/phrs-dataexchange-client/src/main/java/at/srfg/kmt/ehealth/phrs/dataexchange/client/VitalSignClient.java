@@ -26,7 +26,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Used to persist and retrieve vital signs information. <br/>
  * This class can not be extended. 
@@ -204,7 +203,7 @@ public final class VitalSignClient {
      * @return all the vital sings for all the users.
      * @throws TripleException by any kind of triplestore related error.
      */
-    public Iterable<Triple> getVitalSigns() throws TripleException {
+    public Iterable<Triple> getVitalSignsTriples() throws TripleException {
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS, RESOURCE);
 
@@ -225,7 +224,7 @@ public final class VitalSignClient {
      * @return
      * @throws TripleException 
      */
-    public Iterable<Triple> getVitalSignsForUser(String userId) throws TripleException {
+    public Iterable<Triple> getVitalSignsTriplesForUser(String userId) throws TripleException {
 
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
@@ -249,8 +248,26 @@ public final class VitalSignClient {
         return result;
     }
 
+    public Iterable<String> getVitalSignsResourceURIForUser(String userId)
+            throws TripleException {
+        final Map<String, String> queryMap = new HashMap<String, String>();
+        // like this I indetify the type
+        queryMap.put(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS);
+        queryMap.put(OWNER, userId);
+
+        // here I search for all resources with 
+        // rdf type == vital sign 
+        // and
+        // owner == user id
+        final Iterable<String> resources =
+                triplestore.getForPredicatesAndValues(queryMap);
+
+        return resources;
+    }
+
     public void updateVitalSign(String resourceURI, String predicate, String newValue)
             throws TripleException {
+        
         final boolean resourceExists = triplestore.exists(resourceURI);
         if (!resourceExists) {
             final String msg =
@@ -295,7 +312,7 @@ public final class VitalSignClient {
     }
 
     public void deleteVitalSign(String resourceURI) throws TripleException {
-        
+
         if (resourceURI == null) {
             throw new NullPointerException("The resourceURI argument can not be null.");
         }
@@ -305,7 +322,7 @@ public final class VitalSignClient {
             LOGGER.warn("No resource for this {} URI, remove has no effect.", resourceURI);
             return;
         }
-        
+
         triplestore.deleteForSubject(resourceURI);
     }
 }
