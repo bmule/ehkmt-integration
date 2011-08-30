@@ -34,6 +34,7 @@ public class VitalSignClientExample {
                 Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "100",
                 Constants.MM_HG);
 
@@ -41,6 +42,7 @@ public class VitalSignClientExample {
                 Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE,
                 "Free text note for diasystolic.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "80",
                 Constants.MM_HG);
 
@@ -48,6 +50,7 @@ public class VitalSignClientExample {
                 Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
                 "Free text note for body height.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "180",
                 Constants.CENTIMETER);
 
@@ -55,6 +58,7 @@ public class VitalSignClientExample {
                 Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
                 "Free text note for body weight.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "80",
                 Constants.KILOGRAM);
 

@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
+import at.srfg.kmt.ehealth.phrs.Constants;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -87,6 +88,7 @@ public class VitalSignClientUnitTest {
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "100", MM_HG);
         assertNotNull(resourceURI);
 
@@ -174,6 +176,7 @@ public class VitalSignClientUnitTest {
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "100", MM_HG);
         assertNotNull(resourceURI);
         final String newValue = "200";
@@ -245,6 +248,7 @@ public class VitalSignClientUnitTest {
                 ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
                 "201006010000",
+                Constants.STATUS_COMPELETE,
                 "100", MM_HG);
         assertNotNull(resourceURI);
         

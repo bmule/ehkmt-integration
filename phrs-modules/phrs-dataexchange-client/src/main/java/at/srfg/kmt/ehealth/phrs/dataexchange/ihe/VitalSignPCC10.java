@@ -46,25 +46,38 @@ public class VitalSignPCC10 {
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
     public static String getPCC10Message(Set<DynaBean> beans) throws TripleException {
-        
+
 
         return null;
     }
 
     private REPCMT004000UV01PertinentInformation5 getPertinentInformation(Set<String> rootIds,
             DynaBean code, String note, DynaBean status, String effectiveTimeStr,
-            DynaBean value) {
+            String value, DynaBean valueUnitBean) {
         final POCDMT000040Observation observation =
                 OBJECT_FACTORY.createPOCDMT000040Observation();
-        
+
         // template ids
         final List<II> templateIds = buildTemplateIds(null);
         observation.getTemplateId().addAll(templateIds);
-        
+
+        final CD cd = buildCode(code);
+        observation.setCode(cd);
+
         // effective time
         final IVLTS effectiveTime = new IVLTS();
         effectiveTime.setValue(effectiveTimeStr);
         observation.setEffectiveTime(effectiveTime);
+
+//        final CS statusCode = buildStatus(status);
+//        observation.setStatusCode(statusCode);
+
+
+        final PQ qunatity = new PQ();
+        qunatity.setValue(value);
+        final String valueUnit = (String) valueUnitBean.get(Constants.SKOS_NOTATION);
+        qunatity.setUnit(valueUnit);
+        observation.getValue().add(qunatity);
 
 
         final REPCMT004000UV01PertinentInformation5 pertinentInformation =
@@ -87,4 +100,34 @@ public class VitalSignPCC10 {
 
         return iis;
     }
+
+    private CD buildCode(DynaBean dynaBean) {
+        final String codePrefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
+
+        final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
+        final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
+
+        final CD code = new CD();
+        code.setCode(codeValue);
+        code.setDisplayName(codePrefLabel);
+
+        final DynaBean codeSystemBean =
+                (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+
+        final String codeSystemCode =
+                (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
+        code.setCodeSystem(codeSystemCode);
+        final String codeSystemName = (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
+        code.setCodeSystemName(codeSystemName);
+
+        return code;
+    }
+
+//    private CS buildStatus(DynaBean statusBean) {
+//        final String[] statusCodes = codeSystemAndCode(status);
+//        final CS statusCode = new CS();
+//        statusCode.setCode(statusCodes[1]);
+//        statusCode.setCodeSystem(statusCodes[0]);
+//        return statusCode;
+//    }
 }

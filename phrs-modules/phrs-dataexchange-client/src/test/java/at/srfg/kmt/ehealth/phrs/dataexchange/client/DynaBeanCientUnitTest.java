@@ -23,15 +23,32 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
+ * This test it access the vial sign information stored in the underlying 
+ * triplestore (as triples) and manipulate like DynaBean instance. <br/>
+ * More precisely this test unit   
  *
- * @author mradules
+ * 
+ * @author Mihai
  */
 public class DynaBeanCientUnitTest {
 
+    /**
+     * The time for the registered vital sign.
+     */
     public static final String TIME = "201006010000";
+    
+    /**
+     * The note for the vial sign.
+     */
     public static final String NOTE = "Free text note for systolic.";
+    
+    /**
+     * 
+     */
     public static final String VALUE = "100";
+    
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -83,6 +100,7 @@ public class DynaBeanCientUnitTest {
                 Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 NOTE,
                 TIME,
+                Constants.STATUS_COMPELETE,
                 VALUE,
                 Constants.MM_HG);
 
@@ -144,6 +162,7 @@ public class DynaBeanCientUnitTest {
         
         final DynaBean codeSystemBean = 
                 (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+        proveCodeSystem(codeSystemBean);
     }
     
     private void proveCodeSystem(DynaBean bean) {
