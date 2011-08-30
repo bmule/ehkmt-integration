@@ -69,9 +69,8 @@ public class VitalSignPCC10 {
         effectiveTime.setValue(effectiveTimeStr);
         observation.setEffectiveTime(effectiveTime);
 
-//        final CS statusCode = buildStatus(status);
-//        observation.setStatusCode(statusCode);
-
+        final CS statusCode = buildStatus(status);
+        observation.setStatusCode(statusCode);
 
         final PQ qunatity = new PQ();
         qunatity.setValue(value);
@@ -123,11 +122,22 @@ public class VitalSignPCC10 {
         return code;
     }
 
-//    private CS buildStatus(DynaBean statusBean) {
-//        final String[] statusCodes = codeSystemAndCode(status);
-//        final CS statusCode = new CS();
-//        statusCode.setCode(statusCodes[1]);
-//        statusCode.setCodeSystem(statusCodes[0]);
-//        return statusCode;
-//    }
+    private CS buildStatus(DynaBean bean) {
+        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+        final CS statusCode = new CS();
+        statusCode.setDisplayName(prefLabel);
+
+        final DynaBean codeSystemBean = (DynaBean) bean.get(Constants.CODE_SYSTEM);
+
+        final String codeSystemCode =
+                (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
+        statusCode.setCode(codeSystemCode);
+
+        final String codeSystemName =
+                (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
+
+        statusCode.setCodeSystem(codeSystemName);
+
+        return statusCode;
+    }
 }
