@@ -96,6 +96,7 @@ public class VitalSignClientUnitTest {
         int count = 0;
         Set<String> rootIds = new HashSet<String>();
         for (Triple vitalSign : vitalSigns) {
+            
             final String predicate = vitalSign.getPredicate();
             final String value = vitalSign.getValue();
             if (predicate.equals(OWNER)) {
@@ -144,8 +145,8 @@ public class VitalSignClientUnitTest {
         expectedRootId.add(ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
         assertEquals(expectedRootId, rootIds);
 
-        // the vial sign has 12 tripels, see the documentaion for VitalSignClient
-        assertEquals(12, count);
+        // the vial sign has 13 tripels, see the documentaion for VitalSignClient
+        assertEquals(13, count);
 
         final boolean exists = triplestore.exists(resourceURI);
         assertTrue(exists);
