@@ -123,7 +123,8 @@ public final class VitalSignClient {
      * @return the URI for the new added vital sign (resource).
      * @throws TripleException 
      */
-    public String addVitalSign(String user, String codeURI, String note, String date,
+    public String addVitalSign(String user, String codeURI, String note, 
+            String date, String statusURI, 
             String value, String unitURI) throws TripleException {
 
         final String subject =
@@ -173,6 +174,12 @@ public final class VitalSignClient {
                 Constants.HL7V3_CODE,
                 codeURI,
                 RESOURCE);
+
+        triplestore.persist(subject,
+                HL7V3_STATUS,
+                statusURI,
+                RESOURCE);
+
 
         triplestore.persist(subject,
                 Constants.SKOS_NOTE,
@@ -267,7 +274,7 @@ public final class VitalSignClient {
 
     public void updateVitalSign(String resourceURI, String predicate, String newValue)
             throws TripleException {
-        
+
         final boolean resourceExists = triplestore.exists(resourceURI);
         if (!resourceExists) {
             final String msg =
