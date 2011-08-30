@@ -7,17 +7,12 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
 
+import static at.srfg.kmt.ehealth.phrs.dataexchange.util.QUPCAR004030UVUtil.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
-import org.hl7.v3.IVLTS;
-import static at.srfg.kmt.ehealth.phrs.dataexchange.util.QUPCAR004030UVUtil.*;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import java.util.List;
 import javax.xml.bind.JAXBException;
@@ -28,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author mradules
+ * @author Mihai
  */
 public class VitalSignPCC10 {
 
@@ -45,20 +40,58 @@ public class VitalSignPCC10 {
      */
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
-    public static String getPCC10Message(Set<DynaBean> beans) throws TripleException {
+    public static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
 
 
-        return null;
+        final QUPCIN043200UV01 query;
+        try {
+            query = buildQUPCIN043200UV01("PCC-10-Empty-Input.xml");
+        } catch (JAXBException exception) {
+            throw new RuntimeException(exception);
+        }
+
+        if (beans == null || beans.isEmpty()) {
+            return query;
+        }
+
+        final QUPCIN043200UV01MFMIMT700712UV01ControlActProcess controlActProcess =
+                query.getControlActProcess();
+
+        final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
+                controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
+        final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
+                subject2.getCareProvisionEvent();
+
+        final List<REPCMT004000UV01PertinentInformation5> informations =
+                new ArrayList<REPCMT004000UV01PertinentInformation5>();
+        for (DynaBean vitalBean : beans) {
+            final List<String> rootIds = 
+                    (List<String>)  vitalBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+            final DynaBean code = (DynaBean) vitalBean.get(Constants.HL7V3_CODE);
+            final String note = (String) vitalBean.get(Constants.SKOS_NOTE);
+            final DynaBean status = (DynaBean) vitalBean.get(Constants.HL7V3_STATUS);
+            final String effectiveTime = (String) vitalBean.get(Constants.EFFECTIVE_TIME);
+            final String value = (String) vitalBean.get(Constants.HL7V3_VALUE);
+            final DynaBean unit = (DynaBean) vitalBean.get(Constants.HL7V3_UNIT);
+
+            final REPCMT004000UV01PertinentInformation5 pertinentInformation = 
+                    getPertinentInformation(rootIds, code, note, status, 
+                    effectiveTime, value, vitalBean);
+            informations.add(pertinentInformation);
+        }
+        careProvisionEvent.getPertinentInformation3().addAll(informations);
+
+        return query;
     }
 
-    private REPCMT004000UV01PertinentInformation5 getPertinentInformation(Set<String> rootIds,
+    private static REPCMT004000UV01PertinentInformation5 getPertinentInformation(List<String> rootIds,
             DynaBean code, String note, DynaBean status, String effectiveTimeStr,
             String value, DynaBean valueUnitBean) {
         final POCDMT000040Observation observation =
                 OBJECT_FACTORY.createPOCDMT000040Observation();
 
         // template ids
-        final List<II> templateIds = buildTemplateIds(null);
+        final List<II> templateIds = buildTemplateIds(rootIds);
         observation.getTemplateId().addAll(templateIds);
 
         final CD cd = buildCode(code);
@@ -74,8 +107,10 @@ public class VitalSignPCC10 {
 
         final PQ qunatity = new PQ();
         qunatity.setValue(value);
-        final String valueUnit = (String) valueUnitBean.get(Constants.SKOS_NOTATION);
-        qunatity.setUnit(valueUnit);
+        
+        final DynaBean valueUnit = (DynaBean) valueUnitBean.get(Constants.HL7V3_UNIT);
+        final String notation = (String) valueUnit.get(Constants.SKOS_NOTATION);
+        qunatity.setUnit(notation);
         observation.getValue().add(qunatity);
 
 
@@ -88,7 +123,7 @@ public class VitalSignPCC10 {
 
     }
 
-    private List<II> buildTemplateIds(Collection<String> rootIds) {
+    private static List<II> buildTemplateIds(Collection<String> rootIds) {
 
         final List<II> iis = new ArrayList<II>(rootIds.size());
         for (String rootId : rootIds) {
@@ -100,7 +135,7 @@ public class VitalSignPCC10 {
         return iis;
     }
 
-    private CD buildCode(DynaBean dynaBean) {
+    private static CD buildCode(DynaBean dynaBean) {
         final String codePrefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
 
         final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
@@ -122,20 +157,24 @@ public class VitalSignPCC10 {
         return code;
     }
 
-    private CS buildStatus(DynaBean bean) {
+    private static CS buildStatus(DynaBean bean) {
         final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+        
         final CS statusCode = new CS();
         statusCode.setDisplayName(prefLabel);
 
-        final DynaBean codeSystemBean = (DynaBean) bean.get(Constants.CODE_SYSTEM);
-
+        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
+        final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
+        statusCode.setCode(codeValue);
+        
+        final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+        
         final String codeSystemCode =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         statusCode.setCode(codeSystemCode);
 
         final String codeSystemName =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
-
         statusCode.setCodeSystem(codeSystemName);
 
         return statusCode;
