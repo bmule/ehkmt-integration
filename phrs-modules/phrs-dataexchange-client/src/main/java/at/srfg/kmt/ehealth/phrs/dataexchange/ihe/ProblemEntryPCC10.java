@@ -64,19 +64,22 @@ public class ProblemEntryPCC10 {
 
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
-        for (DynaBean vitalBean : beans) {
+        for (DynaBean bean : beans) {
+            
+            
             final List<String> rootIds = 
-                    (List<String>)  vitalBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
-            final DynaBean code = (DynaBean) vitalBean.get(Constants.HL7V3_CODE);
-            final String note = (String) vitalBean.get(Constants.SKOS_NOTE);
-            final DynaBean status = (DynaBean) vitalBean.get(Constants.HL7V3_STATUS);
-            final String startDate = (String) vitalBean.get(Constants.HL7V3_DATE_START);
-            final String endDate = (String) vitalBean.get(Constants.HL7V3_DATE_END);
-            final DynaBean value = (DynaBean) vitalBean.get(Constants.HL7V3_VALUE_CODE);
+                    (List<String>)  bean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+            final DynaBean code = (DynaBean) bean.get(Constants.HL7V3_CODE);
+            final String note = (String) bean.get(Constants.SKOS_NOTE);
+            final DynaBean status = (DynaBean) bean.get(Constants.HL7V3_STATUS);
+            final String startDate = (String) bean.get(Constants.HL7V3_START_DATE);
+            //final String endDate = (String) bean.get(Constants.HL7V3_DATE_END);
+            final DynaBean value = (DynaBean) bean.get(Constants.HL7V3_VALUE_CODE);
+            
 
             final REPCMT004000UV01PertinentInformation5 pertinentInformation = 
                     getPertinentInformation(rootIds, code, note, status, 
-                    startDate, endDate, value, vitalBean);
+                    startDate, startDate, value, bean);
             informations.add(pertinentInformation);
         }
         careProvisionEvent.getPertinentInformation3().addAll(informations);
@@ -183,7 +186,7 @@ public class ProblemEntryPCC10 {
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         cd.setCode(codeValue);
         
-        final DynaBean codeSystemBean = (DynaBean) bean.get(Constants.CODE_SYSTEM);
+        final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
         final String codeSystemCode = 
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         cd.setCodeSystem(codeSystemCode);
