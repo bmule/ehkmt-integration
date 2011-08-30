@@ -76,7 +76,7 @@ public class VitalSignPCC10 {
 
             final REPCMT004000UV01PertinentInformation5 pertinentInformation = 
                     getPertinentInformation(rootIds, code, note, status, 
-                    effectiveTime, value, vitalBean);
+                    effectiveTime, value, unit);
             informations.add(pertinentInformation);
         }
         careProvisionEvent.getPertinentInformation3().addAll(informations);
@@ -107,9 +107,8 @@ public class VitalSignPCC10 {
 
         final PQ qunatity = new PQ();
         qunatity.setValue(value);
-        
-        final DynaBean valueUnit = (DynaBean) valueUnitBean.get(Constants.HL7V3_UNIT);
-        final String notation = (String) valueUnit.get(Constants.SKOS_NOTATION);
+
+        final String notation = (String) valueUnitBean.get(Constants.SKOS_NOTATION);
         qunatity.setUnit(notation);
         observation.getValue().add(qunatity);
 
