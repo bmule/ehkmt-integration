@@ -58,7 +58,7 @@ public class VitalSignClientExample {
                 "80",
                 Constants.KILOGRAM);
 
-        final Iterable<Triple> vitalSigns = client.getVitalSignsForUser(owner);
+        final Iterable<Triple> vitalSigns = client.getVitalSignsTriplesForUser(owner);
         for (Triple vitalSign : vitalSigns) {
             System.out.println(vitalSign);
         }

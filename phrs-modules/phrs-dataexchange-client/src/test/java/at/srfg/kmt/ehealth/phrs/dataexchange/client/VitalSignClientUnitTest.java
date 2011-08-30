@@ -90,7 +90,7 @@ public class VitalSignClientUnitTest {
                 "100", MM_HG);
         assertNotNull(resourceURI);
 
-        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsForUser(USER);
+        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsTriplesForUser(USER);
         int count = 0;
         Set<String> rootIds = new HashSet<String>();
         for (Triple vitalSign : vitalSigns) {
@@ -182,7 +182,7 @@ public class VitalSignClientUnitTest {
         // time when a resource get updated.
         vitalSignClient.updateVitalSign(resourceURI, HL7V3_VALUE, newValue);
 
-        final Iterable<Triple> properties = vitalSignClient.getVitalSignsForUser(USER);
+        final Iterable<Triple> properties = vitalSignClient.getVitalSignsTriplesForUser(USER);
         Set<String> rootIds = new HashSet<String>();
         for (Triple triple : properties) {
             final String predicate = triple.getPredicate();
@@ -250,7 +250,7 @@ public class VitalSignClientUnitTest {
         
         vitalSignClient.deleteVitalSign(resourceURI);
          int counter = 0;
-        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSigns();
+        final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsTriples();
         for (Triple vitalSign : vitalSigns) {
             counter++;
         }
