@@ -88,6 +88,10 @@ public final class SchemeClient {
     }
 
     public boolean isPropertyResource(Set<String> propertyTypes) {
+        if (propertyTypes == null) {
+            return false;
+        }
+        
         final boolean result = !propertyTypes.contains(RDF_LITERAL);
         return result;
     }
