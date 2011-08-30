@@ -245,6 +245,31 @@ public final class ProblemEntryClient {
         return result;
     }
 
+    /**
+     * Returns all the Problem Entries for a given user.
+     * 
+     * @param userId
+     * @return
+     * @throws TripleException 
+     */
+    public Iterable<String> getProblemEntriesURIForUser(String userId) throws TripleException {
+
+        final Map<String, String> queryMap = new HashMap<String, String>();
+        // like this I indetify the type
+        queryMap.put(RDFS_TYPE, PHRS_OBSERVATION_ENTRY_CLASS);
+        queryMap.put(OWNER, userId);
+
+        // here I search for all resources with 
+        // rdf type == prblem entry (observation entry) 
+        // and
+        // owner == user id
+        final Iterable<String> resources =
+                triplestore.getForPredicatesAndValues(queryMap);
+
+
+        return resources;
+    }
+
     public void updateProblemEntry(String resourceURI, String predicate, String newValue)
             throws TripleException {
         final boolean resourceExists = triplestore.exists(resourceURI);
