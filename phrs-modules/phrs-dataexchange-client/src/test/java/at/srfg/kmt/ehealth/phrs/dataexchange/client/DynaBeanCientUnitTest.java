@@ -23,7 +23,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * This test it access the vial sign information stored in the underlying 
  * triplestore (as triples) and manipulate like DynaBean instance. <br/>
@@ -38,17 +37,14 @@ public class DynaBeanCientUnitTest {
      * The time for the registered vital sign.
      */
     public static final String TIME = "201006010000";
-    
     /**
      * The note for the vial sign.
      */
     public static final String NOTE = "Free text note for systolic.";
-    
     /**
      * 
      */
     public static final String VALUE = "100";
-    
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -106,8 +102,8 @@ public class DynaBeanCientUnitTest {
 
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
-        queryMap.put(Constants.RDFS_TYPE, 
-                     Constants.PHRS_VITAL_SIGN_CLASS);
+        queryMap.put(Constants.RDFS_TYPE,
+                Constants.PHRS_VITAL_SIGN_CLASS);
         queryMap.put(Constants.OWNER, USER);
 
         // here I search for all resources with 
@@ -141,6 +137,10 @@ public class DynaBeanCientUnitTest {
             final Object effectiveTime = dynaBean.get(Constants.EFFECTIVE_TIME);
             assertEquals(TIME, effectiveTime);
 
+            final DynaBean statusBean =
+                    (DynaBean) dynaBean.get(Constants.HL7V3_STATUS);
+            proveStatusBean(statusBean);
+
             final Object value = dynaBean.get(Constants.HL7V3_VALUE);
             assertEquals(VALUE, value);
 
@@ -149,27 +149,42 @@ public class DynaBeanCientUnitTest {
         }
     }
 
-    
     private void proveCode(DynaBean bean) {
         final Object codePrefLabel = bean.get(Constants.SKOS_PREFLABEL);
         // this value is according with the loaded rdf file
         assertEquals("Systolic blood pressure", codePrefLabel);
         final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
-        
+
         final Object codeValue = codeBean.get(Constants.CODE_VALUE);
         // this is according with the loaded rdf file
         assertEquals("C0871470", codeValue);
-        
-        final DynaBean codeSystemBean = 
+
+        final DynaBean codeSystemBean =
                 (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
         proveCodeSystem(codeSystemBean);
     }
-    
+
     private void proveCodeSystem(DynaBean bean) {
         final Object codeSystemCode = bean.get(Constants.CODE_SYSTEM_CODE);
         assertEquals("2.16.840.1.113883.6.86", codeSystemCode);
         final Object codeSystemName = bean.get(Constants.CODE_SYSTEM_NAME);
         assertEquals("UMLS", codeSystemName);
+    }
+
+    private void proveStatusBean(DynaBean bean) {
+        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+        assertEquals("Complete", prefLabel);
+        
+        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
+        final Object codeValue = codeBean.get(Constants.CODE_VALUE);
+        assertEquals("C0205197", codeValue);
+        
+        final DynaBean codeSystemBean =  (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+        final Object codeSystemName = codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
+        assertEquals("UMLS", codeSystemName);
+        
+        final Object codeSystemCode = codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
+        assertEquals("2.16.840.1.113883.6.86", codeSystemCode);
     }
 
     private void proveUnit(DynaBean bean) {
