@@ -30,25 +30,25 @@ public class Constants {
      * This is an instance URI.
      */
     public static final String STATUS_COMPELETE =
-            getICardeaResource("/instance/Complete");
+            ICARDEA_NS + "/instances/Complete";
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_INCOMPELETE =
-            getICardeaResource("/instance/Incomplete");
+            ICARDEA_NS +  "/instances/Incomplete";
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_RUNNING =
-            getICardeaResource("/instance/Runnig");
+            ICARDEA_NS + "/instances/Runnig";
 
     /**
      * This is an instance URI.
      */
     public static final String STATUS_INTERRUPTED =
-            getICardeaResource("status/instance/Interrupted");
+            ICARDEA_NS +  "/instances/Interrupted";
     
    public static final String STATUS_ABORTED = 
             ICARDEA_NS + "/instances/Aborted";
