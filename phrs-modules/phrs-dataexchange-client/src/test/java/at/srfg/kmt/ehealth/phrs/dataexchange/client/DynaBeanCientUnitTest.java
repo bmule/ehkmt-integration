@@ -4,13 +4,13 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
+import at.srfg.kmt.ehealth.phrs.Constants;
+import java.util.List;
+import static org.junit.Assert.*;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.beanutils.DynaClass;
 import org.apache.commons.beanutils.DynaProperty;
-import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
-import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -18,11 +18,8 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import org.apache.commons.beanutils.DynaBean;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +29,9 @@ import org.slf4j.LoggerFactory;
  */
 public class DynaBeanCientUnitTest {
 
+    public static final String TIME = "201006010000";
+    public static final String NOTE = "Free text note for systolic.";
+    public static final String VALUE = "100";
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
@@ -78,18 +78,19 @@ public class DynaBeanCientUnitTest {
 
     @Test
     public void testAddVitalSignForOwner() throws TripleException, IllegalAccessException, InstantiationException {
-        
+
         vitalSignClient.addVitalSign(USER,
-                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
-                "Free text note for systolic.",
-                "201006010000",
-                "100",
-                MM_HG);
+                Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                NOTE,
+                TIME,
+                VALUE,
+                Constants.MM_HG);
 
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
-        queryMap.put(RDFS_TYPE, PHRS_VITAL_SIGN_CLASS);
-        queryMap.put(OWNER, USER);
+        queryMap.put(Constants.RDFS_TYPE, 
+                     Constants.PHRS_VITAL_SIGN_CLASS);
+        queryMap.put(Constants.OWNER, USER);
 
         // here I search for all resources with 
         // rdf type == vital sign 
@@ -100,25 +101,63 @@ public class DynaBeanCientUnitTest {
 
         for (String resoure : resources) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
-            final Object rdfType = dynaBean.get(RDFS_TYPE);
-            System.out.println("->" + rdfType);
-            final Object createDate = dynaBean.get(CREATE_DATE);
-            System.out.println("->" + createDate);
-            final Object creator = dynaBean.get(CREATOR);
-            System.out.println("->" + creator);
-            final Object rootTemplates = dynaBean.get(HL7V3_TEMPLATE_ID_ROOT);
-            System.out.println("->" + rootTemplates);
-            final Object code = dynaBean.get(HL7V3_CODE);
-            System.out.println("->" + toString((DynaBean) code));
-            final Object note = dynaBean.get(SKOS_NOTE);
-            System.out.println("->" + note);
-            final Object effectiveTime = dynaBean.get(EFFECTIVE_TIME);
-            System.out.println("->" + effectiveTime);
-            final Object value = dynaBean.get(HL7V3_VALUE);
-            System.out.println("->" + value);
-            final Object unit = dynaBean.get(HL7V3_UNIT);
-            System.out.println("->" + unit);
+            final Object rdfType = dynaBean.get(Constants.RDFS_TYPE);
+            assertEquals(Constants.PHRS_VITAL_SIGN_CLASS, rdfType);
+
+            final Object createDate = dynaBean.get(Constants.CREATE_DATE);
+            assertNotNull(createDate);
+
+            final Object creator = dynaBean.get(Constants.CREATOR);
+            assertEquals(VitalSignClient.class.getName(), creator);
+
+            final List rootTemplates =
+                    (List) dynaBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+            assertTrue(rootTemplates.size() == 3);
+
+            final DynaBean code = (DynaBean) dynaBean.get(Constants.HL7V3_CODE);
+            proveCode(code);
+
+            final Object note = dynaBean.get(Constants.SKOS_NOTE);
+            assertEquals(NOTE, note);
+
+            final Object effectiveTime = dynaBean.get(Constants.EFFECTIVE_TIME);
+            assertEquals(TIME, effectiveTime);
+
+            final Object value = dynaBean.get(Constants.HL7V3_VALUE);
+            assertEquals(VALUE, value);
+
+            final DynaBean unit = (DynaBean) dynaBean.get(Constants.HL7V3_UNIT);
+            proveUnit(unit);
         }
+    }
+
+    
+    private void proveCode(DynaBean bean) {
+        final Object codePrefLabel = bean.get(Constants.SKOS_PREFLABEL);
+        // this value is according with the loaded rdf file
+        assertEquals("Systolic blood pressure", codePrefLabel);
+        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
+        
+        final Object codeValue = codeBean.get(Constants.CODE_VALUE);
+        // this is according with the loaded rdf file
+        assertEquals("C0871470", codeValue);
+        
+        final DynaBean codeSystemBean = 
+                (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+    }
+    
+    private void proveCodeSystem(DynaBean bean) {
+        final Object codeSystemCode = bean.get(Constants.CODE_SYSTEM_CODE);
+        assertEquals("2.16.840.1.113883.6.86", codeSystemCode);
+        final Object codeSystemName = bean.get(Constants.CODE_SYSTEM_NAME);
+        assertEquals("UMLS", codeSystemName);
+    }
+
+    private void proveUnit(DynaBean bean) {
+        final Object preflabel = bean.get(Constants.SKOS_PREFLABEL);
+        assertEquals("Milimeter Hg", preflabel);
+        final Object notation = bean.get(Constants.SKOS_NOTATION);
+        assertEquals("mm[Hg]", notation);
     }
 
     /**                                                                                                                                                                         
