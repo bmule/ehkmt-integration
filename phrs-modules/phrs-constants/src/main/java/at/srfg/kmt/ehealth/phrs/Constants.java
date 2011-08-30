@@ -64,6 +64,8 @@ public class Constants {
     public static final String CODE_NAME = CODE_NS + "#codeName";
 
     public static final String CODE_SYSTEM = CODE_NS + "#codeSystem";
+    
+    public static final String CODE_VALUE = CODE_NS + "#codeValue";
 
     public static final String CODE_SYSTEM_NS = getICardeaResource("codeSystem");
 
@@ -216,6 +218,8 @@ public class Constants {
     public static final String SKOS_NS = "http://www.w3.org/2004/02/skos/core";
     public static final String SKOS_NOTE = SKOS_NS + "#note";
     public static final String SKOS_RELATED = SKOS_NS + "#related";
+    public static final String SKOS_PREFLABEL = SKOS_NS + "#prefLabel";
+    public static final String SKOS_NOTATION = SKOS_NS + "#notation";
 
     
     /**
