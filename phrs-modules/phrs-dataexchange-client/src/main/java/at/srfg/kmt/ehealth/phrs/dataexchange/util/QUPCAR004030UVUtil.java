@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.util;
 
-
 import java.io.File;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -26,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.xml.namespace.QName;
 
-
-
 /**
  * Contains a set of common used methods all related with the PCC10 
  * (<code>QUPCIN043200UV01</code>) transactions. <br>
@@ -45,10 +42,9 @@ public class QUPCAR004030UVUtil {
      * are routed through this member. The Logger name space
      * is <code>at.srfg.kmt.ehealth.phrs.security.impl.QUPCAR004030UVServiceUtil</code>.
      */
-    private static final Logger LOGGER = 
+    private static final Logger LOGGER =
             LoggerFactory.getLogger(QUPCAR004030UVUtil.class);
-    
-    
+
     /**
      * Don't let anybody to instantiate this class.
      */
@@ -67,7 +63,7 @@ public class QUPCAR004030UVUtil {
      */
     public static QUPCAR004030UVService getQUPCAR004040UVService() throws MalformedURLException {
         final QName qName = new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
-        final URL url = 
+        final URL url =
                 QUPCAR004030UVUtil.class.getClassLoader().getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
         final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
         return result;
@@ -84,15 +80,15 @@ public class QUPCAR004030UVUtil {
      * null or empty strings.
      */
     public static void sendPCC10(QUPCIN043200UV01 request, String endpoint) {
-        
+
         if (request == null || endpoint == null) {
-            final NullPointerException nullException = 
+            final NullPointerException nullException =
                     new NullPointerException("The request and/or the endpoitn argument can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
         }
 
-        LOGGER.debug("Tries to send the request {} on the end point {}",request, endpoint);
+        LOGGER.debug("Tries to send the request {} on the end point {}", request, endpoint);
 
         final QUPCAR004030UVService service;
         try {
@@ -124,23 +120,6 @@ public class QUPCAR004030UVUtil {
         final BindingProvider bp = (BindingProvider) portType;
         final Map<String, Object> reqContext = bp.getRequestContext();
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpoint);
-    }
-
-    public static void toWriteInTemp(Object toMarshal, String name) throws JAXBException {
-        
-        // FIXME : this action can be restricted by a JAAS securicy policy,
-        // please consider this in the future, Padawn, the way to the dark
-        // side is always the ealy one.
-        final String tempDir = System.getProperty("java.io.tmpdir");
-        final JAXBContext context =
-                JAXBContext.newInstance(org.hl7.v3.MCCIIN000002UV01.class);
-
-        final Marshaller marshaller = context.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        final File destiantion =
-                new File(tempDir + File.separatorChar + name + ".xml");
-        marshaller.marshal(toMarshal, destiantion);
-        LOGGER.debug("The {} was persisted on : {} ",  name, destiantion.getAbsolutePath());
     }
 
     /**
@@ -191,4 +170,20 @@ public class QUPCAR004030UVUtil {
         return inputStream;
     }
 
+    public static void toWriteInTemp(Object toMarshal, String name) throws JAXBException {
+
+        // FIXME : this action can be restricted by a JAAS securicy policy,
+        // please consider this in the future, Padawn, the way to the dark
+        // side is always the ealy one.
+        final String tempDir = System.getProperty("java.io.tmpdir");
+        final JAXBContext context =
+                JAXBContext.newInstance(org.hl7.v3.QUPCIN043200UV01.class);
+
+        final Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        final File destiantion =
+                new File(tempDir + File.separatorChar + name + ".xml");
+        marshaller.marshal(toMarshal, destiantion);
+        LOGGER.debug("The {} was persisted on : {} ", name, destiantion.getAbsolutePath());
+    }
 }
