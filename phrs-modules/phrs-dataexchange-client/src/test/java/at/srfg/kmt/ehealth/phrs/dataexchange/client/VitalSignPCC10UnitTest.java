@@ -40,4 +40,9 @@ public class VitalSignPCC10UnitTest {
     //
     // @Test
     // public void hello() {}
+    
+    @Test
+    public void test() {
+        //
+    }
 }
