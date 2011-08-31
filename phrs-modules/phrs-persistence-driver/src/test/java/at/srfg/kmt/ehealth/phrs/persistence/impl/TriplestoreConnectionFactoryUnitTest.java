@@ -36,8 +36,7 @@ public class TriplestoreConnectionFactoryUnitTest {
     
     
     public static final String INVALID_SUBJECT =
-            "http://www.icardea.at/phrs/instances/codeSystem/other_snomed"
-            + "";
+            "http://www.icardea.at/phrs/instances/codeSystem/other_snomed";
     /**
      * The Logger instance. All log messages from this class
      * are routed through this member. The Logger name space
