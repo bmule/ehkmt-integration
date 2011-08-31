@@ -122,7 +122,7 @@
 
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Finding">
-        <skos:prefLabel>Functional limitation</skos:prefLabel>
+        <skos:prefLabel>Finding</skos:prefLabel>
         <skos:note>The result of an examination or inquiry.</skos:note>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FindingULMSCode">
