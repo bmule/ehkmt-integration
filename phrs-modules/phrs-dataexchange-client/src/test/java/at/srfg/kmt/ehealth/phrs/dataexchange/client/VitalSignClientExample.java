@@ -17,13 +17,25 @@ import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.QUPCIN043200UV01;
 
 /**
- * Runnable class able to add and list on the standard output vital signs.
- * To use this class from maven environment use :
+ * Runnable class able to add  one (or more) problem entry.<br/>
+ * More precisely this class adds four <i>Vital Sign</i> to the underlying 
+ * persistence layer; after this it generates PCC10 conform message and 
+ * serialize it in to a file named 
+ * <i>vital-sign.xml</i> stored in to the temporary directory. 
+ * The exact location for this file is listed in the log file (located in 
+ * target/log.out)<br/> 
+ * To run this class from maven environment use :
+ * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test<br/>
- * <b>Nota Benne</b> This example also clean the environment.
+ * </pre>
+ * Take care this command does not compile the classes. <br/>
+ * <b>Nota Bene : </b> this class will remove/clean the triplestore related 
+ * files. The location for this files is configurated via the configuration 
+ * file named generic_triplestore.xml. <br/>
  * 
- * Take care the does not compile the classes.
- * @author mradules
+ * @author Mihai
+ * @version 0.1
+ * @since 0.1
  */
 public class VitalSignClientExample {
     
