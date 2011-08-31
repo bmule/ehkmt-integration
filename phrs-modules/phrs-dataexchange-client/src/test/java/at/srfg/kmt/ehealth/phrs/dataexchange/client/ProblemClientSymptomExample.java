@@ -21,7 +21,10 @@ import org.hl7.v3.QUPCIN043200UV01;
  * PCC10 conform message and serialize it in to a file named 
  * <i>fever-symptopm.xml</i> stored in to the temporary directory. </br> 
  * To use this class from maven environment use :
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemClientSymptomExample -Dexec.classpathScope=test</br>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemClientSymptomExample -Dexec.classpathScope=test<br/>
+ * <b>Nota Bene : </b> this class will remove/clean the triplestore related 
+ * files. The location for this files is configurated via the configuration 
+ * file named generic_triplestore.xml.
  * 
  * Take care the does not compile the classes.
  * @author mradules
