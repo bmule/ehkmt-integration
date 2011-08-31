@@ -19,7 +19,7 @@ import org.hl7.v3.QUPCIN043200UV01;
  * More precisely this class adds a <i>Symptom</i> with the estabilish code
  * <i>Fever</i> to the underlying persistence layer; after this it generates 
  * PCC10 conform message and serialize it in to a file named 
- * <i>problem-enrty.xml</i> stored in to the temporary directory. </br> 
+ * <i>fever-symptopm.xml</i> stored in to the temporary directory. </br> 
  * To use this class from maven environment use :
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemClientSymptomExample -Dexec.classpathScope=test</br>
  * 
@@ -55,7 +55,7 @@ public class ProblemClientSymptomExample {
         }
 
         final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
-        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "problem-enrty");
+        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "fever-symptopm");
 
 
 
