@@ -146,7 +146,7 @@ public final class ProblemEntryClient {
                 CREATOR_NAME,
                 LITERAL);
 
-        // this can help to find a vial sign, there are alos other way 
+        // this can help to find a problem entry, there are alos other way 
         // to do this (e.g. using the know templateRootID, for more )
         // information about this please consult the documentation)
         triplestore.persist(subject,
