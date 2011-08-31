@@ -2330,6 +2330,18 @@
         </icadyCode:code>
     </rdf:Description>
     
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
+        <skos:prefLabel>Oral administration of treatment</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministrationULMSCode">
+                <icadyCode:codeValue>C1273553</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
     
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
@@ -2500,12 +2512,13 @@
         <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#drug">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#drugName">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
+
 
 </rdf:RDF>
