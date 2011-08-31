@@ -260,6 +260,7 @@ public class Constants {
      * This is a iCarea PHRS specific property.
      */
     public static final String ORIGIN = ICARDEA_NS + "#origin";
+
     /**
      * The unique id for "Simple Observation" in the IHE acceptation.<br/>
      * In most of the cases this is used like value (of type literal) for a 
@@ -269,6 +270,26 @@ public class Constants {
      * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13</url>
      */
     public static final String SIMPLE_OBSERVATIONS = "1.3.6.1.4.1.19376.1.5.3.1.4.13";
+
+    /**
+     * The unique id for "Medication" in the IHE acceptation.<br/>
+     * In most of the cases this is used like value (of type literal) for a 
+     * property named templIdRoot.
+     * 
+     * @see #ICARDEA_HL7V3_TEMPLATE_ID_ROOT
+     * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.12</url>
+     */
+    public static final String IMUNISATION = "1.3.6.1.4.1.19376.1.5.3.1.4.12";
+    
+    /**
+     * The unique id for "Medication" in the IHE acceptation.<br/>
+     * In most of the cases this is used like value (of type literal) for a 
+     * property named templIdRoot.
+     * 
+     * @see #ICARDEA_HL7V3_TEMPLATE_ID_ROOT
+     * @see <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.7</url>
+     */
+    public static final String MEDICATION = "1.3.6.1.4.1.19376.1.5.3.1.4.7";
     
     /**
      * The unique id for "Vital Signs Observation" in the IHE acceptation.<br/>
@@ -360,6 +381,11 @@ public class Constants {
     public static final String HL7V3_DATE_START = ICARDEA_HL7V3_NS + "#dateStart";
     public static final String HL7V3_DATE_END = ICARDEA_HL7V3_NS + "#dateEnd";
     
+    public static final String HL7V3_DOSAGE = ICARDEA_HL7V3_NS + "#dosage";
+    public static final String HL7V3_FREQUENCY = ICARDEA_HL7V3_NS + "#frequency";
+    public static final String HL7V3_ADMIN_ROUTE = ICARDEA_HL7V3_NS + "#adminRoute";
+    public static final String HL7V3_DRUG = ICARDEA_HL7V3_NS + "#drug";
+    
     public static final String HL7V3_FEVER = ICARDEA_NS + "/instances/Fever";
     public static final String HL7V3_PALPITATION = ICARDEA_NS + "/instances/Palpitations";
     public static final String HL7V3_FATIQUE = ICARDEA_NS + "/instances/Fatigue-Symptom";
@@ -394,10 +420,16 @@ public class Constants {
             "http://www.icardea.at/phrs/types/1.0/VitalSign";
     
     /**
-     * The rdf class for a vital sign in the PHRS acceptation.
+     * The rdf class for a Problem Entry in the PHRS acceptation.
      */
     public static final String PHRS_OBSERVATION_ENTRY_CLASS = 
             "http://www.icardea.at/phrs/types/1.0/Observation";
+    
+    /**
+     * The rdf class for a medication in the PHRS acceptation.
+     */
+    public static final String PHRS_MEDICATION_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/Medication";
     
     /**
      * Describes an observation as risk.
