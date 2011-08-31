@@ -58,7 +58,7 @@ public class ProblemClientFatiqueFindingExample {
         }
 
         final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
-        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "fever-symptopm");
+        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "fatigue-finding");
 
 
 
