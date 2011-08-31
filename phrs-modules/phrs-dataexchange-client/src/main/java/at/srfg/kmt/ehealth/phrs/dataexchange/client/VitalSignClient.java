@@ -93,12 +93,12 @@ public final class VitalSignClient {
 
     /**
      * Adds a vital sign resource and return the URI for this resource. <br/>
-     * This method generates twelve triples, this triples are pointing for the 
-     * properties :
+     * This method generates the following triples, this triples are 
+     * pointing for the properties :
      * <ol>
      * <li> owner
      * <li> create date
-     * <li> update date 
+     * <li> update date  (this is add only if the resource is updated)
      * <li> creator
      * <li> owner
      * <li> rdf type
