@@ -2454,6 +2454,12 @@
         <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
     </rdfs:Class>
 
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/MedicationDosage">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 Medication</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
+    </rdfs:Class>
+
     <rdf:Property rdf:about="http://www.icardea.at/phrs/code#frequency">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
@@ -2475,6 +2481,22 @@
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosageValue">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationDosage"/>
+        <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosageUnit">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationDosage"/>
         <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
