@@ -26,7 +26,7 @@
             If the path starts with ${TEMP_DIR} then the location is relative to 
             the temporary direcotry.
             If the path starts with ${HOME_DIR} then the location is relative to 
-            aclual user home the temporary direcotry.
+            aclual user home direcotry.
             -->
             ${HOME_DIR}/.icardea/test/sesame
         </filedump>
