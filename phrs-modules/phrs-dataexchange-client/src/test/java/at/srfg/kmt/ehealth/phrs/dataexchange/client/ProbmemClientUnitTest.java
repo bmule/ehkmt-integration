@@ -96,7 +96,7 @@ public class ProbmemClientUnitTest {
                 HL7V3_FEVER);
         assertNotNull(resourceURI);
 
-        final Iterable<Triple> observations = problemClient.getProblemEntriesForUser(USER);
+        final Iterable<Triple> observations = problemClient.getProblemEntryTriplesForUser(USER);
         int count = 0;
         Set<String> rootIds = new HashSet<String>();
         for (Triple problemEnrty : observations) {
@@ -194,7 +194,7 @@ public class ProbmemClientUnitTest {
         // time when a resource get updated.
         problemClient.updateProblemEntry(resourceURI, HL7V3_VALUE_CODE, HL7V3_PALPITATION);
 
-        final Iterable<Triple> properties = problemClient.getProblemEntriesForUser(USER);
+        final Iterable<Triple> properties = problemClient.getProblemEntryTriplesForUser(USER);
         Set<String> rootIds = new HashSet<String>();
         for (Triple triple : properties) {
 
@@ -264,7 +264,7 @@ public class ProbmemClientUnitTest {
 
         problemClient.deleteProblemEntry(resourceURI);
         int counter = 0;
-        final Iterable<Triple> triples = problemClient.getProblemEntries();
+        final Iterable<Triple> triples = problemClient.getProblemEntryTriples();
         for (Triple triple : triples) {
             counter++;
         }
