@@ -2342,6 +2342,7 @@
         <rdfs:label xml:lang="en">HL7 V3 Root Template ID</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">The template id used to indetify the message like a certain one (e.g. IHE Survey Observation )</rdfs:comment>
     </rdf:Property>
@@ -2360,6 +2361,7 @@
         <rdfs:label xml:lang="en">Short Note</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">a short note</rdfs:comment>
     </rdf:Property>
@@ -2369,6 +2371,7 @@
         <rdfs:label xml:lang="en">HL7 V3 Status</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">Indicates the HL7 V3 status</rdfs:comment>
     </rdf:Property>
@@ -2417,6 +2420,7 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">The Start Date</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">The start date for a HL7 V3 observation</rdfs:comment>
     </rdf:Property>
@@ -2425,6 +2429,7 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">The End Date</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
     </rdf:Property>
@@ -2439,8 +2444,46 @@
     <rdf:Property rdf:about="http://www.icardea.at/phrs/code#codeSystem">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource2"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The code system</rdfs:comment>
+    </rdf:Property>
+
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/Medication">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 Medication</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
+    </rdfs:Class>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#frequency">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The frequency for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#adminRoute">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The administration route for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosage">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#drug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
 
 </rdf:RDF>
