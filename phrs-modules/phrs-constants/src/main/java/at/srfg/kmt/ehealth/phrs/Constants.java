@@ -400,7 +400,7 @@ public class Constants {
 
     public static final String HL7V3_FREQUENCY = ICARDEA_HL7V3_NS + "#frequency";
     public static final String HL7V3_ADMIN_ROUTE = ICARDEA_HL7V3_NS + "#adminRoute";
-    public static final String HL7V3_DRUG = ICARDEA_HL7V3_NS + "#drug";
+    public static final String HL7V3_DRUG_NAME = ICARDEA_HL7V3_NS + "#drugName";
     
     
     public static final String HL7V3_FEVER = ICARDEA_NS + "/instances/Fever";
@@ -411,6 +411,12 @@ public class Constants {
     public static final String HL7V3_TEMPORRALY_LOSS_OF_SPEECH = 
             ICARDEA_NS + "/instances/TemporarayLossOfSpeech";
     
+    /**
+     * Used to describe oral administration of treatment in the HL3 V3 
+     * acception. This is a resource.
+     */
+    public static final String HL7V3_ORAL_ADMINISTRATION = 
+            ICARDEA_NS + "/instances/OralAdministration";
     
     public static final String RDFS_TYPE = 
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
