@@ -255,6 +255,12 @@ public class Constants {
     
     
     /**
+     * Hols information about the origin for a given resource, in the
+     * iCarea PHRS context. <br/>
+     * This is a iCarea PHRS specific property.
+     */
+    public static final String ORIGIN = ICARDEA_NS + "#origin";
+    /**
      * The unique id for "Simple Observation" in the IHE acceptation.<br/>
      * In most of the cases this is used like value (of type literal) for a 
      * property named templIdRoot.
@@ -397,7 +403,6 @@ public class Constants {
      * Describes an observation as risk.
      */
     public static final String HL7V3_RISK_OF = ICARDEA_NS + "/instances/RiskOf";
-
 
     /**
      * Used to load the default values for the constants - if this is required.
