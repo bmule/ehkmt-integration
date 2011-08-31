@@ -5,12 +5,12 @@
     Created on : August 19, 2011, 2:04 PM
     Author     : The M1s
     Description:
-        It allows to configure the Generic triple .
+        It allows to configure the Generic triple for test purposes.
 -->
 
 <triplestore-definition>
     
-        <memorysail>
+    <memorysail>
         <!--
         The memorysail element is used to configure a triple store from type
         memory sail.
@@ -25,12 +25,13 @@
             location where the triplestore application starts.
             If the path starts with ${TEMP_DIR} then the location is relative to 
             the temporary direcotry.
+            If the path starts with ${HOME_DIR} then the location is relative to 
+            aclual user home direcotry.
             -->
-            ${TEMP_DIR}/iCardea/test/sesame
+            ${HOME_DIR}/.icardea/test/sesame
         </filedump>
     </memorysail>
 
-    
     <postconstruct>
         <!--
         The postconstruct element is used to configure events related with the 
@@ -43,7 +44,7 @@
             The loadfiles element is used to configure files that may be loaded 
             after the connection to the triplestore is achived..
             -->
-            startup.core.rdf
+            startup.test.rdf,startup.test1.rdf
         </loadfiles>
     </postconstruct>
 </triplestore-definition>
