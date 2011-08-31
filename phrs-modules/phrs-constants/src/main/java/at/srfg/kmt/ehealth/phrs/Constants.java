@@ -381,10 +381,27 @@ public class Constants {
     public static final String HL7V3_DATE_START = ICARDEA_HL7V3_NS + "#dateStart";
     public static final String HL7V3_DATE_END = ICARDEA_HL7V3_NS + "#dateEnd";
     
+    /**
+     * Used to describe the medication dosage. This is rdfs resource.
+     */
     public static final String HL7V3_DOSAGE = ICARDEA_HL7V3_NS + "#dosage";
+    
+    /**
+     * Used to describe the medication dosage value (e.g. 1). 
+     * This is a literal, a float.
+     */
+    public static final String HL7V3_DOSAGE_VALUE = ICARDEA_HL7V3_NS + "#dosageValue";
+    
+    /**
+     * Used to describe the medication dosage unit (e.g. pill). 
+     * This is a resource.
+     */
+    public static final String HL7V3_DOSAGE_UNIT = ICARDEA_HL7V3_NS + "#dosageUnit";
+
     public static final String HL7V3_FREQUENCY = ICARDEA_HL7V3_NS + "#frequency";
     public static final String HL7V3_ADMIN_ROUTE = ICARDEA_HL7V3_NS + "#adminRoute";
     public static final String HL7V3_DRUG = ICARDEA_HL7V3_NS + "#drug";
+    
     
     public static final String HL7V3_FEVER = ICARDEA_NS + "/instances/Fever";
     public static final String HL7V3_PALPITATION = ICARDEA_NS + "/instances/Palpitations";
