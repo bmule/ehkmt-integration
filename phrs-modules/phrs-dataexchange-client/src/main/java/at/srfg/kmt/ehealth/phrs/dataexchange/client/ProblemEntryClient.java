@@ -8,13 +8,11 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-import java.util.Map;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
-import java.util.Date;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
@@ -23,7 +21,9 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,7 +200,7 @@ public final class ProblemEntryClient {
         return subject;
     }
 
-    public Iterable<Triple> getProblemEntries() throws TripleException {
+    public Iterable<Triple> getProblemEntryTriples() throws TripleException {
         final Iterable<String> resources =
                 triplestore.getForPredicateAndValue(RDFS_TYPE, PHRS_OBSERVATION_ENTRY_CLASS, RESOURCE);
 
@@ -221,7 +221,7 @@ public final class ProblemEntryClient {
      * @return
      * @throws TripleException 
      */
-    public Iterable<Triple> getProblemEntriesForUser(String userId) throws TripleException {
+    public Iterable<Triple> getProblemEntryTriplesForUser(String userId) throws TripleException {
 
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type

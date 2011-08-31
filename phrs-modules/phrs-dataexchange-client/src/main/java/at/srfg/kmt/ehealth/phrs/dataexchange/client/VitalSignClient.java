@@ -255,7 +255,7 @@ public final class VitalSignClient {
         return result;
     }
 
-    public Iterable<String> getVitalSignsResourceURIForUser(String userId)
+    public Iterable<String> getVitalSignURIsForUser(String userId)
             throws TripleException {
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
