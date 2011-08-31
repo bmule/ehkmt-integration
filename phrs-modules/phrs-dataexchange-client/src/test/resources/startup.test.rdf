@@ -253,7 +253,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AFewTimesPerWeek">
         <skos:prefLabel>A few times per week</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AFewTimesPerWeekPHRSCode">
                 <icadyCode:codeValue>few_times_per_week</icadyCode:codeValue>
@@ -265,7 +265,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryMonth">
         <skos:prefLabel>Every month</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryMonthPHRSCode">
                 <icadyCode:codeValue>every_month</icadyCode:codeValue>
@@ -277,7 +277,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3Hours">
         <skos:prefLabel>3 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3HoursPHRSCode">
                 <icadyCode:codeValue>3_hour_day</icadyCode:codeValue>
@@ -327,7 +327,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheEvening">
         <skos:prefLabel>in the evening</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheEveningPHRSCode">
                 <icadyCode:codeValue>when_timeofday_evening</icadyCode:codeValue>
@@ -436,7 +436,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7To12Hours">
         <skos:prefLabel>7 to 12 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7To12HoursPHRSCode">
                 <icadyCode:codeValue>7_to_12_hour_day</icadyCode:codeValue>
@@ -446,11 +446,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker(10-19/day)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker_10_19_day">
         <skos:prefLabel>Ex-moderate smoker (10-19/day)</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker(10-19/day)ULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker_10_19_dayULMSCode">
                 <icadyCode:codeValue>C0558929</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -460,7 +460,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtNoon">
         <skos:prefLabel>at noon</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtNoonPHRSCode">
                 <icadyCode:codeValue>when_timeofday_noon</icadyCode:codeValue>
@@ -472,7 +472,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/30Minutes">
         <skos:prefLabel>30 minutes</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/30MinutesPHRSCode">
                 <icadyCode:codeValue>30_min_day</icadyCode:codeValue>
@@ -484,7 +484,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4Hours">
         <skos:prefLabel>4 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4HoursPHRSCode">
                 <icadyCode:codeValue>4_hour_day</icadyCode:codeValue>
@@ -547,7 +547,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/afternoon">
         <skos:prefLabel>afternoon</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/afternoonPHRSCode">
                 <icadyCode:codeValue>when_timeofday_afternoon</icadyCode:codeValue>
@@ -560,7 +560,7 @@
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteSmoker">
         <skos:prefLabel>Cigarette smoker</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
-        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars,Cigs,PipTERM_RISK_SMOKING_TYPES</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteSmokerULMSCode">
                 <icadyCode:codeValue>C0337667</icadyCode:codeValue>
@@ -587,7 +587,7 @@
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarSmoker">
         <skos:prefLabel>Cigar smoker</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
-        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars,Cigs,PipTERM_RISK_SMOKING_TYPES</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarSmokerULMSCode">
                 <icadyCode:codeValue>C0337666</icadyCode:codeValue>
@@ -600,7 +600,7 @@
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeSmoker">
         <skos:prefLabel>Pipe smoker</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
-        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars,Cigs,PipTERM_RISK_SMOKING_TYPES</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeSmokerULMSCode">
                 <icadyCode:codeValue>C0337665</icadyCode:codeValue>
@@ -625,7 +625,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryHour">
         <skos:prefLabel>every Hour</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryHourPHRSCode">
                 <icadyCode:codeValue>frequency_every_hour</icadyCode:codeValue>
@@ -685,7 +685,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerWeek">
         <skos:prefLabel>Several times per week</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerWeekPHRSCode">
                 <icadyCode:codeValue>several_times_per_week</icadyCode:codeValue>
@@ -697,7 +697,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5Hours">
         <skos:prefLabel>5 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5HoursPHRSCode">
                 <icadyCode:codeValue>5_hour_day</icadyCode:codeValue>
@@ -746,7 +746,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MoreThan12Hours">
         <skos:prefLabel>more than 12 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MoreThan12HoursPHRSCode">
                 <icadyCode:codeValue>over_12_hour_day</icadyCode:codeValue>
@@ -758,7 +758,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryDay">
         <skos:prefLabel>Every day</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryDayPHRSCode">
                 <icadyCode:codeValue>every_day</icadyCode:codeValue>
@@ -804,11 +804,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker(40+/day)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker_40_plus_day">
         <skos:prefLabel>Ex-very heavy cigarette smoker (40+/day)</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker(40+/day)ULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker_40_plus_dayULMSCode">
                 <icadyCode:codeValue>C0425303</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -816,11 +816,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker(20-39/day)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker_20_39_day">
         <skos:prefLabel>Ex-heavy cigarette smoker (20-39/day)</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker(20-39/day)ULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker_20_39_dayULMSCode">
                 <icadyCode:codeValue>C0425302</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -840,11 +840,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker(1-9/day)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker_1_9_day">
         <skos:prefLabel>Ex-light cigarette smoker (1-9/day)</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker(1-9/day)ULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker_1_9_dayULMSCode">
                 <icadyCode:codeValue>C0425300</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -865,7 +865,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryWeek">
         <skos:prefLabel>Every week</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryWeekPHRSCode">
                 <icadyCode:codeValue>every_week</icadyCode:codeValue>
@@ -877,7 +877,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/6Hours">
         <skos:prefLabel>6 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/6HoursPHRSCode">
                 <icadyCode:codeValue>6_hour_day</icadyCode:codeValue>
@@ -887,11 +887,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams(mg)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams_mg">
         <skos:prefLabel>milligrams (mg)</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/MedicationUnits</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams(mg)ULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams_mgULMSCode">
                 <icadyCode:codeValue>C0439210</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -963,7 +963,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7Hours">
         <skos:prefLabel>7 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7HoursPHRSCode">
                 <icadyCode:codeValue>7_hour_day</icadyCode:codeValue>
@@ -998,10 +998,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDay?">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDay">
         <skos:prefLabel>When during the day?</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDay?PHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDayPHRSCode">
                 <icadyCode:codeValue>S0043</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1011,7 +1011,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/other">
         <skos:prefLabel>other</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/otherPHRSCode">
                 <icadyCode:codeValue>frequency_other</icadyCode:codeValue>
@@ -1021,10 +1021,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften?(Frequency)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften_Frequency">
         <skos:prefLabel>How often? (Frequency)</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften?(Frequency)PHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften_FrequencyPHRSCode">
                 <icadyCode:codeValue>S0042</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1032,10 +1032,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong">
         <skos:prefLabel>Frequency of Activity (how long?)</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)PHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLongPHRSCode">
                 <icadyCode:codeValue>S0041</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1055,10 +1055,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity_howLong">
         <skos:prefLabel>Duration of Activity (how long?)</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)PHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity_howLongPHRSCode">
                 <icadyCode:codeValue>S0040</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1081,7 +1081,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheMorning">
         <skos:prefLabel>in the morning</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheMorningPHRSCode">
                 <icadyCode:codeValue>when_timeofday_morning</icadyCode:codeValue>
@@ -1167,7 +1167,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtBedtime">
         <skos:prefLabel>at bedtime</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtBedtimePHRSCode">
                 <icadyCode:codeValue>when_timeofday_bedtime</icadyCode:codeValue>
@@ -1189,10 +1189,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated,CurrentOrEx">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated_CurrentOrEx">
         <skos:prefLabel>Pipe related, current or ex</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated,CurrentOrExPHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated_CurrentOrExPHRSCode">
                 <icadyCode:codeValue>S0039</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1200,10 +1200,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated,CurrentOrEx">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated_CurrentOrEx">
         <skos:prefLabel>Cigarette related, current or ex</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated,CurrentOrExPHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated_CurrentOrExPHRSCode">
                 <icadyCode:codeValue>S0038</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1211,10 +1211,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated,CurrentOrEx">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated_CurrentOrEx">
         <skos:prefLabel>Cigar related, current or ex</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated,CurrentOrExPHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated_CurrentOrExPHRSCode">
                 <icadyCode:codeValue>S0037</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1236,10 +1236,10 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars,Cigs,PipTERM_RISK_SMOKING_TYPES">
-        <skos:prefLabel>Smoking types cigars, cigs, pip TERM_RISK_SMOKING_TYPES</skos:prefLabel>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES">
+        <skos:prefLabel>Smoking types cigars, cigs, pipe</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars,Cigs,PipTERM_RISK_SMOKING_TYPESPHRSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPESPHRSCode">
                 <icadyCode:codeValue>S0036</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
@@ -1356,7 +1356,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerYear">
         <skos:prefLabel>per year</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerYearPHRSCode">
                 <icadyCode:codeValue>frequency_per_year</icadyCode:codeValue>
@@ -1380,7 +1380,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/15Minutes">
         <skos:prefLabel>15 minutes</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/15MinutesPHRSCode">
                 <icadyCode:codeValue>15_min_day</icadyCode:codeValue>
@@ -1555,7 +1555,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerMonth">
         <skos:prefLabel>per month</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerMonthPHRSCode">
                 <icadyCode:codeValue>frequency_per_month</icadyCode:codeValue>
@@ -1576,11 +1576,11 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/[D]ShortnessOfBreath">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreath">
         <skos:prefLabel>[D]Shortness of breath</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/[D]ShortnessOfBreathULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreathULMSCode">
                 <icadyCode:codeValue>C0013404</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
@@ -1590,7 +1590,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasion">
         <skos:prefLabel>on occasion</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasionPHRSCode">
                 <icadyCode:codeValue>frequency_on_occassion</icadyCode:codeValue>
@@ -1837,7 +1837,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerMonth">
         <skos:prefLabel>Several times per month</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerMonthPHRSCode">
                 <icadyCode:codeValue>several_times_per_month</icadyCode:codeValue>
@@ -2012,7 +2012,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerWeek">
         <skos:prefLabel>per week</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerWeekPHRSCode">
                 <icadyCode:codeValue>frequency_per_week</icadyCode:codeValue>
@@ -2091,7 +2091,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/45Minutes">
         <skos:prefLabel>45 minutes</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/45MinutesPHRSCode">
                 <icadyCode:codeValue>45_min_day</icadyCode:codeValue>
@@ -2139,7 +2139,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1Hour">
         <skos:prefLabel>1 hour</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1HourPHRSCode">
                 <icadyCode:codeValue>1_hour_day</icadyCode:codeValue>
@@ -2236,7 +2236,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerDay">
         <skos:prefLabel>per day</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/HowOften?(Frequency)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerDayPHRSCode">
                 <icadyCode:codeValue>frequency_per_day</icadyCode:codeValue>
@@ -2260,7 +2260,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NotSpecified">
         <skos:prefLabel>Not specified</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay?</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NotSpecifiedPHRSCode">
                 <icadyCode:codeValue>when_timeofday_not_specified</icadyCode:codeValue>
@@ -2272,7 +2272,7 @@
     </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2Hours">
         <skos:prefLabel>2 hours</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity(howLong?)</skos:related>
+        <skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2HoursPHRSCode">
                 <icadyCode:codeValue>2_hour_day</icadyCode:codeValue>
