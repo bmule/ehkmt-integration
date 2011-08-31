@@ -46,38 +46,49 @@ public final class TriplestoreConnectionFactory {
      */
     private static final TriplestoreConnectionFactory THIS;
 
+    /**
+     * Instantiate the <code>THIS</code> constants when this class is loaded 
+     * for the first time.
+     * 
+     * @throws IllegalStateException if the <code>THIS</code>  can not be 
+     * instantiate from any reason.
+     */
     static {
         try {
             THIS = new TriplestoreConnectionFactory();
         } catch (GenericRepositoryException ex) {
+            LOGGER.warn(ex.getMessage(), ex);
             throw new IllegalStateException(ex);
         }
     }
+    
+    /**
+     * The configuration for this facotry.
+     */
     private final XMLConfiguration configuration;
+    
+    /**
+     * The unique instance for the triplestore connection.
+     */
     private GenericTriplestore triplestore;
 
     private TriplestoreConnectionFactory() throws GenericRepositoryException {
         final ClassLoader classLoader = getClass().getClassLoader();
         final URL resource = classLoader.getResource(CONFIG_FILE);
-        if (resource == null) {
-            configuration = null;
-        } else {
-            try {
-                configuration =
-                        new XMLConfiguration(CONFIG_FILE);
-            } catch (ConfigurationException e) {
-                LOGGER.warn("The configutation file named {} can not be located in the classpath.", CONFIG_FILE);
-                LOGGER.warn(e.getMessage(), e);
-                final GenericRepositoryException exception =
-                        new GenericRepositoryException(e);
-                throw exception;
-            }
+        try {
+            configuration =
+                    new XMLConfiguration(resource);
+        } catch (ConfigurationException e) {
+            LOGGER.warn(e.getMessage(), e);
+            final GenericRepositoryException exception =
+                    new GenericRepositoryException(e);
+            throw exception;
         }
-        
+
         triplestore = buildTriplestore(configuration);
     }
 
-    private GenericTriplestore buildTriplestore(XMLConfiguration configuration) 
+    private GenericTriplestore buildTriplestore(XMLConfiguration configuration)
             throws GenericRepositoryException {
 
         // TODO : The triplestore type will be according with the configuration  
@@ -118,7 +129,7 @@ public final class TriplestoreConnectionFactory {
         try {
             final boolean isClosed =
                     ((GenericTriplestoreLifecycle) triplestore).isClosed();
-            LOGGER.debug("The connection is {} ", isClosed ? "closed" : "still open" );
+            LOGGER.debug("The connection is {} ", isClosed ? "closed" : "still open");
 
             if (isClosed) {
                 LOGGER.debug("The connection was closed tries to build a new one.");
