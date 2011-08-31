@@ -31,7 +31,8 @@ import org.hl7.v3.QUPCIN043200UV01;
  */
 public class ProblemClientFatiqueFindingExample {
 
-    public static void main(String... args) throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException {
+    public static void main(String... args) 
+            throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException {
         final String owner = "testOwner";
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
