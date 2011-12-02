@@ -469,6 +469,26 @@ public class Constants {
     public static final String PHRS_ACTOR_CLASS = 
             "http://www.icardea.at/phrs/types/1.0/PhrsActor";
 
+    /**
+     * The unique identifiers for the "id" predicate, 
+     * this predicate must be applied to an actor. 
+     */
+    public static final String PHRS_ACTOR_ID = 
+            "http://www.icardea.at/phrs/actor#id";
+
+    /**
+     * The unique identifiers for the "namespace" predicate, 
+     * this predicate must be applied to an actor. 
+     */
+    public static final String PHRS_ACTOR_NAMESPACE = 
+            "http://www.icardea.at/phrs/actor#namespace";
+
+    /**
+     * The unique identifiers for the "protocolId" predicate, 
+     * this predicate must be applied to an actor. 
+     */
+    public static final String PHRS_ACTOR_PROTOCOL_ID = 
+            "http://www.icardea.at/phrs/actor#protocolId";
 
     /**
      * Used to load the default values for the constants - if this is required.
