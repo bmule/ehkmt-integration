@@ -458,6 +458,17 @@ public class Constants {
      * Describes an observation as risk.
      */
     public static final String HL7V3_RISK_OF = ICARDEA_NS + "/instances/RiskOf";
+    
+    
+    /**
+     * The rdf class for the PHRSActor acceptation. 
+     * The PHRSActor is used for any extern entity 
+     * that interact with the PHRS and needs to be
+     * unique identified. 
+     */
+    public static final String PHRS_ACTOR_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/PhrsActor";
+
 
     /**
      * Used to load the default values for the constants - if this is required.
