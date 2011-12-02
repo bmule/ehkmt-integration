@@ -5,19 +5,21 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-import java.util.Map;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
 /**
+ * It provides support for RDFS (e.g. RDF properties or RDF classes). 
+ * 
  * This class can not be extended.
  * 
  * @author mihai
