@@ -2520,5 +2520,14 @@
         <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
 
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/PhrsActor">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">An PHRS Actor</rdfs:label>
+        <rdfs:comment xml:lang="en">Encapsulate all the information for a singular An PHRS Actor.</rdfs:comment>
+    </rdfs:Class>
+    
+    
+
+
 
 </rdf:RDF>
