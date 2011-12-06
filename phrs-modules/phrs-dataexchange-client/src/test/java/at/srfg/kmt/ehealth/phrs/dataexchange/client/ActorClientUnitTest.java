@@ -100,6 +100,10 @@ public class ActorClientUnitTest {
         // the result can not be null
         Assert.assertNotNull(register);
 
+        final boolean exist =
+                nameSpaceClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        Assert.assertTrue(exist);
+
         final Iterable<Triple> forSubject = triplestore.getForSubject(register);
         for (Triple triple : forSubject) {
             LOGGER.debug("Test triple {}", triple);
@@ -152,5 +156,35 @@ public class ActorClientUnitTest {
         final String protolId =
                 nameSpaceClient.getProtocolId(NAME_SPACE, PHRS_ID);
         Assert.assertEquals(PROTOCOL_ID, protolId);
+    }
+
+    /**
+     * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
+     * and prove its validity using all the existing <code>xxxExist</code>
+     * methods.
+     * 
+     * @throws TripleException if this exception occurs then this test fails.
+     * @see ActorClient#register(java.lang.String, java.lang.String) 
+     * @see ActorClient#exist(java.lang.String, java.lang.String, java.lang.String) 
+     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String) 
+     * @see ActorClient#protocolIdExist(java.lang.String) 
+     */
+    @Test
+    public void testProtocolIdExists() throws TripleException {
+        // I register the relation between the name space, phrs id and 
+        // protocol id.
+        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+
+        final boolean existAll =
+                nameSpaceClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        Assert.assertTrue(existAll);
+        
+        final boolean existNameSpaceAndPHRSId =
+                nameSpaceClient.protocolIdExist(NAME_SPACE, PHRS_ID);
+        Assert.assertTrue(existNameSpaceAndPHRSId);
+        
+        final boolean exist =
+                nameSpaceClient.protocolIdExist(PROTOCOL_ID);
+        Assert.assertTrue(exist);
     }
 }
