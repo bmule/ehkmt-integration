@@ -1,6 +1,6 @@
 /*
  * Project :iCardea
- * File : NameSpaceClient.java
+ * File : ActorClient.java
  * Encoding : UTF-8
  * Date : Dec 2, 2011
  * User : Mihai Radulescu
@@ -37,21 +37,21 @@ import org.slf4j.LoggerFactory;
  * @since 0.1
  * @author m1s
  */
-public final class NameSpaceClient {
+public final class ActorClient {
 
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.NameSpaceClient</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient</code>.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(NameSpaceClient.class);
+            LoggerFactory.getLogger(ActorClient.class);
 
     /**
      * Holds the name for the creator, the instance responsible to create
      * problem entry instances with this client.
      */
-    private static final String CREATOR_NAME = NameSpaceClient.class.getName();
+    private static final String CREATOR_NAME = ActorClient.class.getName();
 
     /**
      * Used to persist/retrieve informations from the persistence layer.
@@ -60,7 +60,7 @@ public final class NameSpaceClient {
 
     /**
      * Builds a
-     * <code>NameSpaceClient</code> instance. <br/> <b>Note : </b> This
+     * <code>ActorClient</code> instance. <br/> <b>Note : </b> This
      * constructor builds its own individual connection to the triple store and
      * don't share it with the rest of the application.
      *
@@ -69,20 +69,20 @@ public final class NameSpaceClient {
      * @throws TripleException if the connection with the triplestore can not be
      * establish from any reasons.
      */
-    public NameSpaceClient() throws GenericRepositoryException {
+    public ActorClient() throws GenericRepositoryException {
         triplestore = new SesameTriplestore();
         ((GenericTriplestoreLifecycle) triplestore).init();
     }
 
     /**
      * Builds a
-     * <code>NameSpaceClient</code> instance for a given triplestrore.
+     * <code>ActorClient</code> instance for a given triplestrore.
      *
      * @param triplestore the triplestore instance, it can not be null.
      * @throws NullPointerException if the
      * <code>triplestore</code> argument is null.
      */
-    public NameSpaceClient(GenericTriplestore triplestore) {
+    public ActorClient(GenericTriplestore triplestore) {
         if (triplestore == null) {
             throw new NullPointerException("The triplestore argumetn can not be null.");
         }
