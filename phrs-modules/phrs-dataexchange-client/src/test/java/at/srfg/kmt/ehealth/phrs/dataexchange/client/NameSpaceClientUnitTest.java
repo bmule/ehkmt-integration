@@ -80,6 +80,7 @@ public class NameSpaceClientUnitTest {
      *
      * @see NameSpaceClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
+     * @throws TripleException if this exception occurs then this test fails.
      */
     @Test
     public void testRegisters() throws TripleException {
@@ -122,5 +123,26 @@ public class NameSpaceClientUnitTest {
                 Assert.assertEquals(NAME_SPACE, value);
             }
         }
+    }
+    
+    /**
+     * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
+     * and retreats only the Protocol Id for the given  Namespace and PHRS Id.
+     * 
+     * @see NameSpaceClient#register(java.lang.String, java.lang.String,
+     * java.lang.String)
+     * @throws TripleException if this exception occurs then this test fails.
+     */
+    @Test
+    public void testProtocolId() throws TripleException {
+         // I register the relation between the name space, phrs id and 
+        // protocol id.
+       nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        
+        // I register the relation between the name space, phrs id and 
+        // protocol id.
+        final String protolId =
+                nameSpaceClient.getProtocolId(NAME_SPACE, PHRS_ID);
+        Assert.assertEquals(PROTOCOL_ID, protolId);
     }
 }
