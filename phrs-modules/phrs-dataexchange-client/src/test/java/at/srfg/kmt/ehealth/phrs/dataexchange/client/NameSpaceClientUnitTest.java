@@ -5,7 +5,10 @@
  * Date     : Dec 6, 2011
  * User     : Mihai Radulescu
  */
+
+
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
+
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -20,9 +23,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This test suite does some basic  tests (persist and retrieve) 
- * with the <code>NameSpaceClient</code>.
- * 
+ * This test suite does some basic tests (persist and retrieve) with the
+ * <code>NameSpaceClient</code>.
+ *
  * @author m1s
  * @version 0.1
  * @since 0.1
@@ -37,22 +40,27 @@ public class NameSpaceClientUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(NameSpaceClientUnitTest.class);
+
     /**
      * The unique name space identifier used in this test.
      */
     private static final String NAME_SPACE = "MY NAME SPACE";
+
     /**
      * The unique PHR System identifier used in this test.
      */
     private static final String PHRS_ID = "MY PHRS_ID";
+
     /**
      * The unique Protocol Id identifier used in this test.
      */
     private static final String PROTOCOL_ID = "MY PROTOCOL_ID";
+
     /**
      * The connection to the underlying persistence layer used in this test.
      */
     private GenericTriplestore triplestore;
+
     /**
      * The
      * <code>NameSpaceClient</code> to be tested.
@@ -124,21 +132,21 @@ public class NameSpaceClientUnitTest {
             }
         }
     }
-    
+
     /**
      * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
-     * and retreats only the Protocol Id for the given  Namespace and PHRS Id.
-     * 
+     * and retreats only the Protocol Id for the given Namespace and PHRS Id.
+     *
      * @see NameSpaceClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
      * @throws TripleException if this exception occurs then this test fails.
      */
     @Test
     public void testProtocolId() throws TripleException {
-         // I register the relation between the name space, phrs id and 
+        // I register the relation between the name space, phrs id and 
         // protocol id.
-       nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
-        
+        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+
         // I register the relation between the name space, phrs id and 
         // protocol id.
         final String protolId =
