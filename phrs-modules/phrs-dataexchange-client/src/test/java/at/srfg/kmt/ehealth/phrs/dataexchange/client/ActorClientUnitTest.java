@@ -1,6 +1,6 @@
 /*
  * Project  :iCardea
- * File     : NameSpaceClientUnitTest.java
+ * File     : ActorClientUnitTest.java
  * Encoding : UTF-8
  * Date     : Dec 6, 2011
  * User     : Mihai Radulescu
@@ -31,15 +31,15 @@ import org.slf4j.LoggerFactory;
  * @since 0.1
  * @see ActorClient
  */
-public class NameSpaceClientUnitTest {
+public class ActorClientUnitTest {
 
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.NameSpaceClientUnitTest</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClientUnitTest</code>.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(NameSpaceClientUnitTest.class);
+            LoggerFactory.getLogger(ActorClientUnitTest.class);
 
     /**
      * The unique name space identifier used in this test.

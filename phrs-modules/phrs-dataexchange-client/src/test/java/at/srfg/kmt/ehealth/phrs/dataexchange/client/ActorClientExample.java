@@ -1,6 +1,6 @@
 /*
  * Project  :iCardea
- * File     : NameSpaceClientExample.java
+ * File     : ActorClientExample.java
  * Encoding : UTF-8
  * Date     : Dec 6, 2011
  * User     : Mihai Radulescu
@@ -19,14 +19,14 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
  * a protocol id, query for the protocol id and displays it.
  * To run this class from maven environment use :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.NameSpaceClientExample -Dexec.classpathScope=test<br/>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClientExample -Dexec.classpathScope=test<br/>
  * </pre> Take care this command does not compile the classes.
  *
  * @author m1s
  * @version 0.1
  * @since 0.1
  */
-public final class NameSpaceClientExample {
+public final class ActorClientExample {
 
     /**
      * The unique name space identifier used in this test.
@@ -46,7 +46,7 @@ public final class NameSpaceClientExample {
     /**
      * Don't let anyone to instantiate this class.
      */
-    private NameSpaceClientExample() {
+    private ActorClientExample() {
         // UNIMPLEMETNED
     }
 
