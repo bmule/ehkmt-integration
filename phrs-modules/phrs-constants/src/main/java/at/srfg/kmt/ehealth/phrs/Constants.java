@@ -489,6 +489,16 @@ public class Constants {
      */
     public static final String PHRS_ACTOR_PROTOCOL_ID = 
             "http://www.icardea.at/phrs/actor#protocolId";
+    
+    /**
+     * The string used to unique identify the iCardea name space.
+     */
+    public static final String ICARDEA_NAMESPACE = "icardea";
+
+    /**
+     * The string used to unique identify the iCardea-PHR System name space.
+     */
+    public static final String PHRS_NAMESPACE = "icardea.phrs";
 
     /**
      * Used to load the default values for the constants - if this is required.
