@@ -26,12 +26,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Client used to manage and manipulate name space related information. <br/>
- * This client can be used to manage and manipulate : <ul> <li/> name space id
- * <li/> PHR System id <li/> Protocol id </ul> In the PHRS system every actor
- * must have the upper listed information. The relation between the three upper
- * listed properties is following : <i>the PHR System id</i> is formed from
- * <i>Name Space</i> and <i>the Protocol Id</i>.<br/> This class is not designed
- * to be extended.
+ * This client can be used to manage and manipulate : 
+ * <ul> 
+ * <li> name space id
+ * <li> PHR System id
+ * <li> Protocol id
+ * </ul> 
+ * In the PHRS system every actor must have the upper listed information. 
+ * The relation between the three upper listed properties is following :
+ * <i>the PHR System id</i> is formed from <i>Name Space</i> and
+ * <i>the Protocol Id</i>.<br/>
+ * This class is not designed to be extended.
  *
  * @version 0.1
  * @since 0.1
