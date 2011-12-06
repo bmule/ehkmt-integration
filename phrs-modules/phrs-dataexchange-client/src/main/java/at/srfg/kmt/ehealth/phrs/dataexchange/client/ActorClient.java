@@ -268,8 +268,16 @@ public final class ActorClient {
             throw new NullPointerException("The protocolId can not be null.");
         }
         
-        final boolean result =
-                triplestore.exists(Constants.PHRS_ACTOR_PROTOCOL_ID, protocolId);
+       final Map<String, String> requestMap = new HashMap<String, String>();
+        requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
+        requestMap.put(Constants.PHRS_ACTOR_PROTOCOL_ID, protocolId);
+
+        // TODO : this check is not preformat enought you also must prove 
+        // the content. 
+        final Iterable<String> results =
+                triplestore.getForPredicatesAndValues(requestMap);
+        
+        final boolean result = results.iterator().hasNext();
         return result;
     }
 
