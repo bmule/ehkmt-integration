@@ -60,7 +60,7 @@ public final class NameSpaceClientExample {
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
-        final NameSpaceClient nameSpaceClient = new NameSpaceClient(triplestore);
+        final ActorClient nameSpaceClient = new ActorClient(triplestore);
         // I register the relation between the name space, phrs id and 
         // protocol id.
         nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);

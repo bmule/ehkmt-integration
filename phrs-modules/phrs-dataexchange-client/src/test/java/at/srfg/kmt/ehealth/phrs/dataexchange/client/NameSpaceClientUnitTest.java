@@ -24,12 +24,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This test suite does some basic tests (persist and retrieve) with the
- * <code>NameSpaceClient</code>.
+ * <code>ActorClient</code>.
  *
  * @author m1s
  * @version 0.1
  * @since 0.1
- * @see NameSpaceClient
+ * @see ActorClient
  */
 public class NameSpaceClientUnitTest {
 
@@ -63,9 +63,9 @@ public class NameSpaceClientUnitTest {
 
     /**
      * The
-     * <code>NameSpaceClient</code> to be tested.
+     * <code>ActorClient</code> to be tested.
      */
-    private NameSpaceClient nameSpaceClient;
+    private ActorClient nameSpaceClient;
 
     /**
      * Runs before any test from this suite and prepare the environment for the
@@ -79,14 +79,14 @@ public class NameSpaceClientUnitTest {
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
-        nameSpaceClient = new NameSpaceClient(triplestore);
+        nameSpaceClient = new ActorClient(triplestore);
     }
 
     /**
      * Register a relation between : a name space, a PHRS id and a Protocol id
      * and proves if the result was persisted properly.
      *
-     * @see NameSpaceClient#register(java.lang.String, java.lang.String,
+     * @see ActorClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
      * @throws TripleException if this exception occurs then this test fails.
      */
@@ -114,7 +114,7 @@ public class NameSpaceClientUnitTest {
             }
 
             if (Constants.CREATOR.equals(predicate)) {
-                final String creator = NameSpaceClient.class.getName();
+                final String creator = ActorClient.class.getName();
                 Assert.assertEquals(creator, value);
             }
 
@@ -137,7 +137,7 @@ public class NameSpaceClientUnitTest {
      * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
      * and retreats only the Protocol Id for the given Namespace and PHRS Id.
      *
-     * @see NameSpaceClient#register(java.lang.String, java.lang.String,
+     * @see ActorClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
      * @throws TripleException if this exception occurs then this test fails.
      */
