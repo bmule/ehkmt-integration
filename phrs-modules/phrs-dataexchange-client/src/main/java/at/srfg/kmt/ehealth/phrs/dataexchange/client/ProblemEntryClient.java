@@ -71,9 +71,9 @@ public final class ProblemEntryClient {
     private final SchemeClient schemeClient;
 
     /**
-     * Builds a <code>ProblemClient</code> instance. <br/>
+     * Builds a <code>ProblemEntryClient</code> instance. <br/>
      * <b>Note : </b> This constructor builds its own individual connection 
-     * (and don't) share it with the rest of the applications.
+     * to the triple store and don't share it with the rest of the application.
      * 
      * @throws GenericRepositoryException if the underlying persistence layer 
      * can not be initialized from any reasons.
@@ -90,7 +90,7 @@ public final class ProblemEntryClient {
     }
 
     /**
-     * Builds a <code>ProblemClient</code> instance for a given triplestrore.
+     * Builds a <code>ProblemEntryClient</code> instance for a given triplestrore.
      * 
      * @param triplestore the triplestore instance, it can not be null.
      * @throws NullPointerException if the <code>triplestore</code> 
@@ -98,7 +98,7 @@ public final class ProblemEntryClient {
      */
     ProblemEntryClient(GenericTriplestore triplestore) {
         if (triplestore == null) {
-            throw new NullPointerException("The triplestore");
+            throw new NullPointerException("The triplestore argument can not be null.");
         }
 
         this.triplestore = triplestore;
