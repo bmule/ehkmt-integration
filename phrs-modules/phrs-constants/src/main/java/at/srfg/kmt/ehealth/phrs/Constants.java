@@ -479,6 +479,7 @@ public class Constants {
     /**
      * The unique identifiers for the "namespace" predicate, 
      * this predicate must be applied to an actor. 
+     * This property is a literal.
      */
     public static final String PHRS_ACTOR_NAMESPACE = 
             "http://www.icardea.at/phrs/actor#namespace";
@@ -486,6 +487,7 @@ public class Constants {
     /**
      * The unique identifiers for the "protocolId" predicate, 
      * this predicate must be applied to an actor. 
+     * This property is a literal.
      */
     public static final String PHRS_ACTOR_PROTOCOL_ID = 
             "http://www.icardea.at/phrs/actor#protocolId";
