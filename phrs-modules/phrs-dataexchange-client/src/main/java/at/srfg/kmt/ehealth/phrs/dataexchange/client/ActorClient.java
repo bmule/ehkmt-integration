@@ -130,7 +130,7 @@ public final class ActorClient {
 
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
@@ -173,7 +173,7 @@ public final class ActorClient {
     public String getProtocolId(String phrId) throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, Constants.PHRS_NAMESPACE);
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
@@ -223,10 +223,8 @@ public final class ActorClient {
         final String subject =
                 triplestore.persist(Constants.OWNER, phrId, LITERAL);
 
-        triplestore.persist(subject,
-                Constants.CREATOR,
-                CREATOR_NAME,
-                LITERAL);
+
+        triplestore.persist(subject, Constants.CREATOR, CREATOR_NAME, LITERAL);
 
         // this can help to find a phrs actor in an easy way
         triplestore.persist(subject,
@@ -247,6 +245,11 @@ public final class ActorClient {
         triplestore.persist(subject,
                 Constants.PHRS_ACTOR_PROTOCOL_ID,
                 protoclId,
+                LITERAL);
+
+        triplestore.persist(subject,
+                Constants.PHRS_ACTOR_ID,
+                phrId,
                 LITERAL);
 
         return subject;
@@ -325,7 +328,7 @@ public final class ActorClient {
         // very unpleasant side effects.
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.PHRS_ACTOR_PROTOCOL_ID, protoclId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
 
@@ -374,7 +377,7 @@ public final class ActorClient {
 
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
 
         // TODO : this check is not preformat enought you also must prove 
@@ -459,7 +462,7 @@ public final class ActorClient {
 
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
@@ -497,9 +500,9 @@ public final class ActorClient {
      * Removes all the actors (relations) that involves a given PHR System Id
      * and returns the Protocol Id for the deleted actors. If there are no
      * actors (relations) for the specified PHR System Id then this method
-     * returns an empty set.<br/>
-     * <b>Note : </b> This methods removes all the clients from all name-spaces.
-     * 
+     * returns an empty set.<br/> <b>Note : </b> This methods removes all the
+     * clients from all name-spaces.
+     *
      *
      * @param phrId the PHR System Id for the actor to be deleted. It can not be
      * null or empty string.
@@ -515,7 +518,7 @@ public final class ActorClient {
      */
     public Set<String> removeProtocolIds(String phrId) throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
-        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.PHRS_ACTOR_ID, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
 
         final Iterable<String> forPredicatesAndValues =
@@ -526,7 +529,7 @@ public final class ActorClient {
             return result;
         }
 
-        for (String subject = ""; iterator.hasNext(); ) {
+        for (String subject = ""; iterator.hasNext();) {
             subject = iterator.next();
             final Iterable<String> forSubjectAndPredicate =
                     triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
