@@ -2520,5 +2520,33 @@
         <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
 
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/PhrsActor">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">An PHRS Actor</rdfs:label>
+        <rdfs:comment xml:lang="en">An PHRS Actor is used to define the reation between Name-space, PHR System Id and Protocol Id.</rdfs:comment>
+    </rdfs:Class>
 
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#id">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+        <rdfs:comment xml:lang="en">The PHR System Unique id</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#namespace">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+        <rdfs:comment xml:lang="en">The name space for a given PHRS actor</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#protocolId">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+        <rdfs:comment xml:lang="en">The protocolId is the unique id in entire iCardea system</rdfs:comment>
+    </rdf:Property>
 </rdf:RDF>
