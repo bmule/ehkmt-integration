@@ -90,6 +90,9 @@ final class TupleQueryAndBindingNameIterableResult implements Iterable<String> {
 
         @Override
         public void remove() {
+            final UnsupportedOperationException exception =
+                    new UnsupportedOperationException("Remove is nut supprted.");
+            throw exception;
         }
     }
 }
