@@ -14,11 +14,13 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import java.util.Set;
 import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * This test suite does some basic tests (persist and retrieve) with the
@@ -38,27 +40,32 @@ public class ActorClientUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ActorClientUnitTest.class);
+
     /**
      * The unique name space identifier used in this test.
      */
     private static final String NAME_SPACE = "MY NAME SPACE";
+
     /**
      * The unique PHR System identifier used in this test.
      */
     private static final String PHRS_ID = "MY PHRS_ID";
+
     /**
      * The unique Protocol Id identifier used in this test.
      */
     private static final String PROTOCOL_ID = "MY PROTOCOL_ID";
+
     /**
      * The connection to the underlying persistence layer used in this test.
      */
     private GenericTriplestore triplestore;
+
     /**
      * The
      * <code>ActorClient</code> to be tested.
      */
-    private ActorClient nameSpaceClient;
+    private ActorClient actorClient;
 
     /**
      * Runs before any test from this suite and prepare the environment for the
@@ -72,7 +79,7 @@ public class ActorClientUnitTest {
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
-        nameSpaceClient = new ActorClient(triplestore);
+        actorClient = new ActorClient(triplestore);
     }
 
     /**
@@ -86,18 +93,9 @@ public class ActorClientUnitTest {
     @Test
     public void testRegisters() throws TripleException {
 
-        // I register the relation between the name space, phrs id and 
-        // protocol id.
-        final String register =
-                nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
-        // the result can not be null
-        Assert.assertNotNull(register);
+        final String registerActor = registerActor();
 
-        final boolean exist =
-                nameSpaceClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
-        Assert.assertTrue(exist);
-
-        final Iterable<Triple> forSubject = triplestore.getForSubject(register);
+        final Iterable<Triple> forSubject = triplestore.getForSubject(registerActor);
         for (Triple triple : forSubject) {
             LOGGER.debug("Test triple {}", triple);
             final String predicate = triple.getPredicate();
@@ -136,48 +134,45 @@ public class ActorClientUnitTest {
      *
      * @see ActorClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
-     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String) 
+     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String)
      * @throws TripleException if this exception occurs then this test fails.
      */
     @Test
     public void testProtocolId() throws TripleException {
-        // I register the relation between the name space, phrs id and 
-        // protocol id.
-        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        registerActor();
 
         // I register the relation between the name space, phrs id and 
         // protocol id.
         final String protolId =
-                nameSpaceClient.getProtocolId(NAME_SPACE, PHRS_ID);
+                actorClient.getProtocolId(NAME_SPACE, PHRS_ID);
         Assert.assertEquals(PROTOCOL_ID, protolId);
     }
 
     /**
-     * Tries to obtain a protocol id for a wrong (unregister) Name-Space, 
-     * PHRS Id and Protocol Id.
-     * 
+     * Tries to obtain a protocol id for a wrong (unregister) Name-Space, PHRS
+     * Id and Protocol Id.
+     *
      * @see ActorClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
-     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String) 
-     * @see ActorClient#getProtocolId(java.lang.String) 
+     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String)
+     * @see ActorClient#getProtocolId(java.lang.String)
      * @throws TripleException if this exception occurs then this test fails.
      */
     @Test
     public void testGetProtocolIdForWrongActors() throws TripleException {
-        // I register the relation between the name space, phrs id and 
-        // protocol id.
-        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        registerActor();
+
         final String subfix = getRandomString();
 
         final String protolIdForNsandPHRId =
-                nameSpaceClient.getProtocolId(NAME_SPACE + subfix, PHRS_ID + subfix);
+                actorClient.getProtocolId(NAME_SPACE + subfix, PHRS_ID + subfix);
         // I am sure that there is no relation between the upper arguments
         // (I use random string)
         Assert.assertNull(protolIdForNsandPHRId);
 
 
         final String protolId =
-                nameSpaceClient.getProtocolId(PHRS_ID + subfix);
+                actorClient.getProtocolId(PHRS_ID + subfix);
         // I am sure that there is no relation between the upper arguments
         // (I use random string)
         Assert.assertNull(protolId);
@@ -199,20 +194,14 @@ public class ActorClientUnitTest {
      */
     @Test
     public void testProtocolIdExists() throws TripleException {
-        // I register the relation between the name space, phrs id and 
-        // protocol id.
-        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
-
-        final boolean existAll =
-                nameSpaceClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
-        Assert.assertTrue(existAll);
+        registerActor();
 
         final boolean existNameSpaceAndPHRSId =
-                nameSpaceClient.protocolIdExist(NAME_SPACE, PHRS_ID);
+                actorClient.protocolIdExist(NAME_SPACE, PHRS_ID);
         Assert.assertTrue(existNameSpaceAndPHRSId);
 
         final boolean exist =
-                nameSpaceClient.protocolIdExist(PROTOCOL_ID);
+                actorClient.protocolIdExist(PROTOCOL_ID);
         Assert.assertTrue(exist);
     }
 
@@ -237,16 +226,16 @@ public class ActorClientUnitTest {
         final String protocolId = PROTOCOL_ID + subfix;
 
         final boolean existAll =
-                nameSpaceClient.exist(namespace, phrsId, protocolId);
+                actorClient.exist(namespace, phrsId, protocolId);
         // this relation can not exist
         Assert.assertFalse(existAll);
 
         final boolean existNameSpaceAndPHRSId =
-                nameSpaceClient.protocolIdExist(namespace, phrsId);
+                actorClient.protocolIdExist(namespace, phrsId);
         Assert.assertFalse(existNameSpaceAndPHRSId);
 
         final boolean exist =
-                nameSpaceClient.protocolIdExist(protocolId);
+                actorClient.protocolIdExist(protocolId);
         Assert.assertFalse(exist);
     }
 
@@ -259,5 +248,80 @@ public class ActorClientUnitTest {
         final double random = Math.random() * 10000;
         final String subfix = Double.toHexString(random);
         return subfix;
+    }
+
+    /**
+     * Registers a actor, remove it and prove if the remove action was 
+     * successfully. The remove is applied on all actors that have a given
+     * Name-Space and PHR System id.
+     * 
+     * @throws TripleException if this exception occurs then this test fails.
+     * @see ActorClient#removeProtocolIds(java.lang.String, java.lang.String) 
+     */
+    @Test
+    public void testRemoveProtocolIdForNsAndPHRsID() throws TripleException {
+        registerActor();
+
+        final Set<String> removeProtoclIds =
+                actorClient.removeProtocolIds(NAME_SPACE, PHRS_ID);
+        // I register a singular actor, the result set has only one element.
+        Assert.assertEquals(1, removeProtoclIds.size());
+
+        // the result set must contain only one  protocl id (because I register
+        // only one actor).
+        Assert.assertTrue(removeProtoclIds.contains(PROTOCOL_ID));
+
+        // this actor was removed so this must return false.
+        final boolean existAll =
+                actorClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        Assert.assertFalse(existAll);
+    }
+
+    /**
+     * Registers an actor (using the NAME_SPACE, PHRS_ID, PROTOCOL_ID constants) 
+     * and prove if the registration was done correct.
+     * 
+     * @return the URI for the new actor.
+     * @throws TripleException by any predicate calculus related errors.
+     */
+    private String registerActor() throws TripleException {
+        final String register =
+                actorClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+
+        // the result can not be null
+        Assert.assertNotNull(register);
+
+        final boolean existAll =
+                actorClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        Assert.assertTrue(existAll);
+
+        return register;
+    }
+    
+    /**
+     * Registers a actor, remove it and prove if the remove action was 
+     * successfully. The remove is applied on all actors that have a given
+     * PHR System id.
+     * 
+     * @throws TripleException if this exception occurs then this test fails.
+     * @see ActorClient#removeProtocolIds(java.lang.String) 
+     */
+    @Test
+    public void testRemoveProtocolIdForNs() throws TripleException {
+        registerActor();
+
+        final Set<String> removeProtoclIds =
+                actorClient.removeProtocolIds(PHRS_ID);
+        // I register a singular actor, the result set has only one element.
+        Assert.assertEquals(1, removeProtoclIds.size());
+
+        // the result set must contain only one  protocl id (because I register
+        // only one actor).
+        Assert.assertTrue(removeProtoclIds.contains(PROTOCOL_ID));
+
+        // this actor was removed so this must return false.
+        final boolean existAll =
+                actorClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        Assert.assertFalse(existAll);
     }
 }
