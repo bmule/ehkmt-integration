@@ -251,12 +251,12 @@ public class ActorClientUnitTest {
     }
 
     /**
-     * Registers a actor, remove it and prove if the remove action was 
+     * Registers a actor, remove it and prove if the remove action was
      * successfully. The remove is applied on all actors that have a given
      * Name-Space and PHR System id.
-     * 
+     *
      * @throws TripleException if this exception occurs then this test fails.
-     * @see ActorClient#removeProtocolIds(java.lang.String, java.lang.String) 
+     * @see ActorClient#removeProtocolIds(java.lang.String, java.lang.String)
      */
     @Test
     public void testRemoveProtocolIdForNsAndPHRsID() throws TripleException {
@@ -278,9 +278,9 @@ public class ActorClientUnitTest {
     }
 
     /**
-     * Registers an actor (using the NAME_SPACE, PHRS_ID, PROTOCOL_ID constants) 
+     * Registers an actor (using the NAME_SPACE, PHRS_ID, PROTOCOL_ID constants)
      * and prove if the registration was done correct.
-     * 
+     *
      * @return the URI for the new actor.
      * @throws TripleException by any predicate calculus related errors.
      */
@@ -297,14 +297,14 @@ public class ActorClientUnitTest {
 
         return register;
     }
-    
+
     /**
-     * Registers a actor, remove it and prove if the remove action was 
-     * successfully. The remove is applied on all actors that have a given
-     * PHR System id.
-     * 
+     * Registers a actor, remove it and prove if the remove action was
+     * successfully. The remove is applied on all actors that have a given PHR
+     * System id.
+     *
      * @throws TripleException if this exception occurs then this test fails.
-     * @see ActorClient#removeProtocolIds(java.lang.String) 
+     * @see ActorClient#removeProtocolIds(java.lang.String)
      */
     @Test
     public void testRemoveProtocolIdForNs() throws TripleException {
@@ -323,5 +323,24 @@ public class ActorClientUnitTest {
         final boolean existAll =
                 actorClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
         Assert.assertFalse(existAll);
+    }
+
+    /**
+     * Repetitive registers the same actor and it proves if only one instance
+     * of the actor exists. Because the a
+     * 
+     * 
+     * @throws TripleException if this exception occurs then this test fails.
+     */
+    @Test
+    public void testRepetativeAdd() throws TripleException {
+        for (int i = 0; i < 10; i++) {
+            registerActor();
+        }
+        
+        // only one actor must be registered
+        final Set<String> protocolId = 
+                actorClient.getProtocolIdsInNamespace(NAME_SPACE);
+        Assert.assertEquals(1, protocolId.size());
     }
 }
