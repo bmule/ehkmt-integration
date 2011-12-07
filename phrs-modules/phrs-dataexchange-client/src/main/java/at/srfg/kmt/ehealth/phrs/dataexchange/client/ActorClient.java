@@ -181,6 +181,38 @@ public final class ActorClient {
 
         return iterator.hasNext() ? iterator.next() : null;
     }
+    
+    public Set<String> getProtocolIdsInNamespace(String namespace) 
+            throws TripleException {
+        
+        final Map<String, String> requestMap = new HashMap<String, String>();
+        requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
+        requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
+        
+        final Iterable<String> forPredicatesAndValues = 
+                triplestore.getForPredicatesAndValues(requestMap);
+        final Iterator<String> iterator = forPredicatesAndValues.iterator();
+        
+        final Set<String> result = new HashSet<String>();
+        if (!iterator.hasNext()) {
+            return result;
+        }
+        
+        // TODO : use SPQL for better (faster/performater) queries, avoid multiple calls.
+        for (String subject = ""; iterator.hasNext();) {
+            subject = iterator.next();
+            final Iterable<String> forSubjectAndPredicate =
+                    triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
+            final Iterator<String> protocolIdIterator = forSubjectAndPredicate.iterator();
+            updateSet(result, protocolIdIterator);
+            triplestore.deleteForSubject(subject);
+        }
+        
+        
+        
+        return result;
+    }
+
 
     /**
      * Creates a the relation between the namespace, PHRS Id and Protocol id and
@@ -472,6 +504,7 @@ public final class ActorClient {
             return result;
         }
 
+        // TODO : use SPQL for better (faster/performater) queries, avoid multiple calls.
         for (String subject = ""; iterator.hasNext();) {
             subject = iterator.next();
             final Iterable<String> forSubjectAndPredicate =
@@ -529,6 +562,7 @@ public final class ActorClient {
             return result;
         }
 
+        // TODO : use SPQL for better (faster/performater) queries, avoid multiple calls.
         for (String subject = ""; iterator.hasNext();) {
             subject = iterator.next();
             final Iterable<String> forSubjectAndPredicate =
