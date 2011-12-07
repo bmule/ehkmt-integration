@@ -5,8 +5,6 @@
  * Date : Dec 2, 2011
  * User : Mihai Radulescu
  */
-
-
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
@@ -25,22 +23,19 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
- * Client used to manage and manipulate name space related information. 
- * This client group together three kind of information and allows the user
- * to manipulate it like one.; this group is named actor. <br/>
- * This client can be used to manage and manipulate : 
- * <ul> 
- * <li> Name Space Id - this information allows grouping. 
- * <li> Protocol Id - this is the unique identifier for the entire iCardea 
- * (among all subsystems).
- * <li> PHR System Id - this is the unique identifier for the PHR System. 
- * </ul> 
- * In the PHRS System every actor must have the upper listed information. 
- * The relation between the three upper listed properties is following :
- * <i>the PHR System id</i> is formed from <i>Name Space</i> and
- * <i>the Protocol Id</i>.<br/>
- * This class is not designed to be extended.
+ * Client used to manage and manipulate name space related information. This
+ * client group together three kind of information and allows the user to
+ * manipulate it like one.; this group is named actor. <br/> This client can be
+ * used to manage and manipulate : <ul> <li> Name Space Id - this information
+ * allows grouping. <li> Protocol Id - this is the unique identifier for the
+ * entire iCardea (among all subsystems). <li> PHR System Id - this is the
+ * unique identifier for the PHR System. </ul> In the PHRS System every actor
+ * must have the upper listed information. The relation between the three upper
+ * listed properties is following : <i>the PHR System id</i> is formed from
+ * <i>Name Space</i> and <i>the Protocol Id</i>.<br/> This class is not designed
+ * to be extended.
  *
  * @version 0.1
  * @since 0.1
@@ -55,13 +50,11 @@ public final class ActorClient {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ActorClient.class);
-
     /**
      * Holds the name for the creator, the instance responsible to create
      * problem entry instances with this client.
      */
     private static final String CREATOR_NAME = ActorClient.class.getName();
-
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
@@ -69,9 +62,9 @@ public final class ActorClient {
 
     /**
      * Builds a
-     * <code>ActorClient</code> instance. <br/> <b>Note : </b> This
-     * constructor builds its own individual connection to the triple store and
-     * don't share it with the rest of the application.
+     * <code>ActorClient</code> instance. <br/> <b>Note : </b> This constructor
+     * builds its own individual connection to the triple store and don't share
+     * it with the rest of the application.
      *
      * @throws GenericRepositoryException if the underlying persistence layer
      * can not be initialized from any reasons.
@@ -103,20 +96,39 @@ public final class ActorClient {
     }
 
     /**
-     * Searches for a Protocol Id that corresponds to a given Name-space and
-     * PHR System id. 
-     * 
-     * @param namespace the involved Name-space, it can not be null.
-     * @param phrId the involved Name-space, it can not be null.
-     * @return the Protocol Id that corresponds to a given Name-space and
-     * PHR System id
-     * @throws TripleException by any predicate calculus related problems.
-     * In most of the cases this exception chains the real cause for this
+     * Searches for a Protocol Id that corresponds to a given Name-Space and PHR
+     * System id. If the underlying persistence layer does not contains any
+     * relation between the specified arguments then this method returns a null.
+     *
+     * @param namespace the involved Name-space, it can not be null or empty
+     * string.
+     * @param phrId the involved PHR System id, it can not be null or empty
+     * string.
+     * @return the Protocol Id that corresponds to a given Name-space and PHR
+     * System id or null of no relation can be found.
+     * @throws TripleException by any predicate calculus related problems. In
+     * most of the cases this exception chains the real cause for this
      * exception, this can be obtained by calling the
      * <code>getCause</code> method.
+     * @throws NullPointerException if the
+     * <code>namespace</code> or
+     * <code>phrId</code> arguments are null or empty string.
      */
     public String getProtocolId(String namespace, String phrId)
             throws TripleException {
+
+        if (namespace == null || namespace.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The namespace argument can not be null");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
+        if (phrId == null || phrId.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The phrId argument can not be null");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
         requestMap.put(Constants.OWNER, phrId);
@@ -124,23 +136,40 @@ public final class ActorClient {
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
 
-        final String subject = forPredicatesAndValues.iterator().next();
+        final Iterator<String> subjectIterator = forPredicatesAndValues.iterator();
+        if (!subjectIterator.hasNext()) {
+            LOGGER.debug("No actor for Name-Space [{}] and PHR System Id [{}]", namespace, phrId);
+            // if there is no subject (resource) then the rest does not count. 
+            return null;
+        }
+
+        final String subject = subjectIterator.next();
         final Iterable<String> forSubjectAndPredicate =
                 triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
         final Iterator<String> iterator = forSubjectAndPredicate.iterator();
-        
+
         return iterator.hasNext() ? iterator.next() : null;
     }
 
     /**
-     * 
-     * @param phrId
-     * @return
-     * @throws TripleException if the relation between the upper listed
-     * properties can not be establish from any reasons. In most of the cases
-     * this exception chains the real cause for this exception, this can be
-     * obtained by calling the <code>getCause</code> method.
-
+     * Searches for a Protocol Id that corresponds to a given PHR System id, the
+     * Name-Space is the default one. The default Name-Space value is defined
+     * here :
+     * <code>Constants.PHRS_NAMESPACE</code>. If the underlying persistence
+     * layer does not contains any relation between the specified arguments then
+     * this method returns a null.
+     *
+     * @param phrId the involved PHR System id, it can not be null or empty
+     * string.
+     * @return the Protocol Id that corresponds to a given Name-Space and PHR
+     * System id or null of no relation can be found.
+     * @throws TripleException by any predicate calculus related problems. In
+     * most of the cases this exception chains the real cause for this
+     * exception, this can be obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if the
+     * <code>namespace</code> argument is null or empty string.
+     * @see Constants#PHRS_NAMESPACE
      */
     public String getProtocolId(String phrId) throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
@@ -149,8 +178,9 @@ public final class ActorClient {
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
+        final Iterator<String> iterator = forPredicatesAndValues.iterator();
 
-        return forPredicatesAndValues.iterator().next();
+        return iterator.hasNext() ? iterator.next() : null;
     }
 
     /**
@@ -167,7 +197,8 @@ public final class ActorClient {
      * @throws TripleException if the relation between the upper listed
      * properties can not be establish from any reasons. In most of the cases
      * this exception chains the real cause for this exception, this can be
-     * obtained by calling the <code>getCause</code> method.
+     * obtained by calling the
+     * <code>getCause</code> method.
      * @throws NullPointerException if any method arguments is null or empty
      * string.
      * @see #register(java.lang.String, java.lang.String)
@@ -223,17 +254,23 @@ public final class ActorClient {
     }
 
     /**
-     * Registers the relation between a given PHRS Actor Namespace, PHRS Id and
-     * Protocol Id and returns the URI for this relation. The PHRS Actor
-     * Namespace is a constant.
+     * Registers the relation between the PHRS Default Name-Space, PHRS Id and
+     * Protocol Id and returns the URI for this relation. The default Name-Space
+     * value is defined here :
+     * <code>Constants.PHRS_NAMESPACE</code>.
      *
-     * @param phrId
-     * @param protoclId
-     * @return
+     * @param phrId the name space unique id. It can not be null or empty string
+     * otherwise an exception raises.
+     * @param protoclId the name space unique id. It can not be null or empty
+     * string otherwise an exception raises.
+     * @return the URI for the relation between the upper defined properties.
      * @throws TripleException if the relation between the upper listed
      * properties can not be establish from any reasons. In most of the cases
      * this exception chains the real cause for this exception, this can be
-     * obtained by calling the <code>getCause</code> method.
+     * obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if any method arguments is null or empty
+     * string.
      * @see #register(java.lang.String, java.lang.String, java.lang.String)
      * @see Constants#PHRS_ACTOR_NAMESPACE
      */
@@ -243,13 +280,50 @@ public final class ActorClient {
         return result;
     }
 
+    /**
+     * Proves if a relation defined with Name-Space, PHR System id and Protocol
+     * Id was already registered.
+     *
+     * @param namespace the Name-Space value for the relation that presence is
+     * to be tested. It can not be null or an empty string.
+     * @param phrId the PHR System Id value for the relation that presence is to
+     * be tested. It can not be null or an empty string.
+     * @param protoclId the Protocol Id value for the relation that presence is
+     * to be tested. It can not be null or an empty string.
+     * @return true if the a relation defined with Name-Space, PHR System id and
+     * Protocol Id was already registered, false otherwise.
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if any method arguments is null or empty
+     * string.
+     */
     public final boolean exist(String namespace, String phrId, String protoclId)
             throws TripleException {
+
+        if (namespace == null || namespace.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The namespace argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
+        if (phrId == null || phrId.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The phrId argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
+        if (protoclId == null || protoclId.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The protoclId argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
 
         // the reason why this method is final is because  the other register
         // methods are basing on this method. Overriding may have
         // very unpleasant side effects.
-
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
         requestMap.put(Constants.OWNER, phrId);
@@ -265,8 +339,36 @@ public final class ActorClient {
         return hasNext;
     }
 
+    /**
+     * Proves if a relation defined with Name-Space and PHR System id was
+     * already registered; this methods returns true for any possible Protocol
+     * Id value.
+     *
+     * @param namespace the Name-Space value for the relation that presence is
+     * to be tested. It can not be null or an empty string.
+     * @param phrId the PHR System Id value for the relation that presence is to
+     * be tested. It can not be null or an empty string.
+     * @return true if the a relation defined with Name-Space, PHR System id and
+     * Protocol Id was already registered, false otherwise.
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if any method arguments is null or empty
+     * string.
+     * @see #exist
+     */
     public boolean protocolIdExist(String namespace, String phrId)
             throws TripleException {
+
+
+        if (phrId == null || phrId.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The phrId argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
         // the reason why this method is final is because  the other register
         // methods are basing on this method. Overriding may have
         // very unpleasant side effects.
@@ -289,23 +391,26 @@ public final class ActorClient {
      * Proves if there is at least one actor (relation between name-space, PHRS
      * Id and Protocol Id) with the given protocol id.
      *
-     * @param protocolId the Protocol that presence is to be tested.
-     * It can not be null or an empty string. 
+     * @param protocolId the Protocol that presence is to be tested. It can not
+     * be null or an empty string.
      * @return true if the underlying system contains at least one actor
      * (relation between name-space, PHRS Id and Protocol Id) with the given
      * protocol id.
-     *
-     * @throws TripleException by any errors related with the underlying
-     * persistence layer. In most of the cases this exception contains (chains)
-     * the real cause for the exception.
+     * @throws TripleException by any predicate calculus related errors. 
+     * In most of the cases this exception chains the real cause for this 
+     * exception, this can be obtained by calling the <code>getCause</code> 
+     * method.
+     * @throws NullPointerException if the protocolId argument is null or empty
+     * string.
+     * @see #exist
      */
     public boolean protocolIdExist(String protocolId) throws TripleException {
-        
+
         if (protocolId == null || protocolId.isEmpty()) {
             throw new NullPointerException("The protocolId can not be null.");
         }
-        
-       final Map<String, String> requestMap = new HashMap<String, String>();
+
+        final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
         requestMap.put(Constants.PHRS_ACTOR_PROTOCOL_ID, protocolId);
 
@@ -313,7 +418,7 @@ public final class ActorClient {
         // the content. 
         final Iterable<String> results =
                 triplestore.getForPredicatesAndValues(requestMap);
-        
+
         final boolean result = results.iterator().hasNext();
         return result;
     }
