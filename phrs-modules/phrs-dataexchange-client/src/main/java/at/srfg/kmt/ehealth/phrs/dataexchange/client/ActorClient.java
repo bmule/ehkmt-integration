@@ -20,19 +20,23 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Client used to manage and manipulate name space related information. <br/>
+ * Client used to manage and manipulate name space related information. 
+ * This client group together three kind of information and allows the user
+ * to manipulate it like one.; this group is named actor. <br/>
  * This client can be used to manage and manipulate : 
  * <ul> 
- * <li> name space id
- * <li> PHR System id
- * <li> Protocol id
+ * <li> Name Space Id - this information allows grouping. 
+ * <li> Protocol Id - this is the unique identifier for the entire iCardea 
+ * (among all subsystems).
+ * <li> PHR System Id - this is the unique identifier for the PHR System. 
  * </ul> 
- * In the PHRS system every actor must have the upper listed information. 
+ * In the PHRS System every actor must have the upper listed information. 
  * The relation between the three upper listed properties is following :
  * <i>the PHR System id</i> is formed from <i>Name Space</i> and
  * <i>the Protocol Id</i>.<br/>
@@ -89,12 +93,28 @@ public final class ActorClient {
      */
     public ActorClient(GenericTriplestore triplestore) {
         if (triplestore == null) {
-            throw new NullPointerException("The triplestore argumetn can not be null.");
+            final NullPointerException nullPointerException =
+                    new NullPointerException("The triplestore argumetn can not be null.");
+            LOGGER.warn(nullPointerException.getMessage(), nullPointerException);
+            throw nullPointerException;
         }
 
         this.triplestore = triplestore;
     }
 
+    /**
+     * Searches for a Protocol Id that corresponds to a given Name-space and
+     * PHR System id. 
+     * 
+     * @param namespace the involved Name-space, it can not be null.
+     * @param phrId the involved Name-space, it can not be null.
+     * @return the Protocol Id that corresponds to a given Name-space and
+     * PHR System id
+     * @throws TripleException by any predicate calculus related problems.
+     * In most of the cases this exception chains the real cause for this
+     * exception, this can be obtained by calling the
+     * <code>getCause</code> method.
+     */
     public String getProtocolId(String namespace, String phrId)
             throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
@@ -107,9 +127,21 @@ public final class ActorClient {
         final String subject = forPredicatesAndValues.iterator().next();
         final Iterable<String> forSubjectAndPredicate =
                 triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
-        return forSubjectAndPredicate.iterator().next();
+        final Iterator<String> iterator = forSubjectAndPredicate.iterator();
+        
+        return iterator.hasNext() ? iterator.next() : null;
     }
 
+    /**
+     * 
+     * @param phrId
+     * @return
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the <code>getCause</code> method.
+
+     */
     public String getProtocolId(String phrId) throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, Constants.PHRS_NAMESPACE);
@@ -118,7 +150,7 @@ public final class ActorClient {
         final Iterable<String> forPredicatesAndValues =
                 triplestore.getForPredicatesAndValues(requestMap);
 
-        return null;
+        return forPredicatesAndValues.iterator().next();
     }
 
     /**
@@ -133,7 +165,9 @@ public final class ActorClient {
      * string otherwise an exception raises.
      * @return the URI for the relation between the upper defined properties.
      * @throws TripleException if the relation between the upper listed
-     * properties can not be establish from any reasons.
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the <code>getCause</code> method.
      * @throws NullPointerException if any method arguments is null or empty
      * string.
      * @see #register(java.lang.String, java.lang.String)
@@ -196,7 +230,10 @@ public final class ActorClient {
      * @param phrId
      * @param protoclId
      * @return
-     * @throws TripleException
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the <code>getCause</code> method.
      * @see #register(java.lang.String, java.lang.String, java.lang.String)
      * @see Constants#PHRS_ACTOR_NAMESPACE
      */
