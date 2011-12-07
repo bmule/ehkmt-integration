@@ -5,8 +5,6 @@
  * Date     : Dec 6, 2011
  * User     : Mihai Radulescu
  */
-
-
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
@@ -40,27 +38,22 @@ public class ActorClientUnitTest {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ActorClientUnitTest.class);
-
     /**
      * The unique name space identifier used in this test.
      */
     private static final String NAME_SPACE = "MY NAME SPACE";
-
     /**
      * The unique PHR System identifier used in this test.
      */
     private static final String PHRS_ID = "MY PHRS_ID";
-
     /**
      * The unique Protocol Id identifier used in this test.
      */
     private static final String PROTOCOL_ID = "MY PROTOCOL_ID";
-
     /**
      * The connection to the underlying persistence layer used in this test.
      */
     private GenericTriplestore triplestore;
-
     /**
      * The
      * <code>ActorClient</code> to be tested.
@@ -138,11 +131,12 @@ public class ActorClientUnitTest {
     }
 
     /**
-     * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
+     * Creates a relation between a given : Name-Space, PHRS Id and Protocol Id
      * and retreats only the Protocol Id for the given Namespace and PHRS Id.
      *
      * @see ActorClient#register(java.lang.String, java.lang.String,
      * java.lang.String)
+     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String) 
      * @throws TripleException if this exception occurs then this test fails.
      */
     @Test
@@ -159,17 +153,49 @@ public class ActorClientUnitTest {
     }
 
     /**
-     * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
-     * and prove its validity using all the existing <code>xxxExist</code>
-     * methods. 
-     * This test is the antonym for the <code>testProtocolIdIsNotExisting</code>.
+     * Tries to obtain a protocol id for a wrong (unregister) Name-Space, 
+     * PHRS Id and Protocol Id.
      * 
+     * @see ActorClient#register(java.lang.String, java.lang.String,
+     * java.lang.String)
+     * @see ActorClient#getProtocolId(java.lang.String, java.lang.String) 
+     * @see ActorClient#getProtocolId(java.lang.String) 
      * @throws TripleException if this exception occurs then this test fails.
-     * @see ActorClient#register(java.lang.String, java.lang.String) 
-     * @see ActorClient#exist(java.lang.String, java.lang.String, java.lang.String) 
-     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String) 
-     * @see ActorClient#protocolIdExist(java.lang.String) 
-     * @see #testProtocolIdIsNotExisting() 
+     */
+    @Test
+    public void testGetProtocolIdForWrongActors() throws TripleException {
+        // I register the relation between the name space, phrs id and 
+        // protocol id.
+        nameSpaceClient.register(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
+        final String subfix = getRandomString();
+
+        final String protolIdForNsandPHRId =
+                nameSpaceClient.getProtocolId(NAME_SPACE + subfix, PHRS_ID + subfix);
+        // I am sure that there is no relation between the upper arguments
+        // (I use random string)
+        Assert.assertNull(protolIdForNsandPHRId);
+
+
+        final String protolId =
+                nameSpaceClient.getProtocolId(PHRS_ID + subfix);
+        // I am sure that there is no relation between the upper arguments
+        // (I use random string)
+        Assert.assertNull(protolId);
+    }
+
+    /**
+     * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
+     * and prove its validity using all the existing
+     * <code>xxxExist</code> methods. This test is the antonym for the
+     * <code>testProtocolIdIsNotExisting</code>.
+     *
+     * @throws TripleException if this exception occurs then this test fails.
+     * @see ActorClient#register(java.lang.String, java.lang.String)
+     * @see ActorClient#exist(java.lang.String, java.lang.String,
+     * java.lang.String)
+     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String)
+     * @see ActorClient#protocolIdExist(java.lang.String)
+     * @see #testProtocolIdIsNotExisting()
      */
     @Test
     public void testProtocolIdExists() throws TripleException {
@@ -180,32 +206,32 @@ public class ActorClientUnitTest {
         final boolean existAll =
                 nameSpaceClient.exist(NAME_SPACE, PHRS_ID, PROTOCOL_ID);
         Assert.assertTrue(existAll);
-        
+
         final boolean existNameSpaceAndPHRSId =
                 nameSpaceClient.protocolIdExist(NAME_SPACE, PHRS_ID);
         Assert.assertTrue(existNameSpaceAndPHRSId);
-        
+
         final boolean exist =
                 nameSpaceClient.protocolIdExist(PROTOCOL_ID);
         Assert.assertTrue(exist);
     }
-    
+
     /**
-     * Proves its validity for some not existent actors using all the existing 
-     * <code>xxxExist</code> methods.
-     * This test is the antonym for the <code>testProtocolIdExists</code>.
-     * 
+     * Proves its validity for some not existent actors using all the existing
+     * <code>xxxExist</code> methods. This test is the antonym for the
+     * <code>testProtocolIdExists</code>.
+     *
      * @throws TripleException if this exception occurs then this test fails.
-     * @see ActorClient#register(java.lang.String, java.lang.String) 
-     * @see ActorClient#exist(java.lang.String, java.lang.String, java.lang.String) 
-     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String) 
-     * @see ActorClient#protocolIdExist(java.lang.String) 
-     * @see #testProtocolIdExists() 
+     * @see ActorClient#register(java.lang.String, java.lang.String)
+     * @see ActorClient#exist(java.lang.String, java.lang.String,
+     * java.lang.String)
+     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String)
+     * @see ActorClient#protocolIdExist(java.lang.String)
+     * @see #testProtocolIdExists()
      */
     @Test
     public void testProtocolIdIsNotExisting() throws TripleException {
-        final double random = Math.random() * 10000;
-        final String subfix = Double.toHexString(random);
+        final String subfix = getRandomString();
         final String namespace = NAME_SPACE + subfix;
         final String phrsId = PHRS_ID + subfix;
         final String protocolId = PROTOCOL_ID + subfix;
@@ -214,13 +240,24 @@ public class ActorClientUnitTest {
                 nameSpaceClient.exist(namespace, phrsId, protocolId);
         // this relation can not exist
         Assert.assertFalse(existAll);
-        
+
         final boolean existNameSpaceAndPHRSId =
                 nameSpaceClient.protocolIdExist(namespace, phrsId);
         Assert.assertFalse(existNameSpaceAndPHRSId);
-        
+
         final boolean exist =
                 nameSpaceClient.protocolIdExist(protocolId);
         Assert.assertFalse(exist);
+    }
+
+    /**
+     * Generates a random (hex)string with at least 4 digits.
+     *
+     * @return a random (hex)string with at least 4 digits.
+     */
+    private String getRandomString() {
+        final double random = Math.random() * 10000;
+        final String subfix = Double.toHexString(random);
+        return subfix;
     }
 }
