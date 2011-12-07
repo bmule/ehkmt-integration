@@ -161,13 +161,15 @@ public class ActorClientUnitTest {
     /**
      * Creates a relation between a given : Namespace, PHRS Id and Protocol Id
      * and prove its validity using all the existing <code>xxxExist</code>
-     * methods.
+     * methods. 
+     * This test is the antonym for the <code>testProtocolIdIsNotExisting</code>.
      * 
      * @throws TripleException if this exception occurs then this test fails.
      * @see ActorClient#register(java.lang.String, java.lang.String) 
      * @see ActorClient#exist(java.lang.String, java.lang.String, java.lang.String) 
      * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String) 
      * @see ActorClient#protocolIdExist(java.lang.String) 
+     * @see #testProtocolIdIsNotExisting() 
      */
     @Test
     public void testProtocolIdExists() throws TripleException {
@@ -186,5 +188,39 @@ public class ActorClientUnitTest {
         final boolean exist =
                 nameSpaceClient.protocolIdExist(PROTOCOL_ID);
         Assert.assertTrue(exist);
+    }
+    
+    /**
+     * Proves its validity for some not existent actors using all the existing 
+     * <code>xxxExist</code> methods.
+     * This test is the antonym for the <code>testProtocolIdExists</code>.
+     * 
+     * @throws TripleException if this exception occurs then this test fails.
+     * @see ActorClient#register(java.lang.String, java.lang.String) 
+     * @see ActorClient#exist(java.lang.String, java.lang.String, java.lang.String) 
+     * @see ActorClient#protocolIdExist(java.lang.String, java.lang.String) 
+     * @see ActorClient#protocolIdExist(java.lang.String) 
+     * @see #testProtocolIdExists() 
+     */
+    @Test
+    public void testProtocolIdIsNotExisting() throws TripleException {
+        final double random = Math.random() * 10000;
+        final String subfix = Double.toHexString(random);
+        final String namespace = NAME_SPACE + subfix;
+        final String phrsId = PHRS_ID + subfix;
+        final String protocolId = PROTOCOL_ID + subfix;
+
+        final boolean existAll =
+                nameSpaceClient.exist(namespace, phrsId, protocolId);
+        // this relation can not exist
+        Assert.assertFalse(existAll);
+        
+        final boolean existNameSpaceAndPHRSId =
+                nameSpaceClient.protocolIdExist(namespace, phrsId);
+        Assert.assertFalse(existNameSpaceAndPHRSId);
+        
+        final boolean exist =
+                nameSpaceClient.protocolIdExist(protocolId);
+        Assert.assertFalse(exist);
     }
 }
