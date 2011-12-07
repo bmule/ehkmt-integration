@@ -16,10 +16,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -396,10 +393,10 @@ public final class ActorClient {
      * @return true if the underlying system contains at least one actor
      * (relation between name-space, PHRS Id and Protocol Id) with the given
      * protocol id.
-     * @throws TripleException by any predicate calculus related errors. 
-     * In most of the cases this exception chains the real cause for this 
-     * exception, this can be obtained by calling the <code>getCause</code> 
-     * method.
+     * @throws TripleException by any predicate calculus related errors. In most
+     * of the cases this exception chains the real cause for this exception,
+     * this can be obtained by calling the
+     * <code>getCause</code> method.
      * @throws NullPointerException if the protocolId argument is null or empty
      * string.
      * @see #exist
@@ -423,11 +420,126 @@ public final class ActorClient {
         return result;
     }
 
-    String removeProtoclId(String namespace, String phrId) {
-        return null;
+    /**
+     * Removes all the actors (relations) that involves a given Name-Space and
+     * PHR System Id and returns the Protocol Id for the deleted actors. If
+     * there are no actors (relations) for the specified Name-Space and
+     * PHR System Id then this method returns an empty set.
+     *
+     * @param namespace the Name-Space for the actor to be deleted. It can not
+     * be null or empty string.
+     * @param phrId the PHR System Id for the actor to be deleted. It can not
+     * be null or empty string.
+     * @return all the Protocol Id for the deleted actors (relations) that
+     * involves a given Name-Space and PHR System Id.
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if any method arguments is null or empty
+     * string.
+     */
+    public Set<String> removeProtoclIds(String namespace, String phrId)
+            throws TripleException {
+
+        if (namespace == null || namespace.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The namespace argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
+        if (phrId == null || phrId.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The phrId argument can not ne null.");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+
+        final Map<String, String> requestMap = new HashMap<String, String>();
+        requestMap.put(Constants.PHRS_ACTOR_NAMESPACE, namespace);
+        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
+        final Iterable<String> forPredicatesAndValues =
+                triplestore.getForPredicatesAndValues(requestMap);
+        final Iterator<String> iterator = forPredicatesAndValues.iterator();
+        final Set<String> result = new HashSet<String>();
+        if (!iterator.hasNext()) {
+            return result;
+        }
+
+        for (String subject = iterator.next(); iterator.hasNext();
+                subject = iterator.next()) {
+            final Iterable<String> forSubjectAndPredicate =
+                    triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
+            final Iterator<String> protocolIdIterator =
+                    forSubjectAndPredicate.iterator();
+            updateSet(result, protocolIdIterator);
+        }
+
+        for (String subject = iterator.next(); iterator.hasNext();
+                subject = iterator.next()) {
+            triplestore.deleteForSubject(subject);
+        }
+
+        return result;
     }
 
-    String removeProtoclId(String phrId) {
-        return null;
+    private Set<String> updateSet(Set<String> set, Iterator<String> iterator) {
+        if (!iterator.hasNext()) {
+            return set;
+        }
+
+        for (String s = iterator.next(); iterator.hasNext();
+                s = iterator.next()) {
+            set.add(s);
+        }
+        return set;
+    }
+
+    /**
+     * Removes all the actors (relations) that involves a given PHR System Id
+     * and returns the Protocol Id for the deleted actors. If
+     * there are no actors (relations) for the specified PHR System Id then this
+     * method returns an empty set.
+     *
+     * @param phrId the PHR System Id for the actor to be deleted. It can not
+     * be null or empty string.
+     * @return all the Protocol Id for the deleted actors (relations) that
+     * involves a given Name-Space and PHR System Id.
+     * @throws TripleException if the relation between the upper listed
+     * properties can not be establish from any reasons. In most of the cases
+     * this exception chains the real cause for this exception, this can be
+     * obtained by calling the
+     * <code>getCause</code> method.
+     * @throws NullPointerException if any method arguments is null or empty
+     * string.
+     */
+    public Set<String> removeProtoclId(String phrId) throws TripleException {
+        final Map<String, String> requestMap = new HashMap<String, String>();
+        requestMap.put(Constants.OWNER, phrId);
+        requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
+
+        final Iterable<String> forPredicatesAndValues =
+                triplestore.getForPredicatesAndValues(requestMap);
+        final Iterator<String> iterator = forPredicatesAndValues.iterator();
+        final Set<String> result = new HashSet<String>();
+        if (!iterator.hasNext()) {
+            return result;
+        }
+
+        for (String subject = iterator.next(); iterator.hasNext();
+                subject = iterator.next()) {
+            final Iterable<String> forSubjectAndPredicate =
+                    triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
+            final Iterator<String> protocolIdIterator = forSubjectAndPredicate.iterator();
+            updateSet(result, protocolIdIterator);
+        }
+
+        for (String subject = iterator.next(); iterator.hasNext();
+                subject = iterator.next()) {
+            triplestore.deleteForSubject(subject);
+        }
+
+        return result;
     }
 }
