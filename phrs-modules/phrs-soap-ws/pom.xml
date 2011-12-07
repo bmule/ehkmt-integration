@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" 
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>phrs-soap-ws</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>SOAP Web Services</name>
+    <description>
+        This modules exposeses some PHRS features like SOAP bease web services.
+    </description>
+
+    <inceptionYear>2011</inceptionYear>
+    <url>http://code.google.com/p/icardea/</url>
+    
+    <dependencies>
+        <dependency>                                                                                                                                                                                      
+            <groupId>org.hl7.v3</groupId>                                                                                                                                                                 
+            <artifactId>QUPC_AR004030UV_Service</artifactId>
+            <version>0.1</version>
+            <!--scope compile-->
+        </dependency> 
+        
+        <dependency>                                                                                                                                                                                      
+            <groupId>org.hl7.v3</groupId>                                                                                                                                                                 
+            <artifactId>QUPC_AR004040UV_Service</artifactId>                                                                                                                                              
+            <version>0.1</version> 
+            <!--scope compile-->
+        </dependency> 
+
+        <dependency>                                                                                                                                                                                      
+            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+            <artifactId>phrs-dataexchange-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <!--scope compile-->
+        </dependency> 
+
+    </dependencies>
+    <build>
+        <finalName>phrs-soap-ws</finalName>
+    </build>
+</project>
