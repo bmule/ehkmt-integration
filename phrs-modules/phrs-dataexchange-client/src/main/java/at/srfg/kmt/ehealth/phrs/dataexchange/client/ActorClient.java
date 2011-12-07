@@ -47,11 +47,13 @@ public final class ActorClient {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ActorClient.class);
+
     /**
      * Holds the name for the creator, the instance responsible to create
      * problem entry instances with this client.
      */
     private static final String CREATOR_NAME = ActorClient.class.getName();
+
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
@@ -423,13 +425,13 @@ public final class ActorClient {
     /**
      * Removes all the actors (relations) that involves a given Name-Space and
      * PHR System Id and returns the Protocol Id for the deleted actors. If
-     * there are no actors (relations) for the specified Name-Space and
-     * PHR System Id then this method returns an empty set.
+     * there are no actors (relations) for the specified Name-Space and PHR
+     * System Id then this method returns an empty set.
      *
      * @param namespace the Name-Space for the actor to be deleted. It can not
      * be null or empty string.
-     * @param phrId the PHR System Id for the actor to be deleted. It can not
-     * be null or empty string.
+     * @param phrId the PHR System Id for the actor to be deleted. It can not be
+     * null or empty string.
      * @return all the Protocol Id for the deleted actors (relations) that
      * involves a given Name-Space and PHR System Id.
      * @throws TripleException if the relation between the upper listed
@@ -440,7 +442,7 @@ public final class ActorClient {
      * @throws NullPointerException if any method arguments is null or empty
      * string.
      */
-    public Set<String> removeProtoclIds(String namespace, String phrId)
+    public Set<String> removeProtocolIds(String namespace, String phrId)
             throws TripleException {
 
         if (namespace == null || namespace.isEmpty()) {
@@ -467,17 +469,13 @@ public final class ActorClient {
             return result;
         }
 
-        for (String subject = iterator.next(); iterator.hasNext();
-                subject = iterator.next()) {
+        for (String subject = ""; iterator.hasNext();) {
+            subject = iterator.next();
             final Iterable<String> forSubjectAndPredicate =
                     triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
             final Iterator<String> protocolIdIterator =
                     forSubjectAndPredicate.iterator();
             updateSet(result, protocolIdIterator);
-        }
-
-        for (String subject = iterator.next(); iterator.hasNext();
-                subject = iterator.next()) {
             triplestore.deleteForSubject(subject);
         }
 
@@ -488,9 +486,8 @@ public final class ActorClient {
         if (!iterator.hasNext()) {
             return set;
         }
-
-        for (String s = iterator.next(); iterator.hasNext();
-                s = iterator.next()) {
+        for (String s = ""; iterator.hasNext();) {
+            s = iterator.next();
             set.add(s);
         }
         return set;
@@ -498,12 +495,14 @@ public final class ActorClient {
 
     /**
      * Removes all the actors (relations) that involves a given PHR System Id
-     * and returns the Protocol Id for the deleted actors. If
-     * there are no actors (relations) for the specified PHR System Id then this
-     * method returns an empty set.
+     * and returns the Protocol Id for the deleted actors. If there are no
+     * actors (relations) for the specified PHR System Id then this method
+     * returns an empty set.<br/>
+     * <b>Note : </b> This methods removes all the clients from all name-spaces.
+     * 
      *
-     * @param phrId the PHR System Id for the actor to be deleted. It can not
-     * be null or empty string.
+     * @param phrId the PHR System Id for the actor to be deleted. It can not be
+     * null or empty string.
      * @return all the Protocol Id for the deleted actors (relations) that
      * involves a given Name-Space and PHR System Id.
      * @throws TripleException if the relation between the upper listed
@@ -514,7 +513,7 @@ public final class ActorClient {
      * @throws NullPointerException if any method arguments is null or empty
      * string.
      */
-    public Set<String> removeProtoclId(String phrId) throws TripleException {
+    public Set<String> removeProtocolIds(String phrId) throws TripleException {
         final Map<String, String> requestMap = new HashMap<String, String>();
         requestMap.put(Constants.OWNER, phrId);
         requestMap.put(Constants.RDFS_TYPE, Constants.PHRS_ACTOR_CLASS);
@@ -527,16 +526,12 @@ public final class ActorClient {
             return result;
         }
 
-        for (String subject = iterator.next(); iterator.hasNext();
-                subject = iterator.next()) {
+        for (String subject = ""; iterator.hasNext(); ) {
+            subject = iterator.next();
             final Iterable<String> forSubjectAndPredicate =
                     triplestore.getForSubjectAndPredicate(subject, Constants.PHRS_ACTOR_PROTOCOL_ID);
             final Iterator<String> protocolIdIterator = forSubjectAndPredicate.iterator();
             updateSet(result, protocolIdIterator);
-        }
-
-        for (String subject = iterator.next(); iterator.hasNext();
-                subject = iterator.next()) {
             triplestore.deleteForSubject(subject);
         }
 
