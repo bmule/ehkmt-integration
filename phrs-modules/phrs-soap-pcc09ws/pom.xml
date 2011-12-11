@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+    
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>phrs-soap-pcc09ws</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>PCC9-SOAP-WS</name>
+    <url>http://maven.apache.org</url>
+    <inceptionYear>2011</inceptionYear>
+    <description>
+        This modules provides an end point able to get involved in IHE CM PCC9
+        transactions.
+    </description>
+    
+    <properties>
+        <log4j.version>1.6.1</log4j.version>
+    </properties>
+    
+    <dependencies>
+
+        
+        <dependency>                                                                                                                                                                                      
+            <groupId>org.hl7.v3</groupId>                                                                                                                                                                 
+            <artifactId>QUPC_AR004040UV_Service</artifactId>                                                                                                                                              
+            <version>0.1</version> 
+        </dependency>     
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        
+    </dependencies>
+    
+    <build>
+        <finalName>PCC9-SOAP-WS</finalName>
+    </build>
+</project>
