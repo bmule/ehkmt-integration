@@ -74,6 +74,8 @@
         <module>phrs-constants</module>
         <module>phrs-persistence-driver</module>
         <module>phrs-dataexchange-client</module>
+        <module>phrs-soap-pcc09ws</module>
+        <module>phrs-soap-pcc10ws</module>
   </modules>
 
 
