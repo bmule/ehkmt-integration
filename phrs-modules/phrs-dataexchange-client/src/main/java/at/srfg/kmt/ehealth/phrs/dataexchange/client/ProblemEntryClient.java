@@ -79,7 +79,7 @@ public final class ProblemEntryClient {
      * can not be initialized from any reasons.
      * @throws TripleException 
      */
-    ProblemEntryClient() throws GenericRepositoryException, TripleException {
+    public ProblemEntryClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
         final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct("startup.test.rdf");
         // I load the need instances.
@@ -96,7 +96,7 @@ public final class ProblemEntryClient {
      * @throws NullPointerException if the <code>triplestore</code> 
      * argument is null. 
      */
-    ProblemEntryClient(GenericTriplestore triplestore) {
+    public ProblemEntryClient(GenericTriplestore triplestore) {
         if (triplestore == null) {
             throw new NullPointerException("The triplestore argument can not be null.");
         }
