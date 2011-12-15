@@ -12,7 +12,7 @@
     <groupId>at.srfg.kmt.ehealth.phrs</groupId>
     <artifactId>phrs-dataexchange-client</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>Personal Health System Framework Data Exchange Clinet</name>
+    <name>Data Exchange Clinet</name>
     <description>
         This modules uses the persistence driver to access information from the 
         underlying persistence layer. 
