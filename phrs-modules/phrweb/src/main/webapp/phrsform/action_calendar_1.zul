@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<!--  TODO need to winmt has binder need to agree -->
+<!--  ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?-->
+<?component name="calendar-eventpage" inline="true" macro-uri="/phrsform/action_calendar_ctrl_event_1.zul" ?>
+<?component name="calendar-menubar" inline="true" macro-uri="/phrsform/action_calendar_ctrl_menu_1.zul" ?>
+<!-- 
+
+<? component name="calendar-eventpage" inline="true" macro-uri="/widgets/application/zk_calendar/ctrl_event.zul" ? >
+<? component name="calendar-menubar" inline="true" macro-uri="/widgets/application/zk_calendar/ctrl_menu.zul" ? >
+mold="month" 
+mold="default" shows time, instead of month view
+ -->
+
+<zk>
+    <style src="style.css" />                
+    <window id="DemoWin" apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.AllCalendarComposer">
+        <!-- Main Calendar Component timeZone="HeadQuarter=GMT-8,EuroDivision=GMT+0" -->
+        <div>	
+Portal user <label value="@{mainDashCtrl.portalUser}"/>..<label value="${mainDashCtrl.portalUser}"/>
+        </div>
+        <calendars id="calendars"  
+        firstDayOfWeek="Sunday" 
+         mold="month"  
+         height="600px" 
+         timeZone="${calendars.defaultTimeZone}" >
+            <toolbar>     
+                <!-- Module - Control Menu -->
+                <calendar-menubar />
+            </toolbar>
+        </calendars>
+ 
+        <!-- Module - Event Popup -->
+        <calendar-eventpage />
+         
+        <!-- Choose Date Popup -->
+        <popup id="dateChooserPopup" sclass="chooser-popup"
+            onOpen='dateChooser.value=calendars.currentDate;dateChooser.timeZone=calendars.defaultTimeZone'>
+            <!-- onOpen='dateChooser.value=calendars.currentDate;dateChooser.timeZone=calendars.defaultTimeZone'> -->
+            <groupbox mold="3d">
+                <caption label="Data Chooser">
+                    <button id="dateConfirm" label="Close" />
+                </caption>
+                <calendar id="dateChooser" />
+            </groupbox>
+        </popup>
+ 
+        <!-- Server+Client Fusion - Mouse Scroll Handling -->
+        <script type="text/javascript" src="/js/lib/jquery.mousewheel.min.js" />
+        <script type="text/javascript" ><![CDATA[
+            var calenderWidget; //ZK Calendar client side widget
+            zk.afterMount(function() {
+                calenderWidget = zk.Widget.$(jq("$calendars")); // ZK id selector
+                 
+                //Mouse wheel Handle - change month 
+                jq('$calendars').bind('mousewheel', function(event, delta) {
+                    if (calenderWidget.getMold() == "month") { //Only month mold need this 
+                        zAu.send(new zk.Event(calenderWidget, 'onMoveDate', delta > 0 ? 1 : -1));
+                        return false
+                    }
+                    return true;
+                });
+            });
+        ]]></script>
+    </window>
+</zk>

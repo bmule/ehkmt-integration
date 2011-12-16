@@ -1,0 +1,32 @@
+http://yigitdarcin.wordpress.com/2011/05/18/better-ajax-operations-and-callbacks-in-jsf-with-primefaces/
+
+
+<h:outputScript target="head">
+//<![CDATA[ 
+      function handleSaveRequest(xhr, status, args) {
+           if( args.notValid || args.validationFailed )
+              return;
+           userFormDialog.hide();
+           alert('User with username ' +args.user.username+ ' is saved successfully');
+   }
+ //]]>  
+</h:outputScript>
+
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (window.console && window.console.firebug) {
+						  console.log("onEditComplete idDialogObw o1 outputScript");
+					}					
+					if (args.validationFailed) {
+							jQuery('#dialog').effect("shake", { times:5 }, 100);
+						
+						if (window.console && window.console.firebug) {
+							  console.log("onEditComplete  validation failed");
+						}				
+					} else {
+						widDialogObw.hide();
+					}
+				}
+	     		//]]>			
+			</script>

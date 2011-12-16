@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+	
+<f:view contentType="text/html">
+<h:head>
+	<title></title> 
+</h:head>
+
+<h:body>
+<ui:composition>
+<!-- 
+				$(PrimeFaces.escapeClientId('idDialogAAA')).parent()
+								.effect("shake", {
+									times : 5
+								}, 100);
+
+ -->
+	<h:outputScript  target="head" >
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+		
+						$(PrimeFaces.escapeClientId('widDialogRisk')).parent()
+						.effect("shake", {
+							times : 5
+						}, 100);						
+					} else {
+						widDialogAAA.hide();
+					}
+				}
+	     		//]]>			
+			</script>
+	</h:outputScript>
+
+	<h:form prependId="false" id="formOOO" binding="#{OOOBean.mainForm}">
+		
+		<p:messages showDetail="true"></p:messages>
+		<p:growl id="msgs" showDetail="true" />
+
+		<p:fieldset legend="#{labels['default_blank_label']}">
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="create" rendered="#{OOOBean.allowCreate}"
+						title="#{labels['default.button.newform.label']}"
+						image="ui-icon-plus" actionListener="#{OOOBean.create}"
+						update="idPanelXXX" oncomplete="widDialogAAA.show()" />
+					<p:spacer width="100" height="10" rendered="#{OOOBean.allowCreate}" />
+					
+					<p:commandButton value="chart01" 	title="#{labels['default_blank_label']}						 
+						update="idPanelChart01BodyWeight" oncomplete="widDialogChart01.show()" />
+					<p:commandButton value="chart02" title="#{labels['default_blank_label']}"						 
+						update="idPanelChart02" oncomplete="widDialogChart02.show()" />	
+									
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="idItemTableActionmgt" 
+				widgetVar="widItemTableActionmgt" var="theItem"
+				value="#{OOOBean.modelMain}" paginator="true" rows="20">
+
+				<p:column style="width:50px" headerText="Options">
+					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+						<!-- ok, success view  OOOBean -->
+						<p:commandButton update="idPanelXXX"
+							disabled="#{theItem.status eq 'default.no_answer.label'}"
+							oncomplete="widDialogAAA.show()" image="ui-icon ui-icon-search"
+							title="#{labels['default.button.view.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{OOOBean.selected}" />
+							<f:setPropertyActionListener value="no"
+								target="#{OOOBean.modify}" />
+						</p:commandButton>
+
+						<p:commandButton update="idPanelXXX"
+							oncomplete="widDialogAAA.show()" image="ui-icon ui-icon-pencil"
+							title="#{labels['default.button.edit.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{OOOBean.selected}" />
+							<f:setPropertyActionListener value="yes"
+								target="#{OOOBean.modify}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+				
+				<p:column headerText="#{labels['default_blank_label']}">
+					<h:outputLabel value="#{theItem.priority}" />
+				</p:column>
+				<p:column headerText="#{labels['default_blank_label']}">
+					<h:outputLabel value="#{theItem.status}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{labels['default_blank_label']}">
+					<h:outputLabel value="#{theItem.title}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+
+
+				<p:column headerText="#{labels['action.category.label']}">
+					<h:outputLabel value="#{theItem.code}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+				<!-- short.date.label=Date-->
+				<p:column headerText="#{labels['short.dateStart.label']}">
+					<h:outputLabel value="#{theItem.beginDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>
+				<p:column headerText="#{labels['short.dateEnd.label']}">
+					<h:outputLabel value="#{theItem.endDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>
+
+
+				<p:column headerText="#{labels['default.comments.label']}">
+					<h:outputText value="#{theItem.note}" />
+				</p:column>
+
+				<!--  expander  -->
+			</p:dataTable>
+		</p:fieldset>
+		
+		
+		</h:form>
+		
+	<h:form prependId="false">
+			<p:messages showDetail="true"></p:messages>
+			<p:growl id="msgs" showDetail="true" />
+	
+		<p:dialog closable="false" 
+			widgetVar="widDialogAAA" 
+			id="idDialogAAA" 
+			header="#{labels['default_blank_label']}"
+			resizable="true" 
+			modal="true" appendToBody="true"
+			width="600">
+
+			<p:outputPanel id="idPanelAdl" layout="block">
+				<!-- fields here  inside outputPanel, this gets updated-->
+				
+				<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
+					<f:facet name="header">
+						<h:outputLabel value="#{OOOBean.selected.code}">
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+					</f:facet>					
+
+					<h:outputLabel for="idField_1"
+						value="#{labels['default_blank_label']}"
+						styleClass="form-dialog-label" />
+						
+					<p:outputPanel id="idField_1" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.title}"
+							rendered="#{OOOBean.modify eq 'no'}" />
+						<p:inputText value="#{OOOBean.selected.title}"
+							id="idField_1_input"
+							rendered="#{OOOBean.modify eq 'yes'}" />
+					</p:outputPanel>
+					<p:message for="idField_1_input" display="text" /> 
+					
+					
+					<h:outputLabel for="idField_code"
+						value="#{labels['default_blank_label']}"
+						styleClass="form-dialog-label" />
+
+					<p:outputPanel id="idField_code" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.code}"
+							rendered="#{OOOBean.modify eq 'no'}">
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+						<!-- value: itemValue="default.no_answer.label" or itemValue=""-->
+						<h:selectOneMenu value="#{OOOBean.selected.code}"
+							id="idField_2_input"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:selectItem itemLabel="Please Choose"
+								itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>								
+							<f:selectItems value="#{OOOBean.vocabMap.TAG_ZZZZ}" var="lv"
+								itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+						</h:selectOneMenu>
+					</p:outputPanel>
+					<p:message for="idField_2_input" display="text" /> 
+										
+					<!-- radio options for status, need label default_activeStatusFalse-->
+										<h:outputLabel for="idField_status" value="#{labels['default_blank_label']}" styleClass="form-dialog-label" />
+										<p:outputPanel id="idField_status" layout="block">
+														<h:selectOneRadio value="#{OOOBean.selected.status}">
+															<f:selectItem itemLabel="#{labels['default_activeStatusTrue']}"
+																itemValue="default_activeStatusTrue"
+																noSelectionOption="true"></f:selectItem>
+															<f:selectItem itemLabel="#{labels['default_activeStatusFalse']}"
+																itemValue="default_activeStatusFalse" ></f:selectItem>
+														</h:selectOneRadio>					
+										</p:outputPanel>
+										<p:message for="idField_status" display="text" /> 	
+<!-- integer -->
+					<h:outputLabel value="#{labels['default_blank_label']}"
+						for="intField_1" styleClass="form-dialog-label" />
+					<p:outputPanel id="intField_1" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.priority}"
+							rendered="#{OOOBean.modify eq 'no'}"/>
+						<p:inputText  value="#{OOOBean.selected.priority}"
+							id="intField_1_input"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:convertNumber integerOnly="true"  pattern="9999"></f:convertNumber>
+						</p:inputText>
+					</p:outputPanel>
+					<p:message for="intField_1_input" display="text" /> 
+<!-- double -->
+					<h:outputLabel value="#{labels['default_blank_label']}"
+						for="doubleField_1" styleClass="form-dialog-label" />
+					<p:outputPanel id="doubleField_1" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.priority}"
+							rendered="#{OOOBean.modify eq 'no'}"/>
+							
+						<p:inputText  value="#{OOOBean.selected.priority}"
+							id="doubleField_1_input"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:convertNumber  maxFractionDigits="1" ></f:convertNumber>
+						</p:inputText>
+					</p:outputPanel>									
+					<p:message for="doubleField_1_input" display="text" /> 
+					
+					<h:outputLabel value="#{labels['short.dateStart.label']}"
+						for="beginDateField" styleClass="form-dialog-label" />
+					<p:outputPanel id="beginDateField" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.beginDate}"
+							rendered="#{OOOBean.modify eq 'no'}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputLabel>
+						<!-- calendar option
+	                    <p:calendar 
+	                                rendered="X{OOOBean.modify eq 'yes'}"
+	                                title="yyyy-MM-dd"
+	                                value="#{OOOBean.selected.beginDate}"
+	                                showOn="button"
+	                                pattern="yyyy-MM-dd" />
+	                                
+	                                -->
+
+						<p:inputMask mask="9999/99/99"
+						id="beginDateField_input"
+							value="#{OOOBean.selected.beginDate}"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:convertDateTime pattern="yyyy/MM/dd" />
+						</p:inputMask>
+					</p:outputPanel>					
+					<p:message for="beginDateField_input" display="text" /> 
+					
+					<h:outputLabel value="#{labels['short.dateStart.label']}"
+								for="beginDateField" styleClass="form-dialog-label" />
+					<p:outputPanel id="beginDateField" layout="block">
+								<h:outputLabel value="#{OOOBean.selected.beginDate}"
+									rendered="#{OOOBean.modify eq 'no'}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+
+								<p:calendar id="beginDateField_input"
+									required="true" requiredMessage="#{labels['default_required_field']}"
+									rendered="#{OOOBean.modify eq 'yes'}" title="yyyy-MM-dd"
+									value="#{OOOBean.selected.beginDate}" showOn="button"
+									pattern="yyyy-MM-dd" />
+									
+							</p:outputPanel>
+							<p:message for="beginDateField_input" display="text" />					
+
+					<h:outputLabel value="#{labels['short.dateEnd.label']}"
+						for="endDateField" styleClass="form-dialog-label" />
+					<p:outputPanel id="endDateField" layout="block">
+						<h:outputLabel value="#{OOOBean.selected.endDate}"
+							rendered="#{OOOBean.modify eq 'no'}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputLabel>
+						<!-- 	
+	                    <p:calendar 
+	                                rendered="X{OOOBean.modify eq 'yes'}"
+	                                title="yyyy-MM-dd"
+	                                value="X{OOOBean.selected.endDate}"
+	                                showOn="button"
+	                                pattern="yyyy-MM-dd" />-->
+
+						<p:inputMask id="_DateField_input" mask="9999/99/99" value="#{OOOBean.selected.endDate}"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:convertDateTime pattern="yyyy/MM/dd" />
+						</p:inputMask>
+					</p:outputPanel>
+					<p:message for="_DateField_input" display="text" />
+					
+<!-- display date uses either end date or start date -->		
+                  <h:outputLabel value="#{labels['default_blank_label']}"
+                                 for="displayDateField"
+                                 styleClass="form-dialog-label"/>
+                                 
+                   <p:outputPanel id="displayDateField"   layout="block">
+                                  
+						<h:outputLabel value="#{OOOBean.selected.displayDate}" 
+							rendered="#{OOOBean.modify eq 'no'}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputLabel>	                   
+                  		<!-- 	
+                  		 <p:calendar 
+                               rendered="X{OOOBean.modify eq 'yes'}"
+                               title="yyyy-MM-dd"
+                               value="X{OOOBean.selected.displayDate}"
+                               showOn="button"
+                               pattern="yyyy-MM-dd" />-->
+                                                       		
+						<p:inputMask id="_DateField2_input" mask="9999/99/99"
+							value="#{OOOBean.selected.displayDate}"
+							rendered="#{OOOBean.modify eq 'yes'}">
+							<f:convertDateTime pattern="yyyy/MM/dd" />
+						</p:inputMask>									                                
+                  </p:outputPanel>								
+ 						<p:message for="_DateField2_input" display="text" /> 
+
+		            <h:outputLabel for="field_note"
+								value="#{labels['default.comments.label']}"
+								styleClass="form-dialog-label" />  
+                    <p:outputPanel id="field_note"  layout="block">
+						<h:outputText value="#{OOOBean.selected.note}"
+							rendered="#{OOOBean.modify eq 'no'}" styleClass="commentText" />
+						<p:inputTextarea value="#{OOOBean.selected.note}"
+							autoResize="false" cols="30" rows="5"  
+							rendered="#{OOOBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+	  				</p:outputPanel> 					 
+				</h:panelGrid>
+
+				<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+					<f:facet name="header">
+
+						<p:commandButton rendered="#{OOOBean.modify eq 'yes'}"
+							widgetVar="widDialogSaveButtonXXX" process="idPanelXXX"
+							value="#{labels['default.button.create.label']}"
+							title="#{labels['default.button.create.label']}"
+							update="msgs idFormXXX idItemTableXXX" 
+							actionListener="#{OOOBean.store}"
+							oncomplete="onEditComplete(xhr,status,args)"
+							image="ui-icon ui-icon-check" />						
+<!-- 
+	form must be inner to output panelfor above update list		was on save update="idItemTableXXX msgs idPanelXXX" 
+do not change to type= reset or alter onsuccess to oncomplete. The test is to make the save button fail via invalidate and then try to cancel
+if the JSF lifecyle is messed up the same dialog form will appear again and again....This type of cancel button works with the refresh backend method "refresh" -->
+							
+						<p:commandButton rendered="#{OOOBean.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{OOOBean.refresh}" immediate="true" 
+							onsuccess="widDialogAAA.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{OOOBean.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 
+							onsuccess="widDialogAAA.hide()"
+							image="ui-icon ui-icon-close" />
+
+					</f:facet>
+				</h:panelGrid>
+			</p:outputPanel>
+		</p:dialog>
+
+	
+	</h:form>
+	<!-- remove "type=reset, add: actionListener="#{OOOBean.refresh}" immediate="true"  
+	onclick="widDialogAAA.hide()"
+	 value="#{labels['default.button.reset.label']}" 
+										value="#{odlbwBean.modify eq 'no' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"  
+	
+	-->
+	<h:form prependId="false">
+		<p:messages showDetail="true"></p:messages>
+		<!--<p:growl id="msgs" showDetail="true" />-->
+		<p:dialog closable="true" 
+			widgetVar="widDialogChart00" 
+			id="idChart00" 
+			header="#{labels['default.tab.charts']} : #{labels['default_blank_label']}"
+			resizable="true" 
+			modal="true" appendToBody="true"
+			width="600">
+			<p:outputPanel id="idPanelChart00">
+				<p:lineChart model="#{OOOBeanBean.chart00}" />
+			</p:outputPanel>
+		</p:dialog>
+	</h:form>
+
+</ui:composition>
+
+	
+</h:body>
+<!--
+			oncomplete="widItemTableXXXRisk.update();widDialogAAA.hide()" 
+			immediate true avoids hang up with validation errors, do not use a closable window because need to refresh UI dialog component and need ID on back end!-->
+</f:view>
+</html>
+

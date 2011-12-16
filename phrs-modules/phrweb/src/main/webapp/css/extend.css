@@ -1,0 +1,37 @@
+.table.innertable td { border:0;
+}
+
+.ui-datatable .ui-datatable-header {
+	text-align: right;
+}
+
+.actions td {
+	border: 0px none !important;
+	padding: 2px !important;
+}
+
+.button-cell-small {
+	width: 35px;
+	height: 35px;
+}
+
+.column-2-buttons {
+	width: 90px;
+}
+
+.commentTextInputArea {
+	
+}
+
+.commentText {
+	
+}
+
+.column-button-spacer {
+	width: 3px;
+}
+
+.form-dialog-label {
+	font-weight: bold;
+	width: 100px;
+}

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<style type="text/css">
+		.table.innertable td { border:0;
+		}
+	</style>
+</h:head>
+<h:body>
+	
+<f:view contentType="text/html">
+
+			<h:form prependId="false">
+				
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['activityOfDailyLivingItem.label']}">
+
+					<!--  rendered="#{padlBean.modify eq 'yes'}" 
+					onRowEditUpdate="msgs" < p:column selectionMode="multiple" /> -->
+
+
+					<p:dataTable rowEditListener="#{padlBean.rowEditListener}"
+						onRowEditUpdate="msgs" 
+						selectionMode="single"
+						selection="#{padlBean.selected}" 
+						id="idItemTableAdl"
+						widgetVar="widItemTableAdl" var="theItem"
+						value="#{padlBean.modelMain}">
+						
+
+						<p:column headerText="#{labels['labels.menu.options.label']}"
+							style="width:16px">
+							<p:rowEditor />
+						</p:column>
+
+						<p:column
+							headerText="#{labels['activityOfDailyLivingItem.activityCode.label']}">
+							<h:outputLabel value="#{theItem.code}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+		
+						<p:column styleClass="innertable" headerText="#{labels['activityOfDailyLivingItem.valueActivity.label']}" >
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputLabel value="#{theItem.status}">
+										<f:converter converterId="labelLookup" />
+									</h:outputLabel>
+								</f:facet>
+		
+								<f:facet name="input">
+									<h:selectOneRadio value="#{theItem.status}">
+										<f:selectItem itemLabel="I can do this without assistance"
+											itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
+										<f:selectItem itemLabel="I require assistance"
+											itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>
+										
+										<f:selectItem itemLabel="Not answered"
+											itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
+									</h:selectOneRadio>
+								</f:facet>
+							</p:cellEditor>
+
+						</p:column>
+		
+				
+						<p:column headerText="#{labels['default.comments.label']}">
+							<p:cellEditor>
+								<f:facet name="output">
+									<h:outputText value="#{theItem.note}" />
+								</f:facet>
+								<f:facet name="input">
+									<h:inputText value="#{theItem.note}" style="width:100%" />
+								</f:facet>
+							</p:cellEditor>
+
+						</p:column>
+		  				
+					</p:dataTable>
+				</p:fieldset>
+			</h:form>
+
+
+	<!-- 
+
+					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+				<listheader label="${labels.obsIssue.issueCode.label}" 				hflex="2" sort="auto(code)" />
+				<listheader label="${labels.activityOfDailyLivingItem.valueActivity.label}" 		hflex="2" sort="auto(status)" />
+				<listheader label="${labels.short.dateStart.label}"  				hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 					hflex="1" />
+				<listheader label="${labels.default.comments.label}" 				hflex="3" />
+			</listhead>
+	
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.code,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 			
+				<listcell label="@{itemMain.status,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>
+				<listcell label="@{itemMain.beginDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				<listcell label="@{itemMain.endDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	/>						
+				<listcell label="@{itemMain.note}"      		/>																		
+			</listitem>							
+		</listbox>	
+					
+
+activityOfDailyLivingItem.label=Activity Of Daily Living
+activityOfDailyLivingItem.activityCategory.label=Category
+activityOfDailyLivingItem.activityCode.label=Activity Type
+activityOfDailyLivingItem.valueActivity.label=Activity Status
+#deprecated
+activityOfDailyLivingItem.isActivityUnassisted.label=I can do without assistance
+#deprecated
+activityOfDailyLivingItem.isActivityAssisted.label=I can do with assistance
+
+action=" {padlBean.store}"
+http://balusc.blogspot.com/2006/06/using-datatables.html
+actionListener=" {padlBean.store}" 
+update="msgs"
+process="@parent"
+								 <f:setPropertyActionListener value="#{theItem}" target="#{padlBean.selectedItem}" />
+
+						 editing onchange="x{padlBean.store}" valueChangeListener="X{padlBean.store}" 
+											<f:selectItem
+										itemLabel="#{labels['default_activeStatusNotSpecified']}"
+										itemValue="default_activeStatusNotSpecified"
+										noSelectionOption="true"></f:selectItem>
+							<f:selectItems value=" {padlBean.vocabMap.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS}"
+							
+										var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />									
+	valueChangeListener="#{padlBean.setSelected}">
+	
+	        <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{car.model}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{car.model}" style="width:100%"/>
+                </f:facet>
+	idItemTableAdl
+						<p:column>
+							<p:commandButton headerText="Update your Status"
+								action=" {padlBean.testme}" image="ui-icon ui-icon-pencil"
+								title="Update">
+								<f:setPropertyActionListener value=" {theItem}"
+									target=" {padlBean.selected}" />
+							</p:commandButton>
+						</p:column>, -->
+</f:view>
+</h:body>
+</html>

@@ -1,0 +1,4 @@
+if (window.console && window.console.firebug) {
+  console.debug();
+}
+

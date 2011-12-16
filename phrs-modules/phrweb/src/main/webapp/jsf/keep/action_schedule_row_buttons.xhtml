@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+
+	<ui:composition>
+	<!--
+		 p:column style="width:13px">
+			<p:outputPanel
+				rendered="YY{theItem.status != 'default.no_answer.label'}">
+				<p:rowToggler />
+			</p:outputPanel>
+		 /p:column>-->
+
+		<p:column style="width:50px">
+			<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+				<!-- ok, success view  actionmgtBean -->
+				<p:commandButton update="idPanelActionmgt"
+					disabled="#{theItem.status eq 'default.no_answer.label'}"
+					oncomplete="widActionmgtDialog.show()"
+					image="ui-icon ui-icon-search"
+					title="#{labels['default.button.view.label']}">
+					<f:setPropertyActionListener value="#{theItem}"
+						target="#{actionmgtBean.selected}" />
+					<f:setPropertyActionListener value="no" target="#{actionmgtBean.modify}" />
+				</p:commandButton>
+
+				<p:commandButton update="idPanelActionmgt"
+					oncomplete="widActionmgtDialog.show()"
+					image="ui-icon ui-icon-pencil"
+					title="#{labels['default.button.edit.label']}">
+					<f:setPropertyActionListener value="#{theItem}"
+						target="#{actionmgtBean.selected}" />
+					<f:setPropertyActionListener value="yes"
+						target="#{actionmgtBean.modify}" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:column>
+	</ui:composition>
+</h:body>
+</html>

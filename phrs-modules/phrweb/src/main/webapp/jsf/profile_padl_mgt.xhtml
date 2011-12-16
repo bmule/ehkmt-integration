@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui
+	http://www.javabeat.net/tips/72-how-to-use-hselectoneradio-inside-hdatatabl.html
+	http://www.javabeat.net/tips/43-how-to-use-hselectbooleancheckbox-within-hd.html
+	-->
+	<ui:define name="head">
+	
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+
+					} else {
+						widDialogAdl.hide();
+					}
+				}
+	     		//]]>			
+			</script>
+				
+		<style type="text/css">
+		.table.innertable td { border:0;
+		}
+	</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<!-- TODO ADD column render options for modify, and make column for modify = no
+activityOfDailyLivingItem.activityCode.label
+
+prependId="false"
+			<f:facet name="header">Choose the edit option on each row to update your answer </f:facet>
+
+ -->
+
+	<ui:define name="content">
+		<div class="entry">
+
+			<h:form prependId="false">
+				<p:messages />
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['activityOfDailyLivingItem.label']}">
+
+					<!--  rendered="#{padlBean.modify eq 'yes'}" 
+					onRowEditUpdate="msgs"-->
+
+
+					<p:dataTable widgetVar="widItemTableAdl" id="idItemTableAdl"
+					 	var="theItem" value="#{padlBean.modelMain}">
+					 	
+						<p:column style="width:50px" headerText="Options">
+							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+		
+								<!-- ok, success view  padlBean -->
+								<p:commandButton update="idPanelAdl"
+									disabled="#{theItem.status eq 'default.no_answer.label'}"
+									oncomplete="widDialogAdl.show()" image="ui-icon ui-icon-search"
+									title="#{labels['default.button.view.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{padlBean.selected}" />
+									<f:setPropertyActionListener value="no"
+										target="#{padlBean.modify}" />
+								</p:commandButton>
+		
+								<p:commandButton update="idPanelAdl"
+									oncomplete="widDialogAdl.show()" image="ui-icon ui-icon-pencil"
+									title="#{labels['default.button.edit.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{padlBean.selected}" />
+									<f:setPropertyActionListener value="yes"
+										target="#{padlBean.modify}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>
+
+						<p:column headerText="#{labels['activityOfDailyLivingItem.activityCode.label']}">
+							<h:outputLabel value="#{theItem.code}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+
+						
+						<p:column styleClass="innertable" headerText="#{labels['activityOfDailyLivingItem.valueActivity.label']}" >							
+							<h:outputLabel value="#{theItem.status}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+	
+						<p:column headerText="#{labels['default.comments.label']}">
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+						
+					</p:dataTable>
+				</p:fieldset>
+						
+
+			</h:form>
+
+		</div>
+		<!-- div entry -->
+		
+
+				<p:dialog closable="false" widgetVar="widDialogAdl" header="#{labels['activityOfDailyLivingItem.activityCode.label']}"
+					appendToBody="true" 
+					id="idDialogAdl" resizable="true" modal="true" width="600">
+					
+					<p:outputPanel id="idPanelAdl" layout="block">
+					
+					<h:form prependId="false" id="idFormAdl">
+						<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
+								<f:facet name="header">
+									<h:outputLabel value="#{padlBean.selected.code}">
+										<f:converter converterId="labelLookup" />
+									</h:outputLabel>
+								</f:facet>	
+														
+								<h:outputLabel for="idField_status" value="#{labels['activityOfDailyLivingItem.valueActivity.label']}" styleClass="form-dialog-label" />
+								<p:outputPanel id="idField_status" layout="block">
+										<h:selectOneRadio value="#{padlBean.selected.status}">
+											<f:selectItem itemLabel="I can do this without assistance"
+												itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
+											<f:selectItem itemLabel="I require assistance"
+												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>									
+											<f:selectItem itemLabel="Not answered"
+												itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
+										</h:selectOneRadio>					
+								</p:outputPanel>
+								<p:message for="idField_status" display="text" /> 
+	
+			           			<h:outputLabel for="field_note"
+									value="#{labels['default.comments.label']}"
+									styleClass="form-dialog-label" />  
+								<p:column colspan="2">	
+				                    <p:outputPanel id="field_note"  layout="block">
+										<h:outputText value="#{padlBean.selected.note}"
+											rendered="#{padlBean.modify eq 'no'}" styleClass="commentText" />
+										<p:inputTextarea value="#{padlBean.selected.note}"
+											autoResize="false" cols="30" rows="5"  
+											rendered="#{padlBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+					  				</p:outputPanel>
+					  				<p:message for="field_note" display="text" /> 
+				  				</p:column>		  						
+	  						
+	  						</h:panelGrid>	
+							<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+								<f:facet name="header">
+			
+									<p:commandButton rendered="#{padlBean.modify eq 'yes'}"
+										widgetVar="widDialogSaveButtonAdl" process="idFormAdl"
+										value="#{labels['default.button.create.label']}"
+										title="#{labels['default.button.create.label']}"
+										update="idFormAdl idItemTableAdl msgs"
+										actionListener="#{padlBean.store}"
+										oncomplete="onEditComplete(xhr,status,args)"
+										image="ui-icon ui-icon-check" />
+
+										
+									<p:commandButton rendered="#{padlBean.modify eq 'yes'}" 
+										value="#{labels['default.button.reset.label']}" 						
+										actionListener="#{padlBean.refresh}" immediate="true" 
+										onsuccess="widDialogAdl.hide()"									
+										image="ui-icon ui-icon-close" />
+						
+									<p:commandButton  rendered="#{padlBean.modify eq 'no'}" 
+										value="#{labels['default.button.close.label']}" 						
+										reset="true"
+										onsuccess="widDialogAdl.hide()"
+										image="ui-icon ui-icon-close" />					
+								<!-- padlBean -->
+								</f:facet>
+							</h:panelGrid>	
+						</h:form>  															
+					</p:outputPanel>
+						
+				</p:dialog>
+		
+	
+<!-- <p:commandButton
+										value="#{padlBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+										type="reset" immediate="true" onclick="widDialogAdl.hide()"
+										image="ui-icon ui-icon-close" />
+	
+		<h:form prependId="false">
+			<p:dialog closable="false" widgetVar="xxwidDialogAdl" header="#{labels['activityOfDailyLivingItem.activityCode.label']}"
+					appendToBody="true" id="xxidDialogAdl" resizable="true" modal="true" width="600">
+					
+						<p:outputPanel id="xxidPanelAdl" layout="block">
+							<h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+								<f:facet name="header">
+									<h:outputLabel value="#{padlBean.selected.code}">
+										<f:converter converterId="labelLookup" />
+									</h:outputLabel>
+								</f:facet>	
+								
+								<h:outputLabel for="xxidField_status" value="#{labels['activityOfDailyLivingItem.valueActivity.label']}" styleClass="form-dialog-label" />
+								<p:outputPanel id="xxidField_status" layout="block">
+										<h:selectOneRadio value="#{padlBean.selected.status}">
+											<f:selectItem itemLabel="I can do this without assistance"
+												itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
+											<f:selectItem itemLabel="I require assistance"
+												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>									
+											<f:selectItem itemLabel="Not answered"
+												itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
+										</h:selectOneRadio>					
+								</p:outputPanel>
+							
+					
+							</h:panelGrid>
+						</p:outputPanel>
+						</p:dialog>		
+		</h:form> -->
+		
+		
+	</ui:define>
+	<!-- 
+
+					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+				<listheader label="${labels.obsIssue.issueCode.label}" 				hflex="2" sort="auto(code)" />
+				<listheader label="${labels.activityOfDailyLivingItem.valueActivity.label}" 		hflex="2" sort="auto(status)" />
+				<listheader label="${labels.short.dateStart.label}"  				hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 					hflex="1" />
+				<listheader label="${labels.default.comments.label}" 				hflex="3" />
+			</listhead>
+	
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.code,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 			
+				<listcell label="@{itemMain.status,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>
+				<listcell label="@{itemMain.beginDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				<listcell label="@{itemMain.endDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	/>						
+				<listcell label="@{itemMain.note}"      		/>																		
+			</listitem>							
+		</listbox>	
+					
+
+activityOfDailyLivingItem.label=Activity Of Daily Living
+activityOfDailyLivingItem.activityCategory.label=Category
+activityOfDailyLivingItem.activityCode.label=Activity Type
+activityOfDailyLivingItem.valueActivity.label=Activity Status
+#deprecated
+activityOfDailyLivingItem.isActivityUnassisted.label=I can do without assistance
+#deprecated
+activityOfDailyLivingItem.isActivityAssisted.label=I can do with assistance
+
+action=" {padlBean.store}"
+http://balusc.blogspot.com/2006/06/using-datatables.html
+actionListener=" {padlBean.store}" 
+update="msgs"
+process="@parent"
+								 <f:setPropertyActionListener value="#{theItem}" target="#{padlBean.selectedItem}" />
+
+						 editing onchange="x{padlBean.store}" valueChangeListener="X{padlBean.store}" 
+											<f:selectItem
+										itemLabel="#{labels['default_activeStatusNotSpecified']}"
+										itemValue="default_activeStatusNotSpecified"
+										noSelectionOption="true"></f:selectItem>
+							<f:selectItems value=" {padlBean.vocabMap.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS}"
+							
+										var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />									
+	valueChangeListener="#{padlBean.setSelected}">
+	
+	        <p:cellEditor>
+                <f:facet name="output">
+                    <h:outputText value="#{car.model}" />
+                </f:facet>
+                <f:facet name="input">
+                    <p:inputText value="#{car.model}" style="width:100%"/>
+                </f:facet>
+	idItemTableAdl
+						<p:column>
+							<p:commandButton headerText="Update your Status"
+								action=" {padlBean.testme}" image="ui-icon ui-icon-pencil"
+								title="Update">
+								<f:setPropertyActionListener value=" {theItem}"
+									target=" {padlBean.selected}" />
+							</p:commandButton>
+						</p:column>, -->
+</ui:composition>

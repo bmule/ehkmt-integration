@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title> 
+</h:head>
+<!-- 		modal="false" appendToBody="true" removed prependId="false" and works now..-->
+<h:body>
+<ui:composition>	
+	<h:form>
+		<p:dialog closable="true" 
+		widgetVar="widDialogChart02" 
+		id="idChart02" 
+		header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
+		resizable="true" 
+		width="550">
+			<p:outputPanel id="idPanelChart02">
+				<p:lineChart model="#{odlbpBean.chartModel}" style="chartStyle" titleY="Blood Pressure" titleX="Time"/>
+			</p:outputPanel>
+		</p:dialog>			
+   </h:form>        
+</ui:composition>
+</h:body>
+</html>

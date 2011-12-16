@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+
+<!-- Management related panels. Each panel has its own controller and each panel is currently a separate include -->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgtdash" title="${labels.activityItem.label}" border="none" width="600px">
+
+<tabbox id="tabbox_main" height="100%">
+	<tabs id="tabs">
+		<tab id="tab_1_manage" 	label="${labels.default.tab.list_management}" 	/>
+		<tab id="tab_2_list" 	label="${labels.default.tab.viewinfolist}" 		/><!--  reports -->
+		<tab id="tab_3_chart" 	label="${labels.default.tab.charts}" 			/>
+		<tab id="tab_4_educate" label="${labels.default.tab.education}" 		/><!-- rss feeds for a topic, forum,etc -->
+		<tab id="tab_5_social" 	label="${labels.default.tab.social}"  			/><!-- rss feeds for a topic, forum,etc -->	
+	</tabs>
+	<tabpanels>
+		<tabpanel id="tab_manage">			
+			 <include src="/phrsform/obs_activity_mgt_module.zul" />
+		</tabpanel>
+		<tabpanel>
+			<!--  err <jasperreport   datasource="@{winmgtCtrl.loadAll}"  />-->
+		</tabpanel>
+		<tabpanel id="tab_view"></tabpanel>
+		<tabpanel></tabpanel>
+		<tabpanel></tabpanel>
+	</tabpanels>
+</tabbox>	
+ </window>	
+</zk>

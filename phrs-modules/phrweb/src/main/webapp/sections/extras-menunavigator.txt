@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<!--
+NOTA BENE : this file represents only a PART from the view.
+This section was design to be used together with other sections.
+This section can be use alone only for the test purposes.
+-->
+
+
+<h:head>
+	<title>IGNORED</title>
+</h:head>
+
+<h:body>
+	<ui:composition>
+	<!-- rendered=true/false is controlled in  layout template -->
+	<!-- 	<li><a href="#{request.contextPath}/jsf/xx"><h:outputLabel value="#{labels['xx']}"/></a></li>  -->	
+	<!-- columns="2" cellpadding="10" ui-helper-clearfix id="sidebar1"-->
+			
+<!--  layout section is scrollable -->
+	<p:panel toggleable="true" >
+		<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;font-size:12pt;">	
+			<p:column  style="width:100%;font-size:12pt;">	
+				<h:panelGroup rendered="#{ref.type == 'node'}">
+					<h:outputText value="#{ref.label}" /><!-- TODO open action onclick -->
+				</h:panelGroup>
+				<h:panelGroup rendered="#{ref.type eq 'link'}">
+					<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" /></a>
+				</h:panelGroup>
+				<h:panelGroup rendered="#{ref.type eq 'nodelink'}">
+					<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" /></a>
+				</h:panelGroup>			
+			</p:column>			
+		</p:treeTable>	
+	</p:panel>	
+
+
+<!--  
+<p:accordionPanel autoHeight="true" style="width:250px">
+
+	<p:tab title="Health Observations" style="font-size:12pt;">
+		<div class=".wijmo-wijmenu-text  ui-corner-all sidebar">
+			<ul>
+		       <li><a href="#{request.contextPath}/jsf/obs_bp_mgt.xhtml" ><h:outputLabel value="#{labels['obsBloodPressureA01.label']}"/></a></li>
+				<li><a href="#{request.contextPath}/jsf/obs_bw_mgt.xhtml"><h:outputLabel value="#{labels['obsBodyWeightBMW01.label']}"/></a></li>
+				<li><a href="#{request.contextPath}/jsf/obs_problem_mgt.xhtml"><h:outputLabel value="#{labels['menu.problems.label']}"/></a></li>
+				<li><a href="#{request.contextPath}/jsf/obs_medications_iframe.xhtml"><h:outputLabel value="#{labels['medicationSummary.label']}"/></a></li>
+			</ul>
+		</div>
+	</p:tab>
+	<p:tab title="Health Observations2"  style="font-size:12pt;">
+	<div class=".wijmo-wijmenu  ui-corner-all sidebar">
+	<ul>
+       <li><a href="#{request.contextPath}/jsf/obs_bp_mgt.xhtml" ><h:outputLabel value="#{labels['obsBloodPressureA01.label']}"/></a></li>
+        <li><a href="#{request.contextPath}/jsf/obs_bp_mgt.xhtml"><h:outputLabel value="#{labels['obsBloodPressureA01.label']}"/></a></li>
+		<li><a href="#{request.contextPath}/jsf/obs_bw_mgt.xhtml"><h:outputLabel value="#{labels['obsBodyWeightBMW01.label']}"/></a></li>
+		<li><a href="#{request.contextPath}/jsf/obs_problem_mgt.xhtml"><h:outputLabel value="#{labels['menu.problems.label']}"/></a></li>
+		<li><a href="#{request.contextPath}/jsf/obs_medications_iframe.xhtml"><h:outputLabel value="#{labels['medicationSummary.label']}"/></a></li>
+	</ul>
+</div>
+</p:tab>
+<p:tab title="Profile" style="font-size:12pt;">
+	<div class="ui-widget-content ui-corner-all ui-helper-clearfix sidebar">
+	<ul>
+        <li><a href="#{request.contextPath}/jsf/profile_contact_info_iframe.xhtml?typecontact=healthcare_user" ><h:outputLabel value="#{labels['contactInfo.personal.label']}"/></a></li>
+        <li><a href="#{request.contextPath}/jsf/riskfactor_mgt.xhtml"><h:outputLabel value="Risk Factors"/></a></li>
+		<li><a href="#{request.contextPath}/jsf/profile_padl_mgt.xhtml"><h:outputLabel value="Activities of Daily Living"/></a></li>
+		<li><a href="#{request.contextPath}/jsf/obs_activity_mgt.xhtml"><h:outputLabel value="#{labels['menu.activityItem.label']}"/></a></li>
+	</ul>
+</div>
+</p:tab>
+</p:accordionPanel> 
+
+http://stackoverflow.com/questions/4764642/use-primefaces-tree-component-as-a-navigation-menu
+
+DefaultTreeNode node0 = new DefaultTreeNode("<a href=\"http://www.google.pl\">http://www.google.pl</a>", null); 
+	<p:menu type="plain"  styleClass="sidebar">
+		<p:submenu label="Health Observations">
+			<p:menuitem value="#{labels['obsBloodPressureA01.label']}"  url="/jsf/obs_bp_mgt.xhtml" />
+			<p:menuitem value="#{labels['obsBodyWeightBMW01.label']}" 	url="/jsf/obs_bw_mgt.xhtml" />
+			<p:menuitem value="#{labels['menu.problems.label']}" 		url="/jsf/obs_problem_mgt.xhtml" />
+			
+			<p:menuitem value="#{labels['medicationSummary.label']}" 	url="/jsf/obs_medications_iframe.xhtml" />
+           </p:submenu>
+	</p:menu>
+</p:tab>
+		<p:tab title="Profile">
+			<p:menuitem value="Medical Documents" 	 />
+		</p:tab>
+		
+		<p:tab title="Profile">
+			<p:submenu label="Profile">
+				<p:menuitem value="#{labels['contactInfo.personal.label']}" 	url="/jsf/profile_contact_info_iframe.xhtml?typecontact=healthcare_user" />
+				<p:menuitem value="Risk Factors" 	url="/jsf/riskfactor_mgt.xhtml" />
+				<p:menuitem value="Activities of Daily Living" 	url="/jsf/profile_padl_mgt.xhtml" />			
+				<p:menuitem value="#{labels['menu.activityItem.label']}" 	url="/jsf/obs_activity_mgt.xhtml" />
+			</p:submenu>  
+		</p:tab>
+		<p:tab title="Imported Patient Data"">
+			<p:menuitem value="Medical Documents" 	 />
+		</p:tab>
+		<p:tab title="Monitoring">
+			<h:panelGrid >
+			</h:panelGrid>
+		</p:tab>	
+		<p:tab title="Information &amp; People">
+			<h:panelGrid >
+			</h:panelGrid>
+		</p:tab>	
+		<p:tab title="Contacts">
+						<p:menuitem value="My Contacts" 	url="/jsf/profile_contact_info_iframe.xhtml?typecontact=healthcare_provider" />
+
+		</p:tab>
+		<p:tab title="Privacy and Administration">
+			<p:submenu label="Privacy and Administration">
+				<p:menuitem value="Privacy Mangement" 	/>
+			</p:submenu>
+		</p:tab>	
+		
+		
+		<p:menu type="plain" id="sidebar1" styleClass="sidebar">
+	
+			<p:submenu label="Health Observations">
+				<p:menuitem value="#{labels['obsBloodPressureA01.label']}"  url="/jsf/obs_bp_mgt.xhtml" />
+				<p:menuitem value="#{labels['obsBodyWeightBMW01.label']}" 	url="/jsf/obs_bw_mgt.xhtml" />
+				<p:menuitem value="#{labels['menu.problems.label']}" 		url="/jsf/obs_problem_mgt.xhtml" />
+				
+				<p:menuitem value="#{labels['medicationSummary.label']}" 	url="/jsf/obs_medications_iframe.xhtml" />
+	           </p:submenu>
+	           
+			<p:submenu label="Profile">
+				<p:menuitem value="#{labels['contactInfo.personal.label']}" 	url="/jsf/profile_contact_info_iframe.xhtml?typecontact=healthcare_user" />
+				<p:menuitem value="Risk Factors" 	url="/jsf/riskfactor_mgt.xhtml" />
+				<p:menuitem value="Activities of Daily Living" 	url="/jsf/profile_padl_mgt.xhtml" />			
+				<p:menuitem value="#{labels['menu.activityItem.label']}" 	url="/jsf/obs_activity_mgt.xhtml" />
+			</p:submenu>  
+			<p:submenu label="Imported Patient Data">
+				<p:menuitem value="Medical Documents" 	 />
+			</p:submenu>         
+			<p:submenu label="Monitoring">
+				<p:menuitem value="#{labels['overviewCurrentVitalSigns.vitalsign.label']}" 	url="/jsf/monitor_vitals.xhtml" />
+			</p:submenu>
+			
+			<p:submenu label="Information &amp; People">
+				<p:menuitem value="__" 	 />
+			</p:submenu>		
+		
+			<p:submenu label="Contacts">
+				<p:menuitem value="My Contacts" 	url="/jsf/profile_contact_info_iframe.xhtml?typecontact=healthcare_provider" />
+				
+			</p:submenu>
+			<p:submenu label="Privacy and Administration">
+				<p:menuitem value="Privacy Mangement" 	/>
+			</p:submenu>	
+		</p:menu> -->
+
+
+	</ui:composition>
+</h:body>	
+<!-- 
+TODO controller with managed bean and one iframe page, can appear many times...no id or prependid=false...
+
+			label="Information &amp; People"
+						?content=cied-patient-education" ><treerow><treecell  label="#{labels.default.patient_education.label}" 
+			
+													
+									?content=basic-information 	label="Basic Information"
+									?content=new-habits  		label="New Habits" 
+									?content=precautions  		label="Precautions" 
+									?content=warning-signs  	label="Warning Signs" 
+									?content=decision-aids  	label="Decision Aids"
+									?content=useful-links  		label="Links" 	
+									?content=glossary  			label="Glossary" 
+					
+						?content=pages label="Community" 
+	
+									?content=blog 	label="Blogs"			
+									?content=forum 	label="Forums"		
+									?content=tags 	label="Find by Keywords" 
+																
+									?content=bookmarks label="Community Bookmarks"
+ 
+		<p:submenu label="xxx">
+			<p:menuitem value="__" 	/>
+		</p:submenu> 
+		
+	<p:menuitem value="#{labels['xxxx']}" 	url="/jsf/xxx.xhtml" />
+	<treeitem 	value="/phrsform/app_content_main_1.zul?content=mail"><treerow><treecell label="Mail" />
+    <p:menuitem value="#{navigationpanel_msg.uawDescriptionMenuItem}"/>
+                    <p:menuitem value="#{navigationpanel_msg.patientDataMenuItem}"/>
+                    <p:menuitem value="#{navigationpanel_msg.evaluation1MenuItem}"/>
+                    <p:menuitem value="#{navigationpanel_msg.evaluation2MenuItem}"/>
+                  <p:menuitem value="#{navigationpanel_msg.agesNotificationMenuItem}" /> 
+		
+      
+      				<div id="sidebar1" class="ui-widget-content ui-corner-all ui-helper-clearfix sidebar">
+					<ul>
+						<li>
+							<table>
+								<tr>
+									<td colspan="2" align="left" style="padding:8px;">
+										<h:form>
+                                            <ui:include src="themeMenu.xhtml" />
+										</h:form>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<ul>
+ 											<li><a href="#{request.contextPath}/ui/commandButton.jsf">CommandButton</a></li>
+											<li><a href="#{request.contextPath}/ui/commandLink.jsf">CommandLink</a></li>
+											<li><a href="#{request.contextPath}/ui/contextMenuHome.jsf" class="new">ContextMenu</a></li>
+										</ul>
+									</td>
+									<td>
+										<ul>
+                                            
+											<li><a href="#{request.contextPath}/ui/lightboxHome.jsf">LightBox</a></li>
+                                            <li><a href="#{request.contextPath}/ui/log.jsf" class="new">Log</a></li>
+											<li><a href="#{request.contextPath}/ui/inputMask.jsf">Masked Input</a></li>
+
+										</ul>
+									</td>
+								</tr>
+							</table>
+
+						</li>
+					</ul>
+				</div>
+       -->
+
+
+</html>

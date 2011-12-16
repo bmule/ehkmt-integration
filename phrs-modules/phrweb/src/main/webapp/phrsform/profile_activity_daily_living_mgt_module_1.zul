@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ProfileActivityDailyLivingMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	
+<!--  include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/> -->	
+<groupbox>
+	<caption label="${labels.activityOfDailyLivingItem.label}" />
+	<!--<include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/>	-->		 	            	
+<div id="mgtListDiv" style="overflow:auto;">
+					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+				<listheader label="${labels.activityOfDailyLivingItem.activityCode.label}" 				hflex="2" sort="auto(code)" />
+				<listheader label="${labels.activityOfDailyLivingItem.valueActivity.label}" 		hflex="2" sort="auto(status)" />
+				<listheader label="${labels.short.dateStart.label}"  				hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 					hflex="1" />
+				<listheader label="${labels.default.comments.label}" 				hflex="3" />
+			</listhead>
+	
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.code,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 			
+				<listcell label="@{itemMain.status,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>
+				<listcell label="@{itemMain.beginDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				<listcell label="@{itemMain.endDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	/>						
+				<listcell label="@{itemMain.note}"      		/>																		
+			</listitem>							
+		</listbox>			
+</div>
+<div>
+<separator/>
+<toolbar id="toolBarForm" height="24px">	
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}" />
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+	
+<div id="mgtFormDiv" visible="@{winmgtCtrl.flagEdit}" > 
+	<textbox id="objId" 		value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+
+<grid> 
+	<columns sizable="true">							
+		<column label=" " height="6px" width="20%" />
+		<column label=" " height="6px" width="80%" />				
+	</columns>
+<rows>
+<!-- 
+
+3 OPTIONS yes, no, (null or blank)
+activityOfDailyLivingItem.valueActivity.label
+
+TERM_ACTIVITY_OF_DAILY_LIVING_PHRS
+TERM_ACTIVITY_LIFESTYLE_STATUS_VALUE
+ -->	
+		
+	<row>	
+		<label value="${labels.activityOfDailyLivingItem.activityCode.label}" />
+		<textbox disabled="true" readonly="true" label="@{itemMain.code, converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterInputFieldVocab'}" />			
+	</row>	
+	<row>
+		<label value="@{itemMain.code, converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/>	
+		<combobox id="combobox_2"  readonly="true" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"
+			model="@{winmgtCtrl.stringModel_2}" 
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.status}"/>			
+	</row>
+	<row>
+	<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='buttonSave.onClick'}"
+			width="250px" height="50px" tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div> <!--  end div, to hide form, but leave tool bar-->
+</div>	
+</groupbox>							
+</window>	
+
+</zk>

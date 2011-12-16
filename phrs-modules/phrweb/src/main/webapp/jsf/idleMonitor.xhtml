@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="content">
+
+		<div id="cols">
+		<div class="main box">
+
+		<div id="content">
+
+		<div id="content-in" class="box"><h:form>
+
+			<h2 style="color: #7DAC09;">IdleMonitor</h2>
+			<p>IdleMonitor component monitors user interactions and notifies callbacks when users go idle or come back. IdleMonitor on this page
+			is set for 10 seconds for demonstration purposes. Stay idle for 10 seconds and idleMonitor will warn you.</p>
+	
+			<p:idleMonitor timeout="10000" onidle="idleDialog.show();" onactive="idleDialog.hide();"/>
+			
+			<p:dialog header="What's happening?" widgetVar="idleDialog" modal="true" 
+					fixedCenter="true" close="false" width="400px">
+				<h:outputText value="Dude, are you there?" />
+			</p:dialog>
+			
+			<h3>Source</h3>
+			<pre name="code" class="xml">
+&lt;p:idleMonitor timeout="10000" onidle="idleDialog.show();" onactive="idleDialog.hide();"/&gt;
+			
+&lt;p:dialog header="What's happening?" widgetVar="idleDialog" modal="true" fixedCenter="true" close="false"
+			width="400px"&gt;
+	&lt;h:outputText value="Dude, are you there?" /&gt;
+&lt;/p:dialog&gt;
+			</pre>
+
+		</h:form></div>
+
+		</div>
+
+		<hr class="noscreen" />
+
+		<div id="aside"><ui:include src="../templates/components.xhtml" />
+
+		</div>
+
+		</div>
+		</div>
+
+
+	</ui:define>
+</ui:composition>

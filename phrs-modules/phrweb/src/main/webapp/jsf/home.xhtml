@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+	<ui:define name="content">
+	
+	<p:fieldset toggleable="false"  legend="Home">
+		<h:outputText value="#{labels['message_home']}" />
+
+			<p:panel collapsed="true"  closable="false" toggleable="true" header="Table of Contents"  style="width:100%">
+				<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;font-size:12pt;">
+					
+				<p:column  style="width:100%;">
+				 	
+					<h:panelGroup rendered="#{ref.type == 'noderoot'}">
+						<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
+					</h:panelGroup>	
+							
+					<h:panelGroup rendered="#{ref.type == 'nodeheaderlink'}">
+						<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+						<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/></a>
+					</h:panelGroup>
+					
+					<h:panelGroup rendered="#{ref.type == 'nodeheader'}">
+						<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+					</h:panelGroup>
+								
+					<h:panelGroup rendered="#{ref.type == 'node'}">
+						<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+					</h:panelGroup>				
+					<h:panelGroup rendered="#{ref.type eq 'link'}" >
+						<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
+					</h:panelGroup>
+					<h:panelGroup rendered="#{ref.type eq 'nodelink'}">
+						<a href="#{request.contextPath}#{ref.url}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
+					</h:panelGroup>			
+				</p:column>			
+			</p:treeTable>	
+		</p:panel>
+	</p:fieldset>
+	</ui:define>
+</ui:composition>

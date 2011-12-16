@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+	
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+				
+					} else {
+						widDialogObw.hide();
+					}
+				}
+	     		//]]>			
+			</script>
+				
+		<style type="text/css">
+		.table.innertable td { border:0;
+		}
+	</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<!-- TODO ADD column render options for modify, and make column for modify = no
+prependId="false"
+			<f:facet name="header">Choose the edit option on each row to update your answer </f:facet>
+ -->
+
+	<ui:define name="content">
+		<div class="entry">
+
+			<h:form prependId="false">
+
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['obsBodyWeightBMW01.label']}">
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton update="idPanelObw" value="create"
+								rendered="#{odlbwBean.allowCreate}"
+								title="#{labels['default.button.newform.label']}"
+								image="ui-icon-plus" actionListener="#{odlbwBean.create}"
+								oncomplete="widDialogObw.show()" />
+							<p:spacer width="2px"></p:spacer>
+							<p:commandButton value="Chart"
+								title="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
+								update="idPanelChart01" oncomplete="widDialogChart01.show()" />
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable widgetVar="widItemTableObw" id="idItemTableObw"
+						var="theItem" value="#{odlbwBean.modelMain}">
+
+						<p:column style="width:50px" headerText="#{labels['labels.menu.options.label']}">
+							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+								<!-- ok, success view  odlbwBean -->
+								<p:commandButton update="idPanelObw"
+									disabled="#{theItem.status eq 'default.no_answer.label'}"
+									oncomplete="widDialogObw.show()" image="ui-icon ui-icon-search"
+									title="#{labels['default.button.view.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlbwBean.selected}" />
+									<f:setPropertyActionListener value="no"
+										target="#{odlbwBean.modify}" />
+								</p:commandButton>
+
+								<p:commandButton update="idPanelObw"
+									oncomplete="widDialogObw.show()" image="ui-icon ui-icon-pencil"
+									title="#{labels['default.button.edit.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlbwBean.selected}" />
+									<f:setPropertyActionListener value="yes"
+										target="#{odlbwBean.modify}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>
+						<!--  
+						<p:column headerText="#{labels['default_date_modified']}">
+							<h:outputLabel value="#{theItem.modifyDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>-->
+						<!-- short.date.label=Date-->
+						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}">
+							<h:outputLabel value="#{theItem.beginDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}">
+							<h:outputLabel value="#{theItem.bodyWeight}" /> kg
+						</p:column>
+						<p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}" > 
+							<h:outputLabel value="#{theItem.bmi}" />
+						</p:column>
+						<p:column
+							headerText="#{labels['obsBodyWeightBMW01.height.label']}">
+							<h:outputLabel value="#{theItem.bodyHeight}" /> cm
+						</p:column>
+
+						<p:column headerText="#{labels['default.comments.label']}">
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+
+
+			</h:form>
+
+
+
+		</div>
+		<!-- div entry -->
+		
+		
+			<!-- obsBodyWeightBMW01.bodyweight.label -->
+		<p:dialog closable="false" widgetVar="widDialogObw" appendToBody="true"
+				header="#{labels['obsBodyWeightBMW01.label']}" id="idDialogObw"
+				resizable="true" modal="true" width="600">
+				
+				
+				<p:outputPanel id="idPanelObw" layout="block">
+				<h:form id="idFormObw">	
+						<!--		Test date=<h:outputLabel value="#{odlbwBean.selected.beginDate}" />
+					<br />-->
+					<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
+									
+						<h:outputLabel value="#{labels['short.dateStart.label']}"
+							for="beginDateField" styleClass="form-dialog-label" />
+						<p:outputPanel id="beginDateField" layout="block">
+							<h:outputLabel value="#{odlbwBean.selected.beginDate}"
+								rendered="#{odlbwBean.modify eq 'no'}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+							<!-- calendar option-->
+							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}" 
+								id="beginDateField_input"
+								rendered="#{odlbwBean.modify eq 'yes'}" title="yyyy-MM-dd"
+								value="#{odlbwBean.selected.beginDate}" showOn="button"
+								pattern="yyyy-MM-dd" />								
+						</p:outputPanel>
+						<p:message for="beginDateField_input" display="text" />
+						
+<!--  obsBodyWeightBMW01.bodyBMI.label -->
+
+						<h:outputLabel
+							value="#{labels['obsBodyWeightBMW01.bodyweight.label']}"
+							for="bodyWeightField_1" styleClass="form-dialog-label" />
+						<p:outputPanel id="bodyWeightField_1" layout="block">
+							<h:outputLabel value="#{odlbwBean.selected.bodyWeight}"
+								rendered="#{odlbwBean.modify eq 'no'}" />
+<!-- maxFractionDigits="1" -->
+							<p:inputText required="true" requiredMessage="#{labels['default_required_field']}"
+								id="bodyWeightField_1_input"
+								value="#{odlbwBean.selected.bodyWeight}"
+								rendered="#{odlbwBean.modify eq 'yes'}">
+								<f:convertNumber maxFractionDigits="1"></f:convertNumber>
+							</p:inputText> kg					
+						</p:outputPanel>
+						<p:message for="bodyWeightField_1_input" display="text" />
+
+						<h:outputLabel
+							value="#{labels['obsBodyWeightBMW01.height.label']}"
+							for="bodyHeightField_1" styleClass="form-dialog-label" />
+						<p:outputPanel id="bodyHeightField_1" layout="block">
+							<h:outputLabel value="#{odlbwBean.selected.bodyHeight}"
+								rendered="#{odlbwBean.modify eq 'no'}" />
+
+							<p:inputText  required="true" requiredMessage="#{labels['default_required_field']}"
+								id="bodyHeightField_1_input"
+								value="#{odlbwBean.selected.bodyHeight}"
+								rendered="#{odlbwBean.modify eq 'yes'}">
+								<f:convertNumber maxFractionDigits="1"></f:convertNumber>
+							</p:inputText> cm
+						</p:outputPanel>
+						<p:message for="bodyHeightField_1_input" display="text" />
+
+						<h:outputLabel for="field_note"
+							value="#{labels['default.comments.label']}"
+							styleClass="form-dialog-label" />
+						<p:column colspan="2">
+							<p:outputPanel id="field_note" layout="block">
+								<h:outputText value="#{odlbwBean.selected.note}"
+									rendered="#{odlbwBean.modify eq 'no'}" styleClass="commentText" />
+								<p:inputTextarea value="#{odlbwBean.selected.note}"
+									autoResize="false" cols="30" rows="5"  
+									rendered="#{odlbwBean.modify eq 'yes'}" label="Comment"
+									styleClass="commentTextInputArea" />
+							</p:outputPanel>
+							<p:message for="field_note" display="text" />
+						</p:column>
+
+					</h:panelGrid>
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<f:facet name="header">
+<!-- 							update="idItemTableObw msgs idPanelObw" -->
+							<p:commandButton rendered="#{odlbwBean.modify eq 'yes'}"
+								widgetVar="widDialogSaveButtonObw" process="idFormObw"
+								value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								update="msgs idFormObw idItemTableObw" 
+								actionListener="#{odlbwBean.store}"
+								oncomplete="onEditComplete(xhr,status,args)"
+								image="ui-icon ui-icon-check" />
+
+							<!--p:commandButton
+								value="#{odlbwBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								type="reset" immediate="true" onclick="widDialogObw.hide()"
+								image="ui-icon ui-icon-close" />-->
+								
+						<p:commandButton rendered="#{odlbwBean.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{odlbwBean.refresh}" immediate="true" 
+							onsuccess="widDialogObw.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{odlbwBean.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogObw.hide()"
+							image="ui-icon ui-icon-close" />								
+
+						</f:facet>
+					</h:panelGrid>
+				 </h:form>
+				</p:outputPanel>
+
+		
+		</p:dialog>
+		
+		
+			<!--  <ui:include src="./charts/charts_obs_bw.xhtml" />		testBw chart01 
+			modal="false" appendToBody="true"
+			
+			update="idPanelChart01" oncomplete="widDialogChart01.show()" />
+			prependId="false" 
+			-->
+		
+			<p:dialog closable="true"
+					widgetVar="widDialogChart01" 
+					id="idChart01" 
+					header="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
+					resizable="true"
+					width="600">
+				<h:form>
+					<p:outputPanel id="idPanelChart01">
+						<p:lineChart model="#{odlbwBean.chartModel}"  style="chartStyle"  />
+						<!-- titleX="Time"  titleY="Body Weight(kg)" -->
+					</p:outputPanel>
+				</h:form>
+			</p:dialog>
+		
+		<!--  
+		
+			<p:dialog closable="false" widgetVar="XXwidDialogObw"
+				header="#{labels['obsBodyWeightBMW01.label']}" id="XXidDialogObw"
+				resizable="true" modal="true" width="600">
+				<h:form prependId="false">
+					<p:outputPanel id="XXidPanelObw" layout="block">
+									Test date=<h:outputLabel value="#{odlbwBean.selected.beginDate}" />
+						<br />
+									Test date=<h:outputLabel value="#{odlbwBean.modify}" />
+						<br />
+	
+					</p:outputPanel>
+				</h:form>
+			</p:dialog>
+	
+		-->
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+
+	<ui:composition>
+
+<!-- 
+#{labels['medicationSummary.medicationNameText.label']}	
+#{labels['medicationSummary.medicationStatus.main.label']}	
+#{labels['default.medicationDosage.label']}	
+#{labels['medicationSummary.medicationQuantity.label']}	
+#{labels['medicationSummary.medicationQuantityUnit.label']}
+#{labels['medicationSummary.medicationFrequencyInterval.label']}	
+#{labels['treatmentMatrix.dosageInterval']}	
+#{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}	
+#{labels['treatmentMatrix.dosageTimeOfDay']}
+	
+#{labels['medicationSummary.prescribedByPersonName.label']}	
+#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}	
+
+#{labels['default.comments.label']}
+
+#{labels['']}	
+#{labels['']}	
+#{labels['']}
+	 -->
+		<p:dialog closable="false"  widgetVar="widDialogOmed" 
+			id="idDialogOmed" 
+			modal="true"	appendToBody="true"
+			header="#{labels['medicationSummary.label']}" width="620"
+			showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelOmed" layout="block">
+				<h:form id="idFormOmed">
+				<h:inputHidden value="#{odlmed.selected.code}" />
+				
+					<h:panelGrid columns="3">
+
+<!-- 								required="true" requiredMessage="#{labels['default_required_field']}" -->
+						<h:outputLabel for="label"
+							value="#{labels['medicationSummary.medicationNameText.label']}"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="label" layout="block">
+							<h:outputLabel value="#{odlmed.selected.label}"
+								rendered="#{odlmed.modify eq 'no'}" />
+							<p:inputText value="#{odlmed.selected.label}" id="label_input"
+								rendered="#{odlmed.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="label_input" display="text" />
+						
+<!--  					<h:outputLabel for="field_code"
+							value="#{labels['activityItem.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_code" layout="block"> 
+							<h:outputLabel value="#{odlmed.selected.code}" rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+  								
+							<h:selectOneMenu value="#{odlmed.selected.code}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems
+									value="#{odlmed.vocabMap.TAG_PHYSICAL_ACTIVITIES}" var="lv"
+									itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+
+							</h:selectOneMenu>
+						</p:outputPanel>
+						<p:message for="field_code" display="text" />
+-->
+
+						<h:outputLabel for="field_activity_status"
+							value="#{labels['medicationSummary.medicationStatus.main.label']}"
+							styleClass="form-dialog-label" />
+
+
+						<p:outputPanel id="field_activity_status" layout="block">
+							<h:outputLabel value="#{odlmed.selected.status}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+							<h:selectOneRadio layout="pageDirection"
+								value="#{odlmed.selected.status}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItem
+									itemLabel="#{labels['medicationSummary_medicationStatus_true']}"
+									itemValue="medicationSummary_medicationStatus_true"
+									noSelectionOption="true"></f:selectItem>
+								<f:selectItem
+									itemLabel="#{labels['medicationSummary_medicationStatus_false']}"
+									itemValue="medicationSummary_medicationStatus_false"></f:selectItem>
+							</h:selectOneRadio>
+						</p:outputPanel>
+						<p:message for="field_activity_status" display="text" />
+
+						<h:outputLabel for="displayDate"
+							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="displayDate" layout="block">
+
+							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
+								<h:outputLabel value="#{theItem.displayDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+							</p:outputPanel>
+ 
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+								id="displayDate_input"
+								value="#{odlmed.selected.displayDate}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+						<!-- 	TODO displayDate or beginDate ?-->
+						<!-- 	<p:calendar required="true"  requiredMessage="#{labels['default_required_field']}" 
+								id="displayDate_input"
+								rendered="#{odlmed.modify eq 'yes'}" title="yyyy-MM-dd"
+								value="#{odlmed.selected.displayDate}" showOn="button"
+								pattern="yyyy-MM-dd" />		-->						
+						</p:outputPanel>
+						<p:message for="displayDate_input" display="text" />
+
+  
+						<h:outputLabel for="field_dosage"
+							value="#{labels['medicationSummary.medicationQuantity.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_dosage" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosage}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+							
+							<p:inputText value="#{odlmed.selected.treatmentMatrix.dosage}"
+								id="field_dosage_input"
+								style="width:60px"
+								rendered="#{odlmed.modify eq 'yes'}" >						
+									<f:convertNumber  maxFractionDigits="2" ></f:convertNumber>
+								</p:inputText>
+							<p:spacer  width="4px"/>
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageUnits}" 
+								id="field_dosageUnits_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>						
+						</p:outputPanel>
+						<p:outputPanel>
+							<p:message for="field_dosageUnits_input" display="text" />
+							<p:message for="field_dosage_input" display="text" />
+						</p:outputPanel>
+											
+						<h:outputLabel for="field_dosageInterval"
+							value="#{labels['medicationSummary.medicationFrequencyInterval.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_dosageInterval" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageInterval}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageInterval}" 
+								id="field_dosageInterval_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>							
+						</p:outputPanel>
+						<p:message for="field_dosageInterval_input" display="text" />
+						
+
+						<h:outputLabel for="field_freqTimeOfDay"
+							value="#{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_freqTimeOfDay" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageTimeOfDay}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageTimeOfDay}" 
+								id="field_freqTimeOfDay_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+							
+						</p:outputPanel>
+						<p:message for="field_freqTimeOfDay_input" display="text" />									
+
+
+ 						<h:outputLabel for="field_prescribed"
+							value="#{labels['medicationSummary.prescribedByPersonName.label']}"
+							styleClass="form-dialog-label" />
+							
+						<p:outputPanel id="field_prescribed" layout="block">
+							<h:outputLabel value="#{odlmed.selected.prescribedByName}"
+								rendered="#{odlmed.modify eq 'no'}" />
+							<p:inputText value="#{odlmed.selected.prescribedByName}" 
+								id="field_prescribed_input"
+								rendered="#{odlmed.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_prescribed_input" display="text" />	
+						
+						<h:outputLabel for="field_reasonCode"
+							value="#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_reasonCode" layout="block">
+							<h:outputLabel value="#{odlmed.selected.reasonCode}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.reasonCode}" 
+								id="field_reasonCode_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_REASON_WITH_RISK_FACTORS}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>							
+						</p:outputPanel>
+						<p:message for="field_reasonCode_input" display="text" />										
+
+						<h:outputLabel for="field_note_med"
+							value="#{labels['default.comments.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_note_med" layout="block">
+							<h:outputText value="#{odlmed.selected.note}"
+								rendered="#{odlmed.modify eq 'no'}" styleClass="commentText" />
+							<p:inputTextarea value="#{odlmed.selected.note}" id="field_note_med_input"
+								autoResize="false" cols="30" rows="5"  
+								rendered="#{odlmed.modify eq 'yes'}" label="Comment"
+								styleClass="commentTextInputArea" />
+						</p:outputPanel>
+						<p:message for="field_note_med_input" display="text" />
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<f:facet name="header">
+							<p:commandButton value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								process="idFormOmed" 
+								update="msgs idFormOmed idItemTableOmed"
+								oncomplete="onEditComplete(xhr,status,args)"
+								actionListener="#{odlmed.store}" image="ui-icon ui-icon-check" />
+
+							<!-- p:commandButton type="reset"
+								value="#{odlmed.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								onclick="widDialogOmed.hide();" immediate="true"
+								image="ui-icon ui-icon-close" />-->
+								
+						<p:commandButton rendered="#{odlmed.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{odlmed.refresh}" immediate="true" 
+							onsuccess="widDialogOmed.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{odlmed.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogOmed.hide()"
+							image="ui-icon ui-icon-close" />								
+						</f:facet>
+					</h:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+	</ui:composition>
+</h:body>
+						
+<!-- 
+						<h:outputLabel for="field_dosageUnits"
+							value="#{labels['medicationSummary.medicationQuantityUnit.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_dosageUnits" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageUnits}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageUnits}" 
+								id="field_dosageUnits_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+							
+						</p:outputPanel>
+						<p:message for="field_dosageUnits_input" display="text" />
+- 
+//TAG_MEDICATION_COMPLIANCE_STATUS
+					'medicationSummary_medicationStatus_true',
+					//Yes, I currently take this medication
+					'medicationSummary_medicationStatus_false.label'
+time_mm_5= 5 minutes	
+time_mm_10=10 minutes	
+time_mm_15=15 minutes	
+time_mm_30=30 minutes
+time_mm_45=45 minutes
+time_hh_1=1 hour	
+time_hh_2=2 hour
+time_hh_3=3 hour
+time_hh_4=4 hour
+time_hh_5=5 hour	
+time_dd_1=All Day
+time_dd_2=2 days
+time_dd_3=3 days
+time_dd_4=4 days
+time_dd_5=5 days
+time_dd_6=6 days
+time_ww_1=1 week
+time_ww_2=2 weeks
+time_ww_3=3 weeks
+time_mo_1=1 month
+
+						<h:selectOneMenu value="#{odlmed.selected.durationCode}"
+							rendered="#{odlmed.modify eq 'yes'}">
+							<f:selectItem itemLabel="#{labels['time_dd_1']}"
+								itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_5']}"
+								itemValue="time_mm_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_15']}"
+								itemValue="time_mm_15"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_30']}"
+								itemValue="time_mm_30"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_45']}"
+								itemValue="time_mm_45"></f:selectItem>
+								
+							<f:selectItem itemLabel="#{labels['time_hh_1']}"
+								itemValue="time_hh_1"></f:selectItem>								
+							<f:selectItem itemLabel="#{labels['time_hh_2']}"
+								itemValue="time_hh_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_3']}"
+								itemValue="time_hh_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_4']}"
+								itemValue="time_hh_4"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_5']}"
+								itemValue="time_hh_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_6']}"								
+								itemValue="time_hh_6"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_7']}"								
+								itemValue="time_hh_7"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_8']}"								
+								itemValue="time_hh_8"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_9']}"								
+								itemValue="time_hh_9"></f:selectItem>
+																																
+							<f:selectItem itemLabel="#{labels['time_dd_2']}"
+								itemValue="time_dd_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_3']}"
+								itemValue="time_dd_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_4']}"
+								itemValue="time_dd_4"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_5']}"
+								itemValue="time_dd_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_6']}"
+								itemValue="time_dd_6"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_1']}"
+								itemValue="time_ww_1"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_2']}"
+								itemValue="time_ww_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_3']}"
+								itemValue="time_ww_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mo_1']}"
+								itemValue="time_mo_1"></f:selectItem>
+						</h:selectOneMenu>
+						-->
+<!-- 
+default.medicationDosage.label=Dosage
+medicationSummary.medicationQuantity.label=How many?
+medicationSummary.medicationQuantityUnit.label=Units
+ -
+ <p:column colspan="3" >
+ 
+<h:outputLabel for="dosageMatrix"
+  value="#{labels['default.medicationDosage.label']}" styleClass="form-dialog-label" />
+ </p:column>
+  <p:column colspan="3" > 
+  <p:outputPanel id="dosageMatrix" layout="block">
+   
+   <h:panelGrid border="0" >
+   		
+	  <p:column>
+	   	<f:facet name="header"> 
+	   			<h:outputLabel for="field_dosage"
+							value="#{labels['medicationSummary.medicationQuantity.label']}" />
+		</f:facet>
+						<p:outputPanel id="field_dosage" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosage}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+							<p:inputText value="#{odlmed.selected.treatmentMatrix.dosage}"
+								id="field_dosage_input"
+								rendered="#{odlmed.modify eq 'yes'}" />
+							<h:inputText value="#{odlmed.selected.treatmentMatrix.dosage}" />							
+						</p:outputPanel>
+						<p:message for="field_dosage_input" display="text" />		
+	 </p:column>
+	   	
+	 <p:column>
+	   	<f:facet name="header"> 
+	   			<h:outputLabel for="field_dosage"
+							value="medicationSummary.medicationQuantityUnit.label" />
+		</f:facet>	  
+						<p:outputPanel id="field_dosageUnits" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageUnits}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageUnits}" 
+								id="field_dosageUnits_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+							
+						</p:outputPanel>
+						<p:message for="field_dosageUnits_input" display="text" />		 	
+	 </p:column>
+	   	
+	 <p:column>
+		   	<f:facet name="header"> 
+	   			<h:outputLabel for="field_dosage"
+							value="#{labels['medicationSummary.medicationFrequencyInterval.label']}" />
+			</f:facet>
+
+						<p:outputPanel id="field_dosageInterval" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageInterval}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageInterval}" 
+								id="field_dosageInterval_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>							
+						</p:outputPanel>
+						<p:message for="field_dosageInterval_input" display="text" />			   	
+	 </p:column>
+	 
+	 <p:column>
+		   	<f:facet name="header"> 
+	   			<h:outputLabel for="field_dosage"
+							value="#{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}" />
+			</f:facet>
+						<p:outputPanel id="field_freqTimeOfDay" layout="block">
+							<h:outputLabel value="#{odlmed.selected.treatmentMatrix.dosageTimeOfDay}"
+								rendered="#{odlmed.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{odlmed.selected.treatmentMatrix.dosageTimeOfDay}" 
+								id="field_freqTimeOfDay_input"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:selectItems 
+									value="#{odlmed.vocabMap.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+							
+						</p:outputPanel>
+						<p:message for="field_freqTimeOfDay_input" display="text" />
+		   	
+	 </p:column>	 	   
+   </p:outputPanel>
+
+   -->
+</html>

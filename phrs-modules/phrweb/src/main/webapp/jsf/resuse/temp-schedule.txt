@@ -1,0 +1,51 @@
+       <h:panelGrid id="eventDetails" columns="2">
+        
+            <h:outputLabel for="title" value="Title:" />
+            <p:inputText id="title" value="#{actionactBean.event.title}" />
+            
+            <h:outputLabel for="" value="Category"/>
+           <!-- TAG_ACTION_CATEGORIES --> 
+           
+			<h:outputLabel for="field_category"
+				value="#{labels['riskfactor.duration.smoking.smoketype.label']}"
+				styleClass="form-dialog-label" />
+	
+				<p:outputPanel id="field_category"  layout="block">
+ 					<h:outputLabel 
+ 						value="#{actionactBean.selected.code}" 
+ 						rendered="#{actionactBean.modify eq 'no'}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>						
+		
+					<h:selectOneMenu 
+						value="#{actionactBean.selected.code}"
+						rendered="#{actionactBean.modify eq 'yes'}">
+						<f:selectItems
+							value="#{actionactBean.vocabMap.TAG_ACTION_CATEGORIES}"
+							var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+					</h:selectOneMenu>										
+				</p:outputPanel>          
+           
+
+            <h:outputLabel for="from" value="From:" />
+            <p:inputMask id="from" mask="9999/99/99"
+                value="#{actionactBean.event.startDate}" >
+                <f:convertDateTime pattern="yyyy/MM/dd" />
+            </p:inputMask>
+
+            <h:outputLabel for="to" value="To:" />
+            <p:inputMask id="to" mask="9999/99/99"
+                value="#{actionactBean.event.endDate}" >
+                <f:convertDateTime pattern="yyyy/MM/dd" />
+            </p:inputMask>
+
+            <h:outputLabel for="allDay" value="All Day:" />
+            <h:selectBooleanCheckbox id="allDay"
+                value="#{actionactBean.event.allDay}" />
+
+            <p:commandButton type="reset" value="Reset" />
+            <p:commandButton value="Save"
+                oncomplete="actionschedule.update();eventDialog.hide();"
+                actionListener="#{actionactBean.addEvent}" />
+                
+        </h:panelGrid>

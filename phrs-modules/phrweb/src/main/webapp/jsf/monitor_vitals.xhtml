@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+	<ui:define name="head">
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--<h1 class="title ui-widget-header ui-corner-all">Monitor Vital Signs</h1>-->
+	
+			<h2 class="title ui-widget-header ui-corner-all">Monitor Vital Signs</h2>
+
+			
+				<p:messages />
+				<p:growl id="msgs" showDetail="true" />
+
+				<!--	<p:fieldset legend="Monitor Vital Signs">-->
+
+				<!-- fields here  inside outputPanel, this gets updated-->
+				<!-- #{labels['action.name.label']}
+<h:outputLabel value="Body Weight" />
+margin:0 auto;
+ -->
+<p:tabView style="width:100%;height:600px">
+<p:tab title="Body Weight" >
+
+					<!--  <h:outputLabel value="Chart" for="idField_chart"
+						styleClass="form-dialog-label" />
+					<p:outputPanel layout="block" id="idField_chart">
+						<h:form>
+							<p:commandButton value="Body Weight Chart" 
+							title="Body Weight Chart" update="idPanelChart01"
+							oncomplete="widDialogChart01.show()" />
+						</h:form>
+					</p:outputPanel>
+					-->
+				<h:panelGrid columns="2" cellpadding="2" style="float:left;" >
+					<h:outputLabel value="Date" for="idField_bw_date"
+						styleClass="form-dialog-label" />	
+					<h:outputLabel value="#{codlBean.vitalsMap.bw_date}" style="float:right;"/>
+
+
+					<h:outputLabel for="idField_bw" value="Body Weight"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_bw" style="float:right;">
+						<h:outputLabel value="#{codlBean.vitalsMap.bw}" />
+					</p:outputPanel>
+
+
+					<h:outputLabel for="idField_bh" value="Body Height"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_bh" style="float:right;">
+						<h:outputLabel value="#{codlBean.vitalsMap.bh}" />
+					</p:outputPanel>
+
+
+					<h:outputLabel for="idField_bw_bmi" value="BMI"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_bw_bmi" style="float:right;">
+						<h:outputLabel value="#{codlBean.vitalsMap.bw_bmi}" />
+					</p:outputPanel>
+
+
+				</h:panelGrid>
+			<h:panelGroup>
+			
+			<p:lineChart model="#{codlBean.chart01}" titleX="Time"
+					titleY="Body Weight(kg)" style="chartStyle" />
+			</h:panelGroup>	
+			
+			<!--  
+			<p:panel closable="false" toggleable="true" style="width:100%;height:600px"
+			header="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}">
+				<p:lineChart model="#{codlBean.chart01}" titleX="Time"
+					titleY="Body Weight(kg)" style="chartStyle" />
+			</p:panel>-->
+	</p:tab>
+	<p:tab title="Blood Pressure">
+
+				<!--  blood pressure 						<h:outputLabel value="Blood Pressure" />-->
+				
+<!--  
+					<h:outputLabel value="Chart" for="idField_chart_bp"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_chart_bp" layout="block">
+							<h:form>
+								<p:commandButton value="Blood Pressure Chart"
+									title="Blood Pressure Chart" update="idPanelChart02"
+									oncomplete="widDialogChart02.show()" />	
+							</h:form>
+					</p:outputPanel>
+-->
+				<h:panelGrid columns="2" cellpadding="2" style="float:left;margin:0 auto;">
+					<h:outputLabel value="Date" for="idField_bp_date" styleClass="form-dialog-label" />	
+					<h:outputLabel value="#{codlBean.vitalsMap.bp_date}" style="float:right;"/>
+	
+					<h:outputLabel for="idField_bp" value="Blood Pressure"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_bp" layout="block"
+						style="text-align:right">
+						<h:panelGrid columns="3" cellpadding="0" style="float:right;">
+							<h:outputLabel value="#{codlBean.vitalsMap.bp_systolic}" />
+							<h:outputLabel value="/" />
+							<h:outputLabel value="#{codlBean.vitalsMap.bp_diastolic}" />
+						</h:panelGrid>
+					</p:outputPanel>
+
+					<h:outputLabel for="idField_bp_hr" value="Heart Rate"
+						styleClass="form-dialog-label" />
+					<p:outputPanel id="idField_bp_hr" style="float:right;">
+						<h:outputLabel value="#{codlBean.vitalsMap.bp_heartrate}" />
+					</p:outputPanel>
+
+				</h:panelGrid>
+			<h:panelGroup>
+			
+				<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
+					titleX="Time" style="chartStyle" />
+			</h:panelGroup>	
+			<!--  		
+				<p:panel closable="false" toggleable="true" 
+					header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}">
+					<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
+					titleX="Time" style="chartStyle" />
+			</p:panel>
+			-->
+	</p:tab>
+</p:tabView>
+
+		<!--  div id=entry appendToBody="true"-->
+
+		<p:dialog closable="true" widgetVar="widDialogChart01" id="idChart01"
+			header="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
+			resizable="false" modal="false" width="550">
+			<p:outputPanel id="idPanelChart01">
+				<p:lineChart model="#{codlBean.chart01}" titleX="Time"
+					titleY="Body Weight(kg)" style="chartStyle" />
+			</p:outputPanel>
+		</p:dialog>
+
+		<p:dialog closable="true" widgetVar="widDialogChart02" id="idChart02"
+			header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
+			resizable="true" modal="false" width="550">
+			<p:outputPanel id="idPanelChart02">
+				<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
+					titleX="Time" style="chartStyle" />
+			</p:outputPanel>
+		</p:dialog>
+
+
+	</ui:define>
+
+	<!--  
+	
+	<p:lineChart model="#{chartBean.cartesianModel}" />
+ styleClass="chartStyle"
+ 
+		<ui:include src="./charts/charts_obs_bw.xhtml" />
+		<ui:include src="./charts/charts_obs_bp.xhtml" />
+					
+	vitalsMap.bw
+	vitalsMap.bw_bmi
+	vitalsMap.bw_date
+	 
+	vitalsMap.bh
+	vitalsMap.bp_systolic
+	vitalsMap.bp_diastolic
+	vitalsMap.bp_heartrate
+	vitalsMap.bp_date				
+					
+								
+					<h:outputLabel for="idField_code"
+						value="#{labels['action.name.label']}"
+						styleClass="form-dialog-label" />
+										
+					<h:outputLabel value="Integer field"
+						for="intField_1" styleClass="form-dialog-label" />
+					<p:outputPanel id="intField_1" layout="block">
+						<h:outputLabel value="#{codlBean.selected.priority}"/>
+					</p:outputPanel>
+					<p:outputPanel layout="block"></p:outputPanel>
+					
+					<h:outputLabel value="Double field"
+						for="doubleField_1" styleClass="form-dialog-label" />
+					<p:outputPanel id="doubleField_1" layout="block">
+						<h:outputLabel value="#{codlBean.selected.priority}"/>
+					</p:outputPanel>					
+					<p:outputPanel layout="block"></p:outputPanel>-->
+
+	<!--</p:fieldset>-->
+</ui:composition>
+

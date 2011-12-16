@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+	<ui:define name="head">
+		<style type="text/css">
+
+		</style>
+	</ui:define>
+
+<ui:define name="content">
+<!--h1 class="title ui-widget-header ui-corner-all">DataTable Row Selection</h1-->
+<div class="entry">
+
+<h:form id="bodyweightForm">
+
+    <p:growl id="msgs" />
+
+	<p:panel header="Create a new Entry">
+		<h:panelGrid columns="2" id="grid">
+			<h:outputLabel value="Title : *" for="txt_title"></h:outputLabel>
+			<p:inputText id="txt_title" 
+							value="#{cmgtBean.book.title}" required="true"requiredMessage="#{labels['default_required_field']}"/>
+			
+			<h:outputLabel value="Author : *" for="txt_author"></h:outputLabel>
+			<p:inputText id="txt_author" required="true" 
+							value="#{cmgtBean.book.author}" />
+			
+			<p:commandButton value="Reset" type="reset"/>
+			<p:commandButton value="Add" update="books msgs @parent"
+							action="#{cmgtBean.reinit}" >
+				<p:collector value="#{cmgtBean.book}" 
+							addTo="#{cmgtBean.books}" />
+			</p:commandButton>
+		</h:panelGrid>
+	</p:panel>
+	
+	<p:ajaxStatus style="width:16px;height:16px;">
+		<f:facet name="start">
+			<h:graphicImage value="/img/ajaxloading.gif" />
+		</f:facet>
+		
+		<f:facet name="complete">
+			<h:outputText value="" />
+		</f:facet>
+	</p:ajaxStatus>
+	
+	<p:outputPanel id="listBodyweight">
+		<p:dataTable value="#{cmgtBean.bodyweightList}" var="theItem" paginator="true" rows="20">
+		
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Action" />
+				</f:facet>
+				<p:commandLink 
+					value="Remove" 
+					update="bodyweightForm:listBodyweight" 
+					process="@this">
+					<p:collector 
+						value="#{theItem}"
+						removeFrom="#{cmgtBean.bodyweightList}" />
+				</p:commandLink>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Title" />
+				</f:facet>
+				<h:outputText value="#{theItem.title}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Code" />
+				</f:facet>
+				<h:outputText value="#{theItem.code}" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Body Weight" />
+				</f:facet>
+				<p:outputPanel >
+					<!-- grid for measurement units -->
+					<h:outputText value="#{theItem.code}" />
+				</p:outputPanel>
+			</p:column>			
+
+		</p:dataTable>
+	</p:outputPanel>
+
+</h:form>
+
+</div>
+<!-- div entry -->
+</ui:define>
+
+
+</ui:composition>

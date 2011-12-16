@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<!-- Create Event Popup -->
+<window width="400px" title="Create Calendar Event" border="normal" id="EventPop" mode="popup" visible="false">
+    <caption>
+        Lock :
+        <checkbox id="pplocked" />
+    </caption>
+    <!-- #007FA5 #398CA3  at.srfg.kmt.ehealth.phrs.PhrsConstants.CALENDAR_EVENT_CONTENT_COLOR_DEFAULT  -->
+    <textbox id="headColor" value="#007FA5" 	readonly="true" visible="false"/>
+    <textbox id="cntColor"  value="#398CA3"  	readonly="true" visible="false"/>
+    
+    <grid hflex='1'>
+        <columns>
+            <column width="100px" />
+            <column />
+        </columns>
+        <rows>            
+            <row>
+                <label value="${labels.event.dateBegin.label}"/>
+                <div>
+                    <datebox id="ppbegin" format="yyyy-MM-dd" 
+                    timeZone="${calendars.defaultTimeZone}" />
+                    
+                    <listbox mold="select" id="ppbt" />
+                </div>
+            </row>
+            
+   			<row>    
+                <label value="${labels.event.dateEnd.label}"/>
+               <div>
+                    <datebox id="ppend"  format="yyyy-MM-dd" 
+                    timeZone="${calendars.defaultTimeZone}" />
+                    <listbox id="ppet" mold="select" />
+                   <label value="All Day"/>
+                   <checkbox id="ppallDay" 
+                   		onCheck='ppbt.visible = !self.checked;ppet.visible = !self.checked' />
+                </div>
+   
+            </row>
+
+            <row>
+                <label value="${labels.default.comments.event.label}"/>
+                <textbox id="ppcnt"  multiline="true" rows="3" width="97%" 
+               />
+            </row>
+            <row>
+                <cell colspan="2" style="text-align:center;">
+                    <button id="okBtn" width="80px" label="OK" />
+                    <button id="cancelBtn" width="80px" label="Cancel" />
+                    <button id="deleteBtn" width="80px" label="Delete" />
+                </cell>
+            </row>
+        </rows>
+    </grid>
+             <!-- 
+selection color, use a simple color selection
+             <row>
+                Color:
+                <hlayout>
+                    Header -
+                    <colorbox id="headColor" value="#007FA5" height="20px"/>
+                    Content -
+                    <colorbox id="cntColor" value="#398CA3" height="20px"/>
+                </hlayout>
+ 
+            </row>-->   
+</window>

@@ -1,0 +1,39 @@
+/*
+			@Override
+			public void onEvent(Event event) throws Exception {
+				final String msg = (String) event.getData();
+
+				// Check if empty, than do not show incoming message
+				if (StringUtils.isEmpty(msg)) {
+					return;
+				}
+
+				setMsg(msg);
+
+				if (msgWindow == null) {
+
+				
+					 * If you whish to popup the incoming message than uncomment
+					 * these next 3 lines.
+					
+					// START Popup
+					getMsgWindow();
+					((Textbox) getMsgWindow().getFellow("tb")).setValue(getMsg());
+					MessageBarCtrl.this.btnOpenMsg.setImage("/images/icons/message2_16x16.gif");
+					// END Popup
+ 
+					
+					 * If you whish to inform smartly of incoming message than
+					 * uncomment the next line for only a blinking Icon.
+					 */
+					// MessageBarCtrl.this.btnOpenMsg.setImage("/images/icons/incoming_message1_16x16.gif");
+				} else {
+					Textbox t = ((Textbox) getMsgWindow().getFellow("tb"));
+					t.setValue(getMsg());
+					// SCROLL the text to the last Message.
+					Clients.evalJavaScript("scrollTextbox('" + t.getUuid() + "')");
+//					int stPos = t.getText().length();
+//					t.setSelectionRange(stPos, getMsg().length() - 1);
+				}
+			}
+	*/

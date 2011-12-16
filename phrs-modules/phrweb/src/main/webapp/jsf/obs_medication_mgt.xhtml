@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+	<title></title>
+
+	<script type="text/javascript">
+	//<![CDATA[        
+		function onEditComplete(xhr, status, args) {
+			if (window.console && window.console.firebug) {
+				  console.log("onEditComplete idDialogOmed action_schedule_mgt_module h:head");
+			}
+			
+			if (args.validationFailed) {
+
+			} else {
+				widDialogOmed.hide();
+			}
+		}
+     //]]>
+		</script>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+	<ui:define name="content">
+	
+		<h:outputScript  target="head" >
+			<script type="text/javascript">
+			//<![CDATA[       
+				function onEditComplete(xhr, status, args) {
+					if (window.console && window.console.firebug) {
+						  console.log("onEditComplete outputScript");
+					}
+					if (args.validationFailed) {
+			
+					} else {
+						widDialogOmed.hide();
+					}
+				}
+			  //]]>
+			</script>
+
+		</h:outputScript>
+			
+		
+		<h:form prependId="false">
+			<p:messages />
+			<!-- show validation messages for create form contents -->
+			<p:growl id="msgs" showDetail="true" />
+			<!-- shows the validation messages for dialog contents -->
+
+			<p:fieldset legend="#{labels['medicationSummary.label']}">
+			<p:breadCrumb> 	
+				<p:menuitem value="Active Medications" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
+					immediate="true"/>			
+				<p:menuitem value="Active Medications" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
+					immediate="true"/>
+				<p:menuitem value="Inactive" 			url="/jsf/obs_medication_mgt.xhtml?view=inactive"
+					immediate="true"/>
+				<p:menuitem value="History" 			url="/jsf/obs_medication_mgt.xhtml?view=history" 
+					immediate="true"/> 			 
+			</p:breadCrumb>	
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="create" immediate="true"
+						rendered="#{odlmed.allowCreate}"
+						title="#{labels['default.button.newform.label']}"
+						image="ui-icon-plus" actionListener="#{odlmed.create}"
+						update="idPanelOmed" oncomplete="widDialogOmed.show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+	<!-- 
+#{labels['medicationSummary.label']}
+#{labels['medicationSummary.label']}
+list 
+#{labels['medicationSummary.medicationNameText.label']}
+#{labels['medicationSummary.medicationStatus.short.label']}
+#{labels['short.date.label']}
+#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.short.label']}
+#{labels['default.medicationDosage.label']}	
+#{labels['medicationSummary.prescribedByPersonName.short.label']}	
+#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.short.label']}	
+#{labels['default.comments.label']}	
+
+
+	
+label 
+code
+status  TAG_MEDICATION_COMPLIANCE_STATUS
+displayDate
+reasonCode or medicationReasonCodes TAG_MEDICATION_REASON_WITH_RISK_FACTORS
+...
+treatmentMatrix.dosage
+treatmentMatrix.dosageUnits  TAG_MEDICATION_DOSAGE_DOSAGE_UNITS
+treatmentMatrix.dosageInterval TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1
+treatmentMatrix.dosageTimeOfDay TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1
+...
+ 
+prescribedByName
+noteReason
+note
+
+				map.put('TAG_MEDICATION_COMPLIANCE_STATUS', 		getTerms(PhrsConstants.TAG_MEDICATION_COMPLIANCE_STATUS,language))
+				map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
+				map.put('TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1', getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1,language))
+				map.put('TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1,language))
+				map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', 	getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))
+
+...form
+medicationSummary.medicationNameText.label
+medicationSummary.medicationStatus.main.label
+
+default.medicationDosage.label
+.. medicationSummary.medicationQuantity.label  						treatmentMatrix.dosage
+.. medicationSummary.medicationQuantityUnit.label 	treatmentMatrix.dosageUnits
+.. medicationSummary.medicationFrequencyInterval.label medicationSummary.medicationFrequencyInterval.example.label
+    treatmentMatrix.dosageInterval
+.. medicationSummary.medicationFrequencyTimeOfDay.label dosageTimeOfDay
+.. treatmentMatrix.dosageTimeOfDay prescribedByName
+
+prescribedByName medicationSummary.prescribedByPersonName.label
+
+reasonCode  medicationReasonCodes TAG_MEDICATION_REASON_WITH_RISK_FACTORS  medicationSummary.medicationReasonPrimaryKeywordCode.label
+
+default.comments.label
+
+medicationSummary.medicationNameText.label	
+medicationSummary.medicationStatus.main.label	
+default.medicationDosage.label	
+medicationQuantity.label
+medicationSummary.medicationQuantityUnit.label
+medicationSummary.medicationFrequencyInterval.label
+treatmentMatrix.dosageInterval	
+medicationSummary.medicationFrequencyTimeOfDay.label
+treatmentMatrix.dosageTimeOfDay
+	
+medicationSummary.prescribedByPersonName.label	
+medicationSummary.medicationReasonPrimaryKeywordCode.label
+
+default.comments.label
+
+#{labels['']}	
+#{labels['']}	
+#{labels['']}
+
+ 
+rendered="#{infotype eq 'active' or infotype eq null}"
+
+rendered="#{infotype eq 'inactive'}"
+rendered="#{infotype eq 'history'}"
+	 -->
+			<p:dataTable id="idItemTableOmed"
+				widgetVar="widItemTableOmed" var="theItem"
+				value="#{odlmed.modelMain}" paginator="true" rows="20">
+
+				<p:column style="width:50px" headerText="Options">
+					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+						<!-- ok, success view  odlmed -->
+						<p:commandButton update="idPanelOmed"
+							disabled="#{theItem.status eq 'default.no_answer.label'}"
+							oncomplete="widDialogOmed.show()"
+							image="ui-icon ui-icon-search"
+							title="#{labels['default.button.view.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{odlmed.selected}" />
+							<f:setPropertyActionListener value="no"
+								target="#{odlmed.modify}" />
+						</p:commandButton>
+
+						<p:commandButton update="idPanelOmed"
+							oncomplete="widDialogOmed.show()"
+							image="ui-icon ui-icon-pencil"
+							title="#{labels['default.button.edit.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{odlmed.selected}" />
+							<f:setPropertyActionListener value="yes"
+								target="#{odlmed.modify}" />
+						</p:commandButton>
+						
+					</h:panelGrid>
+				</p:column>
+
+				<p:column headerText="#{labels['medicationSummary.medicationNameText.label']}">			
+					<h:outputLabel value="#{theItem.label}"/>
+					<p:outputPanel rendered="#{theItem.code != null}">
+						<h:outputLabel value="#{theItem.code}" style="font-style:italic;" />
+					</p:outputPanel>
+				</p:column>
+				<!--  TODO add Status from EHR Medication, use Origin part  -->
+				<p:column headerText="#{labels['medicationSummary.medicationStatus.main.label']}">
+					<h:outputLabel value="#{theItem.status}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+					<p:outputPanel rendered="#{theItem.origin != null}">
+						
+						<h:outputLabel value="EHR source:" style="font-style:italic;color:red;" />
+						<!--  do lookup for nice label e.g. originLabel or  use jstl 2.2 -->
+						<h:outputLabel value="#{theItem.origin}" style="font-style:italic;" />
+					</p:outputPanel>					
+				</p:column>
+				
+				<p:column headerText="#{labels['short.date.label']}">
+					<h:outputLabel value="#{theItem.displayDate }"><!-- beginDate-->
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>
+			
+				<p:column headerText="#{labels['default.medicationDosage.label']}">
+					<h:outputLabel value="#{theItem.treatmentMatrix.dosage}"/>					
+					<h:outputLabel value="#{theItem.treatmentMatrix.dosageUnits}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+					<br/>					
+					<h:outputLabel value="#{theItem.treatmentMatrix.dosageInterval}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+					<br/>	
+					<h:outputLabel value="#{theItem.treatmentMatrix.dosageTimeOfDay}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>																			
+				</p:column>
+				<p:column headerText="#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}">
+					<h:outputLabel value="#{theItem.reasonCode}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>				
+				<p:column headerText="#{labels['medicationSummary.prescribedByPersonName.label']}">
+					<h:outputText value="#{theItem.prescribedByName}" />
+				</p:column>
+				
+				<p:column headerText="#{labels['default.comments.label']}">
+					<h:outputText value="#{theItem.note}" />
+				</p:column>
+
+				<!--  expander  -->
+			</p:dataTable>
+
+		</p:fieldset>
+
+	</h:form>
+
+<!-- form dialog -->
+		<!--  add dialog here and wrap with the form -->
+		
+		<ui:include src="./obs_medication_dialog.xhtml" />
+		
+		<!--<p:dialog widgetVar="widDialogOmed" id="idDialogOmed"
+			modal="true"	appendToBody="true"
+			header="Action Details" width="600" showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelOmed" layout="block">
+				<h:form id="idFormOmed">
+				
+				test
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>-->
+
+
+</ui:define>
+</ui:composition>

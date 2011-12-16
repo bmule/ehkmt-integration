@@ -1,0 +1,64 @@
+<window id="win" border="normal" height="100%">
+	<zscript><![CDATA[
+	   boolean hasZkex = true;
+	   try{
+		   Class.forName("org.zkoss.zkex.Version");
+	   }catch(Exception e){
+		   hasZkex = false;			   
+	   }						    
+	]]></zscript>
+	<html unless="${hasZkex}"><![CDATA[
+	         <h1>Missing zkex.jar</h1>
+	         <p>
+	         You need to have zkex.jar in your WEB-INF/lib to make this sample work well.
+	         For it use chart component.
+	         How to get zkex.jar? Please contact info@zkoss.org
+	         </p>
+	]]></html>
+	<vbox>
+		<grid width="400px">
+			<columns>
+				<column label="category" width="150px" />
+				<column label="value" />
+			</columns>
+			<rows>
+				<row>
+					<label id="c0" value="C/C++" />
+					<decimalbox id="v0" value="21.2"
+						constraint="no empty" onChange="update(0)" />
+				</row>
+				<row>
+					<label id="c1" value="VB" />
+					<decimalbox id="v1" value="10.2"
+						constraint="no empty" onChange="update(1)" />
+				</row>
+				<row>
+					<label id="c2" value="Java" />
+					<decimalbox id="v2" value="40.4"
+						constraint="no empty" onChange="update(2)" />
+				</row>
+				<row>
+					<label id="c3" value="PHP" />
+					<decimalbox id="v3" value="28.2"
+						constraint="no empty" onChange="update(3)" />
+				</row>
+			</rows>
+		</grid>
+		<zscript><![CDATA[//@DECLARATION
+			PieModel model = new SimplePieModel();
+			void update(int rowIndex) {
+				Label lb = (Label) win.getFellow("c"+rowIndex);
+				Decimalbox db = (Decimalbox) win.getFellow("v"+rowIndex);
+				model.setValue(lb.getValue(), new Double(db.getValue().doubleValue()));
+			}
+			]]>
+			<![CDATA[
+			for(int j=0; j < 4; ++j) {
+				update(j);
+			}
+		]]></zscript>
+		<chart id="mychart" title="Pie Chart Demo" width="500" if="${hasZkex}" 
+			height="250" type="pie" threeD="true" fgAlpha="128" model="${model}" />
+	</vbox>
+
+</window>

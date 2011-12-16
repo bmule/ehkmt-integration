@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+	<ui:define name="head">
+		<!-- 
+action_actions_list_label=Actions List
+ -->
+
+	</ui:define>
+	<!-- action_schedule_mgt_module.xhtml -->
+	<ui:define name="content">
+	<p:breadCrumb>
+		<p:menuitem  value="View Calendar" immediate="true"  url="/jsf/action_schedule_calendar.xhtml" 
+		styleClass="ui-button-text"/>		 				
+		<p:menuitem  value="View Calendar" immediate="true"  url="/jsf/action_schedule_calendar.xhtml" 
+		styleClass="ui-button-text"/>	
+		<p:menuitem  value="#{labels['action_actions_list_label']}"     url="/jsf/action_schedule_dash.xhtml" 
+		 immediate="true" styleClass="ui-button-text"/>		 
+	</p:breadCrumb>
+		
+		<!-- <p:fieldset legend="#{labels['action_actions_list_label']} Calendar">-->
+
+			<p:messages />
+			<p:growl id="messages" showDetail="true" />
+			<h:form id="idFormActionCalendar">
+				<p:schedule value="#{actionactBean.eventModel}" />
+			</h:form>
+		<!-- </p:fieldset>-->
+	</ui:define>
+
+</ui:composition>

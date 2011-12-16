@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui
+					$(PrimeFaces.escapeClientId('widDialogRisk')).parent()
+							.effect("shake", {
+								times : 5
+							}, 100);
+	-->
+	<ui:define name="head">
+		<script type="text/javascript">
+		//<![CDATA[    
+			function onEditComplete(xhr, status, args) {
+				if (args.validationFailed) {
+					if (window.console && window.console.firebug) {
+						  console.log("onEditComplete  validation failed");
+					}
+	
+				} else {
+					widDialogRisk.hide();
+				}
+			} 
+			//]]>
+		</script>
+	</ui:define>
+
+	<ui:define name="content">
+		<!--h1 class="title ui-widget-header ui-corner-all">DataTable Row Selection</h1-->
+		<div class="entry">
+		
+		</div>
+	</ui:define>
+</ui:composition>
+		

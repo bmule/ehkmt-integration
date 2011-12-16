@@ -1,0 +1,19 @@
+<!--
+<row>
+	<label value="combo test" />
+	<combobox id="combobox_1" readonly="true" width="250px" constraint="no empty" tooltip="${labels.default.selection.choose.label}"/>
+</row>
+<row>
+	<label value="combo test" />
+	<combobox id="combobox_1" readonly="true"   width="250px" constraint="no empty" tooltip="${labels.default.selection.choose.label}">
+		<comboitem self="@{each=item}" value="@{item.entrySet.key}"  label="@{item.entrySet.value}"/>
+	    <attribute name="onCreate"><![CDATA[
+			String temp = hidden_tb1.getValue();  
+	        //String temp= this.selected.code; //hidden_tb2.getValue();
+	        ListModelMap lmm2=at.srfg.kmt.ehealth.phrs.presentation.utils.UtilsUI.createListModel(at.srfg.kmt.ehealth.phrs.persist.PhrsConstants.TAG_PHYSICAL_ACTIVITIES);
+	        listbox_2.setModel(lmm2);
+			]]>					   
+		 </attribute>
+	</combobox>
+</row>
+ -->

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+
+	<script type="text/javascript">
+	//<![CDATA[        
+		function XXXXonEditComplete(xhr, status, args) {
+			if (window.console && window.console.firebug) {
+				  console.log("onEditComplete idDialogActionmgt action_schedule_mgt_module h:head");
+			}
+			
+			if (args.validationFailed) {
+		
+			} else {
+				widDialogActionmgt.hide();
+			}
+		}
+     //]]>
+		</script>
+</h:head>
+
+<h:body>
+
+	<ui:composition>
+	
+		<h:outputScript  target="head" >
+			<script type="text/javascript">
+			//<![CDATA[       
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+			
+					} else {
+						widDialogActionmgt.hide();
+					}
+				}
+			  //]]>
+			</script>
+
+		</h:outputScript>
+		<!-- 
+	ui-button-text	
+	ui-dialog-titlebar ui-widget-header
+		 -->
+	
+		<h:form prependId="false">
+			<p:fieldset legend="#{labels['action_actions_list_label']}" >
+
+<p:breadCrumb >		
+		<p:menuitem  value="#{labels['action_actions_list_label']}"   immediate="true"  url="#" 
+		styleClass="ui-button-text" />
+		<p:menuitem  value="#{labels['action_actions_list_label']}"   immediate="true"  url="#"  
+			styleClass="ui-button-text"/>
+		<p:menuitem  value="View Calendar"  url="/jsf/action_schedule_calendar.xhtml"  immediate="true"
+			styleClass="ui-button-text" />		 						 
+</p:breadCrumb>			
+			<p:messages />
+			<!-- show validation messages for create form contents -->
+			<p:growl id="msgs" showDetail="true" />
+			<!-- shows the validation messages for dialog contents 		
+			<p:fieldset legend="#{labels['action_actions_list_label']}" > ui-button-text-->
+
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="create" immediate="true"
+						rendered="#{actionmgtBean.allowCreate}"
+						title="#{labels['default.button.newform.label']}"
+						image="ui-icon-plus" actionListener="#{actionmgtBean.create}"
+						update="idPanelActionmgt" oncomplete="widDialogActionmgt.show()" />	
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="idItemTableActionmgt"
+				widgetVar="widItemTableActionmgt" var="theItem"
+				value="#{actionmgtBean.modelMain}" paginator="true" rows="20">
+
+				<!--  ui:include src="./action_schedule_row_buttons.xhtml" /-->
+				<p:column style="width:50px" headerText="Options">
+					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+						<!-- ok, success view  actionmgtBean -->
+						<p:commandButton update="idPanelActionmgt"
+							disabled="#{theItem.status eq 'default.no_answer.label'}"
+							oncomplete="widDialogActionmgt.show()"
+							image="ui-icon ui-icon-search"
+							title="#{labels['default.button.view.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{actionmgtBean.selected}" />
+							<f:setPropertyActionListener value="no"
+								target="#{actionmgtBean.modify}" />
+						</p:commandButton>
+
+						<p:commandButton update="idPanelActionmgt"
+							oncomplete="widDialogActionmgt.show()"
+							image="ui-icon ui-icon-pencil"
+							title="#{labels['default.button.edit.label']}">
+							<f:setPropertyActionListener value="#{theItem}"
+								target="#{actionmgtBean.selected}" />
+							<f:setPropertyActionListener value="yes"
+								target="#{actionmgtBean.modify}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</p:column>
+
+				<p:column headerText="#{labels['action.isActiveStatus.short.label']}" 
+					sortBy="#{theItem.status}">
+					<h:outputLabel value="#{theItem.status}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{labels['action.name.label']}" 
+					sortBy="#{theItem.title}">
+					<h:outputLabel value="#{theItem.title}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+
+
+				<p:column headerText="#{labels['action.category.label']}" 
+					sortBy="#{theItem.code}">
+					<h:outputLabel value="#{theItem.code}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+				</p:column>
+
+				<p:column headerText="#{labels['action.date.when.label']}" 
+					sortBy="#{theItem.beginDate}">
+					<h:outputLabel value="#{theItem.beginDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>
+				<!--  
+				<p:column headerText="#{labels['action.date.end.label']}" 
+					sortBy="#{theItem.endDate}">
+					<h:outputLabel value="#{theItem.endDate}">
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:outputLabel>
+				</p:column>-->
+				<p:column headerText="#{labels['action.endtime.label']}" 
+					sortBy="#{theItem.durationCode}">
+					<h:outputLabel value="#{theItem.durationCode}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>					
+				</p:column>
+				<!--  			
+				<p:column headerText="#{labels['action.endtime.label']}">
+					<h:outputLabel value="#{theItem.durationTimeString}" />
+				</p:column>
+				-->
+				<p:column headerText="#{labels['default.comments.label']}">
+					<h:outputText value="#{theItem.note}" />
+				</p:column>
+
+				<!--  expander  -->
+			</p:dataTable>
+
+			<!-- </p:fieldset>-->
+
+		</p:fieldset>	
+		</h:form>
+		<!--  dialog form -->
+		<ui:include src="./actionActivity_dialog.xhtml" />
+
+	</ui:composition>
+</h:body>
+<!--  
+		 p:commandButton type="reset" value="Cancel" />
+				 p:commandButton value="Save"
+					oncomplete="actionschedule.update();widDialogActionmgt.hide();"
+					actionListener="X{actionactBean.addEvent}" />
+					
+ store addEvent
+idItemTableActionmgtWidget idItemTableActionmgt
+oncomplete="actionschedule.update();widDialogActionmgt.hide();
+rendered="X{actionmgtBean.modify eq 'yes'}"
+
+ note update refers to ids idItemTableActionmgt 
+ update the idDialogEventmgt to handle the error messages on each field, otherwise, the 
+ form stays open with these errors, and everyone is confused...
+ oncomplete="widDialogActionmgt.hide();"
+   f: convertNumber type="#,###.00" 
+			action.category.label
+			labels.action.name.label
+action.actions.label=Actions
+action.actionplan.label=Action Plan
+action.category.label=Category
+action.name.label=Action Name
+action.date.when.label=When?
+action.endtime.label=How long?
+action.duration.label=Duration	
+
+action.date.end.label=Until?
+action.calendar.short=Calendar
+action.table.label=Table
+ 						
+event.allDay.label=All Day	
+-->
+</html>

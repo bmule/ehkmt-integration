@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk>
+<!--window id="edu1" title="${labels.default.patient_education.label}" border="none" width="100%" mode="embedded"
+		apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.PhrsApplicationComposer">
+	<iframe src="http://wordpress.org/" scrolling="auto" width="100%"/>
+</window> targetIframe iframeDiv-->
+
+	<div id="iframeDiv" apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.PhrsApplicationComposer" >
+		<iframe id="targetIframe"  src="http://localhost:1990/confluence" scrolling="auto" width="100%" height="100%"/>
+	</div>
+</zk>

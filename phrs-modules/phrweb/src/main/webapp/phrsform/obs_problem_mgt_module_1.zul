@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+
+<!--init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" root="./winmgt"?-->
+
+<!--?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsProblemSymptomMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	 	
+<!--title="${labels.obsIssue.label}"  include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/-->		 
+<groupbox>
+	<caption label="${labels.obsIssue.label}" />
+	<!--  <include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/>	,org.zkoss.zkplus.databind.AnnotateDataBindingComposer-->		 	            	
+<div id="mgtListDiv" style="overflow:auto;">
+					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+				<listheader label="${labels.obsIssue.issueCode.label}" 				hflex="2" sort="auto(code)" />
+				<listheader label="${labels.obsIssue.isActiveStatus.label}" 		hflex="3" sort="auto(status)" />
+				<!-- 
+				<listheader label="${labels.date.status.list.label}"  				hflex="1" sort="auto(beginDate)"/>				
+				-->
+				<listheader label="${labels.short.date.label}"  					hflex="2" sort="auto(beginDate)"/>
+				<!--  
+				<listheader label="${labels.short.dateStart.label}"  				hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 					hflex="1" />
+				-->
+				<listheader label="${labels.default.comments.label}" 				hflex="3" />
+			</listhead>
+			<!-- use onCreate to call lookup label function in controller -->
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.code,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 			
+				<listcell label="@{itemMain.status,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/>
+				<!-- 
+				<listcell label="@{itemMain.dateStatusId,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 
+				-->
+				<listcell label="@{itemMain.displayDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" />
+				<!--  
+				<listcell label="@{itemMain.beginDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" />
+				<listcell label="@{itemMain.endDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" />						
+				-->
+				<listcell label="@{itemMain.note}"      		/>																		
+			</listitem>							
+		</listbox>			
+</div>
+<div>
+<separator/>
+<toolbar id="toolBarForm" height="24px">
+<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}"  />
+<!--
+autodisable problem with validate!
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}"  >
+	  <attribute name="onBindingValidate">
+    	 if (jsr303.validate(event.getReferences(), event.getBindings(), event.getValues()))
+        	 self.setAttribute("passed",true);
+  		 </attribute>
+  	</toolbarbutton>-->
+	
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+	
+<div id="mgtFormDiv" visible="@{winmgtCtrl.flagEdit}" > 
+	<textbox id="objId" 		value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+
+<grid>
+	<columns sizable="true">							
+		<column label=" " height="6px" width="30%" />
+		<column label=" " height="6px" width="70%" />		
+	</columns>
+<rows>
+
+	<row>
+		<label value="${labels.obsIssue.issueCode.label}" />	
+		<!--listbox id="listbox_1" width="300px" tooltiptext="" /-->	
+		 
+		<combobox id="combobox_1"  readonly="true" mold="rounded" 
+			itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+			model="@{winmgtCtrl.stringModel_1}" 
+			constraint="no empty" 
+			selectedItem="@{winmgtCtrl.selected.code}"
+			value="@{winmgtCtrl.selected.code}"
+			width="250px"/>
+			
+			<!--  <listbox id="listbox_1"  mold="select" rows="1" 
+			model="@{winmgtCtrl.stringModel_1}" 
+			selectedItem="@{winmgtCtrl.selected.code}"
+			itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ListboxLabelValueRenderer"
+			width="250px"
+			/>-->
+			         							
+	</row> 		
+								  	
+	<row>
+		<label value="${labels.obsIssue.isActiveStatus.label}" />
+		<radiogroup id="radiogroup_1" 
+			value="@{winmgtCtrl.selected.status,save-when='buttonSave.onClick'}"
+		 	selectedItem="@{winmgtCtrl.selected.status}"		
+			tooltiptext="">		
+			<!-- FIXME using local code,what does interop need?
+			Using I18 code string as the value!!  -->	
+			<vbox>		
+				<radio value="default_activeStatusTrue"  label="${labels.default_activeStatusTrue}" selected="true"/>
+				<radio value="default_activeStatusFalse" label="${labels.default_activeStatusFalse}"/>
+			</vbox>
+		</radiogroup>
+	</row>
+	<!-- displayDate -->
+	<row>
+		<div>
+			<label value="${labels.short.date.label}"/>
+			<separator/>
+			<label value="${labels.tip.date.formating}"/>									
+		</div>		
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.displayDate,save-when='buttonSave.onClick'}"
+			constraint="no empty, no future"
+			width="200px" tooltiptext=""/>
+	</row>
+	<!-- 
+	<row>
+		<label value="${labels.obsIssue.observationDateStart.label}"/>									
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.beginDate,save-when='buttonSave.onClick'}"
+			constraint="no empty, no future"
+			width="200px" tooltiptext=""/>
+	</row>
+	<row>
+		<label value="${labels.obsIssue.observationDateEnd.label}"/>	
+		<datebox id="endDate_1" format="yyyy-MM-dd" 
+			constraint="no future"
+			value="@{winmgtCtrl.selected.endDate,save-when='buttonSave.onClick'}"
+			width="200px" tooltiptext="" />
+	</row>	-->
+	<row>
+		<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='buttonSave.onClick'}"
+			width="250px" height="50px" 
+			tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div> <!--  end div, to hide form, but leave tool bar-->
+</div>	
+</groupbox>							
+</window>	
+
+</zk>

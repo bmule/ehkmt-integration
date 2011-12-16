@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk>
+<!-- the content briefs feeds should be displayed into EAST window
+and displayed in the normal viewer iframe created in the main layout composer?? 
+this should be deprecated -->
+	<div id="targetIframe" apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.PhrsApplicationComposer" >
+		<iframe  id="iframeDiv"  src="http://qviz-dev.salzburgresearch.at/confluence" scrolling="auto" width="100%" height="100%"/>
+	</div>
+
+<!--  http://wordpress.org/extend/plugins/json-api/other_notes/-->
+</zk>
+

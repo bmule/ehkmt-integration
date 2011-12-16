@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" title="new page title" contentType="text/html;charset=UTF-8"?>
+<?taglib uri="http://www.zkoss.org/dsp/web/core" prefix="c"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<!--
+	<window id="winmgt" title="${labels.activityItem.label} module"
+			apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsActivityPhysicalMgrComposer, org.zkoss.zkplus.databind.AnnotateDataBindingComposer"
+			border="none" width="600px">
+-->							
+
+<div>
+<groupbox>
+	<caption label="${labels.activityItem.label}" />
+ <toolbar>	
+	<toolbarbutton id="newform"  	visible="@{winmgtCtrl.flagNewForm}"		label="${labels.default.button.newform.label}"  />
+	<toolbarbutton id="save"  		visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.save.label}"  />
+	<toolbarbutton id="cancel"  	visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="delete" 		visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.delete.label}" />			
+</toolbar>	
+	
+<div> 
+	<textbox id="objId" value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+<grid>
+	<columns sizable="true">							
+		<column label=" " height="6px" width="30%" />
+		<column label=" " height="6px" width="70%" />		
+	</columns>
+<rows>
+	<row>
+		<label value="${labels.activityItem.label}" />
+		<hbox>
+			<textbox  id="hidden_text_listbox_4" value="@{winmgtCtrl.selected.code,save-when='self.onChange'}" visible="false" />
+			<listbox id="listbox_4" mold="select" rows="1" width="250px" >			          						
+				<listitem  self="@{each=item}" value="@{item.entrySet.key}"  label="@{item.entrySet.value}"/>																																	
+				<attribute name="onSelect"><![CDATA[
+                     		if (self.selectedItem.value != null) {
+                     			hidden_text_listbox_4.setValue( self.selectedItem.value);
+                     		} else{
+                     			hidden_text_listbox_4.setValue("") ;
+                     		}                      
+                 		]]></attribute>                  
+                   <attribute name="onCreate"><![CDATA[
+                       ListModelMap lmm4=at.srfg.kmt.ehealth.phrs.zk.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.PhrsConstants.TAG_PHYSICAL_ACTIVITIES, hidden_text_listbox_4.getValue(),true);
+                       listbox_4.setModel(lmm4);
+					    ]]>					   
+				 </attribute> 					
+			</listbox>
+		</hbox>
+	</row> 								
+	<row>	
+		<label value="" />
+		<vbox>
+			<label value="${labels.activityItem.activityName.explain.label}" />
+			<textbox id="textbox_1" value="@{winmgtCtrl.selected.codeOtherText,save-when='self.onChange'}" width="250px" />
+		</vbox>
+	</row>			  	
+	<row>
+		<label value="${labels.activityItem.status.short.label}" />
+		<radiogroup id="radiogroup_1" value="@{winmgtCtrl.selected.statusCode,save-when='self.onChange'}"
+			onCheck="radiogroup_1 = self.selectedItem.value">	
+			<vbox>		
+				<radio value="true"  label="${labels.activityItem.isActiveStatusTrue.label}"/>
+				<radio value="false" label="${labels.activityItem.isActiveStatusFalse.label}"/>
+			</vbox>
+		</radiogroup>
+	</row>
+	<row>
+		<label value="${labels.activityItem.activityFrequencyCode.label}" />
+		<hbox>
+			<textbox  id="hidden_text_listbox_2" value="@{winmgtCtrl.selected.frequencyCode,save-when='self.onChange'}" visible="false" />
+			<listbox id="listbox_2" mold="select" rows="1" width="250px" emptyMessage="plz choose..." >			          						
+				<listitem  self="@{each=item}" value="@{item.entrySet.key}"  label="@{item.entrySet.value}"/>																																	
+				<attribute name="onSelect"><![CDATA[
+                     		if (self.selectedItem.value != null) {
+                     			hidden_text_listbox_2.setValue( self.selectedItem.value);
+                     		} else{
+                     			hidden_text_listbox_2.setValue("") ;
+                     		}                      
+                 		]]></attribute>                  
+                   <attribute name="onCreate"><![CDATA[
+                       ListModelMap lmm2=at.srfg.kmt.ehealth.phrs.zk.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.PhrsConstants.TAG_PHYSICAL_ACTIVITY_FREQUENCY, hidden_text_listbox_2.getValue(),true);
+                       listbox_2.setModel(lmm2);
+					    ]]>					   
+				 </attribute> 					
+			</listbox>
+		</hbox>
+	</row> 
+
+	<row>
+		<label value="${labels.activityItem.activityDurationCode.label}" />
+		<hbox>
+			<textbox  id="hidden_text_listbox_3"  value="@{winmgtCtrl.selected.durationCode,save-when='self.onChange'}" visible="false" />
+			<listbox id="listbox_3" mold="select" rows="1" width="250px" emptyMessage="plz choose..." >			          						
+				<listitem  self="@{each=item}" value="@{item.entrySet.key}"  label="@{item.entrySet.value}"/>																																	
+				<attribute name="onSelect"><![CDATA[
+                     		if (self.selectedItem.value != null) {
+                     			hidden_text_listbox_3.setValue( self.selectedItem.value);
+                     		} else{
+                     			hidden_text_listbox_3.setValue("") ;
+                     		}                      
+                 		]]></attribute>                  
+                   <attribute name="onCreate"><![CDATA[
+                       ListModelMap lmm3=at.srfg.kmt.ehealth.phrs.zk.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.PhrsConstants.TAG_PHYSICAL_ACTIVITY_DURATION, hidden_text_listbox_3.getValue(),true);
+                       listbox_3.setModel(lmm3);
+					    ]]>					   
+				 </attribute> 					
+			</listbox>
+		</hbox>
+	</row>
+	<row>
+		<label value="${labels.default.observationDateStart.label}"/>									
+		<datebox id="startDate_1" format="${labels.format.date}" 
+			constraint="no empty"
+			value="@{winmgtCtrl.selected.beginDate,save-when='self.onChange'}"
+			width="250px" tooltiptext=""/>
+	</row>
+	<row>
+		<label value="${labels.default.observationDateEnd.label}"/>
+		
+		<datebox id="endDate_1" format="${labels.format.date}" 
+			value="@{winmgtCtrl.selected.endDate,save-when='self.onChange'}"
+			width="250px" tooltiptext="" />
+	</row>	
+	<row>
+		<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='self.onChange'}"
+			width="250px" height="50px" 
+			tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div><!-- end div, to hide form, but leave tool bar-->
+</groupbox>
+</div>			
+	<!-- </window>-->
+		
+</zk>

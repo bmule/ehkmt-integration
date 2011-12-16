@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>ignored, but required</title>
+</h:head>
+
+<h:body>
+
+	<!-- oncomplete="onEditComplete(xhr,status,args)" -->
+	<!-- 
+actionmgtBean used with table mgt
+actionmgtBean used with schedule calendar
+ -->
+
+	<!--  use event and not selected. The event wrapper will map to the selected
+    p :dialog w idgetVar="eventDialog"  header="Action Event Details" showEffect="clip" hideEffect="clip" >
+     action.isActiveStatus.short.label
+     				<listheader label="${labels.action.isActiveStatus.short.label}" 				hflex="1" sort="auto(status)"/>
+				<listheader label="${labels.action.category.label}" 							hflex="2" sort="auto(category)" />						
+				<listheader label="${labels.action.name.label}" 								hflex="4" sort="auto(label)" />
+				<listheader label="${labels.short.dateStart.label}"  							hflex="2" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 								hflex="2" />
+				<listheader label="${labels.action.duration.label}" 							hflex="2" />
+				<listheader label="${labels.default.comments.label}" 
+				id="eventDetails"	
+     -->
+<ui:composition>
+		
+		<p:dialog id="idDialogActionmgt"  closable="false" appendToBody="true"
+				widgetVar="widDialogActionmgt"	header="Action Details" 
+				width="600" showEffect="clip" hideEffect="clip"	>
+
+			<p:outputPanel id="idPanelActionmgt" layout="block">
+				<h:form prependId="false" id="idFormActionmgt">
+					<h:panelGrid columns="3">
+					
+						<h:outputLabel for="actiontitle"
+							value="#{labels['action.name.label']} *"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="actiontitle" layout="block">
+							<h:outputLabel value="#{actionmgtBean.selected.title}"
+								rendered="#{actionmgtBean.modify eq 'no'}" />
+							<p:inputText value="#{actionmgtBean.selected.title}" id="actiontitle_input"
+								required="true" requiredMessage="#{labels['default_required_field']}"
+								rendered="#{actionmgtBean.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="actiontitle_input" display="text" />
+
+						<h:outputLabel for="field_category"
+							value="#{labels['action.category.label']}"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_category" layout="block">
+							<h:outputLabel value="#{actionmgtBean.selected.code}"
+								rendered="#{actionmgtBean.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{actionmgtBean.selected.code}" id="field_category_input"
+								rendered="#{actionmgtBean.modify eq 'yes'}">
+								<f:selectItems
+									value="#{actionmgtBean.vocabMap.TAG_ACTION_CATEGORIES}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+						</p:outputPanel>
+						<p:message for="field_category_input" display="text" />
+
+						<h:outputLabel for="field_action_status"
+							value="#{labels['action.isActiveStatus.label']}"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_action_status" layout="block">
+							<h:outputLabel value="#{actionmgtBean.selected.status}"
+								rendered="#{actionmgtBean.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneRadio layout="pageDirection" id="field_action_status_input"
+								value="#{actionmgtBean.selected.status}"
+								rendered="#{actionmgtBean.modify eq 'yes'}">
+								<f:selectItem itemLabel="#{labels['action_isActiveStatusTrue']}"
+									itemValue="action_isActiveStatusTrue"></f:selectItem>
+								<f:selectItem
+									itemLabel="#{labels['action_isActiveStatusFalse']}"
+									itemValue="action_isActiveStatusFalse" noSelectionOption="true"></f:selectItem>
+
+							</h:selectOneRadio>
+						</p:outputPanel>					
+						<p:message for="field_action_status_input" display="text" />
+
+						<h:outputLabel for="fromDate"
+							value="#{labels['action.date.when.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="fromDate" layout="block">
+
+							<p:outputPanel rendered="#{actionmgtBean.modify eq 'no'}">
+								<h:outputLabel value="#{actionmgtBean.beginDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+							</p:outputPanel>
+
+							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
+									id="fromDate_input" rendered="#{actionmgtBean.modify eq 'yes'}"
+									value="#{actionmgtBean.selected.beginDate}" showOn="button"
+									pattern="yyyy-MM-dd" title="yyyy-MM-dd"/>	
+															
+						</p:outputPanel>
+						<p:message for="fromDate_input" display="text" />
+
+						<!-- action.endtime.label default_date_to_label actionmgtBean -->
+						<h:outputLabel for="toDate"
+							value="#{labels['action.endtime.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="toDate" layout="block">
+							<h:outputLabel value="#{actionmgtBean.selected.durationCode}"
+									rendered="#{actionmgtBean.modify eq 'no'}">
+									<f:converter converterId="labelLookup" />
+							</h:outputLabel>							
+			
+								<!--
+								<h:panelGrid columns="2">
+									<p:outputPanel>
+										<h:outputLabel value="#{actionmgtBean.selected.endDate}">
+											<f:convertDateTime pattern="yyyy-MM-dd" />
+										</h:outputLabel>
+									</p:outputPanel>
+
+						
+									</p:outputPanel>
+								</h:panelGrid>-->
+							
+
+								<h:selectOneMenu value="#{actionmgtBean.selected.durationCode}"
+									id="toDate_input"
+									rendered="#{actionmgtBean.modify eq 'yes'}">								
+									<f:selectItem itemLabel="#{labels['time_dd_1']}"
+										itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_mm_5']}"
+										itemValue="time_mm_5"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_mm_15']}"
+										itemValue="time_mm_15"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_mm_30']}"
+										itemValue="time_mm_30"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_mm_45']}"
+										itemValue="time_mm_45"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_1']}"
+										itemValue="time_hh_1"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_2']}"
+										itemValue="time_hh_2"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_3']}"
+										itemValue="time_hh_3"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_4']}"
+										itemValue="time_hh_4"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_5']}"
+										itemValue="time_hh_5"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_6']}"
+										itemValue="time_hh_6"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_7']}"
+										itemValue="time_hh_7"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_8']}"
+										itemValue="time_hh_8"></f:selectItem>
+									<f:selectItem itemLabel="#{labels['time_hh_9']}"
+										itemValue="time_hh_9"></f:selectItem>
+								</h:selectOneMenu>
+							</p:outputPanel>
+							<!-- <f:facet name="header">
+									<h:outputLabel value="#{labels['event.allDay.label']}" />
+								</f:facet>
+								<h:panelGrid columns="2">							
+									<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
+										rendered="#{actionmgtBean.modify eq 'yes'}" title="yyyy-MM-dd"
+										value="#{actionmgtBean.selected.endDate}" showOn="button"
+								</h:panelGrid>
+								-->
+								
+						<p:message for="toDate_input" display="text" />
+																							
+						<h:outputLabel for="field_note_act"
+							value="#{labels['default.comments.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_note_act" layout="block">
+							<h:outputText value="#{actionmgtBean.selected.note}"
+								id="field_note_act_input"
+								rendered="#{actionmgtBean.modify eq 'no'}"
+								styleClass="commentText" />
+							<p:inputTextarea value="#{actionmgtBean.selected.note}"
+								autoResize="false" cols="30" rows="5"  
+								rendered="#{actionmgtBean.modify eq 'yes'}" label="Comment"
+								styleClass="commentTextInputArea" />
+						</p:outputPanel>
+						<p:message for="field_note_act_input" display="text" />
+
+					</h:panelGrid>
+<!-- 
+idFormActionCalendar should be updated...
+it is in a tab and cache=false causes an error to make all components
+in the tab to fail somewhere in the lifecycle e.g. this form and others.
+ -->
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<f:facet name="header">
+							<p:commandButton value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								process="idFormActionmgt"
+								update="idItemTableActionmgt msgs idFormActionmgt idFormActionCalendar"
+								oncomplete="onEditComplete(xhr,status,args)"
+								actionListener="#{actionmgtBean.store}"
+								image="ui-icon ui-icon-check" />
+
+						<p:commandButton rendered="#{actionmgtBean.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{actionmgtBean.refresh}" immediate="true" 
+							onsuccess="widDialogActionmgt.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{actionmgtBean.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogActionmgt.hide()"
+							image="ui-icon ui-icon-close" />								
+								
+						</f:facet>
+					</h:panelGrid>
+				</h:form>	
+			</p:outputPanel>
+		</p:dialog>
+
+	</ui:composition>
+</h:body>
+<!--  
+							<p:commandButton type="reset"
+								value="#{actionmgtBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								onclick="widDialogActionmgt.hide();" immediate="true"
+								image="ui-icon ui-icon-close" />-->
+<!--  
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+								value="#{actionmgtBean.selected.beginDate}"
+								rendered="#{actionmgtBean.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+ 			<radio value="action_isActiveStatusTrue"  label="${labels.action_isActiveStatusTrue}"  selected="true"/>
+				<radio value="action_isActiveStatusFalse" label="${labels.action_isActiveStatusFalse}"/>
+	 
+<h:selectBooleanCheckbox id="allDay" title="All Day"
+										value="X{actionmgtBean.selected.allDay}"
+										rendered="X{actionmgtBean.modify eq 'yes'}" />
+										<h:outputLabel value="All Day" ></h:outputLabel>
+time_mm_5= 5 minutes	
+time_mm_10=10 minutes	
+time_mm_15=15 minutes	
+time_mm_30=30 minutes
+time_mm_45=45 minutes
+time_hh_1=1 hour	
+time_hh_2=2 hour
+time_hh_3=3 hour
+time_hh_4=4 hour
+time_hh_5=5 hour	
+time_dd_1=All Day
+time_dd_2=2 days
+time_dd_3=3 days
+time_dd_4=4 days
+time_dd_5=5 days
+time_dd_6=6 days
+time_ww_1=1 week
+time_ww_2=2 weeks
+time_ww_3=3 weeks
+time_mo_1=1 month
+
+	<f:selectItems
+		value="X{actionmgtBean.vocabMap.TAG_XXXX}"
+		var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+	
+	action.isActiveStatus.label
+	action.date.when.label
+	action.endtime.label
+	replace:default_date_from_label,default_date_to_label
+ 
+		<f:selectItem itemLabel="#{labels['time_dd_2']}"
+			itemValue="time_dd_2"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_dd_3']}"
+			itemValue="time_dd_3"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_dd_4']}"
+			itemValue="time_dd_4"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_dd_5']}"
+			itemValue="time_dd_5"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_dd_6']}"
+			itemValue="time_dd_6"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_ww_1']}"
+			itemValue="time_ww_1"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_ww_2']}"
+			itemValue="time_ww_2"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_ww_3']}"
+			itemValue="time_ww_3"></f:selectItem>
+		<f:selectItem itemLabel="#{labels['time_mo_1']}"
+			itemValue="time_mo_1"></f:selectItem>
+											   
+<h:outputLabel value="#{actionmgtBean.selected.allDay}" styleClass="form-dialog-label" /> 
+-->
+</html>

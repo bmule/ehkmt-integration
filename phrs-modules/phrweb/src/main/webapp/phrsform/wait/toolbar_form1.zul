@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page  contentType="text/html;charset=UTF-8"?>
+<zk>
+<window id="formbuttons1">
+	<div>			flagEdit=<label value="@{winmgtCtrl.flagEdit}"/>
+		<hbox>	
+			<toolbar>
+				<toolbarbutton id="save"  		forward="onClick=//mgt/winmgt.onSave(${winmgtCtrl.selected})" 	  visible="@{winmgtCtrl.flagEdit}"	    label="Save" 	/>		 
+				<toolbarbutton id="newform"  	forward="onClick=//mgt/winmgt.onNewForm(${winmgtCtrl.selected})"  visible="@{winmgtCtrl.flagNewForm}"		label="New Form" />
+				<toolbarbutton id="cancel"  	forward="onClick=//mgt/winmgt.onCancel(${winmgtCtrl.selected})"   visible="@{winmgtCtrl.flagEdit}"					label="Cancel" />                		  
+				<toolbarbutton id="delete" 		forward="onClick=//mgt/winmgt.onDelete(${winmgtCtrl.selected})"   visible="@{winmgtCtrl.flagEdit}"					label="Delete" />			
+			</toolbar>
+		</hbox>
+		
+		<hbox>				
+			<button id="saveTest"  			onClick="savetest()"    label="SaveTest    " 	/>	
+			<button id="saveTest2"  		forward="onClick=//mgt/winmgt.onSaveTest2(${winmgtCtrl.selected})" 	     label="SaveTest2" 	/>	 		
+		</hbox>
+	</div>
+<!-- 	 	
+			visible="@{winmgtCtrl.flagEdit}"
+				<button id="save"  		 	visible="@{winmgtCtrl.flagEdit}"	    label="Save    " 	/>		 
+				<button id="newForm"  	 	visible="@{winmgtCtrl.flagNewForm}"		label="New Form" />
+				<button id="cancel"  	  	visible="@{winmgtCtrl.flagEdit}"		label="Cancel  " />                		  
+				<button id="delete" 	  	visible="@{winmgtCtrl.flagEdit}"		label="Delete  " />	
+			<toolbar>
+				<toolbarbutton id="save"  		forward="onClick=//mgt/winmgt.onSave(${formbuttons1})" 	   unless="@{winmgtCtrl.flagEdit==true}"					label="Save" 	/>		 
+				<toolbarbutton id="newForm"  	forward="onClick=//mgt/winmgt.onNewForm(${formbuttons1})"  unless="@{winmgtCtrl.flagNewForm==false}"	label="New Form" />
+				<toolbarbutton id="cancel"  	forward="onClick=//mgt/winmgt.onCancel(${formbuttons1})"   unless="@{winmgtCtrl.flagEdit==true}"					label="Cancel Form" />                		  
+				<toolbarbutton id="delete" 		forward="onClick=//mgt/winmgt.onDelete(${formbuttons1})"   unless="@{winmgtCtrl.flagEdit==true}"					label="Delete Entry" />			
+			</toolbar>
+		
+ -->
+</window>		
+	
+</zk>

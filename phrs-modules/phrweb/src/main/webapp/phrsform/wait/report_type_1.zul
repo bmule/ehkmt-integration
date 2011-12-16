@@ -1,0 +1,35 @@
+<?page title="Report" contentType="text/html;charset=UTF-8"?>
+<zk>
+<window title="Report" border="normal">
+<iframe id="frame_report_type_1">
+<zk>
+    Choose a File Type : <listbox id="format" mold="select" >
+        <listitem label="PDF" value="pdf" selected="true" />
+        <listitem label="HTML" value="html" />
+        <listitem label="Word (RTF)" value="rtf" />
+        <listitem label="Excel" value="xls" />
+        <listitem label="Excel (JXL)" value="jxl" />
+        <listitem label="CSV" value="csv" />
+        <listitem label="OpenOffice (ODT)" value="odt" unless="false" />
+    </listbox>
+    <button label="Get Report" onClick='showReport()' />
+    <jasperreport id="report" height="360px" />
+    <zscript><![CDATA[
+        import demo.reporting.jasperreport.CustomDataSource;
+         
+        void showReport() {
+            //Preparing parameters
+            Map parameters = new HashMap();
+            parameters.put("ReportTitle", "Address Report");
+            parameters.put("DataFile", "CustomDataSource from java");
+             
+            report.setSrc("/widgets/reporting/jasperreport/jasperreport.jasper");
+            report.setParameters(parameters);
+            report.setDatasource(new CustomDataSource());
+            report.setType((String) format.getSelectedItem().getValue());
+        }
+    ]]></zscript>
+</zk>
+</window>
+</iframe>
+</zk>

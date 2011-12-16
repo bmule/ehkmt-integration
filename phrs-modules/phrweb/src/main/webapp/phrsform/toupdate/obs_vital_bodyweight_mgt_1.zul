@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<window border="none" mode="embedded">
+
+<window id="main" title="Body Weight"
+	apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsVitalBodyWeightMgrComposer"
+	border="none" width="600px">
+
+    <script><![CDATA[
+        function pwdValid(pwd2) {
+            var valLabel = jq("$pwd_val");
+            if (pwd2.getValue() == "") {
+                zk.Widget.$(valLabel).setValue("Client Side Validation");
+            } else if (pwd2.getValue() != zk.Widget.$(jq("$pwd")).getValue()) {
+                zk.Widget.$(valLabel).setValue("Not Match !")
+            } else {
+                zk.Widget.$(valLabel).setValue("OK !")
+            };
+        }
+
+function  calculateBMI() {
+  //var weight = eval(decimalbox_1.value)
+  //var height = eval(decimalbox_2.value)
+  var weight = eval(zk.Widget.$(decimalbox_1.value))
+  var height = eval(zk.Widget.$(decimalbox_2.value))
+  
+  var height2 = height / 100
+  var BMI = weight  / (height2 * height2)
+  //decimalbox_3.value=custRound(BMI,1);
+  zk.Widget.$(decimalbox_3).setValue(BMI)
+ 
+}
+
+function custRound(x,places) {
+  return (Math.round(x*Math.pow(10,places)))/Math.pow(10,places)
+}
+]]></script>
+
+	<tabbox id="tabbox_main" height="100%">
+		<tabs id="tabs">
+			<tab id="tab_1_manage" label="Information management" />
+			<tab id="tab_2_list" label="View Information" />
+			<tab id="tab_3_chart" label="Charts" />
+		</tabs>
+		<tabpanels>
+			<tabpanel>
+				<vlayout>
+					<listbox id="modelList_listbox" rows="6"
+							model="@{mainCtrl.modelMain}"
+							selectedItem="@{mainCtrl.selected}">
+						
+						<listhead sizable="true">
+							<listheader label="${c:l('default.date.label')}" width="35%" />
+							<listheader label="Weight" width="20%" />
+							<listheader label="Height" width="20%" />
+							<listheader label="BMI - Body Mass Index" width="20%" />
+						</listhead>
+<!-- <listitem><listcell label="date123" /><listcell label="123,32" /><listcell label="24" /></listitem>-->
+						
+							<listitem self="@{each=item}">
+							<!--  format="format.date" -->
+								<listcell><label value="@{item.beginDate}"  /></listcell>
+								<listcell label="@{item.bodyWeight}" />
+								<listcell label="@{item.bodyHeight}" />
+								<listcell label="@{item.bmi}" />
+							</listitem>
+						<!-- measurementUnit, mood -->
+					</listbox>
+
+					<separator />
+
+					<groupbox>
+						<caption label="Body Weight form" />
+						<hbox pack="center" width="100%">
+							<div>
+								<button id="add" label="Add" />
+								<button id="update" label="Update"  
+									disabled="true" />
+								<button id="delete" label="Delete"
+									disabled="true" />
+
+								<button label="clear"
+									onClick="Clients.closeErrorBox(new Component[]{startDate_1,decimalbox_1,decimalbox_2,decimalbox_3,note})" />
+							</div>
+						</hbox>
+
+						<grid>
+							<columns sizable="true">
+								<column label=" " height="6px"
+									width="35%" />
+								<column label=" " height="6px"
+									width="65%" />
+							</columns>
+							<!-- width="150px"	 -->
+							<rows>
+							<!--  units metric only -->	
+								<row>
+									<label value="${c:l('default.date.label')}"/>
+									<datebox id="startDate_1" format="format.date" 
+									constraint="no empty,no future"
+									value="@{mainCtrl.selected.beginDate,save-when='self.onChange'}"
+									width="250px" />
+								</row>			
+								<row>
+									<label value="Body Weight (kg)" />
+									<decimalbox id="decimalbox_1"
+										constraint="no empty,no negative,no zero"
+										format="format.number.float"
+										value="@{mainCtrl.selected.bodyWeight,save-when='self.onChange'}"
+										onChange="calculateBMI()"
+										width="250px" />
+								</row>
+								<row>
+									<label value="Body height (cm)" />
+									<decimalbox id="decimalbox_2"
+										constraint="no empty,no negative,no zero"
+										format="format.number.float"
+										value="@{mainCtrl.selected.bodyHeight,save-when='self.onChange'}"
+										onChange="calculateBMI()"
+										width="250px" />
+										 
+									
+								</row>
+								
+								<row>
+								<label value="Body Mass Index (BMI)" />
+								<decimalbox id="decimalbox_3"
+										format="format.number.float"
+										value="@{mainCtrl.selected.bmi,save-when='self.onChange'}"
+										readonly="true"
+										width="250px" />
+								</row>
+								<row>
+									<label value="Notes:" />
+									<textbox id="note"
+										value="@{mainCtrl.selected.note,save-when='self.onChange'}"
+										width="250px" height="50px" />
+								</row>
+								
+
+							</rows>
+						</grid>
+
+					</groupbox>
+				</vlayout>
+			</tabpanel>
+			<tabpanel>This is panel for printing</tabpanel>
+			<tabpanel>This is panel for charts</tabpanel>
+		</tabpanels>
+	</tabbox>
+</window>
+</window>
+</zk>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page  contentType="text/html;charset=UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<zscript><![CDATA[
+                  
+	//@DECLARATION
+	//public void showSelection() {
+	//	info.setValue("selected old: " + navtree_1.getSelectedItem().getLabel());
+	//}
+	public void showLink() {
+		if(navtree_1.getSelectedItem().getValue()!=null){
+			navtree_1.getSelectedItem().setOpen(true);
+			//info.setValue("" + navtree_1.getSelectedItem().getValue());
+			//navtree_1.setTooltiptext("" + navtree_1.getSelectedItem().getValue());
+			EventQueues.lookup("selectNavItemForCenter", EventQueues.DESKTOP, true)
+				.publish(new Event("onSelectNavItemForCenter", null, navtree_1.getSelectedItem()));
+		}	
+	}	
+	
+	void openTreeChildren() { 
+		self.setOpen(true);
+	}
+]]>
+</zscript>
+<!-- rows="8"  
+
+default.error.underconstruction.label=in Arbeit/under construction
+observations.label=Observations
+sidemenu.choose.label=Please select an option from the side bar
+menu.education.health.label=Health Topics
+
+menu.personaldata.label=Personal Data
+menuitem.contactInfo.label=Contact Info
+menu.riskfactors.label=Risk Factors
+
+menu.profile.label=Profile
+menu.actionplan.label=Action Plan
+menu.admin.label=Admin
+menu.activityLevel.label=Activity Level
+menu.activityItem.label=Physical Activity
+menu.problems.label=Problems
+menu.lifestyle.label=Lifestyle
+menu.activitiesofdailyliving.label=Activities of Daily Living
+menu.patientsecurity.label=Patient Security
+list.actions.label=-
+
+#patient education menu labels
+menu.education.basic.info.label=Basic Information
+menu.education.newhabits.label=New Habits
+menu.education.precautions=Precautions
+menu.education.warningsigns=Warning Signs
+menu.education.patientforums=Patient Forums
+button.bmi.calculate=BMI
+
+
+contactInfo.label=Contact Information
+
+menu.activityLevel.label
+onSelect="showLink()"
+-->
+<tree id="navtree_1" onSelect="showLink()" >
+	<!--treecols sizable="true">
+	<treecol label="Health Data" /></treecols-->
+	<treechildren>
+		<treeitem open="false"  onClick="openTreeChildren()" ><treerow><treecell label="Observations" /></treerow>
+			<treechildren >
+				<treeitem  value="WEB-INF/phrsform/obs_vitals_overview_module.zul">			<treerow><treecell label="${labels.overviewCurrentVitalSigns.vitalsign.label}" /></treerow></treeitem>
+				<treeitem  value="WEB-INF/phrsform/obs_vital_blood_pressure_mgt_module.zul"><treerow><treecell label="${labels.obsBloodPressureA01.label}" /></treerow></treeitem>									
+				<treeitem  value="WEB-INF/phrsform/obs_vital_bodyweight_mgt_module_1.zul">	<treerow><treecell label="${labels.obsBodyWeightBMW01.label}" /></treerow></treeitem>	
+				<treeitem  value="WEB-INF/phrsform/obs_problem_mgt_module_1.zul">			<treerow><treecell label="${labels.menu.problems.label}" /></treerow></treeitem>
+				<treeitem  value="WEB-INF/phrsform/obs_activity_mgt_module.zul">			<treerow><treecell label="${labels.menu.activityItem.label}" /></treerow></treeitem>									
+				<treeitem  value="WEB-INF/phrsform/obs_medication_mgt_module_1.zul">		<treerow><treecell label="${labels.medicationSummary.label}" /></treerow></treeitem>									
+
+			</treechildren>
+		</treeitem>
+
+		<treeitem open="false"  onClick="openTreeChildren()" ><treerow><treecell label="Action Plan" /></treerow>
+			<treechildren>
+				<treeitem value="WEB-INF/phrsform/action_mgt_calendar_dash_1.zul"><treerow><treecell 		label="Action Plan Dashboard" /></treerow></treeitem>									
+
+				<treeitem value="WEB-INF/phrsform/action_mgt_module_1.zul"><treerow><treecell 				label="${labels.menu.actionplan.label}"/></treerow></treeitem>
+					<!-- <treeitem open="false"><treerow><treecell label="Test" /></treerow><treechildren>									
+					<treeitem value="WEB-INF/phrsform/actions_basic_goals.zul"><treerow><treecell 			label="Test: actions" /></treerow></treeitem>
+					<treeitem value="WEB-INF/phrsform/test.zul?typecontact=happycow"><treerow><treecell 	label="Test:Order" /></treerow></treeitem>	
+					<treeitem value="test2.zul?typecontact=happycow"><treerow><treecell 					label="Test2:Order param" /></treerow></treeitem>	
+					</treechildren>	</treeitem>	-->		
+			</treechildren>
+		</treeitem>		
+		<!-- ?typecontact=happycow -->	
+		<treeitem open="false"  onClick="openTreeChildren()" ><treerow><treecell label="Profile" /></treerow>
+			<treechildren>
+				<treeitem  	value="WEB-INF/phrsform/profile_contact_info_mgt_1.zul?typecontact=healthcare_user"><treerow><treecell 		label="${labels.contactInfo.personal.label}" /></treerow></treeitem>											
+				<treeitem  	value="WEB-INF/phrsform/profile_contact_info_mgt_1.zul?typecontact=healthcare_provider"><treerow><treecell 	label="${labels.contactInfo.medical.label}" /></treerow></treeitem>									
+				<!--  can put into panel -->
+				<treeitem 	value="WEB-INF/phrsform/app_content_main_1.zul?content=mail"><treerow><treecell label="Mail" /></treerow></treeitem>	
+				
+				<!--  <treeitem  	value="WEB-INF/phrsform/profile_medical_contact_messaging_1.zul"><treerow><treecell label="Messaging" /></treerow></treeitem>-->									
+
+				<treeitem  	value="WEB-INF/phrsform/profile_riskfactors_mgt_module_1.zul"><treerow><treecell 			label="Risk Factors" /></treerow></treeitem>									
+				<treeitem  	value="WEB-INF/phrsform/profile_activity_daily_living_mgt_module_1.zul"><treerow><treecell 	label="Activities of Daily Living" /></treerow></treeitem>										
+			</treechildren>
+		</treeitem>		
+		<treeitem open="false"  onClick="openTreeChildren()" ><treerow><treecell label="Imported Patient Data" /></treerow>
+			<treechildren>
+				<treeitem ><treerow><treecell 		label="Medical Documents" /></treerow></treeitem>											
+			</treechildren>
+		</treeitem>	
+	</treechildren>
+</tree>
+
+			<!--
+			<label id="info" visible="false" />
+			 	medicationSummary.label=Übersicht Medikation medicationSummary.list.label=Medikation 
+				<treeitem  	value="WEB-INF/phrsform/obs_activity_mgt_dash.zul"><treerow><treecell label="xxxdeprecated Physical Activities Dashboard" /></treerow></treeitem>								
+				<treeitem  	value="WEB-INF/phrsform/crud.zul"><treerow><treecell label="CRUD test" /></treerow></treeitem>																				
+			treeitem><treerow><treecell label="${labels.overviewCurrentVitalSigns.label}" /></treerow></treeitem>
+			-->
+</zk>

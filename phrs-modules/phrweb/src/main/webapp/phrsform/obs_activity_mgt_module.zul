@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsActivityPhysicalMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	 	
+	<!-- title="${labels.activityItem.label}" include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/-->
+<groupbox>
+	<caption label="${labels.activityItem.label}" />
+		 	            	
+<div id="mgtListDiv" style="overflow:auto;">					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+				<listheader label="${labels.short.date.label}" 									hflex="2" sort="auto(createDate)" />						
+				<listheader label="${labels.short.activity.label}" 								hflex="2" sort="auto(code)" />
+				<listheader label="${labels.activityItem.isActiveStatusTrue.short.label}" 		hflex="2" sort="auto(status)" />				
+				<listheader label="${labels.short.date.label}"  								hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.activityItem.activityFrequencyCode.short.label}" 	hflex="2" sort="auto(frequencyCode)" />
+				<listheader label="${labels.activityItem.activityDurationCode.short.label}" 	hflex="2" />				
+				<!-- 				
+				<listheader label="${labels.short.dateStart.label}"  							hflex="1" sort="auto(beginDate)"/>
+				<listheader label="${labels.short.dateEnd.label}" 								hflex="1" />
+				-->				
+				<listheader label="${labels.default.comments.label}" 							hflex="3" />
+			</listhead>
+			<!-- use onCreate to call lookup label function in controller -->
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.createDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				<listcell>
+					<label value="@{itemMain.code,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> <space />
+					<label value="@{itemMain.codeOtherText}"/>
+				</listcell>	
+				
+				<listcell label="@{itemMain.status,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>							
+				<!-- 
+				<listcell label="@{itemMain.dateStatusId,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 
+				-->
+				<listcell label="@{itemMain.displayDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" />
+				
+				<listcell label="@{itemMain.frequencyCode,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" 	/>
+				<listcell label="@{itemMain.durationCode,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"  	/>				
+				<!-- 
+				<listcell label="@{itemMain.beginDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				<listcell label="@{itemMain.endDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	/>	
+				-->					
+				<listcell label="@{itemMain.note}"      		/>																		
+			</listitem>							
+		</listbox>			
+</div>
+<div>
+<separator/>
+<toolbar id="toolBarForm" height="24px">	
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}"  />
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+	
+<div id="mgtFormDiv" visible="@{winmgtCtrl.flagEdit}" > 
+	<textbox id="objId" 		value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+	<!--  
+	<div>hidden1 <textbox  id="hidden_text_listbox_1" value="@{winmgtCtrl.selected.code,save-when='buttonSave.onClick'}"
+		onChange="combobox_3.selectedItem(self.value)" />
+	</div>-->
+<grid>
+	<columns sizable="true">							
+		<column label=" " height="6px" width="18%" />
+		<column label=" " height="6px" width="82%" />		
+	</columns>
+<rows>
+	<!-- <row>
+		<label value="${labels.activityItem.label}" />	
+		<listbox id="listbox_1" width="250px" tooltiptext=""/>			          							
+	</row>model="@{winmgtCtrl.testModelStrings}" 
+	-->
+
+
+	<row>
+		<label value="${labels.activityItem.label}" />	
+		<combobox id="combobox_1"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+			model="@{winmgtCtrl.stringModel_1}" 
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.code}"/>	          							
+	</row>
+							
+	<row>	
+		<label value="" />
+		<vbox>
+			<label value="${labels.activityItem.activityName.explain.label}" />
+			<textbox id="textbox_1" value="@{winmgtCtrl.selected.codeOtherText,save-when='buttonSave.onClick'}"
+			 width="250px" tooltiptext="" />
+		</vbox>
+	</row>			  	
+	<row>
+		<label value="${labels.activityItem.isActiveStatus.label}" />
+		<radiogroup id="radiogroup_1" value="@{winmgtCtrl.selected.status,save-when='buttonSave.onClick'}" selectedItem="@{winmgtCtrl.selected.status}"
+			tooltiptext="">			
+			<vbox>		<!-- TODO FIXME code is local code, also see problems as well -->
+				<radio value="activityItem_isActiveStatusTrue"  label="${labels.activityItem_isActiveStatusTrue}"  selected="true"/>
+				<radio value="activityItem_isActiveStatusFalse" label="${labels.activityItem_isActiveStatusFalse}"/>
+			</vbox>
+		</radiogroup>
+	</row>
+	<row>
+		<label value="${labels.activityItem.activityFrequencyCode.label}" />	
+		<combobox id="combobox_2"  readonly="true" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"
+			model="@{winmgtCtrl.stringModel_2}" 
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.frequencyCode}"/>	          							
+	</row>
+	<row>
+		<label value="${labels.activityItem.activityDurationCode.label}" />	
+		<combobox id="combobox_3"  readonly="true" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"
+			model="@{winmgtCtrl.stringModel_3}"  
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.durationCode}"/>	          							
+	</row>
+
+	<row>
+		<div>
+			<label value="${labels.short.date.label}"/>
+			<separator/>
+			<label value="${labels.tip.date.formating}"/>									
+		</div>
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.displayDate,save-when='buttonSave.onClick'}"
+			constraint="no empty, no future"
+			width="200px" tooltiptext=""/>
+	</row>		
+	<!-- 
+	<row>
+		<label value="${labels.xx.label}" />	
+		<combobox id="combobox_x"  readonly="true" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"
+			model="@{winmgtCtrl.vocabListStrings('')}" 
+			selectedItem="@{winmgtCtrl.selected.xxx}"/>	          							
+	</row>	
+	
+	<row>
+		<label value="${labels.activityItem.activityFrequencyCode.label}" />
+		<listbox id="listbox_2"  width="250px" tooltiptext="" />			          							
+	</row> 
+	<row>
+		<label value="${labels.activityItem.activityDurationCode.label}" />
+		<listbox id="listbox_3" width="250px"  tooltiptext=""/>			          							
+	</row>
+	 
+	<row>
+		<label value="${labels.activityItem.observationDateStart.label}"/>									
+		<datebox id="startDate_1" format="yyyy-MM-dd"  constraint="no empty"
+			value="@{winmgtCtrl.selected.beginDate,save-when='buttonSave.onClick'}"
+			width="250px" tooltiptext=""/>
+	</row>
+	<row>
+		<label value="${labels.activityItem.observationDateEnd.label}"/>	
+		<datebox id="endDate_1" format="yyyy-MM-dd"  
+			value="@{winmgtCtrl.selected.endDate,save-when='buttonSave.onClick'}"
+			width="250px" tooltiptext="" />
+	</row>	-->
+	<row>
+		<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='buttonSave.onClick'}"
+			width="250px" height="50px" 
+			tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div> <!--  end div, to hide form, but leave tool bar-->
+</div>	
+</groupbox>							
+</window>	
+
+</zk>

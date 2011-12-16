@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<zk>
+<label value="Form tool bar"/>
+ <toolbar id="toolBarForm">	
+	<toolbarbutton id="newform" visible="@{winmgtCtrl.flagNewForm}"		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="save"  	visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.create.label}"  />
+	<toolbarbutton id="cancel"  visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="delete" 	visible="@{winmgtCtrl.flagExists}"		label="${labels.default.button.delete.label}" />			
+</toolbar>
+</zk>

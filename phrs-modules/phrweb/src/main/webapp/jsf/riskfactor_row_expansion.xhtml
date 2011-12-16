@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+<!-- 
+					<p:column style="width:16px">
+						<p:outputPanel rendered="#{theItem.status != 'default.no_answer.label'}">
+							<p:rowToggler />
+						</p:outputPanel>
+					</p:column>
+ -->
+	<ui:composition>
+		<p:rowExpansion>
+
+			<!-- columnClasses="label, value" -->
+			<p:outputPanel layout="block"
+				rendered="#{theItem.code == applicationScope.ConstantsMap.TAG_RISK_FACTORS_SMOKING}">
+				<h:panelGrid columns="2" cellpadding="2" border="0"
+					style="width:300px;" styleClass="ui-widget-content">
+					<!--What do you smoke or did you smoke?-->
+					<h:outputLabel for="row_smoketype"
+						value="#{labels['riskfactor.duration.smoking.smoketype.label']}"
+						styleClass="form-dialog-label" />
+
+					<p:dataGrid var="theSmokeType" id="row_smoketype"
+						value="#{theItem.smokeType}" columns="1">
+						<p:column headerText=" ">
+							<h:outputLabel value="#{theSmokeType}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataGrid>
+
+					<h:outputLabel for="row_duration_smoke1"
+						value="#{labels['riskfactor.duration.smoking.mainquestion.label']}"
+						styleClass="form-dialog-label" />
+
+					<h:outputLabel id="row_duration_smoke1"
+						value="#{theItem.smokeDuration}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+
+					<h:outputLabel for="row_quantity_smoke"
+						value="#{labels['riskfactor.quantity.smoking.label']}"
+						styleClass="form-dialog-label" />
+
+					<h:outputLabel id="row_quantity_smoke"
+						value="#{theItem.smokeQuantity}">
+						<f:converter converterId="labelLookup" />
+					</h:outputLabel>
+					<h:outputLabel for="row_note1"
+						value="#{labels['default.comments.label']}"
+						styleClass="form-dialog-label" />
+
+					<h:outputText value="#{theItem.note}" id="row_note1"
+						styleClass="commentText" />
+
+				</h:panelGrid>
+			</p:outputPanel>
+
+			<p:outputPanel layout="block"
+				rendered="#{theItem.code != applicationScope.ConstantsMap.TAG_RISK_FACTORS_SMOKING}">
+				<h:panelGrid columns="2" cellpadding="2" border="0"
+					style="width:300px;" styleClass="ui-widget-content">
+
+					<h:outputLabel
+						value="#{labels['riskfactor.treatmentStatementPrimary.label']}"
+						for="row_1_treat" styleClass="form-dialog-label" />
+
+					<p:dataGrid var="treatment" id="row_1_treat"
+						value="#{theItem.treatmentTypes}"
+						rendered="#{riskBean.modify eq 'no'}" columns="1">
+						<p:column headerText="Types">
+							<h:outputLabel value="#{treatment}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataGrid>
+
+					<h:outputLabel for="row_diabetes_med"
+						value="#{labels['riskfactor.risktype.diabetes.drug.mainquestion.label']}"
+						rendered="#{theItem.code == applicationScope.ConstantsMap.TAG_RISK_FACTORS_DIABETES}"
+						styleClass="form-dialog-label" />
+
+
+					<p:dataGrid var="theMedication" id="row_diabetes_med"
+						rendered="#{theItem.code == applicationScope.ConstantsMap.TAG_RISK_FACTORS_DIABETES}"
+						value="#{theItem.medicationTypes}" columns="1">
+						<p:column headerText=" ">
+							<!-- types -->
+							<h:outputLabel value="#{theMedication}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+					</p:dataGrid>
+					<h:outputLabel for="row_note2"
+						value="#{labels['default.comments.label']}"
+						styleClass="form-dialog-label" />
+
+					<h:outputText value="#{theItem.note}" id="row_note2"
+						styleClass="commentText" />
+
+				</h:panelGrid>
+			</p:outputPanel>
+
+
+
+
+
+		</p:rowExpansion>
+	</ui:composition>
+</h:body>
+</html>

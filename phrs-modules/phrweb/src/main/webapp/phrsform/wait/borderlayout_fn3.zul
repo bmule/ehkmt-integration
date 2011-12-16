@@ -1,0 +1,3 @@
+<window border="normal" height="100%">
+	<iframe src="http://www.zkoss.org" height="100%" width="100%"/>
+</window>

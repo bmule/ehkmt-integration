@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+	<ui:define name="head">
+
+	
+	</ui:define>
+
+	
+		<!--h1 class="title ui-widget-header ui-corner-all">DataTable Row Selection</h1
+		
+			<div class="entry" style="width:100%;">
+			
+			onTabChangeUpdate="idTabActions idTabCalendar"
+			 tabChangeListener="#{actionactBean.refresh}"
+			 dynamic="true" 
+		-->
+		<ui:define name="content">
+			<p:tabView >
+			
+			
+			 <!--  do not set cache=true with calendar on board
+			the dialog form now should update the calendar when something is added or edited
+			consider another approach... dialog on the calender and a popup list or something??
+			 -->
+
+				<p:tab title="Actions" id="idTabActions">
+						<ui:include src="./action_schedule_mgt_module.xhtml" />
+		
+				</p:tab>
+
+				<p:tab title="Calendar" id="idTabCalendar">
+					<p:messages />
+					<p:growl id="messages" showDetail="true" />
+					<!-- the action list dialog must update this calendar!! 
+					There is a bug when using cache=false for the tab...dynamic=true is ok
+					-->
+					<h:form id="idFormActionCalendar">
+						<p:schedule value="#{actionactBean.eventModel}" />
+					</h:form>				
+				<!-- 
+							<p:messages />
+							<p:growl id="messages" showDetail="true" />
+						<h:form id="idFormCalendar">
+							<p:schedule value="#{actionactBean.eventModel}"  />
+						</h:form>							
+				 -->
+<!-- use iframe to isolate problems with the schedule... it causes the other table to fail 
+					<iframe frameborder="0" scrolling="yes" src="/phrweb/jsf/action_schedule_iframe.xhtml" height="600px" width="100%">
+					
+					</iframe>
+						-->
+				</p:tab>
+			</p:tabView>
+		</ui:define>
+	
+
+
+<!--  
+							<p:ajaxStatus style="height:24px;display:block;">
+								<f:facet name="start">
+									<h:graphicImage value="../img/ajaxloading.gif" />
+								</f:facet>
+
+								<f:facet name="complete">
+									<h:outputText value="" />
+								</f:facet>
+							</p:ajaxStatus>-->
+
+	
+
+							<!-- id and widgetVar are same names, should change?? IE problem?  -->
+						
+							<!--  <h:form  id="actionScheduleform">					
+							<p:schedule id="idActionschedule"
+								widgetVar="widActionschedule"
+								value="#{actionactBean.eventModel}" 
+								editable="false">
+							</p:schedule>
+							</h:form>
+	
+	
+								eventSelectListener="#{actionactBean.onEventSelect}"
+								dateSelectListener="#{actionactBean.onDateSelect}"
+								eventMoveListener="#{actionactBean.onEventMove}"
+								eventResizeListener="#{actionactBean.onEventResize}"	
+								onEventMoveUpdate="messages" onEventResizeUpdate="messages"						
+								onDateSelectUpdate="eventDetails"
+								onDateSelectComplete="eventDialog.show()"
+								onEventSelectUpdate="eventDetails"
+								onEventSelectComplete="eventDialog.show()"
+								
+	 -->
+
+
+						
+
+<!--<h:panelGrid columns="1" cellpadding="0">
+						 ui:include src="./schedule.xhtml" 
+ BUG... after calendar view, opening the list view has problems - selecting rows fail!
+Remove Form here... perahps not matching with eventDialog??
+<h:form  id="actionScheduleform">
+</h:form>
+ -->
+
+
+
+</ui:composition>

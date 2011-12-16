@@ -1,0 +1,25 @@
+<!-- 
+<include  src="/phrsform/obs_activity_form_1.zul" />
+xflagEdit=		<label value="@{winmgtCtrl.flagEdit}"/>
+flagNewForm=	<label value="@{winmgtCtrl.flagNewForm}"/>			
+<button id="newform"  		label="${labels.default.button.newform.label}" 	/>		
+<button id="save"  			label="${labels.default.button.create.label}" 	/>	
+<button id="cancel"  		forward="onCancel"	    label="${labels.default.button.reset.label}" />	
+<toolbar>	
+			<toolbarbutton id="newform"  	forward="onNewForm(@{winmgtCtrl.selected})"  	visible="@{winmgtCtrl.flagNewForm}"		label="${labels.default.button.newform.label}"  />
+				<toolbarbutton id="cancel"  forward="onClick=//mgt/winmgt.onCancel(@{winmgtCtrl.selected})"   	visible="@{winmgtCtrl.flagEdit}"					label="${default.button.reset.label}" />                		  
+				<toolbarbutton id="delete" 	forward="onClick=//mgt/winmgt.onDelete(@{winmgtCtrl.selected})"   	visible="@{winmgtCtrl.flagEdit}"					label="${default.button.delete.label}" />					
+	</toolbar>	
+	<div>			
+		<hbox>	
+			<button id="save0"  		forward="onClick=//mgt/winmgt.onSave(${winmgtCtrl.selected})" 	visible="@{winmgtCtrl.flagEdit}"	    label="save0" 	/>		 		
+			<button id="save"  			forward="onClick=//mgt/winmgt.onSave(${winmgtCtrl.selected})" 		visible="@{winmgtCtrl.flagEdit}"	    label="${labels.default.button.create.label}" 	/>		 
+			<toolbar>	<toolbarbutton id="newform"  	forward="onClick=//mgt/winmgt.onNewForm(@{winmgtCtrl.selected})"  	visible="@{winmgtCtrl.flagNewForm}"		label="${labels.default.button.newform.label}"  />
+				<toolbarbutton id="cancel"  	forward="onClick=//mgt/winmgt.onCancel(@{winmgtCtrl.selected})"   	visible="@{winmgtCtrl.flagEdit}"					label="${default.button.reset.label}" />                		  
+				<toolbarbutton id="delete" 		forward="onClick=//mgt/winmgt.onDelete(@{winmgtCtrl.selected})"   	visible="@{winmgtCtrl.flagEdit}"					label="${default.button.delete.label}" />			
+			</toolbar>
+		</hbox>	
+	</div>	
+	 include src="/phrsform/toolbar_form1.zul" /
+	 visible="@{winmgtCtrl.flagEdit}"
+-->

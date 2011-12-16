@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.prime.com.tr/ui" >
+<h:head> </h:head>
+<h:body>
+<f:view contentType="text/html">
+
+<h:form prependId="false">
+	<p:messages id="msgs" showDetail="true"/>
+
+	<p:commandButton value="Info" actionListener="#{messagesController.addInfo}" update="msgs"/>
+	<p:commandButton value="Warn" actionListener="#{messagesController.addWarn}" update="msgs"/>
+	<p:commandButton value="Error" actionListener="#{messagesController.addError}" update="msgs"/>
+	<p:commandButton value="Fatal" actionListener="#{messagesController.addFatal}" update="msgs"/>
+</h:form>
+
+<h3>Message</h3>
+<h:form prependId="false">
+	<h:panelGrid id="grid" columns="3">
+        <h:outputText value="Default: *" />
+        <p:inputText id="default" required="true" />
+        <p:message for="default" />
+
+        <h:outputText value="Text Only: *" />
+        <p:inputText id="textOnly" required="true" />
+        <p:message for="textOnly" display="text" />
+
+        <h:outputText value="Icon Only: *" />
+        <p:inputText id="iconOnly" required="true" />
+        <p:message for="iconOnly" display="icon" />
+    </h:panelGrid>
+
+	<p:commandButton value="Submit" update="grid"/>
+</h:form>
+
+</f:view>
+</h:body>
+</html>
+			

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zk>
+	<window id="createMyEntry" title="Create Entry" border="normal" mode="popup" apply="org.zkoss.zknewsfeed.controllers.EventCreationController" visible="false">
+		<grid>
+			<rows>
+				<row>
+					Item: <textbox id="tbText" cols="40" value="" />
+				</row>
+				<row>
+					Type: <combobox id="cmbType">
+						<comboitem label="Release" />
+						<comboitem label="Small talk" />
+						<comboitem label="Event" />
+					  </combobox>
+				</row>
+				<row>
+					Submit:
+					<button id="btnAddNews" label="Create" width="36px" height="24px"/>
+					<button id="btnCancel" label="Cancel" width="36px" height="24px" />
+				</row>	
+			</rows>
+		</grid>
+	</window>
+</zk>

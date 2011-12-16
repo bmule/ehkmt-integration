@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+</h:head>
+<h:body>
+	<f:view>
+<p:dialog  widgetVar="userFormDialog" appendToBody="true"  >
+
+   <p:outputPanel id="editDialog">
+      <h:panelGrid>
+         <h:outputLabel for="userName" value="Username" />
+         <p:inputText id="userName"
+                        value="#{userManagementBean.user.username}" />
+
+         <h:outputLabel for="password" value="Password"/>
+         <p:inputText autocomplete="false" id="password"
+                       value="#{userManagementBean.user.password}"/>
+
+      </h:panelGrid>
+   </p:outputPanel>
+
+   <p:commandButton value="Save!"
+                       actionListener="#{userManagementBean.save}"
+                       process="editDialog" update="userTable messages"
+                       oncomplete="userFormDialog.hide();"/>
+</p:dialog>
+
+<p:messages id="messages"/>
+
+<p:outputPanel id="userTable">
+
+      <p:dataTable value="#{userManagementBean.all}" var="user" >
+	<p:column>
+          <f:facet name="header">Username</f:facet>
+          #{user.username}
+	</p:column>
+     </p:dataTable>
+</p:outputPanel>
+	</f:view>
+</h:body>
+</html>

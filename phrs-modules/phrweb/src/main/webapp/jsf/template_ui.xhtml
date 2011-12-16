@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<f:view contentType="text/html">
+
+	<!-- primefaces.prime.com.tr/ui 	  for 3.0  http://primefaces.org/ui
+	http://www.javabeat.net/tips/72-how-to-use-hselectoneradio-inside-hdatatabl.html
+	http://www.javabeat.net/tips/43-how-to-use-hselectbooleancheckbox-within-hd.html
+	-->
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/extend.css" />
+			
+		<script type="text/javascript" src="#{request.contextPath}/js/prime_extend.js"/>
+
+		<ui:insert name="head"></ui:insert>
+	</h:head>
+
+	<h:body>
+<!-- 
+				<div align="left" style="display:inline-block;">			
+					<image src="/img/iCardeaLogosm.png" width="100px" />				
+					<label value="PHR"  style="vertical-align:top;color:#0C7A9A;margin-right:10px;font-size:15px;font-weight:bold" />
+					
+				</div>
+
+ -->
+		<p:layout fullPage="true">
+			<p:layoutUnit position="top"  
+				rendered="#{param['sidebar'] == null}"
+				height="25">
+				<div style="display: inline-block">
+					<p:spacer width="20"/>
+					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
+					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"/>
+				</div>	
+			</p:layoutUnit>
+			<p:layoutUnit position="bottom" 
+				height="50" 
+				fullPage="true" rendered="#{param['sidebar'] == null}"
+				footer="true">
+					<ui:insert name="status">
+						<p:ajaxStatus
+							style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;">
+							<f:facet name="start">
+								<p:graphicImage value="/images/loading.gif" />
+							</f:facet>
+			
+							<f:facet name="complete">
+								<h:outputText value="" />
+							</f:facet>
+						</p:ajaxStatus>
+					</ui:insert>
+			</p:layoutUnit>
+			<p:layoutUnit position="left"  
+				width="250" fullPage="true" 
+				rendered="#{param['sidebar'] == null}"
+				collapsible="true" gutter="false" 
+				scrollable="false" 
+				resizable="true">
+				<ui:include src="/sections/menunavigator.xhtml" />
+
+			</p:layoutUnit>
+			<!--<p:layoutUnit position="right" header="RIGHT" width="200">
+				<h:outputText value="Right Content" />
+			</p:layoutUnit>-->
+			
+			<p:layoutUnit position="center">
+				<div id="content" class="ui-widget">
+					<ui:insert name="content">...</ui:insert>
+				</div>
+			</p:layoutUnit>
+		</p:layout>
+		<!-- no sidebar or layout 
+		<h:panelGrid rendered="#{param['sidebar']} == 'no'">
+			<div id="content" class="ui-widget">
+				<ui:insert name="content">...</ui:insert>
+			</div>
+		</h:panelGrid>-->
+	</h:body>
+</f:view>
+<!-- 	
+		
+		<div id="wrapper">
+			<p:panel visible="false" >
+				sidebar=<h:outputText value="#{param['sidebar']}" />
+			</p:panel>
+	
+			<div id="page">
+
+				<div id="content" class="ui-widget">
+					<div class="postxx">
+						<ui:insert name="content">...</ui:insert>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+
+
+ -->
+
+
+
+
+</html>

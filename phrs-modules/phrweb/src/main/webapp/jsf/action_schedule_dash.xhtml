@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+	<ui:define name="head">
+
+
+	</ui:define>
+
+	<ui:define name="content">
+ 
+		<ui:include src="./action_schedule_mgt_module.xhtml" />
+
+	</ui:define>
+
+
+
+	<!--  
+							<p:ajaxStatus style="height:24px;display:block;">
+								<f:facet name="start">
+									<h:graphicImage value="../img/ajaxloading.gif" />
+								</f:facet>
+
+								<f:facet name="complete">
+									<h:outputText value="" />
+								</f:facet>
+							</p:ajaxStatus>-->
+
+
+
+	<!-- id and widgetVar are same names, should change?? IE problem?  -->
+
+	<!--  <h:form  id="actionScheduleform">					
+							<p:schedule id="idActionschedule"
+								widgetVar="widActionschedule"
+								value="#{actionactBean.eventModel}" 
+								editable="false">
+							</p:schedule>
+							</h:form>
+	
+	
+								eventSelectListener="#{actionactBean.onEventSelect}"
+								dateSelectListener="#{actionactBean.onDateSelect}"
+								eventMoveListener="#{actionactBean.onEventMove}"
+								eventResizeListener="#{actionactBean.onEventResize}"	
+								onEventMoveUpdate="messages" onEventResizeUpdate="messages"						
+								onDateSelectUpdate="eventDetails"
+								onDateSelectComplete="eventDialog.show()"
+								onEventSelectUpdate="eventDetails"
+								onEventSelectComplete="eventDialog.show()"
+								
+<h:panelGrid columns="1" cellpadding="0">
+						 ui:include src="./schedule.xhtml" 
+ BUG... after calendar view, opening the list view has problems - selecting rows fail!
+Remove Form here... perahps not matching with eventDialog??
+<h:form  id="actionScheduleform">
+</h:form>
+ -->
+
+
+
+</ui:composition>

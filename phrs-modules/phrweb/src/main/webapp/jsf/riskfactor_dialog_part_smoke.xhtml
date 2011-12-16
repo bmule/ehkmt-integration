@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+      
+<h:head>
+  <title></title>
+</h:head>
+
+<h:body>
+
+    <ui:composition>
+	
+			<p:outputPanel id="riskfactor_types_smoking"   layout="block"
+					rendered="#{riskBean.selected.code == applicationScope.ConstantsMap.TAG_RISK_FACTORS_SMOKING}">
+					
+				<h:panelGrid  columns="2" cellpadding="2" border="1"
+						style="margin:0 auto;">
+
+						<f:facet name="header">
+							<h:outputLabel value="#{riskBean.selected.code}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</f:facet>
+							
+				 	<!--What do you smoke or did you smoke?-->
+					<h:outputLabel for="field_smoketype"
+						value="#{labels['riskfactor.duration.smoking.smoketype.label']}"
+						styleClass="form-dialog-label" />
+	
+					<p:outputPanel id="field_smoketype"  layout="block">
+							
+						<p:dataGrid var="theSmokeType"
+							value="#{riskBean.selected.smokeType}"
+							rendered="#{riskBean.modify eq 'no'}"
+							columns="1">
+							<p:column headerText=" ">
+								<h:outputLabel value="#{theSmokeType}">
+									<f:converter converterId="labelLookup" />
+								</h:outputLabel>
+							</p:column>
+						</p:dataGrid>
+						<!-- required="true" -->
+						<h:selectManyCheckbox 
+							layout="pageDirection"
+							value="#{riskBean.selected.smokeType}"
+							rendered="#{riskBean.modify eq 'yes'}"
+							>
+							<f:selectItems
+								value="#{riskBean.vocabMap.TAG_RISK_SMOKING_TYPES}"
+								var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+						</h:selectManyCheckbox>					
+					</p:outputPanel>
+					
+ 					<h:outputLabel for="field_duration_smoke1"
+						value="#{labels['riskfactor.duration.smoking.mainquestion.label']}"
+						styleClass="form-dialog-label" /> 
+										
+ 					<!-- riskfactor.duration.smoking.label .... I smoked for  -->
+					 <h:panelGrid id="field_duration_smoke1"  border="0">
+						  <f:facet name="header">
+						    <h:outputText value="#{labels['riskfactor.duration.smoking.label']}"/>
+						  </f:facet>
+						<p:outputPanel id="field2_duration_smoke1"  layout="block">
+		 					<h:outputLabel 
+		 						value="#{riskBean.selected.smokeDuration}" 
+		 						rendered="#{riskBean.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+							<!-- required="true" -->
+							<h:selectOneMenu  value="#{riskBean.selected.smokeDuration}"
+								rendered="#{riskBean.modify eq 'yes'}">
+								<f:selectItems
+									value="#{riskBean.vocabMap.TAG_RISK_SMOKING_DURATION}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+						</p:outputPanel>  
+					 </h:panelGrid>	
+				
+  					<h:outputLabel for="field_status_smoke1"
+						value="#{labels['riskfactor.active.smoking.label']}"
+						styleClass="form-dialog-label" /> 
+						
+					<p:outputPanel id="field_status_smoke1"  layout="block">	
+	 					<h:outputLabel 
+	 						value="#{riskBean.selected.status}" 
+	 						rendered="#{riskBean.modify eq 'no'}">
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+						<!-- required="true" -->
+						<h:selectOneRadio
+								layout="pageDirection"
+								value="#{riskBean.selected.status}"
+								rendered="#{riskBean.modify eq 'yes'}">
+								<f:selectItems
+									value="#{riskBean.vocabMap.TAG_RISK_FACTORS_SMOKING_STATUS}"
+									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+						</h:selectOneRadio>						
+					</p:outputPanel> 						
+						<!--  <f:selectItem id="item5" itemLabel="Web" itemValue="5" /> -->
+									
+                    <h:outputLabel value="#{labels['riskfactor.observationDateEnd.smoking.label']}"
+                                   for="endDateField"
+                                   styleClass="form-dialog-label"/>
+                                   
+                     <p:outputPanel id="endDateField"   layout="block">
+                                    
+						<h:outputLabel value="#{riskBean.selected.endDate}" 
+							rendered="#{riskBean.modify eq 'no'}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:outputLabel>	                   
+	                   <!-- 	
+	                    <p:calendar 
+	                                rendered="X{riskBean.modify eq 'yes'}"
+	                                title="yyyy-MM-dd"
+	                                value="X{riskBean.selected.endDate}"
+	                                showOn="button"
+	                                pattern="yyyy-MM-dd" />-->
+	                                                        		
+						<p:inputMask mask="9999/99/99"
+							value="#{riskBean.selected.endDate}"
+							rendered="#{riskBean.modify eq 'yes'}">
+							<f:convertDateTime pattern="yyyy/MM/dd" />
+						</p:inputMask>
+							                                
+                    </p:outputPanel>
+						
+  					<h:outputLabel for="field_quantity_smoke1"
+						value="#{labels['riskfactor.quantity.smoking.label']}"
+						styleClass="form-dialog-label" /> 
+						                                 
+ 					<p:outputPanel id="field_quantity_smoke1"  layout="block">
+	 					<h:outputLabel 
+	 						value="#{riskBean.selected.smokeQuantity}" 
+	 						rendered="#{riskBean.modify eq 'no'}">
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+						<!-- required="true" -->
+						<h:selectOneMenu 
+							value="#{riskBean.selected.smokeQuantity}"
+							rendered="#{riskBean.modify eq 'yes'}"
+							>
+							<f:selectItems
+								value="#{riskBean.vocabMap.TAG_RISK_SMOKING_QUANTITY}"
+								var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+						</h:selectOneMenu> 
+					</p:outputPanel>  	
+
+                    <h:outputLabel 
+						for="field_note_smoke"
+						value="#{labels['default.comments.label']}"
+						styleClass="form-dialog-label" />       
+						     
+                    <p:outputPanel id="field_note_smoke"  layout="block">
+						<h:outputText value="#{riskBean.selected.note}"
+							rendered="#{riskBean.modify eq 'no'}" 
+							styleClass="commentText" />
+						<p:inputTextarea value="#{riskBean.selected.note}"
+							autoResize="false" cols="30" rows="5"  
+							rendered="#{riskBean.modify eq 'yes'}" 						
+							styleClass="commentTextInputArea"   />						
+		  			</p:outputPanel>    
+		  			      	
+               </h:panelGrid>                 		
+			</p:outputPanel>		<!-- end smoking risks, continue with fields for ALL risks e.g. Note -->
+		
+    </ui:composition>
+</h:body>
+
+</html>   

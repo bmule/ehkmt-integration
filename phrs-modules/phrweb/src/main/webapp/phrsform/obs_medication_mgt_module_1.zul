@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+obs_medication_mgt_active_module_1.zul
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgtdash" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsMedicationMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	
+		  	
+	<!--include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/-->
+<!-- 
+<groupbox>
+	<caption label="${labels.medicationSummary.label}" />
+	
+</groupbox>	-->
+<!-- height="600px" width="100%" -->
+<tabbox id="tabbox_main" height="600px" width="100%">
+<tabs>
+	<tab label="${labels.medicationSummary.label}" />
+	<tab label="Medications - no longer taking" />
+	<tab label="Medications - history of updates" />
+</tabs>
+
+<tabpanels>
+		<tabpanel style="overflow:auto;" >			
+			 <include src="/phrsform/obs_medication_mgt_active_inactive_module_1.zul" filterstatus="true"/>
+		</tabpanel>
+		<tabpanel style="overflow:auto;" >
+			<include src="/phrsform/obs_medication_mgt_active_inactive_module_1.zul" filterstatus="false" />	
+		</tabpanel>
+		<tabpanel style="overflow:auto;" >
+			<include src="/phrsform/obs_medication_history_module_1.zul" />	
+		</tabpanel>
+</tabpanels>
+</tabbox>						
+</window>	
+</zk>

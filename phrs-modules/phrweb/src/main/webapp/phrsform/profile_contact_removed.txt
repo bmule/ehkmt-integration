@@ -1,0 +1,71 @@
+
+<!-- <hbox> 
+							<label value="${labels.contactInfo.telephoneMobile.label}" />
+							<textbox id="textbox_6" 
+							value="@{mainCtrl.selected.primaryTelephoneMobile,save-when='buttonSave.onClick'}" width="120px" />
+						</hbox>
+		<grid> 
+			<columns sizable="true">
+				<column label=" " height="6px" hflex="1" />
+				<column label=" " height="6px" hflex="2" />
+				<column label=" " height="6px" hflex="2"  />				
+			</columns>		
+		<rows>
+			
+			<row>
+				<label value="${labels.contactInfo.internetChatProvider.label}"/>	
+				<combobox id="combobox_7"  readonly="true" mold="rounded" 
+					selectedItem="@{winmgtCtrl.selected.internetChatProvider}"
+					value="@{winmgtCtrl.selected.internetChatProvider}">
+					
+					    <comboitem label="${labels.default.combobox.pleasechoose.label}"  value="default.combobox.pleasechoose.label"></comboitem>
+	 					<comboitem label="google" value="Google"></comboitem>
+	 					<comboitem value="skype"     	label="Skype"  />	
+						<comboitem value="google"  		label="Google"/>
+						<comboitem value="icq"  		label="ICQ"/>
+						<comboitem value="meeting_room"  label="Meeting_Room"/>
+	 			</combobox>	
+ 
+				<vbox>	
+					<label value="${labels.contactInfo.internetChatId.label}" />
+					<textbox id="textbox_18"
+						value="@{mainCtrl.selected.internetChatId,save-when='buttonSave.onClick'}"
+						width="170px"  />						
+				</vbox>
+			</row>
+			<row>
+				<label value="${labels.contactInfo.internetVoiceProvider.label}"/>	
+	
+				<combobox id="combobox_8"  readonly="true" mold="rounded" 
+					selectedItem="@{winmgtCtrl.selected.internetVoiceProvider}"
+					value="@{winmgtCtrl.selected.internetVoiceProvider}">
+	 				<comboitem label="google" value="Google"></comboitem>
+	 					<comboitem label="${labels.default.combobox.pleasechoose.label}"  value="default.combobox.pleasechoose.label"></comboitem> 				
+	 					<comboitem value="skype"     	label="Skype"  />	
+						<comboitem value="google"  		label="Google"/>
+						<comboitem value="icq"  		label="ICQ"/>
+						<comboitem value="meeting_room"  label="Meeting_Room"/>
+	 			</combobox>					
+				
+				<vbox>	
+					<label value="${labels.contactInfo.internetVoiceId.label}" />
+					<textbox id="textbox_19"
+						value="@{mainCtrl.selected.internetVoiceId,save-when='buttonSave.onClick'}"
+						width="170px"  />						
+				</vbox>
+			</row>						
+		</rows>
+		</grid>
+-->
+	
+	
+
+	<!--  <row>
+					<label value="${labels.contactInfo.status.label}" />
+					<textbox id="textbox_0" 
+						constraint="no empty"
+						value="@{mainCtrl.selected.status,save-when='buttonSave.onClick'}"										
+						width="250px" /></row>
+		
+				 itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ListItemRendererVocabItem"
+				-->

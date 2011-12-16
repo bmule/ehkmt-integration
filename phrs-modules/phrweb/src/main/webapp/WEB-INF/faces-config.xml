@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+  	<application>
+  		<!-- <message-bundle>at.srfg.kmt.ehealth.phrs.i18n.messagelabels.properties</message-bundle>
+  		<message-bundle>at.srfg.kmt.ehealth.phrs.i18n.messagelabels.properties_de</message-bundle>-->
+		 <locale-config>
+		 	<default-locale>en</default-locale>
+		 	<supported-locale>de</supported-locale>
+		 </locale-config>
+		 <resource-bundle>	
+		 <!-- 		 	<base-name>at.srfg.kmt.ehealth.phrs.i18n.LabelUtil</base-name>  -->
+		 <!--  messagelabels.properties at.srfg.kmt.ehealth.phrs.i18n.LabelUtil  Messagelabels-->
+		 	
+		 	<base-name>Messagelabels</base-name><!--  messagelabels.properties at.srfg.kmt.ehealth.phrs.i18n.LabelUtil-->
+		 	<var>labels</var>
+		 </resource-bundle>
+	</application>
+	<converter>
+		<display-name>Label Value Converter</display-name>
+		<converter-id>labelLookup</converter-id>
+		<converter-class>at.srfg.kmt.ehealth.phrs.jsf.utils.LabelLookupConverter</converter-class>
+		<!--  attribute>
+			<attribute-name>converterId</attribute-name>
+			<attribute-class>java.lang.String</attribute-class>
+		</attribute>-->
+	</converter>
+<!--  
+	<managed-bean>
+		<managed-bean-name>messagesController</managed-bean-name>
+		<managed-bean-class>at.srfg.kmt.ehealth.phrs.jsf.managedbean.MessagesController</managed-bean-class>
+		<managed-bean-scope>request</managed-bean-scope>
+	</managed-bean>
+	<managed-bean>
+		<managed-bean-name>userService</managed-bean-name>
+		<managed-bean-class>at.srfg.kmt.ehealth.phrs.presentation.services.UserService</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>-->
+	<managed-bean>
+		<managed-bean-name>phrsConstants</managed-bean-name>
+		<managed-bean-class>at.srfg.kmt.ehealth.phrs.PhrsConstants</managed-bean-class>
+		<managed-bean-scope>application</managed-bean-scope>
+	</managed-bean>
+
+<!--  	
+	    <managed-bean>
+		<managed-bean-name>authenticationBean</managed-bean-name>
+		<managed-bean-class>at.srfg.kmt.ehealth.phrs.authentication.AuthenticationBean</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>	
+-->
+
+<!-- ############################################################### -->
+<navigation-rule>
+	<display-name>/jsf/login_restricted</display-name>
+	<from-view-id>/jsf/login_restricted.xhtml</from-view-id>
+	<navigation-case>
+		<to-view-id>/jsf/welcome.xhtml</to-view-id>
+	</navigation-case>
+</navigation-rule>
+<navigation-rule>
+	<display-name>jsf/adduser</display-name>
+	<from-view-id>/jsf/adduser.xhtml</from-view-id>
+	<navigation-case>
+		<to-view-id>/jsf/listuser.xhtml</to-view-id>
+	</navigation-case>
+</navigation-rule>
+<!--  
+<navigation-rule>
+	<display-name>/jsf/riskfactor_mgt</display-name>
+	<from-view-id>/jsf/riskfactor_mgt.xhtml</from-view-id>
+	<navigation-case>
+		<to-view-id>/jsf/welcome.xhtml</to-view-id>
+	</navigation-case>
+</navigation-rule>
+-->
+<!--  get an error
+f != java.lang.Long
+phaseId=RENDER_RESPONSE(6)
+at at.srfg.kmt.ehealth.phrs.jsf.utils.OutputPahseListener.afterPhase(OutputPahseListener.java:56)
+Caused by:
+java.util.IllegalFormatConversionException - f != java.lang.Long
+at java.util.Formatter$FormatSpecifier.failConversion(Formatter.java:3999)
+ <lifecycle>
+   <phase-listener>at.srfg.kmt.ehealth.phrs.jsf.utils.OutputPahseListener</phase-listener>
+ </lifecycle>-->
+</faces-config>

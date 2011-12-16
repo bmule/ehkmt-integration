@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<!--?variable-resolver class="org.zkoss.zkplus.spring.DelegatingVariableResolver"?-->
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsVitalBodyWeightMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">
+<!-- ,org.zkoss.zkplus.databind.AnnotateDataBindingComposer title="${labels.obsBodyWeightBMW01.label}" -->
+<!--include src="/WEB-INF/phrsform/toolbar_mgt_list_1.zul"/-->
+<tabbox>
+<tabs>
+	<tab label="${labels.obsBodyWeightBMW01.label}" />
+	<tab label="${labels.default.chart.label}" />
+</tabs>
+<tabpanels>
+<tabpanel style="overflow:auto;" >
+
+<groupbox>
+	<caption label="${labels.obsBodyWeightBMW01.label}" />
+	<!--  <include src="/WEB-INF/phrsform/toolbar_mgt_list_1.zul"/>	-->	 	            	
+<div id="mgtListDiv" style="overflow:auto;">					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}" >
+			<listhead sizable="true">	
+				<listheader label="${labels.short.date.label}" 					hflex="3" sort="auto(beginDate)" />						
+				<listheader label="${labels.obsBodyWeightBMW01.label}" 			hflex="2" sort="auto(bodyWeight)"  />
+				<listheader label="${labels.obsBodyWeightBMW01.bodyBMI.label}" 	hflex="2" sort="auto(bodyHeight)" />
+				<listheader label="${labels.obsBodyWeightBMW01.height.label}" 	hflex="2"  />
+				<listheader label="${labels.default.comments.label}" 			hflex="6" />			
+			</listhead>
+			<!-- use onCreate to call lookup label function in controller -->
+			<!--listcell label="@{itemMain.bodyWeight}"/> style='display:inline-block;width:20px;'-->
+			<!--<listcell label="@{itemMain.bodyHeight}"	/-->
+			<listitem self="@{each=itemMain}">
+				<listcell label="@{itemMain.beginDate,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}"  />
+			
+				<listcell>
+					<span><label value="@{itemMain.bodyWeight}"/> kg</span>				 
+				</listcell>
+				<listcell label="@{itemMain.bmi}"	/>
+				<listcell>
+					<span><label value="@{itemMain.bodyHeight}"/> cm</span>				 
+				</listcell>				
+			
+				<listcell label="@{itemMain.note}"      />																		
+			</listitem>							
+		</listbox>			
+</div>
+<!-- 
+				<listcell>				
+					<div style='display:inline-block;width:20px;'><label value="@{itemMain.systolic}" style="text-align:right"/>/</div>				 
+					<div style='display:inline-block;width:20px;'><label value="@{itemMain.diastolic}"  style="text-align:right"/> mmHg</div>				
+				</listcell>
+ -->
+<div>
+<separator/>
+<toolbar id="toolBarForm" height="24px">	
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}" />
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+<!--  
+	<div visible="@{winmgtCtrl.flagEdit}"> *flag edit visible* </div><div visible="${buttonSave.disabled}"> *div buttonSave visible* </div>
+	@ buttonSave.disabled= <label value="@{buttonSave.disabled}"/> /getFlagEdit()= <label value="@{winmgtCtrl.getFlagEdit()}"/> 
+	/ winmgtCtrl.flagEdit= <label value="@{winmgtCtrl.flagEdit}"/> /$ winmgtCtrl.flagEdit= <label value="${winmgtCtrl.flagEdit}"/>
+	/$ buttonSave.disabled= <label value="${buttonSave.disabled}"/>
+	
+	mgtStatus = <label value="${mgtStatus}"/> mgtStatus2 = <label value="${arg.mgtStatus}"/> mgtStatus3 = <label value="${winmgtCtrl.arg.mgtStatus}"/>
+	mgtStatus4 = <label value="${winmgtCtrl.mgtStatus}"/>
+
+-->
+<div id="mgtFormDiv"> <!-- visibility controlled by controller, the flag visible="@{winmgtCtrl.flagEdit}" --> 
+	<textbox id="objId" 			value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+	<textbox id="measurementUnit" 	value="@{winmgtCtrl.selected.measurementUnit,save-when='buttonSave.onClick'}"  visible="false"/>
+<grid>
+	<columns sizable="true">							
+		<column label=" " height="6px" width="15%" />
+		<column label=" " height="6px" width="85%" />		
+	</columns>
+<rows>
+
+ <!-- not needed,  caption enough <label value="${labels.obsBodyWeightBMW01.bodyweight.label}"/>
+ void onChange$bodyWeight(){
+ if(selected) selected.bmi = UtilsUI.calculateBMI(selected.bodyWeight,selected.bodyHeight,selected.measurementUnit)
+ 
+ measure_unit_weight_height
+  forward="onChange=onCalculateBMI"
+  no negative, problem??
+   constraint="no empty,no zero" 
+    constraint="no empty,no zero" 
+ -->
+  <row>
+  	<label value=""/>
+	<groupbox>
+		<caption label="${labels.obsBodyWeightBMW01.bodyweight.label}" />								
+			<hbox>	
+				<decimalbox id="decimalbox_1" value="@{winmgtCtrl.selected.bodyWeight,save-when='buttonSave.onClick'}"
+						width="50px" tooltiptext="${labels.obsBodyWeightBMW01.bodyweight.label}" 
+						 />
+				<label id="measure_unit_weight" value="kg"/>
+				<space />				
+				<label value="${labels.obsBodyWeightBMW01.height.label}" />
+				<decimalbox id="decimalbox_2" value="@{winmgtCtrl.selected.bodyHeight,save-when='buttonSave.onClick'}"
+						width="50px" tooltiptext="${labels.obsBodyWeightBMW01.height.label}"  
+						/>				 
+				<label id="measure_unit_height" value="cm"/>
+				<!--  
+				<space />	
+				<label value="${labels.obsBodyWeightBMW01.bodyBMI.label}"/>
+				<decimalbox id="decimalbox_3" value="@{winmgtCtrl.selected.bmi,save-when='buttonSave.onClick'}" 
+					readonly="true" focus="false" scale="1"
+			 		width="50px" tooltiptext="${labels.obsBodyWeightBMW01.bodyBMI.label}" />
+				-->
+			</hbox>
+		</groupbox>	
+	</row>	
+	  	
+
+	<row>
+		<label value="${labels.default.observationDateStart.label}"/>									
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.beginDate,save-when='buttonSave.onClick'}"
+			constraint="no empty,no future" width="200px" tooltiptext=""/>
+	</row>
+	
+	<row>
+		<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='buttonSave.onClick'}"
+			width="250px" height="50px" 
+			tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div>
+</div>	
+</groupbox>	
+
+</tabpanel>
+<tabpanel style="overflow:auto;" >
+
+</tabpanel>
+</tabpanels>
+</tabbox>						
+</window>
+
+</zk>

@@ -1,0 +1,64 @@
+
+<!-- 
+	<listitem  self="@{each=item_1}" value="@{item_1.entrySet.key}"  label="@{item_1.entrySet.value}"/>																																	                          
+		<attribute name="onChange"><![CDATA[ 
+	        String label=at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyService.getTermLabel(self.getValue(),org.zkoss.util.Locales.getCurrent());
+			Listitem li = new Listitem(label);
+	        li.setValue(self.getValue());
+	        listbox_1.setSelectedItem(li); ]]>					   
+		</attribute>
+	</listitem>
+
+
+TODO onSelect of list, show form and turn on delete button
+<toolbar id="toolBarForm">	
+	<toolbarbutton id="buttonNewform" 	visible="@{winmgtCtrl.flagNewForm}"		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonSave"  	visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.create.label}"  />
+	<toolbarbutton id="buttonCancel"  	visible="@{winmgtCtrl.flagEdit}"		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 	visible="@{winmgtCtrl.flagExists}"		label="${labels.default.button.delete.label}" />			
+</toolbar>
+buttonDelete.setVisible(false)
+<button id="save" > 
+	<attribute name="onBindingValidate">
+		if (jsr303.validate(event.getReferences(), event.getBindings(), event.getValues()))
+		self.setAttribute("passed",true);
+	</attribute> 
+	<attribute name="onClick">
+		if (self.getAttribute("passed") == true) {
+		 	//Executions.sendRedirect("xxx.zul");
+		 	
+		 }
+	</attribute> 
+</button>
+  	<textbox  id="hidden_tb1"  	value="@{winmgtCtrl.selected.code,save-when='self.onChange'}" 		visible="true"/>
+	<textbox  id="hidden_tb2" 	value="@{winmgtCtrl.selected.frequencyCode,save-when='self.onChange'}" visible="true" />
+	<textbox  id="hidden_tb3"  	value="@{winmgtCtrl.selected.durationCode,save-when='self.onChange'}" visible="true" />		
+
+	<listbox id="listbox_1" mold="select" rows="1" width="250px" >	
+		<listitem  self="@{each=item_1}" value="@{item_1.entrySet.key}"  label="@{item_1.entrySet.value}"/>																																	                          
+                  <attribute name="onCreate"><![CDATA[                                                
+                       ListModelMap lmm1=at.srfg.kmt.ehealth.phrs.presentation.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.persist.PhrsConstants.TAG_PHYSICAL_ACTIVITIES, hidden_tb1.getValue(),true);
+                       listbox_1.setModel(lmm1);
+					    ]]>					   
+				 </attribute> 				 					
+			</listbox> 
+			<listbox id="listbox_2" mold="select" rows="1" width="250px" >			          						
+				<listitem  self="@{each=item_2}" value="@{item_2.entrySet.key}"  label="@{item_2.entrySet.value}"/>																																	          
+                   <attribute name="onCreate"><![CDATA[                    
+                       ListModelMap lmm2=at.srfg.kmt.ehealth.phrs.presentation.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.persist.PhrsConstants.TAG_PHYSICAL_ACTIVITY_FREQUENCY, hidden_tb2.getValue(),true);
+                       listbox_2.setModel(lmm2);
+					    ]]>					   
+				 </attribute> 					
+			</listbox>
+			<label value="${labels.activityItem.activityDurationCode.label}" />
+	
+			<listbox id="listbox_3" mold="select" rows="1" width="250px"  >			          						
+				<listitem  self="@{each=item_3}" value="@{item_3.entrySet.key}"  label="@{item_3.entrySet.value}"/>																																	                 
+                   <attribute name="onCreate"><![CDATA[
+                                 
+                       ListModelMap lmm3=at.srfg.kmt.ehealth.phrs.presentation.utils.UtilsUI.createMapModel(at.srfg.kmt.ehealth.phrs.persist.PhrsConstants.TAG_PHYSICAL_ACTIVITY_DURATION, hidden_tb3.getValue(),true);
+                       listbox_3.setModel(lmm3);
+					    ]]>					   
+				 </attribute> 					
+			</listbox>
+ -->

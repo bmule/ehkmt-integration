@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+  		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+	    <title>
+	        <ui:insert name="windowTitle"/>
+	    </title>
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/default.css" />
+			
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/syntaxhighlighter/syntaxhighlighter.css" />
+
+		<link type="text/css" rel="stylesheet"
+			href="#{request.contextPath}/css/extend.css" />
+
+		<ui:insert name="head"></ui:insert>
+</h:head>
+
+<h:body>
+
+
+    <p:layout id="mainPageLayoutPanel" fullPage="true">
+
+        <p:layoutUnit position="left"
+                      width="180"
+                      header="#{layoutpanel_msg.leftPanelTitle}"
+                      resizable="true"
+                      collapsible="true">
+
+            <div id="sidebarleft">
+                <ui:insert name="sidebarleft"/>
+            </div>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="right"
+                      width="180"
+                      header="#{layoutpanel_msg.rightPanelTitle}"
+                      resizable="true"
+                      closable="true"
+                      collapsed="true"
+                      collapsible="true">
+
+            <div id="sidebarright">
+                <ui:insert name="sidebarright"/>
+            </div>
+
+        </p:layoutUnit>
+
+        <p:layoutUnit position="center"
+                      resizable="true"
+                      closable="true"
+                      collapsible="true">
+            <div id="content">
+                <ui:insert name="content"/>
+            </div>
+        </p:layoutUnit>
+
+        <p:layoutUnit position="bottom"
+                      height="100"
+                      header="#{layoutpanel_msg.bottomPanelTitle}"
+                      resizable="true"
+                      closable="true"
+                      collapsed="true"
+                      collapsible="true">
+
+            <div id="bottombar">
+                <ui:insert name="bottombar"/>
+            </div>
+
+        </p:layoutUnit>
+
+    </p:layout>
+
+
+</h:body>
+</html>

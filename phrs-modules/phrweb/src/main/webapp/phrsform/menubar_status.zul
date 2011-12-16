@@ -1,0 +1,11 @@
+<?page title="" contentType="text/html;charset=UTF-8"?>
+<zk>
+	<window title="" border="normal">
+	
+		<textbox width="100%" height="1.2em" sclass="status" readonly="true"
+		         id="status" use="at.srfg.kmt.ehealth.phrs.zpresentation.model.helper.StatusBar" />
+		         
+		<timer id="statusTimer" running="false" repeats="false" onTimer='status.setText("");'/>
+	
+	</window>
+</zk>

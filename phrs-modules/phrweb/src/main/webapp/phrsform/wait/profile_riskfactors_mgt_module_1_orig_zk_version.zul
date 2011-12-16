@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ProfileRiskFactorMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	 	
+
+	<iframe id="riskIframe" src="jsf/riskfactor_mgt.xhtml" scrolling="yes" width="100%" height="610px"/>
+					
+</window>	
+</zk>

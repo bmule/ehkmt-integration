@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+<window border="none" mode="embedded">
+
+<window id="main" title="Medical Contact Information"
+	apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ProfileMedicalContactsMgrComposer"
+	border="none" width="600px">
+
+<groupbox>
+	<caption label="${labels.contactInfo.medical.label} />
+	<!-- winmgtCtrl <include src="/WEB-INF/phrsform/toolbar_mgt_list_1.zul"/>		-->	
+	 	            	
+<div id="mgtListDiv" style="overflow:auto;">					  
+
+<listbox id="modelList_listbox" rows="6"
+		model="@{mainCtrl.modelMain}"
+		selectedItem="@{mainCtrl.selected}">
+	<listhead sizable="true">
+	<listheader label="Active?" 		hflex="1" sort="auto" />
+		<listheader label="Name" 		hflex="4" sort="auto(item.lastName)"/>
+		<listheader label="Role" 		hflex="2" sort="auto" />
+		<listheader label="Telephone" 	hflex="3"  />
+		<listheader label="E-mail" 		hflex="3"  />
+		<listheader label="Chat, OpenID Email" 		hflex="3"  />
+		<!-- <listheader label="Notes" 	hflex="5" sort="auto" />-->
+	</listhead>
+	<listitem self="@{each=item}" >
+	<listcell label="@{item.statusCode,	 convert er='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" />
+	
+	<listcell>
+		<label value="@{item.lastName}"/>, <label value="@{item.firstName}"/>, 
+	</listcell>
+	<listcell label="@{item.role,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" />
+	<listcell>
+		<label value="@{item.primaryTelephone}" />
+		<div><label value="(m)"/><label value="@{item.primaryTelephoneMobile}" /></div>
+	</listcell>
+	<listcell label="@{item.email}" />
+	<listcell>		
+		<label value="@{item.internetChatId, converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterChatId'}" />	
+		<div>
+		<label value="@{item.internetSystemFederatedId, converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterFederatedMailId'}" /></div>
+	</listcell>		
+</listbox>
+</div>					 <!--   <window border="normal">
+						
+						
+						<window sclass="card-pre" title="Name Card Preview" width="430px" height="400px" border="normal">
+						div sclass="card">
+						<image sclass="logo" src="/images/ZK-Logo.gif" />
+						<vlayout sclass="title">
+						<label sclass="name" value="@{selected.fullName}" />
+						<hlayout sclass="dept"><label value="@{selected.title}" /> Contributor</hlayout>
+						</vlayout>
+						<div sclass="number">Tel:+1-23-456-789 ext <label value="@{selected.extension}" /></div>
+						
+						</div>
+						</window>-->
+<div>
+					<separator />
+
+					<groupbox>
+	<!--  					<caption label="Medical Contact Form" />
+						<hbox pack="center" width="100%">
+							<div>
+								<button id="add" label="Add" />
+								<button id="update" label="Update"  
+									disabled="true" />
+								<button id="delete" label="Delete"
+									disabled="true" />
+
+								<button label="clear"
+									onClick="Clients.closeErrorBox(new Component[]{name_tb})" />
+							</div>
+						</hbox>
+-->
+						<grid>
+							<columns sizable="true">
+								<column label=" " height="6px"
+									width="35%" />
+								<column label=" " height="6px"
+									width="65%" />
+							</columns>
+							<!-- width="150px"
+							  Weight: <decimalbox format="format.number.float" value="xxx.bodyWeight"  />
+							 -->
+							<rows>
+								<row>
+									<label value="Status:" />
+									<checkbox id="activeStatus_cb" constraint="no empty"
+										label="Does this person still provide you healthcare?"  
+										 value="@{mainCtrl.selected.statusCode,save-when='self.onChange'}" 
+										 
+									<!-- value="checked" value="@{mainCtrl.selected.statusCode,save-when='self.onChange'}" />-->
+								</row>
+								<row>
+									<label value="Title:" />
+									<textbox id="personTitle_tb"
+										value="@{mainCtrl.selected.title,save-when='self.onChange'}"
+										width="250px" />
+								</row>
+								<row>
+									<label value="Name:" />
+									<textbox id="name_tb" constraint="no empty:Please enter Name"
+										value="@{mainCtrl.selected.name,save-when='self.onChange'}"
+										
+										width="250px" />
+								</row>
+								<row>
+									<label value="Telephone:" />
+									<textbox id="telephone_tb" constraint="no empty"
+										value="@{mainCtrl.selected.primaryTelephone,save-when='self.onChange'}"
+										
+										width="250px" />
+								</row>
+								<row>
+									<label value="Role:" />
+									<listbox id="roleCode_tb"  constraint="no empty"
+											model="@{mainCtrl.roleVocab}"
+											mold="select"
+											selectedItem="@{mainCtrl.selected.roleCode,save-when='self.onChange'}"/>
+
+									<!-- model="@{mainCtrl.roleVocab}" />-->
+								</row>
+								<row>
+									<label value="Role comment:" />
+									<textbox id="roleNote_tb"
+										value="@{mainCtrl.selected.roleNote,save-when='self.onChange'}"
+										width="250px" />
+								</row>
+
+								<row>
+									<label value="Clinic, Hospital" />
+									<textbox
+										id="affliatedHealthOrganization_tb"
+										value="@{mainCtrl.selected.affliatedHealthOrganization,save-when='self.onChange'}"
+										width="250px" />
+								</row>
+
+								<row>
+									<label value="Email:" />
+									<textbox id="email_tb" constraint="/.+@.+\.[a-z]+/: Please enter an e-mail address"
+										value="@{mainCtrl.selected.email,save-when='self.onChange'}"
+										width="250px" />
+								</row>
+
+								<row>
+									<label value="Address:" />
+									<textbox id="addressText_tb"
+										value="@{mainCtrl.selected.addressText,save-when='self.onChange'}"
+										width="250px" height="45px" />
+								</row>
+								<row>
+									<label value="Notes:" />
+									<textbox id="note_tb"
+										value="@{mainCtrl.selected.note,save-when='self.onChange'}"
+										width="250px" height="50px" />
+								</row>
+								<row>
+									<label value="Website:" />
+									<textbox id="website_tb"
+										value="@{mainCtrl.selected.website,save-when='self.onChange'}"
+										width="250px" />
+								</row>
+								<!-- disable ended depending on status -->
+								<!--  
+								<row>
+									<label
+										value="The Year your healthcare began:" />
+									<intbox id="startDateYear_ib"
+										value="@{mainCtrl.selected.beginDate,save-when='self.onChange'}"
+										constraint="/[01256789]/" maxLength="1"
+										width="50px" />
+								</row>
+								
+								<row>
+									<label
+										value="The Year your healthcare ended:" />
+									<intbox id="endDateYear_ib"
+										value="@{mainCtrl.selected.endDate,save-when='self.onChange'}"
+										width="50px" />
+								</row>-->
+
+							</rows>
+						</grid>
+
+					</groupbox>
+</div>	
+</window>
+</zk>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+   <title></title>
+</h:head>
+
+<h:body>
+
+    <ui:composition>
+ 					<!-- risks: not smoking, not diabetes -->
+ 					<p:outputPanel id="riskfactor_types_general" layout="block"
+					
+							rendered="#{riskBean.selected.code != applicationScope.ConstantsMap.TAG_RISK_FACTORS_SMOKING and riskBean.selected.code != applicationScope.ConstantsMap.TAG_RISK_FACTORS_DIABETES}">
+	
+						<h:panelGrid  columns="2" cellpadding="2" border="1"
+							style="margin:0 auto;">
+
+							<f:facet name="header">
+								<h:outputLabel value="#{riskBean.selected.code}">
+									<f:converter converterId="labelLookup" />
+								</h:outputLabel>
+							</f:facet>						
+										
+							<h:outputLabel
+								value="#{labels['riskfactor.treatmentStatementPrimary.label']}"
+								for="field_1" styleClass="form-dialog-label" />	
+															
+							<p:outputPanel id="field_1" layout="block" >
+							
+
+								<p:dataGrid var="treatment"
+									value="#{riskBean.selected.treatmentTypes}"
+									rendered="#{riskBean.modify eq 'no'}" columns="1">
+									<p:column headerText="Types">
+										<h:outputLabel value="#{treatment}">
+											<f:converter converterId="labelLookup" />
+										</h:outputLabel>
+									</p:column>
+								</p:dataGrid>
+<!-- required="true" -->
+								<h:selectManyCheckbox
+									layout="pageDirection"
+									value="#{riskBean.selected.treatmentTypes}"
+									rendered="#{riskBean.modify eq 'yes'}"								
+									>
+									<f:selectItems
+										value="#{riskBean.riskfactorTreatmentsList}"
+										var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+								</h:selectManyCheckbox>
+							</p:outputPanel>
+									
+		                    <h:outputLabel 
+								for="field_note_risk"
+								value="#{labels['default.comments.label']}"
+								styleClass="form-dialog-label" />       
+								     
+		                    <p:outputPanel id="field_note_risk"  layout="block">
+								<h:outputText value="#{riskBean.selected.note}"
+									rendered="#{riskBean.modify eq 'no'}" styleClass="commentText" />
+								<p:inputTextarea value="#{riskBean.selected.note}"
+									autoResize="false" cols="30" rows="5"  
+									rendered="#{riskBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+			  				</p:outputPanel> 
+			  											
+					</h:panelGrid>							
+				</p:outputPanel> <!-- end non smoking, non-diabetes risks -->   
+    </ui:composition>
+</h:body>
+
+</html>   

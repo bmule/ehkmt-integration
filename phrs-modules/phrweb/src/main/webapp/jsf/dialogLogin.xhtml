@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script type="text/javascript">
+			function handleLoginRequest(xhr, status, args) {
+				if(args.validationFailed || !args.loggedIn) {
+					jQuery('#dialog').parent().effect("shake", { times:3 }, 100);
+				} else {
+					dlg.hide();
+					jQuery('#loginLink').fadeOut();
+				}
+			}
+		</script>
+</h:head>
+<h:body>
+	<f:view contentType="text/html">
+	<h:outputLink id="loginLink" value="javascript:void(0)" onclick="dlg.show()" title="login">	
+	<p:graphicImage value="/images/login.png" />
+</h:outputLink>
+
+<p:growl id="growl" showDetail="true" life="3000" />
+
+<p:dialog id="dialog" header="Login" widgetVar="dlg">
+	<h:form>
+
+		<h:panelGrid columns="2" cellpadding="5">
+			<h:outputLabel for="username" value="Username: *" />
+			<p:inputText value="#{loginBean.username}" 
+					id="username" required="true" label="username" requiredMessage="#{labels['default_required_field']}" />
+			
+			<h:outputLabel for="password" value="Password: * " />
+			<h:inputSecret value="#{loginBean.password}" 
+					id="password" required="true" label="password" requiredMessage="#{labels['default_required_field']}"/>
+			
+			<f:facet name="footer">
+				<p:commandButton value="Login" update="growl" 
+					actionListener="#{loginBean.login}" 
+					oncomplete="handleLoginRequest(xhr, status, args)"/>
+			</f:facet>
+		</h:panelGrid>
+		
+	</h:form>
+</p:dialog>
+
+
+				
+	</f:view>
+</h:body>
+</html>

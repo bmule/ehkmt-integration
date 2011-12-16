@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page id="mgt" contentType="text/html;charset=UTF-8"?>
+<!--
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<window id="winmgt" 
+		 apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsMedicationMgrComposer"
+		 border="none" width="100%" style="overflow:auto;">	
+		  	
+	<!--include src="WEB-INF/phrsform/toolbar_mgt_list_1.zul"/
+<groupbox>
+	<caption label="${labels.medicationSummary.label}" />-->
+	
+<!-- 
+title="${labels.medicationSummary.label}" 
+medicationSummary.label=Übersicht Medikation
+
+medicationSummary.list.label=Medikation
+medicationSummary.list.all.short.label=All
+medicationSummary.list.active.short.label=Active
+medicationSummary.list.inactive.short.label=Inactive
+medicationSummary.list.completed.short.label=Completed
+
+	medicationSummary.medicationNameText.label
+medicationSummary.medicationCode.label
+medicationSummary.medicationStatus.short.label
+medicationSummary.medicationStatus.main.label
+medicationSummary.medicationReasonPrimaryKeywordCode.short.label
+...date
+default.medicationDosage.label
+medicationSummary.medicationFrequency.short.label
+medicationSummary.prescribedByPersonName.short.label
+medicationSummary.medicationReasonComment.short.label
+
+medicationNameText
+medicationStatus
+medicationReasonPrimaryKeywordCode
+
+    "dosageInterval" : "http://www.icardea.at/phrs/instances/EveryDay",
+    "dosageTimeOfDay" : "http://www.icardea.at/phrs/instances/NotSpecified",
+    "dosageUnits" : "http://www.icardea.at/phrs/instances/pills",
+	 -->			 	            	
+<div id="mgtListDiv" style="overflow:auto;">					  
+		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
+			<listhead sizable="true">	
+			
+				<listheader label="${labels.medicationSummary.medicationNameText.label}" 			hflex="2" sort="auto(label)" />						
+				<listheader label="${labels.medicationSummary.medicationStatus.short.label}" 		hflex="3" sort="auto(status)" />
+				<listheader label="${labels.short.date.label}"  									hflex="2" sort="auto(beginDate)"/>
+				
+				
+				<listheader label="${labels.medicationSummary.medicationReasonPrimaryKeywordCode.short.label}" 	hflex="1" sort="auto(reasonCode)" />
+				
+				<!--listheader label="${labels.short.dateStart.label}" 								hflex="2" sort="auto(beginDate)" />
+				-->
+				<listheader label="${labels.default.medicationDosage.label}" 						hflex="2" />
+				<listheader label="${labels.medicationSummary.prescribedByPersonName.short.label}" 	hflex="2" sort="auto(prescribedByName)"/>
+				<listheader label="${labels.medicationSummary.medicationReasonPrimaryKeywordCode.short.label}" hflex="2" sort="auto(reasonCode)"/>
+				<listheader label="${labels.default.comments.label}" 								hflex="3" />
+			</listhead>
+	
+			<!-- use onCreate to call lookup label function in controller -->
+			<listitem self="@{each=itemMain}">
+				<listcell>
+					<label value="@{itemMain.label}"/>
+					<!-- FIXME shows ?? when empty label value="@{itemMain.code,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/--> 				
+				</listcell>					
+				
+				<listcell label="@{itemMain.status,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>
+				<!-- 
+				<listcell label="@{itemMain.dateStatusId,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" /> 
+				-->
+				<listcell label="@{itemMain.displayDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" />
+				
+				<listcell label="@{itemMain.reasonCode,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"      		/>
+				<!--
+				<listcell label="@{itemMain.beginDate,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
+				 medicationFrequencyQuantity  medicationFrequencyInterval medicationFrequencyTimeOfDays -->
+				<listcell>
+					<label value="@{itemMain.treatmentMatrix.dosage}"      />
+					<label value="@{itemMain.treatmentMatrix.dosageUnits,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"  />				
+					<separator/>
+					<label value="@{itemMain.treatmentMatrix.dosageInterval,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" />
+					<separator/>
+					<label value="@{itemMain.treatmentMatrix.dosageTimeOfDay,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" />					
+				</listcell>
+				<listcell label="@{itemMain.prescribedByName}" /><!-- prescribedByName -->
+				<listcell label="@{itemMain.reasonCode}" /><!-- reasonCode-->
+				<listcell label="@{itemMain.note}" />												
+			</listitem>							
+		</listbox>			
+</div>
+<!--  makes no sense ... deprecated <listcell label="@{itemMain.treatmentMatrix.dosageQuantity}" />-->
+<div>
+<separator/>
+<toolbar id="toolBarForm" height="24px">	
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}" />
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+	
+<div id="mgtFormDiv" visible="@{winmgtCtrl.flagEdit}" > 
+	<textbox id="objId" 		value="@{winmgtCtrl.selected.id,save-when='none'}"  visible="false"/>
+
+<grid>
+	<columns sizable="true">							
+		<column label=" " height="6px" width="20%" />
+		<column label=" " height="6px" width="80%" />		
+	</columns>
+<rows>
+	
+	<row>	
+		<label value="${labels.medicationSummary.medicationNameText.label}" />
+		<textbox id="textbox_1" value="@{winmgtCtrl.selected.label,save-when='buttonSave.onClick'}"
+			 	width="250px" tooltiptext="" 
+			 	constraint="no empty"/>
+			 	<!-- : ${labels.validate.requiredField.label} -->		
+	</row>	
+	<row>
+		<label value="${labels.medicationSummary.medicationStatus.main.label}" />		
+ 		<combobox id="combobox_1"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+			width="300px" 
+			model="@{winmgtCtrl.stringModel_1}" 
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.status }"/>	
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.displayDate,save-when='buttonSave.onClick'}"
+			constraint="no empty, no future"
+			width="150px" />	
+	</row>
+	<!--  	
+	<row>
+		<div>
+			<label value="${labels.short.date.label}"/>
+			<separator/>
+			<label value="${labels.tip.date.formating}"/>									
+		</div>
+		<datebox id="startDate_1" format="yyyy-MM-dd" 
+			value="@{winmgtCtrl.selected.displayDate,save-when='buttonSave.onClick'}"
+			constraint="no empty, no future"
+			width="150px" />
+	</row>-->
+<!-- 
+	<row>
+		<label value="${labels.medicationSummary.observationDateStart.label}"/>
+		<hbox>		
+			<datebox id="startDate_1" format="yyyy-MM-dd" 
+			 	constraint="no empty, no future"
+				value="@{winmgtCtrl.selected.beginDate,save-when='buttonSave.onClick'}"
+				width="150px" tooltiptext=""/>				
+			<space />
+			<label value="${labels.medicationSummary.observationDateEnd.label}"/>			
+			<datebox id="endDate_1" format="yyyy-MM-dd" 
+			constraint="no future"
+			value="@{winmgtCtrl.selected.endDate,save-when='buttonSave.onClick'}"
+			width="150px" tooltiptext="" />
+		</hbox>									
+	</row>
+ -->
+	<row >
+		<label value="${labels.default.medicationDosage.label}"/>
+		<!-- <caption label="${labels.default.medicationDosage.label}" /> <label value="${labels.medicationSummary.list.label}"/>-->
+		<div>
+				<hbox>
+						<vbox>
+							<label value="${labels.medicationSummary.medicationQuantity.label}"/>
+							<div>
+								<decimalbox id="decimalbox_1" value="@{winmgtCtrl.selected.treatmentMatrix.dosage,save-when='buttonSave.onClick'}"  
+						 		constraint="no empty,no negative,no zero" 
+						 		width="40px" tooltiptext="" />
+					 		</div>
+					 		<!-- : ${labels.validate.requiredField.label} -->
+						</vbox>
+					<space />
+						<vbox>				
+							<label value="${labels.medicationSummary.medicationQuantityUnit.label}"/>
+									<!--listbox id="listbox_2"  width="150px" tooltiptext="/> -->
+					 		<combobox id="combobox_2"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+								model="@{winmgtCtrl.stringModel_2}" 
+								constraint="no empty"
+								selectedItem="@{winmgtCtrl.selected.treatmentMatrix.dosageUnits}"/>					
+								<!-- treatmentMatrix.dosageUnits -->	
+						</vbox>
+				</hbox>
+				<div id="space1"><space /></div>
+				<hbox>
+					<vbox>
+					<label value="${labels.medicationSummary.medicationFrequencyInterval.label} ${labels.medicationSummary.medicationFrequencyInterval.example.label}"/>				
+									<!--<listbox id="listbox_3"  width="150px" tooltiptext="" >
+									</listbox-->
+							<!--  treatmentMatrix.dosageInterval -->
+					 		<combobox id="combobox_3"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+								model="@{winmgtCtrl.stringModel_3}" 
+								constraint="no empty"
+								selectedItem="@{winmgtCtrl.selected.treatmentMatrix.dosageInterval}"/>					
+					</vbox>
+					<space />
+					<vbox>
+					<label value="${labels.medicationSummary.medicationFrequencyTimeOfDay.label}"/>
+									<!--label value="${labels.medicationSummary.medicationFrequencyTimeOfDay.label}" /-->
+					<!--  treatmentMatrix.dosageTimeOfDay -->
+			 		<combobox id="combobox_4"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+						model="@{winmgtCtrl.stringModel_4}" 
+						constraint="no empty"
+						selectedItem="@{winmgtCtrl.selected.treatmentMatrix.dosageTimeOfDay}"/>					
+					</vbox>			
+				</hbox>
+		</div>
+	</row>	
+
+	<row>
+		<label value="${labels.medicationSummary.prescribedByPersonName.label}" />
+		<textbox id="textbox_2" value="@{winmgtCtrl.selected.prescribedByName,save-when='buttonSave.onClick'}"
+				 width="200px" tooltiptext="" />
+	</row>
+	<row>
+		<label value="${labels.medicationSummary.medicationReasonPrimaryKeywordCode.label}" />	
+	 	<combobox id="combobox_5"  readonly="true" mold="rounded" itemRenderer="at.srfg.kmt.ehealth.phrs.zk.utils.ComboItemLabelValueRenderer"	
+			model="@{winmgtCtrl.stringModel_5}" 
+			constraint="no empty"
+			selectedItem="@{winmgtCtrl.selected.reasonCode}"/>	
+	</row>	
+	<row>
+		<label value="${labels.default.comments.label}" />
+		<textbox id="note"
+			value="@{winmgtCtrl.selected.note,save-when='buttonSave.onClick'}"
+			width="300px" height="50px" 
+			tooltiptext=""/>
+	</row>	
+</rows>
+</grid>
+</div> <!--  end div, to hide form, but leave tool bar-->
+</div>	
+<!--</groupbox-->							
+</window>	
+</zk>

@@ -1,7 +1,121 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>phrweb</display-name>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<!-- testmode testmode=true disables saving of PhrUser when the OpenId session 
+		is started it allows null protocol IDs that will be set with a default. Useful 
+		for single user mode testing testmode= -->
+	<context-param>
+		<param-name>testmode</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<!-- TODO if we use the Dyu properties file to set available providers then 
+		we do not need this. The software could check the Dyu file first Use a URL 
+		for the iCARDEA OpenId provider, otherwise provide the context name of the 
+		local provider application -->
+	<context-param>
+		<param-name>openid.provider</param-name>
+		<param-value>provider</param-value>
+	</context-param>
+	<!-- Name of OpenId provider on local machine for testing. 'provider' is 
+		the application context of the local OpenId provider -->
+	<context-param>
+		<param-name>openid.provider.test</param-name>
+		<param-value>provider</param-value>
+	</context-param>
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>cupertino</param-value>
+	</context-param>
+	<!-- casablanca <context-param> <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name> 
+		<param-value>resources.application</param-value> </context-param> -->
+	<!-- Change to "Production" when you are ready to deploy Development -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+		<param-value>Production</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Faces Servlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+		<!-- alternative in case later we want to filter OpenId on *.xhtml <url-pattern>*.faces</url-pattern> -->
+	</servlet-mapping>
+	<!--<context-param> <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name> 
+		<param-value>resources.application</param-value> </context-param> -->
+	<context-param>
+		<description>State saving method: 'client' or 'server' (=default). See JSF Specification 2.5.2</description>
+		<param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+		<param-value>client</param-value>
+	</context-param>
+	<context-param>
+		<description>
+	This parameter tells MyFaces if javascript code should be allowed in
+	the rendered HTML output.
+	If javascript is allowed, command_link anchors will have javascript code
+	that submits the corresponding form.
+	If javascript is not allowed, the state saving info and nested parameters
+	will be added as url parameters.
+	Default is 'true'</description>
+		<param-name>org.apache.myfaces.ALLOW_JAVASCRIPT</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<description>
+	If true, rendered HTML code will be formatted, so that it is 'human-readable'
+	i.e. additional line separators and whitespace will be written, that do not
+	influence the HTML code.
+	Default is 'true'</description>
+		<param-name>org.apache.myfaces.PRETTY_HTML</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.apache.myfaces.DETECT_JAVASCRIPT</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<description>
+	If true, a javascript function will be rendered that is able to restore the
+	former vertical scroll on every request. Convenient feature if you have pages
+	with long lists and you do not want the browser page to always jump to the top
+	if you trigger a link or button action that stays on the same page.
+	Default is 'false'
+</description>
+		<param-name>org.apache.myfaces.AUTO_SCROLL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<listener>
+		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>at.srfg.kmt.ehealth.phrs.DefaultLoader</listener-class>
+	</listener>
+
+	<welcome-file-list>
+		<welcome-file>index.xhtml</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- After this, the JSF view exception might occur. Catching that exception 
+		automatically is an open issue -->
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
+
+
 </web-app>

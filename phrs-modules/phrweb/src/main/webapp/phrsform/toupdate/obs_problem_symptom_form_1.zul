@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" ?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+
+	<window id="main" title="Problem"
+		apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.ObsProblemSymptomMgrComposer"
+		border="none" width="600px">
+
+		<tabbox id="tabbox_main" height="100%">
+			<tabs id="tabs">
+				<tab id="tab_1_manage" label="${c:l('default.tab.list_management')}" />
+				<tab id="tab_2_list" label="${c:l('default.tab.viewinfolist')}" />
+				<tab id="tab_3_chart" label="${c:l('default.tab.charts')}" />
+			</tabs>
+			<tabpanels>
+				<tabpanel>
+					<vlayout>
+					
+						<listbox id="modelList_listbox" rows="6"
+							model="@{mainCtrl.modelMain}" selectedItem="@{mainCtrl.selected}">
+							<listhead sizable="true">
+							
+								<listheader label="${c:l('obsIssue.menu.label')}" width="20%" />
+								<listheader label="${c:l('short.dateStart.label')}" width="15%" />
+								<listheader label="${c:l('short.dateEnd.label')}" width="15%" />
+								<listheader label="${c:l('obsIssue.observationDateEnd.label')}" width="30%" />
+							</listhead>
+							<listitem self="@{each=item}">
+								<hbox>
+									<listcell label="@{item.codeLabel}" />
+									<listcell label="@{item.beginDate}" />
+									<listcell label="@{item.endDate}" />
+									<listcell label="@{item.note}" />
+								</hbox>														
+							</listitem>
+						</listbox>
+						<separator />
+						<groupbox>
+							<caption label="${c:l('obsIssue.menu.label')}" />
+							<hbox pack="center" width="100%">
+								<div>
+									<button id="add" label="Add" />
+									<button id="update" label="Update"  disabled="true" />
+									<button id="delete" label="Delete"  disabled="true" />
+<!-- clear or New need to remove the select -->
+									<button label="clear"
+										onClick="Clients.closeErrorBox(new Component[]{startDate_1,endDate_1,combobox_1,note})" />
+								</div>
+							</hbox>
+
+							<grid>
+								<columns sizable="true">							
+									<column label="${c:l('short.dateStart.label')}" height="6px"
+										width="25%" />
+									<column label="${c:l('short.dateEnd.label')}" height="6px"
+										 />
+									<!--  <column label=" " height="6px"
+										width="65%" />-->
+								</columns>
+								<!-- width="150px"	label="${c:l('default.combobox.pleasechoose.label')}" -->
+								<rows>
+									<row>
+										<label value="${c:l('obsIssue.menu.label')}" />
+										<listbox mold="select" rows="1"
+											id="combobox_1" 
+											model="@{mainCtrl.lvModel_1}"
+											constraint="no empty,no negative,no zero"
+											value="@{mainCtrl.selected.code,save-when='self.onChange'}"											
+											width="250px" >
+												<comboitem label="${c:l('default.combobox.pleasechoose.label')}"/>
+											</combobox>
+									</row>								
+									<row>
+										<label value="${c:l('obsIssue.observationDateStart.label')}" tooltip="observation date"/>																			
+										<datebox id="startDate_1" format="${c:l('format.date')}" 
+											constraint="no empty,no future"
+											value="@{mainCtrl.selected.beginDate,save-when='self.onChange'}"
+											width="250px" />
+									</row>
+									<row>								
+										<label value="${c:l('obsIssue.observationDateEnd.label')}"/>
+										<!-- requires startDate and start date is required -->
+										<datebox id="endDate_1" format="${c:l('format.date')}" 
+											constraint="no future"
+											value="@{mainCtrl.selected.beginDate,save-when='self.onChange'}"
+											width="250px" />
+									</row>									
+									<row>
+										<label value="${c:l('defaults.comments.label')}" />
+										<textbox id="note"
+											value="@{mainCtrl.selected.note,save-when='self.onChange'}"
+											width="250px" height="50px" />
+									</row>
+								</rows>
+							</grid>
+						</groupbox>
+					</vlayout>
+				</tabpanel>
+				<tabpanel>This is panel for printing</tabpanel>
+				<tabpanel>This is panel for charts</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</window>
+
+</zk>

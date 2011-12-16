@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+		<title></title>
+
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:outputScript target="head">
+			<script type="text/javascript">
+			//<![CDATA[                
+				function onEditComplete(xhr, status, args) {
+					if (window.console && window.console.firebug) {
+						console.log("onEditComplete outputScript");
+					}
+					if (args.validationFailed) {
+
+					} else {
+						widDialogPcon.hide();
+					}
+				}
+				//]]>
+			</script>
+
+		</h:outputScript>
+	<!--	 allowCreate=<h:outputLabel value="#{procon.allowCreate}"/>
+		
+		contactTypeMedical=<h:outputLabel value="#{procon.contactTypeMedical}"/>
+		contactType=<h:outputLabel value="#{procon.contactType}"/>-->
+		<h:form prependId="false">
+			<p:messages />
+			<!-- show validation messages for create form contents -->
+			<p:growl id="msgs" showDetail="true" />
+			<!-- shows the validation messages for dialog contents -->
+			<!-- 
+
+render="#{procon.contactType eq  'healthcare_user'}"
+render="#{procon.contactType eq  'healthcare_provider'}"
+ -->
+
+			<p:fieldset
+				legend="#{procon.contactType eq  'healthcare_user' ? labels['contactInfo.personal.label'] : labels['contactInfo.medical.label']}">
+				<!-- 
+
+			<label value="${labels.contactInfo.medical.label}"  	if="${formElementRole.visible}"/>
+			<label value="${labels.contactInfo.personal.label}"     if="@{composer.contactType == 'healthcare_user'}"/>
+ 			render="#{procon.contactType eq  'healthcare_provider'}"
+ -->
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="create" immediate="true"
+							rendered="#{procon.allowCreate}"
+							title="#{labels['default.button.newform.label']}"
+							image="ui-icon-plus" actionListener="#{procon.create}"
+							update="idPanelPcon" oncomplete="widDialogPcon.show()" >
+							<f:setPropertyActionListener value="#{procon.contactType}"
+									target="#{procon.contactType}" />							
+							<f:setPropertyActionListener value="yes"
+									target="#{procon.modify}" />
+							</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+
+				<p:dataTable id="idItemTablePcon"
+					widgetVar="widItemTablePcon" var="theItem"
+					value="#{procon.modelMain}" paginator="true" rows="20">
+
+					<p:column style="width:50px" headerText="Options">
+						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+							<!-- ok, success view  procon -->
+							<p:commandButton update="idPanelPcon"
+								disabled="#{theItem.status eq 'default.no_answer.label'}"
+								oncomplete="widDialogPcon.show()" image="ui-icon ui-icon-search"
+								title="#{labels['default.button.view.label']}">
+								<f:setPropertyActionListener value="#{theItem}"
+									target="#{procon.selected}" />
+								<f:setPropertyActionListener value="no"
+									target="#{procon.modify}" />
+							</p:commandButton>
+
+							<p:commandButton update="idPanelPcon"
+								oncomplete="widDialogPcon.show()" image="ui-icon ui-icon-pencil"
+								title="#{labels['default.button.edit.label']}">
+								<f:setPropertyActionListener value="#{theItem}"
+									target="#{procon.selected}" />
+								<f:setPropertyActionListener value="yes"
+									target="#{procon.modify}" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+					<!-- 
+
+		<listheader label="Name" 			hflex="3" sort="auto(item.lastName)"/>
+		<listheader label="Role" 			hflex="2" sort="auto(healthcareRole)"  if="@{mainCtrl.contactType == 'healthcare_provider'}" />
+		<listheader label="Telephone" 		hflex="3"  />
+		<listheader label="E-mail" 			hflex="3"  />
+		<listheader label="OpenId" 			hflex="2"  />
+		<listheader label="Chat, Email, Talk" 		hflex="3"  />
+		<listheader label="Notes" 	hflex="5" sort="auto" /> 
+	</listhead>
+	<listitem self="@{each=item}" >
+	  
+		//<listcell label="@{item.statusCode,	 converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" />
+	
+		<listcell>
+			<label value="@{item.lastName}"/>,
+			<div><label value="@{item.firstName}"/></div>
+		</listcell>
+		
+		<listcell label="@{item.healthcareRole,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}" if="@{mainCtrl.contactType == 'healthcare_provider'}" />
+		
+		<listcell>
+			<label value="@{item.primaryTelephone}" />
+			//  <div><label value="(m)"/><label value="@{item.primaryTelephoneMobile}" /></div>
+		</listcell>
+
+		<listcell label="@{item.internetFederatedId_obj,			converter='at.srfg.kmt.ehealth.phrs.zk.utils.ListcellContactLinkConverter'}" />
+		
+		
+		<listcell  label="@{item.email_obj,					converter='at.srfg.kmt.ehealth.phrs.zk.utils.ListcellContactLinkConverter'}" />				
+	
+		<listcell label="@{item.internetChatId_obj,					converter='at.srfg.kmt.ehealth.phrs.zk.utils.ListcellContactLinkConverter'}" />
+		<listcell label="@{item.internetSystemFederatedId_obj,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ListcellContactLinkConverter'}" />
+	
+ firstName
+	 middleName
+	 lastName
+	Date birthdate
+	 primaryLanguage
+	
+	//role identifiers from vocabulary or system definition
+	// used for patient healthcare_user, healthcare_provider
+	String healthcareRole
+	
+	Set<String> secondaryRoles
+	
+	Boolean activeStatus
+	//TODO replace activeStatus with statusCode in radio buttons
+	
+	statusCode
+	
+	addressText
+	postalCode
+	city
+	country
+	
+	primaryTelephone
+	
+	internetChatProvider internetChatId
+	internetVoiceProvider internetVoiceId
+	website
+	
+	organization	
+#{labels['default_blank_label']}
+ -->
+					<p:column headerText="Name" sortBy="#{theItem.lastName}">
+						<h:outputLabel value="#{theItem.lastName}" />,<h:outputLabel
+							value="#{theItem.firstName}" />
+						<h:outputLabel value="#{theItem.middleName}" />
+					</p:column>
+
+					<p:column headerText="Role" sortBy="#{theItem.healthcareRole}"
+						render="#{procon.contactType eq  'healthcare_provider'}">
+						<h:outputLabel value="#{theItem.healthcareRole}">				
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="Telephone">
+						<h:outputLabel value="#{theItem.primaryTelephone}" />
+					</p:column>
+					
+					<p:column headerText="Address">
+						<h:outputLabel value="#{theItem.addressText}" />
+						<br/>
+						<h:outputLabel value="#{theItem.postalCode}" />
+						<h:outputLabel value="#{theItem.city}" />
+						<br/>
+						<h:outputLabel value="#{theItem.country}" />
+					</p:column>
+					
+					<p:column headerText="Email" sortBy="#{theItem.email}">
+						<h:outputLabel value="#{theItem.email}" />
+						<!-- email_obj -->
+					</p:column>
+
+					<!-- internetChatId_obj internetSystemFederatedId_obj-->
+					
+					<p:column headerText="Internet Services">
+						<h:panelGrid columns="3" style="border:none;">						
+							<h:outputLabel value="Chat"/>
+							<h:outputLabel value="#{theItem.internetChatProvider}"/>
+							<h:outputLabel value="#{theItem.internetChatId}"/>	
+<!-- 
+							<h:outputLabel value="#{theItem.internetChatProvider}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+ -->												
+							
+								
+							<h:outputLabel value="Voice"/>
+							<h:outputLabel value="#{theItem.internetVoiceProvider}"/>
+							<h:outputLabel value="#{theItem.internetVoiceId}"/>	
+<!-- 
+							<h:outputLabel value="#{theItem.internetVoiceProvider}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+ -->							
+													
+						</h:panelGrid>
+					</p:column>
+					
+					<p:column headerText="Organization" sortBy="#{theItem.organization}">
+						<h:outputLabel value="#{theItem.organization}" />
+					</p:column>
+					
+					<p:column headerText="#{labels['default.comments.label']}">
+						<h:outputText value="#{theItem.note}" />
+					</p:column>
+					<!--  expander  -->
+				</p:dataTable>
+
+			</p:fieldset>
+
+		</h:form>
+
+		<!-- form dialog -->
+		<!--  add dialog here and wrap with the form -->
+
+		<ui:include src="./profile_contact_dialog.xhtml" />
+
+		<!--<p:dialog widgetVar="widDialogPcon" id="idDialogPcon"
+			modal="true"	appendToBody="true"
+			header="Action Details" width="600" showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelPcon" layout="block">
+				<h:form id="idFormPcon">
+				
+				test
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>-->
+
+
+	</ui:define>
+</ui:composition>

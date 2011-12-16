@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+
+	<ui:composition>
+
+<!-- 
+		String name
+	
+	 firstName
+	 middleName
+	 lastName
+	Date birthdate
+	 primaryLanguage
+	
+	//role identifiers from vocabulary or system definition
+	// used for patient healthcare_user, healthcare_provider
+	String healthcareRole
+	
+	Set<String> secondaryRoles
+	
+	Boolean activeStatus
+	//TODO replace activeStatus with statusCode in radio buttons
+	
+	statusCode
+	
+	addressText
+	postalCode
+	city
+	country
+	
+	primaryTelephone
+	
+	internetChatProvider internetChatId
+	internetVoiceProvider internetVoiceId
+	website
+	
+	organization
+	
+	Map<String,String> properties
+	 -->
+		<p:dialog closable="false"  header="#{labels['contactInfo.label']}"
+			widgetVar="widDialogPcon" 
+			id="idDialogPcon" 
+			modal="true"	appendToBody="true"
+			width="600" 
+			showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelPcon" layout="block">
+			<!--  
+			contact type=<h:outputLabel value="#{procon.contactType}"/><br/>
+			procon.modify=<h:outputLabel value="#{procon.modify}"/><br/>
+			procon.modify=<h:outputLabel value="#{procon.modify}"/><br/>
+			contactTypeMedical=<h:outputLabel value="#{procon.contactTypeMedical}"/>
+			<br/>-->
+				<h:form id="idFormPcon">
+					<h:panelGrid columns="3">
+					
+						<h:outputLabel for="field_firstName"
+							value="First Name"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_firstName" layout="block">
+							<h:outputLabel value="#{procon.selected.firstName}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.firstName}" 
+								id="firstName_input"
+								required="true" requiredMessage="#{labels['default_required_field']}"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="firstName_input" display="text" />
+
+						<h:outputLabel for="field_lastName"
+							value="Last Name"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_lastName" layout="block">
+							<h:outputLabel value="#{procon.selected.lastName}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.lastName}" 
+								id="lastName_input"
+								required="true" requiredMessage="#{labels['default_required_field']}"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="lastName_input" display="text" />
+
+						<h:outputLabel for="field_primaryphone"
+							value="Primary Telephone"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_primaryphone" layout="block">
+							<h:outputLabel value="#{procon.selected.primaryTelephone}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.primaryTelephone}" 
+								id="primaryphone_input"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="primaryphone_input" display="text" />
+						
+						<h:outputLabel for="field_email"
+							value="E-Mail"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_email" layout="block">
+							<h:outputLabel value="#{procon.selected.email}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.email}" 
+								id="email_input"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="email_input" display="text" />	
+											
+						<h:outputLabel for="field_org"
+							value="Organization"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_org" layout="block">
+							<h:outputLabel value="#{procon.selected.organization}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.organization}" 
+								id="field_org_input" 
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_org_input" display="text" />							
+						
+						<h:outputLabel for="field_role" 
+							render="#{procon.contactType eq  'healthcare_provider'}"
+							value="Healthcare Role"
+							styleClass="form-dialog-label" />
+<!--  
+render="#{procon.contactType eq 'healthcare_user'}"
+TAG_ROLES_NON_MEDICAL_USER 
+render="#{procon.contactType eq  'healthcare_provider'}
+-->							
+						<p:outputPanel id="field_role" layout="block" 
+							render="#{procon.contactType eq 'healthcare_provider'}">
+							<h:outputLabel value="#{procon.selected.healthcareRole}"
+								rendered="#{procon.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+							<h:selectOneMenu value="#{procon.selected.healthcareRole}" 
+								id="field_role_input"
+								rendered="#{procon.modify eq 'yes' }">
+								<f:selectItems
+									value="#{procon.vocabMap.TAG_ROLES_MEDICAL_PROFESSIONAL}" var="lv"
+									itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+							</h:selectOneMenu>
+						</p:outputPanel>
+						<p:message for="field_role_input" display="text" render="#{procon.contactType eq 'healthcare_user'}" />	
+	
+ <!-- 	remove...								
+						<h:outputLabel value="Birth Date" 
+							render="#{procon.contactType eq 'healthcare_user'}" 
+							for="birthDateField" styleClass="form-dialog-label" />
+						<p:outputPanel id="birthDateField" layout="block" 
+							render="#{procon.contactType eq 'healthcare_user'}">
+							<h:outputLabel value="#{procon.selected.birthdate}"
+								rendered="#{procon.modify eq 'no'}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+							<p:inputMask mask="9999/99/99"
+								id="birthdateDateField_input"
+								value="#{procon.selected.birthdate}"
+								rendered="#{procon.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+						</p:outputPanel>					
+						<p:message for="birthdateDateField_input" display="text" render="#{procon.contactType eq 'healthcare_user'}"/> 
+	 -->											
+						<h:outputLabel for="field_2"
+							value="Street Address"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_2" layout="block">					
+							<h:outputText value="#{procon.selected.addressText}"
+								rendered="#{procon.modify eq 'no'}" />								
+							<p:inputTextarea value="#{procon.selected.addressText}" 
+								id="field_2_input"
+								autoResize="false" cols="30" rows="3" 
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_2_input" display="text" />
+
+						<h:outputLabel for="field_3"
+							value="Postal Code"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_3" layout="block">
+							<h:outputLabel value="#{procon.selected.postalCode}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.postalCode}" 
+								id="field_3_input"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_3_input" display="text" />
+
+						<h:outputLabel for="field_4"
+							value="City"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_4" layout="block">
+							<h:outputLabel value="#{procon.selected.city}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.city}" 
+								id="field_4_input"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_4_input" display="text" />																		
+
+						<h:outputLabel for="field_5"
+							value="Country"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_5" layout="block">
+							<h:outputLabel value="#{procon.selected.country}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.country}" 
+								id="field_5_input"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_5_input" display="text" />
+
+						<h:outputLabel for="field_internetChatProvider" render="#{procon.contactType eq 'healthcare_user'}"
+							value="Internet Chat Service"
+							styleClass="form-dialog-label" />							
+						<p:outputPanel id="field_internetChatProvider" layout="block" render="#{procon.contactType eq 'healthcare_user'}" >
+							<h:outputLabel value="#{procon.selected.internetChatProvider}"
+								rendered="#{procon.modify eq 'no'}">
+							</h:outputLabel>
+							<h:selectOneMenu value="#{procon.selected.internetChatProvider}"
+								id="field_internetChatProvider_input"
+								rendered="#{procon.modify eq 'yes'}">
+										<f:selectItem itemLabel="Google"
+											itemValue="Google" noSelectionOption="true"></f:selectItem>
+										<f:selectItem itemLabel="Skype"
+											itemValue="Skype"></f:selectItem>
+										<f:selectItem itemLabel="Other"
+											itemValue="Other"></f:selectItem>
+							</h:selectOneMenu>	
+							<p:inputText value="#{procon.selected.internetChatId}" 
+								id="internetChatId_input"
+								rendered="#{procon.modify eq 'yes'}" />						
+						</p:outputPanel>
+						<p:message for="internetChatId_input" display="text" render="#{procon.contactType eq 'healthcare_user'}"/>
+
+						<h:outputLabel for="field_internetVoiceProvider" render="#{procon.contactType eq 'healthcare_user'}"
+							value="Internet Voice Service"
+							styleClass="form-dialog-label" />							
+						<p:outputPanel id="field_internetVoiceProvider" layout="block" render="#{procon.contactType eq 'healthcare_user'}">
+							<h:outputLabel value="#{procon.selected.internetVoiceProvider}"
+								rendered="#{procon.modify eq 'no'}">
+							</h:outputLabel>
+							<h:selectOneMenu value="#{procon.selected.internetVoiceProvider}"
+								id="field_internetVoiceProvider_input"
+								rendered="#{procon.modify eq 'yes'}">
+										<f:selectItem itemLabel="Google"
+											itemValue="Google" noSelectionOption="true"></f:selectItem>
+										<f:selectItem itemLabel="Skype"
+											itemValue="Skype"></f:selectItem>
+										<f:selectItem itemLabel="Other"
+											itemValue="Other"></f:selectItem>
+							</h:selectOneMenu>		
+							<p:inputText value="#{procon.selected.internetVoiceId}" 
+								id="internetVoiceId_input"
+								rendered="#{procon.modify eq 'yes'}" />			
+						</p:outputPanel>
+						<p:message for="internetVoiceId_input" display="text" render="#{procon.contactType eq 'healthcare_user'}" />
+
+						<h:outputLabel for="field_note_contact"
+							value="#{labels['default.comments.label']}"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_note_contact" layout="block">
+							<h:outputText value="#{procon.selected.note}"
+								rendered="#{procon.modify eq 'no'}" styleClass="commentText" />
+							<p:inputTextarea value="#{procon.selected.note}" 
+								id="field_note_contact_input"
+								autoResize="false" cols="30" rows="5"  
+								rendered="#{procon.modify eq 'yes'}" label="Comment"
+								styleClass="commentTextInputArea" />
+						</p:outputPanel>
+						<p:message for="field_note_contact_input" display="text" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<f:facet name="header">
+							<p:commandButton value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								process="idFormPcon" 
+								update="msgs idFormPcon idItemTablePcon"
+								oncomplete="onEditComplete(xhr,status,args)"
+								actionListener="#{procon.store}" image="ui-icon ui-icon-check" />
+
+							<!-- p:commandButton type="reset"
+								value="#{procon.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								onclick="widDialogPcon.hide();" immediate="true"
+								image="ui-icon ui-icon-close" />-->
+								
+						<p:commandButton rendered="#{procon.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{procon.refresh}" immediate="true" 
+							onsuccess="widDialogPcon.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{procon.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogPcon.hide()"
+							image="ui-icon ui-icon-close" />								
+						</f:facet>
+					</h:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+	</ui:composition>
+</h:body>
+<!-- 
+time_mm_5= 5 minutes	
+time_mm_10=10 minutes	
+time_mm_15=15 minutes	
+time_mm_30=30 minutes
+time_mm_45=45 minutes
+time_hh_1=1 hour	
+time_hh_2=2 hour
+time_hh_3=3 hour
+time_hh_4=4 hour
+time_hh_5=5 hour	
+time_dd_1=All Day
+time_dd_2=2 days
+time_dd_3=3 days
+time_dd_4=4 days
+time_dd_5=5 days
+time_dd_6=6 days
+time_ww_1=1 week
+time_ww_2=2 weeks
+time_ww_3=3 weeks
+time_mo_1=1 month
+
+						<h:selectOneMenu value="#{procon.selected.durationCode}"
+							rendered="#{procon.modify eq 'yes'}">
+							<f:selectItem itemLabel="#{labels['time_dd_1']}"
+								itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_5']}"
+								itemValue="time_mm_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_15']}"
+								itemValue="time_mm_15"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_30']}"
+								itemValue="time_mm_30"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mm_45']}"
+								itemValue="time_mm_45"></f:selectItem>
+								
+							<f:selectItem itemLabel="#{labels['time_hh_1']}"
+								itemValue="time_hh_1"></f:selectItem>								
+							<f:selectItem itemLabel="#{labels['time_hh_2']}"
+								itemValue="time_hh_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_3']}"
+								itemValue="time_hh_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_4']}"
+								itemValue="time_hh_4"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_5']}"
+								itemValue="time_hh_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_6']}"								
+								itemValue="time_hh_6"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_7']}"								
+								itemValue="time_hh_7"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_8']}"								
+								itemValue="time_hh_8"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_hh_9']}"								
+								itemValue="time_hh_9"></f:selectItem>
+																																
+							<f:selectItem itemLabel="#{labels['time_dd_2']}"
+								itemValue="time_dd_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_3']}"
+								itemValue="time_dd_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_4']}"
+								itemValue="time_dd_4"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_5']}"
+								itemValue="time_dd_5"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_dd_6']}"
+								itemValue="time_dd_6"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_1']}"
+								itemValue="time_ww_1"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_2']}"
+								itemValue="time_ww_2"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_ww_3']}"
+								itemValue="time_ww_3"></f:selectItem>
+							<f:selectItem itemLabel="#{labels['time_mo_1']}"
+								itemValue="time_mo_1"></f:selectItem>
+						</h:selectOneMenu>
+						-->
+</html>

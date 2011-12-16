@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui-->
+
+	<ui:define name="head">
+		<script type="text/javascript">
+		//<![CDATA[    
+			function onEditComplete(xhr, status, args) {
+				if (args.validationFailed) {
+			
+				} else {
+					widDialogRisk.hide();
+				}
+			} //]]>
+		</script>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<ui:define name="content">
+		<!--h1 class="title ui-widget-header ui-corner-all">DataTable Row Selection</h1-->
+		<div class="entry">
+
+			<!--   f: convertNumber type="#,###.00" -->
+
+			<h:form prependId="false">
+				<p:messages />
+				<!-- show validation messages for create form contents -->
+				<p:growl id="msgs" showDetail="true" />
+				<!-- shows the validation messages for dialog contents -->
+
+				<p:fieldset legend="#{labels['riskfactor.label']}">
+
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton value="create"
+								rendered="#{riskBean.allowCreate}"
+								title="#{labels['default.button.newform.label']}"
+								image="ui-icon-plus" actionListener="#{riskBean.create}"
+								update="idPanelRisk" oncomplete="widDialogRisk.show()" />
+							<!-- spacers -->
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<!-- paginator="true" rows="10" -->
+
+					<p:dataTable id="idItemTable" widgetVar="widItemTableRisk"
+						var="theItem" value="#{riskBean.modelMain}">
+
+						<ui:include src="./riskfactor_row_buttons.xhtml" />
+						<p:column
+							headerText="#{labels['riskfactor_isActiveStatus_short']}">
+							<h:outputLabel value="#{theItem.status}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column
+							headerText="#{labels['riskfactor.riskFactorCode.label']}">
+							<h:outputLabel value="#{theItem.code}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{labels['date_modified']}">
+							<h:outputLabel value="#{theItem.modifyDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{labels['default.comments.label']}">
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+						<!--
+						<p:column headerText="resourceUri">
+							<h:outputText value="#{theItem.resourceUri}" />
+						</p:column>
+						  expander  -->
+						<!--  
+						   ui:include src="./riskfactor_row_expansion.xhtml" />-->
+					</p:dataTable>
+
+				</p:fieldset>
+
+			</h:form>
+
+		</div>
+		<!-- div entry -->
+
+	
+			<!-- dialog header=" {labels['riskfactor.label']}" modal="true" riskBean.editMode -->
+			<p:dialog closable="false" widgetVar="widDialogRisk" appendToBody="true"
+				id="riskfactorDlgId" resizable="true" modal="true" width="600">
+
+				<!--  h inputHidden value="x{riskBean.selected.code}"></ h:inputHidden-->
+
+			<p:outputPanel id="idPanelRisk" layout="block">
+				<h:form prependId="false" id="idFormRisk">
+					<ui:include src="./riskfactor_dialog_part_risk_simple.xhtml" />
+					<ui:include src="./riskfactor_dialog_part_risks_extended.xhtml" />
+					<ui:include src="./riskfactor_dialog_part_smoke.xhtml" />
+
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<!-- form buttons belong to the main wrapping grid, they are created only for edit or create mode  -->
+						<f:facet name="footer">
+
+
+							<!-- actionListener="#{riskBean.store}"						id="idDialogSaveRisk"
+						oncomplete="widDialogRisk.hide()" widgetVar="rfDialogSaveButtonWidget" process="riskfactorDialog" title=" {riskBean.new ? 'Save' :'Update'}"  -->
+
+							<p:commandButton rendered="#{riskBean.modify eq 'yes'}"
+								widgetVar="rfDialogSaveButton" process="idFormRisk"
+								value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								update="idFormRisk msgs idItemTable"
+								actionListener="#{riskBean.store}"
+								oncomplete="onEditComplete(xhr,status,args)"
+								image="ui-icon ui-icon-check" />
+
+<!-- 			oncomplete="widItemTableRisk.update();widDialogRisk.hide()" 
+					 TODO validation oncomplete="onEditComplete(xhr,status,args)" -->
+<!-- immediate true avoids hang up with validation errors, do not use a closable window because need to refresh UI dialog component and need ID on back end!-->
+
+							<p:commandButton value="#{riskBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								type="reset" immediate="true" onclick="widDialogRisk.hide()"
+								image="ui-icon ui-icon-close" />
+
+
+						</f:facet>
+
+					</h:panelGrid>
+				</h:form>
+			</p:outputPanel>
+
+				<!-- update="idItemTable msgs"  type="reset"-->
+		</p:dialog>
+
+	</ui:define>
+
+	<!-- test
+		<h:form prependId="false">
+
+				<p:dialog header="Risk Factor" closable="false" appendToBody="true"
+					widgetVar="widDialogRiskyyy" id="riskfactorDlgIdyy"
+					resizable="true" modal="true" width="600">
+
+					<p:outputPanel id="idPanelRiskyyy" layout="block"
+						styleClass="common-dialog">
+						<h:panelGrid columns="2" cellpadding="2">
+							<f:facet name="header">
+								<h:outputText value="#{riskBean.selected.code}" />
+							</f:facet>
+
+
+							<h:outputLabel value="modify" />
+							<h:outputText value="#{riskBean.modify}" />
+
+							<h:outputLabel value="code" />
+							<h:outputText value="#{riskBean.selected.code}" />
+
+							<h:outputLabel value="modify test" />
+							<p:outputPanel>
+								<h:outputText value="#{riskBean.selected.atest}"
+									rendered="#{riskBean.modify eq 'yes'}" />
+								<h:outputText value="#{riskBean.modify}"
+									rendered="#{riskBean.modify eq 'no'}" />
+							</p:outputPanel>
+
+						</h:panelGrid>
+						<p:commandButton value="#{labels['default.button.reset.label']}"
+							type="reset" immediate="true"
+							onclick="widDialogRiskyyy.hide()"
+							image="ui-icon ui-icon-close" />
+					</p:outputPanel>
+				</p:dialog>
+		</h:form>
+		 -->
+</ui:composition>

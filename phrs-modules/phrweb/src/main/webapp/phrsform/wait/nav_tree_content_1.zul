@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page  contentType="text/html;charset=UTF-8"?>
+<zk xmlns="http://www.zkoss.org/2005/zul"
+	xmlns:h="http://www.w3.org/1999/xhtml"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.zkoss.org/2005/zul http://www.zkoss.org/2005/zul/zul.xsd">
+
+<zscript><![CDATA[
+	//@DECLARATION
+	public void showSelection() {
+		info.setValue("selected old: " + navtree_1.getSelectedItem().getLabel());
+	}
+	public void showLink() {
+		if(navtree_1.getSelectedItem().getValue()!=null){
+			info.setValue("selected link: " + navtree_1.getSelectedItem().getValue());
+			EventQueues.lookup("selectNavItemForCenter", EventQueues.DESKTOP, true)
+				.publish(new Event("onSelectNavItemForCenter", null, navtree_1.getSelectedItem()));
+		}	
+	}
+	/*void load() { 
+		alert("here");
+		Treechildren tc = self.getTreechildren(); 
+		if (tc.getChildren().isEmpty()) {
+			Treeitem ti = new Treeitem(); 
+			ti.setLabel("New added"); 
+			ti.setParent(tc);
+		}
+	}*/
+]]>
+</zscript>
+<!-- rows="8"   onSelect="showLink()" -->
+<tree id="navtree_1">
+	<treecols sizable="true">
+	<treecol label="xx" /></treecols>
+	<treechildren>
+		<treeitem open="true" onClick="self.setOpen(true)"><treerow><treecell label="xxxx" /></treerow>
+			<treechildren>
+				<treeitem><treerow><treecell label="" /></treerow></treeitem>
+				<treeitem 	value="WEB-INF/phrsform/borderlayout_fn1.zul"><treerow><treecell label="Basic Information" /></treerow></treeitem>
+				<treeitem  	value="WEB-INF/phrsform/obs_activity_mgt_module.zul"><treerow><treecell label="x x" /></treerow></treeitem>									
+				<treeitem  	value="WEB-INF/phrsform/obs_vital_bodyweight_module_1.zul"><treerow><treecell label="x x" /></treerow></treeitem>	
+				<treeitem  	value="WEB-INF/phrsform/obs_problem_symptom_module_1.zul"><treerow><treecell label="x" /></treerow></treeitem>
+				<treeitem  	value="WEB-INF/phrsform/obs_activity_mgt_module.zul"><treerow><treecell label="x x" /></treerow></treeitem>									
+				<treeitem  	value="WEB-INF/phrsform/obs_medication_module_1.zul"><treerow><treecell label="x" /></treerow></treeitem>									
+				
+				<treeitem  	value="WEB-INF/phrsform/obs_activity_mgt_dash.zul"><treerow><treecell label="x" /></treerow></treeitem>								
+				<treeitem  	value="WEB-INF/phrsform/crud.zul"><treerow><treecell label="CRUD test" /></treerow></treeitem>																				
+
+			</treechildren>
+		</treeitem>
+				
+	</treechildren>
+</tree>
+<label id="info" />
+
+</zk>

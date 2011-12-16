@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+	
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+			
+					} else {
+						widDialogOprob.hide();
+					}
+				}
+	     		//]]>			
+			</script>
+				
+		<style type="text/css">
+		.table.innertable td { border:0;
+		}
+	</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<!-- TODO ADD column render options for modify, and make column for modify = no
+
+prependId="false"
+			<f:facet name="header">Choose the edit option on each row to update your answer </f:facet>
+
+ -->
+
+	<ui:define name="content">
+		<div class="entry">
+
+			<h:form prependId="false">
+				<p:messages />
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['obsIssue.label']}">
+			<p:toolbar>
+				<p:toolbarGroup align="left">
+					<p:commandButton value="create" rendered="#{odlprobBean.allowCreate}"
+						title="#{labels['default.button.newform.label']}"
+						image="ui-icon-plus" actionListener="#{odlprobBean.create}"
+						update="idPanelOprob" oncomplete="widDialogOprob.show()" />														
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+					<p:dataTable widgetVar="widItemTableOprob" id="idItemTableOprob"
+					 	var="theItem" value="#{odlprobBean.modelMain}">
+					 	
+						<p:column style="width:50px" headerText="Options">
+							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+		
+								<!-- ok, success view  odlprobBean -->
+								<p:commandButton update="idPanelOprob"
+									disabled="#{theItem.status eq 'default.no_answer.label'}"
+									oncomplete="widDialogOprob.show()" image="ui-icon ui-icon-search"
+									title="#{labels['default.button.view.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlprobBean.selected}" />
+									<f:setPropertyActionListener value="no"
+										target="#{odlprobBean.modify}" />
+								</p:commandButton>
+		
+								<p:commandButton update="idPanelOprob"
+									oncomplete="widDialogOprob.show()" image="ui-icon ui-icon-pencil"
+									title="#{labels['default.button.edit.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlprobBean.selected}" />
+									<f:setPropertyActionListener value="yes"
+										target="#{odlprobBean.modify}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>			
+	<!-- 
+	
+	
+	obsIssue.issueCode.label
+	obsIssue.isActiveStatus.label
+	
+	short.date.label = displayDate
+	obsIssue.isActiveStatus.label
+	default_activeStatusTrue=This is a current problem since
+    default_activeStatusFalse=This is no longer a problem as of
+	 -->												
+					
+									
+							<p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}">
+								<h:outputLabel value="#{theItem.code}" >
+									<f:converter converterId="labelLookup" />
+								</h:outputLabel>
+							</p:column>					
+					
+						<p:column headerText="#{labels['default_status_problem']}" sortBy="#{theItem.status}">
+							<h:outputLabel value="#{theItem.status}" >
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+						</p:column>	
+						
+						<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}">
+							<h:outputLabel value="#{theItem.displayDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>				
+															
+						<p:column headerText="#{labels['default.comments.label']}">
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+						
+					</p:dataTable>
+				</p:fieldset>
+			
+	</h:form>
+			
+		</div>
+		<!-- div entry -->
+	
+				<p:dialog closable="false" widgetVar="widDialogOprob" header="#{labels['obsIssue.label']}" appendToBody="true"
+					id="idDialogOprob" resizable="true" modal="true" width="600">
+					
+								<p:outputPanel id="idPanelOprob" layout="block" >
+								<h:form id="idFormOprob">
+									<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;" >	
+										
+										<h:outputLabel for="idField_code" value="#{labels['obsIssue.issueCode.label']}" styleClass="form-dialog-label" />
+										<p:outputPanel id="idField_code" layout="block">
+											<h:outputLabel value="#{odlprobBean.selected.code}"
+												rendered="#{odlprobBean.modify eq 'no'}">
+												<f:converter converterId="labelLookup" />
+											</h:outputLabel>
+											
+											<h:selectOneMenu value="#{odlprobBean.selected.code}"
+												rendered="#{odlprobBean.modify eq 'yes'}">
+												<f:selectItem itemLabel="Please Choose"
+													itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>								
+												<f:selectItems value="#{odlprobBean.vocabMap.TAG_PROBLEM_SYMPTOM}" var="lv"
+													itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+											</h:selectOneMenu>
+										</p:outputPanel>
+										<p:message for="idField_code" display="text" /> 
+	
+										<h:outputLabel for="idField_status" value="#{labels['obsIssue.isActiveStatus.label']}" styleClass="form-dialog-label" />
+										<p:outputPanel id="idField_status" layout="block">
+														<h:selectOneRadio value="#{odlprobBean.selected.status}">
+															<f:selectItem itemLabel="#{labels['default_activeStatusTrue']}"
+																itemValue="default_activeStatusTrue"
+																noSelectionOption="true"></f:selectItem>
+															<f:selectItem itemLabel="#{labels['default_activeStatusFalse']}"
+																itemValue="default_activeStatusFalse" ></f:selectItem>
+														</h:selectOneRadio>					
+										</p:outputPanel>
+										<p:message for="idField_status" display="text" /> 	
+	<!-- short.date.label  tip.date.formating-->																
+					                  <h:outputLabel value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+					                                 for="displayDateField"
+					                                 styleClass="form-dialog-label"/>
+					                                 
+					                   <p:outputPanel id="displayDateField"   layout="block">
+					                                  
+											<h:outputLabel value="#{odlprobBean.selected.displayDate}" 
+												rendered="#{odlprobBean.modify eq 'no'}">
+												<f:convertDateTime pattern="yyyy-MM-dd" />
+											</h:outputLabel>	                   
+					                  			
+					                  		 <p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
+					                               rendered="#{odlprobBean.modify eq 'yes'}"
+					                               title="yyyy-MM-dd"
+					                               value="#{odlprobBean.selected.displayDate}"
+					                               showOn="button"
+					                               pattern="yyyy-MM-dd" />
+					                                                       		
+										<!-- 	<p:inputMask mask="9999/99/99"
+												required="true" requiredMessage="#{labels['default_required_field']}"
+												value="#{odlprobBean.selected.displayDate}"
+												rendered="#{odlprobBean.modify eq 'yes'}">
+												<f:convertDateTime pattern="yyyy/MM/dd" />
+											</p:inputMask>	-->								                                
+					                  </p:outputPanel>								
+				  						<p:message for="displayDateField" display="text" /> 
+		
+							
+			           				<h:outputLabel for="field_note_prob"
+										value="#{labels['default.comments.label']}"
+										styleClass="form-dialog-label" />  							
+				                    <p:outputPanel id="field_note_prob"  layout="block">
+										<h:outputText value="#{odlprobBean.selected.note}"
+											rendered="#{odlprobBean.modify eq 'no'}" styleClass="commentText" />
+										<p:inputTextarea value="#{odlprobBean.selected.note}"
+											autoResize="false" cols="30" rows="5"  
+											rendered="#{odlprobBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+					  				</p:outputPanel>
+					  				<p:message for="field_note_prob" display="text" /> 
+					  				  						
+	  						</h:panelGrid>	
+	  						
+							<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+								<f:facet name="header">
+			
+									<p:commandButton rendered="#{odlprobBean.modify eq 'yes'}"
+										widgetVar="widDialogSaveButtonOprob" process="idFormOprob"
+										value="#{labels['default.button.create.label']}"
+										title="#{labels['default.button.create.label']}"
+										update="idFormOprob msgs idItemTableOprob"
+										actionListener="#{odlprobBean.store}"
+										oncomplete="onEditComplete(xhr,status,args)"
+										image="ui-icon ui-icon-check" />
+	
+											
+									<p:commandButton rendered="#{odlprobBean.modify eq 'yes'}" 
+										value="#{labels['default.button.reset.label']}" 						
+										actionListener="#{odlprobBean.refresh}" immediate="true" 
+										onsuccess="widDialogOprob.hide()"									
+										image="ui-icon ui-icon-close" />
+								
+									<p:commandButton  rendered="#{odlprobBean.modify eq 'no'}" 
+										value="#{labels['default.button.close.label']}" 						
+										reset="true"
+										onsuccess="widDialogOprob.hide()"
+										image="ui-icon ui-icon-close" />
+										
+										<!--  									
+										<p:commandButton  rendered="#{odlprob.modify eq 'no'}" 
+											value="#{labels['default.button.close.label']}" 						
+											reset="true"
+											onsuccess="widDialogObp.hide()"
+											image="ui-icon ui-icon-close" />	-->		
+													<!--<p:commandButton
+														value="#{odlprobBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+														type="reset" immediate="true" onclick="widDialogOprob.hide()"
+														image="ui-icon ui-icon-close" />-->
+			
+								</f:facet>
+							</h:panelGrid>	
+						</h:form>														
+						</p:outputPanel>
+				<!-- 
+				
+											
+					<p:commandButton rendered="#{odlbpBean.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{odlbpBean.refresh}" immediate="true" 
+							onsuccess="widDialogObp.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{odlbpBean.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogObp.hide()"
+							image="ui-icon ui-icon-close" />		
+				 -->		
+					</p:dialog>		
+		
+		<!--	
+		<h:form prependId="false">
+		 
+		
+		<p:dialog appendToBody="true" closable="false" widgetVar="xxwidDialogOprob" header="#{labels['default_blank_label']}"
+			id="xxidDialogOprob" resizable="true" modal="true" width="600">
+			
+				<p:outputPanel id="xxidPanelOprob" layout="block">
+					<h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+		test dialog
+	
+					
+			
+					</h:panelGrid>
+				</p:outputPanel>
+		</p:dialog>	
+	
+		
+		</h:form>-->	
+	</ui:define>
+
+</ui:composition>

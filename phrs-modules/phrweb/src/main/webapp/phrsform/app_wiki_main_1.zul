@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<!--
+< ?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk>
+
+<window id="iframeDiv" title="${labels.default.patient_education.label}" border="none" width="100%" mode="embedded"
+		apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.PhrsApplicationComposer">
+	<iframe id="targetIframe" src="http://qviz-dev.salzburgresearch.at/confluence" scrolling="auto" width="100%"/>
+</window>
+</zk>

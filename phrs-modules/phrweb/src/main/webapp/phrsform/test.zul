@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?page contentType="text/html;charset=UTF-8"?>
+<!--
+<?init class="org.zkoss.zkplus.databind.AnnotateDataBinderInit" arg0="./winmgt"?>
+-->
+<zk>
+
+<zscript><![CDATA[ 
+
+ import at.srfg.kmt.ehealth.phrs.model.basesupport.Order;
+	
+	int count = 30;
+	List orders = new LinkedList(); 
+	//List orders2 = new LinkedList();
+	for(int j=0; j < count; ++j) {
+		Order o = new Order();
+		o.setOrderName("OrderName - "+j );
+		o.setOrderNumber("OrderNumber - "+j);
+		orders.add(o);
+		/*
+		Order o2 = new Order();
+		o2.setOrderName("TestName - "+j );
+		o2.setOrderNumber("TestNumber - "+j);
+		orders2.add(o2);*/
+		
+	} 
+	//Order selected = orders.get(0);
+	//Order selected2 = orders2.get(0);
+	
+	]]></zscript>
+<window id="winmgt"  width="500px" apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.TestOrderComposer">
+
+	<combobox model="@{orders}" selectedItem="@{selected2}" value="@{selected2.orderName}">
+		<comboitem self="@{each=order}" label="@{order.orderName}" value="@{order.orderNumber}"
+	<comboitem label="" />
+	</combobox>
+	<grid>
+		<auxhead>
+		<auxheader align="center" colspan="2">Order Information</auxheader>
+		</auxhead>
+		<columns>
+		<column align="center" width="200px" label="Item"/>
+		<column align="center" width="200px" label="Value"/>
+		</columns> 
+		<rows>
+			<row>OrderNumber: 	<label value="@{selected2.orderNumber}"/></row>
+			<row>OrderName: 	<label value="@{selected2.orderName}"/></row>
+		</rows>
+	</grid>
+
+	<div><!-- modelList_listbox -->
+		<listbox mold="select" rows="1" id="listbox_1" model="@{orders}" selectedItem="@{selected}" >
+			<listitem self="@{each=orderA}" label="@{orderA.orderName}" value="@{orderA.orderNumber}"/>
+		</listbox>
+	</div>
+	
+	<grid>
+		<auxhead>
+		<auxheader align="center" colspan="2">Test Information</auxheader>
+		</auxhead>
+		<columns>
+		<column align="center" width="200px" label="Item"/>
+		<column align="center" width="200px" label="Value"/>
+		</columns> 
+		<rows>
+			<row>TestNumber: <label value="@{selected.orderNumber}"/></row>
+			<row>TestName: <label value="@{selected.orderName}"/></row>
+		</rows>
+	</grid>
+
+<separator/>
+<toolbar id="toolBarForm" height="24px">	
+	<toolbarbutton id="buttonNewform" 		label="${labels.default.button.newform.label}" />
+	<toolbarbutton id="buttonSave"  		label="${labels.default.button.create.label}"  />
+	<toolbarbutton id="buttonCancel"  		label="${labels.default.button.reset.label}" />                		  
+	<toolbarbutton id="buttonDelete" 		label="${labels.default.button.delete.label}" autodisable="+self" />			
+</toolbar>
+</window>
+
+
+</zk>

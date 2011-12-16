@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+
+		<script type="text/javascript">
+			//          
+			function onEditComplete(xhr, status, args) {
+				if (args.validationFailed) {
+			
+				} else {
+					widDialogObp.hide();
+				}
+			}
+			//
+		</script>
+
+		<style type="text/css">
+.table.innertable td {
+	border: 0;
+}
+</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<!-- TODO ADD column render options for modify, and make column for modify = no
+
+prependId="false"
+			<f:facet name="header">Choose the edit option on each row to update your answer </f:facet>
+
+ -->
+
+	<ui:define name="content">
+		<div class="entry">
+
+			<h:form prependId="false">
+				<p:messages />
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['obsBloodPressureA01.label']}">
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton update="idPanelObp"  value="create"
+								rendered="#{odlbpBean.allowCreate}"
+								title="#{labels['default.button.newform.label']}"
+								image="ui-icon-plus" actionListener="#{odlbpBean.create}"
+								oncomplete="widDialogObp.show()" />
+								
+								<p:spacer width="2px"></p:spacer>
+								<p:commandButton value="Chart" title="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"						 
+										update="idPanelChart02" oncomplete="widDialogChart02.show()" />				
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable widgetVar="widItemTableObp" id="idItemTableObp"
+						var="theItem" value="#{odlbpBean.modelMain}">
+	<p:columnGroup type="header">
+
+		<!--<p:row>
+			<p:column colspan="2"/>
+			<p:column headerText="#{labels['obsBloodPressureA01.label']}" />
+			<p:column colspan="2" />
+		</p:row>-->
+		<p:row>
+			<p:column headerText="#{labels['labels.menu.options.label']}" />
+			<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.beginDate}"/>
+			<p:column headerText="#{labels['obsBloodPressureA01.label']}" sortBy="#{theItem.systolic}"/>
+			<!--<p:column   headerText="#{labels['obsBloodPressureA01.bpSystolic.label']} / #{labels['obsBloodPressureA01.bpDiastolic.label']}" />
+			 p:column headerText="#{labels['obsBloodPressureA01.bpDiastolic.label']}" /> -->
+			<p:column headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}" sortBy="#{theItem.heartRate}"/>
+			<p:column headerText="#{labels['default.comments.label']}" />
+		</p:row>
+	</p:columnGroup>
+	
+						<p:column style="width:50px"><!--  headerText="Options" -->
+							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+								<!-- ok, success view  odlbpBean -->
+								<p:commandButton update="idPanelObp"
+									disabled="#{theItem.status eq 'default.no_answer.label'}"
+									oncomplete="widDialogObp.show()" image="ui-icon ui-icon-search"
+									title="#{labels['default.button.view.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlbpBean.selected}" />
+									<f:setPropertyActionListener value="no"
+										target="#{odlbpBean.modify}" />
+								</p:commandButton>
+
+								<p:commandButton update="idPanelObp"
+									oncomplete="widDialogObp.show()" image="ui-icon ui-icon-pencil"
+									title="#{labels['default.button.edit.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{odlbpBean.selected}" />
+									<f:setPropertyActionListener value="yes"
+										target="#{odlbpBean.modify}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>
+
+						<!-- short.date.label=Date-->
+						<p:column ><!-- headerText="#{labels['short.date.label']}" -->
+							<h:outputLabel value="#{theItem.beginDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>
+
+					
+						<!--  <f:facet name="header">
+							<h:outputLabel value="#{labels['obsBloodPressureA01.label']}"></h:outputLabel>
+						</f:facet>-->
+						<!-- headerText="#{labels['obsBloodPressureA01.bpSystolic.label']}" -->
+						<!--  style="float:right;"  title="#{labels['obsBloodPressureA01.bpSystolic.label']} / #{labels['obsBloodPressureA01.bpDiastolic.label']}" -->
+						
+						<p:column style="text-align:center;" >						
+								<h:outputLabel value="#{theItem.systolic}" />/<h:outputLabel value="#{theItem.diastolic}" /><h:outputLabel value=" mmHg" />				
+						</p:column>
+
+						
+						<!-- headerText="#{labels['obsBloodPressureA01.bpDiastolic.label']}" -->
+					
+						<!-- headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}" -->
+						<p:column style="text-align:center;" >
+							<h:outputLabel value="#{theItem.heartRate}" /> <h:outputLabel value=" bpm" />
+						</p:column>
+						<!--  headerText="#{labels['default.comments.label']}" -->
+						<p:column>
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+
+	
+				<!--			
+		<p:dialog appendToBody="true" closable="true" widgetVar="widDialogChart01" id="idChart01" header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
+			resizable="true" modal="true" width="600">
+			<p:outputPanel id="idPanelChart01">
+				<p:lineChart model="#{odlbpBean.chart01}" style="chartStyle"/>
+			</p:outputPanel>
+		</p:dialog>
+	  	
+		<p:dialog appendToBody="true" closable="false" widgetVar="xxwidDialogObp" header="#{labels['default.tab.charts']}"
+			id="xxidDialogObp" resizable="true" modal="true" width="600">
+			
+				<p:outputPanel id="xxidPanelObp" layout="block">
+					<h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+		test dialog
+	
+					
+			
+					</h:panelGrid>
+				</p:outputPanel>
+		</p:dialog>	
+		-->
+			</h:form>
+
+		</div>
+		<!-- div entry -->
+		
+	
+
+			<p:dialog closable="false" widgetVar="widDialogObp" appendToBody="true"
+					header="#{labels['obsBloodPressureA01.label']}" id="idDialogObp"
+					resizable="true" modal="true" width="600">
+
+				<p:outputPanel id="idPanelObp" layout="block">
+					<h:form prependId="false" id="idFormObp">
+						<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
+						
+							<h:outputLabel value="#{labels['short.dateStart.label']}*"
+								for="beginDateField" styleClass="form-dialog-label" />
+							<p:outputPanel id="beginDateField" layout="block">
+								<h:outputLabel value="#{odlbpBean.selected.beginDate}"
+									rendered="#{odlbpBean.modify eq 'no'}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+
+								<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
+									rendered="#{odlbpBean.modify eq 'yes'}" title="yyyy-MM-dd"
+									value="#{odlbpBean.selected.beginDate}" showOn="button"
+									pattern="yyyy-MM-dd" />
+								<!--  
+										<p:inputMask mask="9999/99/99" 		
+											required="true"							 
+											value="#{odlbpBean.selected.beginDate}"
+											rendered="#{odlbpBean.modify eq 'yes'}">
+											<f:convertDateTime pattern="yyyy/MM/dd" />
+										</p:inputMask>
+										-->
+							</p:outputPanel>
+							<p:message for="beginDateField" display="text" />
+
+							<h:outputLabel value="Blood Pressure*" for="fields_bloodPressure"
+								styleClass="form-dialog-label" />
+
+							<h:panelGrid columns="4" id="fields_bloodPressure">
+
+								<p:column  headerText="#{labels['obsBloodPressureA01.bpSystolic.label']}">
+									<p:outputPanel id="bp_sys" layout="block">
+										<h:outputLabel value="#{odlbpBean.selected.systolic}"
+											rendered="#{odlbpBean.modify eq 'no'}" />										
+										<p:inputText  required="true" requiredMessage="#{labels['default_required_field']}"
+										style="width:50px"
+											id="fields_systolic_input"
+											value="#{odlbpBean.selected.systolic}"
+											rendered="#{odlbpBean.modify eq 'yes'}">
+											<f:convertNumber integerOnly="true"></f:convertNumber>
+										</p:inputText>									
+									</p:outputPanel>
+								</p:column>
+								
+								<p:column>/</p:column>
+								
+								<p:column headerText="#{labels['obsBloodPressureA01.bpDiastolic.label']}">
+									<p:outputPanel id="bp_dia" layout="block">
+										<h:outputLabel value="#{odlbpBean.selected.diastolic}"
+											rendered="#{odlbpBean.modify eq 'no'}" />
+										<p:inputText required="true" requiredMessage="#{labels['default_required_field']}"
+										style="width:50px"
+											id="fields_diastolic_input"
+											value="#{odlbpBean.selected.diastolic}"
+											rendered="#{odlbpBean.modify eq 'yes'}">
+											<f:convertNumber integerOnly="true"></f:convertNumber>
+										</p:inputText>									
+									</p:outputPanel>
+									
+								</p:column>
+								<p:column>mmHg</p:column>
+							</h:panelGrid>
+							<h:panelGroup>
+								<p:message for="fields_systolic_input" display="text" />
+								<p:message for="fields_diastolic_input" display="text" />
+							</h:panelGroup>
+						
+							
+							<!--  end fields_bloodPressure -->						
+
+							<h:outputLabel
+								value="#{labels['obsBloodPressureA01.bpHeartRate.label']}*"
+								for="field_hrate" styleClass="form-dialog-label" />
+
+							<p:outputPanel id="field_hrate" layout="block">
+								<h:outputLabel value="#{odlbpBean.selected.heartRate}"
+									rendered="#{odlbpBean.modify eq 'no'}" />
+
+								<p:inputText  value="#{odlbpBean.selected.heartRate}" id="field_hrate_input"
+									style="width:50px"								
+									rendered="#{odlbpBean.modify eq 'yes'}">
+									<f:convertNumber integerOnly="true"></f:convertNumber>
+								</p:inputText>
+								bpm
+								<!-- 
+								<p:inputMask mask="999" 
+									value="#{odlbpBean.selected.heartRate}"
+									rendered="#{odlbpBean.modify eq 'yes'}">
+									<f:convertNumber integerOnly="true"></f:convertNumber>
+								</p:inputMask>
+								 -->
+							</p:outputPanel>
+							<p:message for="field_hrate_input" display="text" />
+
+							<h:outputLabel for="field_note_bp"
+								value="#{labels['default.comments.label']}"
+								styleClass="form-dialog-label" />
+							<p:outputPanel id="field_note_bp" layout="block">
+								<h:outputText value="#{odlbpBean.selected.note}"
+									rendered="#{odlbpBean.modify eq 'no'}" styleClass="commentText" />
+								<p:inputTextarea value="#{odlbpBean.selected.note}"
+									autoResize="false" cols="30" rows="5"  
+									rendered="#{odlbpBean.modify eq 'yes'}" label="Comment"
+									styleClass="commentTextInputArea" />
+							</p:outputPanel>
+							<p:message for="field_note_bp" display="text" />
+
+						</h:panelGrid>
+						<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+							<f:facet name="header">
+
+								<p:commandButton rendered="#{odlbpBean.modify eq 'yes'}"
+									widgetVar="widDialogSaveButtonObp" process="idFormObp"
+									value="#{labels['default.button.create.label']}"
+									title="#{labels['default.button.create.label']}"
+									update="msgs idFormObp idItemTableObp"
+									actionListener="#{odlbpBean.store}"
+									oncomplete="onEditComplete(xhr,status,args)"
+									image="ui-icon ui-icon-check" />
+<!--  
+								<p:commandButton
+									value="#{odlbpBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+									type="reset" immediate="true" onclick="widDialogObp.hide()"
+									image="ui-icon ui-icon-close" />-->
+									
+						<p:commandButton rendered="#{odlbpBean.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{odlbpBean.refresh}" immediate="true" 
+							onsuccess="widDialogObp.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{odlbpBean.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogObp.hide()"
+							image="ui-icon ui-icon-close" />
+							</f:facet>
+						</h:panelGrid>
+					</h:form>	
+					</p:outputPanel>
+
+				</p:dialog>	
+
+	
+	<!--  chart in form -->
+
+	<!-- <ui:include src="./charts/charts_obs_bp.xhtml" />
+	
+	
+		<p:dialog closable="true" 
+		widgetVar="widDialogChart02" 
+		id="idChart02" 
+		header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
+		resizable="true" 
+		width="550">
+			<h:form id="idformchart02">
+				<p:outputPanel id="idPanelChart02">
+					<p:lineChart model="#{odlbpBean.chartModel}" style="chartStyle" />
+				</p:outputPanel>
+			</h:form>
+		</p:dialog>	-->		
+		
+ 			<p:dialog closable="true"
+					widgetVar="widDialogChart02" 
+					id="idChart02" 
+					header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
+					resizable="true"
+					width="600">
+				<h:form>
+					<p:outputPanel id="idPanelChart02">
+						<p:lineChart model="#{odlbpBean.chartModel}"  style="chartStyle"  />
+						<!-- titleX="Time"  titleY="Body Weight(kg)" -->
+					</p:outputPanel>
+				</h:form>
+			</p:dialog>
+		
+	</ui:define>
+
+</ui:composition>

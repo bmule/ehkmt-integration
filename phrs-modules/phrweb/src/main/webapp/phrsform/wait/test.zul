@@ -1,0 +1,50 @@
+<?page title="new page title" contentType="text/html;charset=UTF-8"?>
+<zk>
+    <hbox>
+        <listbox id="src" rows="0" multiple="true" width="200px">
+            <listhead>
+                <listheader label="Population"/>
+                <listheader label="Percentage"/>
+            </listhead>
+            <listitem id="a" value="A">
+                <listcell label="A. Graduate"/>
+                <listcell label="20%"/>
+            </listitem>
+            <listitem id="b" value="B">
+                <listcell label="B. College"/>
+                <listcell label="23%"/>
+            </listitem>
+            <listitem id="c" value="C">
+                <listcell label="C. High School"/>
+                <listcell label="40%"/>
+            </listitem>
+            <listitem id="d" value="D">
+                <listcell label="D. Others"/>
+                <listcell label="17%"/>
+            </listitem>
+        </listbox>
+        <vbox>
+            <button label="=&gt;" onClick="move(src, dst)"/>
+            <button label="&lt;=" onClick="move(dst, src)"/>
+        </vbox>
+        <listbox id="dst" checkmark="true" rows="0" multiple="true" width="200px">
+            <listhead>
+                <listheader label="Population" width="120px"/>
+                <listheader label="Percentage"/>
+            </listhead>
+            <listitem id="e" value="E">
+                <listcell label="E. Supermen"/>
+                <listcell label="21%"/>
+            </listitem>
+        </listbox>
+        <zscript>
+            void move(Listbox src, Listbox dst) {
+                Listitem s = src.getSelectedItem();
+                if (s == null)
+                    Messagebox.show("Select an item first");
+                else
+                    s.setParent(dst);
+            }
+        </zscript>
+    </hbox>  
+</zk>
