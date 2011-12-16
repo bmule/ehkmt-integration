@@ -22,7 +22,7 @@ import java.util.Properties;
  * @since 0.1
  * @author Mihai
  */
-public class Constants {
+public final class Constants {
 
     public static final String ICARDEA_NS = "http://www.icardea.at/phrs";
 
@@ -517,6 +517,14 @@ public class Constants {
                 // I don't care. I use the default
             }
         }
+    }
+    
+    
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private Constants() {
+        // UNIMPLEMENTED
     }
 
     private static String getICardeaResource(String resouce) {
