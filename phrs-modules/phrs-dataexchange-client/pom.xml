@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
@@ -22,8 +22,7 @@
     <properties>
         <log4j.version>1.6.1</log4j.version>
     </properties>
-
-  
+     
     <dependencies>
         
         <dependency>
@@ -71,7 +70,6 @@
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.8.3</version>
-            
         </dependency>
 
         
