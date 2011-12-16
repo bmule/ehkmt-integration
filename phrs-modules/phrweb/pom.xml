@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>at.srfg.kmt.ehealth.phrs.parent</artifactId>
+        <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+  
+    <groupId>at.srfg.kmt.ehealth.phrs</groupId>
+    <artifactId>phrweb</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+    <name>PHRS Web Portal</name>
+    <description>
+        This represents presentation layer for the PHR system.
+    </description>
+    <inceptionYear>2011</inceptionYear>
+  
+    <properties>
+        <catalina.home>2.4.0</catalina.home>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrs-constants</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrs-persistence-driver</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrs-dataexchange-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+  
+    <build>
+        <finalName>phrweb</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.1.4</version>
+               
+                <configuration>
+                    <wait>true</wait>
+                    <container>
+                        <containerId>tomcat6x</containerId>
+                        <type>installed</type>
+                        <home>${catalina.home}</home>
+                        <append>false</append>
+                        <timeout>300000</timeout><!-- 5 minutes -->
+                        <log>${project.build.directory}/logs/tomcat6x.log</log>
+                        <output>${project.build.directory}/logs/tomcat6x.out</output>
+                    </container>
+
+                    <configuration>
+                        <!--I need to specify the type two times
+                             once here and once in the upper element.
+                             It seamns that this is a Cargo plugin problem.-->
+                        <type>existing</type>
+
+                        <!--I need to specify the home two times
+                             once here and once in the upper element
+                             It seamns that this is a Cargo plugin problem.-->
+                        <home>${catalina.home}</home>
+
+                        <deployables>
+                            <deployable>
+                                <groupId>${project.groupId}</groupId>
+                                <artifactId>phrweb</artifactId>
+                                <type>war</type>
+                            </deployable>
+                        </deployables>
+                    </configuration>
+
+                </configuration>
+
+            </plugin>    
+        </plugins>
+        
+    </build>
+    
+</project>
