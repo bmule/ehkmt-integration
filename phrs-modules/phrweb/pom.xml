@@ -14,7 +14,11 @@
     <packaging>war</packaging>
     <name>PHRS Web Portal</name>
     <description>
-        This represents presentation layer for the PHR system.
+        This module contails all the classes (and resources) related with the
+        PHRS web protal.
+        This module can be deployed in to a tomcat 6x web container.
+        For deployment use the following command : 
+        "mvn  cargo:deploy -D  -Dcatalina.home=YOUR_TOMCAT"
     </description>
     <inceptionYear>2011</inceptionYear>
     
@@ -47,7 +51,7 @@
     </repositories>
   
     <properties>
-        <catalina.home>2.4.0</catalina.home>
+        <catalina.home>/lab0/apache/tomcat/apache-tomcat-6.0.35</catalina.home>
     </properties>
 
     <dependencies>
