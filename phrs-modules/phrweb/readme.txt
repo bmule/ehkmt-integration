@@ -50,3 +50,8 @@ in the "...src/main/assembly" directory.
 The actual implementation uses the maven repository transitive dependencies
 management abilities to collect all the required dependencies (libraries).
 
+Note : because the generated classes originate from a separate system (where
+are compiled according with groovy needs) there is API compatibility can not be
+validated during the compile step; in this way classes that are incompatible 
+are assambled in to the final war.
+
