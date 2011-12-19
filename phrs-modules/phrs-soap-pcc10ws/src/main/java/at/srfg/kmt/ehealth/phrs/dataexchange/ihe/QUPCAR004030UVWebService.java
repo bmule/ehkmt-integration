@@ -50,9 +50,11 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
                     new NullPointerException("The body argument can not be null.");
             LOGGER.error(nullException.getMessage(), nullException);
             throw nullException;
+            // FIXME : singals the error back to the client.
         }
 
-        // FIXME : singals the error back to the client.
+        
+        // FIXME : link it to the result factory !
         return null;
     }
 }
