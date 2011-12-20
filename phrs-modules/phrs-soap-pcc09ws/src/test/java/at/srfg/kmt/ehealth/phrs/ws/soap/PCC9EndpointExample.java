@@ -40,7 +40,7 @@ public final class PCC9EndpointExample {
      * @param args  three arguments a host, a port and a path.
      */
     public static void main(String... args) throws MalformedURLException {
-
+        
         if (args == null || args.length != 3) {
             throw new IllegalArgumentException("Three arguments are required. The argumetns are : Host(string) , port(integer) and context path(Strign).");
         }
