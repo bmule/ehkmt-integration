@@ -455,6 +455,19 @@ public class Constants {
             "http://www.icardea.at/phrs/types/1.0/Medication";
     
     /**
+     * The rdf class for a medication dosage in the PHRS acceptation.
+     */
+    public static final String PHRS_MEDICATION_DOSAGE_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/MedicationDosage";
+    
+    /**
+     * The phrs medication dosage predicate URI. This is a resource property.  
+     */
+    public static final String PHRS_MEDICATION_DOSAGE = 
+             ICARDEA_NS + "/code#dosage";
+    
+    
+    /**
      * Describes an observation as risk.
      */
     public static final String HL7V3_RISK_OF = ICARDEA_NS + "/instances/RiskOf";
@@ -467,14 +480,14 @@ public class Constants {
      * unique identified. 
      */
     public static final String PHRS_ACTOR_CLASS = 
-            "http://www.icardea.at/phrs/types/1.0/PhrsActor";
+            ICARDEA_NS + "/types/1.0/PhrsActor";
 
     /**
      * The unique identifiers for the "id" predicate, 
      * this predicate must be applied to an actor. 
      */
     public static final String PHRS_ACTOR_ID = 
-            "http://www.icardea.at/phrs/actor#id";
+            ICARDEA_NS + "/actor#id";
 
     /**
      * The unique identifiers for the "namespace" predicate, 
@@ -482,7 +495,7 @@ public class Constants {
      * This property is a literal.
      */
     public static final String PHRS_ACTOR_NAMESPACE = 
-            "http://www.icardea.at/phrs/actor#namespace";
+            ICARDEA_NS + "/actor#namespace";
 
     /**
      * The unique identifiers for the "protocolId" predicate, 
@@ -490,7 +503,7 @@ public class Constants {
      * This property is a literal.
      */
     public static final String PHRS_ACTOR_PROTOCOL_ID = 
-            "http://www.icardea.at/phrs/actor#protocolId";
+            ICARDEA_NS + "/actor#protocolId";
     
     /**
      * The string used to unique identify the iCardea name space.
@@ -502,6 +515,8 @@ public class Constants {
      */
     public static final String PHRS_NAMESPACE = "icardea.phrs";
 
+
+    
     /**
      * Used to load the default values for the constants - if this is required.
      */
