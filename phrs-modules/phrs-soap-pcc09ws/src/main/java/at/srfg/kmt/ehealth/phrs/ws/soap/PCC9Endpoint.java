@@ -2,22 +2,17 @@
  * Project :iCardea
  * File : PCC9Endpoint.java
  * Encoding : UTF-8
- * Date : Dec 9, 2011
+ * Date : Apr 7, 2011
  * User : Mihai Radulescu
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
 import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Map;
-import javax.xml.namespace.QName;
-import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Endpoint;
-import org.hl7.v3.QUPCAR004040UVPortType;
-import org.hl7.v3.QUPCAR004040UVService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  *
