@@ -50,6 +50,17 @@
         
     </repositories>
   
+    <pluginRepositories>
+        <pluginRepository>
+            <!--
+            This snapshot plugin is required because the previous offical
+            release (1.3) is not able to compile Groovy 1.8.4 classes.
+            -->
+            <id>kurtharriger-gmaven-snapshots</id>
+            <url>https://github.com/kurtharriger/gmaven/raw/maven/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
+    
     <properties>
         <catalina.home>/lab0/apache/tomcat/apache-tomcat-6.0.35</catalina.home>
     </properties>
@@ -258,6 +269,11 @@
         <finalName>phrweb</finalName>
         <plugins>
             <plugin>
+               <!--
+               Cargo plugin
+               It is required to deploy the phrweb to the web container.
+               more details here : http://cargo.codehaus.org/Maven2+plugin
+               -->
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
                 <version>1.1.4</version>
@@ -297,6 +313,35 @@
                 </configuration>
 
             </plugin>    
+            
+            
+            <plugin>
+               <!--
+               GMaven plugin
+               It is required to copmile Groovy sources.
+               more details here : http://docs.codehaus.org/display/GMAVEN/Home
+               Note : please note that it also works for Grooyv 1.8
+               -->
+                <groupId>org.codehaus.gmaven</groupId>
+                <artifactId>gmaven-plugin</artifactId>
+                <version>1.4-SNAPSHOT</version>
+                
+                <configuration>
+                    <providerSelection>1.8</providerSelection>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generateStubs</goal>
+                            <goal>compile</goal>
+                            <goal>generateTestStubs</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
         
     </build>
