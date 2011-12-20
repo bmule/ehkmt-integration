@@ -2,13 +2,14 @@
  * Project :iCardea
  * File : QUPCAR004040UVWebService.java
  * Encoding : UTF-8
- * Date : Dec 9, 2011
+ * Date : Apr 7, 2011
  * User : Mihai Radulescu
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
-import java.util.logging.Level;
+
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
 import org.hl7.v3.MCCIIN000002UV01;
@@ -18,12 +19,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * The IHE CM PCC9 web SOAP based web service.
+ * 
  * @author mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
 @WebService(endpointInterface = "org.hl7.v3.QUPCAR004040UVPortType")
+@HandlerChain(file="handler-chain.xml")
 public class QUPCAR004040UVWebService implements QUPCAR004040UVPortType {
 
     /**
