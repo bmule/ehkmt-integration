@@ -13,7 +13,11 @@ import org.junit.Test;
 
 
 /**
- * Tests the Groovy / java interaction.
+ * Tests the Groovy / java interaction. <br/>
+ * To execute <b>only</b> this test use the follow maven command :
+ * <pre>
+ * mvn clean compile test -Dtest=GroovyUnitTest
+ * </pre>
  * 
  * @author mihai
  * @version 1.0-SNAPSHOT
@@ -21,7 +25,13 @@ import org.junit.Test;
  */
 public class GroovyUnitTest {
 
- 
+    /**
+     * Builds a <code>GroovyUnitTest</code> instance.
+     */
+    public GroovyUnitTest() {
+        // UNIMPLEMENTED
+    }
+    
     /**
      * Invoke a java class method together with groovy instance and prove the
      * result is the expected one.
