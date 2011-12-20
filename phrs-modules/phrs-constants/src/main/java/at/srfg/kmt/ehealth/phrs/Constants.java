@@ -466,7 +466,7 @@ public class Constants {
     public static final String PHRS_MEDICATION_DOSAGE = 
              ICARDEA_NS + "/code#dosage";
     
-    
+        
     /**
      * Describes an observation as risk.
      */
