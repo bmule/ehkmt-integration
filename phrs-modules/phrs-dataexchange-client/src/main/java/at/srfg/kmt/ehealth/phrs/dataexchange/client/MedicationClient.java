@@ -173,10 +173,19 @@ public final class MedicationClient {
         return subject;
     }
 
-    private String buildDosage(String value, String unitURI) throws TripleException {
+    public String buildDosage(String value, String unitURI) throws TripleException {
 
         final String subject =
                 triplestore.persist(Constants.HL7V3_DOSAGE_VALUE, value, LITERAL);
+        
+       // this can help to find a medication, there are alos other way 
+        // to do this (e.g. using the know templateRootID, for more )
+        // information about this please consult the documentation)
+        triplestore.persist(subject,
+                Constants.RDFS_TYPE,
+                Constants.PHRS_MEDICATION_DOSAGE_CLASS,
+                RESOURCE);
+
         triplestore.persist(subject,
                 Constants.HL7V3_DOSAGE_UNIT,
                 unitURI,
