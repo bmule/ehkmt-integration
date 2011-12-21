@@ -1,8 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
-import at.srfg.kmt.ehealth.phrs.dataexchange.ihe.ProblemEntryPCC10;
-import at.srfg.kmt.ehealth.phrs.dataexchange.util.QUPCAR004030UVUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -12,7 +11,6 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
-import org.hl7.v3.QUPCIN043200UV01;
 
 
 /**
@@ -64,9 +62,10 @@ public class ProblemClientFeverSymptomExample {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
-        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "fever-symptopm");
 
+        for (DynaBean dynaBean : beans) {
+            DynaBeanUtil.toString(dynaBean);
+        }
 
 
         // TAKE CARE !!!!!!

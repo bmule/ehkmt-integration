@@ -1,8 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
+
 import at.srfg.kmt.ehealth.phrs.Constants;
-import at.srfg.kmt.ehealth.phrs.dataexchange.ihe.VitalSignPCC10;
-import at.srfg.kmt.ehealth.phrs.dataexchange.util.QUPCAR004030UVUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -14,40 +14,37 @@ import java.util.Map;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
-import org.hl7.v3.QUPCIN043200UV01;
+
 
 /**
- * Runnable class able to add  one (or more) problem entry.<br/>
- * More precisely this class adds four <i>Vital Sign</i> to the underlying 
- * persistence layer; after this it generates PCC10 conform message and 
- * serialize it in to a file named 
- * <i>vital-sign.xml</i> stored in to the temporary directory. 
- * The exact location for this file is listed in the log file (located in 
- * target/log.out)<br/> 
- * To run this class from maven environment use :
+ * Runnable class able to add one (or more) problem entry.<br/> More precisely
+ * this class adds four <i>Vital Sign</i> to the underlying persistence layer;
+ * after this it generates PCC10 conform message and serialize it in to a file
+ * named <i>vital-sign.xml</i> stored in to the temporary directory. The exact
+ * location for this file is listed in the log file (located in
+ * target/log.out)<br/> To run this class from maven environment use :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test<br/>
- * </pre>
- * Take care this command does not compile the classes. <br/>
- * <b>Nota Bene : </b> this class will remove/clean the triplestore related 
- * files. The location for this files is configurated via the configuration 
- * file named generic_triplestore.xml. <br/>
- * 
+ * </pre> Take care this command does not compile the classes. <br/> <b>Nota
+ * Bene : </b> this class will remove/clean the triplestore related files. The
+ * location for this files is configurated via the configuration file named
+ * generic_triplestore.xml. <br/>
+ *
  * @author Mihai
  * @version 0.1
  * @since 0.1
  */
 public class VitalSignClientExample {
-    
+
     public static void main(String... args) throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException {
-        
+
         final String owner = "testOwner";
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
-        
+
         final VitalSignClient client = new VitalSignClient(triplestore);
-        
+
         client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                 "Free text note for systolic.",
@@ -55,7 +52,7 @@ public class VitalSignClientExample {
                 Constants.STATUS_COMPELETE,
                 "100",
                 Constants.MM_HG);
-        
+
         client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE,
                 "Free text note for diasystolic.",
@@ -63,7 +60,7 @@ public class VitalSignClientExample {
                 Constants.STATUS_COMPELETE,
                 "80",
                 Constants.MM_HG);
-        
+
         client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
                 "Free text note for body height.",
@@ -71,7 +68,7 @@ public class VitalSignClientExample {
                 Constants.STATUS_COMPELETE,
                 "180",
                 Constants.CENTIMETER);
-        
+
         client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
                 "Free text note for body weight.",
@@ -79,8 +76,8 @@ public class VitalSignClientExample {
                 Constants.STATUS_COMPELETE,
                 "80",
                 Constants.KILOGRAM);
-        
-        
+
+
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
         queryMap.put(Constants.RDFS_TYPE,
@@ -93,17 +90,17 @@ public class VitalSignClientExample {
         // owner == user id
         final Iterable<String> resources =
                 triplestore.getForPredicatesAndValues(queryMap);
-        
+
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();
         for (String resoure : resources) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
             beans.add(dynaBean);
         }
-        
-        final QUPCIN043200UV01 pCC10Message = VitalSignPCC10.getPCC10Message(beans);
-        QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "vital-sign");
 
+        for (DynaBean dynaBean : beans) {
+            DynaBeanUtil.toString(dynaBean);
+        }
 
         // TAKE CARE !!!!!!
         // This lines wipe out everithing alfter the client example ends its 
