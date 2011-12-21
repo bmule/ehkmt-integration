@@ -57,14 +57,14 @@
             <groupId>org.hl7.v3</groupId>                                                                                                                                                                 
             <artifactId>QUPC_AR004030UV_Service</artifactId>                                                                                                                                              
             <version>0.1</version>
-            <scope>test</scope>
+
         </dependency> 
         
         <dependency>                                                                                                                                                                                      
             <groupId>org.hl7.v3</groupId>                                                                                                                                                                 
             <artifactId>QUPC_AR004040UV_Service</artifactId>                                                                                                                                              
             <version>0.1</version> 
-            <scope>test</scope>
+
         </dependency> 
         
         <dependency>
