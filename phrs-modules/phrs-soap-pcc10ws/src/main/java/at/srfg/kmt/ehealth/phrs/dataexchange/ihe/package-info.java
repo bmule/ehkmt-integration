@@ -7,3 +7,12 @@
  */
 
 package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+
+/**
+ * Contains all the classes and resources related with the IHE CM PCC10
+ * transactions.
+ * 
+ * @version 0.1
+ * @since 0.1
+ * @author mradules
+ */
