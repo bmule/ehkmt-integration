@@ -309,37 +309,31 @@
                             </deployable>
                         </deployables>
                     </configuration>
-
                 </configuration>
-
             </plugin>    
             
-            
             <plugin>
-               <!--
-               GMaven plugin
+                
+                <!--
+               Groovy-Eclipse compiler plugin for Maven
                It is required to copmile Groovy sources.
-               more details here : http://docs.codehaus.org/display/GMAVEN/Home
-               Note : please note that it also works for Grooyv 1.8
+               more details here : http://docs.codehaus.org/display/GROOVY/Groovy-Eclipse+compiler+plugin+for+Maven
+               Note : please note that is using by default Grooyv 1.8.4
                -->
-                <groupId>org.codehaus.gmaven</groupId>
-                <artifactId>gmaven-plugin</artifactId>
-                <version>1.4-SNAPSHOT</version>
                 
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
                 <configuration>
-                    <providerSelection>1.8</providerSelection>
+                    <compilerId>groovy-eclipse-compiler</compilerId>
+                    <verbose>true</verbose>
                 </configuration>
-                
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generateStubs</goal>
-                            <goal>compile</goal>
-                            <goal>generateTestStubs</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-compiler</artifactId>
+                        <version>2.6.0-01</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
         </plugins>
