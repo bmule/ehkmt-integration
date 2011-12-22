@@ -10,9 +10,12 @@ package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
+import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.Handler;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004040UVPortType;
 import org.hl7.v3.QUPCAR004040UVService;
@@ -50,13 +53,17 @@ final class SendPcc09Message {
             throws MalformedURLException {
 
         final QUPCAR004040UVService service = getQUPCAR004040UVService();
+        
         final URL documentLocation = service.getWSDLDocumentLocation();
         LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
         // here I obtain the service.
         final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
+        setHandler(portType);
 
         // I set the end point for the 
         setDefaultEndPointURI(portType, endpointURI);
+        
+        
 
         final MCCIIN000002UV01 ack =
                 portType.qupcAR004040UVQUPCIN043100UV(query);
@@ -90,5 +97,14 @@ final class SendPcc09Message {
         result.append("?wsdl");
 
         return result.toString();
+    }
+    
+    private static void setHandler(QUPCAR004040UVPortType portType) throws MalformedURLException {
+        final BindingProvider bp = (BindingProvider) portType;
+        final Binding binding = bp.getBinding();
+        final List<Handler> handlerChain = binding.getHandlerChain();
+        final String endpoint = "http://localhost:8080/phrs/pcc09";
+        handlerChain.add(new WSAdressingHeaderEnricher(endpoint));
+        binding.setHandlerChain(handlerChain);
     }
 }
