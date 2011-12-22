@@ -8,26 +8,32 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
+import java.io.StringWriter;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
 
 
 /**
- * The <code>SOAPHandler</code> used to manage and manipulate SOAP header/body
- * information. 
- * This handler is used to extract the protocol id from the 
- * 
- * 
+ * The
+ * <code>SOAPHandler</code> used to manage and manipulate SOAP header/body
+ * information. This handler is used to extract the protocol id from the
+ *
+ *
  * @author Mihai
  * @version 0.1
  * @since 0.1
@@ -59,13 +65,40 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.error("Error during the SAOP message processing.");
             LOGGER.error(exception.getMessage(), exception);
         }
-        
+
         LOGGER.debug("handleMessage {}", message.toString());
         return true;
     }
-    
+
     private void process(SOAPHeader header) {
+
+        if (header == null) {
+            LOGGER.debug("Header null nothing to process");
+            return;
+        }
+
+        final Iterator childElements = header.examineAllHeaderElements();
+        if (!childElements.hasNext()) {
+            LOGGER.debug("No Header to process");
+            return;
+        }
+        
+        try {
+            final String headerToString = Util.toString(header);
+            LOGGER.debug("The header to precess is : {}", headerToString);
+        } catch (Exception exception) {
+            LOGGER.error("The SOAP header can not be parsed.");
+            LOGGER.error(exception.getMessage(), exception);
+        }
+
+        while (childElements.hasNext()) {
+            final SOAPHeaderElement next = (SOAPHeaderElement) childElements.next();
+            LOGGER.debug("-----------> " + next.getNodeName());
+            LOGGER.debug("-----------> " + next.getValue());
+            LOGGER.debug("-----------> " + next.getTextContent());
+        }
     }
+
 
     private void process(SOAPBody body) {
     }
