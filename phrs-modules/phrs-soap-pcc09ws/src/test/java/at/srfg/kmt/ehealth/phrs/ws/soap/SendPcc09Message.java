@@ -55,7 +55,7 @@ final class SendPcc09Message {
         LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
         // here I obtain the service.
         final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
-        setHandler(portType);
+        setWSAddressHandler(portType);
 
         // I set the end point for the 
         setDefaultEndPointURI(portType, endpointURI);
@@ -96,7 +96,7 @@ final class SendPcc09Message {
         return result.toString();
     }
     
-    private static void setHandler(QUPCAR004040UVPortType portType) throws MalformedURLException {
+    private static void setWSAddressHandler(QUPCAR004040UVPortType portType) throws MalformedURLException {
         final BindingProvider bp = (BindingProvider) portType;
         final Binding binding = bp.getBinding();
         final List<Handler> handlerChain = binding.getHandlerChain();
