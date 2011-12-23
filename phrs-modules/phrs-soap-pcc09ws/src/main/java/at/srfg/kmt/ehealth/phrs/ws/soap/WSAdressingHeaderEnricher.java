@@ -26,6 +26,11 @@ import org.slf4j.LoggerFactory;
  * header with information about the response end-point (URL) following the
  * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
  * standards. <br/>
+ * This class can be applied like <code>SOAPHandler</code> to any WSDL service.
+ * If this <code>SOAPHandler</code> is applied to a SOAP service then the message
+ * header will gain a WS-Addressing header, this header will transport in the 
+ * "wsa:ReplyTo" element a given URL, this URL is specified like constructor 
+ * argument. <br/>
  * This class is not design to be extended.
  *
  * @author mradules
@@ -34,13 +39,25 @@ import org.slf4j.LoggerFactory;
  */
 public final class WSAdressingHeaderEnricher implements SOAPHandler<SOAPMessageContext> {
 
+    /**
+     * The (XML) WS-Addressing name space.
+     */
+    private static final String WSADRESSING_NS = "http://www.w3.org/2005/08/addressing";
+    
+    /**
+     * The (XML) WS-Addressing name-space prefix.
+     */
     private static final String NS_PREFIX = "wsa";
 
+    /**
+     * The name for the WS-Addressing "Reply to" element. 
+     */
     private static final String REPLY_TO_LOCAL_NAME = "ReplyTo";
 
+    /**
+     * The name for the WS-Addressing "Reply to" element. 
+     */
     private static final String ADDRESS_LOCAL_NAME = "Address";
-
-    private static final String WSADRESSING_NS = "http://www.w3.org/2005/08/addressing";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -88,9 +105,15 @@ public final class WSAdressingHeaderEnricher implements SOAPHandler<SOAPMessageC
 
     @Override
     public void close(MessageContext mc) {
-        ;
+        // UNIMPLEMENTED
     }
 
+    /**
+     * This 
+     * 
+     * @param c
+     * @return 
+     */
     @Override
     public boolean handleFault(SOAPMessageContext c) {
         return true;
@@ -98,7 +121,7 @@ public final class WSAdressingHeaderEnricher implements SOAPHandler<SOAPMessageC
 
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
-        SOAPMessage msg = context.getMessage();
+        final SOAPMessage msg = context.getMessage();
         if ((Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY)) {
             try {
                 final SOAPEnvelope envelope = msg.getSOAPPart().getEnvelope();
