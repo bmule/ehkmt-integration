@@ -24,11 +24,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
- * </pre>
  *
- * @author mihai
+ * @author Mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
@@ -43,7 +40,7 @@ final class SendPcc09Message {
             LoggerFactory.getLogger(SendPcc09Message.class);
 
     /**
-     *
+     * Don't let anybody to be instantiate this class.
      */
     private SendPcc09Message() {
         // UNIMPLEMENTED

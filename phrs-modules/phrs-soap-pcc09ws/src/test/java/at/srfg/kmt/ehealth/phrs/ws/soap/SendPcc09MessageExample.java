@@ -15,12 +15,18 @@ import org.hl7.v3.QUPCIN043100UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
- * Runnable class used to send a PCC9 message to a the PCC9 end point. 
- * To run this class from maven environment use :
+ * Runnable class able to sends a  <a
+ * href="http://wiki.ihe.net/index.php?title=PCC-9">PCC09</a> request to a given
+ * end-point. To run this class this class from the command line and maven use
+ * the following command :  
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
  * </pre>
+ * <b>Note : </b> the end-point where the PCC9 request will send is specified
+ * with the "-Dexec.args=" statement. <br/>
+ * This class is not design to be extended.
  *
  * @author mihai
  * @version 1.0-SNAPSHOT
@@ -36,6 +42,13 @@ public class SendPcc09MessageExample {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SendPcc09MessageExample.class);
 
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private SendPcc09MessageExample() {
+        // UNIMPLEMENETD
+    } 
+    
     /**
      *
      * @param args
