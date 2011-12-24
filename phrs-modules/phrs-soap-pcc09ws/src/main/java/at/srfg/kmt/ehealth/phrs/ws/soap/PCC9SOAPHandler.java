@@ -8,25 +8,20 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
-import java.io.StringWriter;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.soap.*;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import javax.xml.xpath.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Document;
-
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * The
@@ -48,6 +43,10 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(PCC9SOAPHandler.class);
 
+
+    public PCC9SOAPHandler()  {
+    }
+
     @Override
     public Set<QName> getHeaders() {
         return null;
@@ -61,7 +60,7 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             process(header);
             final SOAPBody body = message.getSOAPBody();
             process(body);
-        } catch (SOAPException exception) {
+        } catch (Exception exception) {
             LOGGER.error("Error during the SAOP message processing.");
             LOGGER.error(exception.getMessage(), exception);
         }
@@ -70,7 +69,7 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         return true;
     }
 
-    private void process(SOAPHeader header) {
+    private void process(SOAPHeader header) throws XPathExpressionException {
 
         if (header == null) {
             LOGGER.debug("Header null nothing to process");
@@ -82,7 +81,7 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.debug("No Header to process");
             return;
         }
-        
+
         try {
             final String headerToString = Util.toString(header);
             LOGGER.debug("The header to precess is : {}", headerToString);
@@ -91,14 +90,20 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.error(exception.getMessage(), exception);
         }
 
-        while (childElements.hasNext()) {
-            final SOAPHeaderElement next = (SOAPHeaderElement) childElements.next();
-            LOGGER.debug("-----------> " + next.getNodeName());
-            LOGGER.debug("-----------> " + next.getValue());
-            LOGGER.debug("-----------> " + next.getTextContent());
-        }
-    }
+        NodeList nodes = header.getElementsByTagName("wsa:Address");
 
+        final int length = nodes.getLength();
+        if (length != 1) {
+            final IllegalStateException illegalStateException = 
+                    new IllegalStateException("The SOAP Header must contain only one WSA Address element.");
+            LOGGER.error(illegalStateException.getMessage(), illegalStateException);
+            throw illegalStateException;
+        }
+        
+        final Node wsAdressNode = (Node) nodes.item(0);
+        final String wsAddress = wsAdressNode.getTextContent();
+        LOGGER.debug("Response end point address is {}", wsAddress);
+    }
 
     private void process(SOAPBody body) {
     }
