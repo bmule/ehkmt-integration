@@ -8,10 +8,8 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
 import javax.xml.ws.handler.MessageContext;
@@ -20,7 +18,6 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import javax.xml.xpath.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
@@ -80,14 +77,6 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         if (!childElements.hasNext()) {
             LOGGER.debug("No Header to process");
             return;
-        }
-
-        try {
-            final String headerToString = Util.toString(header);
-            LOGGER.debug("The header to precess is : {}", headerToString);
-        } catch (Exception exception) {
-            LOGGER.error("The SOAP header can not be parsed.");
-            LOGGER.error(exception.getMessage(), exception);
         }
 
         NodeList nodes = header.getElementsByTagName("wsa:Address");
