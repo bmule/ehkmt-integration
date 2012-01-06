@@ -41,7 +41,11 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             LoggerFactory.getLogger(PCC9SOAPHandler.class);
 
 
+    /**
+     * Builds a <code>PCC9SOAPHandler</code> 
+     */
     public PCC9SOAPHandler()  {
+        // UNIMPLEMENTED
     }
 
     @Override
@@ -69,13 +73,13 @@ public class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     private void process(SOAPHeader header) throws XPathExpressionException {
 
         if (header == null) {
-            LOGGER.debug("Header null nothing to process");
+            LOGGER.debug("SOPA Header is null nothing to process");
             return;
         }
 
         final Iterator childElements = header.examineAllHeaderElements();
         if (!childElements.hasNext()) {
-            LOGGER.debug("No Header to process");
+            LOGGER.debug("No SOAP Header to process");
             return;
         }
 
