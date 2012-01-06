@@ -18,7 +18,6 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import javax.xml.xpath.XPathExpressionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -114,19 +113,19 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
     private void process(SOAPHeader header) {
 
         if (header == null) {
-            LOGGER.debug("Header null nothing to process");
+            LOGGER.debug("SOAP Header is null nothing to process");
             return;
         }
 
         final Iterator childElements = header.examineAllHeaderElements();
         if (!childElements.hasNext()) {
-            LOGGER.debug("No Header to process");
+            LOGGER.debug("No SOAP Header to process");
             return;
         }
 
         try {
             final String headerToString = Util.toString(header);
-            LOGGER.debug("The header to precess is : {}", headerToString);
+            LOGGER.debug("The SOAP header to precess is : {}", headerToString);
         } catch (Exception exception) {
             LOGGER.error("The SOAP header can not be parsed.");
             LOGGER.error(exception.getMessage(), exception);
@@ -139,5 +138,24 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
      * @param body  the SOAP message body to be log log.
      */
     private void process(SOAPBody body) {
+        if (body == null) {
+            LOGGER.debug("SOAP Body null nothing to process");
+            return;
+        }
+
+        final Iterator childElements = body.getChildElements();
+        if (!childElements.hasNext()) {
+            LOGGER.debug("No Body to process");
+            return;
+        }
+
+        try {
+            final String bodyToString = Util.toString(body);
+            LOGGER.debug("The SOAP Body to precess is : {}", bodyToString);
+        } catch (Exception exception) {
+            LOGGER.error("The SOAP Body can not be parsed.");
+            LOGGER.error(exception.getMessage(), exception);
+        }
+        
     }
 }
