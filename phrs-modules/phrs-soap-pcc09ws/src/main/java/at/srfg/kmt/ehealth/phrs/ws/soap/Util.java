@@ -10,10 +10,10 @@ package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 import java.io.StringWriter;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.SOAPHeader;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.Node;
 
 
 /**
@@ -34,11 +34,13 @@ final class Util {
     }
 
     /**
-     * Serialize a <code>SOAPHeader</code> in to a string, this string
-     * represents a well formated XML.
+     * Serialize a <code>org.w3c.dom.Node</code> in to a string, this string
+     * represents a well formated XML. This methods can be applied on the
+     * SOPA header and SOAP body (because both are extending the 
+     * <code>org.w3c.dom.Node</code>) node interface.
      * 
      * 
-     * @param header the header to be serialize, it can not be null.
+     * @param node the note to be serialize, it can not be null.
      * @return
      * @throws ParserConfigurationException if the header can not be (XML)
      * parsed.
@@ -47,12 +49,12 @@ final class Util {
      * @throws TransformerException by any XML transformation related error.
      * @throws NullPointerException if the <code>header</code> argument is null.
      */
-    static String toString(SOAPHeader header) throws
+    static String toString(Node node) throws
             ParserConfigurationException, TransformerConfigurationException,
             TransformerException {
         
-        if (header == null) {
-            throw new  NullPointerException("The header argument can not be null.");
+        if (node == null) {
+            throw new  NullPointerException("The node argument can not be null.");
         }
 
         final StringWriter stringWriter = new StringWriter();
@@ -62,7 +64,7 @@ final class Util {
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
         transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-        transformer.transform(new DOMSource(header), streamResult);
+        transformer.transform(new DOMSource(node), streamResult);
 
         final String result = stringWriter.toString();
         return result;
