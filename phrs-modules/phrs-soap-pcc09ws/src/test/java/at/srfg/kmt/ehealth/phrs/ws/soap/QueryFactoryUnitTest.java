@@ -224,7 +224,7 @@ public final class QueryFactoryUnitTest {
      * <code>java.util.Date</code> instance located 31 days in the past and
      * returns it like String formated with the pattern : "yyyyMMddHHmmss".
      */
-    private static String getLastMonthDate() {
+    static String getLastMonthDate() {
         final Date date = new Date();
         // one day has 86400 seconds
         final long oneMonth = 1000 * 86400 * 31;
@@ -241,7 +241,7 @@ public final class QueryFactoryUnitTest {
      * <code>java.util.Date</code> that caries the current date and returns it
      * like String formated with the pattern : "yyyyMMddHHmmss".
      */
-    private static String getNowDate() {
+    static String getNowDate() {
         final Date date = new Date();
         return DATE_FORMAT.format(date);
     }
