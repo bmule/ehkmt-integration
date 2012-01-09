@@ -12,10 +12,7 @@ import java.io.InputStream;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -23,15 +20,23 @@ import javax.xml.bind.Unmarshaller;
 import org.hl7.v3.*;
 
 /**
- *
+ * Used to build PCC9 requests (queries) and responses (acknowledge).<br/>
+ * This class is not designed to be extend.
+ * 
  * @author mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
 final class QueryFactory {
 
-    private static final HashMap<String, String> CARE_PROVISION_CODES;
+    /**
+     * Holds all care provision codes supported in this factory.
+     */
+    private static final Map<String, String> CARE_PROVISION_CODES;
 
+    /**
+     * Used to initialize the care provision codes supported in this factory.
+     */
     static {
         CARE_PROVISION_CODES = new HashMap<String, String>();
         CARE_PROVISION_CODES.put("9279-1", "RESPIRATION RATE");
@@ -67,13 +72,14 @@ final class QueryFactory {
      * Format date using the pattern :
      * <code>yyyyMMddHHmmss</code>.
      */
-    private final static DateFormat DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
+    private static final DateFormat DATE_FORMAT =
+            new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
 
     /**
      * The only instance for
      * <code>ObjectFactory</code> - JAXB related.
      */
-    private final static ObjectFactory OBJECT_FACTORY = new ObjectFactory();
+    private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
     /**
      * Used to identify the "always" acknowledge code.
@@ -84,13 +90,20 @@ final class QueryFactory {
      * The file used to build an empty
      * <code>QUPCIN043100UV01</code> query.
      */
-    private final static String PCC9_EMPTY_INPUT_FILE = "PCC-9-Empty-Input.xml";
+    private static final String PCC9_EMPTY_INPUT_FILE = "PCC-9-Empty-Input.xml";
 
     /**
      * The file used to build an empty
      * <code>MCCIIN000002UV01</code> acknowledge.
      */
-    private final static String PCC9_EMPTY_OUTPUT_FILE = "PCC-9-Empty-Output.xml";
+    private static final String PCC9_EMPTY_OUTPUT_FILE = "PCC-9-Empty-Output.xml";
+
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private QueryFactory() {
+        // UNIMPLEMENTED
+    }
 
     /**
      * Builds an empty PCC09 (QUPCIN043100UV01) query based on a default
@@ -100,7 +113,7 @@ final class QueryFactory {
      * @throws JAXBException by any XML parsing problem encounter during the
      * template parsing.
      */
-    public static QUPCIN043100UV01 buildQUPCIN043100UV01() throws JAXBException {
+    public static QUPCIN043100UV01 buildEmptyPCC9Request() throws JAXBException {
         final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
         final Unmarshaller unmarshaller = context.createUnmarshaller();
         final InputStream inputStream = getStream(PCC9_EMPTY_INPUT_FILE);
@@ -120,7 +133,7 @@ final class QueryFactory {
      * @throws JAXBException by any XML parsing problem encounter during the
      * template parsing.
      */
-    public static MCCIIN000002UV01 buildMCCIIN000002UV01() throws JAXBException {
+    public static MCCIIN000002UV01 buildPCC9Acknowledge() throws JAXBException {
         final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
         final Unmarshaller unmarshaller = context.createUnmarshaller();
         final InputStream inputStream = getStream(PCC9_EMPTY_OUTPUT_FILE);
@@ -132,24 +145,21 @@ final class QueryFactory {
     }
 
     private static InputStream getStream(String name) {
-        final ClassLoader classLoader =
-                QueryFactory.class.getClassLoader();
-
+        final ClassLoader classLoader = QueryFactory.class.getClassLoader();
         final InputStream inputStream =
                 classLoader.getResourceAsStream(name);
         if (inputStream == null) {
-            final String msg = String.format("The %s must be placed in the classpath",
-                    name);
+            final String msg = 
+                    String.format("The %s must be placed in the classpath", name);
             throw new IllegalStateException(msg);
         }
 
         return inputStream;
-
     }
 
     public static MCCIIN000002UV01 buildMCCIIN000002UV01WithAcceptAckCodeError()
             throws JAXBException {
-        final MCCIIN000002UV01 result = buildMCCIIN000002UV01();
+        final MCCIIN000002UV01 result = buildPCC9Acknowledge();
         // Coded Simple Value
         // Coded data in its simplest form, where only the code is not
         // predetermined.
@@ -220,7 +230,7 @@ final class QueryFactory {
      * @throws NullPointerException if the
      * <code>patientID</code> is null.
      */
-    public static QUPCIN043100UV01 buildQUPCIN043100UV01(
+    public static QUPCIN043100UV01 buildPCC9Request(
             String careProvisionCode,
             String careProvisionReason,
             String careRecordTimePeriodBegin,
@@ -240,19 +250,19 @@ final class QueryFactory {
 
 
         if (!CARE_PROVISION_CODES.containsKey(careProvisionCode)) {
-            final IllegalStateException illegalException =
-                    new IllegalStateException("Undefined care provision code: " + careProvisionCode);
+            final String msg = String.format("This care provision code %s is not sopported.", careProvisionCode);
+            final IllegalStateException illegalException = new IllegalStateException(msg);
             throw illegalException;
         }
 
         if (patientID == null) {
-            final NullPointerException nullException =
+            final NullPointerException exception = 
                     new NullPointerException("The patientID argument can not be null");
-            throw nullException;
+            throw exception;
         }
 
         // this is a Care Record Event Profile Query
-        QUPCIN043100UV01 query = buildQUPCIN043100UV01();
+        QUPCIN043100UV01 query = buildEmptyPCC9Request();
 
         final Date now = new Date();
         final String creationTime = DATE_FORMAT.format(now);
@@ -306,7 +316,7 @@ final class QueryFactory {
             provisionCodeConceptDescriptor.setCode(careProvisionCode);
             value.setValue(provisionCodeConceptDescriptor);
 
-            JAXBElement<QUPCMT040300UV01CareProvisionCode> careProvisionParameter =
+            final JAXBElement<QUPCMT040300UV01CareProvisionCode> careProvisionParameter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListCareProvisionCode(value);
             parameterList.setCareProvisionCode(careProvisionParameter);
         }
@@ -334,18 +344,18 @@ final class QueryFactory {
             // IVLTS time interval
             final IVXBTS beginInterval = new IVXBTS();
             beginInterval.setValue(careRecordTimePeriodBegin);
-            JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(beginInterval);
+            final JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(beginInterval);
 
             final IVXBTS endInterval = new IVXBTS();
             endInterval.setValue(careRecordTimePeriodEnd);
-            JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(endInterval);
+            final JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(endInterval);
 
             final IVLTS careRecordTimePeriod = new IVLTS();
             careRecordTimePeriod.getRest().add(ivltsLow);
             careRecordTimePeriod.getRest().add(ivltsHigh);
             period.setValue(careRecordTimePeriod);
 
-            JAXBElement<QUPCMT040300UV01CareRecordTimePeriod> timePeriodParamenter =
+            final JAXBElement<QUPCMT040300UV01CareRecordTimePeriod> timePeriodParamenter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListCareRecordTimePeriod(period);
             parameterList.setCareRecordTimePeriod(timePeriodParamenter);
         }
@@ -375,7 +385,7 @@ final class QueryFactory {
                     new QUPCMT040300UV01ClinicalStatementTimePeriod();
             period.setValue(ivlts);
 
-            JAXBElement<QUPCMT040300UV01ClinicalStatementTimePeriod> timePeriodParamenter =
+            final JAXBElement<QUPCMT040300UV01ClinicalStatementTimePeriod> timePeriodParamenter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListClinicalStatementTimePeriod(period);
             parameterList.setClinicalStatementTimePeriod(timePeriodParamenter);
         }
@@ -388,7 +398,7 @@ final class QueryFactory {
             bl.setValue(Boolean.parseBoolean(includeCarePlanAttachment));
             icpa.setValue(bl);
 
-            JAXBElement<QUPCMT040300UV01IncludeCarePlanAttachment> icpaParameter =
+            final JAXBElement<QUPCMT040300UV01IncludeCarePlanAttachment> icpaParameter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListIncludeCarePlanAttachment(icpa);
             parameterList.setIncludeCarePlanAttachment(icpaParameter);
         }
@@ -402,7 +412,7 @@ final class QueryFactory {
             hl7int.setValue(new BigInteger(maximumHistoryStatements));
             maxHistory.setValue(hl7int);
 
-            JAXBElement<QUPCMT040300UV01MaximumHistoryStatements> maxHistoryParameter =
+            final JAXBElement<QUPCMT040300UV01MaximumHistoryStatements> maxHistoryParameter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListMaximumHistoryStatements(maxHistory);
             parameterList.setMaximumHistoryStatements(maxHistoryParameter);
         }
@@ -413,7 +423,7 @@ final class QueryFactory {
                     new QUPCMT040300UV01PatientAdministrativeGender();
 
             // CE - Coded data (Coded With Equivalents)
-            CE ce = new CE();
+            final CE ce = new CE();
             ce.setCode(patientAdministrativeGender);
             gender.setValue(ce);
             JAXBElement<QUPCMT040300UV01PatientAdministrativeGender> genderParameter =
@@ -428,7 +438,7 @@ final class QueryFactory {
             final TS brithTime = new TS();
             brithTime.setValue(patientBirthTime);
             birthTime.setValue(brithTime);
-            JAXBElement<QUPCMT040300UV01PatientBirthTime> birthTimeParameter =
+            final JAXBElement<QUPCMT040300UV01PatientBirthTime> birthTimeParameter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListPatientBirthTime(birthTime);
             parameterList.setPatientBirthTime(birthTimeParameter);
         }
@@ -452,7 +462,7 @@ final class QueryFactory {
 
             name.setValue(pn);
 
-            JAXBElement<QUPCMT040300UV01PatientName> nameParameter =
+            final JAXBElement<QUPCMT040300UV01PatientName> nameParameter =
                     OBJECT_FACTORY.createQUPCMT040300UV01ParameterListPatientName(name);
             parameterList.setPatientName(nameParameter);
         }
