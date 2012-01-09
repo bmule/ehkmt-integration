@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * end-point. To run this class this class from the command line and maven use
  * the following command :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendSimplePcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
  * </pre>
  * <b>Note : </b> the end-point where the PCC9 request will send is specified
  * with the "-Dexec.args=" statement. <br/>
