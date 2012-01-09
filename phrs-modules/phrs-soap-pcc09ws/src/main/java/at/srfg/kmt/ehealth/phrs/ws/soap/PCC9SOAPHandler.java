@@ -18,8 +18,13 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 
@@ -48,6 +53,7 @@ import org.w3c.dom.NodeList;
  */
 public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
+    private static final String PARAMETER_LIST_ELEMENT_NAME = "parameterList";
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
@@ -76,19 +82,15 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Extracts the following information :
-     * <ul> 
-     * <li> the response end point address (URI). The end point address
-     * (URI) is trated according with the 
+     * Extracts the following information : <ul> <li> the response end point
+     * address (URI). The end point address (URI) is trated according with the
      * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
-     * standard and it it extracted from the SOAP message header. 
-     * <li> the involved user (patient). This information is extracted from the 
-     * SOAP message body. 
-     * <li> the care provision code. This information is extracted
-     * from the SOAP message. 
-     * </ul>
+     * standard and it it extracted from the SOAP message header. <li> the
+     * involved user (patient). This information is extracted from the SOAP
+     * message body. <li> the care provision code. This information is extracted
+     * from the SOAP message. </ul>
      *
-     * @param context  the message context to be processed.
+     * @param context the message context to be processed.
      * @return true to continue processing or false to block processing.
      */
     @Override
@@ -110,12 +112,176 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Extracts the response end point URI from a given <code>SOAPHeader</code>.
-     * The end point address (URI) is treated according with the
-     * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
-     * standard. <br>
-     * If the <code>header</code> is null then this method has no effect.
-     * 
+     * Extracts the Care Provision Code information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Care Provision Code information.
+     *
+     * @param paramter the
+     * <code>org.w3c.dom.Element</code> instance that contains the Care
+     * Provision Code information.
+     * @return the Care Provision Code information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Care Provision Code information.
+     * @throws IllegalStateException if the
+     * <code>paramter</code> argument does not contains the right information
+     * for the Care Provision Code.
+     * @throws NullPointerException if the
+     * <code>paramter</code> argument is null.
+     */
+    private String getCareProvisionCode(Element paramter) {
+        if (paramter == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The parameter argument can not be null");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        // TODO : use XPATH !
+        final NodeList careProvisionList =
+                paramter.getElementsByTagName("careProvisionCode");
+        if (careProvisionList.getLength() == 0) {
+            return null;
+        }
+        if (careProvisionList.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount careProvisionCode element. Only one careProvisionCode element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element careProvisionCode = (Element) careProvisionList.item(0);
+
+
+        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        if (values.getLength() == 0) {
+            return null;
+        }
+        if (values.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount values element. Only one values element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element value = (Element) values.item(0);
+        final String result = value.getAttribute("code");
+        return result;
+    }
+
+    /**
+     * Extracts the Patient Name information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Patient Name information.
+     *
+     * @param paramter the
+     * <code>org.w3c.dom.Element</code> instance that contains the Patient Name
+     * information.
+     * @return the Patient Name information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Patient Name information.
+     * @throws IllegalStateException if the
+     * <code>paramter</code> argument does not contains the right information
+     * for the Patient Name.
+     * @throws NullPointerException if the
+     * <code>paramter</code> argument is null.
+     */
+    private String getPatientName(Element paramter) {
+        if (paramter == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The parameter argument can not be null");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        // TODO : use XPATH !
+        final NodeList names =
+                paramter.getElementsByTagName("patientName");
+        if (names.getLength() == 0) {
+            return null;
+        }
+        if (names.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount patientName element. Only one patientName element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element careProvisionCode = (Element) names.item(0);
+
+        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        if (values.getLength() == 0) {
+            return null;
+        }
+        if (values.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount values element. Only one values element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element value = (Element) values.item(0);
+        final String result = value.getTextContent();
+        return result;
+    }
+
+    /**
+     * Extracts the Patient ID information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Patient ID information.
+     *
+     * @param paramter the
+     * <code>org.w3c.dom.Element</code> instance that contains the Patient ID
+     * information.
+     * @return the Patient ID information from the given
+     * <code>org.w3c.dom.Element</code> instance or null if the given element
+     * does not contains any Patient ID information.
+     * @throws IllegalStateException if the
+     * <code>paramter</code> argument does not contains the right information
+     * for the Patient ID.
+     * @throws NullPointerException if the
+     * <code>paramter</code> argument is null.
+     */
+    private String getPatientId(Element paramter) {
+        if (paramter == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The parameter argument can not be null");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        // TODO : use XPATH !
+        final NodeList ids =
+                paramter.getElementsByTagName("patientId");
+        if (ids.getLength() == 0) {
+            return null;
+        }
+        if (ids.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount patientId element. Only one patientId element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element careProvisionCode = (Element) ids.item(0);
+
+        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        if (ids.getLength() == 0) {
+            return null;
+        }
+        if (values.getLength() != 1) {
+            final IllegalStateException exception =
+                    new IllegalStateException("Wrong amount value element. Only one value element expected.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final Element value = (Element) values.item(0);
+        final String result = value.getAttribute("extension");
+        return result;
+    }
+
+    /**
+     * Extracts the response end point URI from a given
+     * <code>SOAPHeader</code>. The end point address (URI) is treated according
+     * with the <a
+     * href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
+     * standard. <br> If the
+     * <code>header</code> is null then this method has no effect.
+     *
      * @param header the header to process.
      */
     private void process(SOAPHeader header) {
@@ -131,8 +297,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             return;
         }
 
-        NodeList nodes = header.getElementsByTagName("wsa:Address");
-
+        final NodeList nodes = header.getElementsByTagName("wsa:Address");
         final int length = nodes.getLength();
         if (length != 1) {
             final IllegalStateException illegalStateException =
@@ -147,18 +312,36 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Extracts the patient name and care provision code from a given 
-     * <code>SOAPBody</code>. <br>
-     * If the <code>header</code> is null then this method has no effect.
-     * 
+     * Extracts the patient name and care provision code from a given
+     * <code>SOAPBody</code>. <br> If the
+     * <code>header</code> is null then this method has no effect.
+     *
      * @param body the body to process.
      */
     private void process(SOAPBody body) {
+        final NodeList paramterList = body.getElementsByTagName(PARAMETER_LIST_ELEMENT_NAME);
+        final int size = paramterList.getLength();
+        for (int i = 0; i < size; i++) {
+            final Element item = (Element) paramterList.item(i);
+            processParamarer(item);
+        }
+
+    }
+
+    private void processParamarer(Element paramter) {
+        final String careProvisionCode = getCareProvisionCode(paramter);
+        LOGGER.debug("careProvisionCode : " + careProvisionCode);
+
+        final String patientId = getPatientId(paramter);
+        LOGGER.debug("patientId : " + patientId);
+
+        final String patientName = getPatientName(paramter);
+        LOGGER.debug("patientName : " + patientName);
     }
 
     /**
      * It returns true, always.
-     * 
+     *
      * @param context the message to process.
      * @return returns true, always.
      */
