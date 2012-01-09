@@ -23,7 +23,15 @@ import org.hl7.v3.QUPCIN043100UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
+ * Utility class able to send PCC9 requests to a given PCC9 end point. <br/> All
+ * the messages send with this class will contain in the SOAP header the result
+ * end point address. The response end point address (URI) is treated according
+ * with the 
+ * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
+ * standards. <br/>
+ * This class can not be extended.
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -46,21 +54,42 @@ final class SendPcc09Message {
         // UNIMPLEMENTED
     }
 
+    /**
+     * Sends a given PCC9 request to a given PCC9 end point and returns the
+     * acknowledge (the response for the request).
+     *
+     * @param query the PCC9 request. It can not be null.
+     * @param endpointURI the URI where the PCC9 end point runs. It can not be
+     * null.
+     * @return the acknowledge (the response for the request)for the given
+     * request.
+     * @throws MalformedURLException if the specified PCC9 end point URI is
+     * malformed.
+     */
     static MCCIIN000002UV01 sendMessage(QUPCIN043100UV01 query, String endpointURI)
             throws MalformedURLException {
 
+        if (query == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The query argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+        }
+
+        if (endpointURI == null || endpointURI.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The endpointURI argument can not be null or empty string.");
+            LOGGER.error(exception.getMessage(), exception);
+        }
+
         final QUPCAR004040UVService service = getQUPCAR004040UVService();
-        
         final URL documentLocation = service.getWSDLDocumentLocation();
         LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
         // here I obtain the service.
         final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
-        setWSAddressHandler(portType);
+        setWSAddressHandler(portType, endpointURI);
 
-        // I set the end point for the 
-        setDefaultEndPointURI(portType, endpointURI);
-        
-        
+        // I set the end point for the PCC9 end point
+        setEndPointURI(portType, endpointURI);
 
         final MCCIIN000002UV01 ack =
                 portType.qupcAR004040UVQUPCIN043100UV(query);
@@ -69,9 +98,14 @@ final class SendPcc09Message {
         return ack;
     }
 
-    private static QUPCAR004040UVService getQUPCAR004040UVService()
-            throws MalformedURLException {
-
+    /**
+     * Returns a proxy instance able to address the PCC9 service. The (returned)
+     * Proxy instance is able to address the PCC9 SOAP based services via a Java
+     * API.
+     *
+     * @return a proxy instance able to address the PCC9 service.
+     */
+    private static QUPCAR004040UVService getQUPCAR004040UVService() {
         final QName qName =
                 new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
         final ClassLoader classLoader = SendPcc09Message.class.getClassLoader();
@@ -80,14 +114,47 @@ final class SendPcc09Message {
         return result;
     }
 
-    private static void setDefaultEndPointURI(QUPCAR004040UVPortType portType, String endpointURI) {
-        final BindingProvider bp = (BindingProvider) portType;
-        final Map<String, Object> reqContext = bp.getRequestContext();
+    /**
+     * Registers a given URI like end point for a given SOAP based service proxy
+     * defined via a port type.
+     *
+     * @param portType the involved SOAP based service (port type). It can not
+     * be null otherwise and exception will raise.
+     * @param endpointURI the URI for the SOAP based service (port type).It can
+     * not be null otherwise and exception will raise.
+     * @throws NullPointerException if the
+     * <code>portType</code> or
+     * <code>endpointURI</code> arguments are null.
+     */
+    private static void setEndPointURI(QUPCAR004040UVPortType portType, String endpointURI) {
+
+        if (portType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The portType argument can no be null");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (endpointURI == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The endpointURI argument can no be null");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        final BindingProvider bindingProvider = (BindingProvider) portType;
+        final Map<String, Object> reqContext = bindingProvider.getRequestContext();
         LOGGER.debug("Usign the  End point : {}", endpointURI);
         reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getWSDLURI(endpointURI));
 //        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8989/testws/pcc9?wsdl");
     }
 
+    /**
+     * Builds a WSDL URI for a given URI.
+     *
+     * @param uri the involved uri.
+     * @return a wsld URI for a given uri.
+     */
     private static String getWSDLURI(String uri) {
         final StringBuffer result = new StringBuffer();
         result.append(uri);
@@ -95,13 +162,31 @@ final class SendPcc09Message {
 
         return result.toString();
     }
-    
-    private static void setWSAddressHandler(QUPCAR004040UVPortType portType) throws MalformedURLException {
-        final BindingProvider bp = (BindingProvider) portType;
-        final Binding binding = bp.getBinding();
+
+    /**
+     * Attaches a SOAP Handler (to a given SOAP based service) that is able to
+     * enrich the SOAP header with response end point related information. The
+     * response end point address (URI) is treated according with the <a
+     * href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
+     * standards. <br/> More precisely if this methods is applied to a given
+     * port type (corresponding to a SOAP based service) then all the messages
+     * send via this services will cary the response end point in the SOAP
+     * message header.
+     *
+     * @param portType the involved SOAP based service (port type). It can not
+     * be null otherwise and exception will raise.
+     * @param endpointURI the URI for the SOAP based service (port type).It can
+     * not be null otherwise and exception will raise.
+     * @throws MalformedURLException
+     */
+    private static void setWSAddressHandler(QUPCAR004040UVPortType portType,
+            String endpointURI)
+            throws MalformedURLException {
+        final BindingProvider bindingProvider = (BindingProvider) portType;
+        final Binding binding = bindingProvider.getBinding();
         final List<Handler> handlerChain = binding.getHandlerChain();
-        final String endpoint = "http://localhost:8080/phrs/pcc09";
-        handlerChain.add(new WSAdressingHeaderEnricher(endpoint));
+        //final String endpoint = "http://localhost:8080/phrs/pcc09";
+        handlerChain.add(new WSAdressingHeaderEnricher(endpointURI));
         binding.setHandlerChain(handlerChain);
     }
 }
