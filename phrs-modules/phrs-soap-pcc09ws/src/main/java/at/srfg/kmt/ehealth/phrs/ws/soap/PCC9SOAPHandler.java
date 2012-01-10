@@ -420,6 +420,6 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     @Override
     public void close(MessageContext mc) {
         LOGGER.debug("{} is closed", PCC9SOAPHandler.class.getName());        
-        // TODO : close the dispatcher
+        dispatcher.shutDown();
     }
 }
