@@ -28,8 +28,8 @@ import org.slf4j.LoggerFactory;
  * Utility class able to send PCC9 requests to a given PCC9 end point. <br/> All
  * the messages send with this class will contain in the SOAP header the result
  * end point address. The response end point address (URI) is treated according
- * with the 
- * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
+ * with the
+ * <a href="http://en.wikipedia.org/wiki/WS-Addressing"> WS-Addressing</a>
  * standards. <br/>
  * This class can not be extended.
  *
@@ -56,17 +56,21 @@ final class SendPcc09Message {
 
     /**
      * Sends a given PCC9 request to a given PCC9 end point and returns the
-     * acknowledge (the response for the request).
+     * acknowledge (the response for the request). The message send contains in
+     * its SOAP header the response URI.
      *
      * @param query the PCC9 request. It can not be null.
      * @param endpointURI the URI where the PCC9 end point runs. It can not be
      * null.
+     * @param responseEndpointURI the URI where the response to the PCC9 request
+     * will be send. It can not be null.
      * @return the acknowledge (the response for the request)for the given
      * request.
      * @throws MalformedURLException if the specified PCC9 end point URI is
      * malformed.
      */
-    static MCCIIN000002UV01 sendMessage(QUPCIN043100UV01 query, String endpointURI)
+    static MCCIIN000002UV01 sendMessage(QUPCIN043100UV01 query,
+            String endpointURI, String responseEndpointURI)
             throws MalformedURLException {
 
         if (query == null) {
@@ -81,12 +85,18 @@ final class SendPcc09Message {
             LOGGER.error(exception.getMessage(), exception);
         }
 
+        if (responseEndpointURI == null || responseEndpointURI.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The responseEndpointURI argument can not be null or empty string.");
+            LOGGER.error(exception.getMessage(), exception);
+        }
+
         final QUPCAR004040UVService service = getQUPCAR004040UVService();
         final URL documentLocation = service.getWSDLDocumentLocation();
         LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
         // here I obtain the service.
         final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
-        setWSAddressHandler(portType, endpointURI);
+        setWSAddressHandler(portType, responseEndpointURI);
 
         // I set the end point for the PCC9 end point
         setEndPointURI(portType, endpointURI);
@@ -126,7 +136,8 @@ final class SendPcc09Message {
      * <code>portType</code> or
      * <code>endpointURI</code> arguments are null.
      */
-    private static void setEndPointURI(QUPCAR004040UVPortType portType, String endpointURI) {
+    private static void setEndPointURI(QUPCAR004040UVPortType portType,
+            String endpointURI) {
 
         if (portType == null) {
             final NullPointerException exception =
@@ -177,7 +188,8 @@ final class SendPcc09Message {
      * be null otherwise and exception will raise.
      * @param endpointURI the URI for the SOAP based service (port type).It can
      * not be null otherwise and exception will raise.
-     * @throws MalformedURLException
+     * @throws MalformedURLException if the URI address specified with the
+     * <code>endpointURI</code> is a malformed.
      */
     private static void setWSAddressHandler(QUPCAR004040UVPortType portType,
             String endpointURI)
