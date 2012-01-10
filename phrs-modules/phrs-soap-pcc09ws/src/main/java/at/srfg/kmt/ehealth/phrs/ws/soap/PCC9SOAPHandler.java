@@ -8,6 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap;
 
 
+import at.srfg.kmt.ehealth.phrs.dispatch.api.Dispatcher;
+import at.srfg.kmt.ehealth.phrs.dispatch.impl.PCC10TaskFactory;
+import at.srfg.kmt.ehealth.phrs.dispatch.impl.SingleDistpatcher;
 import java.util.Iterator;
 import java.util.Set;
 import javax.xml.namespace.QName;
@@ -34,7 +37,8 @@ import org.w3c.dom.NodeList;
  * standard and it it extracted from the SOAP message header. <li> the involved
  * user (patient). This information is extracted from the SOAP message body.
  * <li> the care provision code. This information is extracted from the SOAP
- * message. </ul> <br/> This class is not desing to be extended.
+ * message. </ul> <br/>
+ * This class is not desing to be extended.
  *
  * @author Mihai
  * @version 0.1
@@ -84,13 +88,21 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(PCC9SOAPHandler.class);
+    
+    /**
+     * It holds the URI for the end point (the address where the PCC10 response
+     * will be send).
+     */
+    private String responseEndpointURI;
+    
+    private final Dispatcher dispatcher;
 
     /**
      * Builds a
      * <code>PCC9SOAPHandler</code> instance.
      */
     public PCC9SOAPHandler() {
-        // UNIMPLEMENTED
+        dispatcher = SingleDistpatcher.getDispatcher();
     }
 
     /**
@@ -331,8 +343,8 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         }
 
         final Node wsAdressNode = (Node) nodes.item(0);
-        final String wsAddress = wsAdressNode.getTextContent();
-        LOGGER.debug("Response end point address is {}", wsAddress);
+        responseEndpointURI = wsAdressNode.getTextContent();
+        LOGGER.debug("Response end point address is {}", responseEndpointURI);
     }
 
     /**
@@ -351,6 +363,13 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         }
     }
 
+    /**
+     * Extracts the need it information (for a PCC10 message) from the given 
+     * <code>rg.w3c.dom.Element</code>  and notifies the changes.
+     * 
+     * @param paramter the <code>org.w3c.dom.Element</code> from where the PCC10
+     * required information will be extracted, it can not be null.
+     */
     private void processParamarer(Element paramter) {
         final String careProvisionCode = getCareProvisionCode(paramter);
         LOGGER.debug("Care Provision Code found : {} ", careProvisionCode);
@@ -358,8 +377,30 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         final String patientId = getPatientId(paramter);
         LOGGER.debug("Patient ID Found : {} ", patientId);
 
-        final String patientName = getPatientName(paramter);
-        LOGGER.debug("Patient Name Found : {} ", patientName);
+        final String patientNames = getPatientName(paramter);
+        LOGGER.debug("Patient Name Found : {} ", patientNames);
+        
+        if (responseEndpointURI != null 
+                && careProvisionCode != null 
+                && patientId != null 
+                && patientNames != null) {
+            final Runnable pcc10Task = 
+                    PCC10TaskFactory.buildPCC10Task(responseEndpointURI,
+                    patientId, patientNames, careProvisionCode);
+            notify(pcc10Task);
+        }
+    }
+    
+    /**
+     * Uses the dispatcher to notify the new PCC9 event.
+     * 
+     * @param runnable the task for the runnable, it can notbe null.
+     */
+    private void notify(Runnable pcc10Task) {
+        final DispatcherNotifierTarget target = 
+                new DispatcherNotifierTarget(dispatcher, pcc10Task);
+        final Thread notifyThread = new Thread(target, "phrs-dispatcher");
+        notifyThread.start();
     }
 
     /**
@@ -378,6 +419,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
     @Override
     public void close(MessageContext mc) {
-        LOGGER.debug("{} is closed", PCC9SOAPHandler.class.getName());
+        LOGGER.debug("{} is closed", PCC9SOAPHandler.class.getName());        
+        // TODO : close the dispatcher
     }
 }
