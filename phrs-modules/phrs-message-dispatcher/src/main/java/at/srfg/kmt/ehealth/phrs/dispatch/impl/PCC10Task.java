@@ -64,5 +64,6 @@ final class PCC10Task implements Runnable {
     @Override
     public void run() {
         LOGGER.debug("Tries to execute this tasks with the following properties : {}", properties);
+        LOGGER.debug("Task end.");
     }
 }
