@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * @version 0.1
  * @since 0.1
  */
-public final class DispatcherImpl implements Dispatcher {
+final class DispatcherImpl implements Dispatcher {
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -57,7 +57,7 @@ public final class DispatcherImpl implements Dispatcher {
      *
      * @see #DispatcherImpl(int, int, int)
      */
-    public DispatcherImpl() {
+    DispatcherImpl() {
         this(2, 5, 10);
     }
 
