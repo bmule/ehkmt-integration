@@ -18,10 +18,6 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -260,7 +256,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         final Element careProvisionCode = (Element) ids.item(0);
 
         final NodeList values = careProvisionCode.getElementsByTagName("value");
-        if (ids.getLength() == 0) {
+        if (values.getLength() == 0) {
             return null;
         }
         if (values.getLength() != 1) {
@@ -300,10 +296,10 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         final NodeList nodes = header.getElementsByTagName("wsa:Address");
         final int length = nodes.getLength();
         if (length != 1) {
-            final IllegalStateException illegalStateException =
+            final IllegalStateException exception =
                     new IllegalStateException("The SOAP Header must contain only one WSA Address element.");
-            LOGGER.error(illegalStateException.getMessage(), illegalStateException);
-            throw illegalStateException;
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         final Node wsAdressNode = (Node) nodes.item(0);
