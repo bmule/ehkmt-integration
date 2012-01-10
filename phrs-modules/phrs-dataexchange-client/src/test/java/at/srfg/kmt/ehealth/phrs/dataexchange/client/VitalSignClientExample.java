@@ -99,7 +99,8 @@ public class VitalSignClientExample {
         }
 
         for (DynaBean dynaBean : beans) {
-            DynaBeanUtil.toString(dynaBean);
+            final String toString = DynaBeanUtil.toString(dynaBean);
+            System.out.println(toString);
         }
 
         // TAKE CARE !!!!!!

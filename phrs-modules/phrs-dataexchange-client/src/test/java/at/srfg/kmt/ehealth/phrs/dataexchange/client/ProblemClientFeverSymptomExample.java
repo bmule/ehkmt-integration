@@ -62,11 +62,10 @@ public class ProblemClientFeverSymptomExample {
             beans.add(dynaBean);
         }
 
-
         for (DynaBean dynaBean : beans) {
-            DynaBeanUtil.toString(dynaBean);
+            final String toString = DynaBeanUtil.toString(dynaBean);
+            System.out.println(toString);
         }
-
 
         // TAKE CARE !!!!!!
         // This lines wipe out everithing alfter the client example ends its 
