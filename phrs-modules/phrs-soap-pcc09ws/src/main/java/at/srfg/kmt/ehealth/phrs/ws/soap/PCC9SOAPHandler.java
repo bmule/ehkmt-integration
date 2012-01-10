@@ -28,20 +28,13 @@ import org.w3c.dom.NodeList;
  * The
  * <code>SOAPHandler</code> used to manage and manipulate SOAP header/body
  * information. More precisely this
- * <code>SOAPHandler<code/> implementation
- * extracts
- * <ul>
- * <li> the response end point address (URI). The end point address (URI) is
- * trated according with the
- * <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
- * standard and it it extracted from the SOAP message header.
- * <li> the involved user (patient). This information is extracted from the
- * SOAP message body.
- * <li> the care provision code.  This information is extracted from the
- * SOAP message.
- * </ul>
- * <br/>
- * This class is not desing to be extended.
+ * <code>SOAPHandler</code> implementation extracts <ul> <li> the response end
+ * point address (URI). The end point address (URI) is treated according with
+ * the <a href="http://en.wikipedia.org/wiki/WS-Addressing">WS-Addressing</a>
+ * standard and it it extracted from the SOAP message header. <li> the involved
+ * user (patient). This information is extracted from the SOAP message body.
+ * <li> the care provision code. This information is extracted from the SOAP
+ * message. </ul> <br/> This class is not desing to be extended.
  *
  * @author Mihai
  * @version 0.1
@@ -49,7 +42,41 @@ import org.w3c.dom.NodeList;
  */
 public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
-    private static final String PARAMETER_LIST_ELEMENT_NAME = "parameterList";
+    /**
+     * The XML Tag Name for the Care Provision Code XML Element.
+     */
+    private static final String CARE_PROVISION_CODE_TAG_NAME = "careProvisionCode";
+
+    /**
+     * The XML Element Attribute Name for the Patient Name XML Element.
+     */
+    private static final String PATIENTNAME_TAG_NAME = "patientName";
+
+    /**
+     * The XML Element Attribute Name for the Patient ID XML Element.
+     */
+    private static final String PATIENT_ID_TAG_NAME = "patientId";
+
+    /**
+     * The XML Tag name for the Value XML Element.
+     */
+    private static final String VALUE_TAG_NAME = "value";
+
+    /**
+     * The XML Tag name for the Parameter List XML Element.
+     */
+    private static final String PARAMETER_LIST_TAG_NAME = "parameterList";
+
+    /**
+     * The XML Element Attribute Name for the Code values.
+     */
+    private static final String CODE_ATTRIBUTE_NAME = "code";
+
+    /**
+     * The XML Element Attribute Name for the Extension values.
+     */
+    private static final String EXTENSION_ATTRIBUTE_NAME = "extension";
+
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
@@ -60,7 +87,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * Builds a
-     * <code>PCC9SOAPHandler</code>
+     * <code>PCC9SOAPHandler</code> instance.
      */
     public PCC9SOAPHandler() {
         // UNIMPLEMENTED
@@ -134,7 +161,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
         // TODO : use XPATH !
         final NodeList careProvisionList =
-                paramter.getElementsByTagName("careProvisionCode");
+                paramter.getElementsByTagName(CARE_PROVISION_CODE_TAG_NAME);
         if (careProvisionList.getLength() == 0) {
             return null;
         }
@@ -147,7 +174,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         final Element careProvisionCode = (Element) careProvisionList.item(0);
 
 
-        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        final NodeList values = careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
         if (values.getLength() == 0) {
             return null;
         }
@@ -158,7 +185,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             throw exception;
         }
         final Element value = (Element) values.item(0);
-        final String result = value.getAttribute("code");
+        final String result = value.getAttribute(CODE_ATTRIBUTE_NAME);
         return result;
     }
 
@@ -189,7 +216,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
         // TODO : use XPATH !
         final NodeList names =
-                paramter.getElementsByTagName("patientName");
+                paramter.getElementsByTagName(PATIENTNAME_TAG_NAME);
         if (names.getLength() == 0) {
             return null;
         }
@@ -201,7 +228,8 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         }
         final Element careProvisionCode = (Element) names.item(0);
 
-        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        final NodeList values =
+                careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
         if (values.getLength() == 0) {
             return null;
         }
@@ -243,7 +271,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
         // TODO : use XPATH !
         final NodeList ids =
-                paramter.getElementsByTagName("patientId");
+                paramter.getElementsByTagName(PATIENT_ID_TAG_NAME);
         if (ids.getLength() == 0) {
             return null;
         }
@@ -255,7 +283,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
         }
         final Element careProvisionCode = (Element) ids.item(0);
 
-        final NodeList values = careProvisionCode.getElementsByTagName("value");
+        final NodeList values = careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
         if (values.getLength() == 0) {
             return null;
         }
@@ -266,7 +294,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             throw exception;
         }
         final Element value = (Element) values.item(0);
-        final String result = value.getAttribute("extension");
+        final String result = value.getAttribute(EXTENSION_ATTRIBUTE_NAME);
         return result;
     }
 
@@ -315,24 +343,23 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      * @param body the body to process.
      */
     private void process(SOAPBody body) {
-        final NodeList paramterList = body.getElementsByTagName(PARAMETER_LIST_ELEMENT_NAME);
+        final NodeList paramterList = body.getElementsByTagName(PARAMETER_LIST_TAG_NAME);
         final int size = paramterList.getLength();
         for (int i = 0; i < size; i++) {
             final Element item = (Element) paramterList.item(i);
             processParamarer(item);
         }
-
     }
 
     private void processParamarer(Element paramter) {
         final String careProvisionCode = getCareProvisionCode(paramter);
-        LOGGER.debug("careProvisionCode : " + careProvisionCode);
+        LOGGER.debug("Care Provision Code found : {} ", careProvisionCode);
 
         final String patientId = getPatientId(paramter);
-        LOGGER.debug("patientId : " + patientId);
+        LOGGER.debug("Patient ID Found : {} ", patientId);
 
         final String patientName = getPatientName(paramter);
-        LOGGER.debug("patientName : " + patientName);
+        LOGGER.debug("Patient Name Found : {} ", patientName);
     }
 
     /**
