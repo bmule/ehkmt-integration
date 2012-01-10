@@ -22,10 +22,12 @@ import org.slf4j.LoggerFactory;
  * end-point. To run this class this class from the command line and maven use
  * the following command :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendSimplePcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testws"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendSimplePcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews"
  * </pre>
- * <b>Note : </b> the end-point where the PCC9 request will send is specified
- * with the "-Dexec.args=" statement. <br/>
+ * <b>Note : </b> the first argument (for the main method) is the end-point,
+ * this is the URI where the PCC9 request will send. 
+ * <b>Note : </b> the second argument (for the main method) is the
+ * response-end-point, this is the URI where the PCC10 response will send. <br/>
  * This class is not design to be extended.
  *
  * @author mihai
@@ -64,7 +66,7 @@ public final class SendSimplePcc09MessageExample {
      */
     public static void main(String... args)
             throws JAXBException, MalformedURLException {
-        if (args == null || args.length != 1) {
+        if (args == null || args.length != 2) {
             final IllegalArgumentException exception =
                     new IllegalArgumentException("One argument expected (the PCC9 end point URI).");
             LOGGER.error(exception.getMessage(), exception);
@@ -72,10 +74,11 @@ public final class SendSimplePcc09MessageExample {
         }
 
         final String endpointURI = args[0];
+        final String responseURI = args[1];
         final QUPCIN043100UV01 pcc9Request = QueryFactory.buildEmptyPCC9Request();
         LOGGER.info("Tries to send a PCC9 query ({}) to {}", pcc9Request, endpointURI);
         final MCCIIN000002UV01 ack =
-                SendPcc09Message.sendMessage(pcc9Request, endpointURI);
+                SendPcc09Message.sendMessage(pcc9Request, endpointURI, responseURI);
         LOGGER.info("Acknowledge (respense) is : {}.", ack);
     }
 }
