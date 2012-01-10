@@ -26,4 +26,9 @@ public interface Dispatcher {
      * @param task the task to be dispatch.
      */
     void dispatch(Runnable task);
+    
+    /**
+     * Close this Dispatcher.
+     */
+    void shutDown();
 }

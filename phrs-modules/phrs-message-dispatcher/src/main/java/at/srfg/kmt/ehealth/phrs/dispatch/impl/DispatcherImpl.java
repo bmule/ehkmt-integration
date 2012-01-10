@@ -99,6 +99,7 @@ final class DispatcherImpl implements Dispatcher {
     /**
      * Shot down this dispatcher, after this this dispatcher can not be used.
      */
+    @Override
     public void shutDown() {
         pool.shutdown();
         LOGGER.debug("Actual task count is : {}", queue.size());
