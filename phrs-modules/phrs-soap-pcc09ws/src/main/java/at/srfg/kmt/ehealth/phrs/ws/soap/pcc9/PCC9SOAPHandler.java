@@ -9,8 +9,8 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
 import at.srfg.kmt.ehealth.phrs.dispatch.api.Dispatcher;
-import at.srfg.kmt.ehealth.phrs.dispatch.impl.PCC10TaskFactory;
 import at.srfg.kmt.ehealth.phrs.dispatch.impl.SingleDistpatcher;
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.PCC10TaskFactory;
 import java.util.Iterator;
 import java.util.Set;
 import javax.xml.namespace.QName;
