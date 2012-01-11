@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * Vital Signs request to a given end-point. To run this class this class from
  * the command line and maven use the following command :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.SendVitalSignPCC10Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testPCC10ws http://localhost:8080/responsews"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.SendVitalSignPCC10Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testPCC10ws"
  * </pre> <b>Note : </b> the first argument (for the main method) is the
  * end-point, this is the URI where the PCC10 request will send. <b>Note : </b>
  * the second argument (for the main method) is the response-end-point, this is
