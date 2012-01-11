@@ -7,12 +7,16 @@
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap.simple;
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVWebService;
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVWebService;
+
 import javax.xml.ws.Endpoint;
 
 /**
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.ihe.TestEndPoint -Dexec.classpathScope=test<br/>
+ * Runnable class used to start a dummy web service end point. 
+ * To run this class from maven environment use :
+ * <pre>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.simple.TestEndPoint -Dexec.classpathScope=test<br/>
+ * </pre>
+ *
  * @author mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
@@ -20,7 +24,9 @@ import javax.xml.ws.Endpoint;
 public class TestEndPoint {
 
     public static void main(String ...arg) {
-        System.out.println("End point starts");
-        Endpoint.publish("http://localhost:8989/testws", new QUPCAR004030UVWebService());
+        System.out.println("End point starts ");
+        final String testWSURI = "http://localhost:8989/testws";
+        Endpoint.publish(testWSURI, new TestServiceImpl());
+        //Endpoint.publish(testWSURI, new QUPCAR004030UVWebService());
     }
 }
