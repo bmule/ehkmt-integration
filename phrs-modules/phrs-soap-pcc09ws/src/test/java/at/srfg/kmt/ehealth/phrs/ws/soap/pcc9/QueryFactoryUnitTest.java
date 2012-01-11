@@ -5,9 +5,11 @@
  * Date : Apr 11, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.Util;
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.QueryFactory;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

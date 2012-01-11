@@ -5,7 +5,7 @@
  * Date : Apr 7, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
 import at.srfg.kmt.ehealth.phrs.dispatch.api.Dispatcher;

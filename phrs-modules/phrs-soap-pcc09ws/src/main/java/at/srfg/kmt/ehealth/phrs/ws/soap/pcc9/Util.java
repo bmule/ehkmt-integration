@@ -5,7 +5,7 @@
  * Date : Dec 22, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
 import java.io.Serializable;

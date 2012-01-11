@@ -6,7 +6,7 @@
  * User : Mihai Radulescu
  */
 
-package at.srfg.kmt.ehealth.phrs.ws.soap;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
 /**

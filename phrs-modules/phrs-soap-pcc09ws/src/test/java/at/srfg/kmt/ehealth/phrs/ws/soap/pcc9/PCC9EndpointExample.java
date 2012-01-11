@@ -5,9 +5,10 @@
  * Date : Dec 9, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.PCC9Endpoint;
 import java.net.MalformedURLException;
 
 /**
