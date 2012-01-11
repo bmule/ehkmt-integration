@@ -1,7 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.ProblemEntryPCC10;
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
