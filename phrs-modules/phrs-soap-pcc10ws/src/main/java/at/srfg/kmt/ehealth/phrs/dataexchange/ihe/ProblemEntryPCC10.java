@@ -7,14 +7,14 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
 
-import static at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVUtil.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
+import static at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
+import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
