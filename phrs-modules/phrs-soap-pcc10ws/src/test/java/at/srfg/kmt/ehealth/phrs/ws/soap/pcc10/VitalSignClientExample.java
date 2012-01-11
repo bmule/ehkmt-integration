@@ -1,10 +1,10 @@
-package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.ihe.VitalSignPCC10;
-import at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVUtil;
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.VitalSignPCC10;
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;

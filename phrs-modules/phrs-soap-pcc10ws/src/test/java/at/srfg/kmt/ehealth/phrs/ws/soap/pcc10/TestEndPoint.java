@@ -5,8 +5,9 @@
  * Date : Dec 9, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
+import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVWebService;
 import javax.xml.ws.Endpoint;
 
 /**
