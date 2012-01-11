@@ -102,7 +102,7 @@ final class SendPcc10Message {
      */
     private static QUPCAR004030UVService getQUPCAR004040UVService() {
         final QName qName =
-                new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
+                new QName("urn:hl7-org:v3", "QUPC_AR004030UV_Service");
         final ClassLoader classLoader = SendPcc10Message.class.getClassLoader();
         final URL url = classLoader.getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
         final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
