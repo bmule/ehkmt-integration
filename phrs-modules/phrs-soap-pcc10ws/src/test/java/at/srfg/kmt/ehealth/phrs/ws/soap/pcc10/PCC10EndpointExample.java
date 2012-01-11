@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.PCC10Endpoint;
 import java.net.MalformedURLException;
 
 /**
@@ -18,7 +17,7 @@ import java.net.MalformedURLException;
  * a port (integer) and a path context. <br/>
  * To run this class from maven environment use :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.PCC10EndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8989 testws/pcc10"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.PCC10EndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8989 testws/pcc10"
  * </pre>
  * <b>Note : </b> this class requires three arguments a host, a port and a path.
  *

@@ -27,7 +27,7 @@ import org.hl7.v3.QUPCIN043200UV01;
  * target/log.out)<br/> 
  * To run this class from maven environment use :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemClientFeverSymptomExample -Dexec.classpathScope=test<br/>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.ProblemClientFeverSymptomExample -Dexec.classpathScope=test<br/>
  * </pre>
  * Take care this command does not compile the classes. <br/>
  * <b>Nota Bene : </b> this class will remove/clean the triplestore related 
