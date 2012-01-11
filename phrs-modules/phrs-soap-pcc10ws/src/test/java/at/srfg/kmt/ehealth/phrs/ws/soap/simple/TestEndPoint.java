@@ -24,8 +24,8 @@ import javax.xml.ws.Endpoint;
 public class TestEndPoint {
 
     public static void main(String ...arg) {
-        System.out.println("End point starts ");
         final String testWSURI = "http://localhost:8989/testws";
+        System.out.println("End point starts on " + testWSURI);
         Endpoint.publish(testWSURI, new TestServiceImpl());
         //Endpoint.publish(testWSURI, new QUPCAR004030UVWebService());
     }
