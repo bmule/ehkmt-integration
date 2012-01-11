@@ -5,7 +5,7 @@
  * Date : Aug 28, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import java.io.File;
 import java.io.InputStream;

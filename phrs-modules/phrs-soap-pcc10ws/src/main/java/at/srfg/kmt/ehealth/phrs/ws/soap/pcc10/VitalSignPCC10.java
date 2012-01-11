@@ -5,9 +5,9 @@
  * Date : Aug 27, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
-import static at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVUtil.*;
+import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import java.util.ArrayList;
 import java.util.Collection;

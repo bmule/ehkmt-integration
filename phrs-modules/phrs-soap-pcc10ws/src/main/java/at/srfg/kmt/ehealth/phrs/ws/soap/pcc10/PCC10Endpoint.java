@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
-import at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVWebService;
 import java.net.MalformedURLException;
 import javax.xml.ws.Endpoint;
 import org.slf4j.Logger;

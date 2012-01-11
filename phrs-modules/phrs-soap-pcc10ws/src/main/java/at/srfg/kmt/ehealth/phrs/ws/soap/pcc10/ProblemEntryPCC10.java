@@ -5,10 +5,10 @@
  * Date : Aug 27, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.dataexchange.ihe;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
-import static at.srfg.kmt.ehealth.phrs.dataexchange.ihe.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
+import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import java.util.ArrayList;
 import java.util.Collection;
