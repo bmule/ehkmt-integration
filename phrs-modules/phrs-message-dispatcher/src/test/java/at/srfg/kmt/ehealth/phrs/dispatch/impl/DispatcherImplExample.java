@@ -48,10 +48,13 @@ public final class DispatcherImplExample {
      */
     public static void main(String... args) {
         final DispatcherImpl dispatcher = new DispatcherImpl();
-        final Runnable task = PCC10TaskFactory.buildPCC10Task("End Point", 
-                "PATIENT_ID", 
-                "PATIENT_NAME", 
-                "CARE_PROVISION_CODE");
+        final Runnable task = new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("Here it goes");
+            }
+        };
         dispatcher.dispatch(task);
     }
 }
