@@ -62,7 +62,7 @@ final class SendPcc10Message {
      * malformed.
      */
     static MCCIIN000002UV01 sendMessage(QUPCIN043200UV01 query,
-            String endpointURI, String responseEndpointURI)
+            String endpointURI)
             throws MalformedURLException {
 
         if (query == null) {
@@ -74,12 +74,6 @@ final class SendPcc10Message {
         if (endpointURI == null || endpointURI.isEmpty()) {
             final NullPointerException exception =
                     new NullPointerException("The endpointURI argument can not be null or empty string.");
-            LOGGER.error(exception.getMessage(), exception);
-        }
-
-        if (responseEndpointURI == null || responseEndpointURI.isEmpty()) {
-            final NullPointerException exception =
-                    new NullPointerException("The responseEndpointURI argument can not be null or empty string.");
             LOGGER.error(exception.getMessage(), exception);
         }
 
