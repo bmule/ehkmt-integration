@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Runnable class able to sends a <a
- * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * Vital Signs request to a given end-point. To run this class this class from
+ * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> (that contains
+ * a Problem) request to a given end-point. To run this class this class from
  * the command line and maven use the following command :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.SendProblemFatiquePCC10Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8989/testws/pcc10"
