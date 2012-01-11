@@ -15,7 +15,7 @@ import javax.jws.WebService;
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
-@WebService(endpointInterface="at.srfg.kmt.ehealth.phrs.dataexchange.ihe.TestService")
+@WebService(endpointInterface="at.srfg.kmt.ehealth.phrs.ws.soap.simple.TestService")
 public class TestServiceImpl implements  TestService {
 
     @Override
