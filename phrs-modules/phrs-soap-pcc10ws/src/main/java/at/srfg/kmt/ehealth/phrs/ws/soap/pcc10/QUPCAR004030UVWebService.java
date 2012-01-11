@@ -8,13 +8,14 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
+import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.bind.JAXBException;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
 import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
  * @since 1.0-SNAPSHOT
  */
 @WebService(endpointInterface = "org.hl7.v3.QUPCAR004030UVPortType")
+@HandlerChain(file = "handler-chain.xml")
 public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
 
     /**
@@ -52,7 +54,6 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
             throw nullException;
             // FIXME : singals the error back to the client.
         }
-
         
         // FIXME : link it to the result factory !
         return null;
