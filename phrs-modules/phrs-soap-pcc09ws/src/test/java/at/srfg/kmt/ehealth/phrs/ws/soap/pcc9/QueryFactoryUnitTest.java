@@ -8,8 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.Util;
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.QueryFactory;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,7 +36,7 @@ public final class QueryFactoryUnitTest {
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.QueryFactoryUnitTest</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.QueryFactoryUnitTest</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(QueryFactoryUnitTest.class);

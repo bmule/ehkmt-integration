@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * end-point. To run this class this class from the command line and maven use
  * the following command :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.SendSimplePcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendSimplePcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews"
  * </pre>
  * <b>Note : </b> the first argument (for the main method) is the end-point,
  * this is the URI where the PCC9 request will send. 
@@ -40,7 +40,7 @@ public final class SendSimplePcc09MessageExample {
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09MessageExample</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendPcc09MessageExample</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SendSimplePcc09MessageExample.class);

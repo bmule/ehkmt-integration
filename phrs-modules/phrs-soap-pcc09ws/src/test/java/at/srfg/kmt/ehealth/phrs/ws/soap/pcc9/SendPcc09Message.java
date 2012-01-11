@@ -43,7 +43,7 @@ final class SendPcc09Message {
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.SendPcc09Message</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendPcc09Message</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SendPcc09Message.class);
