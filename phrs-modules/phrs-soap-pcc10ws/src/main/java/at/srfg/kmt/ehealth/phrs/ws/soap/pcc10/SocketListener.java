@@ -95,6 +95,6 @@ public class SocketListener {
         Consumer c = new Consumer(q);
         new Thread(p).start();
         new Thread(c).start();
-
+        LOGGER.info("SocketListener started on localhost:5578");
     }
 }
