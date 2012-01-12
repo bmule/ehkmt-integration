@@ -45,19 +45,6 @@
             <version>${log4j.version}</version>
         </dependency>
         
-        <dependency>
-            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>phrs-message-dispatcher</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>at.srfg.kmt.ehealth.phrs</groupId>
-            <artifactId>phrs-soap-pcc10ws</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        
     </dependencies>
     
     <build>
