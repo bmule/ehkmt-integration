@@ -77,7 +77,7 @@ final class SendPcc10Message {
             LOGGER.error(exception.getMessage(), exception);
         }
 
-        final QUPCAR004030UVService service = getQUPCAR004040UVService();
+        final QUPCAR004030UVService service = getQUPCAR004030UVService();
         final URL documentLocation = service.getWSDLDocumentLocation();
         LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
         // here I obtain the service.
@@ -100,7 +100,7 @@ final class SendPcc10Message {
      *
      * @return a proxy instance able to address the PCC10 service.
      */
-    private static QUPCAR004030UVService getQUPCAR004040UVService() {
+    private static QUPCAR004030UVService getQUPCAR004030UVService() {
         final QName qName =
                 new QName("urn:hl7-org:v3", "QUPC_AR004030UV_Service");
         final ClassLoader classLoader = SendPcc10Message.class.getClassLoader();
