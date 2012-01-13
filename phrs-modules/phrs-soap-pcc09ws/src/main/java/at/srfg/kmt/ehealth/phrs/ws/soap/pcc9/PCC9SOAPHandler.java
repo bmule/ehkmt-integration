@@ -396,7 +396,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param runnable the task for the runnable, it can notbe null.
      */
-    private void notify(String host, int port, Map<String, String> params) {
+  private void notify(String host, int port, Map<String, String> params) {
         LOGGER.debug("Tries to dispatch {} ", params);
         try {
             final Socket socket = new Socket(host, port);
