@@ -82,6 +82,9 @@ public class PCC9Endpoint {
     public void start() throws MalformedURLException {
         LOGGER.info("PCC9 endpoint runs on {}", endpointURI);
         final QUPCAR004040UVWebService webService = new QUPCAR004040UVWebService();
-        Endpoint.publish(endpointURI, webService);
+        //Endpoint.publish(endpointURI, webService);
+        
+        final Endpoint endpoint = Endpoint.create(webService);
+        endpoint.publish(endpointURI);
     }
 }
