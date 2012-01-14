@@ -107,7 +107,7 @@ public class PCC9SecureEndpoint {
     }
 
     private void start(String host, int port, String context,
-            String keysoreFile, String keyStorePasswd) throws NoSuchAlgorithmException, KeyStoreException {
+            String keysoreFile, String keyStorePasswd) throws Exception {
 
         final SSLContext ssl;
         try {
