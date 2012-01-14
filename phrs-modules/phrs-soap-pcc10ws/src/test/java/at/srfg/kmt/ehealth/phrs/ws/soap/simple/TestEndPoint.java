@@ -26,7 +26,7 @@ public class TestEndPoint {
     public static void main(String ...arg) {
         final String testWSURI = "http://localhost:8989/testws";
         System.out.println("End point starts on " + testWSURI);
-        Endpoint.publish(testWSURI, new TestServiceImpl());
-        //Endpoint.publish(testWSURI, new QUPCAR004030UVWebService());
+        final Endpoint ep = Endpoint.create(new TestServiceImpl());
+        ep.publish(testWSURI);
     }
 }
