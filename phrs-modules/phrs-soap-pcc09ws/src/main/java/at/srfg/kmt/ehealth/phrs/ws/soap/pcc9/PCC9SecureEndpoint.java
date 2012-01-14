@@ -11,13 +11,13 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpsConfigurator;
 import com.sun.net.httpserver.HttpsServer;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.security.*;
-import java.security.cert.CertificateException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.logging.Level;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
@@ -47,10 +47,11 @@ public class PCC9SecureEndpoint {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(PCC9SecureEndpoint.class);
 
-    /**
-     * The URL for end point.
-     */
-    private final String endpointURI;
+    private final String context;
+
+    private final int port;
+
+    private final String host;
 
     /**
      * Builds a end point for <a
@@ -64,57 +65,82 @@ public class PCC9SecureEndpoint {
      * <code>host</code> or the
      * <code>path</code> is null.
      */
-    public PCC9SecureEndpoint(String host, int port, String path) {
+    public PCC9SecureEndpoint(String host, int port, String context) {
 
         if (host == null) {
             final NullPointerException exception =
                     new NullPointerException("The host argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
-        if (path == null) {
+        if (context == null) {
             final NullPointerException exception =
                     new NullPointerException("The path argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
-        final StringBuilder builder = new StringBuilder("http://");
-        builder.append(host);
-        builder.append(":");
-        builder.append(port);
-        builder.append("/");
-        builder.append(path);
-        endpointURI = builder.toString();
+        if (!context.startsWith("/")) {
+            this.context = "/" + context;
+        } else {
+            this.context = context;
+        }
+
+
+        this.port = port;
+        this.host = host;
     }
 
-    /**
-     * Starts the end point.
-     *
-     * @throws MalformedURLException if the URL defined in the constructor is
-     * malformated.
-     */
-    public void start() throws MalformedURLException {
-        LOGGER.info("PCC9 endpoint runs on {}", endpointURI);
+    private String buildURI(String host, int port, String context) {
+        final StringBuilder result = new StringBuilder("https://");
+        result.append(host);
+        result.append(":");
+        result.append(port);
+        result.append(context);
 
-
-
-        final QUPCAR004040UVWebService webService = new QUPCAR004040UVWebService();
-        Endpoint.publish(endpointURI, webService);
+        return result.toString();
     }
 
-    private void d() throws NoSuchAlgorithmException, KeyStoreException, FileNotFoundException, IOException, CertificateException, UnrecoverableKeyException, KeyManagementException {
-        SSLContext ssl = SSLContext.getInstance("TLS");
+    public void start() throws Exception {
+        start(host, port, context, "srfg-phrs-core-keystore.ks", "icardea");
+    }
 
-        KeyManagerFactory keyFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-        KeyStore store = KeyStore.getInstance("JKS");
+    private void start(String host, int port, String context,
+            String keysoreFile, String keyStorePasswd) throws NoSuchAlgorithmException, KeyStoreException {
 
-        final String keyPass = "1234567";
-        store.load(new FileInputStream("keystoreFile"), keyPass.toCharArray());
+        final SSLContext ssl;
+        try {
+            ssl = SSLContext.getInstance("TLS");
+        } catch (NoSuchAlgorithmException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
-        keyFactory.init(store, keyPass.toCharArray());
+        final KeyManagerFactory keyFactory =
+                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+        final KeyStore store;
+        try {
+            store = KeyStore.getInstance("JKS");
+        } catch (KeyStoreException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
+        final ClassLoader classLoader = PCC9SecureEndpoint.class.getClassLoader();
+        final InputStream stream =
+                classLoader.getResourceAsStream(keysoreFile);
+        if (stream == null) {
+            final String msg =
+                    String.format("The key store file named %s can not be located in the classpath.", keysoreFile);
+            final NullPointerException exception = new NullPointerException(msg);
+            LOGGER.error(exception.getMessage(), exception);
+        }
 
-        TrustManagerFactory trustFactory = 
+        store.load(stream, keyStorePasswd.toCharArray());
+        keyFactory.init(store, keyStorePasswd.toCharArray());
+
+        final TrustManagerFactory trustFactory =
                 TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 
         trustFactory.init(store);
@@ -122,17 +148,18 @@ public class PCC9SecureEndpoint {
         ssl.init(keyFactory.getKeyManagers(),
                 trustFactory.getTrustManagers(), new SecureRandom());
 
-        HttpsConfigurator configurator = new HttpsConfigurator(ssl);
-
-        HttpsServer httpsServer = HttpsServer.create(new InetSocketAddress("localhost", 8989), 8989);
+        final HttpsConfigurator configurator = new HttpsConfigurator(ssl);
+        final HttpsServer httpsServer = HttpsServer.create(new InetSocketAddress(host, port), port);
 
         httpsServer.setHttpsConfigurator(configurator);
 
-        HttpContext httpContext = httpsServer.createContext(endpointURI);
+        final HttpContext httpContext = httpsServer.createContext(context);
 
         httpsServer.start();
-        
+
         final QUPCAR004040UVWebService webService = new QUPCAR004040UVWebService();
+        final String endpointURI = buildURI(host, port, context);
+        LOGGER.info("PCC9 Safe endpoint runs on {}", endpointURI);
         final Endpoint endpoint = Endpoint.create(endpointURI, webService);
         endpoint.publish(httpContext);
     }
