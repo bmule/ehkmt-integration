@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.QueryFactory;
 import java.net.MalformedURLException;
 import javax.xml.bind.JAXBException;
 import org.hl7.v3.MCCIIN000002UV01;
