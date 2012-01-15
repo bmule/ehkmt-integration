@@ -51,6 +51,8 @@ public class PCC9SecureEndpoint {
     private final int port;
 
     private final String host;
+    private final String keystoreFile;
+    private final String keystorePassword;
 
     /**
      * Builds a end point for <a
@@ -64,7 +66,8 @@ public class PCC9SecureEndpoint {
      * <code>host</code> or the
      * <code>path</code> is null.
      */
-    public PCC9SecureEndpoint(String host, int port, String context) {
+    public PCC9SecureEndpoint(String host, int port, String context,
+            String keystoreFile, String keystorePassword) {
 
         if (host == null) {
             final NullPointerException exception =
@@ -86,9 +89,24 @@ public class PCC9SecureEndpoint {
             this.context = context;
         }
 
+        if (keystoreFile == null || keystoreFile.isEmpty()) {
+            final NullPointerException exception =
+                    new NullPointerException("The keystoreFile argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
+        if (keystorePassword == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The keystorePassword argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        
         this.port = port;
         this.host = host;
+        this.keystoreFile = keystoreFile;
+        this.keystorePassword = keystorePassword;
     }
 
     private String buildURI(String host, int port, String context) {
@@ -102,7 +120,8 @@ public class PCC9SecureEndpoint {
     }
 
     public void start() throws Exception {
-        start(host, port, context, "srfg-phrs-core-keystore.ks", "icardea");
+//        start(host, port, context, "srfg-phrs-core-keystore.ks", "icardea");
+        start(host, port, context, keystoreFile, keystorePassword);
     }
 
     private void start(String host, int port, String context,
