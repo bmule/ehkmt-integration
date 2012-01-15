@@ -177,7 +177,7 @@ public class PCC9SecureEndpoint {
         final QUPCAR004040UVWebService webService = new QUPCAR004040UVWebService();
         final String endpointURI = buildURI(host, port, context);
         LOGGER.info("PCC9 Safe endpoint runs on {}", endpointURI);
-        final Endpoint endpoint = Endpoint.create(endpointURI, webService);
+        final Endpoint endpoint = Endpoint.create(webService);
         endpoint.publish(httpContext);
     }
 }
