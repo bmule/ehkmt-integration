@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.WSAdressingHeaderEnricher;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
