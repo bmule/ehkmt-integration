@@ -107,6 +107,12 @@ final class SendPcc09Message {
 
         return ack;
     }
+    
+    static MCCIIN000002UV01 sendSecureMessage(QUPCIN043100UV01 query,
+            String endpointURI, String responseEndpointURI)
+            throws MalformedURLException {
+        return null;
+    }
 
     /**
      * Returns a proxy instance able to address the PCC9 service. The (returned)
