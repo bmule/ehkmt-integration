@@ -5,6 +5,6 @@ clear
 
 mvn clean compile
 mvn test-compile
-mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.PCC9SecureEndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8089 testws/pcc9" -X
+mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.PCC9SecureEndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8089 testws/pcc9"
 
 
