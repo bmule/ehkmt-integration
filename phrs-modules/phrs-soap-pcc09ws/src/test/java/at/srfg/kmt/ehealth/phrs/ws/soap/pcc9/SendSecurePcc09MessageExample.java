@@ -75,8 +75,10 @@ public final class SendSecurePcc09MessageExample {
 
         final String endpointURI = args[0];
         final String responseURI = args[1];
-        final String keystoreFilePath = "/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/etc/ssl/jss-cacerts";
-        final String keystoreFilePassword = "icardea";
+        //        final String keystoreFilePath = "/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/etc/ssl/srfg-phrs-core-keystore.ks";
+        //        final String keystoreFilePassword = "icardea";
+        final String keystoreFilePath = args[2];
+        final String keystoreFilePassword = args[3];
 
 
         final String careProvisionCode = "MEDLIST";
