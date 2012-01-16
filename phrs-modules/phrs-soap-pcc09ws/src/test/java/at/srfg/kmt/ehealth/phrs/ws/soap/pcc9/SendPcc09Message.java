@@ -28,10 +28,8 @@ import org.slf4j.LoggerFactory;
  * Utility class able to send PCC9 requests to a given PCC9 end point. <br/> All
  * the messages send with this class will contain in the SOAP header the result
  * end point address. The response end point address (URI) is treated according
- * with the
- * <a href="http://en.wikipedia.org/wiki/WS-Addressing"> WS-Addressing</a>
- * standards. <br/>
- * This class can not be extended.
+ * with the <a href="http://en.wikipedia.org/wiki/WS-Addressing">
+ * WS-Addressing</a> standards. <br/> This class can not be extended.
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -77,18 +75,21 @@ final class SendPcc09Message {
             final NullPointerException exception =
                     new NullPointerException("The query argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         if (endpointURI == null || endpointURI.isEmpty()) {
             final NullPointerException exception =
                     new NullPointerException("The endpointURI argument can not be null or empty string.");
             LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         if (responseEndpointURI == null || responseEndpointURI.isEmpty()) {
             final NullPointerException exception =
                     new NullPointerException("The responseEndpointURI argument can not be null or empty string.");
             LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         final QUPCAR004040UVService service = getQUPCAR004040UVService();
@@ -107,11 +108,48 @@ final class SendPcc09Message {
 
         return ack;
     }
-    
+
+    /**
+     * Sends secure (SSL) a given PCC9 request to a given PCC9 end point and 
+     * returns the acknowledge (the response for the request). 
+     * The message send contains in its SOAP header the response URI.
+     *
+     * @param query the PCC9 request. It can not be null.
+     * @param endpointURI the URI where the PCC9 end point runs. It can not be
+     * null.
+     * @param responseEndpointURI the URI where the response to the PCC9 request
+     * will be send. It can not be null.
+     * @param certPath the path for the SSL certificate file, it can not be null.
+     * @param certPassword the password for the SSL certificate file, it can not
+     * be null.
+     * @return the acknowledge (the response for the request)for the given
+     * request.
+     * @throws MalformedURLException if the specified PCC9 end point URI is
+     * malformed.
+     */
     static MCCIIN000002UV01 sendSecureMessage(QUPCIN043100UV01 query,
-            String endpointURI, String responseEndpointURI)
-            throws MalformedURLException {
-        return null;
+            String endpointURI, String responseEndpointURI, String certPath,
+            String certPassword) throws MalformedURLException {
+
+        if (certPath == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The certPath argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (certPassword == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The certPassword argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+
+        SSLClient.sslSetup(certPath, certPassword);
+
+        final MCCIIN000002UV01 ack = sendMessage(query, endpointURI, responseEndpointURI);
+        return ack;
     }
 
     /**
