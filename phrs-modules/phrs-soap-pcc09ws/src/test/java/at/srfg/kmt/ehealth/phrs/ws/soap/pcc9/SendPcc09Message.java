@@ -119,8 +119,8 @@ final class SendPcc09Message {
      * null.
      * @param responseEndpointURI the URI where the response to the PCC9 request
      * will be send. It can not be null.
-     * @param certPath the path for the SSL certificate file, it can not be null.
-     * @param certPassword the password for the SSL certificate file, it can not
+     * @param keystoreFilePath the path for the SSL certificate file, it can not be null.
+     * @param keystoreFilePassword the password for the SSL certificate file, it can not
      * be null.
      * @return the acknowledge (the response for the request)for the given
      * request.
@@ -128,17 +128,17 @@ final class SendPcc09Message {
      * malformed.
      */
     static MCCIIN000002UV01 sendSecureMessage(QUPCIN043100UV01 query,
-            String endpointURI, String responseEndpointURI, String certPath,
-            String certPassword) throws MalformedURLException {
+            String endpointURI, String responseEndpointURI, String keystoreFilePath,
+            String keystoreFilePassword) throws MalformedURLException {
 
-        if (certPath == null) {
+        if (keystoreFilePath == null) {
             final NullPointerException exception =
                     new NullPointerException("The certPath argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
-        if (certPassword == null) {
+        if (keystoreFilePassword == null) {
             final NullPointerException exception =
                     new NullPointerException("The certPassword argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
@@ -146,7 +146,7 @@ final class SendPcc09Message {
         }
 
 
-        SSLClient.sslSetup(certPath, certPassword);
+        SSLClient.sslSetup(keystoreFilePath, keystoreFilePassword);
 
         final MCCIIN000002UV01 ack = sendMessage(query, endpointURI, responseEndpointURI);
         return ack;
