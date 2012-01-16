@@ -29,12 +29,15 @@ public class SSLClient {
     private static final String SSL_STORE_PASSWORD = 
             "javax.net.ssl.trustStorePassword";
 
-    static void sslSetup(String certPath, String password) {
+    public static void sslSetup(String certPath, String password) {
         System.setProperty(HANDLER_PKGS, SUN_SSL_PROTOCOL);
+        
         final Provider provider = new Provider();
         Security.addProvider(provider);
+        
         System.setProperty(SSL_STORE_PROTOCOL, certPath);
         System.setProperty(SSL_STORE_PASSWORD, password);
+        
         System.out.println("The SSL comunication was enabled");
     }
 }
