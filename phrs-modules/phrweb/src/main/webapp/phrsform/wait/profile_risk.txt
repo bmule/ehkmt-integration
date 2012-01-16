@@ -1,3 +1,0 @@
-change visability of ppet and ppet begin and end time
-					<checkbox id="ppallDay"
-						onCheck='ppbt.visible = !self.checked;ppet.visible = !self.checked' />

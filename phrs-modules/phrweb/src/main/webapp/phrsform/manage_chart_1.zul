@@ -1,7 +1,0 @@
-<?page title="new page title" contentType="text/html;charset=UTF-8"?>
-<zk>
-<window id="chart1" title="${labels.default.chart.label}" border="none" width="100%" mode="embedded"
-		apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.PatientEducationComposer">
-		<iframe src="https://sites.google.com/site/ciedpatient/" scrolling="auto" width="100%"/>
-	</window>
-</zk>

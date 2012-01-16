@@ -1,5 +1,0 @@
-<attribute name="onSelect"><![CDATA[
-     if (self.selectedItem.value != null) {
-           EventQueues.lookup("selectFormListItem", EventQueues.DESKTOP, true).publish(new Event("onSelectFormListItem", null, self.selectedItem.value));
-      }                      
- ]]></attribute>
