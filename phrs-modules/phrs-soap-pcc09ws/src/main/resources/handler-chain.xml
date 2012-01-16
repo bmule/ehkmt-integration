@@ -4,6 +4,9 @@
     xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     <javaee:handler-chain>
         <javaee:handler>
+            <javaee:handler-class>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.MimeTypeHandler</javaee:handler-class>
+        </javaee:handler>
+        <javaee:handler>
             <javaee:handler-class>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.DebugHandler</javaee:handler-class>
         </javaee:handler>
         <javaee:handler>
