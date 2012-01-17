@@ -44,8 +44,35 @@
 
 			<p:outputPanel id="idPanelOmed" layout="block">
 				<h:form id="idFormOmed">
-				<h:inputHidden value="#{odlmed.selected.code}" />
-				
+		<!--  -->
+					<h:inputHidden value="#{odlmed.selected.statusStandard}" />
+					
+					<h:inputHidden value="#{odlmed.selected.resourceUri}" />
+					<h:inputHidden value="#{odlmed.selected.tempCreateDate}" />
+					<h:inputHidden value="#{odlmed.selected.tempId}" />
+					
+					<h:inputHidden value="#{odlmed.selected.createId}" />
+					
+					<!-- 
+					<h:inputHidden value="#{odlmed.selected.status}" /> 
+					<h:inputHidden value="#{odlmed.selected.label}" /> 
+					-->
+					
+					<h:inputHidden value="#{odlmed.selected.code}" />
+					<h:inputHidden value="#{odlmed.selected.type}" />
+					<h:inputHidden value="#{odlmed.selected.category}" />
+					<h:inputHidden value="#{odlmed.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{odlmed.selected.creatorUri}" />
+					<h:inputHidden value="#{odlmed.selected.ownerUri}" />					
+					<h:inputHidden value="#{odlmed.selected.parentId}" />
+					<h:inputHidden value="#{odlmed.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{odlmed.selected.origin}" />
+					<h:inputHidden value="#{odlmed.selected.originStatus}" />
+					
 					<h:panelGrid columns="3">
 
 <!-- 								required="true" requiredMessage="#{labels['default_required_field']}" -->
@@ -55,7 +82,9 @@
 						<p:outputPanel id="label" layout="block">
 							<h:outputLabel value="#{odlmed.selected.label}"
 								rendered="#{odlmed.modify eq 'no'}" />
-							<p:inputText value="#{odlmed.selected.label}" id="label_input"
+								
+							<p:inputText value="#{odlmed.selected.label}" id="label_input" 
+								required="true"
 								rendered="#{odlmed.modify eq 'yes'}" />
 						</p:outputPanel>
 						<p:message for="label_input" display="text" />
@@ -80,10 +109,56 @@
 						<p:message for="field_code" display="text" />
 -->
 
+
+						
+<!--  
+						<h:outputLabel for="displayDate"
+							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="displayDate" layout="block">
+
+							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
+								<h:outputLabel value="#{odlmed.selected.displayDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+							</p:outputPanel>
+ 
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+								id="displayDate_input"
+								value="#{odlmed.selected.displayDate}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+					
+						</p:outputPanel>
+						<p:message for="displayDate_input" display="text" />
+-->
+						<h:outputLabel for="beginDate"
+							value="Begin Date #{labels['tip.date.formating']}"
+							styleClass="form-dialog-label" />	
+												
+						<p:outputPanel id="beginDate" layout="block">
+
+							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
+								<h:outputLabel value="#{odlmed.selected.beginDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+							</p:outputPanel>
+ 
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+								id="beginDate_input"
+								value="#{odlmed.selected.beginDate}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+					
+						</p:outputPanel>
+						<p:message for="beginDate_input" display="text" />
+<!-- status -->
 						<h:outputLabel for="field_activity_status"
 							value="#{labels['medicationSummary.medicationStatus.main.label']}"
 							styleClass="form-dialog-label" />
-
 
 						<p:outputPanel id="field_activity_status" layout="block">
 							<h:outputLabel value="#{odlmed.selected.status}"
@@ -103,34 +178,34 @@
 							</h:selectOneRadio>
 						</p:outputPanel>
 						<p:message for="field_activity_status" display="text" />
-
-						<h:outputLabel for="displayDate"
-							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
-							styleClass="form-dialog-label" />
-
-						<p:outputPanel id="displayDate" layout="block">
+<!-- end date -->												
+						<h:outputLabel for="endDate"
+							value="Stop Date #{labels['tip.date.formating']}"
+							styleClass="form-dialog-label" />						
+						<p:outputPanel id="endDate" layout="block">
 
 							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
-								<h:outputLabel value="#{theItem.displayDate}">
+								<h:outputLabel value="#{odlmed.selected.endDate}">
 									<f:convertDateTime pattern="yyyy-MM-dd" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
-								id="displayDate_input"
-								value="#{odlmed.selected.displayDate}"
+							<p:inputMask mask="9999/99/99"  requiredMessage="#{labels['default_required_field']}"
+								id="endDate_input"
+								value="#{odlmed.selected.endDate}"
 								rendered="#{odlmed.modify eq 'yes'}">
 								<f:convertDateTime pattern="yyyy/MM/dd" />
 							</p:inputMask>
+					
+						</p:outputPanel>
+						<p:message for="endDate_input" display="text" />
+												
 						<!-- 	TODO displayDate or beginDate ?-->
 						<!-- 	<p:calendar required="true"  requiredMessage="#{labels['default_required_field']}" 
 								id="displayDate_input"
 								rendered="#{odlmed.modify eq 'yes'}" title="yyyy-MM-dd"
 								value="#{odlmed.selected.displayDate}" showOn="button"
-								pattern="yyyy-MM-dd" />		-->						
-						</p:outputPanel>
-						<p:message for="displayDate_input" display="text" />
-
+								pattern="yyyy-MM-dd" />		-->	
   
 						<h:outputLabel for="field_dosage"
 							value="#{labels['medicationSummary.medicationQuantity.label']}"

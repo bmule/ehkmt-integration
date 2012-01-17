@@ -5,6 +5,8 @@
 
 clear
 echo "Export certificate from the keystore."
+
+#$1 - the keystore file
  
 $JAVA_HOME/bin/keytool -export -alias tomcat -file mykey.cer -rfc -keystore $1
 echo "Export certificate from the keystore -> done."

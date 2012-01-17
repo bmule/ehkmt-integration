@@ -75,6 +75,10 @@ public final class SendSecurePcc09MessageExample {
 
         final String endpointURI = args[0];
         final String responseURI = args[1];
+        //        final String keystoreFilePath = "/Volumes/Data/lab0/iiiiiCardea/phrs/ehkmt-integration/etc/ssl/srfg-phrs-core-keystore.ks";
+        //        final String keystoreFilePassword = "icardea";
+        final String keystoreFilePath = args[2];
+        final String keystoreFilePassword = args[3];
 
 
         final String careProvisionCode = "MEDLIST";
@@ -117,9 +121,7 @@ public final class SendSecurePcc09MessageExample {
 
         LOGGER.info("Tries to send a PCC9 query ({}) to {}", pcc9Request, endpointURI);
         final MCCIIN000002UV01 ack =
-                SendPcc09Message.sendMessage(pcc9Request, endpointURI, responseURI);
-
-
+                SendPcc09Message.sendSecureMessage(pcc9Request, endpointURI, responseURI, keystoreFilePath, keystoreFilePassword);
 
         LOGGER.info("Acknowledge (respense) is : {}.", ack);
     }

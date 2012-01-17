@@ -29,17 +29,7 @@
 			<attribute-class>java.lang.String</attribute-class>
 		</attribute>-->
 	</converter>
-<!--  
-	<managed-bean>
-		<managed-bean-name>messagesController</managed-bean-name>
-		<managed-bean-class>at.srfg.kmt.ehealth.phrs.jsf.managedbean.MessagesController</managed-bean-class>
-		<managed-bean-scope>request</managed-bean-scope>
-	</managed-bean>
-	<managed-bean>
-		<managed-bean-name>userService</managed-bean-name>
-		<managed-bean-class>at.srfg.kmt.ehealth.phrs.presentation.services.UserService</managed-bean-class>
-		<managed-bean-scope>session</managed-bean-scope>
-	</managed-bean>-->
+
 	<managed-bean>
 		<managed-bean-name>phrsConstants</managed-bean-name>
 		<managed-bean-class>at.srfg.kmt.ehealth.phrs.PhrsConstants</managed-bean-class>

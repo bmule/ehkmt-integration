@@ -38,7 +38,38 @@ actionmgtBean used with schedule calendar
 				width="600" showEffect="clip" hideEffect="clip"	>
 
 			<p:outputPanel id="idPanelActionmgt" layout="block">
-				<h:form prependId="false" id="idFormActionmgt">
+				<h:form prependId="false" id="idFormActionmgt">	
+						
+					<h:inputHidden value="#{actionmgtBean.selected.resourceUri}" />
+					<h:inputHidden value="#{actionmgtBean.selected.tempCreateDate}" />
+				 	<h:inputHidden value="#{actionmgtBean.selected.tempId}" />
+					
+					
+					<h:inputHidden value="#{actionmgtBean.selected.createId}" />
+					
+				<!-- 
+					<h:inputHidden value="#{actionmgtBean.selected.status}" /> 
+					<h:inputHidden value="#{actionmgtBean.selected.label}" /> 
+					<h:inputHidden value="#{actionmgtBean.selected.code}" />
+					label
+					
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+				
+					<h:inputHidden value="#{actionmgtBean.selected.type}" />
+					<h:inputHidden value="#{actionmgtBean.selected.category}" />
+					<h:inputHidden value="#{actionmgtBean.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{actionmgtBean.selected.creatorUri}" />
+					<h:inputHidden value="#{actionmgtBean.selected.ownerUri}" />					
+					<h:inputHidden value="#{actionmgtBean.selected.parentId}" />
+					<h:inputHidden value="#{actionmgtBean.selected.deleted}" />
+					
+									
+					<h:inputHidden value="#{actionmgtBean.selected.origin}" />
+					<h:inputHidden value="#{actionmgtBean.selected.originStatus}" />
+					
 					<h:panelGrid columns="3">
 					
 						<h:outputLabel for="actiontitle"
@@ -84,10 +115,10 @@ actionmgtBean used with schedule calendar
 								value="#{actionmgtBean.selected.status}"
 								rendered="#{actionmgtBean.modify eq 'yes'}">
 								<f:selectItem itemLabel="#{labels['action_isActiveStatusTrue']}"
-									itemValue="action_isActiveStatusTrue"></f:selectItem>
+									itemValue="action_isActiveStatusTrue" noSelectionOption="true"></f:selectItem>
 								<f:selectItem
 									itemLabel="#{labels['action_isActiveStatusFalse']}"
-									itemValue="action_isActiveStatusFalse" noSelectionOption="true"></f:selectItem>
+									itemValue="action_isActiveStatusFalse" ></f:selectItem>
 
 							</h:selectOneRadio>
 						</p:outputPanel>					

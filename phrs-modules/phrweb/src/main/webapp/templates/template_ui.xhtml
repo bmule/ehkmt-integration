@@ -69,6 +69,7 @@
 						</p:ajaxStatus>
 					</ui:insert>
 			</p:layoutUnit>
+			<!--  side bar includes login/logout and request authenticated user to access menu -->
 			<p:layoutUnit position="left"  
 				width="250"  
 				rendered="#{param['sidebar'] == null}"
@@ -80,10 +81,21 @@
 			</p:layoutUnit>
 			<!--<p:layoutUnit position="right" header="RIGHT" width="200">
 				<h:outputText value="Right Content" />
-			</p:layoutUnit>-->
+			</p:layoutUnit> -->
 			
-			<p:layoutUnit position="center" >
-				<div id="content" class="ui-widget"  style="width:100%;" ><!-- class="ui-widget" -->
+			 <!-- restrict access to center content area -->
+			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq false}">
+				<div id="content" class="ui-widget"  style="width:100%;" >
+				
+					<h:outputLabel for="field_action_status"
+							value="#{labels['authenticate_login_please']}"
+							styleClass="form-dialog-label" />					
+				</div>
+			</p:layoutUnit>	
+			
+			<!-- restrict access to center content area -->	
+			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq true}" >
+				<div id="content" class="ui-widget"  style="width:100%;" >				
 					<ui:insert name="content">...</ui:insert>
 				</div>
 			</p:layoutUnit>

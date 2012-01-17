@@ -81,7 +81,7 @@ prependId="false"
 						<p:column style="width:50px"><!--  headerText="Options" -->
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
-								<!-- ok, success view  odlbpBean -->
+								<!-- ok, success view  odlbpBean 
 								<p:commandButton update="idPanelObp"
 									disabled="#{theItem.status eq 'default.no_answer.label'}"
 									oncomplete="widDialogObp.show()" image="ui-icon ui-icon-search"
@@ -91,7 +91,7 @@ prependId="false"
 									<f:setPropertyActionListener value="no"
 										target="#{odlbpBean.modify}" />
 								</p:commandButton>
-
+-->
 								<p:commandButton update="idPanelObp"
 									oncomplete="widDialogObp.show()" image="ui-icon ui-icon-pencil"
 									title="#{labels['default.button.edit.label']}">
@@ -161,7 +161,7 @@ prependId="false"
 			</h:form>
 
 		</div>
-		<!-- div entry -->
+
 		
 	
 
@@ -171,6 +171,42 @@ prependId="false"
 
 				<p:outputPanel id="idPanelObp" layout="block">
 					<h:form prependId="false" id="idFormObp">
+				<!-- 				
+					<h:inputHidden value="#{odlbpBean.selected.label}" /> 				
+					issue:begin and end date when only the display data is used...only one saved				
+					-->													
+					
+					<h:inputHidden value="#{odlbpBean.selected.resourceUri}" />
+					<h:inputHidden value="#{odlbpBean.selected.tempCreateDate}" />
+				 	<h:inputHidden value="#{odlbpBean.selected.tempId}" />
+				<!-- 
+					These do not work, as hidden data 
+					<h:inputHidden value="#{odlbpBean.selected.id}" />
+					<h:inputHidden value="#{odlbpBean.selected.createDate}" />				
+					<h:inputHidden value="#{odlbpBean.selected.modifyDate}" />
+				 -->	
+			 	
+					<h:inputHidden value="#{odlbpBean.selected.createId}" />
+					
+					<h:inputHidden value="#{odlbpBean.selected.code}" />
+					<h:inputHidden value="#{odlbpBean.selected.status}" /> 
+					
+				
+					<h:inputHidden value="#{odlbpBean.selected.type}" />
+					<h:inputHidden value="#{odlbpBean.selected.category}" />
+					<h:inputHidden value="#{odlbpBean.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{odlbpBean.selected.creatorUri}" />
+					<h:inputHidden value="#{odlbpBean.selected.ownerUri}" />					
+					<h:inputHidden value="#{odlbpBean.selected.parentId}" />
+					<h:inputHidden value="#{odlbpBean.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{odlbpBean.selected.origin}" />
+					<h:inputHidden value="#{odlbpBean.selected.originStatus}" />
+					
+										
 						<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
 						
 							<h:outputLabel value="#{labels['short.dateStart.label']}*"

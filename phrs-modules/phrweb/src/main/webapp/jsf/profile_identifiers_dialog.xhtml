@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+
+	<ui:composition>
+
+
+		<p:dialog closable="false"  widgetVar="widDialogProids" 
+			id="idDialogProids" 
+			modal="true"	appendToBody="true"
+			header="Identifier Details" width="600"
+			showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelProids" layout="block">
+				<h:form id="idFormProids">
+				
+
+					<h:inputHidden value="#{proids.selected.resourceUri}" />				
+					
+					<h:inputHidden value="#{proids.selected.tempCreateDate}" />
+					<h:inputHidden value="#{proids.selected.tempId}" />
+					
+					<h:inputHidden value="#{proids.selected.createId}" />
+					
+				<!-- 
+					<h:inputHidden value="#{proids.selected.id}" />
+					<h:inputHidden value="#{proids.selected.createDate}" />
+					<h:inputHidden value="#{proids.selected.status}" /> 
+					<h:inputHidden value="#{proids.selected.label}" /> 
+					<h:inputHidden value="#{proids.selected.code}" />
+					
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+				
+					<h:inputHidden value="#{proids.selected.type}" />
+					<h:inputHidden value="#{proids.selected.category}" />
+					<h:inputHidden value="#{proids.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{proids.selected.creatorUri}" />
+					<h:inputHidden value="#{proids.selected.ownerUri}" />					
+					<h:inputHidden value="#{proids.selected.parentId}" />
+					<h:inputHidden value="#{proids.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{proids.selected.origin}" />
+					<h:inputHidden value="#{proids.selected.originStatus}" />
+									
+					<h:panelGrid columns="3">
+
+						<h:outputLabel for="field_code"
+							value="#{labels['activityItem.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_code" layout="block">
+							<h:outputLabel value="#{proids.selected.code}"
+								rendered="#{proids.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneMenu value="#{proids.selected.code}"
+								id="field_code_input"
+								rendered="#{proids.modify eq 'yes'}">
+								<f:selectItems
+									value="#{proids.vocabMap.TAG_PHYSICAL_ACTIVITIES}" var="lv"
+									itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+
+							</h:selectOneMenu>
+						</p:outputPanel>
+						<p:message for="field_code_input" display="text" />
+
+						<h:outputLabel for="codeOtherText"
+							value="#{labels['activityItem.activityName.explain.label']}"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="codeOtherText" layout="block">
+							<h:outputLabel value="#{proids.selected.codeOtherText}"
+								rendered="#{proids.modify eq 'no'}" />
+							<p:inputText value="#{proids.selected.codeOtherText}"
+								id="codeOtherText_input"
+								rendered="#{proids.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="codeOtherText_input" display="text" />
+
+						<h:outputLabel for="field_activity_status"
+							value="Status"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_activity_status" layout="block">
+							<h:outputLabel value="#{proids.selected.status}"
+								rendered="#{proids.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:selectOneRadio layout="pageDirection"
+								id="field_activity_status_input"
+								value="#{proids.selected.status}"
+								rendered="#{proids.modify eq 'yes'}">
+								<f:selectItem
+									itemLabel="#{labels['activityItem_isActiveStatusTrue']}"
+									itemValue="activityItem_isActiveStatusTrue"></f:selectItem>
+								<f:selectItem
+									itemLabel="#{labels['activityItem_isActiveStatusFalse']}"
+									itemValue="activityItem_isActiveStatusFalse" 
+									noSelectionOption="true"></f:selectItem>
+
+							</h:selectOneRadio>
+
+							<!--
+						<f:selectItems
+							value="X{proids.vocabMap.TAG_XXXX}"
+							var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />-->
+
+						</p:outputPanel>
+						<p:message for="field_activity_status_input" display="text" />
+
+						<h:outputLabel for="displayDate"
+							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="displayDate" layout="block">
+
+							<p:outputPanel rendered="#{proids.modify eq 'no'}">
+								<h:outputLabel value="#{theItem.displayDate}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:outputLabel>
+							</p:outputPanel>
+ 
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+								id="displayDate_input"
+								value="#{proids.selected.displayDate}"
+								rendered="#{proids.modify eq 'yes'}">
+								<f:convertDateTime pattern="yyyy/MM/dd" />
+							</p:inputMask>
+							
+						</p:outputPanel>
+
+
+						<h:outputLabel for="field_durationcode"
+							value="#{labels['activityItem.activityDurationCode.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_identifierType" layout="block">
+							<h:outputLabel value="#{proids.selected.identifierType}"
+								rendered="#{proids.modify eq 'no'}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+									<h:selectOneMenu value="#{proids.selected.identifierType}"
+										id="field_identifierType_input"
+										rendered="#{proids.modify eq 'yes'}">
+										
+										<f:selectItem itemLabel="#{labels['time_dd_1']}"
+											itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
+	
+									</h:selectOneMenu>							
+						</p:outputPanel>
+						<p:message for="field_identifierType_input" display="text" />
+
+						<h:outputLabel for="field_note_act"
+							value="#{labels['default.comments.label']}"
+							styleClass="form-dialog-label" />
+
+						<p:outputPanel id="field_note_act" layout="block">
+							<h:outputText value="#{proids.selected.note}"
+								rendered="#{proids.modify eq 'no'}" styleClass="commentText" />
+							<p:inputTextarea value="#{proids.selected.note}"
+								id="field_note_act_input"
+								autoResize="false" cols="30" rows="5"  
+								rendered="#{proids.modify eq 'yes'}" label="Comment"
+								styleClass="commentTextInputArea" />
+						</p:outputPanel>
+						<p:message for="field_note_act_input" display="text" />
+
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+						<f:facet name="header">
+							<p:commandButton value="#{labels['default.button.create.label']}"
+								title="#{labels['default.button.create.label']}"
+								process="idFormProids" 
+								update="msgs idFormProids idItemTableProids"
+								oncomplete="onEditComplete(xhr,status,args)"
+								actionListener="#{proids.store}" image="ui-icon ui-icon-check" />
+
+							<!-- p:commandButton type="reset"
+								value="#{proids.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+								onclick="widDialogProids.hide();" immediate="true"
+								image="ui-icon ui-icon-close" />-->
+								
+						<p:commandButton rendered="#{proids.modify eq 'yes'}" 
+							value="#{labels['default.button.reset.label']}" 						
+							actionListener="#{proids.refresh}" immediate="true" 
+							onsuccess="widDialogProids.hide()"									
+							image="ui-icon ui-icon-close" />
+					
+						<p:commandButton  rendered="#{proids.modify eq 'no'}" 
+							value="#{labels['default.button.close.label']}" 						
+							reset="true"
+							onsuccess="widDialogProids.hide()"
+							image="ui-icon ui-icon-close" />								
+						</f:facet>
+					</h:panelGrid>
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>
+
+	</ui:composition>
+</h:body>
+
+</html>

@@ -18,7 +18,9 @@
  					<p:outputPanel id="riskfactor_types_general" layout="block"
 					
 							rendered="#{riskBean.selected.code != applicationScope.ConstantsMap.TAG_RISK_FACTORS_SMOKING and riskBean.selected.code != applicationScope.ConstantsMap.TAG_RISK_FACTORS_DIABETES}">
-	
+						
+						<h:inputHidden value="#{riskBean.selected.status}" /> 
+						
 						<h:panelGrid  columns="2" cellpadding="2" border="1"
 							style="margin:0 auto;">
 

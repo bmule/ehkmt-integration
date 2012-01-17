@@ -13,10 +13,15 @@
 	</ui:define>
 
 	<ui:define name="content">
-	
-	<p:fieldset toggleable="false"  legend="Home">
-		<h:outputText value="#{labels['message_home']}" />
 
+		<p:fieldset toggleable="false" legend="Home">
+			<h:outputText value="#{labels['message_home']}" />
+			
+			<h:panelGroup rendered="#{loginBean.loggedIn eq true}">
+				<ui:include src="./home_content.xhtml" />
+			</h:panelGroup>
+			
+			<!--  
 			<p:panel collapsed="true"  closable="false" toggleable="true" header="Table of Contents"  style="width:100%">
 				<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;font-size:12pt;">
 					
@@ -47,6 +52,7 @@
 				</p:column>			
 			</p:treeTable>	
 		</p:panel>
-	</p:fieldset>
+		-->
+		</p:fieldset>
 	</ui:define>
 </ui:composition>

@@ -1,5 +1,0 @@
-<?page title="ZK examples : Server push"?>
-<window title="Message room" border="normal" width="200px"
- apply="at.srfg.kmt.ehealth.phrs.zpresentation.controller.MessageRoomComposer">
-  <textbox id="textbox" value="Please wait ..." />
-</window>

@@ -14,7 +14,7 @@
 </h:head>
 <h:body>
 <!-- param['sidebar']} != 'no' || -->
-	<f:view contentType="text/html">
+	
 		<p:layout fullPage="true" rendered="#{param['sidebar'] == null}">
 			<!--<p:layoutUnit position="top" header="TOP" height="50">
 				<h:outputText value="Top content." />
@@ -38,19 +38,20 @@
 			<p:layoutUnit position="center" header="CENTER 1" >
 				<div id="content" class="ui-widget">
 						<ui:insert name="content">...</ui:insert>
-						<!--  <p:commandButton rendered="#{p:ifGranted(‘ROLE_ADMIN’)}" />
-						 <h:inputText disabled="#{p:ifGranted(‘ROLE_GUEST’)}" />
-						  <p:inputMask rendered="#{p:ifAllGranted(‘ROLE_EDITOR, ROLE_READER’)}" /> 
-						  <p:commandButton rendered="#{p:ifAnyGranted(‘ROLE_ADMIN, ROLE_EDITOR’)}" /> 
-						  <p:commandButton rendered="#{p:ifNotGranted(‘ROLE_GUEST’)}" /> 
-						<h:outputText value="Welcome: #{p:remoteUser}" />
-						-->
+	
 				</div>
 			</p:layoutUnit>
 		</p:layout>
-	</f:view>
+	
 </h:body>
-				<!-- 
+</f:view>
+			<!--  <p:commandButton rendered="X{p:ifGranted(‘ROLE_ADMIN’)}" />
+						 <h:inputText disabled="X{p:ifGranted(‘ROLE_GUEST’)}" />
+						  <p:inputMask rendered="X{p:ifAllGranted(‘ROLE_EDITOR, ROLE_READER’)}" /> 
+						  <p:commandButton rendered="X{p:ifAnyGranted(‘ROLE_ADMIN, ROLE_EDITOR’)}" /> 
+						  <p:commandButton rendered="X{p:ifNotGranted(‘ROLE_GUEST’)}" /> 
+						<h:outputText value="Welcome: X{p:remoteUser}" />
+			
 					<ui:insert name="status">
 						<p:ajaxStatus
 							style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;">
@@ -64,4 +65,5 @@
 						</p:ajaxStatus>
 					</ui:insert>
 				 -->
+
 </html>

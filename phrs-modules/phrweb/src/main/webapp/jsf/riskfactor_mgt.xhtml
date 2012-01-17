@@ -101,6 +101,39 @@
 
 			<p:outputPanel id="idPanelRisk" layout="block">
 				<h:form prependId="false" id="idFormRisk">
+				
+
+					<h:inputHidden value="#{riskBean.selected.resourceUri}" />
+					<h:inputHidden value="#{riskBean.selected.tempCreateDate}" />
+					<h:inputHidden value="#{riskBean.selected.tempId}" />
+						
+					<h:inputHidden value="#{riskBean.selected.createId}" />
+					<!--  code is displayed but not selected in the form, derived from the table list -->
+					<h:inputHidden value="#{riskBean.selected.code}" />
+					
+				<!-- 
+					status is used in smoking, put into the other forms
+					<h:inputHidden value="#{riskBean.selected.status}" /> 
+					<h:inputHidden value="#{riskBean.selected.label}" /> 
+					
+					
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+				
+					<h:inputHidden value="#{riskBean.selected.type}" />
+					<h:inputHidden value="#{riskBean.selected.category}" />
+					<h:inputHidden value="#{riskBean.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{riskBean.selected.creatorUri}" />
+					<h:inputHidden value="#{riskBean.selected.ownerUri}" />					
+					<h:inputHidden value="#{riskBean.selected.parentId}" />
+					<h:inputHidden value="#{riskBean.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{riskBean.selected.origin}" />
+					<h:inputHidden value="#{riskBean.selected.originStatus}" />
+				
 					<ui:include src="./riskfactor_dialog_part_risk_simple.xhtml" />
 					<ui:include src="./riskfactor_dialog_part_risks_extended.xhtml" />
 					<ui:include src="./riskfactor_dialog_part_smoke.xhtml" />
@@ -142,42 +175,5 @@
 
 	</ui:define>
 
-	<!-- test
-		<h:form prependId="false">
 
-				<p:dialog header="Risk Factor" closable="false" appendToBody="true"
-					widgetVar="widDialogRiskyyy" id="riskfactorDlgIdyy"
-					resizable="true" modal="true" width="600">
-
-					<p:outputPanel id="idPanelRiskyyy" layout="block"
-						styleClass="common-dialog">
-						<h:panelGrid columns="2" cellpadding="2">
-							<f:facet name="header">
-								<h:outputText value="#{riskBean.selected.code}" />
-							</f:facet>
-
-
-							<h:outputLabel value="modify" />
-							<h:outputText value="#{riskBean.modify}" />
-
-							<h:outputLabel value="code" />
-							<h:outputText value="#{riskBean.selected.code}" />
-
-							<h:outputLabel value="modify test" />
-							<p:outputPanel>
-								<h:outputText value="#{riskBean.selected.atest}"
-									rendered="#{riskBean.modify eq 'yes'}" />
-								<h:outputText value="#{riskBean.modify}"
-									rendered="#{riskBean.modify eq 'no'}" />
-							</p:outputPanel>
-
-						</h:panelGrid>
-						<p:commandButton value="#{labels['default.button.reset.label']}"
-							type="reset" immediate="true"
-							onclick="widDialogRiskyyy.hide()"
-							image="ui-icon ui-icon-close" />
-					</p:outputPanel>
-				</p:dialog>
-		</h:form>
-		 -->
 </ui:composition>
