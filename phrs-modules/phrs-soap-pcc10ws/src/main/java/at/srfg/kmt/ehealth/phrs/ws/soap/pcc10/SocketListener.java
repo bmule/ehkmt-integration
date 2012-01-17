@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
-public class SocketListener {
+final class SocketListener {
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -36,12 +36,9 @@ public class SocketListener {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SocketListener.class);
 
-    private final String keyfilePath;
-    private final String keyfilePasswd;
     
-    public SocketListener(String keyfilePath, String keyfilePasswd) {
-        this.keyfilePath = keyfilePath;
-        this.keyfilePasswd = keyfilePasswd;
+    
+    public SocketListener() {
     }
 
     private class Producer implements Runnable {
@@ -90,16 +87,13 @@ public class SocketListener {
 
         private void consume(Object toConsume) {
             LOGGER.debug("Tries to consume {}" + toConsume);
-            new PCC10Task(keyfilePath, keyfilePasswd, (Map) toConsume).run();
-            
+            new PCC10Task((Map) toConsume).run();
         }
-        
-
     }
 
-    public void start() throws IOException {
+    public void start(int port) throws IOException {
         BlockingQueue q = new ArrayBlockingQueue(5);
-        Producer p = new Producer(new ServerSocket(5578, 10), q);
+        Producer p = new Producer(new ServerSocket(port, 10), q);
         Consumer c = new Consumer(q);
         new Thread(p).start();
         new Thread(c).start();
