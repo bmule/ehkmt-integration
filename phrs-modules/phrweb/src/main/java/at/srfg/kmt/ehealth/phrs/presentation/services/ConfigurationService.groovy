@@ -428,6 +428,44 @@ public class ConfigurationService implements Serializable{
 		return false;
 
 	}
+        
+        /**
+         * true  - Simple access control by role
+         * false - access control by Consent Manager
+         */
+        public boolean isHealthInfoAccessibleByRole(){
+            boolean flag = false
+            String value = this.getProperty('isAllHealthinfoAccessibleByRole')
+            if(value && value.trim() =='true') flag=true
+            return flag
+        }
+    
+        /**
+         * First check if all info is accessible only by role
+         * <code>isAllHealthInfoAccessibleByRole()</code>
+         * @param role 
+         */
+        public boolean isHealthInfoAccessibleByThisRole(String role) {
+
+		//from UserSessionService.getSessionAttributeRole();
+                boolean flag = isHealthInfoAccessibleByRole()
+		if(flag && role!=null){
+			//role=role.toLowerCase();
+			switch(role){
+				case [
+					'ROLECODE:DOCTOR',
+					'ROLECODE:NURSE']:
+				return true
+				break
+				default:
+				break
+			}
+
+		}
+		return false;
+
+	}
+        
 
 	public String convertLocalRoleToStandardRole(String role){
 		String outRole

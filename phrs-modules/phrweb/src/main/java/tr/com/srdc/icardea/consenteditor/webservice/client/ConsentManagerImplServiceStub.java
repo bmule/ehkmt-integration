@@ -12,7 +12,7 @@ package tr.com.srdc.icardea.consenteditor.webservice.client;
  *  ConsentManagerImplServiceStub java implementation
  */
 
-public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub {
+public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub implements ConsentManagerServiceInterface {
 	protected org.apache.axis2.description.AxisOperation[] _operations;
 
 	// hashmaps to keep the fault mapping
@@ -155,6 +155,7 @@ public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub 
 	 * @param getResources
 	 */
 
+    @Override
 	public tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResourcesResponse getResources(
 
 			tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResources getResources)
@@ -285,6 +286,7 @@ public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub 
 	 * @param getDecision
 	 */
 
+    @Override
 	public tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecisionResponse getDecision(
 			tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecision getDecision)
 	throws java.rmi.RemoteException
@@ -412,6 +414,7 @@ public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub 
 	 * @param generateRequest
 	 */
 
+    @Override
 	public tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GenerateRequestResponse generateRequest(
 
 			tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GenerateRequest generateRequest)
@@ -542,6 +545,7 @@ public class ConsentManagerImplServiceStub extends org.apache.axis2.client.Stub 
 	 * @param getSubjects
 	 */
 
+    @Override
 	public tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse getSubjects(
 
 			tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects getSubjects)

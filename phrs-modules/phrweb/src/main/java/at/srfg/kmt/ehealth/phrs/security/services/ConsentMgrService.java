@@ -34,6 +34,7 @@ import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplSer
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResourcesResponse;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse;
+import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerServiceInterface;
 
 //see icardea-consenteditor-invoker  ConsentManagerImplServiceTest SRDC
 @SuppressWarnings("serial")
@@ -75,10 +76,10 @@ public class ConsentMgrService implements Serializable {
 		}
 	}
 
-	public static boolean isMedicalRole() {
+	public static boolean isMedicalRole(String subjectCode) {
 
-		return ConfigurationService.getInstance().isMedicalCareRole(
-				UserSessionService.getSessionAttributeRole());
+		return ConfigurationService.getInstance().isMedicalCareRole(subjectCode);
+				//UserSessionService.getSessionAttributeRole());
 	}
 
 	public static boolean isConsentMgrRole(String subjectCode) {
@@ -88,6 +89,9 @@ public class ConsentMgrService implements Serializable {
 			return true;
 		}
 		return false;
+	}
+        public static boolean isAccessibleByThisRole(String subjectCode) {
+		return ConfigurationService.getInstance().isHealthInfoAccessibleByThisRole(subjectCode);
 	}
 
 	public static boolean isConsentMgrAction(String actionCode) {
@@ -109,7 +113,12 @@ public class ConsentMgrService implements Serializable {
 		boolean flag = false;
 
 		try {
-			if (isConsentMgrRole(subjectCode)) {
+                        if(isAccessibleByThisRole(subjectCode)){
+                            
+                            flag= true;
+                            
+                        } else if (isConsentMgrRole(subjectCode)) {
+                            
 				sslSetup();
 				String userIdentifier = targetUser;
 
@@ -151,6 +160,10 @@ public class ConsentMgrService implements Serializable {
 
 			e.printStackTrace();
 		}
+               LOGGER.debug("permission result " + " targetUser phrId" + targetUser
+					+ " idType=" + idType + " subjectCode=" + subjectCode
+					+ " resourceCode=" + resourceCode + " resourceCode"
+					+ "action=" + action + " decision allow?=" + flag+" isAccessibleByThisRole="+isAccessibleByThisRole(subjectCode));
 		return flag;
 	}
 
@@ -180,7 +193,7 @@ public class ConsentMgrService implements Serializable {
 	public String callGetDecision(String patientId, String issuerName,
 			String subjectCode, String resourceCode, String action) {
 
-		ConsentManagerImplServiceStub stub;
+		ConsentManagerServiceInterface stub;
 		String endpoint = null;
 
 		ResourceBundle properties = ResourceBundle.getBundle("icardea");
