@@ -18,7 +18,7 @@ import java.security.Security;
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
-public class SSLClient {
+final class SSLClient {
     
     private static final String HANDLER_PKGS = 
             "java.protocol.handler.pkgs";
