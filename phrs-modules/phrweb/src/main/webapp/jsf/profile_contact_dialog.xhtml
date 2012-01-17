@@ -60,14 +60,72 @@
 
 			<p:outputPanel id="idPanelPcon" layout="block">
 			<!--  
-			contact type=<h:outputLabel value="#{procon.contactType}"/><br/>
+			contact type=<h:outputLabel value="#{procon.selected.contactType}"/><br/>
 			procon.modify=<h:outputLabel value="#{procon.modify}"/><br/>
 			procon.modify=<h:outputLabel value="#{procon.modify}"/><br/>
 			contactTypeMedical=<h:outputLabel value="#{procon.contactTypeMedical}"/>
 			<br/>-->
 				<h:form id="idFormPcon">
-					<h:panelGrid columns="3">
+					<h:inputHidden value="#{procon.selected.resourceUri}" />			
+					<h:inputHidden value="#{procon.selected.tempCreateDate}" />
+					<h:inputHidden value="#{procon.selected.tempId}" />
+
+	
+					<h:inputHidden value="#{procon.selected.createId}" />
 					
+					<h:inputHidden value="#{procon.selected.status}" /> 
+					<h:inputHidden value="#{procon.selected.code}" />
+					<h:inputHidden value="#{procon.selected.label}" /> 
+				<!-- 
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+				
+					<h:inputHidden value="#{procon.selected.type}" />
+					<h:inputHidden value="#{procon.selected.category}" />
+					<h:inputHidden value="#{procon.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{procon.selected.creatorUri}" />
+					<h:inputHidden value="#{procon.selected.ownerUri}" />					
+					<h:inputHidden value="#{procon.selected.parentId}" />
+					<h:inputHidden value="#{procon.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{procon.selected.origin}" />
+					<h:inputHidden value="#{procon.selected.originStatus}" />
+					
+					<h:inputHidden value="#{procon.selected.pixIdentifier.type}" />
+					<h:inputHidden value="#{procon.selected.pixIdentifier.domain}" />
+					
+					<h:panelGrid columns="3">
+					<!--  pixIdentifier.identifier ciedIdentifier.identifier-->
+						<h:outputLabel for="field_identifier_pix"
+							value="iCARDEA Protocol ID"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_identifier_pix" layout="block">
+							<h:outputLabel value="#{procon.selected.pixIdentifier.identifier}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.pixIdentifier.identifier}" 
+								id="field_identifier_pix_input"
+								required="true" requiredMessage="#{labels['default_required_field']}"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_identifier_pix_input" display="text" />
+						
+						<h:outputLabel for="field_identifier_cied"
+							value="CIED identifier"
+							styleClass="form-dialog-label" />
+						<p:outputPanel id="field_identifier_cied" layout="block">
+							<h:outputLabel value="#{procon.selected.ciedIdentifier.identifier}"
+								rendered="#{procon.modify eq 'no'}" />
+							<p:inputText value="#{procon.selected.ciedIdentifier.identifier}" 
+								id="field_identifier_cied_input"
+								required="true" requiredMessage="#{labels['default_required_field']}"
+								rendered="#{procon.modify eq 'yes'}" />
+						</p:outputPanel>
+						<p:message for="field_identifier_cied_input" display="text" />
+
+										
 						<h:outputLabel for="field_firstName"
 							value="First Name"
 							styleClass="form-dialog-label" />
@@ -131,16 +189,16 @@
 						<p:message for="field_org_input" display="text" />							
 						
 						<h:outputLabel for="field_role" 
-							render="#{procon.contactType eq  'healthcare_provider'}"
+							render="#{procon.selected.contactType eq  'healthcare_provider'}"
 							value="Healthcare Role"
 							styleClass="form-dialog-label" />
 <!--  
-render="#{procon.contactType eq 'healthcare_user'}"
+render="#{procon.selected.contactType eq 'healthcare_user'}"
 TAG_ROLES_NON_MEDICAL_USER 
-render="#{procon.contactType eq  'healthcare_provider'}
+render="#{procon.selected.contactType eq  'healthcare_provider'}
 -->							
 						<p:outputPanel id="field_role" layout="block" 
-							render="#{procon.contactType eq 'healthcare_provider'}">
+							render="#{procon.selected.contactType eq 'healthcare_provider'}">
 							<h:outputLabel value="#{procon.selected.healthcareRole}"
 								rendered="#{procon.modify eq 'no'}">
 								<f:converter converterId="labelLookup" />
@@ -153,14 +211,14 @@ render="#{procon.contactType eq  'healthcare_provider'}
 									itemLabel="#{lv.label}" itemValue="#{lv.id}" />
 							</h:selectOneMenu>
 						</p:outputPanel>
-						<p:message for="field_role_input" display="text" render="#{procon.contactType eq 'healthcare_user'}" />	
+						<p:message for="field_role_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}" />	
 	
  <!-- 	remove...								
 						<h:outputLabel value="Birth Date" 
-							render="#{procon.contactType eq 'healthcare_user'}" 
+							render="#{procon.selected.contactType eq 'healthcare_user'}" 
 							for="birthDateField" styleClass="form-dialog-label" />
 						<p:outputPanel id="birthDateField" layout="block" 
-							render="#{procon.contactType eq 'healthcare_user'}">
+							render="#{procon.selected.contactType eq 'healthcare_user'}">
 							<h:outputLabel value="#{procon.selected.birthdate}"
 								rendered="#{procon.modify eq 'no'}">
 								<f:convertDateTime pattern="yyyy-MM-dd" />
@@ -172,7 +230,7 @@ render="#{procon.contactType eq  'healthcare_provider'}
 								<f:convertDateTime pattern="yyyy/MM/dd" />
 							</p:inputMask>
 						</p:outputPanel>					
-						<p:message for="birthdateDateField_input" display="text" render="#{procon.contactType eq 'healthcare_user'}"/> 
+						<p:message for="birthdateDateField_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}"/> 
 	 -->											
 						<h:outputLabel for="field_2"
 							value="Street Address"
@@ -223,10 +281,10 @@ render="#{procon.contactType eq  'healthcare_provider'}
 						</p:outputPanel>
 						<p:message for="field_5_input" display="text" />
 
-						<h:outputLabel for="field_internetChatProvider" render="#{procon.contactType eq 'healthcare_user'}"
+						<h:outputLabel for="field_internetChatProvider" render="#{procon.selected.contactType eq 'healthcare_user'}"
 							value="Internet Chat Service"
 							styleClass="form-dialog-label" />							
-						<p:outputPanel id="field_internetChatProvider" layout="block" render="#{procon.contactType eq 'healthcare_user'}" >
+						<p:outputPanel id="field_internetChatProvider" layout="block" render="#{procon.selected.contactType eq 'healthcare_user'}" >
 							<h:outputLabel value="#{procon.selected.internetChatProvider}"
 								rendered="#{procon.modify eq 'no'}">
 							</h:outputLabel>
@@ -244,12 +302,12 @@ render="#{procon.contactType eq  'healthcare_provider'}
 								id="internetChatId_input"
 								rendered="#{procon.modify eq 'yes'}" />						
 						</p:outputPanel>
-						<p:message for="internetChatId_input" display="text" render="#{procon.contactType eq 'healthcare_user'}"/>
+						<p:message for="internetChatId_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}"/>
 
-						<h:outputLabel for="field_internetVoiceProvider" render="#{procon.contactType eq 'healthcare_user'}"
+						<h:outputLabel for="field_internetVoiceProvider" render="#{procon.selected.contactType eq 'healthcare_user'}"
 							value="Internet Voice Service"
 							styleClass="form-dialog-label" />							
-						<p:outputPanel id="field_internetVoiceProvider" layout="block" render="#{procon.contactType eq 'healthcare_user'}">
+						<p:outputPanel id="field_internetVoiceProvider" layout="block" render="#{procon.selected.contactType eq 'healthcare_user'}">
 							<h:outputLabel value="#{procon.selected.internetVoiceProvider}"
 								rendered="#{procon.modify eq 'no'}">
 							</h:outputLabel>
@@ -267,7 +325,7 @@ render="#{procon.contactType eq  'healthcare_provider'}
 								id="internetVoiceId_input"
 								rendered="#{procon.modify eq 'yes'}" />			
 						</p:outputPanel>
-						<p:message for="internetVoiceId_input" display="text" render="#{procon.contactType eq 'healthcare_user'}" />
+						<p:message for="internetVoiceId_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}" />
 
 						<h:outputLabel for="field_note_contact"
 							value="#{labels['default.comments.label']}"

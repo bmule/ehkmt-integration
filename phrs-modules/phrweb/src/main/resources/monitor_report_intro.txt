@@ -1,0 +1,10 @@
+
+This is a confidential report containing personal health information.
+
+It's primary purpose is to enhance patient feedback. 
+Patients can download their monitoring reports and either print them for their own use or
+bring them to a consulation meeting with their doctor.
+
+Patients might even send the document to a healthcare professional 
+or allow a medical person to access their report.
+

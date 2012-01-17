@@ -59,7 +59,7 @@ prependId="false"
 						<p:column style="width:50px" headerText="Options">
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 		
-								<!-- ok, success view  odlprobBean -->
+								<!-- ok, success view  odlprobBean 
 								<p:commandButton update="idPanelOprob"
 									disabled="#{theItem.status eq 'default.no_answer.label'}"
 									oncomplete="widDialogOprob.show()" image="ui-icon ui-icon-search"
@@ -69,7 +69,7 @@ prependId="false"
 									<f:setPropertyActionListener value="no"
 										target="#{odlprobBean.modify}" />
 								</p:commandButton>
-		
+		-->
 								<p:commandButton update="idPanelOprob"
 									oncomplete="widDialogOprob.show()" image="ui-icon ui-icon-pencil"
 									title="#{labels['default.button.edit.label']}">
@@ -126,8 +126,38 @@ prependId="false"
 				<p:dialog closable="false" widgetVar="widDialogOprob" header="#{labels['obsIssue.label']}" appendToBody="true"
 					id="idDialogOprob" resizable="true" modal="true" width="600">
 					
-								<p:outputPanel id="idPanelOprob" layout="block" >
-								<h:form id="idFormOprob">
+				<p:outputPanel id="idPanelOprob" layout="block" >
+					<h:form id="idFormOprob">
+
+					<h:inputHidden value="#{odlprobBean.selected.resourceUri}" />								
+					<h:inputHidden value="#{odlprobBean.selected.tempCreateDate}" />
+					<h:inputHidden value="#{odlprobBean.selected.tempId}" />
+					
+					<h:inputHidden value="#{odlprobBean.selected.createId}" />
+					
+					<!-- 
+					<h:inputHidden value="#{odlprobBean.selected.status}" /> 
+					<h:inputHidden value="#{odlprobBean.selected.label}" /> 
+					<h:inputHidden value="#{odlprobBean.selected.code}" />
+					
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+					
+					
+					<h:inputHidden value="#{odlprobBean.selected.type}" />
+					<h:inputHidden value="#{odlprobBean.selected.category}" />
+					<h:inputHidden value="#{odlprobBean.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{odlprobBean.selected.creatorUri}" />
+					<h:inputHidden value="#{odlprobBean.selected.ownerUri}" />					
+					<h:inputHidden value="#{odlprobBean.selected.parentId}" />
+					<h:inputHidden value="#{odlprobBean.selected.deleted}" />
+					
+					
+					<h:inputHidden value="#{odlprobBean.selected.origin}" />
+					<h:inputHidden value="#{odlprobBean.selected.originStatus}" />
+													
 									<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;" >	
 										
 										<h:outputLabel for="idField_code" value="#{labels['obsIssue.issueCode.label']}" styleClass="form-dialog-label" />

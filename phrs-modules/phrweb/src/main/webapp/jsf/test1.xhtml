@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:ft="http://primefaces.prime.com.tr/facestrace"
+	template="/templates/test_template_ui.xhtml">
+
+	<ui:define name="head">
+	
+			<script type="text/javascript">
+			//<![CDATA[ 
+				function onEditComplete(xhr, status, args) {
+					if (args.validationFailed) {
+				
+					} else {
+						widDialogObw.hide();
+					}
+				}
+	     		//]]>			
+			</script>
+				
+		<style type="text/css">
+		.table.innertable td { border:0;
+		}
+	</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+
+	<ui:define name="content">
+		<div class="entry">
+<h:form>
+<f:param name="trace" value="true" /> 
+</h:form>
+			<h:form prependId="false">
+
+				<p:growl id="msgs" showDetail="true" />
+
+				<p:fieldset legend="#{labels['obsBodyWeightBMW01.label']}">
+					<p:toolbar>
+						<p:toolbarGroup align="left">
+							<p:commandButton update="idPanelObw" value="create"
+								title="#{labels['default.button.newform.label']}"
+								image="ui-icon-plus" actionListener="#{testbwBean.create}"
+								oncomplete="widDialogObw.show()" />
+							<!--
+							<p:spacer width="2px"></p:spacer>
+							<p:commandButton value="Chart"
+								title="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
+								update="idPanelChart01" oncomplete="widDialogChart01.show()" />  -->
+						</p:toolbarGroup>
+					</p:toolbar>
+
+					<p:dataTable widgetVar="widItemTableObw" id="idItemTableObw"
+						var="theItem" value="#{testbwBean.modelMain}">
+
+						<p:column style="width:50px" headerText="#{labels['labels.menu.options.label']}">
+							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+								<p:commandButton update="idPanelObw"
+									oncomplete="widDialogObw.show()" image="ui-icon ui-icon-pencil"
+									title="#{labels['default.button.edit.label']}">
+									<f:setPropertyActionListener value="#{theItem}"
+										target="#{testbwBean.selected}" />
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>
+			
+						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}">
+							<h:outputLabel value="#{theItem.beginDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}">
+							<h:outputLabel value="#{theItem.bodyWeight}" /> kg
+						</p:column>
+						<p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}" > 
+							<h:outputLabel value="#{theItem.bmi}" />
+						</p:column>
+						<p:column
+							headerText="#{labels['obsBodyWeightBMW01.height.label']}">
+							<h:outputLabel value="#{theItem.bodyHeight}" /> cm
+						</p:column>
+
+						<p:column headerText="#{labels['default.comments.label']}">
+							<h:outputText value="#{theItem.note}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:fieldset>
+
+			</h:form>
+
+		</div>
+		<!-- odlbwBean testbwBean-->
+		<p:dialog closable="true" widgetVar="widDialogObw" appendToBody="true"
+				header="#{labels['obsBodyWeightBMW01.label']}" id="idDialogObw"
+				resizable="true" modal="true" width="600">
+			<p:outputPanel id="idPanelObw" layout="block">
+				<h:form id="idFormObw">	
+										
+						<h:outputLabel value="#{labels['short.dateStart.label']}"
+							 styleClass="form-dialog-label" />			
+							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}" 
+								title="yyyy-MM-dd"
+								value="#{testbwBean.selected.beginDate}" showOn="button"
+								pattern="yyyy-MM-dd" />															
+			
+				 </h:form>
+				</p:outputPanel>
+		</p:dialog>
+<ft:trace/>
+	</ui:define>
+
+</ui:composition>

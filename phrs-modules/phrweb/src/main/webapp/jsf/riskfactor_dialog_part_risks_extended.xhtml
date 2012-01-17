@@ -17,7 +17,8 @@
  				<!--  risk: with extended form including medications e.g. for diabetes -->
 				<p:outputPanel id="riskfactor_types_diabetes"  layout="block"					
 					rendered="#{riskBean.selected.code == applicationScope.ConstantsMap.TAG_RISK_FACTORS_DIABETES}">
-
+					
+					<h:inputHidden value="#{riskBean.selected.status}" /> 
 					<h:panelGrid  columns="2" cellpadding="2" border="1" 
 						style="margin:0 auto;">
 

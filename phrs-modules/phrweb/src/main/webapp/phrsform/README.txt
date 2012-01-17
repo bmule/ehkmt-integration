@@ -1,0 +1,1 @@
+Moved previous prototype UIs aways from web application structure

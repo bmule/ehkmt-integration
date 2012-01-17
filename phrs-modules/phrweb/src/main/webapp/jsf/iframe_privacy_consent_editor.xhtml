@@ -11,8 +11,11 @@
 	<ui:define name="head">
 		<ui:insert name="head"></ui:insert>
 	</ui:define>
-
+<!-- 
+/consenteditor/ConsentEditor/ConsentEditor.html
+#{portalBean.pages.privacy_consent_manager}
+-->
 	<ui:define name="content">
-		<iframe src="#{portalBean.pages.privacy_consent_manager}" scrolling="yes" width="100%" height="600px" frameborder="0"/>
+		<iframe src="/consenteditor/ConsentEditor/ConsentEditor.html" scrolling="yes" width="100%" height="600px" frameborder="0"/>
 	</ui:define>
 </ui:composition>

@@ -65,26 +65,7 @@
 						update="idPanelOact" oncomplete="widDialogOact.show()" />
 				</p:toolbarGroup>
 			</p:toolbar>
-	<!-- 
-	
-	activityItem.label
-	
-	short.date.label
-	short.activity.label
-	activityItem.isActiveStatusTrue.short.label
-	short.date.label
-	activityItem.activityFrequencyCode.short.label
-	activityItem.activityDurationCode.short.label
-	
-	code
-	codeOtherText
-	status
-	dateStatusId
-	displayDate
-	frequencyCode
-	durationCode
 
-	 -->
 			<p:dataTable id="idItemTableOact"
 				widgetVar="widItemTableOact" var="theItem"
 				value="#{odlact.modelMain}" paginator="true" rows="20">
@@ -92,7 +73,7 @@
 				<p:column style="width:50px" headerText="Options">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
-						<!-- ok, success view  odlact -->
+						<!-- ok, success view  odlact 
 						<p:commandButton update="idPanelOact"
 							disabled="#{theItem.status eq 'default.no_answer.label'}"
 							oncomplete="widDialogOact.show()"
@@ -103,7 +84,7 @@
 							<f:setPropertyActionListener value="no"
 								target="#{odlact.modify}" />
 						</p:commandButton>
-
+-->
 						<p:commandButton update="idPanelOact"
 							oncomplete="widDialogOact.show()"
 							image="ui-icon ui-icon-pencil"
@@ -115,8 +96,6 @@
 						</p:commandButton>
 					</h:panelGrid>
 				</p:column>
-
-
 
 
 				<p:column headerText="#{labels['action.category.label']}">
@@ -139,7 +118,7 @@
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputLabel>
 				</p:column>
-				<!--  
+			<!--  
 				<p:column headerText="#{labels['action.date.end.label']}">
 					<h:outputLabel value="#{theItem.endDate}">
 						<f:convertDateTime pattern="yyyy-MM-dd" />

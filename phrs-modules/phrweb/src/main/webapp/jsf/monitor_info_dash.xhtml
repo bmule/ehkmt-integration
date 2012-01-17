@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+
+		<script type="text/javascript">
+			//          
+			function onEditComplete(xhr, status, args) {
+				if (args.validationFailed) {
+
+				} else {
+					widDialogOprob.hide();
+				}
+			}
+			//
+		</script>
+
+		<style type="text/css">
+.table.innertable td {
+	border: 0;
+}
+</style>
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+	<!-- 
+	currentUserId;
+	currentUserOwnerUri;
+	currentUserRole;
+
+	ownerUri;
+	protocolId;
+	name;
+
+	resourceType;// resourcecode
+	not needed at this level
+	allowedViewRow 
+	allowedViewContent
+	consentViewContent 
+	request param
+	
+	?resourcecode=#{theItem.resourceType}&amp;phrid=#{theItem.ownerUri}
+	protocolid
+	target="_blank"
+	resourcecode phrid
+either new page or 	
+
+ -->
+
+	<ui:define name="content">
+
+		<h:form prependId="false">
+			<p:messages />
+			<p:growl id="msgs" showDetail="true" />
+
+			<p:fieldset legend="Monitoring Personal Health Information">
+
+
+				<p:dataTable widgetVar="widItemTableOprob" id="idItemTableOprob"
+					var="theItem" value="#{monitorinfoBean.modelMain}">
+
+
+					<!--  
+						<p:column headerText="Sort" sortBy="#{theItem.sortOrder}">
+							<h:outputLabel value="#{theItem.name}" />
+						</p:column>	
+						-->
+					<p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}"
+						style="width:50px">
+		
+						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+							<!-- ok, success view  monitorinfoBean -->
+							<p:commandButton actionListener="#{odlmed.downLoadReport}"
+								image="ui-icon ui-icon-disk"
+								title="#{labels['default.button.view.label']}">
+							</p:commandButton>
+
+						</h:panelGrid>
+					</p:column>
+					
+					<p:column headerText="User Name" sortBy="#{theItem.name}">
+						<h:outputLabel value="#{theItem.name}" />
+					</p:column>
+
+					<p:column headerText="Information Type"
+						sortBy="#{theItem.resourceType}">
+						<h:outputLabel value="#{theItem.resourceType}">
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+
+						<p:outputPanel layout="block"
+							rendered="#{theItem.allowedViewContent eq true}">						
+								Access allowed
+							</p:outputPanel>
+
+						<p:outputPanel layout="block"
+							rendered="#{theItem.allowedViewContent eq false">						
+								Access Denied 
+							</p:outputPanel>
+					</p:column>
+					<p:column headerText="Message">
+						<h:outputLabel value="#{theItem.message}" />
+					</p:column>
+
+					<p:column headerText="PHR Identifier" sortBy="#{theItem.ownerUri}"
+						style="width:200px;word-wrap: break-word;">
+							<h:outputLabel value=" #{theItem.ownerUri}" />
+					</p:column>
+
+					<p:column headerText="Protocol Identifier"
+						style="width:200px;word-wrap: break-word;"
+						sortBy="#{theItem.protocolId}" >
+						<h:outputLabel value="#{theItem.protocolId}" />
+					</p:column>
+
+
+				</p:dataTable>
+			</p:fieldset>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>

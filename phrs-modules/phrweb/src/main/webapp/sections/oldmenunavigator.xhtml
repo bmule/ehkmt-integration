@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<!-- rendered=true/false is controlled in  layout template -->
+	<!-- 	<li><a href="#{request.contextPath}/jsf/xx"><h:outputLabel value="#{labels['xx']}"/></a></li>  -->	
+	<!-- columns="2" cellpadding="10" ui-helper-clearfix id="sidebar1"-->
+			
+<!--  layout section is scrollabl, no need to add additional component -->
+
+
+<h:head>
+	<title></title>
+</h:head>
+
+<h:body>
+	<ui:composition>
+	
+	<p:panel id="loginpanel" closable="false" style="width:100%"  >
+	<!-- TODO render options in template based on loggedIn and also in panel below -->
+		<!--  <a href="logout.jsp">Logout</a>-->
+		<h:form>
+			<!-- 
+			Ajax based vs. h:commandLink.... issue is OpenID processing.. and the return link
+			<p:commandLink value="/login_dialog.jsp" 	title="Login"    rendered="#{loginbean.loggedIn == false}">Login</p:commandLink>
+			<p:commandLink value="/logout.jsp" 			title="Logout" 	rendered="#{loginbean.loggedIn == true}">Logout</p:commandLink>		
+			
+			
+			value="#{usermgtBean.logout}"
+			-->
+			 <h:commandLink value="" actionListener="#{usermgrBean.logout}">
+				 <h:outputText value="Logout" style="font-size:10pt;"/>
+			 </h:commandLink>
+			
+		</h:form>
+	</p:panel>
+	<p:panel style="width:100%" > <!-- rendered="#{loginbean.loggedIn == true}" -->
+	<!-- 
+	<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;" >	
+	selectionMode="single"  
+            selection="#{treeBean.selectedNode}"
+            
+            dynamic="true" cache="false" 
+            styleClass="documentStyle"
+	 -->
+	 <!--  this works 
+	<h:form>
+		<p:tree  value="#{menuBean.root}" var="ref" style="width:100%;"
+			selectionMode="single" selection="#{menuBean.selectedNode}" >
+			<p:treeNode  type="default">  
+            	<h:outputText value="#{ref.label}" />  
+       	 	</p:treeNode> 
+		</p:tree>
+
+    </h:form> selectionMode="single" selection="#{menuBean.selectedNode}" 
+    <h:outputText value="#{ref.type}"/>:
+ 
+	 <h:form>
+		<p:tree  value="#{menuBean.root}" var="ref" style="width:100%;">
+			
+			<p:treeNode rendered="#{ref.type == 'nodeheader'}" type="default">
+						<h:outputText value="#{ref.label}"/><h:outputText value="#{ref.type}"/>
+			</p:treeNode>
+
+				
+				<p:treeNode rendered="#{ref.type == 'node'}" type="default">
+					<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+				</p:treeNode>		
+			
+		</p:tree>
+	</h:form>
+	  
+	 <h:form>
+		<p:tree  value="#{menuBean.root}" var="ref" style="width:100%;">
+			<p:treeNode type="default">
+						test <h:outputText value="#{ref.type}"/><h:outputText value="#{ref.label}"/>
+			</p:treeNode>
+				<p:treeNode rendered="#{ref.type == 'noderoot'}" type="default">
+					<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
+				</p:treeNode>	
+						
+				<p:treeNode rendered="#{ref.type == 'nodeheaderlink'}" type="default">
+					<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/></a>
+				</p:treeNode>
+				
+				<p:treeNode rendered="#{ref.type == 'nodeheader'}" type="default">
+					<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+				</p:treeNode>
+				
+				<p:treeNode rendered="#{ref.type == 'node'}" type="default">
+					<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+				</p:treeNode>			
+					
+				<p:treeNode rendered="#{ref.type eq 'link'}" type="default">
+					<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
+				</p:treeNode>
+				
+				<p:treeNode rendered="#{ref.type eq 'nodelink'}" type="default">
+					<a href="#{request.contextPath}#{ref.url}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
+				</p:treeNode>
+		
+		</p:tree>	 
+	 </h:form>-->	
+	 				<!--
+	          <p:commandLink update="documentPanel" oncomplete="documentDialog.show()" title="View Detail">  
+                <p:graphicImage value="/images/search.png"/>   
+                <f:setPropertyActionListener value="#{document}"   
+                    target="#{documentsController.selectedDocument}" />  
+            </p:commandLink> 				
+	 				
+	 	      <p:commandLink  title="View Detail" ajax="false">  
+				<p:graphicImage value="/images/search.png"/>   
+                <f:setPropertyActionListener value="#{ref}"   
+                    target="#{menuBean.selectedDocument}" />  
+                 <f:setPropertyActionListener value="#{ref.parent}"   
+                    target="#{menuBean.selectedNode}" />                    
+            </p:commandLink>	
+            #{request.contextPath}			
+	 				-->
+	<h:form> 
+		<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;" 	>
+		
+			<p:column  style="width:100%;" selectionMode="single" >	
+			
+				<!-- <p:ajax event="" ></p:ajax> -->
+				<h:panelGroup rendered="#{ref.type == 'noderoot'}" >
+					<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
+				</h:panelGroup>	
+						
+				<h:panelGroup rendered="#{ref.type == 'nodeheaderlink'}">
+					<h:outputLink value="#{request.contextPath}#{ref.fileName}?requestnode=#{ref.resourceUri}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+					</h:outputLink>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{ref.type == 'nodeheader'}">
+					<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{ref.type == 'node'}">
+					<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+				</h:panelGroup>			
+					
+				<h:panelGroup rendered="#{ref.type eq 'link'}" >
+			
+	 <!--        
+	 	      <p:commandLink value="#{ref.fileName}" title="View Detail" ajax="false" actionListener="onNodeSelect">  
+				<p:graphicImage value="/images/search.png"/>   
+                <f:setPropertyActionListener value="#{ref}"   
+                    target="#{menuBean.selectedDocument}" />  
+                 <f:setPropertyActionListener value="#{ref.parent}"   
+                    target="#{menuBean.selectedNode}" />                
+            </p:commandLink>
+            			<p:commandLink value="#{ref.fileName}" title="View Detail"  actionListener="onNodeSelect"> 
+            			<p:graphicImage value="/images/search.png"/> 
+            			     <f:setPropertyActionListener value="#{ref}"   
+                   			 target="#{menuBean.selectedDocument}" />  
+            			</p:commandLink>-->
+					<h:outputLink  value="#{request.contextPath}#{ref.fileName}?requestnode=#{ref.resourceUri}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>					
+					</h:outputLink>
+				</h:panelGroup>
+				
+				<h:panelGroup rendered="#{ref.type eq 'nodelink'}">
+					<h:outputLink value="#{request.contextPath}#{ref.fileName}?requestnode=#{ref.resourceUri}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+					</h:outputLink>
+				</h:panelGroup>
+							
+			</p:column>			
+		</p:treeTable>
+</h:form> 	
+	</p:panel>	
+
+	</ui:composition>
+</h:body>	
+
+
+</html>

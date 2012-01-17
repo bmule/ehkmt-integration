@@ -4,7 +4,8 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 	<display-name>phrweb</display-name>
-
+	<!-- These parameters are read by by the ConfiguratioService, but can be 
+		overriden by the xml config file -->
 	<!-- testmode testmode=true disables saving of PhrUser when the OpenId session 
 		is started it allows null protocol IDs that will be set with a default. Useful 
 		for single user mode testing testmode= -->
@@ -12,10 +13,53 @@
 		<param-name>testmode</param-name>
 		<param-value>true</param-value>
 	</context-param>
+	<context-param>
+		<param-name>testsingleusermode</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>testrolemode</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>testpixmode</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>monitorlistall</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<!-- testrolemode testpixmode -->
+	<!-- offer a GUI selection list of protocol IDs for testing -->
+	<context-param>
+		<param-name>show-test-identifiers</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<!-- how to associate patient identifiers to PHR User -->
+	<context-param>
+		<param-name>associate-identifiers</param-name>
+		<param-value>default</param-value>
+	</context-param>
+	<!-- different scenarios: newuser = openid means that openid creates new 
+		users and there is no separate login/user creation to create a local user 
+		. -->
+	<context-param>
+		<param-name>user-management-scenario</param-name>
+		<param-value>openid-</param-value>
+	</context-param>
+	<context-param>
+		<param-name>patient-identifier-lookup-property</param-name>
+		<param-value>protocolid</param-value>
+	</context-param>
+	<!-- list of where to extract patient identifiers. These might be passed 
+		via an openId provider or gui <param-value>openid</param-value> -->
 	<!-- TODO if we use the Dyu properties file to set available providers then 
 		we do not need this. The software could check the Dyu file first Use a URL 
-		for the iCARDEA OpenId provider, otherwise provide the context name of the 
-		local provider application -->
+		for the iCARDEA OpenId provider, otherwise provide the web application context 
+		name of the local provider application -->
 	<context-param>
 		<param-name>openid.provider</param-name>
 		<param-value>provider</param-value>
@@ -44,13 +88,28 @@
 	<!-- Change to "Production" when you are ready to deploy Development -->
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
-		<param-value>Production</param-value>
+		<param-value>Development</param-value>
 	</context-param>
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<!--<load-on-startup>5</load-on-startup> -->
+	<servlet>
+		<servlet-name>LoginServlet</servlet-name>
+		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoginServlet</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping>
+
+	<!-- alternative in case later we want to filter OpenId on *.xhtml <url-pattern>*.faces</url-pattern> -->
+
+	<!-- <context-param> <param-name>com.sun.faces.enableViewStateIdRendering</param-name> 
+		<param-value>true</param-value> </context-param> -->
 	<servlet-mapping>
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
@@ -95,27 +154,26 @@
 	with long lists and you do not want the browser page to always jump to the top
 	if you trigger a link or button action that stays on the same page.
 	Default is 'false'
-</description>
+		</description>
 		<param-name>org.apache.myfaces.AUTO_SCROLL</param-name>
 		<param-value>true</param-value>
 	</context-param>
 	<listener>
 		<listener-class>org.apache.myfaces.webapp.StartupServletContextListener</listener-class>
 	</listener>
-
 	<listener>
 		<listener-class>at.srfg.kmt.ehealth.phrs.DefaultLoader</listener-class>
 	</listener>
-
+	<!-- listener: This listener is extremely important for catching the onAuthenticate 
+		event, then processing the PhrUser from the authenticated OpenUserId object -->
+	<!-- <listener> <listener-class>at.srfg.kmt.ehealth.phrs.usermgt.openid.dyu.OpenIdContextListener</listener-class> 
+		</listener> -->
 	<welcome-file-list>
 		<welcome-file>index.xhtml</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<!-- After this, the JSF view exception might occur. Catching that exception 
 		automatically is an open issue -->
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>
-
-
 </web-app>

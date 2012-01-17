@@ -58,7 +58,7 @@ prependId="false"
 						<p:column style="width:50px" headerText="Options">
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 		
-								<!-- ok, success view  padlBean -->
+								<!-- ok, success view  padlBean 
 								<p:commandButton update="idPanelAdl"
 									disabled="#{theItem.status eq 'default.no_answer.label'}"
 									oncomplete="widDialogAdl.show()" image="ui-icon ui-icon-search"
@@ -68,7 +68,7 @@ prependId="false"
 									<f:setPropertyActionListener value="no"
 										target="#{padlBean.modify}" />
 								</p:commandButton>
-		
+		-->
 								<p:commandButton update="idPanelAdl"
 									oncomplete="widDialogAdl.show()" image="ui-icon ui-icon-pencil"
 									title="#{labels['default.button.edit.label']}">
@@ -104,17 +104,47 @@ prependId="false"
 			</h:form>
 
 		</div>
-		<!-- div entry -->
 		
-
 				<p:dialog closable="false" widgetVar="widDialogAdl" header="#{labels['activityOfDailyLivingItem.activityCode.label']}"
 					appendToBody="true" 
 					id="idDialogAdl" resizable="true" modal="true" width="600">
 					
 					<p:outputPanel id="idPanelAdl" layout="block">
 					
-					<h:form prependId="false" id="idFormAdl">
+				<h:form prependId="false" id="idFormAdl">
+
+					<h:inputHidden value="#{padlBean.selected.resourceUri}" />				
+					
+					<h:inputHidden value="#{padlBean.selected.tempCreateDate}" />
+					<h:inputHidden value="#{padlBean.selected.tempId}" />
+					
+					<h:inputHidden value="#{padlBean.selected.createId}" />
+					<h:inputHidden value="#{padlBean.selected.code}" />
+				<!-- 
+					<h:inputHidden value="#{padlBean.selected.id}" />
+					<h:inputHidden value="#{padlBean.selected.createDate}" />
+					<h:inputHidden value="#{padlBean.selected.status}" /> 
+					<h:inputHidden value="#{padlBean.selected.label}" /> 
+									
+					issue:begin and end date when only the display data is used...only one saved
+					-->
+				
+					<h:inputHidden value="#{padlBean.selected.type}" />
+					<h:inputHidden value="#{padlBean.selected.category}" />
+					<h:inputHidden value="#{padlBean.selected.externalReference}" />
+					
+					
+					<h:inputHidden value="#{padlBean.selected.creatorUri}" />
+					<h:inputHidden value="#{padlBean.selected.ownerUri}" />					
+					<h:inputHidden value="#{padlBean.selected.parentId}" />
+					<h:inputHidden value="#{padlBean.selected.deleted}" />					
+					
+					<h:inputHidden value="#{padlBean.selected.origin}" />
+					<h:inputHidden value="#{padlBean.selected.originStatus}" />		
+									
 						<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
+								<h:inputHidden id="code" value="#{padlBean.selected.code}"></h:inputHidden>
+								
 								<f:facet name="header">
 									<h:outputLabel value="#{padlBean.selected.code}">
 										<f:converter converterId="labelLookup" />
@@ -182,105 +212,9 @@ prependId="false"
 				</p:dialog>
 		
 	
-<!-- <p:commandButton
-										value="#{padlBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
-										type="reset" immediate="true" onclick="widDialogAdl.hide()"
-										image="ui-icon ui-icon-close" />
-	
-		<h:form prependId="false">
-			<p:dialog closable="false" widgetVar="xxwidDialogAdl" header="#{labels['activityOfDailyLivingItem.activityCode.label']}"
-					appendToBody="true" id="xxidDialogAdl" resizable="true" modal="true" width="600">
-					
-						<p:outputPanel id="xxidPanelAdl" layout="block">
-							<h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
-								<f:facet name="header">
-									<h:outputLabel value="#{padlBean.selected.code}">
-										<f:converter converterId="labelLookup" />
-									</h:outputLabel>
-								</f:facet>	
-								
-								<h:outputLabel for="xxidField_status" value="#{labels['activityOfDailyLivingItem.valueActivity.label']}" styleClass="form-dialog-label" />
-								<p:outputPanel id="xxidField_status" layout="block">
-										<h:selectOneRadio value="#{padlBean.selected.status}">
-											<f:selectItem itemLabel="I can do this without assistance"
-												itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
-											<f:selectItem itemLabel="I require assistance"
-												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>									
-											<f:selectItem itemLabel="Not answered"
-												itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
-										</h:selectOneRadio>					
-								</p:outputPanel>
-							
-					
-							</h:panelGrid>
-						</p:outputPanel>
-						</p:dialog>		
-		</h:form> -->
+
 		
 		
 	</ui:define>
-	<!-- 
 
-					  
-		<listbox id="modelList_listbox"  rows="3"  model="@{winmgtCtrl.modelMain}" selectedItem="@{winmgtCtrl.selected}">
-			<listhead sizable="true">	
-				<listheader label="${labels.obsIssue.issueCode.label}" 				hflex="2" sort="auto(code)" />
-				<listheader label="${labels.activityOfDailyLivingItem.valueActivity.label}" 		hflex="2" sort="auto(status)" />
-				<listheader label="${labels.short.dateStart.label}"  				hflex="1" sort="auto(beginDate)"/>
-				<listheader label="${labels.short.dateEnd.label}" 					hflex="1" />
-				<listheader label="${labels.default.comments.label}" 				hflex="3" />
-			</listhead>
-	
-			<listitem self="@{each=itemMain}">
-				<listcell label="@{itemMain.code,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"/> 			
-				<listcell label="@{itemMain.status,		converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterVocabLabel'}"    	/>
-				<listcell label="@{itemMain.beginDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	 />
-				<listcell label="@{itemMain.endDate,	converter='at.srfg.kmt.ehealth.phrs.zk.utils.ConverterDateShort'}" 	/>						
-				<listcell label="@{itemMain.note}"      		/>																		
-			</listitem>							
-		</listbox>	
-					
-
-activityOfDailyLivingItem.label=Activity Of Daily Living
-activityOfDailyLivingItem.activityCategory.label=Category
-activityOfDailyLivingItem.activityCode.label=Activity Type
-activityOfDailyLivingItem.valueActivity.label=Activity Status
-#deprecated
-activityOfDailyLivingItem.isActivityUnassisted.label=I can do without assistance
-#deprecated
-activityOfDailyLivingItem.isActivityAssisted.label=I can do with assistance
-
-action=" {padlBean.store}"
-http://balusc.blogspot.com/2006/06/using-datatables.html
-actionListener=" {padlBean.store}" 
-update="msgs"
-process="@parent"
-								 <f:setPropertyActionListener value="#{theItem}" target="#{padlBean.selectedItem}" />
-
-						 editing onchange="x{padlBean.store}" valueChangeListener="X{padlBean.store}" 
-											<f:selectItem
-										itemLabel="#{labels['default_activeStatusNotSpecified']}"
-										itemValue="default_activeStatusNotSpecified"
-										noSelectionOption="true"></f:selectItem>
-							<f:selectItems value=" {padlBean.vocabMap.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS}"
-							
-										var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />									
-	valueChangeListener="#{padlBean.setSelected}">
-	
-	        <p:cellEditor>
-                <f:facet name="output">
-                    <h:outputText value="#{car.model}" />
-                </f:facet>
-                <f:facet name="input">
-                    <p:inputText value="#{car.model}" style="width:100%"/>
-                </f:facet>
-	idItemTableAdl
-						<p:column>
-							<p:commandButton headerText="Update your Status"
-								action=" {padlBean.testme}" image="ui-icon ui-icon-pencil"
-								title="Update">
-								<f:setPropertyActionListener value=" {theItem}"
-									target=" {padlBean.selected}" />
-							</p:commandButton>
-						</p:column>, -->
 </ui:composition>
