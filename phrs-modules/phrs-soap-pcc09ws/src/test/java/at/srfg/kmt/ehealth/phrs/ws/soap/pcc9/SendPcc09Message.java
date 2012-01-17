@@ -12,9 +12,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import javax.sql.rowset.serial.SerialArray;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004040UVPortType;
@@ -92,12 +94,12 @@ final class SendPcc09Message {
             throw exception;
         }
 
-        final QUPCAR004040UVService service = getQUPCAR004040UVService();
-        final URL documentLocation = service.getWSDLDocumentLocation();
-        LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
+        final QUPCAR004040UVPortType portType = getQUPCAR004040UVService();
         // here I obtain the service.
-        final QUPCAR004040UVPortType portType = service.getQUPCAR004040UVPort();
+//        final QUPCAR004040UVPortType portType = ((Service)service).getQUPCAR004040UVPort();
         setWSAddressHandler(portType, responseEndpointURI);
+        
+        
 
         // I set the end point for the PCC9 end point
         setEndPointURI(portType, endpointURI);
@@ -159,13 +161,16 @@ final class SendPcc09Message {
      *
      * @return a proxy instance able to address the PCC9 service.
      */
-    private static QUPCAR004040UVService getQUPCAR004040UVService() {
+    private static QUPCAR004040UVPortType getQUPCAR004040UVService() {
         final QName qName =
                 new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
         final ClassLoader classLoader = SendPcc09Message.class.getClassLoader();
         final URL url = classLoader.getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
-        final QUPCAR004040UVService result = new QUPCAR004040UVService(url, qName);
-        return result;
+//        final QUPCAR004040UVService result = new QUPCAR004040UVService(url, qName);
+//        return result;
+        Service service = Service.create(url, qName);
+        final QUPCAR004040UVPortType port = service.getPort(QUPCAR004040UVPortType.class);
+        return port;
     }
 
     /**
@@ -244,5 +249,13 @@ final class SendPcc09Message {
         //final String endpoint = "http://localhost:8080/phrs/pcc09";
         handlerChain.add(new WSAdressingHeaderEnricher(endpointURI));
         binding.setHandlerChain(handlerChain);
+    }
+    
+    private void setSOAP12Binding(QUPCAR004040UVPortType portType) {
+        final BindingProvider bindingProvider = (BindingProvider) portType;
+        final Binding binding = bindingProvider.getBinding();
+        final Map<String, Object> reqContext = bindingProvider.getRequestContext();
+        //reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getWSDLURI(endpointURI));
+        
     }
 }
