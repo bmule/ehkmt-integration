@@ -5,7 +5,7 @@
  * Date : Jan 16, 2012
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import com.sun.net.ssl.internal.ssl.Provider;
@@ -29,7 +29,7 @@ final class SSLClient {
     private static final String SSL_STORE_PASSWORD = 
             "javax.net.ssl.trustStorePassword";
 
-    public static void sslSetup(String certPath, String password) {
+    static void sslSetup(String certPath, String password) {
         System.setProperty(HANDLER_PKGS, SUN_SSL_PROTOCOL);
         
         final Provider provider = new Provider();

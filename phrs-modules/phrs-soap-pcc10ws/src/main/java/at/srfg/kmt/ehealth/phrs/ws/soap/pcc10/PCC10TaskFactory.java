@@ -110,7 +110,7 @@ public final class PCC10TaskFactory {
         properties.put(PCC10TaskProperty.PATIENT_NAME, patientNames);
         properties.put(PCC10TaskProperty.CARE_PROVISION_CODE, careProvisionCode);
 
-        final PCC10Task result = new PCC10Task(properties);
-        return result;
+        //final PCC10Task result = new PCC10Task(properties);
+        return null;
     }
 }

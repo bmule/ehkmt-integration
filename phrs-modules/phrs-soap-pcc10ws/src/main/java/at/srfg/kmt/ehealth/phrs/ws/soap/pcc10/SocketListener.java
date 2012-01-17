@@ -36,6 +36,14 @@ public class SocketListener {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SocketListener.class);
 
+    private final String keyfilePath;
+    private final String keyfilePasswd;
+    
+    public SocketListener(String keyfilePath, String keyfilePasswd) {
+        this.keyfilePath = keyfilePath;
+        this.keyfilePasswd = keyfilePasswd;
+    }
+
     private class Producer implements Runnable {
 
         private ServerSocket serverSocket;
@@ -82,7 +90,7 @@ public class SocketListener {
 
         private void consume(Object toConsume) {
             LOGGER.debug("Tries to consume {}" + toConsume);
-            new PCC10Task((Map) toConsume).run();
+            new PCC10Task(keyfilePath, keyfilePasswd, (Map) toConsume).run();
             
         }
         
