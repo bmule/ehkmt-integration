@@ -12,22 +12,20 @@ import java.net.MalformedURLException;
 import java.util.Iterator;
 import java.util.Set;
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPHeader;
-import javax.xml.soap.SOAPMessage;
+import javax.xml.soap.*;
 import javax.xml.ws.handler.MessageContext;
 import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
- * This SOAP handler is used to used to display in a human readable form 
- * the SOAP message parts (header and body). <br/>
- * This SOAP handler is logging the SOAP message parts (header and body) using
- * the underlying logging frame-work. <br/>
- * This class was not designed to be extended.
- * 
+ * This SOAP handler is used to used to display in a human readable form the
+ * SOAP message parts (header and body). <br/> This SOAP handler is logging the
+ * SOAP message parts (header and body) using the underlying logging frame-work.
+ * <br/> This class was not designed to be extended.
+ *
  * @author Mihai
  * @version 0.1
  * @since 0.1
@@ -43,7 +41,8 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
             LoggerFactory.getLogger(DebugHandler.class);
 
     /**
-     * Builds a <code>DebugHandler</code> instance.
+     * Builds a
+     * <code>DebugHandler</code> instance.
      *
      */
     public DebugHandler() throws MalformedURLException {
@@ -52,7 +51,7 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * This method returns null, always.
-     * 
+     *
      * @return returns null, always.
      */
     @Override
@@ -62,7 +61,7 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * This method is not implemented.
-     * 
+     *
      * @param mc not used, the method is not implemented.
      */
     @Override
@@ -83,13 +82,16 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * Logs the given SOAP message.
-     * 
+     *
      * @param context the SOAP message to log.
      * @return true, always.
      */
     @Override
     public boolean handleMessage(SOAPMessageContext context) {
         final SOAPMessage message = context.getMessage();
+        final MimeHeaders mimeHeaders = message.getMimeHeaders();
+        logMimeHeaders(mimeHeaders);
+
         try {
             final SOAPHeader header = message.getSOAPHeader();
             process(header);
@@ -105,9 +107,33 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Logs a SOAP message header. if the message is null then this method has 
+     * Logs all the given mime-type headers.
+     *
+     * @param headers the mime-type header to be logged.
+     */
+    private void logMimeHeaders(MimeHeaders headers) {
+        if (headers == null) {
+            LOGGER.debug("No mime headers found");
+            return;
+        }
+
+        final StringBuffer msg = new StringBuffer("Available SOAP Headers :\n");
+        for (Iterator headersIt = headers.getAllHeaders(); headersIt.hasNext();) {
+            final MimeHeader header = (MimeHeader) headersIt.next();
+            msg.append("Header ");
+            msg.append(header.getName());
+            msg.append(" = ");
+            msg.append(header.getValue());
+            msg.append('\n');
+        }
+        
+        LOGGER.debug(msg.toString());
+    }
+
+    /**
+     * Logs a SOAP message header. if the message is null then this method has
      * no effect (it only logs the null message).
-     * 
+     *
      * @param header the SOAP level to log.
      */
     private void process(SOAPHeader header) {
@@ -134,8 +160,8 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
 
     /**
      * Logs a SOAP message body.
-     * 
-     * @param body  the SOAP message body to be log log.
+     *
+     * @param body the SOAP message body to be log log.
      */
     private void process(SOAPBody body) {
         if (body == null) {
@@ -156,6 +182,6 @@ public final class DebugHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.error("The SOAP Body can not be parsed.");
             LOGGER.error(exception.getMessage(), exception);
         }
-        
+
     }
 }

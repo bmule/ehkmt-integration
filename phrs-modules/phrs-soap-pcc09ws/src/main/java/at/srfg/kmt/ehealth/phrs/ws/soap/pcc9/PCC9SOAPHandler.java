@@ -384,9 +384,10 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
                 && patientId != null
                 && patientNames != null) {
             final Map<String, String> properties = new HashMap<String, String>();
-            properties.put(patientId, patientId);
-            properties.put(patientNames, patientNames);
-            properties.put(careProvisionCode, careProvisionCode);
+            properties.put("patientId", patientId);
+            properties.put("patientNames", patientNames);
+            properties.put("careProvisionCode", careProvisionCode);
+            properties.put("responseEndpointURI", responseEndpointURI);
             notify("localhost", 5578, properties);
         }
     }

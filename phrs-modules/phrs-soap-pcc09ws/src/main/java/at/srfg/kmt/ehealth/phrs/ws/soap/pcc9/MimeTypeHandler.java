@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import java.util.Iterator;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MimeHeaders;
@@ -26,15 +25,15 @@ import org.slf4j.LoggerFactory;
  * @since 1.0-SNAPSHOT
  */
 public class MimeTypeHandler implements SOAPHandler<SOAPMessageContext> {
-    
-        /**
+    public static final String CONTENT_TYPE_HEADER = "Content-Type";
+
+    /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
      * <code>at.srfg.kmt.ehealth.phrs.ws.soap.MimeTypeHandler</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MimeTypeHandler.class);
-
 
     public Set<QName> getHeaders() {
         return null;
@@ -49,15 +48,29 @@ public class MimeTypeHandler implements SOAPHandler<SOAPMessageContext> {
 
     public boolean handleMessage(SOAPMessageContext context) {
         final MimeHeaders mimeHeaders = context.getMessage().getMimeHeaders();
-        
-        final String[] header = mimeHeaders.getHeader("Content-Type");
-        if (header != null) {
-            for (String h : header) {
-                LOGGER.debug("--->" + header);
-            }
-        }
-        
+
+        LOGGER.debug("Inital Headers.");
+        logHeader(mimeHeaders, CONTENT_TYPE_HEADER);
+
         mimeHeaders.setHeader("Content-Type", "appliaction/soap+xml");
+
+        
+        LOGGER.debug("Headers agter mime type header.");
+        logHeader(mimeHeaders, CONTENT_TYPE_HEADER);
+
         return true;
+    }
+
+    private void logHeader(MimeHeaders mimeHeaders, String headerName) {
+        final String[] headerValues = mimeHeaders.getHeader(headerName);
+
+        if (headerValues == null) {
+            LOGGER.debug("No Header with this name {}", headerName);
+            return;
+        }
+
+        for (String headerValue : headerValues) {
+            LOGGER.debug("{} = {}", headerName, headerValue);
+        }
     }
 }

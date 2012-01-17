@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
+import javax.xml.ws.BindingType;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004040UVPortType;
 import org.hl7.v3.QUPCIN043100UV01;
@@ -20,6 +21,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * The IHE CM PCC9 web SOAP based web service.
+ * <b>Note : </b> This WS is according with the 
+ * <a href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> specifications.
  *
  * @author mihai
  * @version 1.0-SNAPSHOT
@@ -27,6 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 @WebService(endpointInterface = "org.hl7.v3.QUPCAR004040UVPortType")
 @HandlerChain(file = "handler-chain.xml")
+@BindingType(value="http://java.sun.com/xml/ns/jaxws/2003/05/soap/bindings/HTTP/")
 public class QUPCAR004040UVWebService implements QUPCAR004040UVPortType {
 
     /**
