@@ -10,6 +10,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.ws.BindingType;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
 import org.hl7.v3.QUPCIN043200UV01;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 @WebService(endpointInterface = "org.hl7.v3.QUPCAR004030UVPortType")
 @HandlerChain(file = "handler-chain.xml")
+@BindingType(value="http://java.sun.com/xml/ns/jaxws/2003/05/soap/bindings/HTTP/")
 public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
 
     /**
