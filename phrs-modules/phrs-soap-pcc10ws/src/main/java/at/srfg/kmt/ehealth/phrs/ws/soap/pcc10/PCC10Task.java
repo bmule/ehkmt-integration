@@ -14,10 +14,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCIN043200UV01;
@@ -40,7 +37,7 @@ final class PCC10Task implements Runnable {
 
     /**
      * The Logger instance. All log messages from this class are routed through
-     * this member. The Logger name space cd 
+     * this member. The Logger name space cd
      * <code>at.srfg.kmt.ehealth.phrs.ws.soap.PCC9Endpoint</code>.
      */
     private static final Logger LOGGER =
@@ -74,22 +71,37 @@ final class PCC10Task implements Runnable {
 
     @Override
     public void run() {
-        LOGGER.debug("HELL here");
         LOGGER.debug("Tries to execute this tasks with the following propertiess : {}", properties);
+        final String patientId = (String) properties.get("patientId");
+        final String patientNames = (String) properties.get("patientNames");
+        final String careProvisionCode = (String) properties.get("careProvisionCode");
+        final String responseEndpointURI = (String) properties.get("responseEndpointURI");
+
+        if (responseEndpointURI != null
+                && careProvisionCode != null
+                && patientId != null
+                && patientNames != null) {
+            LOGGER.error("This properties map [{}] does not contain enought informations. Task aborted.", properties);
+            return;
+        }
 
         try {
+//            final QUPCIN043200UV01 pcc10Request = buildMessage();
+//                    LOGGER.info("Tries to send a PCC10 query ({}) to {}", pcc10Request, "http://localhost:8989/testws/pcc10");
+//        final MCCIIN000002UV01 ack =
+//                SendPcc10Message.sendMessage(pcc10Request, "http://localhost:8989/testws/pcc10");
             final QUPCIN043200UV01 pcc10Request = buildMessage();
-                    LOGGER.info("Tries to send a PCC10 query ({}) to {}", pcc10Request, "http://localhost:8989/testws/pcc10");
-        final MCCIIN000002UV01 ack =
-                SendPcc10Message.sendMessage(pcc10Request, "http://localhost:8989/testws/pcc10");
+            LOGGER.info("Tries to send a PCC10 query ({}) to {}", pcc10Request, responseEndpointURI);
+            final MCCIIN000002UV01 ack =
+                    SendPcc10Message.sendMessage(pcc10Request, responseEndpointURI);
 
-        LOGGER.info("Acknowledge (respense) is : {}.", ack);
+            LOGGER.info("Acknowledge (respense) is : {}.", ack);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
-        
-        
+
+
 
         LOGGER.debug("Task end.");
     }
