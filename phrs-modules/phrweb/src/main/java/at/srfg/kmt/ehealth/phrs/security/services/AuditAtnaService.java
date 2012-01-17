@@ -3,10 +3,8 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import tr.com.srdc.icardea.atnalog.client.Audit;
 
 @SuppressWarnings("serial")
