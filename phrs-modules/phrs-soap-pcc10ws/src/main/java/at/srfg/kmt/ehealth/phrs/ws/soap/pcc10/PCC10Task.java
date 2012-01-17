@@ -77,10 +77,9 @@ final class PCC10Task implements Runnable {
         final String careProvisionCode = (String) properties.get("careProvisionCode");
         final String responseEndpointURI = (String) properties.get("responseEndpointURI");
 
-        if (responseEndpointURI != null
-                && careProvisionCode != null
-                && patientId != null
-                && patientNames != null) {
+        if (responseEndpointURI == null
+                || careProvisionCode == null
+                ||  (patientId == null && patientNames == null)) {
             LOGGER.error("This properties map [{}] does not contain enought informations. Task aborted.", properties);
             return;
         }
