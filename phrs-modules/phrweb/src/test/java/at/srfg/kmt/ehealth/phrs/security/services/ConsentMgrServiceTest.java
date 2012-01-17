@@ -32,11 +32,7 @@ public class ConsentMgrServiceTest {
     @After
     public void tearDown() {
     }
-/*
-INFO: Unable to sendViaPost to url[http://localhost:8080/consenteditor/services/ConsentManagerImplService/]
-java.net.SocketTimeoutException: Read timed out
-	at java.net.SocketInputStream.socketRead0(Native Method)
- */
+
     @Ignore
     @Test
     public void testBasicStubConnection() throws Exception {
