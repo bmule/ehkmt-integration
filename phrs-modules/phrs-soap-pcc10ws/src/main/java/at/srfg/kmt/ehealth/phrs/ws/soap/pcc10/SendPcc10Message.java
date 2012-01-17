@@ -10,9 +10,11 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
+import javax.xml.ws.Service;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
 import org.hl7.v3.QUPCAR004030UVService;
@@ -23,7 +25,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Utility class able to send PCC10 requests to a given PCC10 end point. <br/>
+ * <b>Note : </b> this message sends <a
+ * href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> based messages. <br/>
  * This class can not be extended.
+ *
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -54,8 +59,8 @@ final class SendPcc10Message {
      * @param query the PCC10 request. It can not be null.
      * @param endpointURI the URI where the PCC10 end point runs. It can not be
      * null.
-     * @param responseEndpointURI the URI where the response to the PCC10 request
-     * will be send. It can not be null.
+     * @param responseEndpointURI the URI where the response to the PCC10
+     * request will be send. It can not be null.
      * @return the acknowledge (the response for the request)for the given
      * request.
      * @throws MalformedURLException if the specified PCC10 end point URI is
@@ -77,11 +82,7 @@ final class SendPcc10Message {
             LOGGER.error(exception.getMessage(), exception);
         }
 
-        final QUPCAR004030UVService service = getQUPCAR004030UVService();
-        final URL documentLocation = service.getWSDLDocumentLocation();
-        LOGGER.debug("Actaul service wsdl location : {}", documentLocation);
-        // here I obtain the service.
-        final QUPCAR004030UVPortType portType = service.getQUPCAR004030UVPort();
+        final QUPCAR004030UVPortType portType = getQUPCAR004030UVService();
 
         // I set the end point for the PCC10 end point
         setEndPointURI(portType, endpointURI);
@@ -94,19 +95,46 @@ final class SendPcc10Message {
     }
 
     /**
-     * Returns a proxy instance able to address the PCC10 service. The (returned)
-     * Proxy instance is able to address the PCC10 SOAP based services via a Java
-     * API.
+     * Returns a proxy instance able to address the PCC10 service. The
+     * (returned) Proxy instance is able to address the PCC10 SOAP based
+     * services via a Java API.
      *
      * @return a proxy instance able to address the PCC10 service.
      */
-    private static QUPCAR004030UVService getQUPCAR004030UVService() {
+    private static QUPCAR004030UVPortType getQUPCAR004030UVService() {
         final QName qName =
                 new QName("urn:hl7-org:v3", "QUPC_AR004030UV_Service");
         final ClassLoader classLoader = SendPcc10Message.class.getClassLoader();
         final URL url = classLoader.getResource("wsdl/QUPC_AR004030UV_Service.wsdl");
-        final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
-        return result;
+//        final QUPCAR004030UVService result = new QUPCAR004030UVService(url, qName);
+//        return result;
+
+        final Service serviceFactory = Service.create(url, qName);
+
+        for (final Iterator<QName> ports = serviceFactory.getPorts();
+                ports.hasNext();) {
+            final QName next = ports.next();
+            LOGGER.debug("Available port :{} ", next);
+        }
+        
+        // I do this just to be sure that the port SOAP 1.2 is used.
+        // Otherwise the SOAP 1.1 may occur.
+        // I am not sure why this problem occur because the specification says :
+        // "On the client there is nothing special that has to be done. 
+        // JAX-WS runtime looks into the WSDL to determine the binding being 
+        // used and configures itself accordingly. wsimport command line tool
+        // or wsimport ant task can be used to import the WSDL and to generated
+        // the client side artifacts."
+        // The upper logging lines are dispalying the SOAP header so if there 
+        // is no port for the given QName then please find the reason. 
+        final QName portQName =
+                new QName("urn:hl7-org:v3", "QUPC_AR004030UV_PortSoap12");
+
+        final QUPCAR004030UVPortType port =
+                serviceFactory.getPort(portQName, QUPCAR004030UVPortType.class);
+        return port;
+
+
     }
 
     /**
