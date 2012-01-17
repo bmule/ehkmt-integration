@@ -30,6 +30,6 @@ public class StartSocketListener {
     }
 
     public static void main(String... args) throws IOException {
-        new SocketListener().start();
+        new SocketListener(args[0], args[1]).start();
     }
 }

@@ -48,6 +48,9 @@ final class PCC10Task implements Runnable {
      */
     private final Map<PCC10TaskProperty, Object> properties;
 
+    private final String keystorePath;
+    private final String keystorePasswd;
+
     /**
      * Builds a
      * <code>PCC10Task</code> for a given set of Key-Pair set.
@@ -57,7 +60,8 @@ final class PCC10Task implements Runnable {
      * @throws NullPointerException if the
      * <code>properties</code> argument is null.
      */
-    public PCC10Task(final Map<PCC10TaskProperty, Object> properties) {
+    public PCC10Task(String keystorePath, String keystorePasswd, 
+            final Map<PCC10TaskProperty, Object> properties) {
 
         if (properties == null) {
             final NullPointerException exception =
@@ -67,6 +71,8 @@ final class PCC10Task implements Runnable {
         }
 
         this.properties = Collections.unmodifiableMap(properties);
+        this.keystorePasswd = keystorePasswd;
+        this.keystorePath = keystorePath;
     }
 
     @Override
