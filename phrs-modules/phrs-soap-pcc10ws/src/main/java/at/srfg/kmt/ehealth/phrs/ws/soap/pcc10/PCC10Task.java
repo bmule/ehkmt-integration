@@ -14,7 +14,12 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-import java.util.*;
+import com.sun.net.ssl.internal.ssl.Provider;
+import java.security.Security;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCIN043200UV01;
@@ -48,9 +53,6 @@ final class PCC10Task implements Runnable {
      */
     private final Map<PCC10TaskProperty, Object> properties;
 
-    private final String keystorePath;
-    private final String keystorePasswd;
-
     /**
      * Builds a
      * <code>PCC10Task</code> for a given set of Key-Pair set.
@@ -60,8 +62,7 @@ final class PCC10Task implements Runnable {
      * @throws NullPointerException if the
      * <code>properties</code> argument is null.
      */
-    public PCC10Task(String keystorePath, String keystorePasswd, 
-            final Map<PCC10TaskProperty, Object> properties) {
+    public PCC10Task(final Map<PCC10TaskProperty, Object> properties) {
 
         if (properties == null) {
             final NullPointerException exception =
@@ -71,8 +72,6 @@ final class PCC10Task implements Runnable {
         }
 
         this.properties = Collections.unmodifiableMap(properties);
-        this.keystorePasswd = keystorePasswd;
-        this.keystorePath = keystorePath;
     }
 
     @Override
@@ -85,20 +84,29 @@ final class PCC10Task implements Runnable {
 
         if (responseEndpointURI == null
                 || careProvisionCode == null
-                ||  (patientId == null && patientNames == null)) {
-            LOGGER.error("This properties map [{}] does not contain enought informations. Task aborted.", properties);
+                || (patientId == null && patientNames == null)) {
+            LOGGER.error("This properties map [{}] does not contain enought informations. Task aborted.", 
+                    properties);
             return;
         }
 
         try {
-//            final QUPCIN043200UV01 pcc10Request = buildMessage();
-//                    LOGGER.info("Tries to send a PCC10 query ({}) to {}", pcc10Request, "http://localhost:8989/testws/pcc10");
-//        final MCCIIN000002UV01 ack =
-//                SendPcc10Message.sendMessage(pcc10Request, "http://localhost:8989/testws/pcc10");
             final QUPCIN043200UV01 pcc10Request = buildMessage();
-            LOGGER.info("Tries to send a PCC10 query ({}) to {}", pcc10Request, responseEndpointURI);
-            final MCCIIN000002UV01 ack =
-                    SendPcc10Message.sendMessage(pcc10Request, responseEndpointURI);
+            LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
+                    pcc10Request, responseEndpointURI);
+
+            final MCCIIN000002UV01 ack;
+            if (!responseEndpointURI.startsWith("https")) {
+                LOGGER.debug("No SSL");
+                ack =
+                        SendPcc10Message.sendMessage(pcc10Request, responseEndpointURI);
+            } else {
+                LOGGER.debug("SSL used");
+                logSecurity();
+                enableSecurity();
+                
+                ack = SendPcc10Message.sendMessage(pcc10Request, responseEndpointURI);
+            }
 
             LOGGER.info("Acknowledge (respense) is : {}.", ack);
 
@@ -109,6 +117,27 @@ final class PCC10Task implements Runnable {
 
 
         LOGGER.debug("Task end.");
+    }
+    
+    private void enableSecurity() {
+        // TODO : I am not sure if this is right and if I need it !
+        final Provider provider = new Provider();
+        Security.addProvider(provider);
+    }
+
+    private void logSecurity() {
+        // TODO : remove this logging in the prodiction mode !
+        final String pkgsProp = "java.protocol.handler.pkgs";
+        final String pgks = System.getProperty(pkgsProp);
+        LOGGER.debug("{} = {}", pkgsProp, pgks);
+        
+        final String trustStoreProp = "javax.net.ssl.trustStore";
+        final String trustStore = System.getProperty(trustStoreProp);
+        LOGGER.debug("{} = {}", trustStoreProp, trustStore);
+        
+        final String passwdProp = "javax.net.ssl.trustStorePassword";
+        final String passwd = System.getProperty(passwdProp);
+        LOGGER.debug("{} = {}", passwdProp, passwd);
     }
 
     private QUPCIN043200UV01 buildMessage()
