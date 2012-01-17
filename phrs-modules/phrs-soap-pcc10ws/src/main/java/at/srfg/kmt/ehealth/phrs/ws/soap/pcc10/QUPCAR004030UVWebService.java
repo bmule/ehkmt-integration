@@ -8,8 +8,10 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
+import java.util.logging.Level;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingType;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
@@ -56,8 +58,14 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
             throw nullException;
             // FIXME : singals the error back to the client.
         }
-        
-        // FIXME : link it to the result factory !
+
+        ;
+        try {
+            final MCCIIN000002UV01 result = AcknowledgeFactory.build();
+            return result;
+        } catch (JAXBException exception) {
+            LOGGER.error(exception.getMessage(), exception);
+        }
         return null;
     }
 }
