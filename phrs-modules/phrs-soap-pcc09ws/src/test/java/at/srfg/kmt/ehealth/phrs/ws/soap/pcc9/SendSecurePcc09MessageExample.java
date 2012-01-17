@@ -66,7 +66,7 @@ public final class SendSecurePcc09MessageExample {
      */
     public static void main(String... args)
             throws JAXBException, MalformedURLException {
-        if (args == null || args.length != 2) {
+        if (args == null || args.length != 4) {
             final IllegalArgumentException exception =
                     new IllegalArgumentException("One argument expected (the PCC9 end point URI).");
             LOGGER.error(exception.getMessage(), exception);
