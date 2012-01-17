@@ -112,13 +112,14 @@ public class MonitorInfoBean extends FaceBaseBean  {
 							item.message+='No contact info or protocolId'
 						}
 						item.sortOrder=sortOrder
-						if(UserSessionService.isSessionUser(ph.getOwnerUri()){
+						if(UserSessionService.isSessionUser(ph.getOwnerUri() ){
 							//put name
 							item.name='My Report. '+item.name
 							item.sortOrder=1
 						}
 
 					}
+                                        
 				} catch(Exception e) {
 					LOGGER.error("",e)
 				}

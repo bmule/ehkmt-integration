@@ -1,28 +1,24 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services;
 
-import java.io.IOException;
-import java.security.Principal;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrOpenId;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
-
 import com.dyuproject.openid.OpenIdUser;
 import com.dyuproject.openid.RelyingParty;
 import com.dyuproject.openid.ext.AxSchemaExtension;
 import com.dyuproject.openid.ext.SRegExtension;
+import java.io.IOException;
+import java.security.Principal;
+import java.util.HashMap;
+import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserSessionService {
 	private final static Logger LOGGER = LoggerFactory
@@ -48,7 +44,7 @@ public class UserSessionService {
 					(HttpServletResponse) FacesContext.getCurrentInstance()
 							.getExternalContext().getResponse());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 	}
 	public static boolean isSessionUser(String targetUserOwnerUri) {
@@ -103,9 +99,9 @@ public class UserSessionService {
 			FacesContext.getCurrentInstance().getExternalContext()
 					.redirect(uri);// "article.jsp?article_id=" + articleId);
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOGGER.error("uri="+uri,e);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("uri="+uri,e);
 		}
 	}
 
@@ -114,7 +110,7 @@ public class UserSessionService {
 		try {
 			RelyingParty.getInstance().invalidate(request, response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 	}
 
@@ -440,7 +436,7 @@ public class UserSessionService {
 			try {
 				value = (String) openIdUser.getAttribute(attrName);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("openIdUser "+openIdUser.getIdentifier()+" attr="+attrName,e);
 			}
 		}
 		// ConfigurationService.isAppModeTest() &&
@@ -461,7 +457,8 @@ public class UserSessionService {
 				map = AxSchemaExtension.get(user);
 		} catch (Exception e) {
 
-			e.printStackTrace();
+			if(user!=null) LOGGER.error("openIdUser "+user.getIdentifier(),e);
+                        else LOGGER.error("openIdUser null",e);
 		}
 		return map;
 	}
@@ -482,7 +479,8 @@ public class UserSessionService {
 			else
 				map = SRegExtension.get(user);
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(user!=null) LOGGER.error("OpenIdUser="+user.getIdentifier(),e);
+                        else LOGGER.error("OpenIdUser=null",e);
 		}
 
 		return map;
@@ -501,7 +499,8 @@ public class UserSessionService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			if(user!=null) LOGGER.error("OpenIdUser="+user.getIdentifier(),e);
+                        else LOGGER.error("OpenIdUser=null",e);
 		}
 
 		return map;
@@ -620,7 +619,7 @@ public class UserSessionService {
 			phrUser = getCommonDao().updatePhrUser(openIdUser.getIdentifier(),
 					attrs, true, true);
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			
 			LOGGER.error("error creating phrUser", e1);
 
 		}
@@ -649,7 +648,8 @@ public class UserSessionService {
 				context.getExternalContext().invalidateSession();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
+                        
 		}
 	}
 
@@ -662,7 +662,7 @@ public class UserSessionService {
 					exists = true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 		return exists;
 	}
@@ -924,7 +924,7 @@ public class UserSessionService {
 			map = FacesContext.getCurrentInstance().getExternalContext()
 					.getSessionMap();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 		return map;
 	}
@@ -948,7 +948,7 @@ public class UserSessionService {
 						map = FacesContext.getCurrentInstance()
 								.getExternalContext().getSessionMap();
 					} catch (Exception e) {
-						e.printStackTrace();
+						LOGGER.error("",e);
 					}
 
 					if (map != null && map.containsKey(attrName)) {
@@ -963,7 +963,7 @@ public class UserSessionService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			LOGGER.error("attrName=" + attrName, e);
 		}
 		return result;
@@ -985,7 +985,7 @@ public class UserSessionService {
 					map = FacesContext.getCurrentInstance()
 							.getExternalContext().getRequestParameterMap();
 				} catch (Exception e) {
-					e.printStackTrace();
+					LOGGER.error("attrName="+attrName,e);
 				}
 
 				if (map != null && map.containsKey(attrName)) {
@@ -993,7 +993,7 @@ public class UserSessionService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			
 			LOGGER.error("attrName=" + attrName, e);
 		}
 		// if(result!=null)
@@ -1024,7 +1024,7 @@ public class UserSessionService {
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 		return flag;
 	}
@@ -1034,7 +1034,7 @@ public class UserSessionService {
 		try {
 			context = FacesContext.getCurrentInstance();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 
 		return context;
@@ -1072,7 +1072,7 @@ public class UserSessionService {
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("",e);
 		}
 		return flag;
 	}
@@ -1088,7 +1088,7 @@ public class UserSessionService {
 						.getSessionMap().put(attrName, value);
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("",e);
 			}
 		}
 	}

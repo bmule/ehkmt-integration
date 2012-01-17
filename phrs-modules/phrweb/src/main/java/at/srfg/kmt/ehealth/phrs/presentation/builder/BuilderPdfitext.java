@@ -9,6 +9,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.codec.Base64.InputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -35,16 +36,36 @@ public class BuilderPdfitext {
      */
     public void createPdf(String filename)
 	throws DocumentException, IOException {
-        // step 1
+ 
         Document document = new Document();
-        // step 2
+      
         PdfWriter.getInstance(document, new FileOutputStream(filename));
-        // step 3
+       
         document.open();
-        // step 4
+     
         document.add(new Paragraph("Hello World!"));
-        // step 5
+     
         document.close();
+    }
+        public InputStream createPdf(String ownerUri,String resourceType)
+	throws DocumentException, IOException {
+            
+        InputStream inputStream=null;
+        //Document document = new Document();
+        
+        //PhrDocumentBuilder pdb = new PhrDocumentBuilder(resourceType);
+        //
+      
+        //PdfWriter.getInstance(document, new FileOutputStream(filename));
+        //Document document = pdb.getPdf();
+        //document.open();
+     
+        //document.add(new Paragraph("Hello World!"));
+     
+        //document.close();
+        
+        return inputStream;
+        
     }
     
 }
