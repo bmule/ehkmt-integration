@@ -103,10 +103,6 @@ final class SendPcc09Message {
 //        final QUPCAR004040UVPortType portType = ((Service)service).getQUPCAR004040UVPort();
         setWSAddressHandler(portType, responseEndpointURI);
 
-
-
-
-
         // I set the end point for the PCC9 end point
         setEndPointURI(portType, endpointURI);
 
