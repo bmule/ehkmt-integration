@@ -113,7 +113,7 @@ final class SendPcc10Message {
      * malformed.
      */
     static MCCIIN000002UV01 sendSecureMessage(QUPCIN043200UV01 query,
-            String endpointURI, String responseEndpointURI, String keystoreFilePath,
+            String endpointURI, String keystoreFilePath,
             String keystoreFilePassword) throws MalformedURLException  {
 
         if (keystoreFilePath == null) {
