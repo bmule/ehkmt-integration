@@ -17,7 +17,6 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
-import org.hl7.v3.QUPCAR004030UVService;
 import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +92,51 @@ final class SendPcc10Message {
 
         return ack;
     }
+    
+        /**
+     * Sends secure (SSL) a given PCC10 request to a given PCC10 end point and
+     * returns the acknowledge (the response for the request). The message send
+     * contains in its SOAP header the response URI.
+     *
+     * @param query the PCC9 request. It can not be null.
+     * @param endpointURI the URI where the PCC10 end point runs. It can not be
+     * null.
+     * @param responseEndpointURI the URI where the response to the PCC9 request
+     * will be send. It can not be null.
+     * @param keystoreFilePath the path for the SSL certificate file, it can not
+     * be null.
+     * @param keystoreFilePassword the password for the SSL certificate file, it
+     * can not be null.
+     * @return the acknowledge (the response for the request)for the given
+     * request.
+     * @throws MalformedURLException if the specified PCC10 end point URI is
+     * malformed.
+     */
+    static MCCIIN000002UV01 sendSecureMessage(QUPCIN043200UV01 query,
+            String endpointURI, String responseEndpointURI, String keystoreFilePath,
+            String keystoreFilePassword) throws MalformedURLException  {
+
+        if (keystoreFilePath == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The certPath argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (keystoreFilePassword == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The certPassword argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+
+        SSLClient.sslSetup(keystoreFilePath, keystoreFilePassword);
+
+        final MCCIIN000002UV01 ack = sendMessage(query, endpointURI);
+        return ack;
+    }
+
 
     /**
      * Returns a proxy instance able to address the PCC10 service. The
