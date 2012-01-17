@@ -1,5 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
+import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import java.io.Serializable;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
@@ -7,16 +10,10 @@ import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-
 import org.apache.axis2.AxisFault;
 import org.joda.time.DateTime;
 import org.opensaml.saml2.core.Issuer;
-import org.opensaml.xacml.ctx.ActionType;
-import org.opensaml.xacml.ctx.AttributeType;
-import org.opensaml.xacml.ctx.AttributeValueType;
-import org.opensaml.xacml.ctx.RequestType;
-import org.opensaml.xacml.ctx.ResourceType;
-import org.opensaml.xacml.ctx.SubjectType;
+import org.opensaml.xacml.ctx.*;
 import org.opensaml.xacml.profile.saml.XACMLAuthzDecisionQueryType;
 import org.opensaml.xacml.profile.saml.impl.XACMLAuthzDecisionQueryTypeImpl;
 import org.opensaml.xacml.profile.saml.impl.XACMLAuthzDecisionQueryTypeMarshaller;
@@ -27,7 +24,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
-
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
@@ -38,9 +34,6 @@ import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplSer
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResourcesResponse;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import at.srfg.kmt.ehealth.phrs.PhrsConstants;
-import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
-import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 
 //see icardea-consenteditor-invoker  ConsentManagerImplServiceTest SRDC
 @SuppressWarnings("serial")

@@ -4,16 +4,10 @@ import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.security.Security;
 import java.util.ResourceBundle;
-
 import org.apache.axis2.AxisFault;
 import org.joda.time.DateTime;
 import org.opensaml.saml2.core.Issuer;
-import org.opensaml.xacml.ctx.ActionType;
-import org.opensaml.xacml.ctx.AttributeType;
-import org.opensaml.xacml.ctx.AttributeValueType;
-import org.opensaml.xacml.ctx.RequestType;
-import org.opensaml.xacml.ctx.ResourceType;
-import org.opensaml.xacml.ctx.SubjectType;
+import org.opensaml.xacml.ctx.*;
 import org.opensaml.xacml.profile.saml.XACMLAuthzDecisionQueryType;
 import org.opensaml.xacml.profile.saml.impl.XACMLAuthzDecisionQueryTypeImpl;
 import org.opensaml.xacml.profile.saml.impl.XACMLAuthzDecisionQueryTypeMarshaller;
@@ -22,7 +16,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.bootstrap.DOMImplementationRegistry;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
-
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
@@ -36,22 +29,22 @@ import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplSer
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse;
 
-public class ConsentMgrServiceTest {
-	private static ConsentMgrServiceTest instance = null;
+public class ConsentMgrServiceExample {
+	private static ConsentMgrServiceExample instance = null;
 	
-	private ConsentMgrServiceTest() {
+	private ConsentMgrServiceExample() {
 	}
 	
-	public static ConsentMgrServiceTest getInstance() {
+	public static ConsentMgrServiceExample getInstance() {
 		if(instance == null)
-			instance = new ConsentMgrServiceTest();
+			instance = new ConsentMgrServiceExample();
 		return instance;
 	}
 
 	public static void main(String[] argv) throws RemoteException {
 		// callGetSubjects();
 		// callGetResources();
-		ConsentMgrServiceTest.getInstance().grantRequest("191", "doctor", "condition");
+		ConsentMgrServiceExample.getInstance().grantRequest("191", "doctor", "condition");
 		// callgenerateRequest(argv[0],argv[1],argv[2],argv[3],argv[4]);
 		// callgenerateRequest("1","srdc","ROLECODE:DOCTOR","RESOURCECODE:CONDITION","READ");
 	}

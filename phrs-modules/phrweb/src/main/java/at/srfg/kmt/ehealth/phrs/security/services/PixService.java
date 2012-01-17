@@ -8,20 +8,6 @@ package at.srfg.kmt.ehealth.phrs.security.services;
  import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.SEX_SEG_FLD;
  */
 
-import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.DOB_SEG_FLD;
-import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.FNAME_SEG_FLD;
-import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.GNAME_SEG_FLD;
-import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.SEX_SEG_FLD;
-import gr.forth.ics.icardea.pid.HL7Utils;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PixIdentifier;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
@@ -33,11 +19,18 @@ import ca.uhn.hl7v2.llp.LLPException;
 import ca.uhn.hl7v2.llp.MinLowerLayerProtocol;
 import ca.uhn.hl7v2.model.Message;
 import ca.uhn.hl7v2.model.v25.message.QBP_Q21;
-import ca.uhn.hl7v2.model.v25.message.RSP_K23;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.parser.DefaultXMLParser;
 import ca.uhn.hl7v2.parser.PipeParser;
+import gr.forth.ics.icardea.pid.HL7Utils;
+import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /* 
  import ca.uhn.hl7v2.model.v25.datatype.CX;
