@@ -10,9 +10,9 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import javax.sql.rowset.serial.SerialArray;
 import javax.xml.namespace.QName;
 import javax.xml.ws.Binding;
 import javax.xml.ws.BindingProvider;
@@ -20,7 +20,6 @@ import javax.xml.ws.Service;
 import javax.xml.ws.handler.Handler;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004040UVPortType;
-import org.hl7.v3.QUPCAR004040UVService;
 import org.hl7.v3.QUPCIN043100UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,11 @@ import org.slf4j.LoggerFactory;
  * the messages send with this class will contain in the SOAP header the result
  * end point address. The response end point address (URI) is treated according
  * with the <a href="http://en.wikipedia.org/wiki/WS-Addressing">
- * WS-Addressing</a> standards. <br/> This class can not be extended.
+ * WS-Addressing</a> standards. <br/> 
+ * <b>Note : </b> this message sends 
+ * <a href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> 
+ * based messages.  <br/> 
+ * This class can not be extended.
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -57,7 +60,8 @@ final class SendPcc09Message {
     /**
      * Sends a given PCC9 request to a given PCC9 end point and returns the
      * acknowledge (the response for the request). The message send contains in
-     * its SOAP header the response URI.
+     * its SOAP header the response URI. <b>Note : </b> this message sends <a
+     * href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> based messages.
      *
      * @param query the PCC9 request. It can not be null.
      * @param endpointURI the URI where the PCC9 end point runs. It can not be
@@ -98,8 +102,6 @@ final class SendPcc09Message {
         // here I obtain the service.
 //        final QUPCAR004040UVPortType portType = ((Service)service).getQUPCAR004040UVPort();
         setWSAddressHandler(portType, responseEndpointURI);
-        
-        
 
         // I set the end point for the PCC9 end point
         setEndPointURI(portType, endpointURI);
@@ -112,18 +114,19 @@ final class SendPcc09Message {
     }
 
     /**
-     * Sends secure (SSL) a given PCC9 request to a given PCC9 end point and 
-     * returns the acknowledge (the response for the request). 
-     * The message send contains in its SOAP header the response URI.
+     * Sends secure (SSL) a given PCC9 request to a given PCC9 end point and
+     * returns the acknowledge (the response for the request). The message send
+     * contains in its SOAP header the response URI.
      *
      * @param query the PCC9 request. It can not be null.
      * @param endpointURI the URI where the PCC9 end point runs. It can not be
      * null.
      * @param responseEndpointURI the URI where the response to the PCC9 request
      * will be send. It can not be null.
-     * @param keystoreFilePath the path for the SSL certificate file, it can not be null.
-     * @param keystoreFilePassword the password for the SSL certificate file, it can not
+     * @param keystoreFilePath the path for the SSL certificate file, it can not
      * be null.
+     * @param keystoreFilePassword the password for the SSL certificate file, it
+     * can not be null.
      * @return the acknowledge (the response for the request)for the given
      * request.
      * @throws MalformedURLException if the specified PCC9 end point URI is
@@ -166,10 +169,31 @@ final class SendPcc09Message {
                 new QName("urn:hl7-org:v3", "QUPC_AR004040UV_Service");
         final ClassLoader classLoader = SendPcc09Message.class.getClassLoader();
         final URL url = classLoader.getResource("wsdl/QUPC_AR004040UV_Service.wsdl");
-//        final QUPCAR004040UVService result = new QUPCAR004040UVService(url, qName);
-//        return result;
-        Service service = Service.create(url, qName);
-        final QUPCAR004040UVPortType port = service.getPort(QUPCAR004040UVPortType.class);
+
+        final Service serviceFactory = Service.create(url, qName);
+
+        for (final Iterator<QName> ports = serviceFactory.getPorts();
+                ports.hasNext();) {
+            final QName next = ports.next();
+            LOGGER.debug("Available port :{} ", next);
+
+        }
+
+        // I do this just to be sure that the port SOAP 1.2 is used.
+        // Otherwise the SOAP 1.1 may occur.
+        // I am not sure why this problem occur because the specification says :
+        // "On the client there is nothing special that has to be done. 
+        // JAX-WS runtime looks into the WSDL to determine the binding being 
+        // used and configures itself accordingly. wsimport command line tool
+        // or wsimport ant task can be used to import the WSDL and to generated
+        // the client side artifacts."
+        // The upper logging lines are dispalying the SOAP header so if there 
+        // is no port for the given QName then please find the reason. 
+        final QName portQName =
+                new QName("urn:hl7-org:v3", "QUPC_AR004040UV_PortSoap12");
+
+        final QUPCAR004040UVPortType port =
+                serviceFactory.getPort(portQName, QUPCAR004040UVPortType.class);
         return port;
     }
 
@@ -249,13 +273,5 @@ final class SendPcc09Message {
         //final String endpoint = "http://localhost:8080/phrs/pcc09";
         handlerChain.add(new WSAdressingHeaderEnricher(endpointURI));
         binding.setHandlerChain(handlerChain);
-    }
-    
-    private void setSOAP12Binding(QUPCAR004040UVPortType portType) {
-        final BindingProvider bindingProvider = (BindingProvider) portType;
-        final Binding binding = bindingProvider.getBinding();
-        final Map<String, Object> reqContext = bindingProvider.getRequestContext();
-        //reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getWSDLURI(endpointURI));
-        
     }
 }
