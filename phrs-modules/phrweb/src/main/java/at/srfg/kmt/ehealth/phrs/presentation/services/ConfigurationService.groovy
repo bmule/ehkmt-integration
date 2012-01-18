@@ -60,7 +60,7 @@ public class ConfigurationService implements Serializable{
 
 		rolesLocal= [
 			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_ADMIN,
-			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST,
+			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST
 		]
 		rolesConsentMgr= [
 			PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN,
@@ -70,7 +70,7 @@ public class ConfigurationService implements Serializable{
 			PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHARMACIST,
 			PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DENTIST,
 			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_ADMIN,
-			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST,
+			PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST
 		]
 	}
 	private synchronized void init(){
@@ -136,10 +136,14 @@ public class ConfigurationService implements Serializable{
 		String value=getProperty(prop)
 		return value ? value : defaultValue
 	}
+        public PropertiesConfiguration getPropertiesConfiguration(){
+            return propertiesConfig
+        }
 	public String getProperty(String prop){
 		String value=null;
-
+                
 		if(prop){
+                    
 			value = propertiesConfig.getProperty(prop)
 			if(!value){
 				switch(prop){
@@ -433,10 +437,14 @@ public class ConfigurationService implements Serializable{
          * true  - Simple access control by role
          * false - access control by Consent Manager
          */
+        
         public boolean isHealthInfoAccessibleByRole(){
             boolean flag = false
             String value = this.getProperty('isAllHealthinfoAccessibleByRole')
-            if(value && value.trim() =='true') flag=true
+            System.out.println("isHealthInfoAccessibleByRole property="+value)
+            if(value!=null) value=value.trim()
+            if(value && value =='true') flag=true
+            System.out.println("isHealthInfoAccessibleByRole flag="+flag)
             return flag
         }
     

@@ -7,7 +7,15 @@ package tr.com.srdc.icardea.consenteditor.webservice.client;
  * by the Apache Axis2 version: 1.5.1  Built on : Oct 19, 2009 (10:59:00 EDT)
  */
 
+/*
+Options options = new Options();
+//options.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeOutInMilliSeconds));
+//options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeOutInMilliSeconds));
 
+// or
+options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+options.setProperty(HTTPConstants.CHUNKED, "false");
+ */
 /*
  *  ConsentManagerImplServiceStub java implementation
  */

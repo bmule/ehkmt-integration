@@ -11,8 +11,17 @@ import static org.junit.Assert.*;
 import org.junit.*;
 import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 public class ConsentMgrServiceTest {
+
+    String ROLE_CODE_DOC = "ROLECODE:DOCTOR";
+    String ROLE_CODE_NURSE = "ROLECODE:DOCTOR";
+    String ACTION_ID_READ = "READ";
+    String PROTOCOL_ID = "191";
+    String PHR_ID = "1";
+    String RESOURCE_CODE_CONDITION = "CONDITION";
+    String ISSUER_NAME = "PHR";
 
     public ConsentMgrServiceTest() {
     }
@@ -45,8 +54,9 @@ public class ConsentMgrServiceTest {
         //        StockQuoteServiceStub stub = new StockQuoteServiceStub(
         //            "http://localhost:8080/axis2/services/StockQuoteService"
         //        );    
-        ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(endpoint + "?wsdl");
-
+        //ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(endpoint + "?wsdl");
+        String url = "http://localhost:8080/consenteditor/services/ConsentManagerImplService?wsdl";
+        ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(url);
 
         // 2. Create a request object (here a nested class named after the matching method)
         //     ConsentManagerImplServiceStub.GetSubjects req = new ConsentManagerImplServiceStub.GetSubjects();
@@ -96,7 +106,46 @@ public class ConsentMgrServiceTest {
         assertEquals(expResult, result);
 
     }
-    
+
+    @Test
+    public void testConfigPropertyConfig() {
+        System.out.println("testConfigPropertyConfig");
+        boolean flag = false;
+        PropertiesConfiguration config = ConfigurationService.getInstance().getPropertiesConfiguration();
+        // System.out.println("testisHealthInfoAccessibleRoleWithCode prop="+config);
+
+        assertNotNull("PropertiesConfiguration null", config);
+
+    }
+
+    @Test
+    public void testConfig() {
+        System.out.println("testConfig");
+        boolean flag = false;
+        ConfigurationService config = ConfigurationService.getInstance();
+        // System.out.println("testisHealthInfoAccessibleRoleWithCode prop="+config);
+
+        assertNotNull("ConfigurationService null", config);
+
+    }
+
+    @Test
+    public void testisHealthInfoAccessibleRoleWithCode() {
+        System.out.println("testisHealthInfoAccessibleRoleWithCode");
+        boolean flag = false;
+        String value = ConfigurationService.getInstance().getProperty("isAllHealthinfoAccessibleByRole");
+        System.out.println("testisHealthInfoAccessibleRoleWithCode prop=" + value);
+        if (value != null) {
+            value = value.trim();
+        }
+
+        if (value != null && value.equalsIgnoreCase("true")) {
+            flag = true;
+        }
+        assertEquals(true, flag);
+
+    }
+
     @Test
     public void testisHealthInfoAccessibleByThisRole() {
         System.out.println("isConsentMgrRole");
@@ -106,7 +155,7 @@ public class ConsentMgrServiceTest {
         assertEquals(expResult, result);
 
     }
-    
+
     @Test
     public void testisHealthInfoAccessibleRole() {
         System.out.println("isConsentMgrRole");
@@ -129,20 +178,13 @@ public class ConsentMgrServiceTest {
         assertEquals(expResult, result);
 
     }
+
     /**
      * Test of isPermitted method, of class ConsentMgrService.
      */
     /*
      * "1","phrs","ROLECODE:DOCTOR","RESOURCECODE:CONDITION","READ"
      */
-    String ROLE_CODE_DOC = "ROLECODE:DOCTOR";
-    String ROLE_CODE_NURSE = "ROLECODE:DOCTOR";
-    String PROTOCOL_ID = "191";
-    String PHR_ID = "1";
-    String ACTION_ID_READ = "READ";
-    String RESOURCE_CODE_CONDITION = "CONDITION";
-    String ISSUER_NAME = "PHR";
-
     @Ignore
     @Test
     public void testIsPermitted_5args() {
