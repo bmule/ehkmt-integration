@@ -10,7 +10,6 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
