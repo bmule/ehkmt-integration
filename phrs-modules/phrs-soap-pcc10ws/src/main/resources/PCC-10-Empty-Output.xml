@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<v3:MCCI_IN000002UV01 ITSVersion="XML_1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:v3="urn:hl7-org:v3">
+	<v3:id/>
+	<v3:creationTime/>
+	<v3:interactionId/>
+	<v3:processingCode/>
+	<v3:processingModeCode/>
+	<v3:acceptAckCode/>
+	<v3:receiver>
+		<v3:device classCode="DEV" determinerCode="INSTANCE">
+			<v3:id/>
+		</v3:device>
+	</v3:receiver>
+	<v3:sender>
+		<v3:device classCode="DEV" determinerCode="INSTANCE">
+			<v3:id/>
+		</v3:device>
+	</v3:sender>
+	<v3:acknowledgement typeCode="AA">
+		<v3:targetMessage>
+			<v3:id root="0" extension="a"/>
+		</v3:targetMessage>
+		<v3:acknowledgementDetail typeCode="E">
+			<v3:code code="!" displayName="a" codeSystemVersion="a" codeSystem="0" codeSystemName="a"/>
+		</v3:acknowledgementDetail>
+	</v3:acknowledgement>
+</v3:MCCI_IN000002UV01>
