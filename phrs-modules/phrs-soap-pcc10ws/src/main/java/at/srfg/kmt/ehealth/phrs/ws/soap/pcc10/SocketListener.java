@@ -13,9 +13,12 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,12 +49,16 @@ final class SocketListener {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SocketListener.class);
 
+    private Set<PCCTask> tasks;
+    
     /**
      * Builds a
      * <code>SocketListener</code> instance.
      */
     SocketListener() {
-        // UNIMPLEMENTED
+        tasks = new HashSet<PCCTask>();
+        tasks.add(new MedicationTask());
+        tasks.add(new VitalSignTask());
     }
 
     /**
@@ -181,8 +188,19 @@ final class SocketListener {
                 return;
             }
 
-            final PCC10Task task = new PCC10Task((Map) toConsume);
-            task.run();
+//            final PCC10Task task = new PCC10Task((Map) toConsume);
+//            task.run();
+            
+            for (PCCTask task : tasks) {
+                if (task.canConsume((Map) toConsume)) {
+                    try {
+                        task.consume((Map) toConsume);
+                    } catch (ConsumeException exception) {
+                        LOGGER.warn("Failure by running task");
+                        LOGGER.warn(exception.getMessage(), exception);
+                    }
+                }
+            }
         }
     }
 
