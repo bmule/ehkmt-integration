@@ -12,7 +12,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
  * Indicates that a certain map of parameters can not be consumed from any
  * reasons. Most of the times it wraps the real cause for the exception, this
  * cause can be obtained by using the
- * <code>getCause()</code> method. *
+ * <code>getCause()</code> method.
  *
  * @author M1s
  * @version 1.0-SNAPSHOT
