@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import java.util.List;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
 public class ConfigurationServiceTest {
@@ -86,7 +87,7 @@ public class ConfigurationServiceTest {
 
     @Test
     public void testisHealthInfoAccessibleByThisRole() {
-        System.out.println("isConsentMgrRole");
+        System.out.println("testisHealthInfoAccessibleByThisRole");
         String subjectCode = ROLE_CODE_DOC;
         boolean expResult = true;
         boolean result = ConfigurationService.getInstance().isHealthInfoAccessibleByThisRole(subjectCode);
@@ -96,7 +97,7 @@ public class ConfigurationServiceTest {
 
     @Test
     public void testisHealthInfoAccessibleRole() {
-        System.out.println("isConsentMgrRole");
+        System.out.println("testisHealthInfoAccessibleRole");
         String subjectCode = ROLE_CODE_DOC;
         boolean expResult = true;
         boolean result = ConfigurationService.getInstance().isHealthInfoAccessibleByRole();
@@ -109,11 +110,22 @@ public class ConfigurationServiceTest {
      */
     @Test
     public void testIsConsentMgrAction() {
-        System.out.println("isConsentMgrAction");
+        System.out.println("testIsConsentMgrAction");
         String actionCode = ACTION_ID_READ;
         boolean expResult = true;
         boolean result = ConsentMgrService.isConsentMgrAction(actionCode);
         assertEquals(expResult, result);
 
     }
+
+    @Test
+    public void testAllConsentMgrActions() {
+        System.out.println("testAllConsentMgrActions");
+        assertNotNull("Config instance is null", ConfigurationService.getInstance());
+        List<String> list = ConfigurationService.getInstance().getConsentAllActions();
+        assertNotNull("list null", list);
+        assertTrue("expect 3 or more", list.size() > 2);
+
+    }
+    //getConsentSubjectCodes
 }

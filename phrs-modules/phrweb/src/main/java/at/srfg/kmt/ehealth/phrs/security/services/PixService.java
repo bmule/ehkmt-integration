@@ -18,17 +18,22 @@ import ca.uhn.hl7v2.app.Initiator;
 import ca.uhn.hl7v2.llp.LLPException;
 import ca.uhn.hl7v2.llp.MinLowerLayerProtocol;
 import ca.uhn.hl7v2.model.Message;
+import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.message.QBP_Q21;
+import ca.uhn.hl7v2.model.v25.message.RSP_K23;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.parser.DefaultXMLParser;
 import ca.uhn.hl7v2.parser.PipeParser;
 import gr.forth.ics.icardea.pid.HL7Utils;
-import static gr.forth.ics.icardea.pid.iCARDEA_Patient_CONSTANTS.*;
+import static gr.forth.ics.icardea.pid.PatientIndexConstants.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,8 +60,10 @@ public class PixService implements Serializable {
 	public final static String IDENTIFIER_TYPE_CIED = "CIED";
 	public final static String IDENTIFIER_NAMESPACE_PROTOCOL_ID_ICARDEA = "icardea.pix";
 	public final static String IDENTIFIER_NAMESPACE_PHR_ID = "PHR";
-
-	public final static String IDENTIFIER_NAMESPACE_UNIVERSAL_ICARDEA = "1.2.826.0.1.3680043.2.44.248240.1";
+        
+        public final static String ICARDEA_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
+	public final static String IDENTIFIER_NAMESPACE_UNIVERSAL_ICARDEA = ICARDEA_PIX_OID;
+ 
 	// String endPoint = "localhost:8080";
 	String host = "localhost";
 
@@ -253,6 +260,7 @@ public class PixService implements Serializable {
 			throws Exception {
 		return sendAndRecvPixMessage(message, reponseInXML, host, port);
 	}
+        
 
 	public Message sendAndRecvPixMessage(Message message, boolean inXML,
 			String host, int port) throws Exception {
@@ -524,7 +532,92 @@ public class PixService implements Serializable {
 			}
 		return resultMap;
 	}
+        
+        /*
+         NEW TO INTEGRATE
+        	public static void setup() throws Exception {
+		//pid = new PatientIndexServerTest2();
+		//pid.run(new String[]{"../../icardea-config/config.ini"});
+		
+		PipeParser p = new PipeParser();
+		Socket socket = null;
 
+		if (pid.usesTLS()) {
+			SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", pid.port());
+			sslsocket.startHandshake();
+			socket = sslsocket;
+		}
+		else
+			socket = new Socket("localhost", 2575);//pid.port());
+                
+		connection = new Connection(p, new MinLowerLayerProtocol(), socket);
+	}
+	public void testQuery() throws HL7Exception, LLPException, IOException {
+
+		// PIX Query
+		//MSH|^~\&|PACS_FUJIFILM|FUJIFILM|PAT_IDENTITY_X_REF_MGR_MISYS|ALLSCRIPTS|20090223144546||QBP^Q23^QBP_Q21|1235421946|P|2.5|||||||
+		//QPD|IHEPIXQuery|Q231235421946|103^^^icardea|^^^ORBIS
+		//RCP|I|
+
+		QBP_Q21 a = new QBP_Q21();		
+		// Construct MSH according to C2.2 of ITI TF-2x
+		HL7Utils.createHeader(a.getMSH(), "2.5");
+		a.getMSH().getMsh9_MessageType().parse("QBP^Q23^QBP_Q21");
+		// Set UTF-8 character set? See:
+		// http://wiki.hl7.org/index.php?title=Character_Set_used_in_v2_messages
+		a.getMSH().getCharacterSet(0).setValue("UNICODE UTF-8");
+
+		// Set Sending app identification
+		a.getMSH().getSendingApplication().parse("testclient^icardea");
+		a.getMSH().getSendingFacility().parse("SALK^icardea");
+		// Set Receiving app identification
+		a.getMSH().getReceivingApplication().parse("PID^icardea");
+		a.getMSH().getReceivingFacility().parse("iCARDEAPlatform");
+		QPD qpd = a.getQPD();
+		qpd.getQpd1_MessageQueryName().parse("IHE PIX Query");
+		qpd.getQpd2_QueryTag().setValue("pix-query-1"); // A query identifier
+		CX from = new CX(a);
+		from.getCx1_IDNumber().setValue("o103"); // we search for this id in the iCARDEA domain
+
+		from.getCx4_AssigningAuthority().getHd2_UniversalID().setValue(ICARDEA_PIX_OID);
+		from.getCx4_AssigningAuthority().getHd3_UniversalIDType().setValue("ISO");
+
+		qpd.getField(3,0).parse(from.encode());
+		
+		String toDomain = "ORBIS";
+		
+		a.getRCP().getRcp3_ResponseModality().getCe1_Identifier().setValue("I");
+                
+		Message m = this.sendAndRecv(a);
+                
+		RSP_K23 ret = (RSP_K23) m;
+		System.out.println("***PIX*****\n"+ret.encode()+"\n+++++++");
+		String status =ret.getQAK().getQak2_QueryResponseStatus().getValue();
+		if ("AE".equals(status)) {
+			// Application Error!!
+			// ...
+		}
+		else if ("NF".equals(status)){
+			// Not Found!!!
+		}
+		else {
+			PID pid = ret.getQUERY_RESPONSE().getPID();
+			for (CX d: pid.getPatientIdentifierList()) {
+				if (toDomain.equals(d.getAssigningAuthority().getHd1_NamespaceID().getValue())) {
+					String id = d.getCx1_IDNumber().getValue();
+					System.out.println("Found ID="+id+" in domain "+toDomain);
+				}
+			}
+		}
+	}
+        	private Message sendAndRecv(Message msg) throws LLPException, HL7Exception, IOException {
+		// The initiator is used to transmit unsolicited messages
+		Initiator initiator = connection.getInitiator();
+		Message response = initiator.sendAndReceive(msg);
+		return response;
+	}
+*/
 	/*
 	 * public PID getPatientPIDById(String identifierValue,String namespace)
 	 * throws HL7Exception, LLPException, IOException, Exception {
@@ -614,21 +707,21 @@ public class PixService implements Serializable {
 		if (response != null) {
 
 			// RSP_K23 resp = new RSP_K23();
-			/*
-			 * RSP_K23 rspk23 = (RSP_K23) response;
-			 * ca.uhn.hl7v2.model.v25.segment.PID pidSegment = rspk23
-			 * .getQUERY_RESPONSE().getPID();
-			 * 
-			 * if (pidSegment != null) { //v25 <-- RSP_K23 ??
-			 * ca.uhn.hl7v2.model.v25.datatype.CX[] ids =
-			 * pidSegment.getPatientIdentifierList();
-			 * 
-			 * if (ids != null && ids.length > 0) {
-			 * 
-			 * 
-			 * } } // ca.uhn.hl7v2.model.v25.message.QBP_Q21; //
-			 * ca.uhn.hl7v2.model.v25.message.RSP_K23;
-			 */
+//			
+//			  RSP_K23 rspk23 = (RSP_K23) response;
+//			  ca.uhn.hl7v2.model.v25.segment.PID pidSegment = rspk23
+//			  .getQUERY_RESPONSE().getPID();
+//			  
+//			  if (pidSegment != null) { //v25 <-- RSP_K23 ??
+//			  ca.uhn.hl7v2.model.v25.datatype.CX[] ids =
+//			  pidSegment.getPatientIdentifierList();
+//			  
+//			  if (ids != null && ids.length > 0) {
+//			  
+//			  
+//			  } } // ca.uhn.hl7v2.model.v25.message.QBP_Q21; //
+//			  ca.uhn.hl7v2.model.v25.message.RSP_K23;
+//			
 			// no v231 K23
 			ca.uhn.hl7v2.model.v25.message.RSP_K23 k23Response = (ca.uhn.hl7v2.model.v25.message.RSP_K23) response;
 
@@ -654,11 +747,11 @@ public class PixService implements Serializable {
 				// resp.getQUERY_RESPONSE().getPID();
 
 			}
-			/*
-			 * PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID
-			 * PhrsConstants.IDENTIFIER_TYPE_PIX_PATIENT_NAME
-			 * PhrsConstants.IDENTIFIER_TYPE_PIX_DATE_OF_BIRTH
-			 */
+			
+			 //PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID
+			 // PhrsConstants.IDENTIFIER_TYPE_PIX_PATIENT_NAME
+			 //PhrsConstants.IDENTIFIER_TYPE_PIX_DATE_OF_BIRTH
+			 
 			if (protocol_id != null) {
 				resultMap.put(PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID,
 						protocol_id);

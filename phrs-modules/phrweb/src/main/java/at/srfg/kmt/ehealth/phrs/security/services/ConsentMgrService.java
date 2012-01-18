@@ -110,12 +110,7 @@ public class ConsentMgrService implements Serializable {
 
     public static boolean isConsentMgrAction(String actionCode) {
 
-        if (actionCode != null
-                && (PhrsConstants.AUTHORIZE_ACTION_CODE_READ.equals(actionCode)
-                || PhrsConstants.AUTHORIZE_ACTION_CODE_WRITE.equals(actionCode) || PhrsConstants.AUTHORIZE_ACTION_CODE_UPDATE.equals(actionCode))) {
-            return true;
-        }
-        return false;
+        return ConfigurationService.getInstance().isConsentAction(actionCode);
     }
 
     // boolean isPhrId
