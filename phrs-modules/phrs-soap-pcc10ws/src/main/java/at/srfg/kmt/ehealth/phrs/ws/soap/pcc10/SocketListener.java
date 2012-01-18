@@ -92,9 +92,9 @@ final class SocketListener {
     }
 
     public void start(int port) throws IOException {
-        BlockingQueue q = new ArrayBlockingQueue(5);
-        Producer p = new Producer(new ServerSocket(port, 10), q);
-        Consumer c = new Consumer(q);
+        final BlockingQueue q = new ArrayBlockingQueue(5);
+        final Producer p = new Producer(new ServerSocket(port, 10), q);
+        final  Consumer c = new Consumer(q);
         new Thread(p).start();
         new Thread(c).start();
         LOGGER.info("SocketListener started on localhost:5578");
