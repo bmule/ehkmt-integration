@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
  * Runnable class used to start the PCC10 web service end point. 
  * The URI for the end point is specified with the <code>main</code> method
  * arguments; the main method requires three arguments : a host (String),
- * a port (integer) and a path context. <br/>
+ * a port (integer) and a path context (string). <br/>
  * To run this class from maven environment use :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.PCC10EndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8989 testws/pcc10"
