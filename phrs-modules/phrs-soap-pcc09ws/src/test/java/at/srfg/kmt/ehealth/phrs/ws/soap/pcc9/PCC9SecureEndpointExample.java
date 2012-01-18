@@ -8,7 +8,6 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import java.net.MalformedURLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +15,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Runnable class used to start the PCC9 web service end point. The URI for the
  * end point is specified with the
- * <code>main</code> method arguments; the main method requires three arguments
- * : a host (String), a port (integer) and a path context. <br/> To run this
- * class from maven environment use :
+ * <code>main</code> method arguments; the main method requires five arguments
+ * : a host (String), a port (integer) and a path context (string), the path for
+ * the keystore file (String) and the password for the keystore file. <br/>
+ * To run this class from maven environment use :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap..pcc9.PCC9SecureEndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8989 testws/pcc9"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap..pcc9.PCC9SecureEndpointExample -Dexec.classpathScope=test -Dexec.args="localhost 8989 testws/pcc9 my-keystore.ks mypasswd"
  * </pre> <b>Note : </b> this class requires three arguments a host, a port and
  * a path.
  *
