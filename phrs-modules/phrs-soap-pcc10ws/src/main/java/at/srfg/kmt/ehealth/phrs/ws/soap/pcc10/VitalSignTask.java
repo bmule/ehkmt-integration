@@ -39,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * @since 1.0-SNAPSHOT
  */
 final class VitalSignTask implements PCCTask {
+    public static final String CARE_PROVISION_CODE = "COBSCAT";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -64,7 +65,7 @@ final class VitalSignTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isVitSign = "COBSCAT".equals(code);
+        final boolean isVitSign = CARE_PROVISION_CODE.equals(code);
         if (!isVitSign) {
             LOGGER.debug("This code : {} is not a medication code.");
         }
@@ -202,5 +203,15 @@ final class VitalSignTask implements PCCTask {
 
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
         return pcc10Message;
+    }
+
+    /**
+     * Returns a human readable string representation for this class. 
+     * @return a string representation for this class. 
+     */
+    @Override
+    public String toString() {
+        final String result = String.format("VitalSignTask{%s}", CARE_PROVISION_CODE);
+        return result;
     }
 }
