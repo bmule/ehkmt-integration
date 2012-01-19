@@ -26,17 +26,18 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Runnable class able to sends a <a
- * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> (that contains
- * a Problem) request to a given end-point. To run this class this class from
+ * Runnable class able to sends a 
+ * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> 
+ * (that contains a Problem) request to a given end-point; 
+ * the main method requires only one argument : a URI (String) the ppc10 end point. <br/>
+ * To run this class this class from
  * the command line and maven use the following command :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.SendProblemFatiquePCC10Message -Dexec.classpathScope=test -Dexec.args="http://localhost:8989/testws/pcc10"
- * </pre> <b>Note : </b> the first argument (for the main method) is the
- * end-point, this is the URI where the PCC10 request will send. <b>Note : </b>
- * the second argument (for the main method) is the response-end-point, this is
- * the URI where the PCC10 response will send. <br/> This class is not design to
- * be extended.
+ * </pre> 
+ * <b>Note : </b> the first argument (for the main method) is the
+ * end-point, this is the URI where the PCC10 request will send. <br/> 
+ * This class is not design to be extended.
  *
  * @author mihai
  * @version 1.0-SNAPSHOT
