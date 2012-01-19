@@ -16,9 +16,8 @@ import org.apache.commons.beanutils.DynaBean;
 /**
  * Runnable class able to add  one (or more) problem entry.<br/>
  * More precisely this class adds a <i>Medication</i> to the underlying 
- * persistence layer; after this it list on the standard output the results. 
- * The exact location for this file is listed in the log file (located in 
- * target/log.out)<br/> 
+ * persistence layer; after this it list on the standard output the results
+ * (dynabeans). <br/>
  * To run this class from maven environment use :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClientExample -Dexec.classpathScope=test<br/>
