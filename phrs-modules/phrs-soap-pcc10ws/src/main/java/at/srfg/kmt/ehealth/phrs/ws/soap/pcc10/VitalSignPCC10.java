@@ -7,14 +7,13 @@
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
-import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
+import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import javax.xml.bind.JAXBElement;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import java.util.List;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
@@ -22,10 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * It is used to generate a 
+ * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2">Vital Signs Observation</a>
+ * according with the IHE standards for a given input.
+ * 
+ * 
  * @author Mihai
  */
-public class VitalSignPCC10 {
+final class VitalSignPCC10 {
 
     /**
      * The Logger instance. All log messages from this class
@@ -39,18 +42,47 @@ public class VitalSignPCC10 {
      * element(s) tree.
      */
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
+    
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private VitalSignPCC10() {
+        // UNIMPLEMENTD
+    }
 
-    public static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
 
+    /**
+     * Builds a 
+     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2">Vital Signs Observation</a>
+     * for a Set of dyna-beans.
+     * 
+     * @param beans the set of dyna beans used to build the 
+     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2">Vital Signs Observation</a>, 
+     * it can not be null.
+     * @return a 
+     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2">Vital Signs Observation</a>
+     * for the given set of dyna-beans.
+     */
+    static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) {
+        
+        if (beans == null) {
+            final NullPointerException exception = 
+                    new NullPointerException("The beans argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         final QUPCIN043200UV01 query;
         try {
             query = buildQUPCIN043200UV01("PCC-10-Empty-Input.xml");
-        } catch (JAXBException exception) {
-            throw new RuntimeException(exception);
+        } catch (JAXBException jaxException) {
+            final RuntimeException exception = new RuntimeException(jaxException);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         if (beans == null || beans.isEmpty()) {
+            LOGGER.debug("Input set is empty - the resunt will be also empty.");
             return query;
         }
 
