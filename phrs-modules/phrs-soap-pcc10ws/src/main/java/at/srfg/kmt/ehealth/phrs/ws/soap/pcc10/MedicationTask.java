@@ -79,6 +79,7 @@ final class MedicationTask implements PCCTask {
         final boolean isMedication = CARE_PROVISION_CODE.equals(code);
         if (!isMedication) {
             LOGGER.debug("This code : {} is not a medication code.");
+            return false;
         }
 
         final String patientId = (String) properties.get("patientId");
@@ -181,7 +182,7 @@ final class MedicationTask implements PCCTask {
                 "MyFreqency",
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                Constants.PILL,
+                "pillURI",
                 "MyDrug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
@@ -203,7 +204,7 @@ final class MedicationTask implements PCCTask {
      */
     @Override
     public String toString() {
-        final String result = String.format("VitalSignTask{%s}", CARE_PROVISION_CODE);
+        final String result = String.format("MedicationTask{%s}", CARE_PROVISION_CODE);
         return result;
     }
 }

@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
 final class ProblemEntryTask implements PCCTask {
 
     public static final String ODL_CARE_PROVISION_CODE = "ODLS";
+
     public static final String RISKLIST_PROVISION_CODE = "RISKLIST";
 
     /**
@@ -66,10 +67,11 @@ final class ProblemEntryTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isProblem = 
+        final boolean isProblem =
                 ODL_CARE_PROVISION_CODE.equals(code) || RISKLIST_PROVISION_CODE.equals(code);
         if (!isProblem) {
             LOGGER.debug("This code : {} is not a medication code.");
+            return false;
         }
 
         final String patientId = (String) properties.get("patientId");
@@ -181,5 +183,17 @@ final class ProblemEntryTask implements PCCTask {
 
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
         return pcc10Message;
+    }
+
+    /**
+     * Returns a human readable string representation for this class.
+     *
+     * @return a string representation for this class.
+     */
+    @Override
+    public String toString() {
+        final String result = 
+                String.format("ProblemEntryTask{%s or %s}", ODL_CARE_PROVISION_CODE, RISKLIST_PROVISION_CODE);
+        return result;
     }
 }

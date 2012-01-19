@@ -72,6 +72,7 @@ final class VitalSignTask implements PCCTask {
         final boolean isVitSign = CARE_PROVISION_CODE.equals(code);
         if (!isVitSign) {
             LOGGER.debug("This code : {} is not a medication code.");
+            return false;
         }
 
         final String patientId = (String) properties.get("patientId");
