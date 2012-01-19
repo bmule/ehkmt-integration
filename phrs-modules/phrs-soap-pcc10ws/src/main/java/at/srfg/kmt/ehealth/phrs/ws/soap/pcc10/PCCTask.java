@@ -40,4 +40,14 @@ public interface PCCTask {
      * @throws ConsumeException by any consume related exception.
      */
     void consume(Map properties) throws ConsumeException;
+
+    /**
+     * If this methods returns false then the task chain must be stop after the
+     * <code>consume</code> method call ends. This method make sense only if
+     * there more task are used together in to a chain of tasks.
+     * 
+     * @return if false then then the task chain must be stop after the
+     * <code>consume</code> method call ends.
+     */
+    boolean continueToNext();
 }
