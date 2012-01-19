@@ -29,7 +29,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Builds and sends a 
  * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * medication. <br/> This class was not designed to be extended.
+ * medication. <br/>
+ * <b>Note : <b/> this class caries no state - this is very important because
+ * it allows (this class) to be used in multi thread environment. <br/>
+ * This class was not designed to be extended.
  *
  * @author M1s
  * @version 1.0-SNAPSHOT

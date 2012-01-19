@@ -10,7 +10,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
@@ -29,27 +29,30 @@ import org.slf4j.LoggerFactory;
 /**
  * Builds and sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * medication. <br/> This class was not designed to be extended.
+ * problem entry information. <br/>
+ * <b>Note : <b/> this class caries no state - this is very important because
+ * it allows (this class) to be used in multi thread environment. <br/>
+ * This class was not designed to be extended.
  *
  * @author Mis
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
-final class VitalSignTask implements PCCTask {
+final class ProblemEntryTask implements PCCTask {
 
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.VitalSignTask</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.ProblemEntryTask</code>.
      */
     private static final Logger LOGGER =
-            LoggerFactory.getLogger(VitalSignTask.class);
+            LoggerFactory.getLogger(ProblemEntryTask.class);
 
     /**
      * Builds a
-     * <code>VitalSignTask</code> instance.
+     * <code>ProblemEntryTask</code> instance.
      */
-    VitalSignTask() {
+    ProblemEntryTask() {
         // UNIMPLEMENTED
     }
 
@@ -61,8 +64,8 @@ final class VitalSignTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isVitSign = "COBSCAT".equals(code);
-        if (!isVitSign) {
+        final boolean isProblem = "COBSCAT".equals(code);
+        if (!isProblem) {
             LOGGER.debug("This code : {} is not a medication code.");
         }
 
@@ -74,12 +77,12 @@ final class VitalSignTask implements PCCTask {
         if (responseURI == null
                 || careProvisionCode == null
                 || (patientId == null && patientNames == null)) {
-            LOGGER.error("This properties map [{}] does not contain enought informations.",
+            LOGGER.error("This properties map [{}] does not contain enought information. This properties map can not be consumed.",
                     properties);
             return false;
         }
 
-        return isVitSign;
+        return isProblem;
     }
 
     /**
@@ -153,43 +156,19 @@ final class VitalSignTask implements PCCTask {
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
+        final ProblemEntryClient client = new ProblemEntryClient(triplestore);
 
-        final VitalSignClient client = new VitalSignClient(triplestore);
-        
-                client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
-                "Free text note for systolic.",
-                "201006010000",
+        // this adds a problem-symptom named fever
+        client.addProblemEntry(
+                owner,
+                Constants.HL7V3_SYMPTOM,
                 Constants.STATUS_COMPELETE,
-                "100",
-                Constants.MM_HG);
-
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE,
-                "Free text note for diasystolic.",
                 "201006010000",
-                Constants.STATUS_COMPELETE,
-                "80",
-                Constants.MM_HG);
-
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
-                "Free text note for body height.",
                 "201006010000",
-                Constants.STATUS_COMPELETE,
-                "180",
-                Constants.CENTIMETER);
+                "Free text note for the problem.",
+                Constants.HL7V3_FEVER);
 
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
-                "Free text note for body weight.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "80",
-                Constants.KILOGRAM);
-
-
-        final Iterable<String> uris = client.getVitalSignURIsForUser(owner);
+        final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();
         for (String uri : uris) {

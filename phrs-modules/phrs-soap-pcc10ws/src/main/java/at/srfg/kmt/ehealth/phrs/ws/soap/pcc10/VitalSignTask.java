@@ -29,7 +29,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Builds and sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * medication. <br/> This class was not designed to be extended.
+ * vital sings information. <br/>
+ * <b>Note : <b/> this class caries no state - this is very important because
+ * it allows (this class) to be used in multi thread environment. <br/>
+ * <br/> This class was not designed to be extended.
  *
  * @author Mis
  * @version 1.0-SNAPSHOT
@@ -74,7 +77,7 @@ final class VitalSignTask implements PCCTask {
         if (responseURI == null
                 || careProvisionCode == null
                 || (patientId == null && patientNames == null)) {
-            LOGGER.error("This properties map [{}] does not contain enought informations.",
+            LOGGER.error("This properties map [{}] does not contain enought information.  This properties map can not be consumed.",
                     properties);
             return false;
         }
