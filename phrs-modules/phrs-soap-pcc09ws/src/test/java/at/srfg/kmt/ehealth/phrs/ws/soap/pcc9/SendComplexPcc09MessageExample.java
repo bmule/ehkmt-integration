@@ -19,10 +19,14 @@ import org.slf4j.LoggerFactory;
 /**
  * Runnable class able to sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-9">PCC09</a> request to a given
- * end-point. To run this class this class from the command line and maven use
- * the following command :
+ * end-point;
+ * the main method requires three one arguments :
+ * an URI (String) for the ppc09 end point, an URI (String) for the ppc10(String)
+ * end point and a care provision code (String). <br/>
+ * To run this class this class from the command line and maven use the 
+ * following command :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendComplexPcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews"
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendComplexPcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews COBSCAT"
  * </pre> 
  * <b>Note : </b> the first argument (for the main method) is the end-point,
  * this is the URI where the PCC9 request will send. 
@@ -53,12 +57,11 @@ public final class SendComplexPcc09MessageExample {
 
     /**
      * Runs this class from the command line. This method requires like argument
-     * an array that has <b>only one element</b>, this element is the end point
-     * where the PCC9 end-point.
+     * an array that has <b>three elements</b> : an URI for the ppc09 end point,
+     * an URI for the ppc10(String) end point and a care provision code.
      *
-     * @param args the command line arguments array. It must contains only one
-     * element - the URI for PCC9 end point other wise an
-     * <code>IllegalArgumentException</code> will raise.
+     * @param args the command line arguments array. It must contains three one
+     * elements other wise an <code>IllegalArgumentException</code> will raise.
      * @throws JAXBException by any JAXB related errors.
      * @throws MalformedURLException if the involved SOAP message is malformed.
      * @throws IllegalArgumentException if the
@@ -66,7 +69,7 @@ public final class SendComplexPcc09MessageExample {
      */
     public static void main(String... args)
             throws JAXBException, MalformedURLException {
-        if (args == null || args.length != 2) {
+        if (args == null || args.length != 3) {
             final IllegalArgumentException exception =
                     new IllegalArgumentException("One argument expected (the PCC9 end point URI).");
             LOGGER.error(exception.getMessage(), exception);
@@ -75,9 +78,9 @@ public final class SendComplexPcc09MessageExample {
 
         final String endpointURI = args[0];
         final String responseURI = args[1];
+        final String careProvisionCode = args[2];
 
-
-        final String careProvisionCode = "MEDLIST";
+//        final String careProvisionCode = "COBSCAT";
         final String careProvisionReason = "iCardea Barcelona Meeting test";
         //String careRecordTimePeriodBegin = "201101010000";
         final String careRecordTimePeriodBegin =
