@@ -91,6 +91,11 @@ final class ProblemEntryPCC10 {
         final QUPCIN043200UV01MFMIMT700712UV01ControlActProcess controlActProcess =
                 query.getControlActProcess();
 
+        final MFMIMT700712UV01QueryAck queryAck = controlActProcess.getQueryAck();
+        II queryId = buildQueryId();
+        queryAck.setQueryId(queryId);
+
+
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
@@ -119,6 +124,13 @@ final class ProblemEntryPCC10 {
         careProvisionEvent.getPertinentInformation3().addAll(informations);
 
         return query;
+    }
+
+    private static II buildQueryId() {
+        final II queryId = new II();
+        queryId.setRoot("1");
+        queryId.setExtension("5");
+        return queryId;
     }
 
     private static REPCMT004000UV01PertinentInformation5 getPertinentInformation(List<String> rootIds,

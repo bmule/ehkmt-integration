@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +43,13 @@ final class VitalSignPCC10 {
      * element(s) tree.
      */
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
+
+    private static II buildQueryId() {
+        final II queryId = new II();
+        queryId.setRoot("1");
+        queryId.setExtension("2");
+        return queryId;
+    }
     
     /**
      * Don't let anybody to instantiate this class.
@@ -90,10 +98,7 @@ final class VitalSignPCC10 {
                 query.getControlActProcess();
         
         final MFMIMT700712UV01QueryAck queryAck = controlActProcess.getQueryAck();
-        //final II queryId = queryAck.getQueryId();
-        final II queryId = new II();
-        queryId.setRoot("1");
-        queryId.setExtension("2");
+        II queryId = buildQueryId();
         queryAck.setQueryId(queryId);
 
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
@@ -163,6 +168,8 @@ final class VitalSignPCC10 {
 
     private static List<II> buildTemplateIds(Collection<String> rootIds) {
 
+        
+        
         final List<II> iis = new ArrayList<II>(rootIds.size());
         for (String rootId : rootIds) {
             final II ii1 = new II();
@@ -174,10 +181,13 @@ final class VitalSignPCC10 {
     }
 
     private static CD buildCode(DynaBean dynaBean) {
+        final String toString = DynaBeanUtil.toString(dynaBean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CD instance.", toString);
+        
         final String codePrefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
 
         final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
-        final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
+        final String codeValue =  (String) codeBean.get(Constants.CODE_VALUE);
 
         final CD code = new CD();
         code.setCode(codeValue);
@@ -195,13 +205,16 @@ final class VitalSignPCC10 {
         return code;
     }
 
-    private static CS buildStatus(DynaBean bean) {
-        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+    private static CS buildStatus(DynaBean dynaBean) {
+        final String toString = DynaBeanUtil.toString(dynaBean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CS instance.", toString);
+        
+        final String prefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
         
         final CS statusCode = new CS();
         statusCode.setDisplayName(prefLabel);
 
-        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
+        final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         statusCode.setCode(codeValue);
         
