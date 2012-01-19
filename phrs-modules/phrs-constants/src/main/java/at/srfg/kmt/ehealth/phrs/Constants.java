@@ -77,19 +77,19 @@ public class Constants {
      * This is an instance URI.
      */
     public static final String LOINC_CODE_SYSTEM =
-            getICardeaResource("codeSystem/instance/LOINC");
+            getICardeaResource("instances/codeSystem/Loinc");
 
     /**
      * This is an instance URI.
      */
     public static final String SNOMED_CODE_SYSTEM =
-            getICardeaResource("codeSystem/instance/SNOMED");
+            getICardeaResource("instances/codeSystem/Snomed");
 
     /**
      * This is an instance URI.
      */
     public static final String PHRS_CODE_SYSTEM =
-            getICardeaResource("codeSystem/instance/PHRS");
+            getICardeaResource("instances/codeSystem/PHRS");
 
     public static final String ICARDEA_INSTANCES_NS = ICARDEA_NS + "/instances";
     
