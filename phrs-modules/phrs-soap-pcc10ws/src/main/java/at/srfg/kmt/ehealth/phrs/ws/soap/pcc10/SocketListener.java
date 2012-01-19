@@ -49,7 +49,11 @@ final class SocketListener {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SocketListener.class);
 
-    private Set<PCCTask> tasks;
+    /**
+     * Holds all the <code>PCCTask</code> used to process the incoming map of
+     * properties.
+     */
+    private final Set<PCCTask> tasks;
     
     /**
      * Builds a
@@ -58,7 +62,10 @@ final class SocketListener {
     SocketListener() {
         tasks = new HashSet<PCCTask>();
         tasks.add(new MedicationTask());
+        tasks.add(new ProblemEntryTask());
         tasks.add(new VitalSignTask());
+        
+        LOGGER.debug("The actual set of tasks is : {} ", tasks);
     }
 
     /**
