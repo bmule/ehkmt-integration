@@ -67,15 +67,24 @@ final class ProblemEntryPCC10 {
      */
     static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
 
+        if (beans == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The beans argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         final QUPCIN043200UV01 query;
         try {
             query = buildQUPCIN043200UV01("PCC-10-Empty-Input.xml");
-        } catch (JAXBException exception) {
-            throw new RuntimeException(exception);
+        } catch (JAXBException jaxException) {
+            final RuntimeException exception = new RuntimeException(jaxException);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
         }
 
         if (beans == null || beans.isEmpty()) {
+            LOGGER.debug("Input set is empty - the resunt will be also empty.");
             return query;
         }
 
