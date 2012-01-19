@@ -73,15 +73,6 @@ public class VitalSignClientExample {
                 "180",
                 Constants.CENTIMETER);
         
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
-                "Free text note for body weight.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "80",
-                Constants.KILOGRAM);
-        
-        
         final Map<String, String> queryMap = new HashMap<String, String>();
         // like this I indetify the type
         queryMap.put(Constants.RDFS_TYPE,
