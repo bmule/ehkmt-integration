@@ -40,8 +40,6 @@ public final class MedicationClientExample {
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
         final MedicationClient client = new MedicationClient(triplestore);
-
-        // this adds a problem-symptom named fever
         client.addMedicationSign(
                 owner,
                 "Free text note for the medication.",
