@@ -66,6 +66,13 @@ public class VitalSignClientExample {
                 Constants.MM_HG);
         
         client.addVitalSign(owner,
+                Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
+                "Free text note for body height.",
+                "201006010000",
+                Constants.STATUS_COMPELETE,
+                "80",
+                Constants.KILOGRAM);
+        client.addVitalSign(owner,
                 Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
                 "Free text note for body height.",
                 "201006010000",
