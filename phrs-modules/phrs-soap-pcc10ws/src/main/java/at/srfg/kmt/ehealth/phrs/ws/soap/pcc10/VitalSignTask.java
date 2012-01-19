@@ -39,6 +39,10 @@ import org.slf4j.LoggerFactory;
  * @since 1.0-SNAPSHOT
  */
 final class VitalSignTask implements PCCTask {
+    
+    /**
+     * The care provision code for this PCC task.
+     */
     public static final String CARE_PROVISION_CODE = "COBSCAT";
 
     /**
@@ -206,7 +210,8 @@ final class VitalSignTask implements PCCTask {
     }
 
     /**
-     * Returns a human readable string representation for this class. 
+     * Returns a human readable string representation for this class.
+     * 
      * @return a string representation for this class. 
      */
     @Override

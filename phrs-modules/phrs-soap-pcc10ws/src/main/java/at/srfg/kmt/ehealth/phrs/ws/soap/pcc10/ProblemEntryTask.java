@@ -29,16 +29,18 @@ import org.slf4j.LoggerFactory;
 /**
  * Builds and sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * problem entry information. <br/>
- * <b>Note : <b/> this class caries no state - this is very important because
- * it allows (this class) to be used in multi thread environment. <br/>
- * This class was not designed to be extended.
+ * problem entry information. <br/> <b>Note : <b/> this class caries no state -
+ * this is very important because it allows (this class) to be used in multi
+ * thread environment. <br/> This class was not designed to be extended.
  *
  * @author Mis
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
 final class ProblemEntryTask implements PCCTask {
+
+    public static final String ODL_CARE_PROVISION_CODE = "ODLS";
+    public static final String RISKLIST_PROVISION_CODE = "RISKLIST";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -64,7 +66,8 @@ final class ProblemEntryTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isProblem = "COBSCAT".equals(code);
+        final boolean isProblem = 
+                ODL_CARE_PROVISION_CODE.equals(code) || RISKLIST_PROVISION_CODE.equals(code);
         if (!isProblem) {
             LOGGER.debug("This code : {} is not a medication code.");
         }
@@ -86,19 +89,19 @@ final class ProblemEntryTask implements PCCTask {
     }
 
     /**
-     * Builds and sends a 
-     * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message 
-     * that contains all the medications for the given properties map.
-     * 
+     * Builds and sends a <a
+     * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message that
+     * contains all the medications for the given properties map.
+     *
      * @param properties the properties to be consumed.
-     * @throws ConsumeException if the  the specified map of parameters can not
+     * @throws ConsumeException if the the specified map of parameters can not
      * be consumed from any reasons. Most of the times it wraps the real cause
-     * for the exception, this cause can be obtained by using the 
+     * for the exception, this cause can be obtained by using the
      * <code>getCause()</code> method.
      */
     @Override
     public void consume(Map properties) throws ConsumeException {
-        
+
         LOGGER.debug("Tries to consumes {}", properties);
         final String responseURI = (String) properties.get("responseEndpointURI");
 
@@ -113,18 +116,18 @@ final class ProblemEntryTask implements PCCTask {
                 LOGGER.debug("SSL used - logs the security properties.");
                 logSecurity();
                 enableSecurity();
-                
+
             }
             final MCCIIN000002UV01 ack = SendPcc10Message.sendMessage(request, responseURI);
             LOGGER.info("Acknowledge (response) is : {}.", ack);
 
         } catch (Exception exception) {
-            final ConsumeException consException = 
+            final ConsumeException consException =
                     new ConsumeException(exception);
             LOGGER.warn(consException.getMessage(), exception);
             throw consException;
         }
-        
+
         LOGGER.debug("The properties {} was succefully consumed.", properties);
     }
 

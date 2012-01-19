@@ -27,18 +27,22 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Builds and sends a 
- * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * medication. <br/>
- * <b>Note : <b/> this class caries no state - this is very important because
- * it allows (this class) to be used in multi thread environment. <br/>
- * This class was not designed to be extended.
+ * Builds and sends a <a
+ * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
+ * medication. <br/> <b>Note : <b/> this class caries no state - this is very
+ * important because it allows (this class) to be used in multi thread
+ * environment. <br/> This class was not designed to be extended.
  *
  * @author M1s
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
 final class MedicationTask implements PCCTask {
+
+    /**
+     * The care provision code for this PCC task.
+     */
+    public static final String CARE_PROVISION_CODE = "MEDLIST";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -58,11 +62,11 @@ final class MedicationTask implements PCCTask {
 
     /**
      * Returns true if the given properties map can be consumed with this
-     * <code>MedicationTask</code> task. More precisely this task can be consumed
-     * if :
-     * 
+     * <code>MedicationTask</code> task. More precisely this task can be
+     * consumed if :
+     *
      * @param properties the
-     * @return 
+     * @return
      */
     @Override
     public boolean canConsume(Map properties) {
@@ -72,7 +76,7 @@ final class MedicationTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isMedication = "MEDLIST".equals(code);
+        final boolean isMedication = CARE_PROVISION_CODE.equals(code);
         if (!isMedication) {
             LOGGER.debug("This code : {} is not a medication code.");
         }
@@ -94,19 +98,19 @@ final class MedicationTask implements PCCTask {
     }
 
     /**
-     * Builds and sends a 
-     * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message 
-     * that contains all the medications for the given properties map.
-     * 
+     * Builds and sends a <a
+     * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message that
+     * contains all the medications for the given properties map.
+     *
      * @param properties the properties to be consumed.
-     * @throws ConsumeException if the  the specified map of parameters can not
+     * @throws ConsumeException if the the specified map of parameters can not
      * be consumed from any reasons. Most of the times it wraps the real cause
-     * for the exception, this cause can be obtained by using the 
+     * for the exception, this cause can be obtained by using the
      * <code>getCause()</code> method.
      */
     @Override
     public void consume(Map properties) throws ConsumeException {
-        
+
         LOGGER.debug("Tries to consumes {}", properties);
         final String responseURI = (String) properties.get("responseEndpointURI");
 
@@ -121,18 +125,18 @@ final class MedicationTask implements PCCTask {
                 LOGGER.debug("SSL used - logs the security properties.");
                 logSecurity();
                 enableSecurity();
-                
+
             }
             final MCCIIN000002UV01 ack = SendPcc10Message.sendMessage(request, responseURI);
             LOGGER.info("Acknowledge (response) is : {}.", ack);
 
         } catch (Exception exception) {
-            final ConsumeException consException = 
+            final ConsumeException consException =
                     new ConsumeException(exception);
             LOGGER.warn(consException.getMessage(), exception);
             throw consException;
         }
-        
+
         LOGGER.debug("The properties {} was succefully consumed.", properties);
     }
 
@@ -166,7 +170,7 @@ final class MedicationTask implements PCCTask {
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
         final MedicationClient client = new MedicationClient(triplestore);
-        
+
         // this adds a medication
         client.addMedicationSign(
                 owner,
@@ -190,5 +194,16 @@ final class MedicationTask implements PCCTask {
 
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
         return pcc10Message;
+    }
+
+    /**
+     * Returns a human readable string representation for this class.
+     *
+     * @return a string representation for this class.
+     */
+    @Override
+    public String toString() {
+        final String result = String.format("VitalSignTask{%s}", CARE_PROVISION_CODE);
+        return result;
     }
 }
