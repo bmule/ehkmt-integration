@@ -51,7 +51,7 @@ public final class MedicationClientExample {
                 "MyFreqency",
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                "pillURI",
+                Constants.PILL,
                 "MyDrug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
