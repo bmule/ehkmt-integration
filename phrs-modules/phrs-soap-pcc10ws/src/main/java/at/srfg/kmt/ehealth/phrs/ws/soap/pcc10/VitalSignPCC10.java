@@ -88,6 +88,13 @@ final class VitalSignPCC10 {
 
         final QUPCIN043200UV01MFMIMT700712UV01ControlActProcess controlActProcess =
                 query.getControlActProcess();
+        
+        final MFMIMT700712UV01QueryAck queryAck = controlActProcess.getQueryAck();
+        //final II queryId = queryAck.getQueryId();
+        final II queryId = new II();
+        queryId.setRoot("1");
+        queryId.setExtension("2");
+        queryAck.setQueryId(queryId);
 
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
