@@ -193,10 +193,10 @@
         <skos:prefLabel>Systolic blood pressure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressureULMSCode">
-                <icadyCode:codeValue>C0871470</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressureLoincCode">
+                <icadyCode:codeValue>8480-6</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1394,10 +1394,10 @@
         <skos:prefLabel>Body height measure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasureULMSCode">
-                <icadyCode:codeValue>C0005890</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasureLoincCode">
+                <icadyCode:codeValue>8306-3</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1440,6 +1440,20 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeat">
+        <skos:prefLabel>Heart rate</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeatLoincCode">
+                <icadyCode:codeValue>8867-4</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformGardeningActivities">
         <skos:prefLabel>Does perform gardening activities</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
@@ -1780,10 +1794,10 @@
         <skos:prefLabel>Body weight</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeightULMSCode">
-                <icadyCode:codeValue>C0005910</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeightLoincCode">
+                <icadyCode:codeValue>3141-9</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1944,10 +1958,10 @@
         <skos:prefLabel>Diastolic blood pressure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressureULMSCode">
-                <icadyCode:codeValue>C0428883</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressureLoincCode">
+                <icadyCode:codeValue>8462-4</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
