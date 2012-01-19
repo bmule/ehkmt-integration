@@ -7,9 +7,10 @@
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
+
 import at.srfg.kmt.ehealth.phrs.Constants;
-import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,26 +22,50 @@ import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
+ * It is used to generate a <a
+ * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Problem
+ * Entry</a> according with the IHE standards for a given input.
  *
  * @author Mihai
  */
-public class ProblemEntryPCC10 {
+final class ProblemEntryPCC10 {
 
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.ProblemEntryPCC10</code>.
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>at.srfg.kmt.ehealth.phrs.ProblemEntryPCC10</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ProblemEntryPCC10.class);
+
     /**
      * JAX-B object factory- used to build jax-b object 'hanged' in the
      * element(s) tree.
      */
     private static final ObjectFactory OBJECT_FACTORY = new ObjectFactory();
 
-    public static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
+    /**
+     * Don't let anybody to instantiate this class.
+     */
+    private ProblemEntryPCC10() {
+        // UNIMPLEMENTD
+    }
+
+    /**
+     * Builds a <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Problem
+     * Entry</a> for a Set of dyna-beans.
+     *
+     * @param beans the set of dyna beans used to build the <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Problem
+     * Entry</a> , it can not be null.
+     * @return a <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Problem
+     * Entry</a> for the given set of dyna-beans.
+     */
+    static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
 
 
         final QUPCIN043200UV01 query;
@@ -65,20 +90,20 @@ public class ProblemEntryPCC10 {
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
         for (DynaBean bean : beans) {
-            
-            
-            final List<String> rootIds = 
-                    (List<String>)  bean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+
+
+            final List<String> rootIds =
+                    (List<String>) bean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
             final DynaBean code = (DynaBean) bean.get(Constants.HL7V3_CODE);
             final String note = (String) bean.get(Constants.SKOS_NOTE);
             final DynaBean status = (DynaBean) bean.get(Constants.HL7V3_STATUS);
             final String startDate = (String) bean.get(Constants.HL7V3_START_DATE);
             //final String endDate = (String) bean.get(Constants.HL7V3_DATE_END);
             final DynaBean value = (DynaBean) bean.get(Constants.HL7V3_VALUE_CODE);
-            
 
-            final REPCMT004000UV01PertinentInformation5 pertinentInformation = 
-                    getPertinentInformation(rootIds, code, note, status, 
+
+            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+                    getPertinentInformation(rootIds, code, note, status,
                     startDate, startDate, value, bean);
             informations.add(pertinentInformation);
         }
@@ -88,7 +113,7 @@ public class ProblemEntryPCC10 {
     }
 
     private static REPCMT004000UV01PertinentInformation5 getPertinentInformation(List<String> rootIds,
-            DynaBean code, String note, DynaBean status, String startDateStr, 
+            DynaBean code, String note, DynaBean status, String startDateStr,
             String endDateStr, DynaBean codeValueBean, DynaBean valueUnitBean) {
         final POCDMT000040Observation observation =
                 OBJECT_FACTORY.createPOCDMT000040Observation();
@@ -108,7 +133,7 @@ public class ProblemEntryPCC10 {
 
         final CS statusCode = buildStatus(status);
         observation.setStatusCode(statusCode);
-        
+
         final CD codeValue = buildCodeValue(codeValueBean);
         observation.getValue().add(codeValue);
 
@@ -156,16 +181,16 @@ public class ProblemEntryPCC10 {
 
     private static CS buildStatus(DynaBean bean) {
         final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
-        
+
         final CS statusCode = new CS();
         statusCode.setDisplayName(prefLabel);
 
         final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         statusCode.setCode(codeValue);
-        
+
         final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
-        
+
         final String codeSystemCode =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         statusCode.setCode(codeSystemCode);
@@ -176,25 +201,25 @@ public class ProblemEntryPCC10 {
 
         return statusCode;
     }
-    
+
     private static CD buildCodeValue(DynaBean bean) {
         final CD cd = new CD();
         final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
         cd.setDisplayName(prefLabel);
-        
+
         final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         cd.setCode(codeValue);
-        
+
         final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
-        final String codeSystemCode = 
+        final String codeSystemCode =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         cd.setCodeSystem(codeSystemCode);
-        
-        final String codeSystemName = 
+
+        final String codeSystemName =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
         cd.setCodeSystemName(codeSystemName);
-        
+
         return cd;
     }
 }
