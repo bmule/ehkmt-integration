@@ -206,7 +206,7 @@ final class VitalSignTask implements PCCTask {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pcc10Message = VitalSignPCC10.getPCC10Message(beans);
         return pcc10Message;
     }
 
