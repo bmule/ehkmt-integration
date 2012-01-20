@@ -12,6 +12,7 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import com.sun.net.ssl.internal.ssl.Provider;
@@ -181,6 +182,15 @@ final class ProblemEntryTask implements PCCTask {
             beans.add(dynaBean);
         }
 
+        // TAKE CARE !!!!!!
+        // This lines wipe out the triple store repository files.
+        try {
+            ((GenericTriplestoreLifecycle) triplestore).shutdown();
+            ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+        } catch (Exception exception) {
+            LOGGER.warn(exception.getMessage(), exception);
+        }
+        
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
         return pcc10Message;
     }

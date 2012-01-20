@@ -12,6 +12,7 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import com.sun.net.ssl.internal.ssl.Provider;
@@ -191,6 +192,15 @@ final class MedicationTask implements PCCTask {
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
             beans.add(dynaBean);
+        }
+        
+        // TAKE CARE !!!!!!
+        // This lines wipe out the triple store repository files.
+        try {
+            ((GenericTriplestoreLifecycle) triplestore).shutdown();
+            ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+        } catch (Exception exception) {
+            LOGGER.warn(exception.getMessage(), exception);
         }
 
         final QUPCIN043200UV01 pcc10Message = MedicationSignPCC10.getPCC10Message(beans);
