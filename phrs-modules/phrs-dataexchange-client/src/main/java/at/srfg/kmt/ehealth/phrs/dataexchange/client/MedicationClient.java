@@ -7,21 +7,17 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
-import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
-import java.util.HashMap;
-import java.util.Map;
-import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
