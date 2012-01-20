@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -166,24 +167,22 @@ final class MedicationTask implements PCCTask {
     private QUPCIN043200UV01 buildMessage()
             throws TripleException, IllegalAccessException, InstantiationException {
 
-        final String owner = "testOwner";
+               final String owner = "testOwner";
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
         final MedicationClient client = new MedicationClient(triplestore);
-
-        // this adds a medication
         client.addMedicationSign(
                 owner,
-                "Free text note for medication.",
+                "Free text note for the medication.",
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
                 "MyFreqency",
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                "pillURI",
+                Constants.PILL,
                 "MyDrug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
@@ -193,8 +192,13 @@ final class MedicationTask implements PCCTask {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
             beans.add(dynaBean);
         }
-        
-        // TAKE CARE !!!!!!
+
+        for (DynaBean dynaBean : beans) {
+            final String toString = DynaBeanUtil.toString(dynaBean);
+            System.out.println(toString);
+        }
+
+         // TAKE CARE !!!!!!
         // This lines wipe out the triple store repository files.
         try {
             ((GenericTriplestoreLifecycle) triplestore).shutdown();
@@ -202,7 +206,7 @@ final class MedicationTask implements PCCTask {
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
-
+        
         final QUPCIN043200UV01 pcc10Message = MedicationSignPCC10.getPCC10Message(beans);
         return pcc10Message;
     }
