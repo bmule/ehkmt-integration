@@ -65,7 +65,7 @@ public class MedicationClientExample {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pCC10Message = MedicationSignPCC10.getPCC10Message(beans);
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "medication");
 
         // TAKE CARE !!!!!!
