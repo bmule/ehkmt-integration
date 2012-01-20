@@ -167,9 +167,6 @@ final class VitalSignPCC10 {
     }
 
     private static List<II> buildTemplateIds(Collection<String> rootIds) {
-
-        
-        
         final List<II> iis = new ArrayList<II>(rootIds.size());
         for (String rootId : rootIds) {
             final II ii1 = new II();
