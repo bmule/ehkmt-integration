@@ -36,9 +36,9 @@ function startsWith(theString,theStart,caseNormal){
 function processForm(theForm){
 	
     var objHidden = document.getElementById("openid_identifier");
-    var objUser= document.getElementById("username");
-    var objDropDown= document.getElementById("loginWith");
-    var mess= document.getElementById("message");
+    var objUser   = document.getElementById("username");
+    var objDropDown = document.getElementById("loginWith");
+    var mess = document.getElementById("message");
     
    // alert("objDropDown.value="+objDropDown.value);
     
@@ -50,10 +50,10 @@ function processForm(theForm){
     //icardea local server accepts short names. We must combine this here otherwise the servlet request must be wrapped
     if(objDropDown.value == "icardea" ){
     	objHidden.value ="https://localhost:8443/idp/u="+objUser.value;
-    	alert("The actual iCARDEA openID identifier="+objHidden.value);
+    	alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     
-    if(objDropDown.value='local'){
+    if(objDropDown.value =='local'){
     	if(objUser.value =='phradmin'){
     		return true;
     	}
@@ -63,6 +63,9 @@ function processForm(theForm){
     	if(startsWith(objUser.value,'phrtest',false)){
     		return true;
     	}
+    	if(startsWith(objUser.value,'nurse',false)){
+    		return true;
+    	}        
     	mess.value="For a local user account, please provide a user name starting with 'phruser'";
     	alert(mess.value);
     	return false;
@@ -113,6 +116,11 @@ function processForm(theForm){
 	  	<td>Role</td>
 	  	<td></td>
   	</tr>
+    	<tr>
+	  	<td>nurse</td>
+	  	<td>Nurse</td>
+	  	<td></td>
+  	</tr>             
   	<tr>
 	  	<td>phruser</td>
 	  	<td></td>
@@ -127,22 +135,18 @@ function processForm(theForm){
 	  	<td>phrtest1</td>
 	  	<td>Doctor</td>
 	  	<td></td>
-  	</tr>  	
+  	</tr>  
+          
   	</table>
-  	<p>The prefix <b></b>phrtest</b> or <b>phruser</b> can be used to create additional local login identifiers 
-  	e.g. <b>phruser123</b> No passwords are needed in order to faciliate demonstration and testing activities</p>
+  	<p>The prefix <b>phrtest</b> or <b>phruser</b> can be used to create additional local login identifiers 
+  	e.g. <b>phruser123</b> No passwords are needed in order to facilitate demonstration and testing activities</p>
   	<p></p>
     
-<!--     <input id="loginWith" name="loginWith" type="text" size="90" value="icardea"/>  -->   
+<!--     <input id="xxloginWith" name="xxloginWith" type="text" size="90" value="icardea"/>  -->   
     
   </form>
 
 </div>
-<!-- 
 
-   <p><a href="/home.jsp">home.jsp</a> <span style="font-size:.8em">test,not filtered</span></p>
-  <p><a href="/index.xhtml">index.xhtml</a> <span style="font-size:.8em">not filtered</span></p>
-    <p><a href="/jsf/home.xhtml">/'protected'/home.xhtml</a> <span style="font-size:.8em">filter activates, expect openID login page</span></p>
- -->
 </body>
 </html>
