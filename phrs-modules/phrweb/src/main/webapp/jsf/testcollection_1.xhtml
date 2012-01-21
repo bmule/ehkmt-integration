@@ -25,8 +25,7 @@
 	<p:panel header="Create a new Entry">
 		<h:panelGrid columns="2" id="grid">
 			<h:outputLabel value="Title : *" for="txt_title"></h:outputLabel>
-			<p:inputText id="txt_title" 
-							value="#{cmgtBean.book.title}" required="true"requiredMessage="#{labels['default_required_field']}"/>
+			<p:inputText id="txt_title" value="#{cmgtBean.book.title}" required="true" requiredMessage="#{labels['default_required_field']}"/>
 			
 			<h:outputLabel value="Author : *" for="txt_author"></h:outputLabel>
 			<p:inputText id="txt_author" required="true" 

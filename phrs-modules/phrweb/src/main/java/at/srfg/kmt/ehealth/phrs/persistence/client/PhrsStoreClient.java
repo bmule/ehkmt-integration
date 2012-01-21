@@ -76,6 +76,30 @@ public class PhrsStoreClient implements Serializable {
 		}
 		return m_instance;
 	}
+        /**
+         * Especially for unit testing, if needed, otherwise get the triplestore for initialization or cleanup 
+         *
+         * @param triplestore
+         * @return 
+         */
+        public static PhrsStoreClient getInstance(GenericTriplestore triplestore) {
+            if (m_instance == null) {
+                    m_instance = new PhrsStoreClient();
+                    if(triplestore!=null) m_instance.setTripleStore(triplestore);
+            }
+            return m_instance;
+	}
+        
+        protected void setTripleStore(GenericTriplestore triplestore){
+            this.triplestore=triplestore;
+        }
+        /**
+         * The RDF based tripleStore
+         * @return 
+         */
+        public GenericTriplestore getTripleStore(){
+            return triplestore;
+        }
 	/*
 	Initialization-on-demand holder idiom
 	 if instance fails will get ambiguous java.lang.NoClassDefFoundError 
