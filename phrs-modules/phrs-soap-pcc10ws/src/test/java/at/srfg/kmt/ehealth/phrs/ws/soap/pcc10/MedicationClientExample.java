@@ -51,7 +51,7 @@ public class MedicationClientExample {
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
-                "MyFreqency",
+                client.buildFrequency("morgen", -1, 8, Constants.HOUR),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 Constants.PILL,
