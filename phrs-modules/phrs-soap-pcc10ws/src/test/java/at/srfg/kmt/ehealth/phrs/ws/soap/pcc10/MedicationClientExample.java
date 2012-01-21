@@ -49,12 +49,12 @@ public class MedicationClientExample {
                 owner,
                 "Free text note for the medication.",
                 Constants.STATUS_COMPELETE,
-                "201006010000",
-                "201006010000",
+                "200812010000",
+                "201106101010",
                 client.buildFrequency("morgen", -1, 8, Constants.HOUR),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
-                "1",
-                Constants.PILL,
+                "25",
+                Constants.MILLIGRAM,
                 "MyDrug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
