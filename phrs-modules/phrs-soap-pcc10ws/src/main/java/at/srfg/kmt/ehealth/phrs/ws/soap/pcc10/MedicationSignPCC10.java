@@ -14,7 +14,10 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import java.io.InputStream;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -96,6 +99,10 @@ final class MedicationSignPCC10 {
         final QUPCIN043200UV01MFMIMT700712UV01ControlActProcess controlActProcess =
                 query.getControlActProcess();
 
+        final MFMIMT700712UV01QueryAck queryAck = controlActProcess.getQueryAck();
+        II queryId = buildQueryId();
+        queryAck.setQueryId(queryId);
+
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
@@ -117,21 +124,28 @@ final class MedicationSignPCC10 {
                 throw exception;
             }
 
-            final List<String> rootIds =
-                    (List<String>) medBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+            final String rootId =
+                    (String) medBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
             final String note = (String) medBean.get(Constants.SKOS_NOTE);
             final DynaBean status = (DynaBean) medBean.get(Constants.HL7V3_STATUS);
             final String dateStart = (String) medBean.get(Constants.HL7V3_DATE_START);
             final String dateEnd = (String) medBean.get(Constants.HL7V3_DATE_END);
-            System.out.println("--->" + medBean.get(Constants.HL7V3_DOSAGE));
-            ;
-//            final DynaBean adminRoute = (DynaBean) medBean.get(Constants.HL7V3_ADMIN_ROUTE);
-//            final DynaBean dosage = (DynaBean) medBean.get(Constants.HL7V3_DOSAGE);
-//            final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
+            final DynaBean frequency = (DynaBean) medBean.get(Constants.HL7V3_FREQUENCY);
+            final DynaBean adminRoute = (DynaBean) medBean.get(Constants.HL7V3_ADMIN_ROUTE);
+            final DynaBean dosage = (DynaBean) medBean.get(Constants.HL7V3_DOSAGE);
+            final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
 
-//            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
-//                    buildPertinentInformation(medication);
-//            pertinentInformations.add(pertinentInformation);
+            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+                    buildPertinentInformation(rootId,
+                    note,
+                    status,
+                    dateStart,
+                    dateEnd,
+                    frequency,
+                    adminRoute,
+                    dosage,
+                    drugName);
+            pertinentInformations.add(pertinentInformation);
         }
         careProvisionEvent.getPertinentInformation3().addAll(pertinentInformations);
 
@@ -139,7 +153,7 @@ final class MedicationSignPCC10 {
     }
 
     private static REPCMT004000UV01PertinentInformation5 buildPertinentInformation(
-            List<String> rootIds,
+            String rootIds,
             String note,
             DynaBean status,
             String dateStart,
@@ -169,13 +183,13 @@ final class MedicationSignPCC10 {
         final IVLPQ ivlpq = buildIVLPQ(dosage);
         substanceAdministration.setDoseQuantity(ivlpq);
 
-        //FIXME : I am not sure about this.
-        // for the moment I add the
+        LOGGER.debug("Sets the template id : {}", rootIds);
         final List<II> templateIds = buildTemplateIds(rootIds);
         substanceAdministration.getTemplateId().addAll(templateIds);
 
         // FIXME : ask the UI for it
-        final CE ce = buildOralRouteCode();
+        //final CE ce = buildOralRouteCode();
+        final CE ce = buildRouteCode(adminRoute);
         substanceAdministration.setRouteCode(ce);
 
         final CS statusCode = buildStatus(status);
@@ -200,10 +214,10 @@ final class MedicationSignPCC10 {
         final List<POCDMT000040EntryRelationship> entryRelationship =
                 substanceAdministration.getEntryRelationship();
 
-        final List<POCDMT000040EntryRelationship> instructions =
-                buildInstructions();
+//        final List<POCDMT000040EntryRelationship> instructions =
+//                buildInstructions();
 
-        entryRelationship.addAll(instructions);
+//        entryRelationship.addAll(instructions);
 
         if (substanceAdministration_JE == null) {
             final JAXBElement<POCDMT000040SubstanceAdministration> newSubstanceAdministration_JE =
@@ -213,15 +227,12 @@ final class MedicationSignPCC10 {
 
         return pertinentInformation;
     }
-    
-    private static List<II> buildTemplateIds(Collection<String> rootIds) {
-        final List<II> iis = new ArrayList<II>(rootIds.size());
-        for (String rootId : rootIds) {
-            final II ii1 = new II();
-            ii1.setExtension(rootId);
-            iis.add(ii1);
-        }
 
+    private static List<II> buildTemplateIds(String rootId) {
+        final List<II> iis = new ArrayList<II>(1);
+        final II ii1 = new II();
+        ii1.setExtension(rootId);
+        iis.add(ii1);
         return iis;
     }
 
@@ -299,12 +310,21 @@ final class MedicationSignPCC10 {
 
         return ivlpq;
     }
-    
+
     private static IVLPQ buildIVLPQ(DynaBean bean) {
+        final String toString = DynaBeanUtil.toString(bean);
+        LOGGER.debug("Tries to build a Dosage for {}", toString);
+
+        final String value =
+                (String) bean.get(Constants.HL7V3_DOSAGE_VALUE);
+
+        final DynaBean unit =
+                (DynaBean) bean.get(Constants.HL7V3_DOSAGE_UNIT);
+        final String unitPrefLabel = (String) unit.get(Constants.SKOS_PREFLABEL);
 
         final IVLPQ ivlpq = new IVLPQ();
-        ivlpq.setValue("XX");
-        ivlpq.setUnit("YY");
+        ivlpq.setValue(value);
+        ivlpq.setUnit(unitPrefLabel);
 
         return ivlpq;
     }
@@ -476,12 +496,24 @@ final class MedicationSignPCC10 {
         return event;
     }
 
-    private static CE buildOralRouteCode() {
+    private static CE buildRouteCode(DynaBean bean) {
+        final String toString = DynaBeanUtil.toString(bean);
+        LOGGER.debug("Tries to build a Route Code for {}", toString);
+        final String prefLabel =
+                (String) bean.get("http://www.w3.org/2004/02/skos/core#prefLabel");
+        final DynaBean code = (DynaBean) bean.get(Constants.CODE);
+        final String codeValue = (String) code.get(Constants.CODE_VALUE);
+
+        final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
+        final String codeSystemName = (String) codeSystem.get(Constants.CODE_SYSTEM_NAME);
+        final String codeSystemCode = (String) codeSystem.get(Constants.CODE_SYSTEM_CODE);
+
+
         CE ce = new CE();
-        ce.setCode("PO");
-        ce.setCodeSystem("2.16.840.1.113883.5.112");
-        ce.setCodeSystemName("HL7 RouteOfAdministration Vocabulary");
-        ce.setDisplayName("oral");
+        ce.setCode(codeValue);
+        ce.setCodeSystem(codeSystemCode);
+        ce.setCodeSystemName(codeSystemName);
+        ce.setDisplayName(prefLabel);
         return ce;
     }
 
@@ -512,12 +544,9 @@ final class MedicationSignPCC10 {
     }
 
     private static II buildUUIDBasedId() {
-        final UUID uuid = UUID.randomUUID();
         final II result = new II();
 
-        //result.setRoot(uuid.toString());
-        //FIXME : this must be unique. This value '12122' origins from the 
-        // SRDC tempalte.
+        // TODO : this must be unique. This value '12122' origins from the SRDC tempalte.
         result.setExtension("12122");
 
         return result;
@@ -558,5 +587,12 @@ final class MedicationSignPCC10 {
         relationship.setAct(act);
         result.add(relationship);
         return result;
+    }
+
+    private static II buildQueryId() {
+        final II queryId = new II();
+        queryId.setRoot("1");
+        queryId.setExtension("11");
+        return queryId;
     }
 }

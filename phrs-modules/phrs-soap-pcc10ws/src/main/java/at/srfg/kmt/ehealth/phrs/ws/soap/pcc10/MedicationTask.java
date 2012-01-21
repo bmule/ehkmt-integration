@@ -11,7 +11,6 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -177,12 +176,12 @@ final class MedicationTask implements PCCTask {
                 owner,
                 "Free text note for the medication.",
                 Constants.STATUS_COMPELETE,
-                "201006010000",
-                "201006010000",
-                "MyFreqency",
+                "200812010000",
+                "201106101010",
+                client.buildFrequency("morgen", -1, 8, Constants.HOUR),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
-                "1",
-                Constants.PILL,
+                "25",
+                Constants.MILLIGRAM,
                 "MyDrug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
@@ -191,11 +190,6 @@ final class MedicationTask implements PCCTask {
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
             beans.add(dynaBean);
-        }
-
-        for (DynaBean dynaBean : beans) {
-            final String toString = DynaBeanUtil.toString(dynaBean);
-            System.out.println(toString);
         }
 
          // TAKE CARE !!!!!!
