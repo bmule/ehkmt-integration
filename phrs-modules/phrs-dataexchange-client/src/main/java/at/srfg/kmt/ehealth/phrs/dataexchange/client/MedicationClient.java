@@ -120,15 +120,7 @@ public final class MedicationClient {
         // template root id.
         triplestore.persist(subject,
                 Constants.HL7V3_TEMPLATE_ID_ROOT,
-                Constants.IMUNISATION,
-                LITERAL);
-
-        // HL7 specific informations.
-        // according with the specification the medcation requires this 
-        // template root id.
-        triplestore.persist(subject,
-                Constants.HL7V3_TEMPLATE_ID_ROOT,
-                Constants.MEDICATION,
+                Constants.MEDICATION_NORMAL_DOSING,
                 LITERAL);
 
         triplestore.persist(subject,
