@@ -93,6 +93,24 @@
         <skos:altLabel>pill</skos:altLabel>
     </rdf:Description>
 
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Hour">
+        <skos:prefLabel>Hour</skos:prefLabel>
+        <skos:notation>h</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Minute">
+        <skos:prefLabel>Minute</skos:prefLabel>
+        <skos:notation>min</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Second">
+        <skos:prefLabel>Second</skos:prefLabel>
+        <skos:notation>sec</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Day">
+        <skos:prefLabel>Day</skos:prefLabel>
+    </rdf:Description>
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Condition">
         <skos:prefLabel>Condition</skos:prefLabel>
