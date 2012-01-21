@@ -291,6 +291,17 @@ public class Constants {
     public static final String MEDICATION = "1.3.6.1.4.1.19376.1.5.3.1.4.7";
 
     /**
+     * The unique id for "Medication Normal dosing" in the IHE acceptation.<br/>
+     * In most of the cases this is used like value (of type literal) for a 
+     * property named templIdRoot.
+     *
+     * @see #ICARDEA_HL7V3_TEMPLATE_ID_ROOT
+     * @see
+     * <url>http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.7</url>
+     */
+    public static final String MEDICATION_NORMAL_DOSING = "1.3.6.1.4.1.19376.1.5.3.1.4.7.1";
+
+    /**
      * The unique id for "Vital Signs Observation" in the IHE acceptation.<br/>
      * In most of the cases this is used like value (of type literal) for a
      * property named templIdRoot.
