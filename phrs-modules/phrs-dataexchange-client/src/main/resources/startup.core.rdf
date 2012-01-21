@@ -52,6 +52,12 @@
         <icadyCodeSystem:codeSystemName>IHEActCode</icadyCodeSystem:codeSystemName>
     </rdf:Description>
 
+    <!--HL7 RouteOfAdministration Vocabulary-->
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration">
+        <icadyCodeSystem:codeSystemCode>2.16.840.1.113883.5.112</icadyCodeSystem:codeSystemCode>
+        <icadyCodeSystem:codeSystemName>HL7 RouteOfAdministration Vocabulary</icadyCodeSystem:codeSystemName>
+    </rdf:Description>
+
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
         <skos:prefLabel>Milimeter Hg</skos:prefLabel>
@@ -2363,12 +2369,12 @@
     </rdf:Description>
     
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
-        <skos:prefLabel>Oral administration of treatment</skos:prefLabel>
+        <skos:prefLabel>oral</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministrationULMSCode">
-                <icadyCode:codeValue>C1273553</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationVocabularyCode">
+                <icadyCode:codeValue>PO</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
