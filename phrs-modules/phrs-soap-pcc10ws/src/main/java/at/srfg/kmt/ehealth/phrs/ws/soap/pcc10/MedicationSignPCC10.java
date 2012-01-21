@@ -9,14 +9,16 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.*;
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
@@ -24,10 +26,10 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * It is used to generate a 
- * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a> 
+ * It is used to generate a <a
+ * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
  * according with the IHE standards for a given input.
- * 
+ *
  * @author M1s
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
@@ -56,21 +58,21 @@ final class MedicationSignPCC10 {
     }
 
     /**
-     * Builds a 
-     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
+     * Builds a <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
      * for a Set of dyna-beans.
      *
-     * @param beans the set of dyna beans used to build the 
-     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
+     * @param beans the set of dyna beans used to build the <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
      * , it can not be null.
-     * @return a 
-     * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
+     * @return a <a
+     * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
      * for the given set of dyna-beans.
      */
     static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
 
         if (beans == null) {
-            final NullPointerException exception = 
+            final NullPointerException exception =
                     new NullPointerException("The beans argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
@@ -90,6 +92,7 @@ final class MedicationSignPCC10 {
             return query;
         }
 
+
         final QUPCIN043200UV01MFMIMT700712UV01ControlActProcess controlActProcess =
                 query.getControlActProcess();
 
@@ -98,66 +101,120 @@ final class MedicationSignPCC10 {
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
 
-        final List<REPCMT004000UV01PertinentInformation5> informations =
+        final List<REPCMT004000UV01PertinentInformation5> pertinentInformations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
-        for (DynaBean bean : beans) {
 
+        for (DynaBean medBean : beans) {
+            final String beanToString = DynaBeanUtil.toString(medBean);
+            LOGGER.debug("Tries to handle this medication {}", beanToString);
+
+            // Here I do type check before any other task take place.
+            final String type = (String) medBean.get(Constants.RDFS_TYPE);
+            if (!Constants.PHRS_MEDICATION_CLASS.equals(type)) {
+                final String msg = String.format("This dynabean %s has the wrong type, its type is %s.", beanToString, type);
+                final IllegalArgumentException exception = new IllegalArgumentException(msg);
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
 
             final List<String> rootIds =
-                    (List<String>) bean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
-            final DynaBean code = (DynaBean) bean.get(Constants.HL7V3_CODE);
-            final String note = (String) bean.get(Constants.SKOS_NOTE);
-            final DynaBean status = (DynaBean) bean.get(Constants.HL7V3_STATUS);
-            final String startDate = (String) bean.get(Constants.HL7V3_START_DATE);
-            //final String endDate = (String) bean.get(Constants.HL7V3_DATE_END);
-            final DynaBean value = (DynaBean) bean.get(Constants.HL7V3_VALUE_CODE);
+                    (List<String>) medBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
+            final String note = (String) medBean.get(Constants.SKOS_NOTE);
+            final DynaBean status = (DynaBean) medBean.get(Constants.HL7V3_STATUS);
+            final String dateStart = (String) medBean.get(Constants.HL7V3_DATE_START);
+            final String dateEnd = (String) medBean.get(Constants.HL7V3_DATE_END);
+            System.out.println("--->" + medBean.get(Constants.HL7V3_DOSAGE));
+            ;
+//            final DynaBean adminRoute = (DynaBean) medBean.get(Constants.HL7V3_ADMIN_ROUTE);
+//            final DynaBean dosage = (DynaBean) medBean.get(Constants.HL7V3_DOSAGE);
+//            final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
 
-
-            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
-                    getPertinentInformation(rootIds, code, note, status,
-                    startDate, startDate, value, bean);
-            informations.add(pertinentInformation);
+//            final REPCMT004000UV01PertinentInformation5 pertinentInformation =
+//                    buildPertinentInformation(medication);
+//            pertinentInformations.add(pertinentInformation);
         }
-        careProvisionEvent.getPertinentInformation3().addAll(informations);
+        careProvisionEvent.getPertinentInformation3().addAll(pertinentInformations);
 
         return query;
     }
 
-    private static REPCMT004000UV01PertinentInformation5 getPertinentInformation(List<String> rootIds,
-            DynaBean code, String note, DynaBean status, String startDateStr,
-            String endDateStr, DynaBean codeValueBean, DynaBean valueUnitBean) {
-        final POCDMT000040Observation observation =
-                OBJECT_FACTORY.createPOCDMT000040Observation();
-
-        // template ids
-        final List<II> templateIds = buildTemplateIds(rootIds);
-        observation.getTemplateId().addAll(templateIds);
-
-        final CD cd = buildCode(code);
-        observation.setCode(cd);
-
-        // effective time
-        final IVLTS startDate = new IVLTS();
-        startDate.setValue(startDateStr);
-        observation.setEffectiveTime(startDate);
-        // FIXME : how do I add here an interval ? end date ?
-
-        final CS statusCode = buildStatus(status);
-        observation.setStatusCode(statusCode);
-
-        final CD codeValue = buildCodeValue(codeValueBean);
-        observation.getValue().add(codeValue);
+    private static REPCMT004000UV01PertinentInformation5 buildPertinentInformation(
+            List<String> rootIds,
+            String note,
+            DynaBean status,
+            String dateStart,
+            String dateEnd,
+            DynaBean frequency,
+            DynaBean adminRoute,
+            DynaBean dosage,
+            String labeledDrugName) {
 
         final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                 OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
-        final JAXBElement<POCDMT000040Observation> observation_je =
-                OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5Observation(observation);
-        pertinentInformation.setObservation(observation_je);
+        // get the substance admin
+        final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JE =
+                pertinentInformation.getSubstanceAdministration();
+
+        final POCDMT000040SubstanceAdministration substanceAdministration =
+                substanceAdministration_JE == null
+                ? new POCDMT000040SubstanceAdministration()
+                : substanceAdministration_JE.getValue();
+        final XDocumentSubstanceMood moodCode = XDocumentSubstanceMood.EVN;
+        substanceAdministration.setMoodCode(moodCode);
+
+        final POCDMT000040Consumable pocdmt000040Consumable =
+                buildPOCDMT000040Consumable(labeledDrugName);
+        substanceAdministration.setConsumable(pocdmt000040Consumable);
+
+        final IVLPQ ivlpq = buildIVLPQ(dosage);
+        substanceAdministration.setDoseQuantity(ivlpq);
+
+        //FIXME : I am not sure about this.
+        // for the moment I add the
+        final List<II> templateIds = buildTemplateIds(rootIds);
+        substanceAdministration.getTemplateId().addAll(templateIds);
+
+        // FIXME : ask the UI for it
+        final CE ce = buildOralRouteCode();
+        substanceAdministration.setRouteCode(ce);
+
+        final CS statusCode = buildStatus(status);
+        substanceAdministration.setStatusCode(statusCode);
+
+        // FIXME care about substance administration 
+        // substanceAdministration.setCode(code);
+
+        // A top level <substanceAdministration> element must be uniquely identified.
+        // If there is no explicit identifier for this observation in the source
+        // EMR system, a GUID may be used for the root attribute,
+        // and the extension may be omitted.
+        // Although HL7 allows for multiple identifiers, this profile requires
+        // that one and only one be used. Subordinate <substanceAdministration>
+        // elements may, but need not be uniquely identified.
+        final II id = buildUUIDBasedId();
+        substanceAdministration.getId().add(id);
+
+        final SXCMTS startStopTime = buildTimePeriod(dateStart, dateEnd);
+        substanceAdministration.getEffectiveTime().add(startStopTime);
+
+        final List<POCDMT000040EntryRelationship> entryRelationship =
+                substanceAdministration.getEntryRelationship();
+
+        final List<POCDMT000040EntryRelationship> instructions =
+                buildInstructions();
+
+        entryRelationship.addAll(instructions);
+
+        if (substanceAdministration_JE == null) {
+            final JAXBElement<POCDMT000040SubstanceAdministration> newSubstanceAdministration_JE =
+                    OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5SubstanceAdministration(substanceAdministration);
+            pertinentInformation.setSubstanceAdministration(newSubstanceAdministration_JE);
+        }
+
         return pertinentInformation;
     }
-
+    
     private static List<II> buildTemplateIds(Collection<String> rootIds) {
-
         final List<II> iis = new ArrayList<II>(rootIds.size());
         for (String rootId : rootIds) {
             final II ii1 = new II();
@@ -168,35 +225,276 @@ final class MedicationSignPCC10 {
         return iis;
     }
 
-    private static CD buildCode(DynaBean dynaBean) {
-        final String codePrefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
+    /**
+     * Builds the drug consumable, a consumable contains a ManufacturedProduct.
+     *
+     * @param labeledDrugName
+     * @return
+     */
+    private static POCDMT000040Consumable buildPOCDMT000040Consumable(String labeledDrugName) {
 
-        final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
-        final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
+        final POCDMT000040Consumable consumable =
+                OBJECT_FACTORY.createPOCDMT000040Consumable();
 
-        final CD code = new CD();
-        code.setCode(codeValue);
-        code.setDisplayName(codePrefLabel);
+        final POCDMT000040ManufacturedProduct manufacturedProduct =
+                OBJECT_FACTORY.createPOCDMT000040ManufacturedProduct();
+        manufacturedProduct.setClassCode(RoleClassManufacturedProduct.MANU);
+        final POCDMT000040LabeledDrug labeledDrug =
+                buildPOCDMT000040LabeledDrug(labeledDrugName);
+        // FIXMe get this from UI.
+        labeledDrug.setClassCode(EntityClassManufacturedMaterial.MMAT);
+        labeledDrug.setDeterminerCode(EntityDeterminerDetermined.KIND);
 
-        final DynaBean codeSystemBean =
-                (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+        manufacturedProduct.setManufacturedLabeledDrug(labeledDrug);
 
-        final String codeSystemCode =
-                (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
-        code.setCodeSystem(codeSystemCode);
-        final String codeSystemName = (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
-        code.setCodeSystemName(codeSystemName);
+        consumable.setManufacturedProduct(manufacturedProduct);
 
-        return code;
+        return consumable;
     }
 
-    private static CS buildStatus(DynaBean bean) {
-        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+    /**
+     * Builds the name of the Drug.
+     *
+     * @param name
+     * @return
+     */
+    private static POCDMT000040LabeledDrug buildPOCDMT000040LabeledDrug(String name) {
+        final POCDMT000040LabeledDrug result = OBJECT_FACTORY.createPOCDMT000040LabeledDrug();
+
+        final EN en = new EN();
+        final List<Serializable> content = en.getContent();
+        content.add(name);
+        result.setName(en);
+
+        return result;
+    }
+
+    /**
+     * Builds the dose quantity.
+     *
+     * @return
+     */
+//    private IVLPQ buildIVLPQ(float dose, String doseUnit) {
+//
+//        // this is the doseQuantity
+//        final IVLPQ ivlpq = new IVLPQ();
+//        final IVXBPQ physicalQuantity = buildPhysicalQuantity_IVXBPQ(dose, doseUnit);
+//
+//        final JAXBElement<IVXBPQ> ivlpqHigh =
+//                OBJECT_FACTORY.createIVLPQHigh(physicalQuantity);
+//
+//        final JAXBElement<IVXBPQ> ivlpqLow =
+//                OBJECT_FACTORY.createIVLPQLow(physicalQuantity);
+//
+//        ivlpq.getRest().add(ivlpqHigh);
+//        ivlpq.getRest().add(ivlpqLow);
+//
+//        return ivlpq;
+//    }
+    private static IVLPQ buildIVLPQ(float dose, String doseUnit) {
+
+        final IVLPQ ivlpq = new IVLPQ();
+        ivlpq.setValue(String.valueOf(dose));
+        ivlpq.setUnit(doseUnit);
+
+        return ivlpq;
+    }
+    
+    private static IVLPQ buildIVLPQ(DynaBean bean) {
+
+        final IVLPQ ivlpq = new IVLPQ();
+        ivlpq.setValue("XX");
+        ivlpq.setUnit("YY");
+
+        return ivlpq;
+    }
+
+    private static PQ buildPhysicalQuantity_PQ(float value, String unit) {
+        final PQ pq = buildPhysicalQuantity_PQ(String.valueOf(value), unit);
+        return pq;
+    }
+
+    private static PQ buildPhysicalQuantity_PQ(String value, String unit) {
+        final PQ physicalQuantity = new PQ();
+        physicalQuantity.setUnit(unit);
+        physicalQuantity.setValue(value);
+
+        return physicalQuantity;
+    }
+
+    private static IVXBPQ buildPhysicalQuantity_IVXBPQ(String value, String unit) {
+        final IVXBPQ physicalQuantity = new IVXBPQ();
+        physicalQuantity.setUnit(unit);
+        physicalQuantity.setValue(value);
+
+        return physicalQuantity;
+    }
+
+    private static IVXBPQ buildPhysicalQuantity_IVXBPQ(float value, String unit) {
+        final IVXBPQ physicalQuantity = buildPhysicalQuantity_IVXBPQ(String.valueOf(value), unit);
+
+        return physicalQuantity;
+    }
+
+    private static QUPCIN043200UV01 buildQuery(String inputFile) throws JAXBException {
+        final JAXBContext context = JAXBContext.newInstance("org.hl7.v3");
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        final InputStream stream = getStream(inputFile);
+
+        final QUPCIN043200UV01 query =
+                (QUPCIN043200UV01) unmarshaller.unmarshal(stream);
+        return query;
+    }
+
+    private static InputStream getStream(String name) {
+        final ClassLoader classLoader =
+                MedicationSignPCC10.class.getClassLoader();
+
+        final InputStream inputStream =
+                classLoader.getResourceAsStream(name);
+        if (inputStream == null) {
+            final String msg =
+                    String.format("The %s must be placed in the classpath", name);
+            throw new IllegalStateException(msg);
+        }
+
+        return inputStream;
+    }
+
+    /**
+     * Builds a once every every 12 hours Frequency
+     *
+     * @return
+     */
+    private static List<SXCMTS> buildExactTimePeriod() {
+        final List<SXCMTS> effectiveTime = new ArrayList<SXCMTS>(2);
+        final PIVLTS every12hours = OBJECT_FACTORY.createPIVLTS();
+        every12hours.setInstitutionSpecified(false);
+
+        // The period indicates how often the dose is given
+        final PQ period = new PQ();
+        period.setUnit("h");
+        period.setValue("12");
+        every12hours.setPeriod(period);
+
+        effectiveTime.add(every12hours);
+        return effectiveTime;
+    }
+
+    private static List<SXCMTS> buildUnexactTimePeriods() {
+        final List<SXCMTS> result = new ArrayList<SXCMTS>(2);
+
+        final EIVLEvent dinerEvent = buildLunchEvent();
+        final EIVLTS timePeriods = buildUnexactTimePeriod(dinerEvent);
+        result.add(timePeriods);
+
+        return result;
+    }
+
+    private static EIVLTS buildUnexactTimePeriod(EIVLEvent event, IVLPQ offset) {
+        final EIVLTS eivlts = OBJECT_FACTORY.createEIVLTS();
+
+        eivlts.setOffset(offset);
+        eivlts.setEvent(event);
+        return eivlts;
+    }
+
+    private static EIVLTS buildUnexactTimePeriod(EIVLEvent event) {
+        final EIVLTS eivlts = OBJECT_FACTORY.createEIVLTS();
+
+        eivlts.setEvent(event);
+
+        return eivlts;
+    }
+
+    private static IVLPQ buildOffset(String value, String unit) {
+        final IVLPQ offset = OBJECT_FACTORY.createIVLPQ();
+        offset.setUnit(unit);
+        offset.setValue(value);
+        return offset;
+    }
+
+    private static List<SXCMTS> buildUnexactAMTimePeriod() {
+        final List<SXCMTS> result = new ArrayList<SXCMTS>(2);
+
+        final EIVLTS eivlts = OBJECT_FACTORY.createEIVLTS();
+        final EIVLEvent event = OBJECT_FACTORY.createEIVLEvent();
+        // before breakfast (from lat. ante cibus matutinus)
+        event.setCode("ACM");
+        eivlts.setEvent(event);
+        result.add(eivlts);
+
+        return result;
+    }
+
+    private static List<SXCMTS> buildUnexactEvningTimePeriod() {
+        final List<SXCMTS> result = new ArrayList<SXCMTS>(2);
+
+        final EIVLTS eivlts = OBJECT_FACTORY.createEIVLTS();
+        final EIVLEvent event = OBJECT_FACTORY.createEIVLEvent();
+        // before breakfast (from lat. ante cibus matutinus)
+        event.setCode("PCV");
+        eivlts.setEvent(event);
+        result.add(eivlts);
+
+        return result;
+    }
+
+    private static SXCMTS buildTimePeriod(String begin, String end) {
+        final IVLTS resul = new IVLTS();
+
+        final IVXBTS ivxbtsBegin = new IVXBTS();
+        ivxbtsBegin.setValue(begin);
+        JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(ivxbtsBegin);
+
+        final IVXBTS ivxbtsEnd = new IVXBTS();
+        ivxbtsEnd.setValue(end);
+        JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(ivxbtsEnd);
+
+        resul.getRest().add(ivltsLow);
+        resul.getRest().add(ivltsHigh);
+
+        return resul;
+    }
+
+    private static EIVLEvent buildDinerEvent() {
+        final EIVLEvent event = OBJECT_FACTORY.createEIVLEvent();
+        event.setDisplayName("Evening meal");
+        event.setCode("307163004");
+        event.setCodeSystemName("SNOMED-CT");
+        event.setCodeSystem("2.16.840.1.113883.6.96");
+        return event;
+    }
+
+    private static EIVLEvent buildLunchEvent() {
+        final EIVLEvent event = OBJECT_FACTORY.createEIVLEvent();
+        event.setDisplayName("Lunch time");
+        event.setCode("307162009");
+        event.setCodeSystemName("SNOMED-CT");
+        event.setCodeSystem("2.16.840.1.113883.6.96");
+        return event;
+    }
+
+    private static CE buildOralRouteCode() {
+        CE ce = new CE();
+        ce.setCode("PO");
+        ce.setCodeSystem("2.16.840.1.113883.5.112");
+        ce.setCodeSystemName("HL7 RouteOfAdministration Vocabulary");
+        ce.setDisplayName("oral");
+        return ce;
+    }
+
+    private static CS buildStatus(DynaBean dynaBean) {
+        final String toString = DynaBeanUtil.toString(dynaBean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CS instance.", toString);
+
+        final String prefLabel = (String) dynaBean.get(Constants.SKOS_PREFLABEL);
 
         final CS statusCode = new CS();
         statusCode.setDisplayName(prefLabel);
 
-        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
+        final DynaBean codeBean = (DynaBean) dynaBean.get(Constants.CODE);
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         statusCode.setCode(codeValue);
 
@@ -213,24 +511,52 @@ final class MedicationSignPCC10 {
         return statusCode;
     }
 
-    private static CD buildCodeValue(DynaBean bean) {
-        final CD cd = new CD();
-        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
-        cd.setDisplayName(prefLabel);
+    private static II buildUUIDBasedId() {
+        final UUID uuid = UUID.randomUUID();
+        final II result = new II();
 
-        final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
-        final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
-        cd.setCode(codeValue);
+        //result.setRoot(uuid.toString());
+        //FIXME : this must be unique. This value '12122' origins from the 
+        // SRDC tempalte.
+        result.setExtension("12122");
 
-        final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
-        final String codeSystemCode =
-                (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
-        cd.setCodeSystem(codeSystemCode);
+        return result;
+    }
 
-        final String codeSystemName =
-                (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
-        cd.setCodeSystemName(codeSystemName);
+    private static List<POCDMT000040EntryRelationship> buildInstructions() {
+        final List<POCDMT000040EntryRelationship> result =
+                new ArrayList<POCDMT000040EntryRelationship>();
+        final POCDMT000040EntryRelationship relationship =
+                OBJECT_FACTORY.createPOCDMT000040EntryRelationship();
 
-        return cd;
+        final POCDMT000040Act act = OBJECT_FACTORY.createPOCDMT000040Act();
+
+        final CD actCode = new CD();
+        actCode.setCodeSystem("1.3.6.1.4.1.19376.1.5.3.2");
+        actCode.setCodeSystemName("IHEActCode");
+        // PINSTRUCT - This is the act of providing instructions to a patient regarding the use of medication.
+        actCode.setCode("PINSTRUCT");
+
+        act.setCode(actCode);
+
+        // FIXME : ask the UI for it
+        final CS activeStatus = buildStatus(null);
+        act.setStatusCode(activeStatus);
+
+        final ED text = new ED();
+        // TODO : get the right language
+        text.setLanguage(Locale.ENGLISH.getLanguage());
+        text.setRepresentation(BinaryDataEncoding.TXT);
+
+        final TEL reference = OBJECT_FACTORY.createTEL();
+        reference.setValue("#xxx");
+        text.setReference(reference);
+
+        // TODO : do the link to the text
+        act.setText(text);
+
+        relationship.setAct(act);
+        result.add(relationship);
+        return result;
     }
 }
