@@ -180,17 +180,17 @@ public final class ProblemEntryClient {
         triplestore.persist(subject,
                 HL7V3_START_DATE,
                 startDate,
-                RESOURCE);
+                LITERAL);
 
         triplestore.persist(subject,
                 HL7V3_END_DATE,
                 endDate,
-                RESOURCE);
+                LITERAL);
 
         triplestore.persist(subject,
                 SKOS_NOTE,
                 note,
-                RESOURCE);
+                LITERAL);
 
         triplestore.persist(subject,
                 HL7V3_VALUE_CODE,
