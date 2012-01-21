@@ -57,15 +57,15 @@
 			<!-- shows the validation messages for dialog contents -->
 
 			<p:fieldset legend="#{labels['medicationSummary.label']}">
-			<!--  
+			 
 			<p:breadCrumb> 	
-				<p:menuitem value="Active Medications" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
+				<p:menuitem value="Current" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
 					immediate="true"/>			
-				<p:menuitem value="Active Medications" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
+				<p:menuitem value="Current" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
 					immediate="true"/>
-				<p:menuitem value="Inactive" 			url="/jsf/obs_medication_mgt.xhtml?view=inactive"
+				<p:menuitem value="Inactive" url="/jsf/obs_medication_mgt.xhtml?view=inactive"
 					immediate="true"/>
-				<p:menuitem value="History" 			url="/jsf/obs_medication_mgt.xhtml?view=history" 
+				<!-- TODO debug<p:menuitem value="History" 			url="/jsf/obs_medication_mgt.xhtml?view=history" 
 					immediate="true"/> 			 
 			</p:breadCrumb>	-->
 			<p:toolbar>
@@ -79,10 +79,10 @@
 			</p:toolbar>
 	<!-- 
 
-rendered="#{infotype eq 'active' or infotype eq null}"
+rendered="XX{infotype eq 'active' or infotype eq null}"
 
-rendered="#{infotype eq 'inactive'}"
-rendered="#{infotype eq 'history'}"
+rendered="XX{infotype eq 'inactive'}"
+rendered="XX{infotype eq 'history'}"
 	 -->
 			<p:dataTable id="idItemTableOmed"
 				widgetVar="widItemTableOmed" var="theItem"
@@ -160,7 +160,7 @@ rendered="#{infotype eq 'history'}"
 				<!-- 
 				
 				<p:column headerText="End Date" >
-					<h:outputText  value="#{theItem.displayDate }">
+					<h:outputText  value="XX{theItem.displayDate }">
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 				</p:column> -->

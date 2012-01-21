@@ -57,18 +57,21 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
 
 		switch(infoType){
 			case 'inactive':
-				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_false',true,modelMain)
+				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_false',true,internalModelList)
 			//medicationSummary_medicationStatus_false
 				break
 
 			case 'history':
 				internalModelList=crudReadHistory()
 				break
-
+                        case 'active':
+				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_true',true,internalModelList)
+			
+				break
 			default:
-			//'active':
-				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_true',true,modelMain)
-			//medicationSummary_medicationStatus_true PhrsConstants.STATUS_COMPLETE
+				//No filter,show inactive and active internalModelList = internalModelList 
+                              
+                                //medicationSummary_medicationStatus_true PhrsConstants.STATUS_COMPLETE
 				break
 
 		}
