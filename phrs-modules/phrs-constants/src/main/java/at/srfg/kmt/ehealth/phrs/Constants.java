@@ -156,8 +156,10 @@ public class Constants {
     public static final String HL7V3_START_DATE = ICARDEA_HL7V3_NS + "#startDate";
 
     public static final String HL7V3_END_DATE = ICARDEA_HL7V3_NS + "#endDate";
-
+    
     public static final String HL7V3_VALUE_CODE = ICARDEA_HL7V3_NS + "#valueCode";
+    
+    
 
     /**
      * The URI for the instance used to define Systolic Blood Pressure in IHE
@@ -520,24 +522,57 @@ public class Constants {
     public static final String PHRS_NAMESPACE = "icardea.phrs";
 
     /**
-     * The string used to unique identify the HL/ medication frequency class.
+     * The string used to unique identify the HL7 V3 medication frequency class.
      */
     public static final String HL7_FREQUECY_CLASS =
             "http://www.icardea.at/phrs/types/1.0/MedicationFrequency";
 
+    /**
+     * The string used to unique identify the HL7 V3 medication frequency
+     * property. This property is a resource.
+     */
     public static final String HL7_FREQUECY_EVENT = ICARDEA_HL7V3_NS + "#event";
 
+    /**
+     * The string used to unique identify the HL7 V3 medication frequency
+     * offset property. This property is a literal.
+     */
     public static final String HL7_FREQUECY_OFFSET = ICARDEA_HL7V3_NS + "#offset";
 
     /**
-     * This is a resource.
+     * The string used to unique identify the HL7 V3 medication frequency
+     * repeat property. This property is a literal.
      */
     public static final String HL7_FREQUECY_REPEAT = ICARDEA_HL7V3_NS + "#repeat";
 
+    /**
+     * The string used to unique identify the the Value Object class.
+     * This class is used to define values and its unit.
+     */
     public static final String PHRS_VALUE_OBJECT_CLASS =
             "http://www.icardea.at/phrs/types/1.0/ValueObject";
 
+    /**
+     * The string used to unique identify the Hour instance.
+     * The Hour instance is used to describe the hour concept.
+     */
+    public static final String HOUR = 
+            "http://www.icardea.at/phrs/instances/MeasureSystem#Hour";
+    
+    /**
+     * The string used to unique identify the Minute instance.
+     * The Hour instance is used to describe the minute concept.
+     */
+    public static final String MINUTE = 
+            "http://www.icardea.at/phrs/instances/MeasureSystem#Minute";
 
+    /**
+     * The string used to unique identify the Second instance.
+     * The Hour instance is used to describe the second concept.
+     */
+    public static final String SECOND = 
+            "http://www.icardea.at/phrs/instances/MeasureSystem#Second";
+    
     /**
      * Used to load the default values for the constants - if this is required.
      */
