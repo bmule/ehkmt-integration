@@ -1,4 +1,4 @@
 #!/bin/bash
 #set -xv
 
-rm -rfv /home/mihai/.icardea
+rm -rfv ~/.icardea
