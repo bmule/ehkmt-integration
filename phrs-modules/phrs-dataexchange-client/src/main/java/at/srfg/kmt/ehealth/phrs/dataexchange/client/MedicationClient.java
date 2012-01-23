@@ -87,7 +87,8 @@ public final class MedicationClient {
     public String addMedicationSign(String user, String note, String statusURI,
             String startDate, String endDate, String frequencyURI,
             String adminRouteURI, String dosageValue, String dosageUnit,
-            String drugName) throws TripleException {
+            String drugName, 
+            String drugCode) throws TripleException {
 
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
@@ -160,9 +161,9 @@ public final class MedicationClient {
                 RESOURCE);
 
         triplestore.persist(subject,
-                Constants.HL7V3_DRUG_NAME,
-                drugName,
-                LITERAL);
+                "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
+                buildManufacturedProduct(drugName, drugCode),
+                RESOURCE);
 
         return subject;
     }
@@ -320,7 +321,7 @@ public final class MedicationClient {
         triplestore.deleteForSubject(resourceURI);
     }
 
-    public String buildFrequency(String event, int offset, int value, 
+    public String buildFrequency(String event, int offset, int value,
             String unitURI) throws TripleException {
 
         final String subject = triplestore.persist(Constants.RDFS_TYPE,
@@ -388,4 +389,98 @@ public final class MedicationClient {
 
         return subject;
     }
+
+    public String buildManufacturedProduct(String drugName, String drugCode)
+            throws TripleException {
+
+        final String result =
+                triplestore.persist(Constants.RDFS_TYPE,
+                "http://www.icardea.at/phrs/types/1.0/ManufacturedProduct",
+                LITERAL);
+
+        triplestore.persist(result,
+                Constants.CREATOR,
+                CREATORN_NAME,
+                LITERAL);
+
+        // generic informarion (beside the 'OWNER' they are not really relevant 
+        // for the HL7 V3 message)
+        triplestore.persist(result,
+                Constants.CREATE_DATE,
+                DateUtil.getFormatedDate(new Date()),
+                LITERAL);
+
+        triplestore.persist(result,
+                "http://www.icardea.at/phrs/hl7V3#classCode",
+                "MANU",
+                LITERAL);
+
+        triplestore.persist(result,
+                "http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug",
+                buildManufacturedLabeledDrug(drugName, drugCode),
+                RESOURCE);
+
+
+        return result;
+    }
+
+    public String buildManufacturedLabeledDrug(String drugName, String drugCode) throws TripleException {
+
+        final String result =
+                triplestore.persist(Constants.RDFS_TYPE,
+                "http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug",
+                LITERAL);
+
+        triplestore.persist(result,
+                Constants.CREATOR,
+                CREATORN_NAME,
+                LITERAL);
+
+        // generic informarion (beside the 'OWNER' they are not really relevant 
+        // for the HL7 V3 message)
+        triplestore.persist(result,
+                Constants.CREATE_DATE,
+                DateUtil.getFormatedDate(new Date()),
+                LITERAL);
+
+        triplestore.persist(result,
+                "http://www.icardea.at/phrs/hl7V3#classCode",
+                "MANU",
+                LITERAL);
+
+        triplestore.persist(result,
+                "http://www.icardea.at/phrs/hl7V3#determinerCode",
+                "KIND",
+                LITERAL);
+
+        triplestore.persist(result,
+                Constants.HL7V3_CODE,
+                buildCode(drugName, drugCode),
+                RESOURCE);
+
+
+        return result;
+    }
+
+    public String buildCode(String name, String code) throws TripleException {
+        final String result =
+                triplestore.persist(Constants.HL7V3_VALUE,
+                code,
+                LITERAL);
+        
+        triplestore.persist(result,
+                Constants.SKOS_PREFLABEL,
+                name,
+                LITERAL);
+        
+        triplestore.persist(result,
+                Constants.CODE_SYSTEM,
+                "http://www.icardea.at/phrs/instances/codeSystem/Ulms",
+                RESOURCE);
+        
+        
+        return result;
+    }
+    
+    
 }
