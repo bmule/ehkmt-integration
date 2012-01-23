@@ -1,4 +1,5 @@
-#!/bin/bash
-#set -xv
+cls
 
-rm -rfv /home/mihai/.icardea
+delree /S c:\Dokumente und Einstellungen\dvxxx.LKSDOM21.000\.icardea
+
+
