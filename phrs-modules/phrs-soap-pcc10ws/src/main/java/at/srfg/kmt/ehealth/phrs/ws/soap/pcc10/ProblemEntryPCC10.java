@@ -11,10 +11,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import org.apache.commons.beanutils.DynaBean;
@@ -139,6 +136,9 @@ final class ProblemEntryPCC10 {
         final POCDMT000040Observation observation =
                 OBJECT_FACTORY.createPOCDMT000040Observation();
 
+        final ED text = buildED("test");
+        observation.setText(text);
+        
         // template ids
         final List<II> templateIds = buildTemplateIds(rootIds);
         observation.getTemplateId().addAll(templateIds);
@@ -242,5 +242,21 @@ final class ProblemEntryPCC10 {
         cd.setCodeSystemName(codeSystemName);
 
         return cd;
+    }
+    
+        private static ED buildED(String text) {
+        LOGGER.debug("Tries to build a HL7 V3 DE instance with the following text : {} like content.", text);
+        
+        final ED result = new ED();
+        // TODO : get the right language
+        result.setLanguage(Locale.ENGLISH.getLanguage());
+        result.setRepresentation(BinaryDataEncoding.TXT);
+
+        final TEL reference = OBJECT_FACTORY.createTEL();
+        reference.setValue(text);
+        result.setReference(reference);
+
+        return result;
+
     }
 }
