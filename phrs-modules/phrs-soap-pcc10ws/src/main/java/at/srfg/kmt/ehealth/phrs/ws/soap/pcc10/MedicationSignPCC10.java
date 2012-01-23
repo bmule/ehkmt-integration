@@ -177,6 +177,9 @@ final class MedicationSignPCC10 {
                 : substanceAdministration_JE.getValue();
         final XDocumentSubstanceMood moodCode = XDocumentSubstanceMood.EVN;
         substanceAdministration.setMoodCode(moodCode);
+        
+        final ED subsAdmTxt = buildED("test");
+        substanceAdministration.setText(subsAdmTxt);
 
         final POCDMT000040Consumable pocdmt000040Consumable =
                 buildPOCDMT000040Consumable(manufacturedProduct);
