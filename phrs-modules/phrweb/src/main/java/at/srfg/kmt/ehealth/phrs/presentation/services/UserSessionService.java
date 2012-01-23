@@ -221,17 +221,34 @@ public class UserSessionService {
 		}
 		return phrUser;
 	}
-
+        /**
+         * To facilitate testing and demonstration
+         * 
+         * Automatic user setup for local login without password for:
+         * 
+         * 1. prefix: phruser*
+         * 2. prefix: phrtest*
+         * 
+         * or Actual user names:
+         * 3. ellen    role nurse
+         * 4. phruser  role nurse
+         * 5. phruser1 role doctor
+         * 
+         * @param theUserName
+         * @return 
+         */
 	public static boolean loginAutomaticUser(String theUserName) {
 		if (theUserName != null && theUserName.trim().length() > 1) {
-			if (theUserName
-					.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)) {
+			if (theUserName.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)) {
 				return true;
 			}
-			if (theUserName
-					.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)) {
+			if (theUserName.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)) {
 				return true;
 			}
+                        if (theUserName.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
+				return true;
+			}
+                        //AUTHORIZE_USER_VT_SCENARIO_NURSE_
 
 		}
 		return false;

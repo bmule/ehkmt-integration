@@ -158,7 +158,9 @@ public class CommonDao{
 				
 				if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST) 
 					|| userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
-					|| userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)) {
+					|| userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
+                                        || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
+                                        
 					//for phrtest or phrtest1, give it one known ownuri so that we have one test user with a known ownerUri
 					//these refer to test data created in the database that might be extracted later for sample data
 					
@@ -171,6 +173,11 @@ public class CommonDao{
 					
 						user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
 						user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
+                                                
+  					} else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
+					
+						user.setOwnerUri(userId);
+						user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);                                              
 						
 					} else {
 						user.setOwnerUri(userId);
@@ -474,10 +481,10 @@ public class CommonDao{
 		if(! theObject.resourceUri){
 			theObject.setOwnerUri(ownerUri)
 			theObject.setCreatorUri(creatorUri)
-			theObject.type = theObject.getClass().toString()
+			
 			//resourceUri is set before actually saving the the object
 		}
-
+                theObject.type = theObject.getClass().toString()
 		phrsRepositoryClient.crudSaveResource(theObject)
 	}
 	/**

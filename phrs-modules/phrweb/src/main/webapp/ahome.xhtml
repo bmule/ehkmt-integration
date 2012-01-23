@@ -15,7 +15,7 @@
 <h:body>
 <center>
     <h:form>
-        <p:panel header="Users Search Form" style="width: 700;">
+        <p:panel header="Users Search Form" style="width:600px;">
         <h:form>
             <h:panelGrid columns="3" cellpadding="2">
                 <h:outputLabel for="#{userManagedBean.searchUser}" value="UserName"/>
@@ -33,7 +33,7 @@
             onRowUnselectUpdate="userUpdateForm"
             rowSelectListener="#{userManagedBean.onUserSelect}"
             rowUnselectListener="#{userManagedBean.onUserUnselect}"
-            paginator="true" rows="5" style="width: 700">
+            paginator="true" rows="5" style="width:700px">
             <p:column sortBy="#{user.userId}" filterBy="#{user.userId}">
                 <f:facet name="header">
                 <h:outputText value="Id" />
@@ -61,10 +61,10 @@
                 </h:outputText>
             </p:column>
         </p:dataTable>
-        <p:panel id="userDetailsPanelId" header="Users Details" style="width: 700;">
+        <p:panel id="userDetailsPanelId" header="Users Details" style="width:700px;">
         <h:panelGrid columns="2" cellpadding="2" id="userUpdateForm" border="0" >
                 <h:outputLabel for="#{userManagedBean.selectedUser.userId}" value="UserId"/>
-                <h:inputText value="#{userManagedBean.selectedUser.userId}" style="width: 100;" readonly="true"></h:inputText>
+                <h:inputText value="#{userManagedBean.selectedUser.userId}" style="width:100px;" readonly="true"></h:inputText>
                 
                 <h:outputLabel for="#{userManagedBean.selectedUser.username}" value="Username"/>
                 <h:inputText value="#{userManagedBean.selectedUser.username}" readonly="true"></h:inputText>
