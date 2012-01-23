@@ -129,7 +129,7 @@ final class ProblemEntryPCC10 {
     private static II buildQueryId() {
         final II queryId = new II();
         queryId.setRoot("1");
-        queryId.setExtension("5");
+        queryId.setExtension("3");
         return queryId;
     }
 
