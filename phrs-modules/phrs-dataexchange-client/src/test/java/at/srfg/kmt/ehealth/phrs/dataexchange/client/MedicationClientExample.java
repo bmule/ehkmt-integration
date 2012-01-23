@@ -50,7 +50,8 @@ public final class MedicationClientExample {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "25",
                 Constants.MILLIGRAM,
-                "MyDrug");
+                "MyDrug",
+                "MyDrugCode");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);

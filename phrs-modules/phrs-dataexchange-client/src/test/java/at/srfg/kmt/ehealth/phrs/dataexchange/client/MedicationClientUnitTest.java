@@ -105,7 +105,8 @@ public class MedicationClientUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 "pillURI",
-                "MyDrug");
+                "MyDrug",
+                "MyDrugCode");
         assertNotNull(resourceURI);
 
         final Iterable<Triple> vitalSigns =
@@ -183,7 +184,8 @@ public class MedicationClientUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 "pillURI",
-                "MyDrug");
+                "MyDrug",
+                "MyDrugCode");
         assertNotNull(resourceURI);
 
         // create a new dosage
@@ -262,7 +264,8 @@ public class MedicationClientUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 "pillURI",
-                "MyDrug");
+                "MyDrug",
+                "MyDrugCode");
         assertNotNull(resourceURI);
 
         medicationClient.deleteMedication(resourceURI);
