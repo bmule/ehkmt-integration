@@ -182,8 +182,8 @@ final class MedicationTask implements PCCTask {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "25",
                 Constants.MILLIGRAM,
-                "MyDrug",
-                "MyDrugCode");
+                "Drug-Eluting Stents",
+                "C1322815");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
