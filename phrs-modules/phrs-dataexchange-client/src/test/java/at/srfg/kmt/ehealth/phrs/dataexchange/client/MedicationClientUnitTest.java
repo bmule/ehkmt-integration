@@ -8,19 +8,14 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
-import java.util.HashSet;
-import java.util.Set;
-import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.Constants;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -133,8 +128,6 @@ public class MedicationClientUnitTest {
                 rootIds.add(value);
             }
 
-
-
             if (predicate.equals(Constants.SKOS_NOTE)) {
                 assertEquals(NOTE, value);
             }
@@ -144,12 +137,11 @@ public class MedicationClientUnitTest {
 
         final Set<String> expectedRootId = new HashSet<String>();
         // all this three describes a medication
-        expectedRootId.add(Constants.IMUNISATION);
-        expectedRootId.add(Constants.MEDICATION);
+        expectedRootId.add(Constants.MEDICATION_NORMAL_DOSING);
         assertEquals(expectedRootId, rootIds);
 
-        // the medication has 13 tripels, see the documentaion for VitalSignClient
-        assertEquals(14, count);
+        // the medication has 13 tripels, see the documentaion for Medication
+        assertEquals(13, count);
 
         final boolean exists = triplestore.exists(resourceURI);
         assertTrue(exists);
