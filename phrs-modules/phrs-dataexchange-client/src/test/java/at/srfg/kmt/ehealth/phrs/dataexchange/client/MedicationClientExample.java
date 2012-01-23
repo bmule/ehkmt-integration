@@ -52,6 +52,19 @@ public final class MedicationClientExample {
                 Constants.MILLIGRAM,
                 "MyDrug",
                 "MyDrugCode");
+        
+        // the old API - no medication code
+        client.addMedicationSign(
+                owner,
+                "Free text note for the medication.",
+                Constants.STATUS_COMPELETE,
+                "200812010000",
+                "201106101010",
+                client.buildFrequency("morgen", -1, 8, Constants.HOUR),
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                "25",
+                Constants.MILLIGRAM,
+                "MyDrugOtherDroug");
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
