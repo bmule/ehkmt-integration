@@ -584,6 +584,22 @@ public class Constants {
     public static final String SECOND = 
             "http://www.icardea.at/phrs/instances/MeasureSystem#Second";
     
+    public static final String MANUFACTURED_PRODUCT_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/ManufacturedProduct";
+    
+    public static final String HL7_CLASS_CODE = 
+            ICARDEA_HL7V3_NS + "#classCode";
+    
+    public static final String MANUFACTURED_LABEL_DRUG = 
+            ICARDEA_HL7V3_NS + "#manufacturedLabeledDrug";
+    
+    public static final String MANUFACTURED_LABEL_DRUG_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug";
+
+    public static final String HL7_DETERMINER_CODE = 
+            ICARDEA_HL7V3_NS + "#determinerCode";
+
+    
     /**
      * Used to load the default values for the constants - if this is required.
      */
