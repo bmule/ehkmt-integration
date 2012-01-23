@@ -133,7 +133,9 @@ final class MedicationSignPCC10 {
             final DynaBean frequency = (DynaBean) medBean.get(Constants.HL7V3_FREQUENCY);
             final DynaBean adminRoute = (DynaBean) medBean.get(Constants.HL7V3_ADMIN_ROUTE);
             final DynaBean dosage = (DynaBean) medBean.get(Constants.HL7V3_DOSAGE);
-            final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
+            // final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
+            final DynaBean manufacturedProduct =
+                    (DynaBean) medBean.get("http://www.icardea.at/phrs/hl7V3#manufacturedProduct");
 
             final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                     buildPertinentInformation(rootId,
@@ -144,7 +146,7 @@ final class MedicationSignPCC10 {
                     frequency,
                     adminRoute,
                     dosage,
-                    drugName);
+                    manufacturedProduct);
             pertinentInformations.add(pertinentInformation);
         }
         careProvisionEvent.getPertinentInformation3().addAll(pertinentInformations);
@@ -161,7 +163,7 @@ final class MedicationSignPCC10 {
             DynaBean frequency,
             DynaBean adminRoute,
             DynaBean dosage,
-            String labeledDrugName) {
+            DynaBean manufacturedProduct) {
 
         final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                 OBJECT_FACTORY.createREPCMT004000UV01PertinentInformation5();
@@ -177,7 +179,7 @@ final class MedicationSignPCC10 {
         substanceAdministration.setMoodCode(moodCode);
 
         final POCDMT000040Consumable pocdmt000040Consumable =
-                buildPOCDMT000040Consumable(labeledDrugName);
+                buildPOCDMT000040Consumable(manufacturedProduct);
         substanceAdministration.setConsumable(pocdmt000040Consumable);
 
         final IVLPQ ivlpq = buildIVLPQ(dosage);
@@ -242,25 +244,77 @@ final class MedicationSignPCC10 {
      * @param labeledDrugName
      * @return
      */
-    private static POCDMT000040Consumable buildPOCDMT000040Consumable(String labeledDrugName) {
+    private static POCDMT000040Consumable buildPOCDMT000040Consumable(DynaBean bean) {
+        final DynaBean manufacturedLabeledDrug =
+                (DynaBean) bean.get("http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug");
+        final DynaBean code =
+                (DynaBean) manufacturedLabeledDrug.get(Constants.HL7V3_CODE);
+        final String labeledDrugName = (String) code.get(Constants.SKOS_PREFLABEL);
+        final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
+
 
         final POCDMT000040Consumable consumable =
                 OBJECT_FACTORY.createPOCDMT000040Consumable();
 
         final POCDMT000040ManufacturedProduct manufacturedProduct =
                 OBJECT_FACTORY.createPOCDMT000040ManufacturedProduct();
+        final String classCode = (String) bean.get("http://www.icardea.at/phrs/hl7V3#classCode");
         manufacturedProduct.setClassCode(RoleClassManufacturedProduct.MANU);
+
         final POCDMT000040LabeledDrug labeledDrug =
                 buildPOCDMT000040LabeledDrug(labeledDrugName);
         // FIXMe get this from UI.
         labeledDrug.setClassCode(EntityClassManufacturedMaterial.MMAT);
         labeledDrug.setDeterminerCode(EntityDeterminerDetermined.KIND);
+        final CE ce = buildCode(code);
+        labeledDrug.setCode(ce);
+
 
         manufacturedProduct.setManufacturedLabeledDrug(labeledDrug);
 
         consumable.setManufacturedProduct(manufacturedProduct);
 
         return consumable;
+    }
+
+    private static CE buildCode(DynaBean bean) {
+        final String toString = DynaBeanUtil.toString(bean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CE instance.", toString);
+
+        final DynaBean codeSystem =
+                (DynaBean) bean.get(Constants.CODE_SYSTEM);
+        final String codeSystemName =
+                (String) codeSystem.get(Constants.CODE_SYSTEM_NAME);
+        final String codeSystemCode =
+                (String) codeSystem.get(Constants.CODE_SYSTEM_CODE);
+
+        final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+        final String value = (String) bean.get(Constants.HL7V3_VALUE);
+
+        final CE result = new CE();
+        result.setCodeSystem(codeSystemCode);
+        result.setCodeSystemName(codeSystemName);
+        result.setCode(value);
+        final ED originalText = buildED(prefLabel);
+        result.setOriginalText(originalText);
+
+        return result;
+    }
+
+    private static ED buildED(String text) {
+        LOGGER.debug("Tries to build a HL7 V3 DE instance with the following text : {} like content.", text);
+        
+        final ED result = new ED();
+        // TODO : get the right language
+        result.setLanguage(Locale.ENGLISH.getLanguage());
+        result.setRepresentation(BinaryDataEncoding.TXT);
+
+        final TEL reference = OBJECT_FACTORY.createTEL();
+        reference.setValue(text);
+        result.setReference(reference);
+
+        return result;
+
     }
 
     /**
