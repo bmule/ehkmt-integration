@@ -113,7 +113,7 @@ public class Constants {
     /**
      * This is an instance URI.
      */
-    public static final String PILL = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Pill";
+    public static final String PILL = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Tablet";
 
     /**
      * This is an instance URI.
