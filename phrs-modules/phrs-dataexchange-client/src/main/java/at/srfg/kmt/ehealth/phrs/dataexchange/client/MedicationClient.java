@@ -87,7 +87,27 @@ public final class MedicationClient {
     public String addMedicationSign(String user, String note, String statusURI,
             String startDate, String endDate, String frequencyURI,
             String adminRouteURI, String dosageValue, String dosageUnit,
-            String drugName, 
+            String drugName) throws TripleException {
+
+        final String result = addMedicationSign(user,
+                note,
+                statusURI,
+                startDate,
+                endDate,
+                frequencyURI,
+                adminRouteURI,
+                dosageValue,
+                dosageUnit,
+                drugName,
+                null);
+        LOGGER.debug("New medication  was added, the new added URI is : {}", result);
+        return result;
+    }
+
+    public String addMedicationSign(String user, String note, String statusURI,
+            String startDate, String endDate, String frequencyURI,
+            String adminRouteURI, String dosageValue, String dosageUnit,
+            String drugName,
             String drugCode) throws TripleException {
 
         final String subject =
@@ -160,9 +180,11 @@ public final class MedicationClient {
                 dosage,
                 RESOURCE);
 
+        final String buildManufacturedProduct =
+                buildManufacturedProduct(drugName, drugCode);
         triplestore.persist(subject,
                 "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
-                buildManufacturedProduct(drugName, drugCode),
+                buildManufacturedProduct,
                 RESOURCE);
 
         return subject;
@@ -395,7 +417,7 @@ public final class MedicationClient {
 
         final String result =
                 triplestore.persist(Constants.RDFS_TYPE,
-                "http://www.icardea.at/phrs/types/1.0/ManufacturedProduct",
+                Constants.MANUFACTURED_PRODUCT_CLASS,
                 LITERAL);
 
         triplestore.persist(result,
@@ -411,24 +433,24 @@ public final class MedicationClient {
                 LITERAL);
 
         triplestore.persist(result,
-                "http://www.icardea.at/phrs/hl7V3#classCode",
+                Constants.HL7_CLASS_CODE,
                 "MANU",
                 LITERAL);
 
         triplestore.persist(result,
-                "http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug",
+                Constants.MANUFACTURED_LABEL_DRUG,
                 buildManufacturedLabeledDrug(drugName, drugCode),
                 RESOURCE);
-
 
         return result;
     }
 
-    public String buildManufacturedLabeledDrug(String drugName, String drugCode) throws TripleException {
+    public String buildManufacturedLabeledDrug(String drugName, String drugCode)
+            throws TripleException {
 
         final String result =
                 triplestore.persist(Constants.RDFS_TYPE,
-                "http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug",
+                Constants.MANUFACTURED_LABEL_DRUG_CLASS,
                 LITERAL);
 
         triplestore.persist(result,
@@ -444,20 +466,27 @@ public final class MedicationClient {
                 LITERAL);
 
         triplestore.persist(result,
-                "http://www.icardea.at/phrs/hl7V3#classCode",
+                Constants.HL7_CLASS_CODE,
                 "MANU",
                 LITERAL);
 
         triplestore.persist(result,
-                "http://www.icardea.at/phrs/hl7V3#determinerCode",
+                Constants.HL7_DETERMINER_CODE,
                 "KIND",
                 LITERAL);
-
-        triplestore.persist(result,
-                Constants.HL7V3_CODE,
-                buildCode(drugName, drugCode),
-                RESOURCE);
-
+        
+        if (drugCode != null) {
+            
+            triplestore.persist(result,
+                    Constants.HL7V3_CODE,
+                    buildCode(drugName, drugCode),
+                    RESOURCE);
+        } else {
+            triplestore.persist(result,
+                    Constants.HL7V3_DRUG_NAME,
+                    drugName,
+                    LITERAL);
+        }
 
         return result;
     }
@@ -467,20 +496,18 @@ public final class MedicationClient {
                 triplestore.persist(Constants.HL7V3_VALUE,
                 code,
                 LITERAL);
-        
+
         triplestore.persist(result,
                 Constants.SKOS_PREFLABEL,
                 name,
                 LITERAL);
-        
+
         triplestore.persist(result,
                 Constants.CODE_SYSTEM,
                 "http://www.icardea.at/phrs/instances/codeSystem/Ulms",
                 RESOURCE);
-        
-        
+
+
         return result;
     }
-    
-    
 }
