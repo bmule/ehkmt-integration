@@ -649,7 +649,7 @@ final class MedicationSignPCC10 {
     private static II buildQueryId() {
         final II queryId = new II();
         queryId.setRoot("1");
-        queryId.setExtension("11");
+        queryId.setExtension("3");
         return queryId;
     }
 }

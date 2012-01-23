@@ -68,8 +68,7 @@ final class ProblemEntryTask implements PCCTask {
 
         final Object code = properties.get("careProvisionCode");
         // TODO : use constants here
-        final boolean isProblem =
-                ODL_CARE_PROVISION_CODE.equals(code) || RISKLIST_PROVISION_CODE.equals(code);
+        final boolean isProblem = "MEDCCAT".equals(code);
         if (!isProblem) {
             LOGGER.debug("This code : {} is not a medication code.");
             return false;
