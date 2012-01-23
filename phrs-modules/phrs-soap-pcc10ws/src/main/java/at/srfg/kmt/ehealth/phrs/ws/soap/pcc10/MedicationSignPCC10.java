@@ -177,7 +177,7 @@ final class MedicationSignPCC10 {
                 : substanceAdministration_JE.getValue();
         final XDocumentSubstanceMood moodCode = XDocumentSubstanceMood.EVN;
         substanceAdministration.setMoodCode(moodCode);
-        
+
         final ED subsAdmTxt = buildED("test");
         substanceAdministration.setText(subsAdmTxt);
 
@@ -250,11 +250,20 @@ final class MedicationSignPCC10 {
     private static POCDMT000040Consumable buildPOCDMT000040Consumable(DynaBean bean) {
         final DynaBean manufacturedLabeledDrug =
                 (DynaBean) bean.get("http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug");
-        final DynaBean code =
-                (DynaBean) manufacturedLabeledDrug.get(Constants.HL7V3_CODE);
-        final String labeledDrugName = (String) code.get(Constants.SKOS_PREFLABEL);
-        final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
 
+        final DynaBean code;
+        try {
+            code = (DynaBean) manufacturedLabeledDrug.get(Constants.HL7V3_CODE);
+
+        } catch (IllegalArgumentException exception) {
+            // this means I don't have code name
+            LOGGER.debug(exception.getMessage(), exception);
+            final String drougName =
+                    (String) bean.get(Constants.HL7V3_DRUG_NAME);
+            return buildPOCDMT000040Consumable(drougName);
+        }
+
+        final String labeledDrugName = (String) code.get(Constants.SKOS_PREFLABEL);
 
         final POCDMT000040Consumable consumable =
                 OBJECT_FACTORY.createPOCDMT000040Consumable();
@@ -272,6 +281,25 @@ final class MedicationSignPCC10 {
         final CE ce = buildCode(code);
         labeledDrug.setCode(ce);
 
+        manufacturedProduct.setManufacturedLabeledDrug(labeledDrug);
+
+        consumable.setManufacturedProduct(manufacturedProduct);
+
+        return consumable;
+    }
+
+    private static POCDMT000040Consumable buildPOCDMT000040Consumable(String drougName) {
+        final POCDMT000040Consumable consumable =
+                OBJECT_FACTORY.createPOCDMT000040Consumable();
+
+        final POCDMT000040ManufacturedProduct manufacturedProduct =
+                OBJECT_FACTORY.createPOCDMT000040ManufacturedProduct();
+        manufacturedProduct.setClassCode(RoleClassManufacturedProduct.MANU);
+        final POCDMT000040LabeledDrug labeledDrug =
+                buildPOCDMT000040LabeledDrug(drougName);
+        // FIXMe get this from UI.
+        labeledDrug.setClassCode(EntityClassManufacturedMaterial.MMAT);
+        labeledDrug.setDeterminerCode(EntityDeterminerDetermined.KIND);
 
         manufacturedProduct.setManufacturedLabeledDrug(labeledDrug);
 
@@ -306,7 +334,7 @@ final class MedicationSignPCC10 {
 
     private static ED buildED(String text) {
         LOGGER.debug("Tries to build a HL7 V3 DE instance with the following text : {} like content.", text);
-        
+
         final ED result = new ED();
         // TODO : get the right language
         result.setLanguage(Locale.ENGLISH.getLanguage());
