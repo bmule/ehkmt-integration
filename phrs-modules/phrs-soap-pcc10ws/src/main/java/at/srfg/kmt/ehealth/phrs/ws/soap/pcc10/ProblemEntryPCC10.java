@@ -138,7 +138,7 @@ final class ProblemEntryPCC10 {
 
         final ED text = buildED("test");
         observation.setText(text);
-        
+
         // template ids
         final List<II> templateIds = buildTemplateIds(rootIds);
         observation.getTemplateId().addAll(templateIds);
@@ -147,9 +147,12 @@ final class ProblemEntryPCC10 {
         observation.setCode(cd);
 
         // effective time
-        final IVLTS startDate = new IVLTS();
-        startDate.setValue(startDateStr);
-        observation.setEffectiveTime(startDate);
+//        final IVLTS startDate = new IVLTS();
+//        startDate.setValue(startDateStr);
+//        observation.setEffectiveTime(startDate);
+        observation.setEffectiveTime(
+                buildTimePeriod(startDateStr, startDateStr));
+        
         // FIXME : how do I add here an interval ? end date ?
 
         final CS statusCode = buildStatus(status);
@@ -243,10 +246,10 @@ final class ProblemEntryPCC10 {
 
         return cd;
     }
-    
-        private static ED buildED(String text) {
+
+    private static ED buildED(String text) {
         LOGGER.debug("Tries to build a HL7 V3 DE instance with the following text : {} like content.", text);
-        
+
         final ED result = new ED();
         // TODO : get the right language
         result.setLanguage(Locale.ENGLISH.getLanguage());
@@ -258,5 +261,22 @@ final class ProblemEntryPCC10 {
 
         return result;
 
+    }
+
+    private static IVLTS buildTimePeriod(String begin, String end) {
+        final IVLTS resul = new IVLTS();
+
+        final IVXBTS ivxbtsBegin = new IVXBTS();
+        ivxbtsBegin.setValue(begin);
+        JAXBElement<IVXBTS> ivltsLow = OBJECT_FACTORY.createIVLTSLow(ivxbtsBegin);
+
+        final IVXBTS ivxbtsEnd = new IVXBTS();
+        ivxbtsEnd.setValue(end);
+        JAXBElement<IVXBTS> ivltsHigh = OBJECT_FACTORY.createIVLTSHigh(ivxbtsEnd);
+
+        resul.getRest().add(ivltsLow);
+        resul.getRest().add(ivltsHigh);
+
+        return resul;
     }
 }
