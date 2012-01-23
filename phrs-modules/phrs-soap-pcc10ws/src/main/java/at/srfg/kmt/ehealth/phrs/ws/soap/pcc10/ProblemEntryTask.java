@@ -70,7 +70,7 @@ final class ProblemEntryTask implements PCCTask {
         // TODO : use constants here
         final boolean isProblem = "MEDCCAT".equals(code);
         if (!isProblem) {
-            LOGGER.debug("This code : {} is not a medication code.");
+            LOGGER.debug("This code : {} is not a problem code.");
             return false;
         }
 
