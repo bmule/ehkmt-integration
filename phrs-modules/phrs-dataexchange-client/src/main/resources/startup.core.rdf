@@ -2402,6 +2402,7 @@
         <rdfs:label xml:lang="en">HL7 Code</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The Code and Code System infromation used to unique identify an item</rdfs:comment>
     </rdf:Property>
@@ -2557,6 +2558,14 @@
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The drug name for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#drug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
 
@@ -2625,5 +2634,52 @@
         <rdfs:label xml:lang="en">Value Object</rdfs:label>
         <rdfs:comment xml:lang="en">It build the realtion between a value (numeric) and its unit(alfanumeric).</rdfs:comment>
     </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedProduct">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3</rdfs:comment>
+    </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medication sign in a HL7 V3.</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#classCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+        <rdfs:comment xml:lang="en">The class code for a single Manufactured Product</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+    </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3.</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#determinerCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+    </rdf:Property>
+
+
     
 </rdf:RDF>
