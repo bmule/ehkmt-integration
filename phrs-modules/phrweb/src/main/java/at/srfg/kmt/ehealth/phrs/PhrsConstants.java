@@ -133,7 +133,7 @@ public class PhrsConstants  implements Serializable {
 	public static final String AUTHORIZE_USER_PREFIX_TEST_ELLEN="phrtestellen";
 	//with this prefix a local account is setup if non-existing, until the scenario is completed with added OpenId, passwords are not strictly needed
 	public static final String AUTHORIZE_USER_PREFIX_AUTO_USER="phruser";
-	
+	public static final String AUTHORIZE_USER_VT_SCENARIO_NURSE="ellen";
 
 	public static final String IDENTIFIER_TYPE_CIED_NUMBER="identifier_cied_number";
 
@@ -223,8 +223,7 @@ public class PhrsConstants  implements Serializable {
 	public final static String TAG_ACTION_CATEGORIES = "action.categories"; // used
 																			// as
 																			// attribute
-																			// name
-																			// in
+																			// name																			// in
 																			// URL
 
 	public final static String PARAM_NAME_CONTACT_TYPE = "typecontact"; // used

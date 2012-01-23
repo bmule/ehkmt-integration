@@ -8,7 +8,7 @@ import com.google.code.morphia.annotations.Property
 @Entity
 public class  MedicationTreatment extends CommonModelProps{
 
-	Boolean useMultipleTreatments
+	//Boolean useMultipleTreatments
 	/**
 	 * associate with Risk or other
 	 * primary reason
@@ -31,19 +31,19 @@ public class  MedicationTreatment extends CommonModelProps{
 	@Embedded
 	MedicationTreatmentMatrix treatmentMatrix
 	
-	@Embedded
-	List<MedicationTreatmentMatrix> treatmentMatrixMultiple
+	//@Embedded
+	//List<MedicationTreatmentMatrix> treatmentMatrixMultiple
 		
-	@Embedded
-	MedicationTreatmentMatrix treatmentMatrixHistory
+	//@Embedded
+	//MedicationTreatmentMatrix treatmentMatrixHistory
 
 	
 	public MedicationTreatment(){
 		super()
-		useMultipleTreatments  = new Boolean(Boolean.TRUE)
+		//useMultipleTreatments  = new Boolean(Boolean.TRUE)
 		treatmentMatrix  = new MedicationTreatmentMatrix()	
-		treatmentMatrixMultiple= new ArrayList<MedicationTreatmentMatrix>()
-		treatmentMatrixHistory = new ArrayList<MedicationTreatmentMatrix>()
+		//treatmentMatrixMultiple= new ArrayList<MedicationTreatmentMatrix>()
+		//treatmentMatrixHistory = new ArrayList<MedicationTreatmentMatrix>()
 		medicationReasonCodes  = new HashSet<String>()
 		//prescribedBy = new ProfileMedicalContactInfo()
 		

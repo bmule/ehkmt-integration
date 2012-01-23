@@ -540,8 +540,9 @@
         </dependency>        
 
     </dependencies>
+ 
   
-    <build>
+    <build>    
         <finalName>phrweb</finalName>
         <plugins>
             <plugin>
@@ -595,11 +596,15 @@
                It is required to compile Groovy sources.
                more details here : http://docs.codehaus.org/display/GROOVY/Groovy-Eclipse+compiler+plugin+for+Maven
                Note : please note that is using by default Grooyv 1.8.4
+               
+               2.3.1  to 2.3.2
                -->
                 
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.1</version>
+                <version>2.3.2</version>
                 <configuration>
+                    <source>1.6</source>
+		    <target>1.6</target>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <verbose>true</verbose>
                 </configuration>
@@ -609,11 +614,17 @@
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>2.6.0-01</version>
                     </dependency>
+                    <!--<dependency>
+                        <groupId>org.codehaus.groovy</groupId>
+                        <artifactId>groovy-eclipse-batch</artifactId>
+                        <version>1.8.4</version>
+                    </dependency>-->
                 </dependencies>
             </plugin>
 
         </plugins>
-        
+     
+
     </build>
     
 </project>
