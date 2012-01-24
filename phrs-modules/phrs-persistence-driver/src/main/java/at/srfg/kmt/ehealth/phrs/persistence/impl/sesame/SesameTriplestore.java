@@ -239,28 +239,36 @@ public class SesameTriplestore
     public void persist(String subject, String predicate, String value, ValueType valueType)
             throws TripleException {
 
+        final Object[] toLog = {subject, predicate, value, valueType};
+        LOGGER.debug("Tries to persists Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
         if (subject == null) {
             final NullPointerException exception =
-                    new NullPointerException("The subject argumetn can not be null.");
+                    new NullPointerException("The subject argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
         if (predicate == null) {
             final NullPointerException exception =
-                    new NullPointerException("The predicate argumetn can not be null.");
+                    new NullPointerException("The predicate argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
         if (value == null) {
             final NullPointerException exception =
-                    new NullPointerException("The value argumetn can not be null.");
+                    new NullPointerException("The value argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
-
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         try {
             final Statement statement = getStatement(subject, predicate, value, valueType);
@@ -285,6 +293,10 @@ public class SesameTriplestore
             tripleException.setValueType(valueType);
             throw tripleException;
         }
+
+        final Object[] toLogFinal = {subject, predicate, value, valueType};
+        LOGGER.debug("The subject : {}, predicate : {}, value {} and value type {} was persisted", toLog);
+
     }
 
     private Statement getStatement(String subject, String predicate, String value,
@@ -338,20 +350,29 @@ public class SesameTriplestore
     @Override
     public String persist(String predicate, String value, ValueType valueType) throws TripleException {
 
+        final Object[] toLog = {predicate, value, valueType};
+        LOGGER.debug("Tries to persists Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
         if (predicate == null) {
             final NullPointerException exception =
-                    new NullPointerException("The predicate argumetn can not be null.");
+                    new NullPointerException("The predicate argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
         if (value == null) {
             final NullPointerException exception =
-                    new NullPointerException("The value argumetn can not be null.");
+                    new NullPointerException("The value argument can not be null.");
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
 
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         final URI subjectURI = getUUIDURI(Constants.ICARDEA_NS);
         final URI predicateURI = valueFactory.createURI(predicate);
@@ -383,7 +404,11 @@ public class SesameTriplestore
             throw tripleException;
         }
 
-        return subjectURI.stringValue();
+        final String result = subjectURI.stringValue();
+
+        final Object[] toLogFinal = {predicate, value, valueType, result};
+        LOGGER.debug("The subject : {}, predicate : {}, value {} and value type {} was persisted unde the subject : {}", toLogFinal);
+        return result;
     }
 
     private URI getUUIDURI(String base) {
