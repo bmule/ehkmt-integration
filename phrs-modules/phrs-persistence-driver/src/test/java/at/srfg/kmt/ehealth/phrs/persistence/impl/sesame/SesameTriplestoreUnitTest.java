@@ -25,10 +25,10 @@ import java.util.Map;
 
 
 /**
- * This test suite is used to test the <code>SesameTriplestore</code> 
- * functionality.
- * 
- * 
+ * This test suite is used to test the
+ * <code>SesameTriplestore</code> functionality.
+ *
+ *
  * @version 0.1
  * @since 0.1
  * @author mradules
@@ -49,23 +49,23 @@ public class SesameTriplestoreUnitTest {
     /**
      * Runs before any test from this suite and prepare the environment for the
      * next running test.
-     * 
-     * @throws GenericRepositoryException if this occurs then the test 
+     *
+     * @throws GenericRepositoryException if this occurs then the test
      * environment may be wrong set.
      */
     @Before
     public void initSiute() throws GenericRepositoryException {
         // The connection factory allows me to configure the connection.
-        final TriplestoreConnectionFactory connectionFactory = 
+        final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
     }
 
     /**
-     * Runs all after any test from this suite and cleans the environment in 
+     * Runs all after any test from this suite and cleans the environment in
      * order that the next test will get a 'clean' environment.
-     * 
-     * @throws GenericRepositoryException 
+     *
+     * @throws GenericRepositoryException
      */
     @After
     public void shutdownSuite() throws GenericRepositoryException {
@@ -76,13 +76,16 @@ public class SesameTriplestoreUnitTest {
 
     /**
      * Adds a triple to the triple store, retrieve it and proves if the stored
-     * triple was correct. The new added triple subject URI is specified by 
-     * user (manually).
-     * 
+     * triple was correct. The new added triple subject URI is specified by user
+     * (manually).
+     *
      * @throws TripleException if this exception occurs then this test it fails.
-     * @see SesameTriplestore#persist(java.lang.String, java.lang.String, at.srfg.kmt.ehealth.phrs.persistence.api.ValueType) 
-     * @see SesameTriplestore#exists(java.lang.String, java.lang.String, java.lang.String, at.srfg.kmt.ehealth.phrs.persistence.api.ValueType) 
-     * @see SesameTriplestore#getForPredicateAndValue(java.lang.String, java.lang.String) 
+     * @see SesameTriplestore#persist(java.lang.String, java.lang.String,
+     * at.srfg.kmt.ehealth.phrs.persistence.api.ValueType)
+     * @see SesameTriplestore#exists(java.lang.String, java.lang.String,
+     * java.lang.String, at.srfg.kmt.ehealth.phrs.persistence.api.ValueType)
+     * @see SesameTriplestore#getForPredicateAndValue(java.lang.String,
+     * java.lang.String)
      */
     @Test
     public void persitExistTest() throws TripleException {
@@ -175,8 +178,8 @@ public class SesameTriplestoreUnitTest {
     /**
      * Adds more values to the same resource (multi value node) and retrieve it
      * using the getForPredicatesAndValues(Map) method.
-     * 
-     * @throws TripleException 
+     *
+     * @throws TripleException
      */
     @Test
     public void multivalueNodeTest() throws TripleException {
@@ -309,5 +312,15 @@ public class SesameTriplestoreUnitTest {
         final boolean exists =
                 triplestore.exists(SUBJECT, SUBJECT, VALUE, LITERAL);
         assertFalse(exists);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void addNodeWithNullPredicate() throws TripleException {
+        triplestore.persist(SUBJECT, PREDICATE, null, LITERAL);
+    }
+
+    @Test(expected = TripleException.class)
+    public void addNodeWithWrongSubject() throws TripleException {
+        triplestore.persist("!@SW@E@#", PREDICATE, VALUE, LITERAL);
     }
 }
