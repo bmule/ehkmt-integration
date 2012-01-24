@@ -105,6 +105,7 @@ public final class ProblemEntryClient {
         this.triplestore = triplestore;
 
         schemeClient = new SchemeClient(triplestore);
+        creator = MedicationClient.class.getName();
     }
 
     /**

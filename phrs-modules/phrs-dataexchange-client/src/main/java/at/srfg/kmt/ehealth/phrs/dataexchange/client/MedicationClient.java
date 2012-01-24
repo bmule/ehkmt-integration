@@ -83,6 +83,7 @@ public final class MedicationClient {
         this.triplestore = triplestore;
 
         schemeClient = new SchemeClient(triplestore);
+        creator = MedicationClient.class.getName();
     }
 
     public String addMedicationSign(String user, String note, String statusURI,
