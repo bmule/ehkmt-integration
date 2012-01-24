@@ -41,15 +41,18 @@ public final class MedicationClient {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MedicationClient.class);
+
     /**
      * Holds the name for the creator, the instance responsible to create
      * medication instances with this client.
      */
-    private static final String CREATORN_NAME = MedicationClient.class.getName();
+    private String creator;
+
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
+
     private final SchemeClient schemeClient;
 
     public MedicationClient() throws GenericRepositoryException, TripleException {
@@ -60,6 +63,7 @@ public final class MedicationClient {
         ((GenericTriplestoreLifecycle) triplestore).init();
 
         schemeClient = new SchemeClient(triplestore);
+        creator = MedicationClient.class.getName();
     }
 
     /**
@@ -130,7 +134,7 @@ public final class MedicationClient {
         // resource. 
         triplestore.persist(subject,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,
                 LITERAL);
 
         // HL7 specific informations.
@@ -356,7 +360,7 @@ public final class MedicationClient {
 
         triplestore.persist(subject,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,
                 LITERAL);
 
         if (event != null) {
@@ -393,7 +397,7 @@ public final class MedicationClient {
 
         triplestore.persist(subject,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,
                 LITERAL);
 
         // generic informarion (beside the 'OWNER' they are not really relevant 
@@ -426,7 +430,7 @@ public final class MedicationClient {
 
         triplestore.persist(result,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,
                 LITERAL);
 
         // generic informarion (beside the 'OWNER' they are not really relevant 
@@ -459,7 +463,7 @@ public final class MedicationClient {
 
         triplestore.persist(result,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,
                 LITERAL);
 
         // generic informarion (beside the 'OWNER' they are not really relevant 
@@ -513,5 +517,26 @@ public final class MedicationClient {
 
 
         return result;
+    }
+
+    /**
+     * Registers a new creator for all the resources generated with this client.
+     * All the generated resources will gain a triple with the predicate :
+     * <code>Constants.CREATOR</code> and the value specified with the argument
+     * <code>creator</code>.
+     *
+     * @param creator the new owner for this client, it can not be null.
+     * @throws NullPointerException if the
+     * <code>creator</code> argument is null.
+     */
+    public void setCreator(String creator) {
+        if (creator == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The creator argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        this.creator = creator;
     }
 }

@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
+
 import java.util.Date;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
@@ -26,10 +27,11 @@ import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
- * Used to persist and retrieve vital signs information. <br/>
- * This class can not be extended. 
- * 
+ * Used to persist and retrieve vital signs information. <br/> This class can
+ * not be extended.
+ *
  * @version 0.1
  * @since 0.1
  * @author mradules
@@ -37,31 +39,41 @@ import org.slf4j.LoggerFactory;
 public final class VitalSignClient {
 
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.security.impl.QUPCAR004030UVServiceUtil</code>.
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>at.srfg.kmt.ehealth.phrs.security.impl.QUPCAR004030UVServiceUtil</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VitalSignClient.class);
+
     /**
-     * Holds the name for the creator, the instance responsible to create vital 
-     * signs instances with this client. 
+     * Holds the name for the creator, the instance responsible to create vital
+     * signs instances with this client.
      */
     private static final String CREATORN_NAME = VitalSignClient.class.getName();
+
+    /**
+     * Holds the name for the creator, the instance responsible to create
+     * medication instances with this client.
+     */
+    private String creator;
+
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
+
     private final SchemeClient schemeClient;
 
     /**
-     * Builds a <code>VitalSignClient</code> instance. <br/>
-     * <b>Note : </b> This constructor builds its own individual connection 
-     * (and it  does not) share it with the rest of the applications.
-     * 
-     * @throws GenericRepositoryException if the underlying persistence layer 
+     * Builds a
+     * <code>VitalSignClient</code> instance. <br/> <b>Note : </b> This
+     * constructor builds its own individual connection (and it does not) share
+     * it with the rest of the applications.
+     *
+     * @throws GenericRepositoryException if the underlying persistence layer
      * can not be initialized from any reasons.
-     * @throws TripleException 
+     * @throws TripleException
      */
     public VitalSignClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
@@ -71,14 +83,16 @@ public final class VitalSignClient {
         ((GenericTriplestoreLifecycle) triplestore).init();
 
         schemeClient = new SchemeClient(triplestore);
+        creator = VitalSignClient.class.getName();
     }
 
     /**
-     * Builds a <code>VitalSignClient</code> instance for a given triplestrore.
-     * 
+     * Builds a
+     * <code>VitalSignClient</code> instance for a given triplestrore.
+     *
      * @param triplestore the triplestore instance, it can not be null.
-     * @throws NullPointerException if the <code>triplestore</code> 
-     * argument is null. 
+     * @throws NullPointerException if the
+     * <code>triplestore</code> argument is null.
      */
     public VitalSignClient(GenericTriplestore triplestore) {
 
@@ -93,27 +107,13 @@ public final class VitalSignClient {
 
     /**
      * Adds a vital sign resource and return the URI for this resource. <br/>
-     * This method generates the following triples, this triples are 
-     * pointing for the properties :
-     * <ol>
-     * <li> owner
-     * <li> create date
-     * <li> update date  (this is add only if the resource is updated)
-     * <li> creator
-     * <li> owner
-     * <li> rdf type
-     * <li> create date
-     * <li> creator
-     * <li> template root id1
-     * <li> template root id2
-     * <li> template root id3
-     * <li> HL7 V3 code
-     * <li> SKOS note
-     * <li> effective time
-     * <li> unit
-     * <li> value for the unit
-     * </ol>
-     * 
+     * This method generates the following triples, this triples are pointing
+     * for the properties : <ol> <li> owner <li> create date <li> update date
+     * (this is add only if the resource is updated) <li> creator <li> owner
+     * <li> rdf type <li> create date <li> creator <li> template root id1 <li>
+     * template root id2 <li> template root id3 <li> HL7 V3 code <li> SKOS note
+     * <li> effective time <li> unit <li> value for the unit </ol>
+     *
      * @param user
      * @param codeURI
      * @param note
@@ -121,10 +121,10 @@ public final class VitalSignClient {
      * @param value
      * @param unitURI
      * @return the URI for the new added vital sign (resource).
-     * @throws TripleException 
+     * @throws TripleException
      */
-    public String addVitalSign(String user, String codeURI, String note, 
-            String date, String statusURI, 
+    public String addVitalSign(String user, String codeURI, String note,
+            String date, String statusURI,
             String value, String unitURI) throws TripleException {
 
         final String subject =
@@ -206,7 +206,7 @@ public final class VitalSignClient {
 
     /**
      * Returns all the vital sings for all the users.
-     * 
+     *
      * @return all the vital sings for all the users.
      * @throws TripleException by any kind of triplestore related error.
      */
@@ -226,10 +226,10 @@ public final class VitalSignClient {
 
     /**
      * Returns all the Vital Signs for a given user.
-     * 
+     *
      * @param userId
      * @return
-     * @throws TripleException 
+     * @throws TripleException
      */
     public Iterable<Triple> getVitalSignsTriplesForUser(String userId) throws TripleException {
 
@@ -331,5 +331,26 @@ public final class VitalSignClient {
         }
 
         triplestore.deleteForSubject(resourceURI);
+    }
+
+    /**
+     * Registers a new creator for all the resources generated with this client.
+     * All the generated resources will gain a triple with the predicate :
+     * <code>Constants.CREATOR</code> and the value specified with the argument
+     * <code>creator</code>.
+     *
+     * @param creator the new owner for this client, it can not be null.
+     * @throws NullPointerException if the
+     * <code>creator</code> argument is null.
+     */
+    public void setCreator(String creator) {
+        if (creator == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The creator argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        this.creator = creator;
     }
 }

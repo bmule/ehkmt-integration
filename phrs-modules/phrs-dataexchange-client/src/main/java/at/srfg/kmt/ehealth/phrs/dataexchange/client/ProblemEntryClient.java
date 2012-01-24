@@ -29,23 +29,18 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * Used to persist and retrieve Problem Entries information. <br/>
- * A Problem entry can be used to describe following : 
- * <ul>
- * <li> Problem
- * <li> Risk
- * <li> Activities of daily living 
- * <li> Symptom 
- * <li>
- * </ul>
- * 
- * To to mutate a <i>Problem Entry</i> in to one of he upper described types
- * you need set the <code>estabilishCode</code> property with one of the proper 
- * value, the value must be accorded with a controlled vocabulary (for more 
- * information you need to use the constant class. </br>
- * 
- * This class can not be extended. 
- * 
+ * Used to persist and retrieve Problem Entries information. <br/> A Problem
+ * entry can be used to describe following : <ul> <li> Problem <li> Risk <li>
+ * Activities of daily living <li> Symptom <li> </ul>
+ *
+ * To to mutate a <i>Problem Entry</i> in to one of he upper described types you
+ * need set the
+ * <code>estabilishCode</code> property with one of the proper value, the value
+ * must be accorded with a controlled vocabulary (for more information you need
+ * to use the constant class. </br>
+ *
+ * This class can not be extended.
+ *
  * @version 0.1
  * @since 0.1
  * @author Mihai
@@ -53,31 +48,35 @@ import org.slf4j.LoggerFactory;
 public final class ProblemEntryClient {
 
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient</code>.
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ProblemEntryClient.class);
+
     /**
-     * Holds the name for the creator, the instance responsible to create problem
-     * entry instances with this client. 
+     * Holds the name for the creator, the instance responsible to create
+     * medication instances with this client.
      */
-    private static final String CREATOR_NAME = ProblemEntryClient.class.getName();
+    private String creator;
+
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
+
     private final SchemeClient schemeClient;
 
     /**
-     * Builds a <code>ProblemEntryClient</code> instance. <br/>
-     * <b>Note : </b> This constructor builds its own individual connection 
-     * to the triple store and don't share it with the rest of the application.
-     * 
-     * @throws GenericRepositoryException if the underlying persistence layer 
+     * Builds a
+     * <code>ProblemEntryClient</code> instance. <br/> <b>Note : </b> This
+     * constructor builds its own individual connection to the triple store and
+     * don't share it with the rest of the application.
+     *
+     * @throws GenericRepositoryException if the underlying persistence layer
      * can not be initialized from any reasons.
-     * @throws TripleException 
+     * @throws TripleException
      */
     public ProblemEntryClient() throws GenericRepositoryException, TripleException {
         triplestore = new SesameTriplestore();
@@ -87,14 +86,16 @@ public final class ProblemEntryClient {
         ((GenericTriplestoreLifecycle) triplestore).init();
 
         schemeClient = new SchemeClient(triplestore);
+        creator = ProblemEntryClient.class.getName();
     }
 
     /**
-     * Builds a <code>ProblemEntryClient</code> instance for a given triplestrore.
-     * 
+     * Builds a
+     * <code>ProblemEntryClient</code> instance for a given triplestrore.
+     *
      * @param triplestore the triplestore instance, it can not be null.
-     * @throws NullPointerException if the <code>triplestore</code> 
-     * argument is null. 
+     * @throws NullPointerException if the
+     * <code>triplestore</code> argument is null.
      */
     public ProblemEntryClient(GenericTriplestore triplestore) {
         if (triplestore == null) {
@@ -107,8 +108,8 @@ public final class ProblemEntryClient {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @param user
      * @param estabilishCode
      * @param statusURI
@@ -117,7 +118,7 @@ public final class ProblemEntryClient {
      * @param note
      * @param valueCode
      * @return
-     * @throws TripleException 
+     * @throws TripleException
      */
     public String addProblemEntry(String user,
             String estabilishCode,
@@ -143,7 +144,7 @@ public final class ProblemEntryClient {
         // resource. 
         triplestore.persist(subject,
                 CREATOR,
-                CREATOR_NAME,
+                creator,
                 LITERAL);
 
         // this can help to find a problem entry, there are alos other way 
@@ -176,18 +177,18 @@ public final class ProblemEntryClient {
                 HL7V3_STATUS,
                 statusURI,
                 RESOURCE);
-        
-        final String startDateStr = startDate == null 
+
+        final String startDateStr = startDate == null
                 ? DateUtil.getFormatedDate(new Date())
-                : startDate; 
+                : startDate;
         triplestore.persist(subject,
                 HL7V3_START_DATE,
                 startDateStr,
                 LITERAL);
 
-        final String endDateStr = endDate == null 
+        final String endDateStr = endDate == null
                 ? DateUtil.getFormatedDate(new Date())
-                : endDate; 
+                : endDate;
         triplestore.persist(subject,
                 HL7V3_END_DATE,
                 endDateStr,
@@ -222,10 +223,10 @@ public final class ProblemEntryClient {
 
     /**
      * Returns all the Problem Entries for a given user.
-     * 
+     *
      * @param userId
      * @return
-     * @throws TripleException 
+     * @throws TripleException
      */
     public Iterable<Triple> getProblemEntryTriplesForUser(String userId) throws TripleException {
 
@@ -253,10 +254,10 @@ public final class ProblemEntryClient {
 
     /**
      * Returns all the Problem Entries for a given user.
-     * 
+     *
      * @param userId
      * @return
-     * @throws TripleException 
+     * @throws TripleException
      */
     public Iterable<String> getProblemEntriesURIForUser(String userId) throws TripleException {
 
@@ -334,5 +335,26 @@ public final class ProblemEntryClient {
         }
 
         triplestore.deleteForSubject(resourceURI);
+    }
+
+    /**
+     * Registers a new creator for all the resources generated with this client.
+     * All the generated resources will gain a triple with the predicate :
+     * <code>Constants.CREATOR</code> and the value specified with the argument
+     * <code>creator</code>.
+     *
+     * @param creator the new owner for this client, it can not be null.
+     * @throws NullPointerException if the
+     * <code>creator</code> argument is null.
+     */
+    public void setCreator(String creator) {
+        if (creator == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The creator argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        this.creator = creator;
     }
 }
