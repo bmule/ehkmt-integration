@@ -91,7 +91,9 @@ public class PixService implements Serializable {
 	}
 
 	protected void initSSl() {
-
+            
+            SSLLocalClient.sslSetup();
+            //must setup secure sockets also
 	}
 
 	private void init() {
