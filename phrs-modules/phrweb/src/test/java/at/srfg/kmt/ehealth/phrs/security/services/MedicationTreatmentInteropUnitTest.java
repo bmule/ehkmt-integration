@@ -186,7 +186,8 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 DOSE_UNITS,//"pillURI",
-                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX+phrResourceUri : "EHRDrug_" + label1);
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX+phrResourceUri : "EHRDrug_" + label1,
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
         final String resourceURI_2 =
                 medicationClient.addMedicationSign(
@@ -199,7 +200,8 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "2",
                 DOSE_UNITS,//"pillURI",
-                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX+phrResourceUri : "EHRDrug " + label2);
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX+phrResourceUri : "EHRDrug " + label2,
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
         final Iterable<String> uris = medicationClient.getMedicationURIsForUser(USER);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
@@ -233,7 +235,8 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 "pillURI",
-                "testaddDrug_1");
+                "testaddDrug_1",
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
         final String resourceURI_2 =
                 medicationClient.addMedicationSign(
@@ -246,7 +249,8 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "2",
                 "pillURI",
-                "testaddDrug 2");
+                "testaddDrug 2",
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
         final Iterable<String> uris = medicationClient.getMedicationURIsForUser(USER);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
@@ -599,7 +603,8 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 "pillURI",
-                "testaddDrug");
+                "testaddDrug",
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
         assertNotNull(resourceURI);
 
         final Iterable<Triple> vitalSigns =

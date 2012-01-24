@@ -10,6 +10,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
@@ -55,7 +56,8 @@ public final class MedicationClientExample {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 Constants.PILL,
-                "MyDrug");
+                "MyDrug",
+                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);

@@ -47,6 +47,7 @@ public class  InteropAccessService implements Serializable{
     private final static Logger LOGGER = LoggerFactory.getLogger(InteropAccessService.class);
     public final static String DATE_PATTERN_INTEROP_DATE_TIME ="yyyyMMddHHmm";
     public final static String REFERENCE_NOTE_PREFIX='resourcephr='
+    public final static String DRUG_CODE_DEFAULT_PHR="MyDrugCode";
     /**
      * Expected by the interop services: yyyyMMddHHmm
      */
@@ -204,22 +205,25 @@ public class  InteropAccessService implements Serializable{
      * @return
      */
     public String tranformMedicationAdminRoute(String adminRoute,String doseUnits){
-        String out=adminRoute
+        /*String out=adminRoute
 
         if(!adminRoute){
 
-            switch(doseUnits){
-                //TODO Ask GUI question if mg/ml option chosen to determine if injected...
-                default:
-                out = HL7V3_ORAL_ADMINISTRATION
-                break
-            }
+        switch(doseUnits){
+        //TODO Ask GUI question if mg/ml option chosen to determine if injected...
+        case '':
+        //fall into default
+        default:
+        out = HL7V3_ORAL_ADMINISTRATION
+        break
+        }
         } else {
-            //default
-            out = HL7V3_ORAL_ADMINISTRATION
+        //default
+        out = HL7V3_ORAL_ADMINISTRATION
         }
 
-        return out
+        return out*/
+        return HL7V3_ORAL_ADMINISTRATION
     }
     /**
      * Transform to date string yyyyMMddHHmm
@@ -285,7 +289,8 @@ public class  InteropAccessService implements Serializable{
                 String owner 	= res.ownerUri
 
                 String status 	= this.transformStatus(res.status)
-                status = status?: null
+                //status = status?: null
+                status = status!=null ? status : Constants.STATUS_RUNNING;
 
                 String categoryCode 	= this.transformCategory(res.category,resourceType)
                 categoryCode = categoryCode?: null
@@ -421,6 +426,7 @@ public class  InteropAccessService implements Serializable{
 
                     String name=domain.label ? domain.label : domain.code
                     String freqCode=domain.getFrequencyCode()
+                    String dosageQuantity=      domain.getTreatmentMatrix().getDosageQuantity()
 
                     String dosageValue=		domain.treatmentMatrix.dosage ? domain.treatmentMatrix.dosage.toString() : '0'
                     String doseUnits=		domain.treatmentMatrix.dosageUnits
@@ -435,6 +441,7 @@ public class  InteropAccessService implements Serializable{
                     //removeMessage(interopRef)
 
                     if( ! interopRef){
+                      
                         messageId  = getInteropClients().getMedicationClient().addMedicationSign(
                             owner,
                             referenceNote,
@@ -443,9 +450,10 @@ public class  InteropAccessService implements Serializable{
                             dateStringEnd,
                             doseInterval,//"MyFreqency",
                             adminRoute,
-                            dosageValue,
+                            dosageQuantity,//not dosageValue error
                             doseUnits,
-                            name);
+                            name);// 2 methods with and without drug code
+                            //,DRUG_CODE_DEFAULT_PHR);
                         /*
                         domain.prescribedByName
                         domain.reasonCode
@@ -455,20 +463,40 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        //update
+                        //update only changes, 
                         //this.updateMessageProblem(theParentId, interopRef, ., valueCode); Constants.HL7V3_ADMIN_ROUTE
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_STATUS, status);
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_FREQUENCY, doseInterval);
-                        this.updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);
-                        //This needs a URI
-                        String newDosageURI = buildMedicationDosage(dosageValue, doseUnits);
-                        //	PHRS_MEDICATION_DOSAGE if updating or HL7V3_DOSAGE if retrieving from EHR data
+                        //Never changes. this.updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);
+                        
+                       //Drug name change requires code. Dont update. this.updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);                                           
+                       //This needs a URI
+                        String newDosageURI = buildMedicationDosage(dosageValue, doseUnits);                                        
+                        
+         
+                        //PHRS_MEDICATION_DOSAGE if updating or HL7V3_DOSAGE if retrieving from EHR data
+                        //String newDosageURI = medicationClient.buildDosage(newDossageValue, newDosageUnit);
 
-                        this.updateMessageMedication(theParentId, interopRef, PHRS_MEDICATION_DOSAGE, newDosageURI);
+                        this.updateMessageMedication(theParentId, 
+                            interopRef, 
+                            PHRS_MEDICATION_DOSAGE, 
+                            newDosageURI);
+                        /*
+                        if(domain.originStatus && (domain.originStatus == PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED) ){
+                            //imported source, do not update drug name by end user or drug code
+                        } else {
+                            String drugCode = DRUG_CODE_DEFAULT_PHR
+                        
+                            buildDrugProduct( name, drugCode)                                
+                            updateMessageMedication(theParentId, interopRef, 
+                                PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI, 
+                                drugURI);
+                        }*/
                         //this.updateMessageProblem(theParentId, interopRef, xxxx, doseUnits);
-                        this.updateMessageMedication(theParentId, interopRef, HL7V3_DRUG_NAME, name);
+                        
+                        //TODO DRUG_CODE_DEFAULT_PHR this.updateMessageMedication(theParentId, interopRef, HL7V3_DRUG_NAME, name);
 
                     }
                     break
@@ -537,6 +565,7 @@ public class  InteropAccessService implements Serializable{
                     categoryCode=Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
                     interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
                     value=domain.getDiastolic() ? domain.getDiastolic().toString() : '0'
+           
                     if( ! interopRef){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
                             categoryCode,
@@ -620,6 +649,7 @@ public class  InteropAccessService implements Serializable{
             } catch (TripleException e) {
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
                 e.printStackTrace();
+            
             } catch (Exception e){
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
             }
@@ -1015,16 +1045,50 @@ public class  InteropAccessService implements Serializable{
         }
         return newDosageURI
     }
+    public String buildDrugProduct( String drugName, String drugCode) {
+        //MedicationClient medicationClient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
+        /*
+         * triplestore.persist(subject,
+         * "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
+         * buildManufacturedProduct(drugName, drugCode), RESOURCE);
+         */
+        String newDrugProductUri = null;
+        try {
+            newDrugProductUri = getInteropClients().getMedicationClient().buildManufacturedProduct(drugName, drugCode);
+        } catch (TripleException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newDrugProductUri;
+        //assertNotNull(newDrugProductUri);
+        /*
+        try {
+        // update 
+        medicationClient.updateMedication(
+        subjectUri,
+        PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI,
+        newDrugProductUri);
+        } catch (TripleException e) {
+        e.printStackTrace();
+        } catch (Exception e) {
+        e.printStackTrace();
+        }*/
+    }
     /**
+     * @deprecated
+     */
+    public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri,PhrsStoreClient client){
+        return this.transformInteropMessage(givenOwnerUri,phrsClass,bean,messageResourceUri)
+    }
+       /**
      * Already know this is new (origin and no resource tag) but must update this record? Get the resourceURI and then update the note with local resourceUri
      * @param givenOwnerUri
      * @param phrsClass
      * @param bean
      * @return
      */
-    public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri,PhrsStoreClient client){
-        return this.transformInteropMessage(givenOwnerUri,phrsClass,bean,messageResourceUri)
-    }
     public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri){
         def theObject=null
         try{
@@ -1052,7 +1116,6 @@ public class  InteropAccessService implements Serializable{
                         med.ownerUri=messageOwner
                         med.creatorUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.CREATOR, med.ownerUri)
 
-
                         String stdStatus = InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)//TODO default
 
                         med.statusStandard = stdStatus
@@ -1065,6 +1128,7 @@ public class  InteropAccessService implements Serializable{
                         med.origin=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR)
 
                         med.originStatus=PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED
+                        
                         med.externalReference=messageResourceUri
 
                         //do not set resourceUri, but origin should be checked during udpates to interop messages
@@ -1079,6 +1143,7 @@ public class  InteropAccessService implements Serializable{
                         med.treatmentMatrix.adminRoute=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_ADMIN_ROUTE, null)
                         //this is a uri to another dynabean with dosage and units
                         //Constants.HL7V3_DOSAGE PHRS_MEDICATION_DOSAGE
+                        
                         String dosageUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_DOSAGE, null)
                         if(dosageUri==null)
                         dosageUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.PHRS_MEDICATION_DOSAGE, null)
@@ -1091,7 +1156,7 @@ public class  InteropAccessService implements Serializable{
                                 }
                             }
 
-                        }catch (Exception e){
+                        } catch (Exception e){
                             LOGGER.error('dosage number conversion error',e)
                         }
                         if(attrs.containsKey(Constants.HL7V3_DOSAGE_UNIT)){
@@ -1354,7 +1419,7 @@ public class  InteropAccessService implements Serializable{
     }
     props.add(value);
     }
-    */
+     */
     
 
 }

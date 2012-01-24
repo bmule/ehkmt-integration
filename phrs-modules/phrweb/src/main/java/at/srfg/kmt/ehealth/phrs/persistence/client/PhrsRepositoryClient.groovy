@@ -238,12 +238,20 @@ public class PhrsRepositoryClient implements Serializable{
         theObject.ownerUri=ownerUri
         theObject.creatorUri = creatorUri
 
-        crudSaveResource( theObject, action)
+        return crudSaveResource( theObject, action)
+        
+        
     }
 
     public Map writeInteropMessages(def theObject){
-            
-        Map map= getInteropService().sendMessages(theObject);
+        Map map
+        try{
+            def x=getInteropService()
+            map= getInteropService().sendMessages(theObject);
+        } catch(Exception e){
+            e.printStackTrace()
+            LOGGER.error('writeInteropMessages ', e)
+        }
         return map
     }
     /**
@@ -289,15 +297,16 @@ public class PhrsRepositoryClient implements Serializable{
      * @return
      */
     def crudSaveResource(def theObject){
-
+        
         if(theObject) {
 
-            if(theObject.resourceUri) crudSaveResource(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
-            else crudSaveResource(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE)
+            if(theObject.resourceUri) return crudSaveResource(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
+            else return crudSaveResource(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE)
 
         }else {
             LOGGER.error('{} - NULL object',theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
         }
+        return theObject
     }
     /**
      * 
