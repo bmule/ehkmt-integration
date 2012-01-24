@@ -176,15 +176,21 @@ public final class ProblemEntryClient {
                 HL7V3_STATUS,
                 statusURI,
                 RESOURCE);
-
+        
+        final String startDateStr = startDate == null 
+                ? DateUtil.getFormatedDate(new Date())
+                : startDate; 
         triplestore.persist(subject,
                 HL7V3_START_DATE,
-                startDate,
+                startDateStr,
                 LITERAL);
 
+        final String endDateStr = endDate == null 
+                ? DateUtil.getFormatedDate(new Date())
+                : endDate; 
         triplestore.persist(subject,
                 HL7V3_END_DATE,
-                endDate,
+                endDateStr,
                 LITERAL);
 
         triplestore.persist(subject,

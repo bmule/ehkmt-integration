@@ -41,18 +41,15 @@ public final class MedicationClient {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MedicationClient.class);
-
     /**
      * Holds the name for the creator, the instance responsible to create
      * medication instances with this client.
      */
     private static final String CREATORN_NAME = MedicationClient.class.getName();
-
     /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
-
     private final SchemeClient schemeClient;
 
     public MedicationClient() throws GenericRepositoryException, TripleException {
@@ -154,14 +151,21 @@ public final class MedicationClient {
                 statusURI,
                 RESOURCE);
 
+
+        final String startDateStr = startDate == null
+                ? DateUtil.getFormatedDate(new Date())
+                : startDate;
         triplestore.persist(subject,
                 Constants.HL7V3_DATE_START,
-                startDate,
+                startDateStr,
                 LITERAL);
 
+        final String endDateStr = endDate == null
+                ? DateUtil.getFormatedDate(new Date())
+                : endDate;
         triplestore.persist(subject,
                 Constants.HL7V3_DATE_END,
-                endDate,
+                endDateStr,
                 LITERAL);
 
         triplestore.persist(subject,
@@ -474,9 +478,9 @@ public final class MedicationClient {
                 Constants.HL7_DETERMINER_CODE,
                 "KIND",
                 LITERAL);
-        
+
         if (drugCode != null) {
-            
+
             triplestore.persist(result,
                     Constants.HL7V3_CODE,
                     buildCode(drugName, drugCode),
