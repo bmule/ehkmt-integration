@@ -17,6 +17,14 @@ public class DynaUtil {
 
     }
 
+    public static String getStringProperty(DynaBean bean, String property) {
+        return DynaUtil.getStringProperty(bean, property, null);
+    }
+
+    public static String getProperty(DynaBean bean, String property) {
+        return DynaUtil.getStringProperty(bean, property, null);
+    }
+
     public static String getStringProperty(DynaBean bean, String property, String defaultValue) {
         String value = null;
         try {
