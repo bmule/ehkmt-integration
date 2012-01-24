@@ -103,7 +103,7 @@ public final class VitalSignClient {
         this.triplestore = triplestore;
 
         schemeClient = new SchemeClient(triplestore);
-        creator = MedicationClient.class.getName();
+        creator = VitalSignClient.class.getName();
     }
 
     /**
