@@ -350,6 +350,20 @@ public final class MedicationClient {
 
         triplestore.deleteForSubject(resourceURI);
     }
+    
+    /**
+     * Frequency graph used when the frequency information is now sufficent to 
+     * build a meningfully Frequency graph.
+     * 
+     * @return 
+     * @throws TripleException 
+     */
+    public String buildNullFrequency() throws TripleException {
+        // TODO : build a singular instance of this and sore it in the rdf file.
+        final String result = 
+                buildFrequency("No Event", -1, 0, Constants.MILLIGRAM);
+        return result;
+    }
 
     public String buildFrequency(String event, int offset, int value,
             String unitURI) throws TripleException {
