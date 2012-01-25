@@ -10,6 +10,7 @@ import tr.com.srdc.icardea.atnalog.client.Audit;
 /*
  * TODO create new thread for each send*
  */
+
 @SuppressWarnings("serial")
 public class AuditAtnaService implements Serializable {
 
@@ -42,38 +43,56 @@ public class AuditAtnaService implements Serializable {
             secure = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
 
             if (atnalog) {
-                int atnalogServerPort = 2861;
+                port = 2861;
 
                 if (secure) {
-                    atnalogServerPort = 8443;
+                    port = 8443;
                     setupSSL();
                 }
 
                 ResourceBundle properties = ResourceBundle.getBundle("icardea");
-                String atnalogServer = properties.getString("atna.log.server");
+                host = properties.getString("atna.log.server");
 
 
                 // String xml = Audit.createMessage("GRM", patientId, resource,
                 // requesterRole);//TODO: Grant Request Message
 
-                audit = new Audit(atnalogServer, atnalogServerPort);
+                audit = new Audit(host, port);
 
                 // a.send_udp( a.create_syslog_xml("caremanager", xml) );
             }
 
         } catch (UnknownHostException e) {
-
+            LOGGER.error("", e);
             e.printStackTrace();
         } catch (Exception e) {
-
+            LOGGER.error("", e);
             e.printStackTrace();
         }
+        System.out.println("do atna?=" + atnalog + " secure? " + secure + " host=" + host + " port=" + port);
+        LOGGER.debug("do atna?=" + atnalog + " secure? " + secure + " host=" + host + " port=" + port);
 
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public boolean isSecure() {
+        return secure;
+    }
+
+    public boolean isAtnalogRequired() {
+        return atnalog;
     }
 
     public void sendAuditMessageGrantForRole(String patientId, String resource, String requestorRole) {
         try {
-            if (audit != null) {
+            if (atnalog && audit != null) {
                 String xml = Audit.createMessage("GRM",
                         patientId, resource, requestorRole);
                 audit.send_udp(audit.create_syslog_xml(AUDIT_SYSTEM_SOURCE_PHRS, xml));
@@ -91,7 +110,7 @@ public class AuditAtnaService implements Serializable {
             throws Exception {
 
         try {
-            if (audit != null) {
+            if (atnalog && audit != null) {
                 String xml = Audit.createMessage("register", patientId, null, null);
 
                 audit.send_udp(audit.create_syslog_xml(AUDIT_SYSTEM_SOURCE_PHRS,
