@@ -275,6 +275,7 @@ public class PhrsConstants  implements Serializable {
 	public final static String PUBSUB_ACTION_INTEROP_PHR_IMPORT= "PHRS_INTEROP.IMPORT";
 	public final static String INTEROP_ORIGIN_STATUS_IMPORTED = PUBSUB_ACTION_INTEROP_PHR_IMPORT;
 	public final static String INTEROP_ORIGIN_DEFAULT_EHR = "PHRS_INTEROP.ORIGIN.EHR";
+        public final static String INTEROP_CREATOR_DEFAULT_PHR = "PHRS_INTEROP.ORIGIN.PHR";
 	// public final static String
 	// PUBSUB_TOPIC_INTEROP_PHR_ACCESS="INTEROP_PHR_ACCESS";
 

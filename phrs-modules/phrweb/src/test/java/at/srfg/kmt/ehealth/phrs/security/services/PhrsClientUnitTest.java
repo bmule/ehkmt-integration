@@ -20,6 +20,9 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
+import com.google.code.morphia.query.Query;
 
 public class PhrsClientUnitTest {
 
@@ -43,14 +46,29 @@ public class PhrsClientUnitTest {
 
     @Before
     public void setUp() {
+        PhrsStoreClient phrsClient = PhrsStoreClient.getInstance();
+        Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
+        phrsClient.getPhrsDatastore().delete(query);
+
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, Exception {
+
+        try {
+            //clean up 
+            PhrsStoreClient phrsClient = PhrsStoreClient.getInstance();
+            Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
+            phrsClient.getPhrsDatastore().delete(query);
+
+            ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).shutdown();
+            ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).cleanEnvironment();
+
+            phrsClient.setTripleStore(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
 
     @Test
     public void testInstanceDefault() {
@@ -146,7 +164,7 @@ public class PhrsClientUnitTest {
             MedicationClient medicationclient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
 
             //quick test
-                String phrResourceUri = null;
+            String phrResourceUri = null;
 //             String resourceURI_1 =
 //                    medicationclient.addMedicationSign(
 //                    USER,
@@ -171,8 +189,7 @@ public class PhrsClientUnitTest {
                     Constants.HL7V3_ORAL_ADMINISTRATION,
                     "1",
                     DOSE_UNITS,//"pillURI",
-                    phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug_test111"
-                    );//InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+                    phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug_test111");//InteropAccessService.DRUG_CODE_DEFAULT_PHR);
 
             assertNotNull("resourceURI_1 no-fail sample is null,interop sample message failed", resourceURI_1);
 
@@ -187,11 +204,11 @@ public class PhrsClientUnitTest {
                     dosageQuantity,//dosageValue,
                     doseUnits,
                     name);
-                    //InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+            //InteropAccessService.DRUG_CODE_DEFAULT_PHR);
             messageResourceUri = messageId;
-         } catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
-                  
+
         } catch (TripleException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -218,7 +235,7 @@ public class PhrsClientUnitTest {
 
 
         assertNotNull(newDrugProductUri);
-        
+
         try {
             // update 
             medicationClient.updateMedication(
@@ -336,25 +353,23 @@ public class PhrsClientUnitTest {
 
         assertNotNull(ias);
     }
-
-    @Test
-    public void testInstanceInteropAccessOverrideTripleStore() {
-        System.out.println("testInstanceInteropAccessOverrideTripleStore");
-        PhrsStoreClient sc = PhrsStoreClient.getInstance(getTripleStore());
-        assertNotNull(sc);
-        at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias = sc.getInteropService();
-
-        assertNotNull(ias);
-    }
-
-    @Test
-    public void testInstanceOverrideTripleStore() {
-        System.out.println("testInstanceOverrideTripleStore");
-        GenericTriplestore triplestore = getTripleStore();
-        assertNotNull("triplestore null", triplestore);
-        PhrsStoreClient sc = PhrsStoreClient.getInstance(triplestore);
-        assertNotNull("PhrsStoreClient nulll", sc);
-    }
+    /*
+     * @Test public void testInstanceInteropAccessOverrideTripleStore() {
+     * System.out.println("testInstanceInteropAccessOverrideTripleStore");
+     * PhrsStoreClient sc = PhrsStoreClient.getInstance(getTripleStore(), true);
+     * assertNotNull(sc);
+     * at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias =
+     * sc.getInteropService();
+     *
+     * assertNotNull(ias); }
+     *
+     * @Test public void testInstanceOverrideTripleStore() {
+     * System.out.println("testInstanceOverrideTripleStore"); GenericTriplestore
+     * triplestore = getTripleStore(); assertNotNull("triplestore null",
+     * triplestore); PhrsStoreClient sc =
+     * PhrsStoreClient.getInstance(getTripleStore(), true);
+     * assertNotNull("PhrsStoreClient nulll", sc); }
+     */
 
     public GenericTriplestore getTripleStore() {
         final TriplestoreConnectionFactory connectionFactory =

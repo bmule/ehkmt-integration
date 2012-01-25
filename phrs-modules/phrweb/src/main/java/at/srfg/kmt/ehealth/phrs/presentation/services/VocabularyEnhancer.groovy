@@ -428,7 +428,8 @@ public class  VocabularyEnhancer implements Serializable {
 			case MedicationTreatment.class.getCanonicalName():
 
 				map.put('TAG_MEDICATION_COMPLIANCE_STATUS', 		getTerms(PhrsConstants.TAG_MEDICATION_COMPLIANCE_STATUS,language))
-				map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
+				//query vocab for http://www.icardea.at/phrs/instances/MedicationUnits
+                                map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
 				map.put('TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1', getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1,language))
 				map.put('TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1,language))
 				map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', 	getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))

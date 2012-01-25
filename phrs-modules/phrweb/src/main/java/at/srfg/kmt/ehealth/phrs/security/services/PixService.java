@@ -130,7 +130,12 @@ public class PixService implements Serializable {
 		}
 
 	}
-
+        /**
+         * Sending a patient registration audit message... if performing a general query
+         * @param protocolId
+         * @param attrs
+         * @return 
+         */
 	public boolean sendAuditMessage(String protocolId, Map<String, String> attrs) {
 		boolean result = false;
 

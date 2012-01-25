@@ -136,7 +136,11 @@
             <artifactId>phrs-dataexchange-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrs-message-dispatcher</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>     
         <!--Other dependencies-->
         
         <dependency>
@@ -197,6 +201,7 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
+            <!--<version>1.8.5</version> but see maven compile, not yet for 1.8.5?-->
             <version>1.8.4</version>
         </dependency>
         
@@ -617,7 +622,7 @@
                     <!--<dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
-                        <version>1.8.4</version>
+                        <version>1.8.4-01</version>
                     </dependency>-->
                 </dependencies>
             </plugin>

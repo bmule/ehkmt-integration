@@ -9,7 +9,7 @@ import org.bson.types.ObjectId
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService
-import at.srfg.kmt.ehealth.phrs.presentation.services.InteropResourceTransformer
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropTermTransformer
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 
 import com.google.code.morphia.annotations.Entity
@@ -208,7 +208,7 @@ public class BasePhrsModel implements  Serializable, Cloneable {
 	}
 
 	public static String getStatusCorrection(String theStatus){
-		return InteropResourceTransformer.transformStatus(theStatus)
+		return InteropTermTransformer.transformStatus(theStatus)
 
 	}
 

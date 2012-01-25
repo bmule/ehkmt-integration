@@ -33,6 +33,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 import at.srfg.kmt.ehealth.phrs.security.services.PixService
+import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil
 
 /**
  * Used by the PhrsStoreClient to send messages whenever an appropriate resource is saved
@@ -245,15 +246,8 @@ public class  InteropAccessService implements Serializable{
     }
 
     public static def getDynaBeanPropertyValue(DynaBean bean, String property, String defaultValue){
-        def value
-        try{
-            value = bean.get(property)
+        return DynaUtil.getStringProperty(bean,property,defaultValue)
 
-            if(!value) value = defaultValue
-        } catch (Exception e){
-            LOGGER.error('property= '+property, e)
-        }
-        return value
     }
     /*
     public String transformDate(Date date,boolean dateTime, Date defaultDate){
@@ -299,7 +293,7 @@ public class  InteropAccessService implements Serializable{
                 valueCode = valueCode?: null
 
                 String dateStringStart 	= transformDate(res.beginDate,res.endDate)
-                dateStringStart = dateStringStart?: null
+                dateStringStart = dateStringStart?: transformDate(new Date(),new Date())
 
                 String dateStringEnd 	= transformDate(res.endDate,(Date)null)
                 dateStringEnd = dateStringEnd?: null
@@ -392,7 +386,7 @@ public class  InteropAccessService implements Serializable{
                     case ActionPlanEvent.class.getCanonicalName():
 
                     //send message only for the sports identifier resource.code= action.categories.activity.sport
-                    if(valueCode == InteropResourceTransformer.CODE_WATCH_SPORT){
+                    if(valueCode == InteropTermTransformer.CODE_WATCH_SPORT){
                         categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                         String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
                         if( ! interopRef){
@@ -468,7 +462,9 @@ public class  InteropAccessService implements Serializable{
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_STATUS, status);
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
                         this.updateMessageMedication(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-                        this.updateMessageMedication(theParentId, interopRef, HL7V3_FREQUENCY, doseInterval);
+                        
+                        //FIXXME - not needed, but refactor to new buildFrequency from interval and TOD time of day
+                        
                         //Never changes. this.updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);
                         
                        //Drug name change requires code. Dont update. this.updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);                                           
@@ -483,21 +479,18 @@ public class  InteropAccessService implements Serializable{
                             interopRef, 
                             PHRS_MEDICATION_DOSAGE, 
                             newDosageURI);
-                        /*
-                        if(domain.originStatus && (domain.originStatus == PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED) ){
-                            //imported source, do not update drug name by end user or drug code
+                        
+                        //add this for any changes...if EHR record ignore change to 
+                        if((domain.getCreatorUri()!=null 
+                            && domain.getCreatorUri().equalsIgnoreCase(Constants.EXTERN)
+                            ) || (domain.getOriginStatus()!=null 
+                                && domain.getOriginStatus().equalsIgnoreCase(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED))   ) {
+                            // dont update    
                         } else {
-                            String drugCode = DRUG_CODE_DEFAULT_PHR
-                        
-                            buildDrugProduct( name, drugCode)                                
-                            updateMessageMedication(theParentId, interopRef, 
-                                PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI, 
-                                drugURI);
-                        }*/
-                        //this.updateMessageProblem(theParentId, interopRef, xxxx, doseUnits);
-                        
-                        //TODO DRUG_CODE_DEFAULT_PHR this.updateMessageMedication(theParentId, interopRef, HL7V3_DRUG_NAME, name);
-
+                             //PHR born resource
+                             this.updateMessageMedication(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+                        }
+ 
                     }
                     break
 
@@ -652,6 +645,10 @@ public class  InteropAccessService implements Serializable{
             
             } catch (Exception e){
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
+            
+            } catch (java.lang.Error e) {
+                LOGGER.error("sesame throws errors not exception..."+resourceType,,e);
+                e.printStackTrace();
             }
         }
         return messageIdMap
@@ -788,6 +785,7 @@ public class  InteropAccessService implements Serializable{
      * @param importMessage
      * @return list of message URIs (not local resource URIs)
      */
+    /*
     public List importNewMessages(String ownerUri,String phrsClass, boolean importMessage){
 
         def list = []
@@ -848,6 +846,97 @@ public class  InteropAccessService implements Serializable{
         }
         return list;
 
+    }*/
+   public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage) throws Exception {
+        
+        //addNewMessagesEhr("1", "2", null);
+        
+        List list = new ArrayList();
+        if (ownerUri != null && phrsClass != null) {
+
+            final MultiIterable result = new MultiIterable();
+            final Map<String, String> queryMap = new HashMap<String, String>();
+            try {
+                Iterable<String> results = iaccess.findInteropMessagesForUser(ownerUri, phrsClass);
+                //check each results, has it been tagged?
+
+                //import the message, and also save it back to the Interop Service to tag it and make other listeners aware of it.
+                if (results != null) {
+                    //transform message to
+
+                    DynaBeanClient dynaBeanClient = iaccess.getInteropClients().getDynaBeanClient();
+
+                    for (String messageResourceUri : results) {
+                        try {
+                            DynaBean dynaBean = dynaBeanClient.getDynaBean(messageResourceUri);
+
+                            //DynaBeanUtil.toString(dynaBean);
+                            System.out.println("importNewMessages getDynaClass()= " + dynaBean.getDynaClass().getName());
+
+                            // DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
+                            //http://www.icardea.at/phrs#owner
+                            Object owner = DynaUtil.getStringProperty(dynaBean,Constants.OWNER);
+                            System.out.println("importNewMessages owner= " + DynaUtil.getStringProperty(dynaBean,Constants.OWNER));
+                            //System.out.println("importNewMessages drug name= " + DynaUtil.getStringProperty(dynaBean,MED_DRUG_NAME_URI));
+
+                            
+                            //String referenceNote= bean.get()
+                            boolean isNewMessage = false;
+                            Object creator = DynaUtil.getStringProperty(dynaBean,Constants.CREATOR);
+                            System.out.println("importNewMessages creator= " + dynaBean.get(Constants.CREATOR));
+                            Object referenceNote = null;
+                            try {
+                                referenceNote = DynaUtil.getStringProperty(dynaBean,Constants.SKOS_NOTE);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                // LOGGER.error(' message error, interop ownerUri= '+ownerUri+" messageResourceUri="+messageResourceUri, e)
+                            }
+                            if (referenceNote != null) {
+                                String aboutResourceUri = iaccess.parseReferenceNote((String) referenceNote);
+
+                                if (aboutResourceUri != null && aboutResourceUri.length() != 0) {
+                                    isNewMessage = false;
+                                } else {
+                                    isNewMessage = true;
+                                }
+                            }
+
+                            if (isNewMessage) {
+                                Object repositoryObject = iaccess.transformInteropMessage(ownerUri, phrsClass, dynaBean, messageResourceUri);
+                                if (repositoryObject != null) {
+                                    list.add(messageResourceUri);
+                                }
+                                if (importMessage) {
+                                    list.add(messageResourceUri);
+                                    //save transformed resource to local store
+                                    //the resourceUri issue
+                                    iaccess.getCommonDao().crudSaveResource(repositoryObject, ownerUri, "interopservice");
+                                    //send message to interop service
+                                    //Map map=
+                                    iaccess.sendMessages(repositoryObject);
+                                }
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            // LOGGER.error(' message error, interop ownerUri= '+ownerUri+" messageResourceUri="+messageResourceUri, e)
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (list != null) {
+            System.out.println("importNewMessages list size= " + list.size());
+        } else {
+            System.out.println("importNewMessages list=NULL " + list);
+        }
+
+
+        return list;
+
     }
     /**
      * Get the dosage details and put them into a map 
@@ -860,13 +949,14 @@ public class  InteropAccessService implements Serializable{
             DynaBeanClient dbc = getInteropClients().getDynaBeanClient()
             DynaBean bean = dbc.getDynaBean(uri)
             if(bean){
-                String dosage = bean.get(Constants.HL7V3_DOSAGE_VALUE) //Constants.HL7V3_DOSAGE
-                String units = bean.get(Constants.HL7V3_DOSAGE_UNIT)
+                String dosage = DynaUtil.getStringProperty(dynaBean,Constants.HL7V3_DOSAGE_VALUE) //Constants.HL7V3_DOSAGE
+                String units = DynaUtil.getStringProperty(dynaBean,Constants.HL7V3_DOSAGE_UNIT)
                 map = new HashMap()
 
-
-                map.put(Constants.HL7V3_DOSAGE_VALUE, dosage)
-                map.put(Constants.HL7V3_DOSAGE_UNIT, units)
+                if(dosage)
+                     map.put(Constants.HL7V3_DOSAGE_VALUE, dosage)
+                if(units)
+                     map.put(Constants.HL7V3_DOSAGE_UNIT, units)
             }
 
         }
@@ -1089,6 +1179,8 @@ public class  InteropAccessService implements Serializable{
      * @param bean
      * @return
      */
+//transformInteropMessage(ownerUri, phrsClass, dynaBean, messageResourceUri);
+//DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
     public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri){
         def theObject=null
         try{
@@ -1098,95 +1190,104 @@ public class  InteropAccessService implements Serializable{
 
                 switch(phrsClass){
                     case Constants.PHRS_MEDICATION_CLASS:
-                    String messageOwner=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.OWNER, null)
-                    Map props = bean.getProperties()
+                        String messageOwner=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.OWNER, null)
+                        Map props = bean.getProperties()
 
 
-                    //check ownerUri of message
-                    if(messageOwner && (messageOwner != givenOwnerUri)){
-                        LOGGER.error('Message ownerUri does not match given givenOwnerUri='+givenOwnerUri+' med.OwnerUri=');
+                        //check ownerUri of message
+                        if(messageOwner && (messageOwner != givenOwnerUri)){
+                            LOGGER.error('Message ownerUri does not match given givenOwnerUri='+givenOwnerUri+' med.OwnerUri=');
 
-                    } else {
+                        } else {
 
-                        // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
-                        // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
-                        // Constants.HL7V3_DRUG_NAME Constants.HL7V3_CODE
+                            // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
+                            // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
+                            // Constants.HL7V3_DRUG_NAME Constants.HL7V3_CODE
 
-                        MedicationTreatment med= new MedicationTreatment()
-                        med.ownerUri=messageOwner
-                        med.creatorUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.CREATOR, med.ownerUri)
+                            MedicationTreatment med= new MedicationTreatment()
+                            med.ownerUri=messageOwner
+                            med.creatorUri=DynaUtil.getStringProperty(dynaBean,bean, Constants.CREATOR, med.ownerUri)
 
-                        String stdStatus = InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)//TODO default
+                            String stdStatus = DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_STATUS, null)//TODO default
 
-                        med.statusStandard = stdStatus
-                        //med.status = 'medicationSummary_medicationStatus_true'
-                        //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)//TODO default
-                        med.status=InteropResourceTransformer.transformStandardStatusToLocal(stdStatus,Constants.PHRS_MEDICATION_CLASS)
+                            med.statusStandard = stdStatus
+                            //med.status = 'medicationSummary_medicationStatus_true'
+                            //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)//TODO default
+                            med.status= InteropTermTransformer.transformStandardStatusToLocal(stdStatus,Constants.PHRS_MEDICATION_CLASS)
 
-                        med.code = InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_CODE, null)//TODO is this drug code?
-                        //check the origin of this message....
-                        med.origin=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR)
+                            med.code = DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_CODE, null)//TODO is this drug code?
+                            //check the origin of this message....
+                            med.origin= DynaUtil.getStringProperty(dynaBean,bean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR)
 
-                        med.originStatus=PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED
-                        
-                        med.externalReference=messageResourceUri
+                            med.originStatus=PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED
 
-                        //do not set resourceUri, but origin should be checked during udpates to interop messages
+                            med.externalReference=messageResourceUri
 
-                        med.reasonCode='http://www.icardea.at/phrs/instances/NoSpecialTreatment'
-                        //med.prescribedByName=
+                            //do not set resourceUri, but origin should be checked during udpates to interop messages
 
-                        med.title=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_DRUG_NAME, null)
+                            med.reasonCode='http://www.icardea.at/phrs/instances/NoSpecialTreatment'
+                            //med.prescribedByName=
 
-                        med.note=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.SKOS_NOTE, null)
+                            med.title= DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_DRUG_NAME, null)
+                            //No notes, using for resourceUri marker
+                            //med.note= DynaUtil.getStringProperty(dynaBean,bean, Constants.SKOS_NOTE, null)
 
-                        med.treatmentMatrix.adminRoute=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_ADMIN_ROUTE, null)
-                        //this is a uri to another dynabean with dosage and units
-                        //Constants.HL7V3_DOSAGE PHRS_MEDICATION_DOSAGE
-                        
-                        String dosageUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_DOSAGE, null)
-                        if(dosageUri==null)
-                        dosageUri=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.PHRS_MEDICATION_DOSAGE, null)
+                            med.treatmentMatrix.adminRoute= DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_ADMIN_ROUTE, null)
+                            //this is a uri to another dynabean with dosage and units
+                            //Constants.HL7V3_DOSAGE PHRS_MEDICATION_DOSAGE
 
-                        Map attrs= this.getMedicationDosageAttributes(dosageUri)
-                        try{
+                            String dosageUri= DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_DOSAGE, null)
+
+                            if(dosageUri==null)
+                            dosageUri= DynaUtil.getStringProperty(dynaBean,bean, Constants.PHRS_MEDICATION_DOSAGE, null)
+
+                            Map attrs= getMedicationDosageAttributes(dosageUri)
                             if(attrs){
-                                if(attrs.containsKey(Constants.HL7V3_DOSAGE_VALUE)){
-                                    med.treatmentMatrix.dosage=Double.valueOf(attrs.get(Constants.HL7V3_DOSAGE_VALUE))
+                                try{                
+                                    if(attrs.containsKey(Constants.HL7V3_DOSAGE_VALUE)){
+                                        String temp=attrs.get(Constants.HL7V3_DOSAGE_VALUE);
+                                        if(temp) med.treatmentMatrix.dosage= Double.valueOf(temp)
+                                    }
+
+                                } catch (Exception e){
+                                    LOGGER.error('dosage number conversion error',e)
+                                }
+                                if(attrs.containsKey(Constants.HL7V3_DOSAGE_UNIT)){
+                                    med.treatmentMatrix.dosageUnits=attrs.get(Constants.HL7V3_DOSAGE_UNIT)
                                 }
                             }
 
-                        } catch (Exception e){
-                            LOGGER.error('dosage number conversion error',e)
+                            med.treatmentMatrix.dosageInterval=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_FREQUENCY, 'http://www.icardea.at/phrs/instances/other')
+                            //FIXXME
+                            med.treatmentMatrix.dosageTimeOfDay='http://www.icardea.at/phrs/instances/NotSpecified'
+
+                            //dates
+                            String dateBegin= DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_DATE_START)
+                            //set new date if not found
+                            Date beginDate = transformDateFromMessage(dateBegin, new Date()) 	//HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
+
+                            String dateEnd= DynaUtil.getStringProperty(dynaBean,bean, Constants.HL7V3_DATE_END, null)
+                            Date endDate = transformDateFromMessage(dateEnd,(Date)null) 		//HealthyUtils.formatDate( dateEnd, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)//transformDate(dateEnd)
+
+                            med.beginDate=beginDate
+                            med.endDate=endDate
+
+
+                            med.createDate=new Date()
+                            med.modifyDate=med.createDate
+                            med.type=MedicationTreatment.class.toString()
+                            theObject = med
+
+                            if(med){
+                                System.out.println("medication imported "+med.toString())
+                                LOGGER.debug(" medication imported "+med.toString());
+                            }
                         }
-                        if(attrs.containsKey(Constants.HL7V3_DOSAGE_UNIT)){
-                            med.treatmentMatrix.dosageUnits=attrs.get(Constants.HL7V3_DOSAGE_UNIT)
 
-                        }
-
-                        med.treatmentMatrix.dosageInterval=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_FREQUENCY, 'http://www.icardea.at/phrs/instances/other')
-                        med.treatmentMatrix.dosageTimeOfDay='http://www.icardea.at/phrs/instances/NotSpecified'
-
-                        //dates
-                        String dateBegin=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_DATE_START, null)
-                        Date beginDate = transformDateFromMessage(dateBegin,(Date)null) 	//HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
-
-                        String dateEnd=InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_DATE_END, null)
-                        Date endDate = transformDateFromMessage(dateEnd,(Date)null) 		//HealthyUtils.formatDate( dateEnd, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)//transformDate(dateEnd)
-
-                        med.beginDate=beginDate
-                        med.endDate=endDate
-
-
-                        med.createDate=new Date()
-                        med.modifyDate=med.createDate
-                        med.type=MedicationTreatment.class.toString()
-                        theObject = med
-                    }
-
-                    //Date formatedDate = DateUtil.getFormatedDate(dateStr)
+                        //Date formatedDate = DateUtil.getFormatedDate(dateStr)
 
                     break
+                    
                     default:
                     break
                 }
@@ -1281,145 +1382,6 @@ public class  InteropAccessService implements Serializable{
 
         return validated;
     }
-    //	addMedicationSign(String user, String note, String statusURI,
-    //		String startDate, String endDate, String frequencyURI,
-    //		String adminRouteURI, String dosageValue, String dosageUnit,
-    //		String drugName)
-    //	final String subject =
-    //			triplestore.persist(Constants.OWNER, user, LITERAL);
-    //
-    //	// this can help to find a medication, there are alos other way
-    //	// to do this (e.g. using the know templateRootID, for more )
-    //	// information about this please consult the documentation)
-    //	triplestore.persist(subject,
-    //			Constants.RDFS_TYPE,
-    //			Constants.PHRS_MEDICATION_CLASS,
-    //			RESOURCE);
-    //
-    //	// generic informarion (beside the 'OWNER' they are not really relevant
-    //	// for the HL7 V3 message)
-    //	triplestore.persist(subject,
-    //			Constants.CREATE_DATE,
-    //			DateUtil.getFormatedDate(new Date()),
-    //			LITERAL);
-    //
-    //	// I preffer to hang a specific name for the Creator only for test
-    //	// purposes. In this way I can follow the the origin for a certain
-    //	// resource.
-    //	triplestore.persist(subject,
-    //			Constants.CREATOR,
-    //			CREATORN_NAME,
-    //			LITERAL);
-    //
-    //	// HL7 specific informations.
-    //	// according with the specification the medcation requires this
-    //	// template root id.
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_TEMPLATE_ID_ROOT,
-    //			Constants.IMUNISATION,
-    //			LITERAL);
-    //
-    //	// HL7 specific informations.
-    //	// according with the specification the medcation requires this
-    //	// template root id.
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_TEMPLATE_ID_ROOT,
-    //			Constants.MEDICATION,
-    //			LITERAL);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.SKOS_NOTE,
-    //			note,
-    //			LITERAL);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_STATUS,
-    //			statusURI,
-    //			RESOURCE);
-
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_DATE_START,
-    //			startDate,
-    //			LITERAL);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_DATE_END,
-    //			endDate,
-    //			LITERAL);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_FREQUENCY,
-    //			frequencyURI,
-    //			RESOURCE);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_ADMIN_ROUTE,
-    //			adminRouteURI,
-    //			RESOURCE);
-    //
-    //	final String dosage = buildDosage(dosageValue, dosageUnit);
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_DOSAGE,
-    //			dosage,
-    //			LITERAL);
-    //
-    //	triplestore.persist(subject,
-    //			Constants.HL7V3_DRUG_NAME,
-    //			drugName,
-    //			LITERAL);
-    //
-    //        for (String resoure : resources) {
-    //            final DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
-    //            final Object rdfType = dynaBean.get(Constants.RDFS_TYPE);
-    //            assertEquals(Constants.PHRS_VITAL_SIGN_CLASS, rdfType);
-    //
-    //            final Object createDate = dynaBean.get(Constants.CREATE_DATE);
-    //            assertNotNull(createDate);
-    //
-    //            final Object creator = dynaBean.get(Constants.CREATOR);
-    //            assertEquals(VitalSignClient.class.getName(), creator);
-    //
-    //            final List rootTemplates =
-    //                    (List) dynaBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
-    //            assertTrue(rootTemplates.size() == 3);
-    //
-    //            final DynaBean code = (DynaBean) dynaBean.get(Constants.HL7V3_CODE);
-    //            proveCode(code);
-    //
-    //            final Object note = dynaBean.get(Constants.SKOS_NOTE);
-    //            assertEquals(NOTE, note);
-    //
-    //            final Object effectiveTime = dynaBean.get(Constants.EFFECTIVE_TIME);
-    //            assertEquals(TIME, effectiveTime);
-    //
-    //            final DynaBean statusBean =
-    //                    (DynaBean) dynaBean.get(Constants.HL7V3_STATUS);
-    //            proveStatusBean(statusBean);
-    //
-    //            final Object value = dynaBean.get(Constants.HL7V3_VALUE);
-    //            assertEquals(VALUE, value);
-    //
-    //            final DynaBean unit = (DynaBean) dynaBean.get(Constants.HL7V3_UNIT);
-    //            proveUnit(unit);
-    //        }oveUnit(unit);
-    //	 }
-
-    /*
-    final DynaProperty dynaProperty =
-    newInstance.getDynaClass().getDynaProperty(predicate);
-    final boolean isList = dynaProperty.getType().equals(ArrayList.class);
-    if (!isList) {
-    newInstance.set(predicate, value);
-    } else {
-    List props = (List) newInstance.get(predicate);
-    if (props == null) {
-    props = new ArrayList<String>();
-    newInstance.set(predicate, props);
-    }
-    props.add(value);
-    }
-     */
     
 
 }

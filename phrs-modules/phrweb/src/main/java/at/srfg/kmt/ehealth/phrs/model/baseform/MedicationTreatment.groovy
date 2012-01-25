@@ -7,7 +7,8 @@ import com.google.code.morphia.annotations.Property
 
 @Entity
 public class  MedicationTreatment extends CommonModelProps{
-
+        //only for external EHR records
+        String productCode
 	//Boolean useMultipleTreatments
 	/**
 	 * associate with Risk or other
