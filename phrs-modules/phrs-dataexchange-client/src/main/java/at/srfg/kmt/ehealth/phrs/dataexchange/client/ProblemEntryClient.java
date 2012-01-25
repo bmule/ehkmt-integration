@@ -354,4 +354,8 @@ public final class ProblemEntryClient {
 
         this.creator = creator;
     }
+    
+    public String getCreator() {
+        return creator;
+    }
 }
