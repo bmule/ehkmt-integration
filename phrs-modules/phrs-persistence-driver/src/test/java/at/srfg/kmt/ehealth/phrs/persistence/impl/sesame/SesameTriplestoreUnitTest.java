@@ -436,6 +436,17 @@ public class SesameTriplestoreUnitTest {
         // here a NullPointerExcpetion raises
         triplestore.delete(SUBJECT, PREDICATE, VALUE, null);
     }
+    
+    @Test(expected = NullPointerException.class)
+    public void deleteNodesWithNullSubject() throws TripleException {
+        triplestore.delete(null, PREDICATE);
+    }
+
+    @Test(expected = TripleException .class)
+    public void deleteNodesWithWrongSubject() throws TripleException {
+        final String wrongSubject = "!@SW@E@#";
+        triplestore.delete(wrongSubject, PREDICATE);
+    }
 
     /**
      * Tries to delete a triple with a wrong(non URI) subject, this will produce
