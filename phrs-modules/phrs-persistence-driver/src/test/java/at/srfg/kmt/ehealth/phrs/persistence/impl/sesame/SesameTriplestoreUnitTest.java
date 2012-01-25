@@ -8,20 +8,15 @@
 package at.srfg.kmt.ehealth.phrs.persistence.impl.sesame;
 
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import static org.junit.Assert.*;
-import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.After;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.After;
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
@@ -314,13 +309,161 @@ public class SesameTriplestoreUnitTest {
         assertFalse(exists);
     }
 
+    /**
+     * Tries to persist a triple with a null subject, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void addNodeWithValueSubject() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.persist(null, PREDICATE, VALUE, LITERAL);
+    }
+
+    /**
+     * Tries to persist a triple with a null predicate, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
     @Test(expected = NullPointerException.class)
     public void addNodeWithNullPredicate() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.persist(SUBJECT, null, VALUE, LITERAL);
+    }
+
+    /**
+     * Tries to persist a triple with a null value, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void addNodeWithNullValue() throws TripleException {
+        // here a NullPointerExcpetion raises
         triplestore.persist(SUBJECT, PREDICATE, null, LITERAL);
     }
 
+    /**
+     * Tries to persist a triple with a null value, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void addNodeWithNullValueType() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.persist(SUBJECT, PREDICATE, VALUE, null);
+    }
+
+    /**
+     * Tries to persist a triple with a wrong(non URI) subject, this will
+     * produce a TripleException pointer exception.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
     @Test(expected = TripleException.class)
     public void addNodeWithWrongSubject() throws TripleException {
-        triplestore.persist("!@SW@E@#", PREDICATE, VALUE, LITERAL);
+        final String wrongSubject = "!@SW@E@#";
+
+        try {
+            // here a TripleException raises    
+            triplestore.persist(wrongSubject, PREDICATE, VALUE, LITERAL);
+        } catch (TripleException exception) {
+            // the exception caries the wrong triple informarion
+            final String subject = exception.getSubject();
+            assertEquals(wrongSubject, subject);
+
+            final String predicate = exception.getPredicate();
+
+            assertEquals(PREDICATE, predicate);
+
+            final String value = exception.getValue();
+            assertEquals(VALUE, value);
+
+            final ValueType valueType = exception.getValueType();
+            assertEquals(LITERAL, valueType);
+
+            throw exception;
+        }
+    }
+
+    /**
+     * Tries to delete a triple with a null subject, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void deleteNodeWithValueSubject() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.delete(null, PREDICATE, VALUE, LITERAL);
+    }
+
+    /**
+     * Tries to delete a triple with a null predicate, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void deleteNodeWithNullPredicate() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.delete(SUBJECT, null, VALUE, LITERAL);
+    }
+
+    /**
+     * Tries to delete a triple with a null value, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void deleteNodeWithNullValue() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.delete(SUBJECT, PREDICATE, null, LITERAL);
+    }
+
+    /**
+     * Tries to delete a triple with a null value, this will produce a
+     * NullPointerException.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = NullPointerException.class)
+    public void deleteNodeWithNullValueType() throws TripleException {
+        // here a NullPointerExcpetion raises
+        triplestore.delete(SUBJECT, PREDICATE, VALUE, null);
+    }
+
+    /**
+     * Tries to delete a triple with a wrong(non URI) subject, this will produce
+     * a TripleException pointer exception.
+     *
+     * @throws TripleException if this error occurs then this test fails.
+     */
+    @Test(expected = TripleException.class)
+    public void deleteNodeWithWrongSubject() throws TripleException {
+        final String wrongSubject = "!@SW@E@#";
+        try {
+            triplestore.delete(wrongSubject, PREDICATE, VALUE, LITERAL);
+        } catch (TripleException exception) {
+            // the exception caries the wrong triple informarion
+            final String subject = exception.getSubject();
+            assertEquals(wrongSubject, subject);
+
+            final String predicate = exception.getPredicate();
+
+            assertEquals(PREDICATE, predicate);
+
+            final String value = exception.getValue();
+            assertEquals(VALUE, value);
+
+            final ValueType valueType = exception.getValueType();
+            assertEquals(LITERAL, valueType);
+
+            throw exception;
+        }
     }
 }

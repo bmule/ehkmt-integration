@@ -702,10 +702,51 @@ public class SesameTriplestore
 
     @Override
     public void delete(String subject, String predicate, String value, ValueType valueType) throws TripleException {
+
+        final Object[] toLog = {subject, predicate, value, valueType};
+        LOGGER.debug("Tries to delete Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
+        if (subject == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The subject argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (predicate == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The predicate argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (value == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The value argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         try {
-            final Statement statement = 
+            final Statement statement =
                     getStatement(subject, predicate, value, valueType);
             connection.remove(statement);
+        } catch (IllegalArgumentException exception) {
+            LOGGER.error(exception.getLocalizedMessage(), exception);
+            final TripleException tripleException =
+                    new TripleException();
+            tripleException.setSubject(subject);
+            tripleException.setPredicate(predicate);
+            tripleException.setValue(value);
+            tripleException.setValueType(valueType);
+            throw tripleException;
         } catch (RepositoryException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             final TripleException tripleException =
@@ -720,6 +761,14 @@ public class SesameTriplestore
 
     @Override
     public void delete(String subject, String predicate) throws TripleException {
+
+        if (subject == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The subject argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         final URI subjectURI = valueFactory.createURI(subject);
         final URI predicateURI = predicate == null ? null : valueFactory.createURI(predicate);
         try {
