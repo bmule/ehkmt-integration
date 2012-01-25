@@ -702,8 +702,9 @@ public class SesameTriplestore
 
     @Override
     public void delete(String subject, String predicate, String value, ValueType valueType) throws TripleException {
-        final Statement statement = getStatement(subject, predicate, value, valueType);
         try {
+            final Statement statement = 
+                    getStatement(subject, predicate, value, valueType);
             connection.remove(statement);
         } catch (RepositoryException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
