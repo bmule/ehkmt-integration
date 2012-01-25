@@ -768,9 +768,23 @@ public class SesameTriplestore
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+        
+        final URI subjectURI;
+        final URI predicateURI;
+        try {
+            subjectURI  = valueFactory.createURI(subject);
+            predicateURI = predicate == null 
+                ? null 
+                : valueFactory.createURI(predicate);
 
-        final URI subjectURI = valueFactory.createURI(subject);
-        final URI predicateURI = predicate == null ? null : valueFactory.createURI(predicate);
+        } catch (IllegalArgumentException exception) {
+                        LOGGER.error(exception.getLocalizedMessage(), exception);
+            final TripleException tripleException = new TripleException();
+            tripleException.setSubject(subject);
+            tripleException.setPredicate(predicate);
+            throw tripleException;
+        }
+
         try {
             final RepositoryResult<Statement> statements =
                     connection.getStatements(subjectURI, predicateURI, null, false);
