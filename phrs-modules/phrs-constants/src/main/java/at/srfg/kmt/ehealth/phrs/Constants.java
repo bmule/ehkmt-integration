@@ -599,6 +599,8 @@ public class Constants {
     public static final String HL7_DETERMINER_CODE = 
             ICARDEA_HL7V3_NS + "#determinerCode";
 
+    public static String EXTERN = 
+            "http://www.icardea.at/phrs/types/1.0/ExternCreator";
     
     /**
      * Used to load the default values for the constants - if this is required.
@@ -624,4 +626,6 @@ public class Constants {
 
         return result.toString();
     }
+    
+    
 }
