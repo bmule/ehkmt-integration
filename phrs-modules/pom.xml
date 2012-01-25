@@ -77,7 +77,7 @@
         <module>phrs-soap-pcc09ws</module>
         <module>phrs-soap-pcc10ws</module>
         <module>phrweb</module> 
-<!--        <module>phrs-message-dispatcher</module>-->
+        <module>phrs-message-dispatcher</module>
   </modules>
 
 
