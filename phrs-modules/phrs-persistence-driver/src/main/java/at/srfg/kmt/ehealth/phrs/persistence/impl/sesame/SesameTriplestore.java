@@ -8,15 +8,8 @@
 package at.srfg.kmt.ehealth.phrs.persistence.impl.sesame;
 
 
-import at.srfg.kmt.ehealth.phrs.persistence.api.*;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
-import at.srfg.kmt.ehealth.phrs.persistence.api.PathElement;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,12 +24,11 @@ import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 import org.openrdf.model.ValueFactory;
-import org.openrdf.query.MalformedQueryException;
-import org.openrdf.query.QueryEvaluationException;
-import org.openrdf.query.QueryLanguage;
-import org.openrdf.query.TupleQuery;
-import org.openrdf.query.TupleQueryResult;
-import org.openrdf.repository.*;
+import org.openrdf.query.*;
+import org.openrdf.repository.Repository;
+import org.openrdf.repository.RepositoryConnection;
+import org.openrdf.repository.RepositoryException;
+import org.openrdf.repository.RepositoryResult;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
@@ -51,7 +43,9 @@ import org.slf4j.LoggerFactory;
  */
 public class SesameTriplestore
         implements GenericTriplestore, GenericTriplestoreLifecycle {
+
     public static final String TEMP_DIR = "${TEMP_DIR}";
+
     public static final String HOME_DIR = "${HOME_DIR}";
 
     private static final String DEFAULT_FILE_DUMP = getDefaultDumpDirectory();
@@ -63,24 +57,22 @@ public class SesameTriplestore
     private final List<Runnable> postconst;
 
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore</code>..
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore</code>..
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(SesameTriplestore.class);
 
     /**
-     * Builds a <code>SesameTriplestore</code> instance using the default 
-     * configuration. The default configuration implies :
-     * <ul>
-     * <li> The triplestore is a memory seal
-     * <li> The dump file for this memory sail is defined with the 
-     * <code>DEFAULT_FILE_DUMP</code> constant.
-     * </ul>
-     * 
+     * Builds a
+     * <code>SesameTriplestore</code> instance using the default configuration.
+     * The default configuration implies : <ul> <li> The triplestore is a memory
+     * seal <li> The dump file for this memory sail is defined with the
+     * <code>DEFAULT_FILE_DUMP</code> constant. </ul>
+     *
      * @throws GenericRepositoryException by any (triplestore) repository
-     * related  exception.
+     * related exception.
      * @see #DEFAULT_FILE_DUMP
      * @see #getDefaultDumpDirectory()
      */
@@ -118,7 +110,7 @@ public class SesameTriplestore
     }
 
     /**
-     * 
+     *
      */
     private void injectConnection() {
         for (Runnable r : postconst) {
@@ -185,7 +177,7 @@ public class SesameTriplestore
                 : configuration.getString("memorysail.filedump") == null
                 ? DEFAULT_FILE_DUMP
                 : configuration.getString("memorysail.filedump");
-        
+
         final String dumpDirStr = solveVars(confDataDirStr);
         LOGGER.debug("The actual data dump directory is {}", dumpDirStr);
 
@@ -202,20 +194,20 @@ public class SesameTriplestore
     }
 
     /**
-     * 
+     *
      * @param input
-     * @return 
+     * @return
      */
     private String solveVars(String input) {
         if (!input.startsWith(TEMP_DIR) && !input.startsWith(HOME_DIR)) {
             return input;
         }
-        
+
         final StringBuilder in = new StringBuilder(input);
         in.delete(0, 12);
-        
+
         final StringBuilder result = new StringBuilder();
-        final String dir = input.startsWith(TEMP_DIR) 
+        final String dir = input.startsWith(TEMP_DIR)
                 ? System.getProperty("java.io.tmpdir")
                 : System.getProperty("user.home");
 
@@ -224,20 +216,73 @@ public class SesameTriplestore
             result.append(File.separator);
         }
         result.append(in);
-        
+
 
         return result.toString();
     }
 
+    /**
+     * Persists the relation between the a subject, its predicate and the
+     * predicate value.
+     *
+     * @param subject the resources (the subject), it must be an URI and it can
+     * not be null.
+     * @param predicate the predicate for the given resource, it can not be
+     * null.
+     * @param value the value for the predicate for the given resource, it can
+     * not be null.
+     * @param valueType the value type, it can not be null.
+     * @throws TripleException by any triplestore related exception.
+     * @throws NullPointerException if and of the algorithms are null.
+     */
     @Override
     public void persist(String subject, String predicate, String value, ValueType valueType)
             throws TripleException {
 
-        final Statement statement = getStatement(subject, predicate, value, valueType);
+        final Object[] toLog = {subject, predicate, value, valueType};
+        LOGGER.debug("Tries to persists Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
+        if (subject == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The subject argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (predicate == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The predicate argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (value == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The value argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         try {
+            final Statement statement = getStatement(subject, predicate, value, valueType);
             connection.add(statement);
             //connection.add(subjectURI,predicateURI,val);
+        } catch (AssertionError repException) {
+            LOGGER.error(repException.getMessage(), repException);
+            final TripleException tripleException =
+                    new TripleException(repException);
+            tripleException.setSubject(subject);
+            tripleException.setPredicate(predicate);
+            tripleException.setValue(value);
+            tripleException.setValueType(valueType);
+            throw tripleException;
         } catch (Exception repException) {
             LOGGER.error(repException.getMessage(), repException);
             final TripleException tripleException =
@@ -248,6 +293,10 @@ public class SesameTriplestore
             tripleException.setValueType(valueType);
             throw tripleException;
         }
+
+        final Object[] toLogFinal = {subject, predicate, value, valueType};
+        LOGGER.debug("The subject : {}, predicate : {}, value {} and value type {} was persisted", toLog);
+
     }
 
     private Statement getStatement(String subject, String predicate, String value,
@@ -286,17 +335,64 @@ public class SesameTriplestore
         return result;
     }
 
+    /**
+     * Persists the relation between the a given subject, its predicate and the
+     * predicate value.
+     *
+     * @param predicate the predicate for the given resource, it can not be
+     * null.
+     * @param value the value for the predicate for the given resource, it can
+     * not be null.
+     * @param valueType the value type, it can not be null.
+     * @throws TripleException by any triplestore related exception.
+     * @throws NullPointerException if and of the algorithms are null.
+     */
     @Override
     public String persist(String predicate, String value, ValueType valueType) throws TripleException {
+
+        final Object[] toLog = {predicate, value, valueType};
+        LOGGER.debug("Tries to persists Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
+        if (predicate == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The predicate argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (value == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The value argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         final URI subjectURI = getUUIDURI(Constants.ICARDEA_NS);
         final URI predicateURI = valueFactory.createURI(predicate);
         final Value val = getValue(value, valueType);
-        final Statement statement =
-                valueFactory.createStatement(subjectURI, predicateURI, val);
 
         try {
+            final Statement statement =
+                    valueFactory.createStatement(subjectURI, predicateURI, val);
             connection.add(statement);
             //connection.add(subjectURI,predicateURI,val);
+        } catch (AssertionError repException) {
+            LOGGER.error(repException.getMessage(), repException);
+            final TripleException tripleException =
+                    new TripleException(repException);
+            tripleException.setSubject(subjectURI.toString());
+            tripleException.setPredicate(predicate);
+            tripleException.setValue(value);
+            tripleException.setValueType(valueType);
+            throw tripleException;
+
         } catch (Exception repException) {
             LOGGER.error(repException.getMessage(), repException);
             final TripleException tripleException =
@@ -308,7 +404,11 @@ public class SesameTriplestore
             throw tripleException;
         }
 
-        return subjectURI.stringValue();
+        final String result = subjectURI.stringValue();
+
+        final Object[] toLogFinal = {predicate, value, valueType, result};
+        LOGGER.debug("The subject : {}, predicate : {}, value {} and value type {} was persisted unde the subject : {}", toLogFinal);
+        return result;
     }
 
     private URI getUUIDURI(String base) {
@@ -547,7 +647,7 @@ public class SesameTriplestore
         try {
             final RepositoryResult<Statement> statements =
                     connection.getStatements(subjectURI, predicateURI, null, true);
-            final StatementValueIterableResult result = 
+            final StatementValueIterableResult result =
                     new StatementValueIterableResult(statements);
             return result;
 
@@ -602,9 +702,51 @@ public class SesameTriplestore
 
     @Override
     public void delete(String subject, String predicate, String value, ValueType valueType) throws TripleException {
-        final Statement statement = getStatement(subject, predicate, value, valueType);
+
+        final Object[] toLog = {subject, predicate, value, valueType};
+        LOGGER.debug("Tries to delete Subject : {}, predicate : {}, value {} and value type {}", toLog);
+
+        if (subject == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The subject argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (predicate == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The predicate argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (value == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The value argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        if (valueType == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The valueType argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         try {
+            final Statement statement =
+                    getStatement(subject, predicate, value, valueType);
             connection.remove(statement);
+        } catch (IllegalArgumentException exception) {
+            LOGGER.error(exception.getLocalizedMessage(), exception);
+            final TripleException tripleException =
+                    new TripleException();
+            tripleException.setSubject(subject);
+            tripleException.setPredicate(predicate);
+            tripleException.setValue(value);
+            tripleException.setValueType(valueType);
+            throw tripleException;
         } catch (RepositoryException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             final TripleException tripleException =
@@ -619,6 +761,14 @@ public class SesameTriplestore
 
     @Override
     public void delete(String subject, String predicate) throws TripleException {
+
+        if (subject == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The subject argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
         final URI subjectURI = valueFactory.createURI(subject);
         final URI predicateURI = predicate == null ? null : valueFactory.createURI(predicate);
         try {
@@ -653,14 +803,14 @@ public class SesameTriplestore
 
     /**
      * Returns the default file dump directory path. For this implementation
-     * this path point to : 
-     * User Home Directory (operating system dependent)/.generictriplestore/sesame
-     * 
+     * this path point to : User Home Directory (operating system
+     * dependent)/.generictriplestore/sesame
+     *
      * @return the default file dump directory path.
      */
     private static String getDefaultDumpDirectory() {
         final String dir = System.getProperty("user.home");
-        
+
         final StringBuilder resut = new StringBuilder(dir);
         if (!dir.endsWith(File.separator)) {
             resut.append(File.separator);
