@@ -47,6 +47,7 @@ public final class DispatcherImplExample {
      * @param args the command line arguments array, no arguments are required.
      */
     public static void main(String... args) {
+        
         final DispatcherImpl dispatcher = new DispatcherImpl();
         final Runnable task = new Runnable() {
 
@@ -54,6 +55,23 @@ public final class DispatcherImplExample {
             public void run() {
                 System.out.println("Here it goes");
             }
+        };
+        dispatcher.dispatch(task);
+    }
+    
+    public static void myMethod(final String... args) {
+        
+        final DispatcherImpl dispatcher = new DispatcherImpl();
+        final Runnable task = new Runnable() {
+
+            @Override
+            public void run() {
+                System.out.println("Here it goes");
+                for (String s : args) {
+                    System.out.println("--" + s);
+                }
+            }
+            
         };
         dispatcher.dispatch(task);
     }
