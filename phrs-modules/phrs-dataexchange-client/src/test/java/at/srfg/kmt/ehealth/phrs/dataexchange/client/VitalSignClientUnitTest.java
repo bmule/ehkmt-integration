@@ -9,18 +9,12 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
-import static org.junit.Assert.*;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
