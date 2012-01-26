@@ -52,6 +52,12 @@
         <icadyCodeSystem:codeSystemName>IHEActCode</icadyCodeSystem:codeSystemName>
     </rdf:Description>
 
+    <!--HL7 RouteOfAdministration Vocabulary-->
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration">
+        <icadyCodeSystem:codeSystemCode>2.16.840.1.113883.5.112</icadyCodeSystem:codeSystemCode>
+        <icadyCodeSystem:codeSystemName>HL7 RouteOfAdministration Vocabulary</icadyCodeSystem:codeSystemName>
+    </rdf:Description>
+
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
         <skos:prefLabel>Milimeter Hg</skos:prefLabel>
@@ -93,6 +99,24 @@
         <skos:altLabel>pill</skos:altLabel>
     </rdf:Description>
 
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Hour">
+        <skos:prefLabel>Hour</skos:prefLabel>
+        <skos:notation>h</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Minute">
+        <skos:prefLabel>Minute</skos:prefLabel>
+        <skos:notation>min</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Second">
+        <skos:prefLabel>Second</skos:prefLabel>
+        <skos:notation>sec</skos:notation>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Day">
+        <skos:prefLabel>Day</skos:prefLabel>
+    </rdf:Description>
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Condition">
         <skos:prefLabel>Condition</skos:prefLabel>
@@ -193,10 +217,10 @@
         <skos:prefLabel>Systolic blood pressure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressureULMSCode">
-                <icadyCode:codeValue>C0871470</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressureLoincCode">
+                <icadyCode:codeValue>8480-6</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1394,10 +1418,10 @@
         <skos:prefLabel>Body height measure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasureULMSCode">
-                <icadyCode:codeValue>C0005890</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasureLoincCode">
+                <icadyCode:codeValue>8306-3</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1440,6 +1464,20 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeat">
+        <skos:prefLabel>Heart rate</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeatLoincCode">
+                <icadyCode:codeValue>8867-4</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformGardeningActivities">
         <skos:prefLabel>Does perform gardening activities</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
@@ -1780,10 +1818,10 @@
         <skos:prefLabel>Body weight</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeightULMSCode">
-                <icadyCode:codeValue>C0005910</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeightLoincCode">
+                <icadyCode:codeValue>3141-9</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -1944,10 +1982,10 @@
         <skos:prefLabel>Diastolic blood pressure</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressureULMSCode">
-                <icadyCode:codeValue>C0428883</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressureLoincCode">
+                <icadyCode:codeValue>8462-4</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -2331,12 +2369,12 @@
     </rdf:Description>
     
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
-        <skos:prefLabel>Oral administration of treatment</skos:prefLabel>
+        <skos:prefLabel>oral</skos:prefLabel>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministrationULMSCode">
-                <icadyCode:codeValue>C1273553</icadyCode:codeValue>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationVocabularyCode">
+                <icadyCode:codeValue>PO</icadyCode:codeValue>
                 <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration"/>
                 </icadyCode:codeSystem>
             </rdf:Description>
         </icadyCode:code>
@@ -2364,6 +2402,7 @@
         <rdfs:label xml:lang="en">HL7 Code</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The Code and Code System infromation used to unique identify an item</rdfs:comment>
     </rdf:Property>
@@ -2400,6 +2439,7 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">The Value</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ValueObject"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:comment xml:lang="en">The value for a measurement</rdfs:comment>
     </rdf:Property>
@@ -2408,6 +2448,7 @@
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
         <rdfs:label xml:lang="en">The Unit</rdfs:label>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ValueObject"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:comment xml:lang="en">The unit for the involved value (from a measurement)</rdfs:comment>
     </rdf:Property>
@@ -2472,7 +2513,7 @@
         <rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
     </rdfs:Class>
 
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#frequency">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#frequency">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -2480,7 +2521,7 @@
         <rdfs:comment xml:lang="en">The frequency for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#adminRoute">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#adminRoute">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -2488,7 +2529,7 @@
         <rdfs:comment xml:lang="en">The administration route for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosage">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#dosage">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -2496,7 +2537,7 @@
         <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosageValue">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#dosageValue">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
@@ -2504,7 +2545,7 @@
         <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#dosageUnit">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#dosageUnit">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
@@ -2512,10 +2553,18 @@
         <rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
     
-    <rdf:Property rdf:about="http://www.icardea.at/phrs/code#drugName">
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#drugName">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
         <rdfs:label xml:lang="en">The code system</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">The drug name for a singular HL7 V3 medication</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#drug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
         <rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
     </rdf:Property>
@@ -2549,4 +2598,88 @@
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
         <rdfs:comment xml:lang="en">The protocolId is the unique id in entire iCardea system</rdfs:comment>
     </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/MedicationFrequency">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">HL7 V3 Medication Frequency</rdfs:label>
+        <rdfs:comment xml:lang="en">Describes the relation between an event(e.g. noon) an offest (eg. 30 mis before) and a repeat.</rdfs:comment>
+    </rdfs:Class>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#event">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">event</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+        <rdfs:comment xml:lang="en">The event for a medication frequency (e.g. every noon)</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#offset">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">offset</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+        <rdfs:comment xml:lang="en">The offset for a medication frequency (e.g. 30 mins before noon)</rdfs:comment>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#repeat">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+        <rdfs:label xml:lang="en">repeat</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+        <rdfs:comment xml:lang="en">The repeat that can be apply on a medication(e.g. every 8 hours)</rdfs:comment>
+    </rdf:Property>
+
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/ValueObject">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">Value Object</rdfs:label>
+        <rdfs:comment xml:lang="en">It build the realtion between a value (numeric) and its unit(alfanumeric).</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedProduct">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3</rdfs:comment>
+    </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medication sign in a HL7 V3.</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#classCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+        <rdfs:comment xml:lang="en">The class code for a single Manufactured Product</rdfs:comment>
+    </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+    </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3.</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#determinerCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+        <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+    </rdf:Property>
+
+
+    
 </rdf:RDF>
