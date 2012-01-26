@@ -99,6 +99,10 @@
         <skos:altLabel>pill</skos:altLabel>
     </rdf:Description>
 
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Drops">
+        <skos:prefLabel>drops</skos:prefLabel>
+    </rdf:Description>
+
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Hour">
         <skos:prefLabel>Hour</skos:prefLabel>
         <skos:notation>h</skos:notation>
@@ -117,7 +121,7 @@
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Day">
         <skos:prefLabel>Day</skos:prefLabel>
     </rdf:Description>
-
+    
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Condition">
         <skos:prefLabel>Condition</skos:prefLabel>
         <skos:note>The result of an examination or inquiry.</skos:note>
@@ -361,8 +365,8 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicyleRiding">
-        <skos:prefLabel>Bicyle riding</skos:prefLabel>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicycleRiding">
+        <skos:prefLabel>Bicycle riding</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicyleRidingULMSCode">
@@ -1719,18 +1723,6 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Active">
-        <skos:prefLabel>Active</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/MedicationStatus</skos:related>
-        <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivePHRSCode">
-                <icadyCode:codeValue>S0016</icadyCode:codeValue>
-                <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
-                </icadyCode:codeSystem>
-            </rdf:Description>
-        </icadyCode:code>
-    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationStatus">
         <skos:prefLabel>Medication Status</skos:prefLabel>
         <icadyCode:code>
@@ -2679,7 +2671,7 @@
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
         <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
     </rdf:Property>
-
+    
 
     
 </rdf:RDF>

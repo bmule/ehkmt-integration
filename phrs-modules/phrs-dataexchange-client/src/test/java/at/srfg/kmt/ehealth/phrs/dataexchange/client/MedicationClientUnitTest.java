@@ -175,7 +175,7 @@ public class MedicationClientUnitTest {
                 "MyFreqency",
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                "pillURI",
+                Constants.PILL,
                 "MyDrug",
                 "MyDrugCode");
         assertNotNull(resourceURI);
@@ -188,7 +188,7 @@ public class MedicationClientUnitTest {
 
         // update the existentn dosage
         medicationClient.updateMedication(resourceURI,
-                Constants.PHRS_MEDICATION_DOSAGE,
+                Constants.HL7V3_DOSAGE,
                 newDosageURI);
 
         final Iterable<String> medicationURIForUser =
@@ -198,7 +198,7 @@ public class MedicationClientUnitTest {
         assertTrue(iterator.hasNext());
         final String medicationURI = iterator.next();
         final Iterable<String> dosageURIs =
-                triplestore.getForSubjectAndPredicate(medicationURI, Constants.PHRS_MEDICATION_DOSAGE);
+                triplestore.getForSubjectAndPredicate(medicationURI, Constants.HL7V3_DOSAGE);
         
         proveDosage(dosageURIs.iterator().next(), newDossageValue, newDosageUnit);
     }

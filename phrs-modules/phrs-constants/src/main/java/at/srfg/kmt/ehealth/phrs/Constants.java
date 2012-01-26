@@ -56,6 +56,9 @@ public class Constants {
     public static final String STATUS_SUSPENDED =
             ICARDEA_NS + "/instances/Suspended";
 
+    public static final String STATUS_ACTIVE =
+            ICARDEA_NS + "/instances/Active";
+
     public static final String CODE_NS = getICardeaResource("code");
 
     public static final String CODE = CODE_NS + "#code";
@@ -104,6 +107,11 @@ public class Constants {
      * This is an instance URI.
      */
     public static final String MILLIGRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Milligram";
+
+    /**
+     * This is an instance URI.
+     */
+    public static final String DROPS = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Drops";
 
     /**
      * This is an instance URI.
@@ -425,6 +433,10 @@ public class Constants {
     public static final String HL7V3_PALPITATION = ICARDEA_NS + "/instances/Palpitations";
 
     public static final String HL7V3_FATIQUE = ICARDEA_NS + "/instances/Fatigue-Symptom";
+
+    public static final String HL7V3_BICYCLE_RIDING = ICARDEA_NS + "/instances/BicycleRiding";
+
+    public static final String HL7V3_WALKING = ICARDEA_NS + "/instances/Walking";
 
     public static final String HL7V3_WEIGHT_INCREASED = ICARDEA_NS + "/instances/WeightIncreased";
 
