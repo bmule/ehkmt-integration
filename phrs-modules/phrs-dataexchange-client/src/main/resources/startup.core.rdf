@@ -1723,18 +1723,6 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Active">
-        <skos:prefLabel>Active</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/MedicationStatus</skos:related>
-        <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivePHRSCode">
-                <icadyCode:codeValue>S0016</icadyCode:codeValue>
-                <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
-                </icadyCode:codeSystem>
-            </rdf:Description>
-        </icadyCode:code>
-    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationStatus">
         <skos:prefLabel>Medication Status</skos:prefLabel>
         <icadyCode:code>
