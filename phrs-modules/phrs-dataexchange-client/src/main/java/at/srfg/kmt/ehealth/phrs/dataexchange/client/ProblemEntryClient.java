@@ -168,7 +168,7 @@ public final class ProblemEntryClient {
         triplestore.persist(subject,
                 HL7V3_CODE,
                 estabilishCode,
-                LITERAL);
+                RESOURCE);
 
         triplestore.persist(subject,
                 HL7V3_STATUS,
