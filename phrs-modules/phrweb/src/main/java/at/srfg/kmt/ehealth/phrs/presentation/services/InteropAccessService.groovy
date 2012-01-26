@@ -480,11 +480,16 @@ public class  InteropAccessService implements Serializable{
                             PHRS_MEDICATION_DOSAGE, 
                             newDosageURI);
                         
+//                        if((domain.getCreatorUri()!=null 
+//                            && (domain.getCreatorUri().equalsIgnoreCase(Constants.EXTERN)
+//                                 || domain.getCreatorUri().contains('at.srfg.'))
+//                            ) || (domain.getOriginStatus()!=null 
+//                                && domain.getOriginStatus().equalsIgnoreCase(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED))   ) {
+                                                                                                                   
                         //add this for any changes...if EHR record ignore change to 
-                        if((domain.getCreatorUri()!=null 
-                            && domain.getCreatorUri().equalsIgnoreCase(Constants.EXTERN)
-                            ) || (domain.getOriginStatus()!=null 
-                                && domain.getOriginStatus().equalsIgnoreCase(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED))   ) {
+                        if( domain.getOriginStatus() != null 
+                                && domain.getOriginStatus().equalsIgnoreCase(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED)   
+                            ) {              
                             // dont update    
                         } else {
                              //PHR born resource

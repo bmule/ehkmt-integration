@@ -25,6 +25,15 @@ public class DynaUtil {
         return DynaUtil.getProperty(bean, property, null);
     }
 
+    /**
+     * Get property value as String, if it is not a String, then it will return
+     * a null
+     *
+     * @param bean
+     * @param property
+     * @param defaultValue
+     * @return
+     */
     public static String getStringProperty(DynaBean bean, String property, String defaultValue) {
         String value = null;
         try {
@@ -33,7 +42,7 @@ public class DynaUtil {
                 value = (String) obj;
             }
         } catch (Exception e) {
-            System.out.println("common error object does not have property=" + property);
+            System.out.println("No dyna String (check Object property) property for: " + property);
         }
 
         if (value == null) {
@@ -44,16 +53,20 @@ public class DynaUtil {
 
     }
 
+    /**
+     *
+     * @param bean
+     * @param property
+     * @param defaultValue
+     * @return
+     */
     public static Object getProperty(DynaBean bean, String property, String defaultValue) {
         Object value = null;
         if (bean != null && property != null && property.length() > 0) {
             try {
-                Object obj = bean.get(property);
-                if (obj != null) {
-                    value = (String) obj;
-                }
+                value = bean.get(property);
             } catch (Exception e) {
-                System.out.println("common error object does not have property=" + property);
+                System.out.println("No dyna Object property for: " + property);
             }
         }
 
@@ -63,5 +76,65 @@ public class DynaUtil {
 
         return value;
 
+    }
+
+    /**
+     * Get as DynaBean, other if it is not a DynaBean, return null
+     *
+     * @param bean
+     * @param property
+     * @return
+     */
+    public static DynaBean getDynaBeanProperty(DynaBean bean, String property) {
+        DynaBean value = null;
+        if (bean != null && property != null && property.length() > 0) {
+            try {
+                Object obj = bean.get(property);
+                if (obj != null && obj instanceof DynaBean) {
+                    value = (DynaBean) obj;
+                }
+            } catch (Exception e) {
+                System.out.println("No dyna Object property for: " + property);
+            }
+        }
+
+        return value;
+
+    }
+
+    /**
+     * To get the value URI Example: DynaBean has "status" property which refers
+     * to a resource with a URI Often only for instance data
+     *
+     * @param bean
+     * @param property
+     * @param defaultValue
+     * @return
+     */
+    public static String getValueResourceUri(DynaBean bean, String property, String defaultValue) {
+        String value = null;
+        if (bean != null && property != null && property.length() > 0) {
+            try {
+                Object obj = bean.get(property);
+                if (obj != null && obj instanceof DynaBean) {
+                    DynaBean db = (DynaBean) obj;
+                    //resourceURI
+                    value = db.getDynaClass().getName();
+                }
+            } catch (Exception e) {
+                System.out.println("No dyna Object property for: " + property);
+            }
+        }
+
+        if (value == null) {
+            value = defaultValue;
+        }
+
+        return value;
+
+    }
+
+    public static String getValueResourceUri(DynaBean bean, String property) {
+        return getValueResourceUri(bean, property, null);
     }
 }

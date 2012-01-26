@@ -25,6 +25,7 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
+import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -41,17 +42,15 @@ import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropTermTransformer;
+import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
 import org.junit.*;
-
-/**
- * Used to prove the functionality for the
- * <code>MedicationClient</code>.
- *
- * @author Mihai
- * @version 0.1
- * @since 0.1
- * @see MedicationClient
+/*
+ The protocol id for the test patient is 191. 
+ * It is available both the in the SALK installation 
+ * and in the "public" test server  
+ * 
  */
+
 public class MedicationTreatmentInteropUnitTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MedicationTreatmentInteropUnitTest.class.getName());
@@ -123,22 +122,6 @@ public class MedicationTreatmentInteropUnitTest {
         //addNewMessagesEhr();
     }
 
-    /**
-     * Runs before any test from this suite and prepare the environment for the
-     * next running test.
-     *
-     * @throws GenericRepositoryException if this occurs then the test
-     * environment may be wrong set.
-     *
-     * @Before public void initSuite() throws GenericRepositoryException,
-     * TripleException, IllegalAccessException, InstantiationException { //final
-     * TriplestoreConnectionFactory connectionFactory = //
-     * TriplestoreConnectionFactory.getInstance(); //triplestore =
-     * connectionFactory.getTriplestore(); //triplestore =
-     * PhrsStoreClient.getInstance(triplestore).getTripleStore(); //iaccess =
-     * PhrsStoreClient.getInstance(triplestore).getInteropService();
-     * //connectionFactory.getTriplestore() }
-     */
     @After
     public void tearDown() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, Exception {
         //System.out.println("shutdownSuite");
@@ -170,18 +153,16 @@ public class MedicationTreatmentInteropUnitTest {
         }
         //System.out.println("end    shutdownSuite");
     }
-    /*
-     * final String toString = DynaBeanUtil.toString(dynaBean);
-     * System.out.println(toString);
-     */
-
+ 
     /**
      * Add 2 medications not yet known by PHR portal
      *
      * @throws TripleException
      */// GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException
-    public void addNewMessagesEhr(String label1, String label2, String phrResourceUri) throws TripleException, IllegalAccessException, InstantiationException {
 
+    public void addNewMessagesEhr(String label1, String label2, String phrResourceUri) throws TripleException, IllegalAccessException, InstantiationException {
+        medicationClient.setCreator(Constants.EXTERN);//simulate extern
+ 
         final String resourceURI_1 =
                 medicationClient.addMedicationSign(
                 USER,
@@ -193,8 +174,9 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 DOSE_UNITS,//"pillURI",
-                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug_" + label1,
-                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug_" + label1
+                 //FIXXME does not create a name code node
+                );
 
         final String resourceURI_2 =
                 medicationClient.addMedicationSign(
@@ -207,8 +189,9 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "2",
                 DOSE_UNITS,//"pillURI",
-                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug " + label2,
-                InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : "EHRDrug " + label2
+                //FIXXME does not create a name code node
+                );
 
         final Iterable<String> uris = medicationClient.getMedicationURIsForUser(USER);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
@@ -222,9 +205,7 @@ public class MedicationTreatmentInteropUnitTest {
             final String toString = DynaBeanUtil.toString(dynaBean);
             System.out.println(toString);
         }
-        //assertNotNull(resourceURI_1);
-        //assertNotNull(resourceURI_2);
-        //return resourceURI;
+    
 
     }
 
@@ -243,8 +224,7 @@ public class MedicationTreatmentInteropUnitTest {
                     Constants.HL7V3_ORAL_ADMINISTRATION,
                     "1",
                     DOSE_UNITS,
-                    "testaddDrug_1",
-                    InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+                    "testaddDrug_1");//FIXXME does not create a code node!
 
             assertNotNull(resourceURI_1);
 
@@ -259,13 +239,11 @@ public class MedicationTreatmentInteropUnitTest {
                     Constants.HL7V3_ORAL_ADMINISTRATION,
                     "12",
                     DOSE_UNITS,
-                    "testaddDrug 2",
-                    InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+                    "testaddDrug 2");//FIXXME does not create a code node!
 
             assertNotNull(resourceURI_2);
 
             final Iterable<String> uris = medicationClient.getMedicationURIsForUser(USER);
-
 
             final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
             final Set<DynaBean> beans = new HashSet<DynaBean>();
@@ -296,7 +274,7 @@ public class MedicationTreatmentInteropUnitTest {
             e.printStackTrace();
             fail("java.lang.Error");
         }
-        //
+       
         //assertNotNull(resourceURI_1);
         //assertNotNull(resourceURI_2);
 
@@ -338,6 +316,12 @@ public class MedicationTreatmentInteropUnitTest {
 
         return res;
 
+    }
+    @Test
+    public void testClientCreator(){
+        String creator= this.medicationClient.getCreator();
+        assertEquals("Error Expect PHR creator! ",PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR,creator);
+        
     }
 
 //	@Test
@@ -390,6 +374,7 @@ public class MedicationTreatmentInteropUnitTest {
     public void testFindInteropMessagesForUser() throws Exception {
 
         addNewMessagesEhr("1", "2", "123-resuri-567");
+        
         String phrClass = PHRS_RESOURCE_CLASS;
         String user = USER;
         System.out.println("testFindInteropMessagesForUser");
@@ -423,18 +408,13 @@ public class MedicationTreatmentInteropUnitTest {
         return count;
     }
 
-    public static void showDynaProperties(DynaBean dynaBean) {
-
-        DynaBeanUtil.toString(dynaBean);
-
-
-    }
 
     @Test
-    public void testSendInteropMessages() {
+    public void testSendInteropMessageMedicationClient() {
         System.out.println("testSendInteropMessages");
 
         Map<String, String> uris = iaccess.sendMessages(phrMed_1);
+        
         assertNotNull("Messages sent but no message URIs returned!", uris);
 
         showMap("message uris by type", uris);
@@ -445,26 +425,203 @@ public class MedicationTreatmentInteropUnitTest {
 
 
         String user = USER;
-        /*
-         * Iterable<String> results = iaccess.findInteropMessagesForUser(user,
-         * phrClass); int count = 0; for (String result : results) { count++;
-         * System.out.println("all found messages count" + count + " uri=" +
-         * result);
-         *
-         * }
-         * assertTrue("No messages found by interop for user and resource type",
-         * count > 0);
-         */
-
+   
         String interopRef = iaccess.findMessageWithReference(
                 user, phrMed_1.getOwnerUri(), PHRS_RESOURCE_CLASS, null);
 
-        //assertNotNull("cannot find message with note reference to resource Uri ="+phrMed_1.getResourceUri(),interopRef);
-        //send message
-        //know resourceUri
-        //find it
+        assertNotNull("cannot find message with note reference to resource Uri ="+phrMed_1.getResourceUri(),interopRef);
+
+    }
+    
+    @Test
+    public void testSendInteropMessageMedicationClientViaInteropDirectCode() {
+        String messageResourceUri = null;
+        try {
+            MedicationTreatment resource = new MedicationTreatment();
+            String resourceType = resource.getClass().getCanonicalName();
+            resource.setOwnerUri(USER);
+            resource.setCreatorUri(USER);
+            resource.setBeginDate(new Date());
+            //res.setEndDate(new Date());
+            resource.setLabel("phr user drug test 1 ");
+
+            resource.setStatus(Constants.STATUS_RUNNING);
+            resource.setReasonCode(MED_REASON);
+
+            //res.setReasonCode(value);
+            //res.setPrescribedByName("");
+            MedicationTreatmentMatrix mtm = new MedicationTreatmentMatrix();
+
+            mtm.setDosage(3.0d);//double
+
+            mtm.setDosageQuantity("5");
+            mtm.setDosageUnits(DOSE_UNITS);
+
+            mtm.setDosageInterval(DOSE_INTERVAL);
+            mtm.setDosageTimeOfDay(DOSE_TIME_OF_DAY);
+
+            resource.setTreatmentMatrix(mtm);
+            //save simulation
+            resource.setResourceUri("theResourceUri_" + UUID.randomUUID().toString());
+            resource.setCreateDate(new Date());
+            resource.setModifyDate(resource.getCreateDate());
+//------------------------------
+//common metadata
+//
+            BasePhrsModel res = (BasePhrsModel) resource;
+            String owner = res.getOwnerUri();
+
+            String status = this.transformStatus(res.getStatus());
+            status = status != null ? status : Constants.STATUS_RUNNING;
+
+            String categoryCode = this.transformCategory(res.getCategory(), resourceType);
+            categoryCode = categoryCode != null ? categoryCode : null;
+
+            String valueCode = this.transformCode(res.getCode());
+            valueCode = valueCode != null ? valueCode : null;
+
+            String dateStringStart = transformDate(res.getBeginDate(), res.getEndDate());
+            dateStringStart = dateStringStart != null ? dateStringStart : null;
+
+            String dateStringEnd = transformDate(res.getEndDate(), (Date) null);
+            dateStringEnd = dateStringEnd != null ? dateStringEnd : null;
+
+// -----------------------------
+//domain data
+//           
+            MedicationTreatment domain = (MedicationTreatment) resource;
+
+            //res.note is by default not sharable
+            /**
+             * Use the note to tag this record. Be sure to write note to
+             * multiple messages such as Vital signs with separate messages for
+             * Body weight, height, sys, diastolic
+             *
+             */
+            //note cannot be null
+            String referenceNote = null;
+            if (resource.getResourceUri() != null) {
+                referenceNote = InteropAccessService.REFERENCE_NOTE_PREFIX + res.getResourceUri(); //'' //res.note is by default not sharable
+            } else {
+                referenceNote = "error";
+            }
+
+            String name = domain.getLabel() != null ? domain.getLabel() : domain.getCode();
+
+            String freqCode = domain.getFrequencyCode();
+            //String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? domain.getTreatmentMatrix().getDosage().toString() : "0";
+            String dosageQuantity = domain.getTreatmentMatrix().getDosageQuantity();
+            String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? domain.getTreatmentMatrix().getDosage().toString() : "0";
+
+            String doseUnits = domain.getTreatmentMatrix().getDosageUnits();
+            String doseInterval = domain.getTreatmentMatrix().getDosageInterval();
+            String doseTimeOfDay = domain.getTreatmentMatrix().getDosageTimeOfDay();
+
+            String adminRoute = domain.getTreatmentMatrix().getAdminRoute();
+            adminRoute = tranformMedicationAdminRoute(adminRoute, doseUnits);
+            assertNotNull(PhrsStoreClient.getInstance().getInteropClients().getMedicationClient());
+
+            MedicationClient medicationclient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
+
+            String messageId = medicationclient.addMedicationSign(
+                    owner,
+                    referenceNote,
+                    status,
+                    dateStringStart,
+                    dateStringEnd,//dateStringEnd,
+                    medicationclient.buildNullFrequency(),//doseInterval, frequency,
+                    adminRoute,
+                    dosageQuantity,//dosageValue,
+                    doseUnits,
+                    name);
+            //InteropAccessService.DRUG_CODE_DEFAULT_PHR);
+            messageResourceUri = messageId;
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+
+        } catch (TripleException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        assertNotNull("messageResourceUri is null,interop message failed", messageResourceUri);
+    }
+    
+
+    public void createManufactureName(String subjectUri, String drugName, String drugCode) {
+        MedicationClient medicationClient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
+        /*
+         * triplestore.persist(subject,
+         * "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
+         * buildManufacturedProduct(drugName, drugCode), RESOURCE);
+         */
+        String newDrugProductUri = null;
+        try {
+            newDrugProductUri = medicationClient.buildManufacturedProduct(drugName, drugCode);
+        } catch (TripleException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
+        assertNotNull(newDrugProductUri);
+
+        try {
+            // update 
+            medicationClient.updateMedication(
+                    subjectUri,
+                    PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI,
+                    newDrugProductUri);
+        } catch (TripleException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /*
+     * medicationClient.updateMedication(resourceURI,
+     * Constants.PHRS_MEDICATION_DOSAGE, newDosageURI);
+     */
+
+    public String transformStatus(String status) {
+        String out = status;
+
+        return out;
+    }
+
+    public String transformCode(String code) {
+        String out = code;
+
+        return out;
+    }
+
+    public String transformCategory(String category, String type) {
+        String out = category;
+
+        return out;
+    }
+
+    public String transformDate(Date date, Date defaultDate) {
+        Date theDate = date;
+        if (theDate == null) {
+            if (defaultDate != null) {
+                theDate = defaultDate;
+            }
+        }
+        if (theDate != null) {
+
+            return HealthyUtils.formatDate(theDate, (String) null, InteropAccessService.DATE_PATTERN_INTEROP_DATE_TIME);
+        }
+        return null;
+    }
+
+    public String tranformMedicationAdminRoute(String adminRoute, String doseUnits) {
+        String out = adminRoute;
+        out = Constants.HL7V3_ORAL_ADMINISTRATION;
+
+
+        return out;
     }
 //    @Test 
 //    public void testSendInteropMessagesDirectCode(){
@@ -529,6 +686,7 @@ public class MedicationTreatmentInteropUnitTest {
                             try {
                                 referenceNote = DynaUtil.getStringProperty(dynaBean, Constants.SKOS_NOTE);
                             } catch (Exception e) {
+                                System.out.println("referenceNote");
                                 e.printStackTrace();
                                 // LOGGER.error(' message error, interop ownerUri= '+ownerUri+" messageResourceUri="+messageResourceUri, e)
                             }
@@ -544,7 +702,7 @@ public class MedicationTreatmentInteropUnitTest {
                             }
 
                             if (isNewMessage) {
-                                Object repositoryObject = iaccess.transformInteropMessage(ownerUri, phrsClass, dynaBean, messageResourceUri);
+                                Object repositoryObject = transformInteropMessage(ownerUri, phrsClass, dynaBean, messageResourceUri);
                                 if (repositoryObject != null) {
                                     list.add(messageResourceUri);
                                 }
@@ -607,16 +765,17 @@ public class MedicationTreatmentInteropUnitTest {
 
                     MedicationTreatment med = new MedicationTreatment();
                     med.setOwnerUri(messageOwner);
+                    
                     med.setCreatorUri(DynaUtil.getStringProperty(dynabean, Constants.CREATOR, "EHR"));//FIXXME 
 
-                    String stdStatus = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_STATUS, null);//TODO default
+                    String stdStatus = DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_STATUS, null);//TODO default
 
                     med.setStatusStandard(stdStatus); //med.status = 'medicationSummary_medicationStatus_true'
                     //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)
 
                     med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS));
-
-                    med.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE, null));//TODO is this drug code?
+                    //there is no code here, but it is likely a dynabean
+                    //deprecated med.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE, null));//TODO is this drug code?
                     //check the origin of this message....
                     med.setOrigin(DynaUtil.getStringProperty(dynabean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR));
 
@@ -638,8 +797,8 @@ public class MedicationTreatmentInteropUnitTest {
                     String productCode = this.getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
                     med.setProductCode(productCode);
 
-
-                    med.getTreatmentMatrix().setAdminRoute(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_ADMIN_ROUTE, null));
+                    //FIXXME 
+                    med.getTreatmentMatrix().setAdminRoute(DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_ADMIN_ROUTE, null));
                     //this is a uri to another dynabean with dosage and units
                     //Constants.HL7V3_DOSAGE PHRS_MEDICATION_DOSAGE
 
@@ -776,7 +935,7 @@ public class MedicationTreatmentInteropUnitTest {
     public Map getMedicationDosageAttributes(DynaBean medicationDynabean) {
         Map map = null;
         try {
-            DynaBean dynaBean = (DynaBean) DynaUtil.getProperty(medicationDynabean, Constants.HL7V3_DOSAGE_VALUE); //getByDynabeanOrUri(medicationDynabean);
+            DynaBean dynaBean = (DynaBean) DynaUtil.getDynaBeanProperty(medicationDynabean, Constants.HL7V3_DOSAGE); //http://www.icardea.at/phrs/hl7V3#dosage  (medicationDynabean);
 
             if (dynaBean != null) {
 
@@ -787,7 +946,7 @@ public class MedicationTreatmentInteropUnitTest {
 
                 if (dynaBean != null) {
                     String dosage = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DOSAGE_VALUE); //Constants.HL7V3_DOSAGE
-                    String units = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DOSAGE_UNIT);
+                    String units = DynaUtil.getValueResourceUri(dynaBean, Constants.HL7V3_DOSAGE_UNIT);
                     map = new HashMap();
 
                     if (dosage != null) {
@@ -818,12 +977,42 @@ public class MedicationTreatmentInteropUnitTest {
      * @param medicationDynabean
      * @return 
      */
+//Simple has HL7V3_DRUG_NAME string
+//dyn MANUFACTURED_PRODUCT_CLASS http://www.icardea.at/phrs/hl7V3#manufacturedProduct 
+//dyn ... MANUFACTURED_LABEL_DRUG_CLASS http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug
+//String ......HL7V3_DRUG_NAME http://www.icardea.at/phrs/hl7V3#drugName
+//
+//Complex with drug code node dynabean HL7V3_CODE
+//dyn MANUFACTURED_PRODUCT_CLASS
+//dyn ... MANUFACTURED_LABEL_DRUG_CLASS
+//dyn ... HL7V3_CODE
+//String ...... HL7V3_VALUE ..drug code
+//String ...... SKOS_PREFLABEL
+//
+//    MANUFACTURED_PRODUCT_CLASS
+//            "http://www.icardea.at/phrs/types/1.0/ManufacturedProduct";
+//    
+//    HL7_CLASS_CODE 
+//            ICARDEA_HL7V3_NS + "#classCode";
+//    
+//    MANUFACTURED_LABEL_DRUG = 
+//            ICARDEA_HL7V3_NS + "#manufacturedLabeledDrug";
+//    
+//    MANUFACTURED_LABEL_DRUG_CLASS 
+//            "http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug";
+    
     public Map getMedicationNameAttributes(DynaBean medicationDynabean) {
         Map map = null;
         try {       
-            DynaBean dynaBean = medicationDynabean;//(DynaBean) DynaUtil.getProperty(medicationDynabean, Constants.xx); 
+            DynaBean dynaBeanMfgProduct =  DynaUtil.getDynaBeanProperty(
+                    medicationDynabean, 
+                    Constants.MANUFACTURED_PRODUCT_CLASS); 
 
-            if (dynaBean != null) {
+            if (dynaBeanMfgProduct != null) {
+                DynaBean dynaBean= DynaUtil.getDynaBeanProperty(
+                        dynaBeanMfgProduct, 
+                        Constants.MANUFACTURED_LABEL_DRUG_CLASS);
+                        
                 //Name provided either complex or simple
                 //
                 //simple:
@@ -836,10 +1025,10 @@ public class MedicationTreatmentInteropUnitTest {
 
                 if (dynaBean != null) {
                     String name, drugId = null;
-                    //simple name usually from PHR add
+                    //simple name usually from PHR add  FIXXME WRONG!
                     name = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DRUG_NAME); //Constants.HL7V3_DOSAGE
-                    //or complex name and code from EHR
-                    DynaBean obj = (DynaBean) DynaUtil.getProperty(dynaBean, Constants.HL7V3_CODE);
+                    //or complex name and code from EHR FIXXME WRONG!
+                    DynaBean obj = (DynaBean) DynaUtil.getDynaBeanProperty(dynaBean, Constants.HL7V3_CODE);
 
                     //Try to get name and code from a complex representation
                     if (obj != null) {
