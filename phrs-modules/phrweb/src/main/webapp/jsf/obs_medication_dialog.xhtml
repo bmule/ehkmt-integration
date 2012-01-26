@@ -45,6 +45,7 @@
 			<p:outputPanel id="idPanelOmed" layout="block">
 				<h:form id="idFormOmed">
 		<!--  -->
+                                        <h:inputHidden value="#{odlmed.selected.productCode}" />
 					<h:inputHidden value="#{odlmed.selected.statusStandard}" />
 					
 					<h:inputHidden value="#{odlmed.selected.resourceUri}" />
@@ -52,11 +53,6 @@
 					<h:inputHidden value="#{odlmed.selected.tempId}" />
 					
 					<h:inputHidden value="#{odlmed.selected.createId}" />
-					
-					<!-- 
-					<h:inputHidden value="#{odlmed.selected.status}" /> 
-					<h:inputHidden value="#{odlmed.selected.label}" /> 
-					-->
 					
 					<h:inputHidden value="#{odlmed.selected.code}" />
 					<h:inputHidden value="#{odlmed.selected.type}" />
@@ -72,6 +68,10 @@
 					
 					<h:inputHidden value="#{odlmed.selected.origin}" />
 					<h:inputHidden value="#{odlmed.selected.originStatus}" />
+					<!-- 
+					<h:inputHidden value="#{odlmed.selected.status}" /> 
+					<h:inputHidden value="#{odlmed.selected.label}" /> 
+					-->                                        
 					
 					<h:panelGrid columns="3">
 

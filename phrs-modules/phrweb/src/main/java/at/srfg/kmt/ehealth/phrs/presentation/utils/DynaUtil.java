@@ -21,8 +21,8 @@ public class DynaUtil {
         return DynaUtil.getStringProperty(bean, property, null);
     }
 
-    public static String getProperty(DynaBean bean, String property) {
-        return DynaUtil.getStringProperty(bean, property, null);
+    public static Object getProperty(DynaBean bean, String property) {
+        return DynaUtil.getProperty(bean, property, null);
     }
 
     public static String getStringProperty(DynaBean bean, String property, String defaultValue) {

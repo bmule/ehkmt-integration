@@ -45,6 +45,7 @@ public final class DynaBeanUtil {
         final DynaProperty[] properties = dynaClass.getDynaProperties();
         for (DynaProperty property : properties) {
             final String name = property.getName();
+            msg.append("\r\n");
             msg.append(name);
             msg.append(":");
             msg.append(bean.get(name));
