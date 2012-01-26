@@ -157,7 +157,7 @@ public class VitalSignDynaBeanCientUnitTest {
 
         final Object codeValue = codeBean.get(Constants.CODE_VALUE);
         // this is according with the loaded rdf file
-        assertEquals("C0871470", codeValue);
+        assertEquals("8480-6", codeValue);
 
         final DynaBean codeSystemBean =
                 (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
@@ -166,9 +166,9 @@ public class VitalSignDynaBeanCientUnitTest {
 
     private void proveCodeSystem(DynaBean bean) {
         final Object codeSystemCode = bean.get(Constants.CODE_SYSTEM_CODE);
-        assertEquals("2.16.840.1.113883.6.86", codeSystemCode);
+        assertEquals("2.16.840.1.113883.6.1", codeSystemCode);
         final Object codeSystemName = bean.get(Constants.CODE_SYSTEM_NAME);
-        assertEquals("UMLS", codeSystemName);
+        assertEquals("LOINC", codeSystemName);
     }
 
     private void proveStatusBean(DynaBean bean) {
