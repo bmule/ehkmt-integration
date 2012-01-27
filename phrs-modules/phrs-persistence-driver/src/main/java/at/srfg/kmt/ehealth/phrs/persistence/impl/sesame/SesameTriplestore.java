@@ -246,6 +246,8 @@ public class SesameTriplestore
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
+        
+        
 
         LOGGER.debug("Tries to init the reposiotry with ID = {} localted on URI = {}", repositoryID, uri);
         final Repository repository = new HTTPRepository(uri, repositoryID);
@@ -679,7 +681,7 @@ public class SesameTriplestore
     public Iterable<String> getForPredicatesAndValues(Map<String, String> predicatesValues)
             throws TripleException {
         final String query = buildMultivalueNodeQuery(predicatesValues);
-        LOGGER.debug("Excute quirey : " + query);
+        LOGGER.debug("Excute qurey : " + query);
 
         try {
             final TupleQuery tupleQuery =
