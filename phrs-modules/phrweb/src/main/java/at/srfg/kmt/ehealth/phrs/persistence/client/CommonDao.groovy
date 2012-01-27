@@ -154,7 +154,11 @@ public class CommonDao{
 				user.setCanLocalLogin(true)
 				user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
 				user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
-				
+//    public static final String ICARDEA_DOMAIN_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
+//    public static final String OWNER_URI_CORE_PORTAL_TEST_USER = "phr/test/testuser";
+//    public static final String PROTOCOL_ID_UNIT_TEST = "14920263490";
+//    public static final String PROTOCOL_ID_PIX_TEST_PATIENT = "191";
+//    public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";		
 				
 				if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST) 
 					|| userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
@@ -170,9 +174,10 @@ public class CommonDao{
 						user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
 						
 					} else if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
-					
+                                                //phrtest user
 						user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
 						user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
+                                                //updateProtocolId(ownerUri,Constants.PROTOCOL_ID_TEST_PHRUSER);
                                                 
   					} else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
 					

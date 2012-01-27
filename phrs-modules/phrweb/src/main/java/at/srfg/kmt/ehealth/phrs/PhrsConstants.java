@@ -73,8 +73,6 @@ public class PhrsConstants  implements Serializable {
 	public static final String PROTOCOL_NAMESPACE_TEST_VALUE ="icardea";
 	public static final String PROTOCOL_ROLE_TEST_VALUE="patient";
 	
-
-
 	public static final String PROFILE_USER_IDENTIFIER_PROTOCOL_ID="protocolid";
 	public static final String PROFILE_USER_IDENTIFIER_PROTOCOL_NAMESPACE="protocolns";
 	public static final String PROFILE_USER_CIED_IDENTIFIER="ciedid";
@@ -227,8 +225,7 @@ public class PhrsConstants  implements Serializable {
 																			// URL
 
 	public final static String PARAM_NAME_CONTACT_TYPE = "typecontact"; // used
-																		// as
-																		// attribute
+																		// as																		// attribute
 																		// name
 																		// in
 																		// URL
@@ -295,9 +292,12 @@ public class PhrsConstants  implements Serializable {
 	 * Rest like identifier for health profile UUID
 	 * /portal/demo01/healthprofile/demo01
 	 */
+        /*
 	public final static String USER_TEST_HEALTH_PROFILE_ID = "/portal/"
 			+ PORTAL_NAME_DEMO + "/" + USER_HEALTH_PROFILE_PREFIX + "/"
-			+ USER_ID_TEST;
+			+ USER_ID_TEST;*/
+        public final static String USER_TEST_HEALTH_PROFILE_ID=Constants.OWNER_URI_CORE_PORTAL_TEST_USER;
+        
 	public final static String USER_TEST_HEALTH_PROFILE_ID_1 = "/portal/"
 		+ PORTAL_NAME_DEMO + "/" + USER_HEALTH_PROFILE_PREFIX + "/"
 		+ "testuser1";
