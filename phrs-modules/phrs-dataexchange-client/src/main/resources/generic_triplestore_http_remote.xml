@@ -15,7 +15,7 @@
         The memorysail element is used to configure a remote triple store.
         -->
 
-        <uri>http://localhost:8080/openrdf-sesame/repositories/phrs_store</uri>
+        <uri><uri>http://localhost:8080/openrdf-sesame</uri></uri>
         <repository-id>phrs-repository</repository-id>
     </remote>
 
