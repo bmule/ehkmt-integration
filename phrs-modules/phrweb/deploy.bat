@@ -1,15 +1,14 @@
-#!/bin/bash
-#set -xv
+cls
 
-# this bash script is used to pack and deploy the phrweb project in to an
-# existing Tomcat instance. 
+rem call package.bat
+rem icardeahome ... \\tools\\apache-tomcat-6.0.20
+rem apache-tomcat-6.0.35
 
-clear
+rem set tomcat_home=D:\\srdc\\codes\\icardea-google\\icardea\\tools\\apache-tomcat-6.0.20
+set tomcat_home="D:\\srfg\\tomcat\\apache-tomcat-6.0.35"
 
-call package.bat
-
-set tomcat_home="D:\tomcat\apache-tomcat-6.0.20"
-
+call mvn clean 
+call mvn compile
 call mvn  cargo:deploy  -Dcatalina.home=%tomcat_home%
 
 echo "------------------------------------------"

@@ -6,10 +6,11 @@
 
 clear
 
-./package.bash
+#not needed with groovy compile ./package.bash
 
 tomcat_home="/lab0/apache/tomcat/apache-tomcat-6.0.35/"
-
+mvn clean 
+mvn compile
 mvn  cargo:deploy  -Dcatalina.home=$tomcat_home
 
 echo ""
