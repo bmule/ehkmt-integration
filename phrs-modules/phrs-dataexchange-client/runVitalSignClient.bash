@@ -6,6 +6,6 @@ clear
 mvn clean 
 mvn compile
 mvn test-compile
-mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test
+mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClientExample -Dexec.classpathScope=test $1
 
 echo "Done"
