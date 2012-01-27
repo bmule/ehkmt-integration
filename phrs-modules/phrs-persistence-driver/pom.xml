@@ -36,7 +36,7 @@
     </repositories>
   
     <properties>
-        <sesame.version>2.4.0</sesame.version>
+        <sesame.version>2.6.1</sesame.version>
         <log4j.version>1.6.1</log4j.version>
     </properties>
 
