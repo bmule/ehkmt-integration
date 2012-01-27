@@ -29,6 +29,7 @@ import org.openrdf.repository.Repository;
 import org.openrdf.repository.RepositoryConnection;
 import org.openrdf.repository.RepositoryException;
 import org.openrdf.repository.RepositoryResult;
+import org.openrdf.repository.http.HTTPRepository;
 import org.openrdf.repository.sail.SailRepository;
 import org.openrdf.sail.memory.MemoryStore;
 import org.slf4j.Logger;
@@ -77,16 +78,41 @@ public class SesameTriplestore
      * @see #getDefaultDumpDirectory()
      */
     public SesameTriplestore() throws GenericRepositoryException {
-        connection = getConnection(null);
+        connection = getMemoryStoreConnection(null);
         valueFactory = connection.getValueFactory();
         postconstruct();
         postconst = new ArrayList<Runnable>();
     }
 
     public SesameTriplestore(Configuration configuration) throws GenericRepositoryException {
-        connection = getConnection(configuration);
+        connection = getRepositoryConnection(configuration);
         valueFactory = connection.getValueFactory();
         postconst = new ArrayList<Runnable>();
+    }
+
+    private RepositoryConnection getRepositoryConnection(Configuration configuration)
+            throws GenericRepositoryException {
+
+        if (configuration == null) {
+            return getMemoryStoreConnection(null);
+        }
+
+        final String fileDump = configuration.getString("memorysail.filedump");
+        if (fileDump != null) {
+            return getMemoryStoreConnection(configuration);
+        }
+
+        final String remoteURI = configuration.getString("remote.uri");
+        if (remoteURI != null) {
+            return getRemoteConnection(configuration);
+        }
+
+        final String msg = String.format("This configuration {} is illegal.", configuration);
+        final IllegalArgumentException exception =
+                new IllegalArgumentException(msg);
+        LOGGER.debug(exception.getMessage(), exception);
+        throw exception;
+
     }
 
     public SesameTriplestore(File configuration) throws GenericRepositoryException {
@@ -169,8 +195,10 @@ public class SesameTriplestore
         LOGGER.debug("Clean the Data Direcotry " + dataDir.getAbsolutePath());
     }
 
-    private RepositoryConnection getConnection(Configuration configuration)
+    private RepositoryConnection getMemoryStoreConnection(Configuration configuration)
             throws GenericRepositoryException {
+        
+        LOGGER.debug("Builds MemoryStore for this configuration {}", configuration);
 
         final String confDataDirStr = configuration == null
                 ? DEFAULT_FILE_DUMP
@@ -191,6 +219,35 @@ public class SesameTriplestore
             LOGGER.error(repositoryException.getMessage(), repositoryException);
             throw new GenericRepositoryException(repositoryException);
         }
+    }
+
+    private RepositoryConnection getRemoteConnection(Configuration configuration)
+            throws GenericRepositoryException {
+        if (configuration == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The connection can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        LOGGER.debug("Builds HTTPRepository for this configuration {}", configuration);
+
+        final String uri = configuration.getString("uri");
+        final String repositoryID = configuration.getString("repository-id");
+
+
+        LOGGER.debug("Tries to init the reposiotry with ID = {} localted on URI = {}", repositoryID, uri);
+        final Repository repository = new HTTPRepository(uri, repositoryID);
+        try {
+            repository.initialize();
+            final RepositoryConnection result = repository.getConnection();
+            LOGGER.debug("The Reposiotry with ID = {} localted on URI = {} is initialized.", repositoryID, uri);
+            return result;
+        } catch (RepositoryException repositoryException) {
+            LOGGER.error(repositoryException.getMessage(), repositoryException);
+            throw new GenericRepositoryException(repositoryException);
+        }
+
+
     }
 
     /**
@@ -768,17 +825,17 @@ public class SesameTriplestore
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
-        
+
         final URI subjectURI;
         final URI predicateURI;
         try {
-            subjectURI  = valueFactory.createURI(subject);
-            predicateURI = predicate == null 
-                ? null 
-                : valueFactory.createURI(predicate);
+            subjectURI = valueFactory.createURI(subject);
+            predicateURI = predicate == null
+                    ? null
+                    : valueFactory.createURI(predicate);
 
         } catch (IllegalArgumentException exception) {
-                        LOGGER.error(exception.getLocalizedMessage(), exception);
+            LOGGER.error(exception.getLocalizedMessage(), exception);
             final TripleException tripleException = new TripleException();
             tripleException.setSubject(subject);
             tripleException.setPredicate(predicate);
