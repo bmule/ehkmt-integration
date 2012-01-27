@@ -179,6 +179,7 @@ public class SesameTriplestore
         final File dataDir = connection.getRepository().getDataDir();
 
         if (dataDir == null) {
+            LOGGER.debug("On env to be clean - up");
             return;
         }
 
@@ -197,7 +198,7 @@ public class SesameTriplestore
 
     private RepositoryConnection getMemoryStoreConnection(Configuration configuration)
             throws GenericRepositoryException {
-        
+
         LOGGER.debug("Builds MemoryStore for this configuration {}", configuration);
 
         final String confDataDirStr = configuration == null
@@ -231,9 +232,20 @@ public class SesameTriplestore
         }
         LOGGER.debug("Builds HTTPRepository for this configuration {}", configuration);
 
-        final String uri = configuration.getString("uri");
-        final String repositoryID = configuration.getString("repository-id");
-
+        final String uri = configuration.getString("remote.uri");
+        if (uri == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The configuration must contains a remote.uri property");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        final String repositoryID = configuration.getString("remote.repository-id");
+        if (repositoryID == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The configuration must contains a remote.repository-id");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
 
         LOGGER.debug("Tries to init the reposiotry with ID = {} localted on URI = {}", repositoryID, uri);
         final Repository repository = new HTTPRepository(uri, repositoryID);
