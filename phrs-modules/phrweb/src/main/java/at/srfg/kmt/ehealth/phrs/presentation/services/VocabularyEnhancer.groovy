@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
+import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionActivityBase
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActivityDailyLiving
@@ -22,6 +23,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileRisk
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
+
 
 public class  VocabularyEnhancer implements Serializable {
 
@@ -357,20 +359,25 @@ public class  VocabularyEnhancer implements Serializable {
 				]
 				break
 			//TODO Pills is not associated to diabetes medications in vocabulary
+                        //'http://www.icardea.at/phrs/instances/pills',
 			case PhrsConstants.TAG_DIABETES_MEDICATIONS:
 				list = [
-					'http://www.icardea.at/phrs/instances/Insulin',
-					'http://www.icardea.at/phrs/instances/pills',
+					'http://www.icardea.at/phrs/instances/Insulin', 
+                                        Constants.PILL,
 					'http://www.icardea.at/phrs/instances/NoSpecialTreatment'
 				]
 				break
-
-			//TAG_DRUG_DOSAGE_UNITS TAG_DRUG_MEDICATION_COMPLIANCE_STATUS
+			case PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS:
+				list = [ Constants.PILL,Constants.DROPS, Constants.MILLIGRAM,Constants.GRAM]
+                                //list = [ Constants.PILL,Constants.DROPS, Constants.MILLIGRAM]
+				break
+		
 
 		}
 
 		return list
 	}
+ 
 
 	public static Map localVocabularies(Class filterClass,String language){
 
@@ -391,17 +398,17 @@ public class  VocabularyEnhancer implements Serializable {
 
 				map.put('TAG_RISK_TREATMENTS_DIABETES', 	getTerms(PhrsConstants.TAG_RISK_TREATMENTS_DIABETES,language))
 			//				map.put('RISK_DIABETES_TYPE_MEDICATION', 	getTerms(PhrsConstants.RISK_DIABETES_TYPE_MEDICATION,language))
-				map.put('TAG_DIABETES_MEDICATIONS', 	getTerms(PhrsConstants.TAG_DIABETES_MEDICATIONS,language))
+				map.put('TAG_DIABETES_MEDICATIONS',             getTerms(PhrsConstants.TAG_DIABETES_MEDICATIONS,language))
 
 			// code  PhrsConstants.TAG_RISK_FACTORS_CHOLESTEROL
-				map.put('TAG_RISK_TREATMENTS_HYPERTENSION', getTerms(PhrsConstants.TAG_RISK_TREATMENTS_HYPERTENSION,language))
+				map.put('TAG_RISK_TREATMENTS_HYPERTENSION',     getTerms(PhrsConstants.TAG_RISK_TREATMENTS_HYPERTENSION,language))
 
 			// code PhrsConstants.TAG_RISK_FACTORS_HYPERTENSION
-				map.put('TAG_RISK_TREATMENTS_CHOLESTEROL', getTerms(PhrsConstants.TAG_RISK_TREATMENTS_CHOLESTEROL,language))
+				map.put('TAG_RISK_TREATMENTS_CHOLESTEROL',      getTerms(PhrsConstants.TAG_RISK_TREATMENTS_CHOLESTEROL,language))
 
 			// code PhrsConstants.TAG_RISK_FACTORS_SMOKING
 				map.put('TAG_RISK_FACTORS_SMOKING_STATUS', 	getTerms(PhrsConstants.TAG_RISK_FACTORS_SMOKING_STATUS,language))
-				map.put('TAG_RISK_SMOKING_TYPES', 			getTerms(PhrsConstants.TAG_RISK_SMOKING_TYPES,language))
+				map.put('TAG_RISK_SMOKING_TYPES', 		getTerms(PhrsConstants.TAG_RISK_SMOKING_TYPES,language))
 				map.put('TAG_RISK_SMOKING_DURATION', 		getTerms(PhrsConstants.TAG_RISK_SMOKING_DURATION,language))
 				map.put('TAG_RISK_SMOKING_QUANTITY', 		getTerms(PhrsConstants.TAG_RISK_SMOKING_QUANTITY,language))
 				break
@@ -411,8 +418,8 @@ public class  VocabularyEnhancer implements Serializable {
 				ActivityDailyLiving.class.getCanonicalName(),
 				ActivityDailyLivingSimple.class.getCanonicalName()
 			]:
-				map.put('TAG_ACTIVITIES_OF_DAILY_LIVING', 			getTerms(PhrsConstants.TAG_ACTIVITIES_OF_DAILY_LIVING,language))
-				map.put('TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS', 	getTerms(PhrsConstants.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS,language))
+				map.put('TAG_ACTIVITIES_OF_DAILY_LIVING', 	getTerms(PhrsConstants.TAG_ACTIVITIES_OF_DAILY_LIVING,language))
+				map.put('TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS',getTerms(PhrsConstants.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS,language))
 
 				break
 
@@ -427,17 +434,17 @@ public class  VocabularyEnhancer implements Serializable {
 
 			case MedicationTreatment.class.getCanonicalName():
 
-				map.put('TAG_MEDICATION_COMPLIANCE_STATUS', 		getTerms(PhrsConstants.TAG_MEDICATION_COMPLIANCE_STATUS,language))
+				map.put('TAG_MEDICATION_COMPLIANCE_STATUS', 	getTerms(PhrsConstants.TAG_MEDICATION_COMPLIANCE_STATUS,language))
 				//query vocab for http://www.icardea.at/phrs/instances/MedicationUnits
-                                map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
+                                map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 	getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
 				map.put('TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1', getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1,language))
-				map.put('TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1', 		getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1,language))
-				map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', 	getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))
+				map.put('TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1', 	getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1,language))
+				map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))
 
 				break
 
 			case ObsActivityPhysical.class.getCanonicalName():
-				map.put('TAG_PHYSICAL_ACTIVITIES', 			getTerms(PhrsConstants.TAG_PHYSICAL_ACTIVITIES,language))
+				map.put('TAG_PHYSICAL_ACTIVITIES', 		getTerms(PhrsConstants.TAG_PHYSICAL_ACTIVITIES,language))
 				map.put('TAG_PHYSICAL_ACTIVITY_FREQUENCY', 	getTerms(PhrsConstants.TAG_PHYSICAL_ACTIVITY_FREQUENCY,language))
 				map.put('TAG_PHYSICAL_ACTIVITY_DURATION', 	getTerms(PhrsConstants.TAG_PHYSICAL_ACTIVITY_DURATION,language))
 			//map.put('STATUS_ACTIVITY', 			null,language)
@@ -448,7 +455,7 @@ public class  VocabularyEnhancer implements Serializable {
 				break
 
 			case ObsProblem.class.getCanonicalName():
-				map.put('TAG_PROBLEM_SYMPTOM', 		getTerms(PhrsConstants.TAG_PROBLEM_SYMPTOM,language))
+				map.put('TAG_PROBLEM_SYMPTOM',                  getTerms(PhrsConstants.TAG_PROBLEM_SYMPTOM,language))
 			/*
 			 TODO Can't do from here ??, must use direct lookup on radio	
 			 stringModel_2 = ['default_activeStatusTrue','default_activeStatusFalse']				
@@ -470,7 +477,7 @@ public class  VocabularyEnhancer implements Serializable {
 			]:
 				map.put('TAG_ROLES_MEDICAL_PROFESSIONAL', 	getTerms(PhrsConstants.TAG_ROLES_MEDICAL_PROFESSIONAL,language))
 			//TAG_ROLES_NON_MEDICAL_USER
-				map.put('TAG_ROLES_NON_MEDICAL_USER', 	getTerms(PhrsConstants.TAG_ROLES_NON_MEDICAL_USER,language))
+				map.put('TAG_ROLES_NON_MEDICAL_USER',           getTerms(PhrsConstants.TAG_ROLES_NON_MEDICAL_USER,language))
 
 				break
 

@@ -476,6 +476,12 @@ public class Constants {
      */
     public static final String SECOND =
             "http://www.icardea.at/phrs/instances/MeasureSystem#Second";
+    /**
+     * Identify the Manufactured Product instance #manufacturedProduct
+     */
+    public static final String MANUFACTURED_PRODUCT =
+            ICARDEA_HL7V3_NS + "#manufacturedProduct";
+    
     public static final String MANUFACTURED_PRODUCT_CLASS =
             "http://www.icardea.at/phrs/types/1.0/ManufacturedProduct";
     public static final String HL7_CLASS_CODE =

@@ -50,16 +50,20 @@ public class InteropClients {
 
         medicationClient = new MedicationClient(triplestore);
         medicationClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-        
-        problemEntryClient = new ProblemEntryClient(triplestore);     
+
+        problemEntryClient = new ProblemEntryClient(triplestore);
         problemEntryClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-        
+
         schemeClient = new SchemeClient(triplestore);
-        
+
         termClient = new TermClient(triplestore);
-              
+
         dynaBeanClient = new DynaBeanClient(triplestore);
         //dynaBeanClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
+    }
+
+    public GenericTriplestore getTriplestore() {
+        return triplestore;
     }
 
     public VitalSignClient getVitalSignClient() {
@@ -97,12 +101,16 @@ public class InteropClients {
             dyna = getDynaBeanClient().getDynaBean(referenceId);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         } catch (InstantiationException e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         } catch (TripleException e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         }
         if (dyna != null) {
             System.out.println("DynaBeanUtil.toString(dyna)"
@@ -140,6 +148,10 @@ public class InteropClients {
 
             } catch (TripleException e) {
                 e.printStackTrace();
+                LOGGER.error("", e);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error("", e);
             }
 
         }

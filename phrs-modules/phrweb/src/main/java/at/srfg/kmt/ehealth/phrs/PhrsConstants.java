@@ -7,7 +7,9 @@ import java.io.Serializable;
 public class PhrsConstants  implements Serializable {
 	
 	public final static String MENU_CONTROL_REQUEST_PARAMETER_SELECTED_NODE="requestnode";
-	  public final static String MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI="http://www.icardea.at/phrs/hl7V3#manufacturedProduct";	
+       
+	  public final static String MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI= Constants.ICARDEA_HL7V3_NS + "#manufacturedProduct";
+                  //"http://www.icardea.at/phrs/hl7V3#manufacturedProduct";	
 	/** 
 	 * 
 	 * The OPEN_ID_PARAM_ constants must match the alias names found in:
