@@ -489,6 +489,19 @@ public class Constants {
     public static String EXTERN =
             "http://www.icardea.at/phrs/types/1.0/ExternCreator";
     
+    /**
+     * Holds the unique instance for the Dispathed To property.
+     * This property is a literal.
+     */
+    public static String DISTPATCH_TO = ICARDEA_HL7V3_NS  + "#dispathedTo";
+    
+    public static String PHRS_REQUEST_CLASS = 
+            "http://www.icardea.at/phrs/types/1.0/PHRSRequest";
+    
+    public static String HL7V3_CARE_PROVISION_CODE = ICARDEA_HL7V3_NS + "#careProcisionCode";
+    public static String HL7V3_REPLY_ADRESS = ICARDEA_HL7V3_NS + "#wsReplyAddress"; 
+    
+    
     public static final String ICARDEA_DOMAIN_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
     public static final String OWNER_URI_CORE_PORTAL_TEST_USER = "phr/test/testuser";
     public static final String PROTOCOL_ID_UNIT_TEST = "14920263490";
