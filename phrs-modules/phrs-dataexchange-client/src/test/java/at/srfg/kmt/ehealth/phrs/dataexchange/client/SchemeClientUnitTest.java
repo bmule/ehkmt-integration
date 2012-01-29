@@ -7,8 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
-import static org.junit.Assert.*;
-import static at.srfg.kmt.ehealth.phrs.Constants.*;
+import static at.srfg.kmt.ehealth.phrs.Constants.RDF_LITERAL;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -17,6 +16,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -56,6 +56,7 @@ public class SchemeClientUnitTest {
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#effectiveTime");
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#templIdRoot");
         CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#value");
+        CLASS_PROPERTIES.add("http://www.icardea.at/phrs/hl7V3#dispathedTo");
     }
     /**
      * The Logger instance. All log messages from this class

@@ -40,9 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 final class ProblemEntryTask implements PCCTask {
 
-    public static final String ODL_CARE_PROVISION_CODE = "ODLS";
-
-    public static final String RISKLIST_PROVISION_CODE = "RISKLIST";
+    public static final String MEDCCAT_CODE = "MEDCCAT";
 
     /**
      * The Logger instance. All log messages from this class are routed through
@@ -202,7 +200,7 @@ final class ProblemEntryTask implements PCCTask {
     @Override
     public String toString() {
         final String result = 
-                String.format("ProblemEntryTask{%s or %s}", ODL_CARE_PROVISION_CODE, RISKLIST_PROVISION_CODE);
+                String.format("ProblemEntryTask (%s)", MEDCCAT_CODE);
         return result;
     }
 }

@@ -358,4 +358,19 @@ public final class VitalSignClient {
     public String getCreator() {
         return creator;
     }
+
+    public void setDispathedTo(String resource, String dispatchToID) 
+            throws TripleException {
+        if (dispatchToID == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The dispatchToID argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        triplestore.persist(resource,
+                Constants.DISTPATCH_TO,
+                dispatchToID,
+                LITERAL);
+    }
 }

@@ -8,11 +8,11 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-import static at.srfg.kmt.ehealth.phrs.Constants.*;
-import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
+import static at.srfg.kmt.ehealth.phrs.Constants.SKOS_RELATED;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 
 

@@ -99,6 +99,10 @@
         <skos:altLabel>pill</skos:altLabel>
     </rdf:Description>
 
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Drops">
+        <skos:prefLabel>drops</skos:prefLabel>
+    </rdf:Description>
+
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Hour">
         <skos:prefLabel>Hour</skos:prefLabel>
         <skos:notation>h</skos:notation>
@@ -117,7 +121,7 @@
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Day">
         <skos:prefLabel>Day</skos:prefLabel>
     </rdf:Description>
-
+    
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Condition">
         <skos:prefLabel>Condition</skos:prefLabel>
         <skos:note>The result of an examination or inquiry.</skos:note>
@@ -361,8 +365,8 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicyleRiding">
-        <skos:prefLabel>Bicyle riding</skos:prefLabel>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicycleRiding">
+        <skos:prefLabel>Bicycle riding</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicyleRidingULMSCode">
@@ -1719,18 +1723,6 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Active">
-        <skos:prefLabel>Active</skos:prefLabel>
-        <skos:related>http://www.icardea.at/phrs/instances/MedicationStatus</skos:related>
-        <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivePHRSCode">
-                <icadyCode:codeValue>S0016</icadyCode:codeValue>
-                <icadyCode:codeSystem>
-                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
-                </icadyCode:codeSystem>
-            </rdf:Description>
-        </icadyCode:code>
-    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationStatus">
         <skos:prefLabel>Medication Status</skos:prefLabel>
         <icadyCode:code>
@@ -2577,7 +2569,7 @@
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#id">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
-        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:label xml:lang="en">ID</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
         <rdfs:comment xml:lang="en">The PHR System Unique id</rdfs:comment>
@@ -2585,7 +2577,7 @@
     
     <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#namespace">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
-        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:label xml:lang="en">Name Space</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
         <rdfs:comment xml:lang="en">The name space for a given PHRS actor</rdfs:comment>
@@ -2593,10 +2585,11 @@
 
     <rdf:Property rdf:about="http://www.icardea.at/phrs/actor#protocolId">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
-        <rdfs:label xml:lang="en">The code system</rdfs:label>
+        <rdfs:label xml:lang="en">Protocol ID</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
-        <rdfs:comment xml:lang="en">The protocolId is the unique id in entire iCardea system</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+        <rdfs:comment xml:lang="en">The protocol ID is the unique id in entire iCardea system</rdfs:comment>
     </rdf:Property>
     
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/MedicationFrequency">
@@ -2679,7 +2672,37 @@
         <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
         <rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
     </rdf:Property>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#dispathedTo">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Distpached to</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+        <rdfs:comment xml:lang="en">The unique address for where a certain information was distpached.</rdfs:comment>
+    </rdf:Property>
+    
+    <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/PHRSRequest">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+        <rdfs:label xml:lang="en">PHR System Request.</rdfs:label>
+        <rdfs:comment xml:lang="en">A single reuest for the PHR System (it may contains the answer adress, care provison code, etc).</rdfs:comment>
+    </rdfs:Class>
+    
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#careProcisionCode">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">Care Provision Code</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+        <rdfs:comment xml:lang="en">A single care provision code code for a PHRS request.</rdfs:comment>
+    </rdf:Property>
 
-
+    <rdf:Property rdf:about="http://www.icardea.at/phrs/hl7V3#wsReplyAddress">
+        <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+        <rdfs:label xml:lang="en">the WS-adressing reply adress</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+        <rdfs:comment xml:lang="en">The adress where the answer(response) for the PHRS request may be delivered.</rdfs:comment>
+    </rdf:Property>
     
 </rdf:RDF>
