@@ -14,6 +14,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
 class HealthyUtils implements Serializable{
 
 	public final static String DATE_PATTERN_LABEL_YEAR_MONTH_DAY ='yyyy-MM-dd'
+        public static final String DATE_PATTERN_LABEL_YEAR_MONTH_DAY_TIME="yyyy-MM-dd HH:mm";
 	/**
 	 * Uses pattern yyyy-MM-dd
 	 * @param dateTime
