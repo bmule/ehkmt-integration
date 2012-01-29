@@ -8,12 +8,15 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import javax.xml.namespace.QName;
 import javax.xml.soap.Node;
 import javax.xml.soap.SOAPBody;
@@ -95,12 +98,17 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      */
     private String responseEndpointURI;
 
+    private final PHRSRequestClient requestClient;
+
     /**
      * Builds a
      * <code>PCC9SOAPHandler</code> instance.
      */
     public PCC9SOAPHandler() {
-        // UNIMPLEMENTED
+        final TriplestoreConnectionFactory connectionFactory =
+                TriplestoreConnectionFactory.getInstance();
+        final GenericTriplestore triplestore = connectionFactory.getTriplestore();
+        requestClient = new PHRSRequestClient(triplestore);
     }
 
     /**
@@ -388,7 +396,16 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             properties.put("patientNames", patientNames);
             properties.put("careProvisionCode", careProvisionCode);
             properties.put("responseEndpointURI", responseEndpointURI);
-            notify("localhost", 5578, properties);
+            //notify("localhost", 5578, properties);
+            persistRequest(responseEndpointURI, patientId, careProvisionCode);
+        }
+    }
+
+    private void persistRequest(String uri, String id, String code) {
+        try {
+            requestClient.addPHRSRequest(uri, id, code);
+        } catch (TripleException ex) {
+            LOGGER.error(ex.getMessage(), ex);
         }
     }
 
@@ -397,19 +414,18 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param runnable the task for the runnable, it can notbe null.
      */
-  private void notify(String host, int port, Map<String, String> params) {
-        LOGGER.debug("Tries to dispatch {} ", params);
-        try {
-            final Socket socket = new Socket(host, port);
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            objectOutputStream.writeObject(params);
-        } catch (Exception e) {
-            LOGGER.error("Prameters : {} can not be dispathed.", params);
-            LOGGER.error(e.getMessage(), e);
-        }
-        LOGGER.debug("The {} was distpatched", params);
-    }
-
+//  private void notify(String host, int port, Map<String, String> params) {
+//        LOGGER.debug("Tries to dispatch {} ", params);
+//        try {
+//            final Socket socket = new Socket(host, port);
+//            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+//            objectOutputStream.writeObject(params);
+//        } catch (Exception e) {
+//            LOGGER.error("Prameters : {} can not be dispathed.", params);
+//            LOGGER.error(e.getMessage(), e);
+//        }
+//        LOGGER.debug("The {} was distpatched", params);
+//    }
     /**
      * It returns true, always.
      *
