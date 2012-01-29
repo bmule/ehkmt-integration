@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : generic_triplestore.xml.xml
+    Created on : August 19, 2011, 2:04 PM
+    Author     : The M1s
+    Description:
+        It allows to configure the Generic triple for test purposes.
+-->
+
+<triplestore-definition>
+    
+    <memorysail>
+        <!--
+        The memorysail element is used to configure a triple store from type
+        memory sail.
+        -->
+        <filedump>
+            <!--
+            The filedump element is used to specify the location wher the 
+            memory sail will dump its conntet.
+            If the path starts with a path separator character then the path 
+            is absolute.
+            If the path starts with a string then the path is relative to the 
+            location where the triplestore application starts.
+            If the path starts with ${TEMP_DIR} then the location is relative to 
+            the temporary direcotry.
+            If the path starts with ${HOME_DIR} then the location is relative to 
+            aclual user home direcotry.
+            -->
+            ${HOME_DIR}/.icardea/test/sesame
+        </filedump>
+    </memorysail>
+
+    <postconstruct>
+        <!--
+        The postconstruct element is used to configure events related with the 
+        post construct pahse. In this phase the conenction to triplestore is 
+        new created and available.
+        -->
+        
+        <loadfiles>
+            <!--
+            The loadfiles element is used to configure files that may be loaded 
+            after the connection to the triplestore is achived..
+            -->
+            startup.test.rdf,startup.test1.rdf
+        </loadfiles>
+    </postconstruct>
+</triplestore-definition>
