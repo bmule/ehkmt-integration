@@ -14,7 +14,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-import javax.xml.bind.JAXBException;
 
 
 /**
