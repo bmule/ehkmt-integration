@@ -9,14 +9,19 @@
 -->
 
 <triplestore-definition>
-    
-    <memorysail>
+           <!--
+        The memorysail element is used to configure a remote triple store.
+        phrs-repository 
+    <remote>
+ 
+
+        <uri>http://localhost:6060/openrdf-sesame</uri>
+        <repository-id>phrwebtest</repository-id>
+    </remote>-->
         <!--
         The memorysail element is used to configure a triple store from type
         memory sail.
-        -->
-        <filedump>
-            <!--
+ 
             The filedump element is used to specify the location wher the 
             memory sail will dump its conntet.
             If the path starts with a path separator character then the path 
@@ -27,7 +32,11 @@
             the temporary direcotry.
             If the path starts with ${HOME_DIR} then the location is relative to 
             aclual user home direcotry.
-            -->
+-->
+    <memorysail>
+
+        <filedump>
+
             ${HOME_DIR}/.icardea/test/sesame
         </filedump>
     </memorysail>

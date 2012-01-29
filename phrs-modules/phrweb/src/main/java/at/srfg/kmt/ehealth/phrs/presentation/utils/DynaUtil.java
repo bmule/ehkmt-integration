@@ -5,6 +5,7 @@
 package at.srfg.kmt.ehealth.phrs.presentation.utils;
 
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
+import org.apache.commons.beanutils.BasicDynaBean;
 import org.apache.commons.beanutils.DynaBean;
 
 public class DynaUtil {
@@ -90,7 +91,10 @@ public class DynaUtil {
         if (bean != null && property != null && property.length() > 0) {
             try {
                 Object obj = bean.get(property);
-                if (obj != null && obj instanceof DynaBean) {
+                //if (obj != null && (obj instanceof BasicDynaBean) ) {
+                //    System.out.println("BasicDynaBean ");
+                //}
+                if (obj != null && !(obj instanceof String) ) {
                     value = (DynaBean) obj;
                 }
             } catch (Exception e) {
