@@ -436,13 +436,13 @@ public class SesameTriplestoreUnitTest {
         // here a NullPointerExcpetion raises
         triplestore.delete(SUBJECT, PREDICATE, VALUE, null);
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void deleteNodesWithNullSubject() throws TripleException {
         triplestore.delete(null, PREDICATE);
     }
 
-    @Test(expected = TripleException .class)
+    @Test(expected = TripleException.class)
     public void deleteNodesWithWrongSubject() throws TripleException {
         final String wrongSubject = "!@SW@E@#";
         triplestore.delete(wrongSubject, PREDICATE);
@@ -476,5 +476,24 @@ public class SesameTriplestoreUnitTest {
 
             throw exception;
         }
+    }
+
+    @Test
+    public void testSearchDoubleValueMap() throws TripleException {
+        final Map<String, String> toSearch = buildPredicatesValuesMap(3);
+        int count = 3;
+        // I create a subject, on this I add n palue object 
+        final String subject = SUBJECT + "MultivalueNode";
+        addNTriples(subject, count);
+        
+        final Iterable<String> forPredicatesAndValues = 
+                triplestore.getForPredicatesAndValues(toSearch, toSearch);
+        int cout = 0;
+        for (String s : forPredicatesAndValues) {
+            count = 0;
+        }
+        
+        assertEquals(0, cout);
+
     }
 }

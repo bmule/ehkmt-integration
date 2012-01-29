@@ -246,8 +246,8 @@ public class SesameTriplestore
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
-        
-        
+
+
 
         LOGGER.debug("Tries to init the reposiotry with ID = {} localted on URI = {}", repositoryID, uri);
         final Repository repository = new HTTPRepository(uri, repositoryID);
@@ -905,5 +905,99 @@ public class SesameTriplestore
         resut.append("sesame");
 
         return resut.toString();
+    }
+
+    @Override
+    public Iterable<String> getForPredicatesAndValues(Map<String, String> predicatesValuesTrue,
+            Map<String, String> predicatesValuesFalse) throws TripleException {
+        
+        final String query = buildMultivalueNodeQuery(predicatesValuesTrue, predicatesValuesFalse);
+        LOGGER.debug("Excute qurey : " + query);
+
+        try {
+            final TupleQuery tupleQuery =
+                    connection.prepareTupleQuery(QueryLanguage.SERQL, query);
+            final TupleQueryResult queryResult = tupleQuery.evaluate();
+            final List<String> bindingNames = queryResult.getBindingNames();
+
+            if (bindingNames.size() != 1) {
+                final String msg =
+                        String.format("Only one binding name expected, the actaul bind name list is %s",
+                        bindingNames.toString());
+                final IllegalStateException illegalStateException =
+                        new IllegalStateException(msg);
+                LOGGER.error(msg, illegalStateException);
+                throw illegalStateException;
+            }
+
+            final String bindName = bindingNames.get(0);
+            final TupleQueryAndBindingNameIterableResult result =
+                    new TupleQueryAndBindingNameIterableResult(queryResult, bindName);
+
+            return result;
+        } catch (Exception exception) {
+            LOGGER.debug(exception.getMessage(), exception);
+            final TripleException tripleException = new TripleException(exception);
+            throw tripleException;
+        }
+
+    }
+
+    private String buildMultivalueNodeQuery(Map<String, String> perdicatesAndValues, Map<String, String> perdicatesAndValues1) {
+
+        final StringBuilder result = new StringBuilder();
+        final StringBuilder where = new StringBuilder();
+        result.append("select subject from ");
+
+        int count = 0;
+        for (Map.Entry<String, String> entry : perdicatesAndValues.entrySet()) {
+            final String predicate = entry.getKey();
+            final String value = entry.getValue();
+            // "{subject} pred1 {obj1}, ");
+            result.append("{subject} ");
+            result.append(uriForSERQL(predicate));
+            result.append(" {value_");
+            result.append(count);
+            result.append("}, ");
+
+            where.append(" value_");
+            where.append(count);
+            where.append(" like ");
+            where.append("\"");
+            where.append(value);
+            where.append("\"");
+            where.append(" AND ");
+
+            count++;
+        }
+        
+        for (Map.Entry<String, String> entry : perdicatesAndValues1.entrySet()) {
+            final String predicate = entry.getKey();
+            final String value = entry.getValue();
+            // "{subject} pred1 {obj1}, ");
+            result.append("{subject} ");
+            result.append(uriForSERQL(predicate));
+            result.append(" {value_");
+            result.append(count);
+            result.append("}, ");
+
+            where.append(" value_");
+            where.append(count);
+            where.append(" != ");
+            where.append("\"");
+            where.append(value);
+            where.append("\"");
+            where.append(" AND ");
+
+            count++;
+        }
+        
+        result.deleteCharAt(result.lastIndexOf(","));
+        where.delete(where.lastIndexOf("AND"), where.length());
+
+        result.append(" where ");
+        result.append(where);
+
+        return result.toString();
     }
 }

@@ -46,6 +46,9 @@ public interface GenericTriplestore {
 
     Iterable<String> getForPredicatesAndValues(Map<String, String> predicatesValues) throws TripleException;
     
+    Iterable<String> getForPredicatesAndValues(Map<String, String> truePredicatesValues, 
+            Map<String, String> falsePredicatesValues) throws TripleException;
+    
     Iterable<String> getForSubjectAndPredicate(String sub, String pred) throws TripleException;
 
     Iterable<Triple> getForSubject(String subject) throws TripleException;
