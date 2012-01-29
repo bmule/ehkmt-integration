@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import javax.xml.bind.JAXBException;
@@ -18,21 +19,30 @@ import javax.xml.bind.JAXBException;
 
 /**
  * Runnable class able to push more vital signs to to the PHRS repository.<br/>
- * More precisely this class adds four <i>Vital Sign</i> to the underlying
- * persistence layer.<br/> To run this class from maven environment use :
+ * To run this class from maven environment use :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignPushClientExample -Dexec.classpathScope=test<br/>
- * </pre> Take care this command does not compile the classes. <br/> <b>Nota
- * Bene : </b> the repository URI and reposiotry ID are configured with the file
- * named "generic_triplestore.xml" placed in classpath.
+ * </pre> 
+ * Take care this command does not compile the classes. <br/> 
+ * This class was not designed to be extended. <br>
+ * <b>Note : <b/> The connection with the underlying persistnce context is
+ * configurated with a configuration file named "generic_triplestore.xml" placed
+ * in the classpath.
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
-public class VitalSignPushClientExample {
+public final class VitalSignPushClientExample {
 
-    public static void main(String... args) throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException {
+    /**
+     * Don't let anyone to instantiate this class.
+     */
+    private VitalSignPushClientExample() {
+        // UNIMPLEMENTD
+    }
+
+    public static void main(String... args) throws TripleException, GenericRepositoryException {
 
         final String owner = "testOwner";
         final TriplestoreConnectionFactory connectionFactory =
@@ -73,6 +83,9 @@ public class VitalSignPushClientExample {
                 "80",
                 Constants.KILOGRAM);
 
-        System.out.println("Vital Signs information was push to the reposiotry.");
+        System.out.println("All the vital signs information was push to the reposiotry.");
+
+        // close the connection with the triplestore.
+        ((GenericTriplestoreLifecycle) triplestore).shutdown();
     }
 }
