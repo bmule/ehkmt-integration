@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -80,7 +81,8 @@ public final class VitalSignPullClientExample {
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         for (String resoure : resources) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
-            System.out.println(dynaBean);
+            final String toString = DynaBeanUtil.toString(dynaBean);
+            System.out.println(toString);
         }
 
         // close the connection with the triplestore.
