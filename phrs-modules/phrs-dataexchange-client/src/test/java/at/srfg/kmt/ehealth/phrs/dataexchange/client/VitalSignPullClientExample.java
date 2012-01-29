@@ -79,11 +79,14 @@ public final class VitalSignPullClientExample {
         final Iterable<String> resources =
                 triplestore.getForPredicatesAndValues(queryMap);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
+        int count = 0;
         for (String resoure : resources) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
             final String toString = DynaBeanUtil.toString(dynaBean);
             System.out.println(toString);
+            count++;
         }
+        System.out.printf("%d vital signs was pulled out.\n", count);
 
         // close the connection with the triplestore.
         ((GenericTriplestoreLifecycle) triplestore).shutdown();
