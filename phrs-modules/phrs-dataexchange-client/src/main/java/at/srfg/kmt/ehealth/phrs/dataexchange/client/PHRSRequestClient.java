@@ -8,21 +8,25 @@
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
-
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.LoadRdfPostConstruct;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.sesame.SesameTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
+ * This client is used to manage and manipulate PHRS Requests. A PHRS request
+ * defines the relation between : <ul> <li> a patient unique id <li> a care
+ * provision code <li> a response URI </ul>
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -31,10 +35,50 @@ import java.util.Map;
 public final class PHRSRequestClient {
 
     /**
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient</code>.
+     */
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(PHRSRequestClient.class);
+
+    /**
      * Used to persist/retrieve informations from the persistence layer.
      */
     private final GenericTriplestore triplestore;
 
+    /**
+     * Holds the name for the creator, the instance responsible to create
+     * medication instances with this client.
+     */
+    private String creator;
+
+    /**
+     * Builds a
+     * <code>PHRSRequestClient</code> instance. <br/> <b>Note : </b> This
+     * constructor builds its own individual connection to the triple store and
+     * don't share it with the rest of the application.
+     *
+     * @throws GenericRepositoryException if the underlying persistence layer
+     * can not be initialized from any reasons.
+     * @throws TripleException
+     */
+    public PHRSRequestClient() throws GenericRepositoryException, TripleException {
+        triplestore = new SesameTriplestore();
+        final LoadRdfPostConstruct loadRdfPostConstruct = new LoadRdfPostConstruct("startup.test.rdf");
+        // I load the need instances.
+        ((GenericTriplestoreLifecycle) triplestore).addToPostconstruct(loadRdfPostConstruct);
+        ((GenericTriplestoreLifecycle) triplestore).init();
+    }
+
+    /**
+     * Builds a
+     * <code>PHRSRequestClient</code> instance for a given triplestrore.
+     *
+     * @param triplestore the triplestore instance, it can not be null.
+     * @throws NullPointerException if the
+     * <code>triplestore</code> argument is null.
+     */
     public PHRSRequestClient(GenericTriplestore triplestore) {
         this.triplestore = triplestore;
     }
@@ -65,7 +109,9 @@ public final class PHRSRequestClient {
                 Constants.PHRS_ACTOR_PROTOCOL_ID,
                 id,
                 LITERAL);
-        
+
+        final String[] toLog = {replyAddress, id, careProcisionCode};
+        LOGGER.debug("New PHR request sored for reply adress={}, id={}, care provision code={}", toLog);
         return subject;
     }
 
@@ -91,7 +137,7 @@ public final class PHRSRequestClient {
             final Iterable<Triple> forSubject = triplestore.getForSubject(resource);
             result.addIterable(forSubject);
         }
-        
+
         return result;
     }
 
@@ -119,7 +165,7 @@ public final class PHRSRequestClient {
                 triplestore.getForPredicatesAndValues(queryMap);
         return result;
     }
-    
+
     public Iterable<String> removeAllPHRSRequests() throws TripleException {
         final Map<String, String> queryMap = new HashMap<String, String>();
 
@@ -130,7 +176,7 @@ public final class PHRSRequestClient {
         for (String resource : result) {
             triplestore.deleteForSubject(resource);
         }
-                
+
         return result;
     }
 
@@ -148,7 +194,32 @@ public final class PHRSRequestClient {
         for (String resource : result) {
             triplestore.deleteForSubject(resource);
         }
-                
+
         return result;
+    }
+
+    /**
+     * Registers a new creator for all the resources generated with this client.
+     * All the generated resources will gain a triple with the predicate :
+     * <code>Constants.CREATOR</code> and the value specified with the argument
+     * <code>creator</code>.
+     *
+     * @param creator the new owner for this client, it can not be null.
+     * @throws NullPointerException if the
+     * <code>creator</code> argument is null.
+     */
+    public void setCreator(String creator) {
+        if (creator == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The creator argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        this.creator = creator;
+    }
+
+    public String getCreator() {
+        return creator;
     }
 }
