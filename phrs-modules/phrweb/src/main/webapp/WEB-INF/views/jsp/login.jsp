@@ -128,8 +128,12 @@ function processForm(theForm){
   	</tr>  	
   	<tr>
 	  	<td>phrtest</td>
-	  	<td>Nurse</td>
-	  	<td></td>
+	  	<td><!--Nurse--></td>
+	  	<td>Test EHR with 
+                    <br/>protocolId= 14920263490
+                    <br/>phrId     = phr/test/testuser
+                
+                </td>
   	</tr>
   	<tr>
 	  	<td>phrtest1</td>

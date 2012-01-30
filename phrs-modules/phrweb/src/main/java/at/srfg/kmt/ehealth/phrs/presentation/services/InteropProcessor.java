@@ -77,7 +77,7 @@ public class InteropProcessor {
 
     public InteropProcessor(PhrsStoreClient phrsClient) {
         this.phrsClient = phrsClient;
-        
+
         init();
     }
 
@@ -125,7 +125,7 @@ public class InteropProcessor {
 
     }
 
-    public PhrsStoreClient getPhrsStoreClient() {     
+    public PhrsStoreClient getPhrsStoreClient() {
         return phrsClient;
     }
 
@@ -1088,5 +1088,22 @@ public class InteropProcessor {
         } catch (Exception e) {
             LOGGER.error("Interop client updateMessageProblem, interop resource= " + resourceUri + " interopResourceId=" + interopResourceId, e);
         }
+    }
+
+    public void registerProtocolId(String owneruri, String protocolId, String namespace) {
+        //phrsStoreClient.getInteropClients().getActorClient().register
+        if (namespace==null) {
+            namespace = Constants.ICARDEA_DOMAIN_PIX_OID;
+            
+        }
+     //AUTHORIZE_USER_PREFIX_TEST   
+        try {
+            getInteropClients().getActorClient().register(namespace, owneruri, protocolId);
+            LOGGER.debug("registered protocolId in core for owneruri= "+owneruri+" protocolId= "+protocolId+" namespace="+namespace);
+
+        } catch (TripleException e) {
+            LOGGER.error("owneruri= "+owneruri+" protocolId= "+protocolId, e);
+        }
+        
     }
 }

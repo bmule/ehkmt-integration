@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
+import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrOpenId
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
@@ -177,7 +178,7 @@ public class CommonDao{
                                                 //phrtest user
 						user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
 						user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
-                                                //updateProtocolId(ownerUri,Constants.PROTOCOL_ID_TEST_PHRUSER);
+                                                updateProtocolId(ownerUri,Constants.PROTOCOL_ID_TEST_PHRUSER,null);
                                                 
   					} else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
 					
@@ -199,6 +200,12 @@ public class CommonDao{
 		}
 		return user;
 	}
+        
+        public void updateProtocolId(String owneruri, String protocolId, String namespace){
+           
+            phrsStoreClient.getInteropProcessor().registerProtocolId( owneruri,protocolId,namespace)
+        
+        }
 
 	/**
 	 * 

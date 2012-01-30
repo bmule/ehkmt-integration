@@ -55,6 +55,12 @@ public class CoreTestData {
         this.client = interopClients.getMedicationClient();
 
     }
+     public CoreTestData() {
+        this.interopClients = PhrsStoreClient.getInstance().getInteropClients();
+
+        this.client = interopClients.getMedicationClient();
+
+    }
 
     public static String formatTimeDate(DateTime dateTime, String pattern) {
 

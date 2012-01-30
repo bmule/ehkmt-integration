@@ -10,6 +10,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 
 
+
 @ManagedBean(name="odlmed")
 @RequestScoped
 public class ObsMedicationChangeBean extends FaceBaseBean  {
@@ -73,6 +74,15 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
                 internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_true',true,internalModelList)
 			
             break
+            case 'all':
+             //do nothing, using internalModelList
+            break 
+            case 'loadtest':
+            
+            at.srfg.kmt.ehealth.phrs.support.test.CoreTestData core=new at.srfg.kmt.ehealth.phrs.support.test.CoreTestData()
+            core.addTestMedications_2_forPortalTestForOwnerUri(Constants.OWNER_URI_CORE_PORTAL_TEST_USER)
+             //using internalModelList
+            break            
             default:
             //No filter,show inactive and active internalModelList = internalModelList                          
             //medicationSummary_medicationStatus_true PhrsConstants.STATUS_COMPLETE
@@ -101,7 +111,13 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
             case 'history':
 
             break
+            case 'all':
 
+            break
+            
+            case 'loadtest':
+
+            break           
             default:
             temp = 'active'
             break

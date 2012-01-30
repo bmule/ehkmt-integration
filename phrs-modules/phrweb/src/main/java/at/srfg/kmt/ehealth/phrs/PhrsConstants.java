@@ -130,10 +130,12 @@ public class PhrsConstants  implements Serializable {
 	public static final String AUTHORIZE_USER_PREFIX_TEST="phrtest";
 	public static final String AUTHORIZE_USER_PREFIX_TEST_1="phrtest1";
 	public static final String AUTHORIZE_USER_PREFIX_TEST_2="phrtest2";
-	public static final String AUTHORIZE_USER_PREFIX_TEST_ELLEN="phrtestellen";
+        //not used AUTHORIZE_USER_PREFIX_TEST_ELLEN
+	public static final String AUTHORIZE_USER_PREFIX_TEST_ELLEN="nurse";
 	//with this prefix a local account is setup if non-existing, until the scenario is completed with added OpenId, passwords are not strictly needed
 	public static final String AUTHORIZE_USER_PREFIX_AUTO_USER="phruser";
-	public static final String AUTHORIZE_USER_VT_SCENARIO_NURSE="ellen";
+        //loginId
+	public static final String AUTHORIZE_USER_VT_SCENARIO_NURSE="nurse";
 
 	public static final String IDENTIFIER_TYPE_CIED_NUMBER="identifier_cied_number";
 
