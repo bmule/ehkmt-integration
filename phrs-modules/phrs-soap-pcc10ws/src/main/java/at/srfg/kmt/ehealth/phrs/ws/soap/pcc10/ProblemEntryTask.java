@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -68,7 +69,7 @@ final class ProblemEntryTask implements PCCTask {
         // TODO : use constants here
         final boolean isProblem = "MEDCCAT".equals(code);
         if (!isProblem) {
-            LOGGER.debug("This code : {} is not a problem code.");
+            LOGGER.debug("This code : {} is not a problem code.", code);
             return false;
         }
 
@@ -106,7 +107,7 @@ final class ProblemEntryTask implements PCCTask {
         final String responseURI = (String) properties.get("responseEndpointURI");
 
         try {
-            final QUPCIN043200UV01 request = buildMessage();
+            final QUPCIN043200UV01 request = buildMessage(responseURI);
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -152,9 +153,9 @@ final class ProblemEntryTask implements PCCTask {
         LOGGER.debug("{} = {}", passwdProp, passwd);
     }
 
-    private QUPCIN043200UV01 buildMessage()
+    private QUPCIN043200UV01 buildMessage(String wsAddress)
             throws TripleException, IllegalAccessException, InstantiationException {
-        
+
         final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
@@ -167,7 +168,17 @@ final class ProblemEntryTask implements PCCTask {
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
             beans.add(dynaBean);
+            handleDistpachedTo(dynaBean, wsAddress);
+            client.setDispathedTo(uri, wsAddress);
         }
+        
+        final int problemCount = beans.size();
+        LOGGER.debug("The total amount of Problem Entries for user {} is {}",
+                owner, problemCount);
+        if (problemCount == 0) {
+            LOGGER.warn("No Problem Entries for this user {}, the HL7 V3 message will be empty.", owner);
+        }
+
 
         // TAKE CARE !!!!!!
         // This lines wipe out the triple store repository files.
@@ -177,9 +188,23 @@ final class ProblemEntryTask implements PCCTask {
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
-        
+
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
         return pcc10Message;
+    }
+
+    private void handleDistpachedTo(DynaBean dynaBean, String wsAddress) {
+        final String distpachedTo;
+        try {
+            distpachedTo = (String) dynaBean.get(Constants.HL7V3_REPLY_ADRESS);
+        } catch (IllegalArgumentException exception) {
+            LOGGER.debug("This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
+            return;
+        }
+
+        final boolean wasDispathed = wsAddress.equals(distpachedTo);
+        LOGGER.debug("This bean {} was already distpached to {}.",
+                DynaBeanUtil.toString(dynaBean), wsAddress);
     }
 
     /**
@@ -189,7 +214,7 @@ final class ProblemEntryTask implements PCCTask {
      */
     @Override
     public String toString() {
-        final String result = 
+        final String result =
                 String.format("ProblemEntryTask (%s)", MEDCCAT_CODE);
         return result;
     }

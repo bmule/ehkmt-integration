@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -30,17 +31,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Builds and sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
- * vital sings information. <br/>
- * <b>Note : <b/> this class caries no state - this is very important because
- * it allows (this class) to be used in multi thread environment. <br/>
- * <br/> This class was not designed to be extended.
+ * vital sings information. <br/> <b>Note : <b/> this class caries no state -
+ * this is very important because it allows (this class) to be used in multi
+ * thread environment. <br/> <br/> This class was not designed to be extended.
  *
  * @author Mis
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
  */
 final class VitalSignTask implements PCCTask {
-    
+
     /**
      * The care provision code for this PCC task.
      */
@@ -72,7 +72,7 @@ final class VitalSignTask implements PCCTask {
         // TODO : use constants here
         final boolean isVitSign = CARE_PROVISION_CODE.equals(code);
         if (!isVitSign) {
-            LOGGER.debug("This code : {} is not a medication code.");
+            LOGGER.debug("This code : {} is not a vital sign code.");
             return false;
         }
 
@@ -93,24 +93,24 @@ final class VitalSignTask implements PCCTask {
     }
 
     /**
-     * Builds and sends a 
-     * <a href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message 
-     * that contains all the medications for the given properties map.
-     * 
+     * Builds and sends a <a
+     * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> message that
+     * contains all the medications for the given properties map.
+     *
      * @param properties the properties to be consumed.
-     * @throws ConsumeException if the  the specified map of parameters can not
+     * @throws ConsumeException if the the specified map of parameters can not
      * be consumed from any reasons. Most of the times it wraps the real cause
-     * for the exception, this cause can be obtained by using the 
+     * for the exception, this cause can be obtained by using the
      * <code>getCause()</code> method.
      */
     @Override
     public void consume(Map properties) throws ConsumeException {
-        
+
         LOGGER.debug("Tries to consumes {}", properties);
         final String responseURI = (String) properties.get("responseEndpointURI");
 
         try {
-            final QUPCIN043200UV01 request = buildMessage();
+            final QUPCIN043200UV01 request = buildMessage(responseURI);
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -120,18 +120,18 @@ final class VitalSignTask implements PCCTask {
                 LOGGER.debug("SSL used - logs the security properties.");
                 logSecurity();
                 enableSecurity();
-                
+
             }
             final MCCIIN000002UV01 ack = SendPcc10Message.sendMessage(request, responseURI);
             LOGGER.info("Acknowledge (response) is : {}.", ack);
 
         } catch (Exception exception) {
-            final ConsumeException consException = 
+            final ConsumeException consException =
                     new ConsumeException(exception);
             LOGGER.warn(consException.getMessage(), exception);
             throw consException;
         }
-        
+
         LOGGER.debug("The properties {} was succefully consumed.", properties);
     }
 
@@ -156,7 +156,7 @@ final class VitalSignTask implements PCCTask {
         LOGGER.debug("{} = {}", passwdProp, passwd);
     }
 
-    private QUPCIN043200UV01 buildMessage()
+    private QUPCIN043200UV01 buildMessage(String wsAddress)
             throws TripleException, IllegalAccessException, InstantiationException {
 
         final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
@@ -168,9 +168,19 @@ final class VitalSignTask implements PCCTask {
         final Iterable<String> uris = client.getVitalSignURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();
+        
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
             beans.add(dynaBean);
+            handleDistpachedTo(dynaBean, wsAddress);
+            client.setDispathedTo(uri, wsAddress);
+        }
+        
+        final int vitalSignCount = beans.size();
+        LOGGER.debug("The total amount of Vital Sign Entries for user {} is {}", 
+                owner, vitalSignCount);
+        if (vitalSignCount == 0) {
+            LOGGER.warn("No Vital signs for this user {}, the HL7 V3 message will be empty.", owner);
         }
 
         // TAKE CARE !!!!!!
@@ -181,15 +191,29 @@ final class VitalSignTask implements PCCTask {
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
-        
+
         final QUPCIN043200UV01 pcc10Message = VitalSignPCC10.getPCC10Message(beans);
         return pcc10Message;
     }
-    
+
+    private void handleDistpachedTo(DynaBean dynaBean, String wsAddress) {
+        final String distpachedTo;
+        try {
+            distpachedTo = (String) dynaBean.get(Constants.HL7V3_REPLY_ADRESS);
+        } catch (IllegalArgumentException exception) {
+            LOGGER.debug("This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
+            return;
+        }
+
+        final boolean wasDispathed = wsAddress.equals(distpachedTo);
+        LOGGER.debug("This bean {} was already distpached to {}.",
+                DynaBeanUtil.toString(dynaBean), wsAddress);
+    }
+
     /**
      * Returns a human readable string representation for this class.
-     * 
-     * @return a string representation for this class. 
+     *
+     * @return a string representation for this class.
      */
     @Override
     public String toString() {
