@@ -1634,7 +1634,7 @@
         <skos:prefLabel>Anxiety</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
         <icadyCode:code>
-            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreathULMSCode">
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AnxietyULMSCode">
                 <icadyCode:codeValue>C0003467</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
