@@ -77,6 +77,7 @@ public class InteropProcessor {
 
     public InteropProcessor(PhrsStoreClient phrsClient) {
         this.phrsClient = phrsClient;
+        
         init();
     }
 
@@ -124,7 +125,7 @@ public class InteropProcessor {
 
     }
 
-    public PhrsStoreClient getPhrsStoreClient() {
+    public PhrsStoreClient getPhrsStoreClient() {     
         return phrsClient;
     }
 

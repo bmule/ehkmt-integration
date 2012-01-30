@@ -29,6 +29,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer
 import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyService
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor
 /**
  * 
  * Includes UserServices and vocabulary helper methods to support child beans
@@ -292,7 +293,7 @@ class FaceBaseBean implements Serializable{
 
 			// Import new interop messages as new domain objects
 
-			//importInteropMessages()
+			//do import manually by subclasses not automatically 
 			internalModelList = getUserService().getResources(getDomainClazz());
 		}
 		if( !internalModelList) internalModelList = []
@@ -309,16 +310,15 @@ class FaceBaseBean implements Serializable{
 	}
 	/**
 	 * 
-	 * @param phrsClass
+	 * @param phrsClass - Interop classes e.g. Constants.PHRS_MEDICATION_CLASS
 	 */
 	public void importInteropMessages(String phrsClass){
 		try{
-			if(selected){
-				if(userService){
-					InteropAccessService ias = userService.getPhrsStoreClient().getInteropService()
-					ias.importNewMessages(selected.ownerUri, phrsClass, true);//importMessage)
-					//validate and update the pci.pixIdentifier object status
-				}
+			if(selected && userService){		
+                            InteropProcessor ip= userService.getPhrsStoreClient().getInteropProcessor()
+                            ip.importNewMessages(selected.ownerUri, phrsClass);
+                                        
+                            //validate and update the pci.pixIdentifier object status
 			}
 		} catch (Exception e){
 			LOGGER.error(' '+e)
