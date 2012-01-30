@@ -1642,6 +1642,42 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWell">
+        <skos:prefLabel>Feeling Well</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWellULMSCode">
+                <icadyCode:codeValue>C2127116</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomach">
+        <skos:prefLabel>Sick to Stomach</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomachULMSCode">
+                <icadyCode:codeValue>C0848290</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEat">
+        <skos:prefLabel>Unable to Eat</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEatULMSCode">
+                <icadyCode:codeValue>C0566306</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasion">
         <skos:prefLabel>on occasion</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
