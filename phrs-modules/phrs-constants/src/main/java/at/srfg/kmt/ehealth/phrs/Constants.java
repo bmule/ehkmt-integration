@@ -347,6 +347,11 @@ public class Constants {
     public static final String HL7V3_PALPITATION = ICARDEA_NS + "/instances/Palpitations";
     public static final String HL7V3_FATIQUE = ICARDEA_NS + "/instances/Fatigue-Symptom";
     public static final String HL7V3_BICYCLE_RIDING = ICARDEA_NS + "/instances/BicycleRiding";
+    public static final String HL7V3_SHORTHENS_OF_BREATH = ICARDEA_NS + "/instances/DShortnessOfBreath";
+    public static final String HL7V3_ANXIETY = ICARDEA_NS + "/instances/Anxiety";
+    public static final String HL7V3_FEELING_WELL = ICARDEA_NS + "/instances/FeelingWell";
+    public static final String HL7V3_SICK_TO_STOMACH = ICARDEA_NS + "/instances/SicktoStomach";
+    public static final String HL7V3_UNABLE_TO_EAT = ICARDEA_NS + "/instances/UnableToEat";
     public static final String HL7V3_WALKING = ICARDEA_NS + "/instances/Walking";
     public static final String HL7V3_WEIGHT_INCREASED = ICARDEA_NS + "/instances/WeightIncreased";
     public static final String HL7V3_BRUSING = ICARDEA_NS + "/instances/BruisingSymptom";
