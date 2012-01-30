@@ -168,16 +168,18 @@ final class VitalSignTask implements PCCTask {
         final Iterable<String> uris = client.getVitalSignURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();
-        
+
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
-            beans.add(dynaBean);
-            handleDistpachedTo(dynaBean, wsAddress);
-            client.setDispathedTo(uri, wsAddress);
+            final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+            if (!wasDistpached) {
+                beans.add(dynaBean);
+                client.setDispathedTo(uri, wsAddress);
+            }
         }
-        
+
         final int vitalSignCount = beans.size();
-        LOGGER.debug("The total amount of Vital Sign Entries for user {} is {}", 
+        LOGGER.debug("The total amount of Vital Sign Entries for user {} is {}",
                 owner, vitalSignCount);
         if (vitalSignCount == 0) {
             LOGGER.warn("No Vital signs for this user {}, the HL7 V3 message will be empty.", owner);
@@ -196,18 +198,20 @@ final class VitalSignTask implements PCCTask {
         return pcc10Message;
     }
 
-    private void handleDistpachedTo(DynaBean dynaBean, String wsAddress) {
+    private boolean wasDistpachedTo(DynaBean dynaBean, String wsAddress) {
         final String distpachedTo;
         try {
-            distpachedTo = (String) dynaBean.get(Constants.HL7V3_REPLY_ADRESS);
+            distpachedTo = (String) dynaBean.get(Constants.DISTPATCH_TO);
         } catch (IllegalArgumentException exception) {
             LOGGER.debug("This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
-            return;
+            return false;
         }
 
         final boolean wasDispathed = wsAddress.equals(distpachedTo);
         LOGGER.debug("This bean {} was already distpached to {}.",
                 DynaBeanUtil.toString(dynaBean), wsAddress);
+
+        return wasDispathed;
     }
 
     /**

@@ -177,9 +177,11 @@ final class MedicationTask implements PCCTask {
         final Set<DynaBean> beans = new HashSet<DynaBean>();
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
-            beans.add(dynaBean);
-            handleDistpachedTo(dynaBean, wsAddress);
-            client.setDispathedTo(uri, wsAddress);
+            final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+            if (!wasDistpached) {
+                beans.add(dynaBean);
+                client.setDispathedTo(uri, wsAddress);
+            }
         }
 
         final int medicationCount = beans.size();
@@ -202,18 +204,20 @@ final class MedicationTask implements PCCTask {
         return pcc10Message;
     }
 
-    private void handleDistpachedTo(DynaBean dynaBean, String wsAddress) {
+    private boolean wasDistpachedTo(DynaBean dynaBean, String wsAddress) {
         final String distpachedTo;
         try {
-            distpachedTo = (String) dynaBean.get(Constants.HL7V3_REPLY_ADRESS);
+            distpachedTo = (String) dynaBean.get(Constants.DISTPATCH_TO);
         } catch (IllegalArgumentException exception) {
-            LOGGER.debug("This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
-            return;
+            LOGGER.debug("This bean {} was not distpached at all.", 
+                    DynaBeanUtil.toString(dynaBean));
+            return false;
         }
 
         final boolean wasDispathed = wsAddress.equals(distpachedTo);
         LOGGER.debug("This bean {} was already distpached to {}.",
                 DynaBeanUtil.toString(dynaBean), wsAddress);
+        return wasDispathed;
     }
 
     /**
