@@ -47,25 +47,23 @@ public class DailyLivingStep8ClientExample {
 
         final ProblemEntryClient client = new ProblemEntryClient(triplestore);
 
-        // this adds a problem-finding named ...
         client.addProblemEntry(
                 owner,
                 Constants.HL7V3_FINDING,
                 Constants.STATUS_ACTIVE,
+                "201006010000",
                 "201007120000",
-                "",
                 "Free text note.",
                 Constants.HL7V3_WALKING);
 
-        // this adds a problem-finding named ...
-//        client.addProblemEntry(
-//                owner,
-//                Constants.HL7V3_FINDING,
-//                Constants.STATUS_ACTIVE,
-//                "201007120000",
-//                "",
-//                "Free text note.",
-//                Constants.HL7V3_BICYCLE_RIDING);
+        client.addProblemEntry(
+                owner,
+                Constants.HL7V3_FINDING,
+                Constants.STATUS_ACTIVE,
+                "201006010000",
+                "201007120000",
+                "Free text note.",
+                Constants.HL7V3_BICYCLE_RIDING);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);

@@ -55,8 +55,7 @@ public class DailyLivingStep10ClientExample {
                 "201007120000",
                 "201008120000",
                 "Free text note.",
-                /*TODO: CORRECT VALUECODE: 'Does ride bicycle' PCC-10-Input-Scenario-DailyLivingStep10.xml:78  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_BICYCLE_RIDING);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
