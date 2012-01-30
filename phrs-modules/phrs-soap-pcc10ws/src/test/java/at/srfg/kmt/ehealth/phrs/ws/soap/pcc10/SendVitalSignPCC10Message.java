@@ -104,7 +104,7 @@ public final class SendVitalSignPCC10Message {
     private static QUPCIN043200UV01 buildMessage() 
             throws TripleException, IllegalAccessException, InstantiationException {
         
-        final String owner = "testOwner";
+        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();

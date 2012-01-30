@@ -39,7 +39,8 @@ import org.hl7.v3.QUPCIN043200UV01;
 public class MedicationClientExample {
 
     public static void main(String... args) throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, JAXBException {
-        final String owner = "testOwner";
+
+        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
