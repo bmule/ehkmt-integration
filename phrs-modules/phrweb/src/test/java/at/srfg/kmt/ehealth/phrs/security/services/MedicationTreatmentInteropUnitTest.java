@@ -183,7 +183,7 @@ public class MedicationTreatmentInteropUnitTest {
 
     }
 
-    public void addNewMessagesEhr(String phrResourceUri, String drug1_quantity, String drug2_quantity) throws TripleException, IllegalAccessException, InstantiationException {
+    public void addNewMessagesEhr(String phrResourceUri, String phrResourceUri2, String drug1_quantity, String drug2_quantity) throws TripleException, IllegalAccessException, InstantiationException {
         medicationClient.setCreator(Constants.EXTERN);//simulate extern
 
 
@@ -206,7 +206,7 @@ public class MedicationTreatmentInteropUnitTest {
         final String resourceURI_2 =
                 medicationClient.addMedicationSign(
                 USER,
-                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : NOTE,
+                phrResourceUri2 != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri2 : NOTE,
                 Constants.STATUS_RUNNING,
                 "201006010000",
                 "201006010000",
@@ -235,6 +235,29 @@ public class MedicationTreatmentInteropUnitTest {
             }
         }
 
+
+    }
+
+    public String addNewMessageEhr(String phrResourceUri, String drug1_quantity) throws TripleException, IllegalAccessException, InstantiationException {
+       
+        medicationClient.setCreator(Constants.EXTERN);//simulate extern
+
+        final String resourceURI_1 =
+                medicationClient.addMedicationSign(
+                USER,
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),//FIXXME must use the buildFrequency
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                drug1_quantity,
+                DOSE_UNITS,
+                //label1 != null ? label1 : "EHRDrug1"
+                DRUG_1_NAME,
+                DRUG_1_CODE);
+
+        return resourceURI_1;
 
     }
 
@@ -289,7 +312,7 @@ public class MedicationTreatmentInteropUnitTest {
             if (printDynabean) {
                 for (DynaBean dynaBean : beans) {
                     final String toString = DynaBeanUtil.toString(dynaBean);
-                    System.out.println(toString);
+                    // System.out.println(toString);
                 }
             }
 
@@ -384,9 +407,9 @@ public class MedicationTreatmentInteropUnitTest {
         System.out.println("testParseReferenceNote");
 
         String expect = "1234";
-        String note = InteropAccessService.REFERENCE_NOTE_PREFIX + expect;
+        String note = InteropProcessor.REFERENCE_NOTE_PREFIX + expect;
 
-        String result = InteropAccessService.parseReferenceNote(note);
+        String result = InteropProcessor.parseReferenceNote(note);
         System.out.println(note + " /parsed" + result);
         assertEquals("reference note", expect, result);
     }
@@ -397,8 +420,8 @@ public class MedicationTreatmentInteropUnitTest {
         //addNewMessagesEhr( "123-resuri-567", "5", "14");
 
         //create EHR records without any reference note for a user
-        addNewMessagesEhr(null, "5", "14");
-        addNewMessagesEhr("xxxxx", "11", "22");
+        addNewMessagesEhr(null, null, "5", "14");
+        addNewMessagesEhr("xxxxx", null, "11", "22");
         String phrClass = PHRS_RESOURCE_CLASS;
         String user = USER;
         System.out.println("testFindAllInteropMessagesForUser");
@@ -420,7 +443,7 @@ public class MedicationTreatmentInteropUnitTest {
     public void testFindNoNewInteropMessagesForUser() throws Exception {
 
         //simulate  EHR records with  phrweb references note
-        addNewMessagesEhr("xxxxxxx", "5", "14");
+        addNewMessagesEhr("xxxx", "zzzzz", "5", "14");
 
         String phrClass = PHRS_RESOURCE_CLASS;
         String user = USER;
@@ -599,6 +622,41 @@ public class MedicationTreatmentInteropUnitTest {
     }
 
     @Test
+    public void testFindReferenceTagExisting() throws Exception {
+        String theParentId = "resUri1234";
+       
+        String message_1=addNewMessageEhr(theParentId, "55");
+        String message_2=addNewMessageEhr(null, "44");
+        String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
+       
+        assertNotNull("Message not found", interopRef);
+        assertEquals("Did not find resource reference ", message_1, interopRef);
+    }
+
+    @Test
+    public void testFindReferenceTagNotExisting() throws Exception {
+        String theParentId = "resUri1234";
+        //put message with a different reference and one with null
+        String message_1=addNewMessageEhr("xxxxxx", "111");
+        String message_2=addNewMessageEhr(null, "222");
+
+        String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
+        assertNull("expected no message result, found: ", interopRef);
+
+    }
+
+    @Test
+    public void testFindReferenceTagNull() throws Exception {
+        String theParentId = "resUri1234";
+        String message_1=addNewMessageEhr(null, "777");
+        String message_2=addNewMessageEhr(null, "888");
+
+        String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
+        assertNull("expected null interopRef, found: ", interopRef);
+        //assertEquals("Did not find resource reference ",theParentId,interopRef);
+    }
+
+    @Test
     public void testSendInteropMessageMedicationClient() {
         System.out.println("testSendInteropMessages");
 
@@ -621,25 +679,10 @@ public class MedicationTreatmentInteropUnitTest {
 
     }
 
-    /*
-     * public void testImportNewMessages() throws Exception {
-     *
-     * String phrClass = PHRS_RESOURCE_CLASS; String user = USER;
-     * System.out.println("testImportNewMessages");
-     *
-     * //add fresh, there might be others but there should be at least 2
-     * addNewMessagesEhr(null, "7", "14"); List imported =
-     * iaccess.importNewMessages(USER, phrClass, false);//
-     * assertNotNull(imported); assertTrue(imported.size() > 0);
-     * assertTrue(imported.size() > 2);
-     *
-     *
-     * }
-     */
     @Test
     public void testImportNewMessages() throws Exception {
         System.out.println("testImportNewMessages");
-        addNewMessagesEhr(null, "4", "8");//an EHR record
+        addNewMessagesEhr(null, null, "4", "8");//an EHR record
         boolean importMessage = false;
         List phrResources = new ArrayList();
 
@@ -648,7 +691,7 @@ public class MedicationTreatmentInteropUnitTest {
         assertNotNull(imported);
         assertTrue("Found 0, expect more", imported.size() > 1);
 
-        assertNotNull("No phrResources created ", phrResources);   
+        assertNotNull("No phrResources created ", phrResources);
         assertTrue("No phrResources created ", phrResources.size() > 0);
 
         String matchName1 = null;
@@ -892,7 +935,7 @@ public class MedicationTreatmentInteropUnitTest {
     @Ignore
     public void testImportMessagesDirectCode() throws Exception {
         System.out.println("testImportMessagesDirectCode");
-        addNewMessagesEhr(null, "4", "8");//an EHR record
+        addNewMessagesEhr(null, null, "4", "8");//an EHR record
         boolean importMessage = false;
         List phrResources = new ArrayList();
         List<String> imported = importNewMessages(USER, PHRS_RESOURCE_CLASS, importMessage, phrResources);
