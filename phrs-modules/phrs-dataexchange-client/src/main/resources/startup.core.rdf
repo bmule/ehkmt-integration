@@ -1630,6 +1630,18 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Anxiety">
+        <skos:prefLabel>Anxiety</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreathULMSCode">
+                <icadyCode:codeValue>C0003467</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasion">
         <skos:prefLabel>on occasion</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
