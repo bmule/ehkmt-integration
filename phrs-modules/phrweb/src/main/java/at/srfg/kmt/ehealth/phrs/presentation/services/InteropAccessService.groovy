@@ -399,7 +399,7 @@ public class  InteropAccessService implements Serializable{
                     case MedicationTreatment.class.getCanonicalName():
 
                     MedicationTreatment domain=(MedicationTreatment)resource
-                    messageIdMap = iprocess.sendMedicationMessagee(resource);
+                    messageIdMap = iprocess.sendMedicationMessage(domain);
                     
                     break
 
@@ -573,7 +573,7 @@ public class  InteropAccessService implements Serializable{
      */
     public String findMessageWithReference(String ownerUri,String resourceUri,String phrsClass, String categoryCode){
         
-        String value = findInteropMessageWithReferenceTag( ownerUri, resourceUri, phrsClass,categoryCode)
+        String value = iprocess.findMessageWithReference( ownerUri, resourceUri, phrsClass,categoryCode)
         return value
     }
     /**
@@ -652,40 +652,7 @@ public class  InteropAccessService implements Serializable{
     public String getTest(){
         return "1234"
     }
-    /**
-     * Take second part after equals sign as an identifier.
-     * resourceUri=1234
-     * @param note
-     * @return null or parsed identifier
-     */
-        
-        
-    public static String parseReferenceNote(String note){
-        String out=null
-        if(note) note = note.trim()
-        if(note){
-            if(note.contains(REFERENCE_NOTE_PREFIX)){
-                //or def parts, then use parts.size()
-                String[] parts = note.split(REFERENCE_NOTE_PREFIX);
-
-                if(parts && parts.length > 0){
-                    //split on whitespace, take [0]
-                    out= parts[1]
-                    if(out!=null){
-                        out=out.trim()
-                        String[] parts2 = out.split(' ');
-                        if(parts2 && parts2.length > 0){
-                            out = parts2[0];
-                        }
-                    }
-                }
-            } else {
-                //no parsing
-                //out = note    
-            }
-        }
-        return out
-    }
+ 
     public List importNewMessages(String ownerUri, String phrsClass)  {
         
         return iprocess.importNewMessages( ownerUri,  phrsClass,  true)
@@ -696,126 +663,6 @@ public class  InteropAccessService implements Serializable{
         return iprocess.importNewMessages( ownerUri,  phrsClass,  importMessage)
     }
 
-    /**
-     *
-     * @param owerUri
-     * @param phrsClass
-     * @return
-     */
-    public Iterable<String> findInteropMessagesForUser(String ownerUri,String phrsClass) {
-
-        Iterable<String> resources;
-        if(ownerUri && phrsClass){
-            final Map<String, String> queryMap = new HashMap<String, String>();
-            try {
-                queryMap.put(Constants.RDFS_TYPE, phrsClass);
-                queryMap.put(Constants.OWNER, ownerUri);
-
-                resources = getPhrsStoreClient().getGenericTriplestore()
-                .getForPredicatesAndValues(queryMap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return resources;
-    }
-
-    /**
-     *
-     * @param triples
-     * @param resourceUri
-     * @return
-     */
-    public String interopFindMessageReferenceTag(Iterable<Triple> triples,String resourceUri){
-        int count = 0;
-        String foundSubjectUri
-        if(triples && resourceUri){
-
-            for (Triple triple : triples) {
-                try{
-                    final String predicate = triple.getPredicate();
-                    final String value = triple.getValue();
-
-                    String subjectUri  = triple.getSubject()
-                    /*
-                    if (predicate.equals(Constants.OWNER)) {
-                    }
-                     */
-                    if (predicate.equals(Constants.SKOS_NOTE)) {
-
-                        if(true){
-                            foundSubjectUri = triple.getSubject()
-                            continue
-                        }
-                    }
-
-                    count++;
-                } catch(Exception e){
-                    LOGGER.error(' interop resourceUri= '+resourceUri, e)
-                }
-            }
-        }
-        return foundSubjectUri
-    }
-    /**
-     *
-     * @param ownerUri
-     * @param resourceUri
-     * @param phrsClass - message class string
-     * @param categoryCode
-     * @return
-     */
-
-    public String findInteropMessageWithReferenceTag(String ownerUri,String resourceUri,String phrsClass,String categoryCode){
-
-        String refId
-        try{
-
-            String value = resourceUri
-            Iterable<Triple> triples = this.interopFindMesssageTriplesForUserByType( ownerUri, resourceUri, phrsClass, categoryCode)
-            refId = this.interopFindMessageReferenceTag(triples, resourceUri)
-
-        } catch(Exception e){
-            LOGGER.error('Interop findExternalReferenceInInteropMessageNote, interop ownerUri= '+ownerUri, e)
-        }
-        return refId
-    }
-    /**
-     *
-     * @param userId
-     * @param phrsClass - Constants.PHRS_MEDICATION_CLASS
-     * @return
-     * @throws TripleException
-     */
-
-    public Iterable<Triple> interopFindMesssageTriplesForUserByType(String ownerUri,String resourceUri,String phrsClass, String categoryCode){
-        //String userId, String phrsClass, String categoryCode,String value) throws TripleException {
-        final MultiIterable result = new MultiIterable();
-        final Map<String, String> queryMap = new HashMap<String, String>();
-        try{
-            queryMap.put(Constants.RDFS_TYPE, phrsClass);//Constants.PHRS_MEDICATION_CLASS);
-            queryMap.put(Constants.OWNER, ownerUri);
-            //categoryCode
-            queryMap.put(Constants.SKOS_NOTE, resourceUri);
-            //filter on code
-            if(categoryCode){
-                queryMap.put(Constants.HL7V3_VALUE_CODE, categoryCode);
-            }
-
-
-            final Iterable<String> resources =
-            getPhrsStoreClient().getGenericTriplestore().getForPredicatesAndValues(queryMap);
-
-
-            for (String resource : resources) {
-                final Iterable<Triple> subject = getPhrsStoreClient().getGenericTriplestore().getForSubject(resource);
-                result.addIterable(subject);
-            }
-        } catch(Exception e){
-            LOGGER.error('Interop findExternalReferenceInInteropMessageNote, interop ownerUri= '+ownerUri, e)
-        }
-        return result;
-    }
     /**
      *
      * @param resourceURI

@@ -47,7 +47,10 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
 public class InteropProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InteropProcessor.class.getName());
-    String PHRS_RESOURCE_CLASS = Constants.PHRS_MEDICATION_CLASS;
+    public final static String DATE_PATTERN_INTEROP_DATE_TIME = "yyyyMMddHHmm";
+    public final static String REFERENCE_NOTE_PREFIX = "resourcephr=";
+    public final static String DRUG_CODE_DEFAULT_PHR = "MyDrugCode";
+    public String PHRS_RESOURCE_CLASS = Constants.PHRS_MEDICATION_CLASS;
     public static final String NOTE = "to import";
     //public static final String USER = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_UNIT_TEST;
@@ -155,9 +158,9 @@ public class InteropProcessor {
             note = note.trim();
         }
         if (note != null) {
-            if (note.contains(InteropAccessService.REFERENCE_NOTE_PREFIX)) {
+            if (note.contains(REFERENCE_NOTE_PREFIX)) {
                 //or def parts, then use parts.size()
-                String[] parts = note.split(InteropAccessService.REFERENCE_NOTE_PREFIX);
+                String[] parts = note.split(REFERENCE_NOTE_PREFIX);
 
                 if (parts != null && parts.length > 0) {
                     //split on whitespace, take [0]
@@ -316,9 +319,8 @@ public class InteropProcessor {
 
             String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
 
-            //removeMessage(interopRef)
 
-            if (interopRef != null) {
+            if (interopRef == null) {
 
                 messageId = medicationclient.addMedicationSign(
                         owner,
@@ -331,7 +333,7 @@ public class InteropProcessor {
                         dosageQuantity,//dosageValue,
                         doseUnits,
                         name);
-                if (messageId != null) {
+                if (messageId != null && messageId.length() > 0) {
                     messageIdMap.put(categoryCode, messageId);
                 }
             } else {
@@ -398,120 +400,54 @@ public class InteropProcessor {
      */
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
         //owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode
-        String value = findInteropMessageWithReferenceTag(ownerUri, resourceUri, phrsClass, categoryCode);
+        //String value = findInteropMessageWithReferenceTag(ownerUri, resourceUri, phrsClass, categoryCode);
+        String value =findMessageWithReference(ownerUri,resourceUri,phrsClass);
         return value;
     }
 
-    /**
-     *
-     * @param ownerUri
-     * @param resourceUri
-     * @param phrsClass - message class string
-     * @param categoryCode
-     * @return
-     */
-    public String findInteropMessageWithReferenceTag(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
+    public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass) {
 
-        String refId = null;
-        try {
+        //List<String> list = new ArrayList();
+        //Set<DynaBean> queryResultBeans = new HashSet<DynaBean>();
+        String result=null;
+        if (ownerUri != null && phrsClass != null && resourceUri != null) {
 
-            String value = resourceUri;
-            Iterable<Triple> triples = interopFindMesssageTriplesForUserByType(ownerUri, resourceUri, phrsClass, categoryCode);
-            refId = interopFindMessageReferenceTag(triples, resourceUri);
-
-        } catch (Exception e) {
-            LOGGER.error("Interop findExternalReferenceInInteropMessageNote, interop ownerUri= " + ownerUri, e);
-        }
-        return refId;
-    }
-
-    public Iterable<Triple> interopFindMesssageTriplesForUserByType(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
-        //String userId, String phrsClass, String categoryCode,String value) throws TripleException {
-        final MultiIterable result = new MultiIterable();
-        final Map<String, String> queryMap = new HashMap<String, String>();
-        try {
-            queryMap.put(Constants.RDFS_TYPE, phrsClass);//Constants.PHRS_MEDICATION_CLASS);
-            queryMap.put(Constants.OWNER, ownerUri);
-            //categoryCode
-            queryMap.put(Constants.SKOS_NOTE, resourceUri);
-            //filter on code
-            if (categoryCode != null) {
-                queryMap.put(Constants.HL7V3_VALUE_CODE, categoryCode);
-            }
-
-
-            final Iterable<String> resources =
-                    getPhrsStoreClient().getGenericTriplestore().getForPredicatesAndValues(queryMap);
-
-
-            for (String resource : resources) {
-                final Iterable<Triple> subject = getPhrsStoreClient().getGenericTriplestore().getForSubject(resource);
-                result.addIterable(subject);
-            }
-        } catch (Exception e) {
-            LOGGER.error("Interop findExternalReferenceInInteropMessageNote, interop ownerUri= " + ownerUri, e);
-        }
-        return result;
-    }
-
-    /**
-     *
-     * @param owerUri
-     * @param phrsClass
-     * @return
-     */
-    public Iterable<String> findInteropMessagesForUser(String ownerUri, String phrsClass) {
-
-        Iterable<String> resources = null;
-        if (ownerUri != null && ownerUri.length() > 0 && phrsClass != null) {
-            final Map<String, String> queryMap = new HashMap<String, String>();
             try {
-                queryMap.put(Constants.RDFS_TYPE, phrsClass);
-                queryMap.put(Constants.OWNER, ownerUri);
+                Set<DynaBean> results = findInteropMessagesForUser(ownerUri, phrsClass, false);//check false old and new messages
+                if (results != null) {
 
-                resources = getPhrsStoreClient().getGenericTriplestore().getForPredicatesAndValues(queryMap);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return resources;
-    }
+                    for (DynaBean dynaBean : results) {
+                        try { 
+                            String messageUri = dynaBean.getDynaClass().getName();      
+                            boolean match = false;
 
-    /**
-     *
-     * @param triples
-     * @param resourceUri
-     * @return
-     */
-    public String interopFindMessageReferenceTag(Iterable<Triple> triples, String resourceUri) {
-        int count = 0;
-        String foundSubjectUri = null;
-        if (triples != null && resourceUri != null) {
+                                String note = DynaUtil.getStringProperty(dynaBean, Constants.SKOS_NOTE);
+                                if (note != null) {
+                                    String foundRef = parseReferenceNote(note);
+                                    if (foundRef != null && foundRef.equals(resourceUri)) {
+                                        match = true;
+                                    }
+                                }
+                            if (match) {
+                                //list.add(messageUri);
+                                result=messageUri;
+                                break;
+                                //queryResultBeans.add(dynaBean);
+                            }
 
-            for (Triple triple : triples) {
-                try {
-                    final String predicate = triple.getPredicate();
-                    final String value = triple.getValue();
-
-                    String subjectUri = triple.getSubject();
-                    /*
-                     * if (predicate.equals(Constants.OWNER)) { }
-                     */
-                    if (predicate.equals(Constants.SKOS_NOTE)) {
-
-                        if (true) {
-                            foundSubjectUri = triple.getSubject();
-                            continue;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
                         }
                     }
-
-                    count++;
-                } catch (Exception e) {
-                    LOGGER.error(" interop resourceUri= " + resourceUri, e);
                 }
-            }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }  
         }
-        return foundSubjectUri;
+
+        return result;
+
     }
 
     public static String createReferenceNote(String resourceUri) {
@@ -556,10 +492,7 @@ public class InteropProcessor {
             e.printStackTrace();
         }
     }
-    /*
-     * medicationClient.updateMedication(resourceURI,
-     * Constants.PHRS_MEDICATION_DOSAGE, newDosageURI);
-     */
+
 
     public String transformStatus(String status) {
         String out = status;
@@ -614,9 +547,7 @@ public class InteropProcessor {
 
         List<String> list = new ArrayList();
         if (ownerUri != null && phrsClass != null) {
-
-            final MultiIterable result = new MultiIterable();
-            final Map<String, String> queryMap = new HashMap<String, String>();
+            ;
             try {
                 //Find new messages (true),ignore known messages that have been imported
                 Set<DynaBean> results = findInteropMessagesForUser(ownerUri, phrsClass, true);
@@ -627,27 +558,23 @@ public class InteropProcessor {
                     if (phrResources == null) {
                         phrResources = new ArrayList();
                     }
-                    int resSize = results.size();
-                    System.out.println("findInteropMessagesForUser, count messages= " + results.size());
-                    LOGGER.debug("findInteropMessagesForUser, count messages= " + results.size());
-
+                    //int resSize = results.size();
+ 
                     for (DynaBean dynaBean : results) {
                         try {
-                            //DynaBean dynaBean = dynaBeanClient.getDynaBean(messageResourceUri);
+
                             String messageUri = dynaBean.getDynaClass().getName();
-                            DynaBeanUtil.toString(dynaBean);
-                            System.out.println("importNewMessages getDynaClass()= " + messageUri);
+                            //DynaBeanUtil.toString(dynaBean);
+                            //System.out.println("importNewMessages getDynaClass()= " + messageUri);
 
                             //DynaBean dynaBean = dynaBeanClient.getDynaBean(resoure);
                             //http://www.icardea.at/phrs#owner
-                            Object owner = DynaUtil.getStringProperty(dynaBean, Constants.OWNER);
-                            System.out.println("importNewMessages owner= " + DynaUtil.getStringProperty(dynaBean, Constants.OWNER));
+                            String owner = DynaUtil.getStringProperty(dynaBean, Constants.OWNER);
+                            //System.out.println("importNewMessages owner= " + DynaUtil.getStringProperty(dynaBean, Constants.OWNER));
 
                             //System.out.println("importNewMessages drug name= " + DynaUtil.getStringProperty(dynaBean,MED_DRUG_NAME_URI));
-                            //transformInteropMessage(ownerUri, phrsClass, dynaBean, messageResourceUri);
-                            //DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
 
-                            Object creator = DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
+                            String creator = DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
 
                             Object repositoryObject = transformInteropMessage(ownerUri, phrsClass, dynaBean, messageUri);
 
@@ -660,7 +587,6 @@ public class InteropProcessor {
                                 phrResources.add(repositoryObject);
                             }
                             if (importMessage && repositoryObject != null) {
-
                                 //save transformed resource to local store
                                 //the resourceUri issue
                                 getCommonDao().crudSaveResource(repositoryObject, ownerUri, "interopservice");
@@ -669,20 +595,19 @@ public class InteropProcessor {
                                 sendMessages(repositoryObject);
                             }
 
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
-                            // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
+                            LOGGER.error(" message error, interop ownerUri= " + ownerUri, e);
                         }
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                //FIXXME for bad sesame issues 
+                LOGGER.error("", e);
             } catch (java.lang.Error e) {
-                System.out.println("java lang error sesame error");
+                //System.out.println("java lang error sesame error");
                 e.printStackTrace();
+                LOGGER.error("possible sesame error", e);
             }
         }
 
@@ -690,6 +615,7 @@ public class InteropProcessor {
         return list;
 
     }
+
 
     public boolean compareOwners(String givenOwnerUri, String messageOwner) {
         boolean valid = false;
@@ -1092,18 +1018,18 @@ public class InteropProcessor {
 
     public void registerProtocolId(String owneruri, String protocolId, String namespace) {
         //phrsStoreClient.getInteropClients().getActorClient().register
-        if (namespace==null) {
+        if (namespace == null) {
             namespace = Constants.ICARDEA_DOMAIN_PIX_OID;
-            
+
         }
-     //AUTHORIZE_USER_PREFIX_TEST   
+        //AUTHORIZE_USER_PREFIX_TEST   
         try {
             getInteropClients().getActorClient().register(namespace, owneruri, protocolId);
-            LOGGER.debug("registered protocolId in core for owneruri= "+owneruri+" protocolId= "+protocolId+" namespace="+namespace);
+            LOGGER.debug("registered protocolId in core for owneruri= " + owneruri + " protocolId= " + protocolId + " namespace=" + namespace);
 
         } catch (TripleException e) {
-            LOGGER.error("owneruri= "+owneruri+" protocolId= "+protocolId, e);
+            LOGGER.error("owneruri= " + owneruri + " protocolId= " + protocolId, e);
         }
-        
+
     }
 }
