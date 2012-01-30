@@ -32,6 +32,7 @@ public class PhrsClientUnitTest {
     public static final String DOSE_TIME_OF_DAY = "http://www.icardea.at/phrs/instances/InTheMorning";
     public static final String DOSE_UNITS = "http://www.icardea.at/phrs/instances/pills";
     public static final String MED_REASON = "http://www.icardea.at/phrs/instances/Cholesterol";
+    private GenericTriplestore triplestore;
 
     public PhrsClientUnitTest() {
     }
@@ -49,22 +50,29 @@ public class PhrsClientUnitTest {
         PhrsStoreClient phrsClient = PhrsStoreClient.getInstance();
         Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
         phrsClient.getPhrsDatastore().delete(query);
+        triplestore = phrsClient.getGenericTriplestore();
 
     }
 
     @After
     public void tearDown() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, Exception {
-
+        try {
+            PhrsStoreClient phrsClient = PhrsStoreClient.getInstance();
+            if (phrsClient != null) {
+                Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
+                phrsClient.getPhrsDatastore().delete(query);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
         try {
             //clean up 
-            PhrsStoreClient phrsClient = PhrsStoreClient.getInstance();
-            Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
-            phrsClient.getPhrsDatastore().delete(query);
+            if (triplestore != null) {
+                ((GenericTriplestoreLifecycle) triplestore).shutdown();
+                ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+            }
 
-            ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).shutdown();
-            ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).cleanEnvironment();
-
-            phrsClient.setTripleStore(null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,7 +84,6 @@ public class PhrsClientUnitTest {
         PhrsStoreClient sc = PhrsStoreClient.getInstance();
         assertNotNull(sc);
     }
-
 
     @Test
     public void testSavePhrResourceViaInterop() throws Exception {
@@ -213,7 +220,7 @@ public class PhrsClientUnitTest {
         String out = null;
         String expect = "1234";
         String note = InteropAccessService.REFERENCE_NOTE_PREFIX + expect;
-     
+
 
         if (note != null) {
             note = note.trim();

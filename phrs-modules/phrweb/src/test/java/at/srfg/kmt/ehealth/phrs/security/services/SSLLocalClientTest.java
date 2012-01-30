@@ -7,10 +7,7 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author bmulreni
- */
+@Ignore
 public class SSLLocalClientTest {
     
     public SSLLocalClientTest() {

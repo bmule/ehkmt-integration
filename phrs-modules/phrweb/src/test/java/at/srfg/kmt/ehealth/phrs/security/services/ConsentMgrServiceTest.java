@@ -13,6 +13,7 @@ import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplSer
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
+@Ignore
 public class ConsentMgrServiceTest {
 
     String ROLE_CODE_DOC = "ROLECODE:DOCTOR";
