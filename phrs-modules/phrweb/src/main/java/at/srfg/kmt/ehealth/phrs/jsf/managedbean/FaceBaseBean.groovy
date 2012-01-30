@@ -467,6 +467,7 @@ class FaceBaseBean implements Serializable{
 		createInitResource()
 
 	}
+
 	public void formEdit(){
 		try{
 

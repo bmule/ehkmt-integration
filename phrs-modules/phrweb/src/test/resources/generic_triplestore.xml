@@ -32,12 +32,14 @@
             the temporary direcotry.
             If the path starts with ${HOME_DIR} then the location is relative to 
             aclual user home direcotry.
+            
+             ${HOME_DIR}/.icardea/test/sesame
 -->
     <memorysail>
 
         <filedump>
 
-            ${HOME_DIR}/.icardea/test/sesame
+            ${HOME_DIR}/.icardea/test2/sesame
         </filedump>
     </memorysail>
 

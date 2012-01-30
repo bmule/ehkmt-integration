@@ -13,179 +13,196 @@ import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 @ManagedBean(name="odlmed")
 @RequestScoped
 public class ObsMedicationChangeBean extends FaceBaseBean  {
-	// collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
-	//CartesianChartModel chartModel
-	String infoType
+    // collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
+    //CartesianChartModel chartModel
+    String infoType
 
-	public ObsMedicationChangeBean() {
-		super();//required!!
-		// setPermittedActions performed by super class
-		infoType = findTypeParam()
-		domainClazz = MedicationTreatment.class
-		setSelected(domainClazz.newInstance())
+    public ObsMedicationChangeBean() {
+        super();//required!!
+        // setPermittedActions performed by super class
+        infoType = findTypeParam()
+        domainClazz =   MedicationTreatment.class
+        setSelected(domainClazz.newInstance())
 
-		initVocabularies(domainClazz,getLanguage())
+        initVocabularies(domainClazz,getLanguage())
 
-		try {
-			loadModelMain()
-		} catch (Exception e){
-			println('ObsMedicationChangeBean loadModelMain Exception '+e)
-		}
-		/*
-		 try{
-		 initChartModel()
-		 } catch (Exception e){
-		 println('ObsActivityBean initChartModel Exception '+e)
-		 }*/
+        try {
+            loadModelMain()
+        } catch (Exception e){
+            println('ObsMedicationChangeBean loadModelMain Exception '+e)
+        }
+        /*
+        try{
+        initChartModel()
+        } catch (Exception e){
+        println('ObsActivityBean initChartModel Exception '+e)
+        }*/
 
-	}
-	//		 modelMain= getLoadAllHistory()
+    }
+    //		 modelMain= getLoadAllHistory()
 
-	//problem with coding of status...could get interop code PhrsConstants.STATUS_COMPLETE etc
-	@Override
-	public void loadModelMain(){
-		/**
-		 * Import new interop messages as new domain objects
-		 */
-		importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
-		/**
-		 * load model
-		 */
-		super.loadModelMain()
-		//get parameter
-		if( ! infoType) infoType = findTypeParam()
+    //problem with coding of status...could get interop code PhrsConstants.STATUS_COMPLETE etc
+    @Override
+    public void loadModelMain(){
+        /**
+         * Import new interop messages as new domain objects
+         */
+        try {
+            importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
+        } catch (Exception e){
+            LOGGER.error('Medication building list importInteropMessages',e)
+        }
+        /**
+         * load model
+         */
+        super.loadModelMain()
+        //get parameter
+        if( ! infoType) infoType = findTypeParam()
 
-		switch(infoType){
-			case 'inactive':
-				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_false',true,internalModelList)
-			//medicationSummary_medicationStatus_false
-				break
-
-			case 'history':
-				internalModelList=crudReadHistory()
-				break
-                        case 'active':
-				internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_true',true,internalModelList)
+        switch(infoType){
+            case 'inactive':
+                internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_false',true,internalModelList)
+            //medicationSummary_medicationStatus_false
+            break
+            //
+            //let history default to ALL records inactive and active
+            //case 'history':
+            //internalModelList=crudReadHistory()
+            //break
+            case 'active':
+                internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_true',true,internalModelList)
 			
-				break
-			default:
-				//No filter,show inactive and active internalModelList = internalModelList 
-                              
-                                //medicationSummary_medicationStatus_true PhrsConstants.STATUS_COMPLETE
-				break
+            break
+            default:
+            //No filter,show inactive and active internalModelList = internalModelList                          
+            //medicationSummary_medicationStatus_true PhrsConstants.STATUS_COMPLETE
+            break
 
-		}
-	}
+        }
+    }
 
-	/**
-	 * Setup request attribute 'view' that controls view widget rendering
-	 * and the list model e.g. active list of meds, inactive list, history of changes
-	 * @return
-	 */
-	public String findTypeParam(){
+    /**
+     * Setup request attribute 'view' that controls view widget rendering
+     * and the list model e.g. active list of meds, inactive list, history of changes
+     * @return
+     */
+    public String findTypeParam(){
 
-		String temp =  findRequestParam('view')
-		switch(temp){
-			case 'inactive':
+        String temp =  findRequestParam('view')
+        switch(temp){
+            case 'inactive':
 
-				break
+            break
 
-			case 'active':
+            case 'active':
 
-				break
+            break
 
-			case 'history':
+            case 'history':
 
-				break
+            break
 
-			default:
-				temp = 'active'
-				break
+            default:
+            temp = 'active'
+            break
 
-		}
-		return temp
-	}
-	/*
-	 public void initChartModel(){
-	 try{
-	 chartModel = HealthyCharts.createChartBloodPressure(this.getModelMain())
-	 } catch (Exception e){
-	 println('initChartModel Exception '+e)
-	 }
-	 if( ! chartModel) chartModel = new CartesianChartModel()
-	 }
-	 public  CartesianChartModel getTestBp(){
-	 return HealthyCharts.testBloodPressureChart()
-	 }*/
+        }
+        return temp
+    }
+    /*
+    public void initChartModel(){
+    try{
+    chartModel = HealthyCharts.createChartBloodPressure(this.getModelMain())
+    } catch (Exception e){
+    println('initChartModel Exception '+e)
+    }
+    if( ! chartModel) chartModel = new CartesianChartModel()
+    }
+    public  CartesianChartModel getTestBp(){
+    return HealthyCharts.testBloodPressureChart()
+    }*/
 
-	@Override
-	public void setPermittedActions(){
-		super.setPermittedActions();
-		//TODO Issue: fired by super constructor before known in domain controller!
-		infoType = findTypeParam()
-		switch(infoType){
-			case 'inactive':
-				this.setAllowDelete(false);
-				setModify(AuthorizationService.MODIFY_YES)
+    @Override
+    public void setPermittedActions(){
+        super.setPermittedActions();
+        //TODO Issue: fired by super constructor before known in domain controller!
+        infoType = findTypeParam()
+        switch(infoType){
+            case 'inactive':
+            this.setAllowDelete(false);
+            setModify(AuthorizationService.MODIFY_YES)
 
-				setAllowCreate(false)
-				setAllowView(true)
-				break
-			case 'active':
-				this.setAllowDelete(false);
-				setModify(AuthorizationService.MODIFY_YES)
+            setAllowCreate(false)
+            setAllowView(true)
+            break
+            case 'active':
+            this.setAllowDelete(false);
+            setModify(AuthorizationService.MODIFY_YES)
 
-				setAllowCreate(true)
-				setAllowView(true)
-				break
-			case 'history':
-				this.setAllowDelete(false);
-				setModify(AuthorizationService.MODIFY_NO)
+            setAllowCreate(true)
+            setAllowView(true)
+            break
+            case 'history':
+            this.setAllowDelete(false);
+            setModify(AuthorizationService.MODIFY_NO)
 
-				setAllowCreate(false)
-				setAllowView(true)
-				break
+            setAllowCreate(false)
+            setAllowView(true)
+            break
 
-			default:
-			//default is active
-				this.setAllowDelete(false);
-				setModify(AuthorizationService.MODIFY_YES)
+            default:
+            //default is active
+            this.setAllowDelete(false);
+            setModify(AuthorizationService.MODIFY_YES)
 
-				setAllowCreate(true)
-				setAllowView(true)
+            setAllowCreate(true)
+            setAllowView(true)
 
-				break
+            break
 
-		}
+        }
 
-	}
+    }
 
-	/**
-	 * Called for a new form, local changes. Also for testing
-	 * Under risks, there are no new risks that a user can add, we provide all known risks and the user should update
-	 */
-	@Override
-	public void modifyNewResource(){
-		super.modifyNewResource();
-		if(selected){
-			selected.beginDate =new Date()
-			selected.status='medicationSummary_medicationStatus_true'
-			selected.treatmentMatrix.dosageUnits='http://www.icardea.at/phrs/instances/pills'
-			selected.treatmentMatrix.dosageInterval='http://www.icardea.at/phrs/instances/EveryDay'
-			selected.treatmentMatrix.dosageTimeOfDay='http://www.icardea.at/phrs/instances/NotSpecified'
-			selected.reasonCode='http://www.icardea.at/phrs/instances/NoSpecialTreatment'
-		}
+    /**
+     * Called for a new form, local changes. Also for testing
+     * Under risks, there are no new risks that a user can add, we provide all known risks and the user should update
+     */
+    @Override
+    public void modifyNewResource(){
+        super.modifyNewResource();
+        if(selected){
+            selected.beginDate =new Date()
+            selected.status='medicationSummary_medicationStatus_true'
+            selected.treatmentMatrix.dosageUnits=Constants.TABLET
+            selected.treatmentMatrix.dosageInterval='http://www.icardea.at/phrs/instances/EveryDay'
+            selected.treatmentMatrix.dosageTimeOfDay='http://www.icardea.at/phrs/instances/NotSpecified'
+            selected.reasonCode='http://www.icardea.at/phrs/instances/NoSpecialTreatment'
+        }
 
-	}
+    }
 
 
-	@Override
-	public void storeModifyFirst(){
-		super.storeModifyFirst()
+    @Override
+    public void storeModifyFirst(){
+        super.storeModifyFirst()
 
-		if(selected){
+        if(selected){
 
-		}
-	}
+        }
+    }
+        
+    @Override
+    public void formEdit(){
+        super.formEdit();
+        if(selected && selected.treatmentMatrix && selected.treatmentMatrix.dosageUnits){
+            //MedicationTreatment domain = (MedicationTreatment)selected
+            //fix existing test data
+            if( selected.treatmentMatrix.dosageUnits == 'http://www.icardea.at/phrs/instances/pills'){
+                
+                selected.treatmentMatrix.dosageUnits=Constants.TABLET
+            }
+        }
+    }
 }
 

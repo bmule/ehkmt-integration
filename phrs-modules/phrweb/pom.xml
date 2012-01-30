@@ -546,7 +546,7 @@
 
     </dependencies>
  
-  
+  <!--  -Dcatalina.home= -->
     <build>    
         <finalName>phrweb</finalName>
         <plugins>

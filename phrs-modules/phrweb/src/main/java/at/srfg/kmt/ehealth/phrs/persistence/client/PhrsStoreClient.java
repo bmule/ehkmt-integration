@@ -1,5 +1,6 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client;
 
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,6 +55,8 @@ public class PhrsStoreClient implements Serializable {
     private PhrsRepositoryClient phrsRepositoryClient;
     private InteropClients interopClients;
     private InteropAccessService interopService;
+    private InteropProcessor interopProcessor;
+    
     static boolean TEST = true;
 
     private PhrsStoreClient() {
@@ -266,7 +269,9 @@ public class PhrsStoreClient implements Serializable {
     public Datastore getPhrsAuditDatastore() {
         return datastoreAuditing;
     }
-
+    public InteropProcessor getInteropProcessor(){
+        return interopProcessor;
+    }
     /**
      * Initialize interop store and clients for interoperability
      */
@@ -282,7 +287,7 @@ public class PhrsStoreClient implements Serializable {
             phrsRepositoryClient = new PhrsRepositoryClient(this);
             interopClients = new InteropClients(triplestore);
             interopService = new InteropAccessService(this);
-
+            interopProcessor = new InteropProcessor(this);
             termClient = interopClients.getTermClient();
             if (termClient == null) {
                 System.out.println("getTermClient NULL");

@@ -55,6 +55,8 @@ public class InteropClients {
         problemEntryClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
 
         schemeClient = new SchemeClient(triplestore);
+        
+        actorClient= new ActorClient(triplestore);
 
         termClient = new TermClient(triplestore);
 
