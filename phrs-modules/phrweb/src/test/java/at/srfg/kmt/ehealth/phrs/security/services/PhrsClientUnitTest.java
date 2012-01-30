@@ -12,6 +12,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import java.util.Date;
 import java.util.UUID;
 import org.junit.*;
@@ -204,31 +205,22 @@ public class PhrsClientUnitTest {
         return ias;
     }
 
-    @Test
-    public void testParseReferenceNote() {
-        System.out.println("phrsclient testParseReferenceNote");
-        String expect = "1234";
-        String x = expect;
-        String result = InteropAccessService.parseReferenceNote(InteropAccessService.REFERENCE_NOTE_PREFIX + x);
-        System.out.println(InteropAccessService.REFERENCE_NOTE_PREFIX + x + " /parsed" + result);
-        assertEquals("reference note", expect, result);
-    }
-
+    @Ignore
     @Test
     public void testReferenceNoteCode() {
         System.out.println("testReferenceNoteCode");
         String out = null;
         String expect = "1234";
-        String note = InteropAccessService.REFERENCE_NOTE_PREFIX + expect;
+        String note = InteropProcessor.REFERENCE_NOTE_PREFIX + expect;
 
 
         if (note != null) {
             note = note.trim();
         }
         if (note != null) {
-            if (note.contains(InteropAccessService.REFERENCE_NOTE_PREFIX)) {
+            if (note.contains(InteropProcessor.REFERENCE_NOTE_PREFIX)) {
                 //or def parts, then use parts.size()
-                String[] parts = note.split(InteropAccessService.REFERENCE_NOTE_PREFIX);
+                String[] parts = note.split(InteropProcessor.REFERENCE_NOTE_PREFIX);
 
                 if (parts != null && parts.length > 0) {
                     //split on whitespace, take [0]
