@@ -2112,7 +2112,7 @@
         <skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WalkingULMSCode">
-                <icadyCode:codeValue>F-02070</icadyCode:codeValue>
+                <icadyCode:codeValue>C0080331</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
                 </icadyCode:codeSystem>
@@ -2371,7 +2371,6 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    
     
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
