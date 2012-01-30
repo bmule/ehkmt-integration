@@ -166,25 +166,11 @@ final class MedicationTask implements PCCTask {
     private QUPCIN043200UV01 buildMessage()
             throws TripleException, IllegalAccessException, InstantiationException {
 
-               final String owner = "testOwner";
+        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
-
         final MedicationClient client = new MedicationClient(triplestore);
-        client.addMedicationSign(
-                owner,
-                "Free text note for the medication.",
-                Constants.STATUS_COMPELETE,
-                "200812010000",
-                "201106101010",
-                client.buildFrequency("morgen", -1, 8, Constants.HOUR),
-                Constants.HL7V3_ORAL_ADMINISTRATION,
-                "25",
-                Constants.MILLIGRAM,
-                "Drug-Eluting Stents",
-                "C1322815");
-
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();

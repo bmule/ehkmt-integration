@@ -159,46 +159,12 @@ final class VitalSignTask implements PCCTask {
     private QUPCIN043200UV01 buildMessage()
             throws TripleException, IllegalAccessException, InstantiationException {
 
-        final String owner = "testOwner";
+        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
 
         final VitalSignClient client = new VitalSignClient(triplestore);
-        
-                client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
-                "Free text note for systolic.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "100",
-                Constants.MM_HG);
-
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE,
-                "Free text note for diasystolic.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "80",
-                Constants.MM_HG);
-
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_BODY_HEIGHT,
-                "Free text note for body height.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "180",
-                Constants.CENTIMETER);
-
-        client.addVitalSign(owner,
-                Constants.ICARDEA_INSTANCE_BODY_WEIGHT,
-                "Free text note for body weight.",
-                "201006010000",
-                Constants.STATUS_COMPELETE,
-                "80",
-                Constants.KILOGRAM);
-
-
         final Iterable<String> uris = client.getVitalSignURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();

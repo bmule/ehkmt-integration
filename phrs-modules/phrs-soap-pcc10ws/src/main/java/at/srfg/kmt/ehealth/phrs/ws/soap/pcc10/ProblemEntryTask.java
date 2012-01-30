@@ -154,22 +154,12 @@ final class ProblemEntryTask implements PCCTask {
 
     private QUPCIN043200UV01 buildMessage()
             throws TripleException, IllegalAccessException, InstantiationException {
-
-        final String owner = "testOwner";
+        
+        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
         final ProblemEntryClient client = new ProblemEntryClient(triplestore);
-
-        // this adds a problem-symptom named fever
-        client.addProblemEntry(
-                owner,
-                Constants.HL7V3_SYMPTOM,
-                Constants.STATUS_COMPELETE,
-                "201006010000",
-                "201006010000",
-                "Free text note for the problem.",
-                Constants.HL7V3_FEVER);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
