@@ -1,8 +1,8 @@
 cls
 
-tomcat_home="/lab0/apache/tomcat/apache-tomcat-6.0.35/"
+rem set tomcat_home="D:\tomcat\apache-tomcat-6.0.20"
 
-set tomcat_home="D:\tomcat\apache-tomcat-6.0.20"
+set tomcat_home="D:\\srfg\\tomcat\\apache-tomcat-6.0.35"
 call mvn  cargo:undeploy  -Dcatalina.home=%tomcat_home%
 
 echo ""
