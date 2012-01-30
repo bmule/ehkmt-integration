@@ -53,8 +53,7 @@ public class ProblemsStep6ClientExample {
                 "201006150000",
                 "",
                 "Free text note.",
-                /*TODO: CORRECT VALUECODE "Anxiety": PCC-10-Input-Scenario-ProblemsStep6.xml:73  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_ANXIETY);
 
         client.addProblemEntry(
                 owner,
@@ -63,8 +62,7 @@ public class ProblemsStep6ClientExample {
                 "201006150000",
                 "",
                 "Free text note.",
-                /*TODO: CORRECT VALUECODE: 'Shortnes of Breath' PCC-10-Input-Scenario-ProblemsStep6.xml:91  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_SHORTHENS_OF_BREATH);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);

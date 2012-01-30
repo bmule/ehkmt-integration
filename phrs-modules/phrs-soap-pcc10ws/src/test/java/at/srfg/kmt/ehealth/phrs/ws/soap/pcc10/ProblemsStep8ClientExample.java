@@ -53,8 +53,7 @@ public class ProblemsStep8ClientExample {
                 "201007120000",
                 "",
                 "Free text note.",
-                /*TODO: CORRECT VALUECODE "Feeling Well": PCC-10-Input-Scenario-ProblemsStep8.xml:75  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_FEELING_WELL);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);

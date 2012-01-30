@@ -56,7 +56,7 @@ public class ProblemsStep11ClientExample {
                 "",
                 "Free text note.",
                 /*TODO: CORRECT VALUECODE "Sick to Stomach": PCC-10-Input-Scenario-ProblemsStep11.xml:75  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_SICK_TO_STOMACH);
 
         client.addProblemEntry(
                 owner,
@@ -66,7 +66,7 @@ public class ProblemsStep11ClientExample {
                 "",
                 "Free text note.",
                 /*TODO: CORRECT VALUECODE "Unable to Eat": PCC-10-Input-Scenario-ProblemsStep11.xml:92  */
-                Constants.HL7V3_FATIQUE);
+                Constants.HL7V3_UNABLE_TO_EAT);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
