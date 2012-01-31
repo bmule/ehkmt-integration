@@ -4,7 +4,7 @@ import java.util.Date
 import java.util.Map
 import java.util.Set
 
-import org.apache.commons.beanutils.BeanMap
+
 import org.bson.types.ObjectId
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -42,7 +42,7 @@ public class AuditBaseAction {
 	//boolean deleted=false
 	
 	//Map<String,Object> auditMap= new HashMap<String,Object>()
-	Map auditMap= []
+	Map<String,String> auditMap= []
 	
 	String creatorOfAction
 	Set ownerOfResource
@@ -75,9 +75,12 @@ public class AuditBaseAction {
 				this.resourceCreatorUri		= creatorOfAction
 				this.resourceOrigin	 		= origin
 								
-				//convert pojo to map and then to json string?
-				if(params) auditMap = new BeanMap(params)
-				else auditMap= []
+				// convert pojo to map and then to json string?
+                                //TODO FIXME ObjectMapper mapper = new ObjectMapper();		 
+				//mapper.writeValue(jsonString, object);
+				// println('jsonString='+jsonString)
+				//convert pojo object to json map
+				//else auditMap= []
 				
 				//auditMap = PhrsStoreClient.getInstance.getJsonMapper().readValue(map, Map.class);
 								
@@ -105,8 +108,8 @@ public class AuditBaseAction {
 				this.deleted				= object.deleted
 				this.resourceOrigin	 		= object.origin
 				
-				//convert pojo to map and then to json string?
-				auditMap = new BeanMap(this);
+				//TODO convert pojo to map and then to json string
+				//auditMap = new BeanMap(this);
 				
 				//auditMap = PhrsStoreClient.getInstance.getJsonMapper().readValue(map, Map.class);
 								

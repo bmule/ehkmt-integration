@@ -334,7 +334,8 @@ public class InteropProcessor {
                         doseUnits,
                         name);
                 if (messageId != null && messageId.length() > 0) {
-                    messageIdMap.put(categoryCode, messageId);
+                    
+                    messageIdMap.put("default", messageId);
                 }
             } else {
                 //update

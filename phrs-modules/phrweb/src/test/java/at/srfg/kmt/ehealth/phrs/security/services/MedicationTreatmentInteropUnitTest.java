@@ -60,7 +60,7 @@ public class MedicationTreatmentInteropUnitTest {
      */
     public static final String NOTE = "to import";
     //user owner uri
-    public static final String USER = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;
+    public static final String USER = "MedicationTreatmentInteropUnitTest";//Constants.OWNER_URI_CORE_PORTAL_TEST_USER;
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
     //"unittest123";//MedicationClientUnitTest.class.getName();
@@ -239,7 +239,7 @@ public class MedicationTreatmentInteropUnitTest {
     }
 
     public String addNewMessageEhr(String phrResourceUri, String drug1_quantity) throws TripleException, IllegalAccessException, InstantiationException {
-       
+
         medicationClient.setCreator(Constants.EXTERN);//simulate extern
 
         final String resourceURI_1 =
@@ -624,11 +624,11 @@ public class MedicationTreatmentInteropUnitTest {
     @Test
     public void testFindReferenceTagExisting() throws Exception {
         String theParentId = "resUri1234";
-       
-        String message_1=addNewMessageEhr(theParentId, "55");
-        String message_2=addNewMessageEhr(null, "44");
+
+        String message_1 = addNewMessageEhr(theParentId, "55");
+        String message_2 = addNewMessageEhr(null, "44");
         String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
-       
+
         assertNotNull("Message not found", interopRef);
         assertEquals("Did not find resource reference ", message_1, interopRef);
     }
@@ -637,8 +637,8 @@ public class MedicationTreatmentInteropUnitTest {
     public void testFindReferenceTagNotExisting() throws Exception {
         String theParentId = "resUri1234";
         //put message with a different reference and one with null
-        String message_1=addNewMessageEhr("xxxxxx", "111");
-        String message_2=addNewMessageEhr(null, "222");
+        String message_1 = addNewMessageEhr("xxxxxx", "111");
+        String message_2 = addNewMessageEhr(null, "222");
 
         String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
         assertNull("expected no message result, found: ", interopRef);
@@ -648,8 +648,8 @@ public class MedicationTreatmentInteropUnitTest {
     @Test
     public void testFindReferenceTagNull() throws Exception {
         String theParentId = "resUri1234";
-        String message_1=addNewMessageEhr(null, "777");
-        String message_2=addNewMessageEhr(null, "888");
+        String message_1 = addNewMessageEhr(null, "777");
+        String message_2 = addNewMessageEhr(null, "888");
 
         String interopRef = iprocess.findMessageWithReference(USER, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
         assertNull("expected null interopRef, found: ", interopRef);
@@ -669,13 +669,21 @@ public class MedicationTreatmentInteropUnitTest {
 
         assertTrue(!uris.isEmpty());
         assertTrue(uris.size() > 0);
+        for (String uri : uris.keySet()) {
+            System.out.println("uri=" + uri);
+        }
 
-        String user = USER;
 
+        assertNotNull("resourceUri is null of sample obj ", phrMed_1.getOwnerUri());
+        //this is the message uri, not the resource uri
         String interopRef = iaccess.findMessageWithReference(
-                user, phrMed_1.getOwnerUri(), PHRS_RESOURCE_CLASS, null);
-
-        assertNotNull("cannot find message with note reference to resource Uri =" + phrMed_1.getResourceUri(), interopRef);
+                USER, phrMed_1.getResourceUri(), PHRS_RESOURCE_CLASS, null);
+        
+        System.out.println("interopRef: " + interopRef);
+        assertNotNull("interopRef is null, cannot find message for " + phrMed_1.getOwnerUri(), interopRef);
+        
+        //Not needed: get dynabean for this message uri
+        //assertEquals("cannot find message with note reference to resource Uri =" + phrMed_1.getResourceUri(), phrMed_1.getResourceUri(), dynbeanNoteReference);
 
     }
 

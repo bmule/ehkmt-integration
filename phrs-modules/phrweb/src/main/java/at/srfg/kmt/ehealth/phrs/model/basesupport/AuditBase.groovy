@@ -64,16 +64,13 @@ public class AuditBase {
 				this.resourceCreatorUri		= object.creatorUri
 				this.deleted				= object.deleted
 				this.resourceOrigin	 		= object.origin
-				
-				//convert pojo object to bean map 
-				//auditMap = new BeanMap(object);
-				 /*dump = object.dump()
-				 println('dump ='+dump)
-				 println('object.toString '+object.toString())
-				 */
-				 //TODO FIXME ObjectMapper mapper = new ObjectMapper();		 
-				 //mapper.writeValue(jsonString, object);
+				//TODO FIXME ObjectMapper mapper = new ObjectMapper();		 
+				//mapper.writeValue(jsonString, object);
 				// println('jsonString='+jsonString)
+				//convert pojo object to json map
+				//auditMap = 
+			
+			
 
 			}
 		} catch (Exception e){
