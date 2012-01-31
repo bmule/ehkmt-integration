@@ -1,4 +1,4 @@
 #!/bin/bash
 #set -xv
 
-rm -rfv ~/.icardea
+rm -rfv ~/Library/Application Support/Aduna/OpenRDF Sesame

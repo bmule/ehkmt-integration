@@ -8,7 +8,7 @@ import org.joda.time.DateTime
 import org.primefaces.model.DefaultStreamedContent
 import org.primefaces.model.StreamedContent
 
-import sun.tools.tree.ThisExpression;
+//sun.tools.tree.ThisExpression
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorInfoItem
@@ -329,7 +329,7 @@ public class MonitorInfoBean extends FaceBaseBean  {
                 LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType+" idType="+idType,e)
             }
         }
-        return reportFile
+       return reportFile
 
     }
 
@@ -342,25 +342,4 @@ public class MonitorInfoBean extends FaceBaseBean  {
     protected StreamedContent getFile() { 
     }*/
 
-
-
-    //	@Override
-    //	public void modifyNewResource(){
-    //		super.modifyNewResource();
-    //		if(selected){
-    //			//default_activeStatusFalse  default_activeStatusTrue
-    //			//selected.status='default_activeStatusTrue'
-    //			//selected.setDisplayDate(new Date()) issue:then this sets date in begin date?
-    //		}
-    //
-    //	}
-    //
-    //	@Override
-    //	public void storeModifyFirst(){
-    //		super.storeModifyFirst()
-    //
-    //		if(selected){
-    //
-    //		}
-    //	}
 }

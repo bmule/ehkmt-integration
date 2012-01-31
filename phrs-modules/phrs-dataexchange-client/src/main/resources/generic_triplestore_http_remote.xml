@@ -16,14 +16,14 @@
             sessame reposiotry accepts request. The 
             "http://localhost:8080/openrdf-sesame" is the default value.
         -->
-        <uri>http://localhost:8080/openrdf-sesame</uri>
+        <uri>http://localhost:6060/openrdf-sesame</uri>
         
         <!--
             The repository-id element is used to configure the reposiotry ID for
             the Sessame HTTP reposiotry. The value for this id is defined by the
             user.
         -->
-        <repository-id>phrs-repository</repository-id>
+        <repository-id>phrs1</repository-id>
     </remote>
 
     <postconstruct>
