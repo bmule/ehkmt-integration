@@ -22,8 +22,11 @@ import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 @ManagedBean(name="monitorinfoBean")
 @RequestScoped
 public class MonitorInfoBean extends FaceBaseBean  {
-
-
+    String resourceType
+    String targetUserId
+    
+    boolean handledReportRequestParams=false;
+    
     public MonitorInfoBean() {
         super();//required!!
         // setPermittedActions performed by super class
@@ -190,15 +193,30 @@ public class MonitorInfoBean extends FaceBaseBean  {
             MonitorInfoItem item = (MonitorInfoItem)selected
             reportValidateRequest(item.ownerUri,true,item.resourceType)
 			
+        } else {
+            // check for resourceType and targetUserId in the request
+            handleReportRequest()
+            if( targetUserId && resourceType){
+                //String ownerUri = getProtocolIdFromPhrId(targetUserId)    
+                
+                reportValidateRequest(targetUserId, true, resourceType)
+                
+            }
         }
 		
     }
-    @PostConstruct
+    
+ 
+    //FIXXME
+    //@PostConstruct
+    /**
+     * Check if there is was a request
+     * Use this method in methods that requirerequest parameters instead of the UI form object
+     */
     public void handleReportRequest(){
         //controller is invoked but not by ajax, check for these parameters and then it is a request
                 
-        String resourceType
-        String targetUserId
+
                 
         try {
             resourceType = UserSessionService.getRequestAttributeString('resourcecode')
@@ -213,6 +231,7 @@ public class MonitorInfoBean extends FaceBaseBean  {
         try {
             if( !hasPhrId){
                 targetUserId = UserSessionService.getRequestAttributeString('protocolid')
+                targetUserId = getProtocolIdFromPhrId(targetUserId)
             }
         } catch(Exception e){
             LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType,e)
@@ -228,13 +247,24 @@ public class MonitorInfoBean extends FaceBaseBean  {
         
     }
     
+    private String getProtocolIdFromPhrId(String phrId){
+        String value
+        if(phrId){
+            
+        }
+    
+        return value
+    }
+    
     protected StreamedContent reportValidateRequest(String targetUserId, boolean hasPhrId, String resourceType){
         boolean permitViewContent= false
+        
+        
         StreamedContent reportFile		
 		
         //either one
         String idType
-		
+        		
         if(hasPhrId) idType='phrid'	
 		
         try {
@@ -251,6 +281,7 @@ public class MonitorInfoBean extends FaceBaseBean  {
 
                     LOGGER.debug(" request phrId="+targetUserId+" resourceType="+resourceType+" permitted?")
                 }
+                //build report
                 reportFile= reportBuild(targetUserId, idType,resourceType, permitViewContent)
                 if(permitViewContent){
 				
@@ -268,7 +299,8 @@ public class MonitorInfoBean extends FaceBaseBean  {
     }
 
     protected StreamedContent reportBuild(String targetUserId, String idType, String resourceType, boolean permited){
-
+        
+        
         StreamedContent reportFile=null
         if(targetUserId && resourceType) {
             try {
@@ -309,15 +341,7 @@ public class MonitorInfoBean extends FaceBaseBean  {
     }
     protected StreamedContent getFile() { 
     }*/
-    /*
-    <dependency>
-    <groupId>net.sf.jasperreports</groupId>
-    <artifactId>jasperreports</artifactId>
-    <version>4.5.0</version>
-    </dependency>
-    4.5.0
-    4.1.3
-     */
+
 
 
     //	@Override
