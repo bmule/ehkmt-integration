@@ -10,42 +10,35 @@
 -->
 
 <triplestore-definition>
-    
+    <!--
     <memorysail>
-        <!--
-        The memorysail element is used to configure a triple store from type
-        memory sail.
-        -->
+     
         <filedump>
-            <!--
-            The filedump element is used to specify the location wher the 
-            memory sail will dump its conntet.
-            If the path starts with a path separator character then the path 
-            is absolute.
-            If the path starts with a string then the path is relative to the 
-            location where the triplestore application starts.
-            If the path starts with ${TEMP_DIR} then the location is relative to 
-            the temporary direcotry.
-            If the path starts with ${HOME_DIR} then the location is relative to 
-            aclual user home direcotry.
-            -->
+      
             ${HOME_DIR}/.icardea/test/sesame
         </filedump>
     </memorysail>
 
     <postconstruct>
-        <!--
-        The postconstruct element is used to configure events related with the 
-        post construct pahse. In this phase the conenction to triplestore is 
-        new created and available.
-        -->
+    
         
         <loadfiles>
-            <!--
-            The loadfiles element is used to configure files that may be loaded 
-            after the connection to the triplestore is achived..
-            -->
+    
             startup.test.rdf
+        </loadfiles>
+    </postconstruct>
+    -->
+        <remote>
+        <uri>http://localhost:6060/openrdf-sesame</uri>
+        
+        <repository-id>phrs1</repository-id>
+    </remote>
+
+    <postconstruct>
+      
+        <loadfiles>
+ 
+            startup.core.rdf
         </loadfiles>
     </postconstruct>
 </triplestore-definition>
