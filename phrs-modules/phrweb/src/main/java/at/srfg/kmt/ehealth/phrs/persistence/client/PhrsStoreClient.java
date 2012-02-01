@@ -56,7 +56,6 @@ public class PhrsStoreClient implements Serializable {
     private InteropClients interopClients;
     private InteropAccessService interopService;
     private InteropProcessor interopProcessor;
-    
     static boolean TEST = true;
 
     private PhrsStoreClient() {
@@ -269,9 +268,11 @@ public class PhrsStoreClient implements Serializable {
     public Datastore getPhrsAuditDatastore() {
         return datastoreAuditing;
     }
-    public InteropProcessor getInteropProcessor(){
+
+    public InteropProcessor getInteropProcessor() {
         return interopProcessor;
     }
+
     /**
      * Initialize interop store and clients for interoperability
      */
@@ -479,56 +480,100 @@ public class PhrsStoreClient implements Serializable {
         return dyna;
     }
 
-    public void updateTriple(String resourceURI, String predicate, String newValue, boolean updateDate) {
-        try {
-            final boolean resourceExists = triplestore.exists(resourceURI);
-            if (!resourceExists) {
-                final String msg =
-                        String.format("There is no resource for this URI %s ", resourceURI);
-                throw new IllegalArgumentException(msg);
+    /**
+     * Work around
+     *
+     * @param resourceURI
+     * @param newValue
+     * @throws Exception
+     */
+    public void updateSkosNote(String subjectUri, String newValue)
+            throws Exception {
+
+        updateTriple(subjectUri, Constants.SKOS_NOTE, newValue, false);
+
+    }
+
+    /**
+     * Work around for client Property check issue. Allows Constants.SKOS_NOTE
+     *
+     *
+     * @param subjectUri
+     * @param predicate
+     * @param newValue
+     * @param updateDate - normally date is updated unless a change to a
+     * reference note
+     * @throws Exception
+     */
+    public void updateTriple(String subjectUri, String predicate, String newValue, boolean updateDate)
+            throws Exception {
+        if (subjectUri != null && predicate != null && newValue != null) {
+            
+            try {
+                final boolean resourceExists = triplestore.exists(subjectUri);
+                if (!resourceExists) {
+                    final String msg =
+                            String.format("There is no resource for this URI %s ", subjectUri);
+                    throw new IllegalArgumentException(msg);
+                }
+
+                //No check for SKOS_NOTE...., dynabeans will pick it up but it will break schemaClient
+                if (!predicate.equals(Constants.SKOS_NOTE)) {
+
+                    final boolean propertyExists = getInteropClients().getSchemeClient().propertyExists(predicate);
+                    if (!propertyExists) {
+                        final String msg =
+                                String.format("The predicate %s does not exists like property", predicate);
+                        throw new IllegalArgumentException(msg);
+                    }
+
+                    // TODO : this mode to detect the value type is not the best one,
+                    // it has its limitations. E.G. no Bnode is supported, no expicit
+                    // classes are supported.
+                    // I chose to se this simple (and limited) solution becuase I it fits 
+                    // the needs for the medication
+                    final boolean isPropertyLiteral = getInteropClients().getSchemeClient().isPropertyLiteral(predicate);
+                    final ValueType type = isPropertyLiteral
+                            ? ValueType.LITERAL
+                            : ValueType.RESOURCE;
+                    triplestore.delete(subjectUri, predicate);
+                    triplestore.persist(subjectUri, predicate, newValue, type);
+                } else {
+                    //known as Literal
+                    triplestore.delete(subjectUri, predicate);
+                    triplestore.persist(subjectUri, predicate, newValue, ValueType.LITERAL);
+                }
+
+                // NOTA BENE : the update operatin is responsible for the UPDATE_DATE property.
+                // More preciselly the update must set the updated date to the date when
+                // the resource was modified.
+                if (updateDate) {
+                    setUpdateDate(subjectUri);
+                }
+            } catch (Exception e) {
+                    LOGGER.error("Error on triple update for subjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
+                    throw new Exception("Error on triple update forsubjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
+  
             }
 
-            final boolean propertyExists = getInteropClients().getSchemeClient().propertyExists(predicate);
-            if (!propertyExists) {
-                final String msg =
-                        String.format("The predicate %s does not exists like property", predicate);
-                throw new IllegalArgumentException(msg);
-            }
-
-            // TODO : this mode to detect the value type is not the best one,
-            // it has its limitations. E.G. no Bnode is supported, no expicit
-            // classes are supported.
-            // I chose to se this simple (and limited) solution becuase I it fits 
-            // the needs for the medication
-            final boolean isPropertyLiteral = getInteropClients().getSchemeClient().isPropertyLiteral(predicate);
-            final ValueType type = isPropertyLiteral ? ValueType.LITERAL : ValueType.RESOURCE;
-
-            triplestore.delete(resourceURI, predicate);
-            triplestore.persist(resourceURI, predicate, newValue, type);
-
-            // NOTA BENE : the update operatin is responsible for the UPDATE_DATE property.
-            // More preciselly the update must set the updated date to the date when
-            // the resource was modified.
-            if (updateDate) {
-                setUpdateDate(resourceURI);
-            }
-        } catch (Exception e) {
-            LOGGER.error(" resourceURI=" + resourceURI + " predicate" + predicate + " newValue" + newValue, e);
+        } else {
+            LOGGER.error("Null input parameter subjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
+            throw new Exception("Null input parameter subjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
         }
     }
 
-    private void setUpdateDate(String resourceURI) {
+    private void setUpdateDate(String subjectUri) {
         try {
             final boolean updateDateExists =
-                    triplestore.exists(resourceURI, Constants.UPDATE_DATE);
+                    triplestore.exists(subjectUri, Constants.UPDATE_DATE);
             if (updateDateExists) {
-                triplestore.delete(resourceURI, Constants.UPDATE_DATE);
+                triplestore.delete(subjectUri, Constants.UPDATE_DATE);
             }
 
             final String newDate = DateUtil.getFormatedDate(new Date());
-            triplestore.persist(resourceURI, Constants.UPDATE_DATE, newDate, LITERAL);
+            triplestore.persist(subjectUri, Constants.UPDATE_DATE, newDate, LITERAL);
         } catch (Exception e) {
-            LOGGER.error(" setUpdateDate resourceURI=" + resourceURI, e);
+            LOGGER.error(" setUpdateDate subjectUri=" + subjectUri, e);
         }
     }
 }

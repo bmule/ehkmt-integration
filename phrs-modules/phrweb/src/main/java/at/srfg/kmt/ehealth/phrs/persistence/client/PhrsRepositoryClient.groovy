@@ -80,7 +80,7 @@ public class PhrsRepositoryClient implements Serializable{
         //&& getPhrsDatastore().exists(theObject)
         if(theObject ){
             result= getPhrsDatastore().get(theObject)
-            writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)
+            //writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)
         }
         return result
     }
@@ -246,7 +246,7 @@ public class PhrsRepositoryClient implements Serializable{
     public Map writeInteropMessages(def theObject){
         Map map
         try{
-            def x=getInteropService()
+            //def x=getInteropService()
             map= getInteropService().sendMessages(theObject);
         } catch(Exception e){
             e.printStackTrace()
@@ -273,16 +273,21 @@ public class PhrsRepositoryClient implements Serializable{
                     theObject.setCreateDate(new Date())
                     theObject.setModifyDate(theObject.getCreateDate())
                     def keyset = getPhrsDatastore().save(theObject)
-                    //Map map=
-                    writeInteropMessages(theObject)
+                    //Do not send messages after a fresh import from the interop service
+                    if( ! theObject.getNewImport()) {
+                        writeInteropMessages(theObject)
+                    }else {
+                        //reset, after persisted
+                        theObject.setNewImport(false)
+                    }
                     //TODO if there is an error, make the resource uri null
-                    writeAuditData(theObject,action,null)
+                    //writeAuditData(theObject,action,null)
                 }
             }else {
                 if(theObject && !theObject.resourceUri)
-                LOGGER.error('{} - missing object ID, object type: {}',theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE,theObject.class)
+                LOGGER.error(' - missing object ID, action and object type: '+PhrsConstants.PUBSUB_ACTION_CRUD_CREATE+' '+theObject.class)
                 else
-                LOGGER.error('{} - NULL object',theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
+                LOGGER.error(' - NULL object action='+PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
             }
         } catch(Exception e){
             LOGGER.error('crudSaveResource ', e)
@@ -304,7 +309,7 @@ public class PhrsRepositoryClient implements Serializable{
             else return crudSaveResource(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE)
 
         }else {
-            LOGGER.error('{} - NULL object',theObject,PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
+            LOGGER.error(' NULL object action '+ PhrsConstants.PUBSUB_ACTION_CRUD_CREATE)
         }
         return theObject
     }
@@ -331,7 +336,7 @@ public class PhrsRepositoryClient implements Serializable{
 				
             }
         } catch (Exception e){
-            LOGGER.error('i transform fail '+tempId, e)
+            LOGGER.error(' crudUpdateResource fail '+tempId, e)
         }
 	try {
             if(theObject && theObject.resourceUri){
@@ -352,13 +357,13 @@ public class PhrsRepositoryClient implements Serializable{
                 }
                 def keyset = getPhrsDatastore().save(theObject)
                         
-                writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE,null)
+                //writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE,null)
             } else if(theObject){
-                LOGGER.error('{} - no object ID, pass to SAVE NEW ACTION object type={}',PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE,theObject.class)
+                LOGGER.error(' - no object ID, pass to SAVE NEW ACTION object action, object '+PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE+' '+theObject.class)
                 return crudSaveResource(theObject)
 
             } else{
-                LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE)
+                LOGGER.error(' - NULL object '+PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE)
             }
         } catch(Exception e){
             LOGGER.error('crudUpdateResource ', e)
@@ -366,7 +371,7 @@ public class PhrsRepositoryClient implements Serializable{
         return theObject
     }
     /**
-     * prevent certain objects being deleted e.g. single instances record user information
+     * Prevent certain objects from being deleted e.g. single instances record user information
      * contact info
      * @param theObject
      * @return
@@ -392,12 +397,12 @@ public class PhrsRepositoryClient implements Serializable{
             def keyset
             if(theObject && theObject.resourceUri){
                 keyset = getPhrsDatastore().delete(theObject)
-                writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_DELETE,null)
+                //writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_DELETE,null)
             }else {
                 if(theObject)
-                LOGGER.error('{} - missing object ID, object type: {}',PhrsConstants.PUBSUB_ACTION_CRUD_DELETE, theObject.class)
+                LOGGER.error(' - missing object ID, object type: '+PhrsConstants.PUBSUB_ACTION_CRUD_DELETE+' '+ theObject.class)
                 else
-                LOGGER.error('{} - NULL object id',PhrsConstants.PUBSUB_ACTION_CRUD_DELETE)
+                LOGGER.error(' - NULL object id '+PhrsConstants.PUBSUB_ACTION_CRUD_DELETE)
             }
             return keyset
         }
@@ -429,8 +434,7 @@ public class PhrsRepositoryClient implements Serializable{
                 resourceObj.id=temp
 
             } catch (Exception e){
-                println('Exception '+e)
-                //logger.error('{} exeception: {}',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA,e)
+                LOGGER.error('Exception '+e)
             }
 
 
@@ -447,24 +451,24 @@ public class PhrsRepositoryClient implements Serializable{
      * @param params
      * @return
      */
-    def writeAuditData(def resourceObj, def action, Map<String,String> params){
-        //TODO add writeAuditSummary
-        if(resourceObj) {
-            //create and writes (true)
-            AuditBase audit=new AuditBase(resourceObj,action)
-            try {
-                getPhrsAuditDatastore().save(audit)
-            } catch (Exception e){
-                println('Exception '+e)
-                LOGGER.error('writeAuditData - NULL object '+e)
-                //logger.error('{} exeception: {}',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA,e)
-                writeHistory(resourceObj,action,params)
-            }
-
-            return audit
-        } else {
-            LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
-        }
+    def writeAuditData(def resourceObj, String action, Map<String,String> params){ 
+        
+//        if(resourceObj) {
+//            //create and writes (true)
+//            AuditBase audit=new AuditBase(resourceObj,action)
+//            try {
+//                getPhrsAuditDatastore().save(audit)
+//            } catch (Exception e){
+//                println('Exception '+e)
+//                LOGGER.error('writeAuditData - NULL object '+e)
+//                
+//                writeHistory(resourceObj,action,params)
+//            }
+//
+//            return audit
+//        } else {
+//            LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
+//        }
         return null
 
     }
@@ -476,8 +480,8 @@ public class PhrsRepositoryClient implements Serializable{
      * @param creatorOfAction
      * @return
      */
-    def writeAuditData(def resourceObj, def action, Map<String,String> params, String creatorOfAction){
-        //TODO add writeAuditSummary
+    def writeAuditData(def resourceObj, String action, Map<String,String> params, String creatorOfAction){
+       
         if(resourceObj) {
             //create and writes (true)
             AuditBase audit=new AuditBase(resourceObj,action)
@@ -487,11 +491,10 @@ public class PhrsRepositoryClient implements Serializable{
             } catch (Exception e){
                 println('Exception '+e)
                 LOGGER.error('writeAuditData  '+e)
-                //logger.error('{} exeception: {}',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA,e)
             }
             return audit
         } else {
-            logger.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
+            logger.error(' - NULL object'+PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
         }
         return null
 
@@ -512,7 +515,7 @@ public class PhrsRepositoryClient implements Serializable{
             //AuditBase audit=new AuditBase()
             //return audit
         } else {
-            LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_ACTION)
+            LOGGER.error(' - NULL object'+PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_ACTION)
         }
         return null
 
@@ -521,53 +524,5 @@ public class PhrsRepositoryClient implements Serializable{
     public void writeAuditSummary(String creatorOfAction,Set ownerOfResource, Set targetResourceType, String action, Map<String,String> params){
 
     }
-    /*
-
-    public PhrMessageLog findInteropMessage(String parentId,String categoryCode, String code){
-
-    return this.findMessageLog(parentId, categoryCode, code, PhrsConstants.MESSAGING_TYPE_INTEROP)
-    }
-
-    public PhrMessageLog findMessageLog(String parentId, String categoryCode, String code, String messageType){
-    PhrMessageLog res
-    if(code){
-    try{
-    //phrsStoreClient.getPhrsDatastore().find(PhrInteropDetail.class, arg1, arg2)
-    Query query = phrsStoreClient.getPhrsDatastore().createQuery(PhrMessageLog.class).field("parentId").equal(parentId);
-
-    if(categoryCode) query.field("categoryCode").equals(categoryCode);
-    query.field("code").equals(code);
-    if(messageType){
-    query.field("messageType").equals(messageType);
-    }
-    } catch(Exception e){
-    LOGGER.error('Interop findMessageLog, interop parentId= '+parentId+' code='+code, e)
-    }
-    }
-    return res
-    }
-
-    public String findExternalReferenceOfInteropMessageLog(String parentId, String categoryCode,String code){
-    String refId
-    try{
-    PhrMessageLog res = this.findInteropMessage(parentId, categoryCode, code)
-    if(res) refId = res.getExternalReference()
-    } catch(Exception e){
-    LOGGER.error('Interop findExternalReferenceOfInteropMessageLog, interop parentId= '+parentId+' code='+code, e)
-    }
-    return refId
-    }
-	
-    public String findExternalReferenceOfMessageLog(String parentId ,String categoryCode, String code, String messageType){
-    String refId
-    try{
-    PhrMessageLog res = this.findMessageLog(parentId, categoryCode, code, messageType)
-    if(res) refId = res.getExternalReference()
-    } catch(Exception e){
-    LOGGER.error('Interop findExternalReferenceOfMessageLog, interop parentId= '+parentId+' code='+code, e)
-    }
-    return refId
-    }
-     */
-
+    
 }

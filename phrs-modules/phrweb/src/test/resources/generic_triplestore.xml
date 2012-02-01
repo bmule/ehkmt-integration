@@ -12,13 +12,15 @@
            <!--
         The memorysail element is used to configure a remote triple store.
         phrs-repository 
-    <remote>
+        -->
+         <!-- 
+  <remote>
  
 
         <uri>http://localhost:6060/openrdf-sesame</uri>
-        <repository-id>phrwebtest</repository-id>
-    </remote>-->
-        <!--
+        <repository-id>unittests</repository-id>
+    </remote>
+        
         The memorysail element is used to configure a triple store from type
         memory sail.
  
@@ -39,10 +41,16 @@
 
         <filedump>
 
-            ${HOME_DIR}/.icardea/test2/sesame
+            ${HOME_DIR}/.icardea/test3/sesame
         </filedump>
     </memorysail>
+<!--
+    <remote>
+       <uri>http://localhost:6060/openrdf-sesame</uri>
+        <repository-id>phrs-repository</repository-id>
+    </remote>
 
+-->
     <postconstruct>
         <!--
         The postconstruct element is used to configure events related with the 

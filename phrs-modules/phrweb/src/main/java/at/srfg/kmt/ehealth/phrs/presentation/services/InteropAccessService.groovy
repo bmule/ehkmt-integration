@@ -303,7 +303,7 @@ public class  InteropAccessService implements Serializable{
                     throw new Exception(" resourceUri not yet set, PHR object was not yet saved?")   
                 }
                 String theParentId = res.resourceUri
-     
+    
 
                 switch ( resourceType ) {
 
@@ -313,7 +313,9 @@ public class  InteropAccessService implements Serializable{
                     if(categoryCode != PhrsConstants.HL7V3_CODE_CATEGORY_RISK){
                         categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_RISK  //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                     }
+                    
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+                    
                     if( ! interopRef){
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
@@ -329,16 +331,18 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        //this.updateMessageProblem(theParentId, interopRef, ., valueCode);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_STATUS, status);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+                       //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+                        
                     }
                     break
 
                     case ProfileActivityDailyLiving.class.getCanonicalName():
 
                     categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_ADL //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
+                    
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
 
                     if( ! interopRef){
@@ -357,12 +361,12 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        //this.updateMessageProblem(theParentId, interopRef, ., valueCode);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_STATUS, status);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+                        //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
 
-                    }
+                   }
                     break
 
                     case ActionPlanEvent.class.getCanonicalName():
@@ -371,6 +375,7 @@ public class  InteropAccessService implements Serializable{
                     if(valueCode == InteropTermTransformer.CODE_WATCH_SPORT){
                         categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                         String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+                        
                         if( ! interopRef){
                             messageId = getInteropClients().getProblemEntryClient()
                             .addProblemEntry(
@@ -387,11 +392,10 @@ public class  InteropAccessService implements Serializable{
                             }
 
                         } else {
-                            //this.updateMessageProblem(theParentId, interopRef, ., valueCode);
-                            this.updateMessageProblem(theParentId, interopRef, HL7V3_STATUS, status);
-                            this.updateMessageProblem(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            this.updateMessageProblem(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                         }
                     }
                     break
@@ -415,7 +419,9 @@ public class  InteropAccessService implements Serializable{
                         categoryCode = Constants.HL7V3_SYMPTOM
                         //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                     }
+                   
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+                    
                     if( ! interopRef){
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
@@ -431,22 +437,23 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_STATUS, status);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageProblem(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-
-                    }
+                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+                   }
                     break
 
                     case ObsVitalsBloodPressure.class.getCanonicalName():
 
                     ObsVitalsBloodPressure domain=(ObsVitalsBloodPressure)resource
                     //not using category code, instead we split form into a few pieces
-                    categoryCode=Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE
-                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+                    categoryCode=Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE                
+                    
                     String value=domain.getSystolic() ? domain.getSystolic().toString() : '0'
-
+                   
+                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+    
                     if( ! interopRef){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
                             Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
@@ -460,15 +467,18 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_VALUE, value);
+                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
                     }
 
                     categoryCode=Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
-                    interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
                     value=domain.getDiastolic() ? domain.getDiastolic().toString() : '0'
-           
-                    if( ! interopRef){
+                    
+                    String interopRef_2 = null
+                    interopRef_2 = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+                              
+                    if( ! interopRef_2 ){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
                             categoryCode,
                             referenceNote,
@@ -481,8 +491,9 @@ public class  InteropAccessService implements Serializable{
                             messageIdMap.put(categoryCode,messageId)
                         }
                     } else {
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageVitals(theParentId, interopRef,HL7V3_VALUE , value);
+                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE , value);
 
                     }
                     break
@@ -491,10 +502,11 @@ public class  InteropAccessService implements Serializable{
 
                     ObsVitalsBodyWeight domain=(ObsVitalsBodyWeight)resource
                     categoryCode=Constants.ICARDEA_INSTANCE_BODY_WEIGHT
-                    // ownerUri, resourceUri, phrsClass,categoryCode,valueCode
-                    String interopRef = findMessageWithReference(
-                        owner, theParentId,  Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
                     String value = domain.getBodyWeight() ? domain.getBodyWeight().toString() : '0'
+                    // ownerUri, resourceUri, phrsClass,categoryCode,valueCode
+                    String interopRef = findMessageWithReference( owner, theParentId,  Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
+                    
+                    
                     if( ! interopRef){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
                             categoryCode,
@@ -506,16 +518,19 @@ public class  InteropAccessService implements Serializable{
 
                         if(messageId)  messageIdMap.put(categoryCode,messageId)
                     } else {
-                        //this.updateMessageProblem(theParentId, interopRef, ., valueCode);
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_STATUS, status);
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_END_DATE, value);
+                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                       
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, value);
 
                     }
+                    
                     categoryCode=Constants.ICARDEA_INSTANCE_BODY_HEIGHT
-                    interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
                     value = domain.getBodyHeight() ? domain.getBodyHeight().toString() : '0'
-
+                    
+                    interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+                    
                     if(interopRef){
                         messageId = getInteropClients().getVitalSignClient()
                         .addVitalSign(owner,
@@ -531,19 +546,20 @@ public class  InteropAccessService implements Serializable{
                         }
                     } else {
                         //update
-                        this.updateMessageVitals(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        this.updateMessageVitals(theParentId, interopRef,HL7V3_VALUE , value);
+                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                        iprocess.updateInteropStatement(theParentId, interopRef,HL7V3_VALUE , value);
 
                     }
                     break
 
-                    case [
-                        ProfileContactInfo.class.getCanonicalName(),
-                        ProfileUserContactInfo.class.getCanonicalName(),
-                        ProfileMedicalContactInfo.class.getCanonicalName()
-                    ]:
-                    //do nothing
-                    break
+//                    case [
+//                        ProfileContactInfo.class.getCanonicalName(),
+//                        ProfileUserContactInfo.class.getCanonicalName(),
+//                        ProfileMedicalContactInfo.class.getCanonicalName()
+//                    ]:
+//                    //do nothing
+//                    break
 
                     default:
                     break
@@ -562,6 +578,8 @@ public class  InteropAccessService implements Serializable{
         }
         return messageIdMap
     }
+ 
+    
 
     /**
      * 
@@ -595,42 +613,13 @@ public class  InteropAccessService implements Serializable{
         }
         return exists
     }
+
+
+ 
     /**
      * 
-     * @param resourceUri
-     * @param interopResourceId
-     * @param predicate
-     * @param newValue
-     */
-    public void updateMessageVitals(String resourceUri, String interopResourceId, String predicate, String newValue){
-        try{
-            getInteropClients().getVitalSignClient().updateVitalSign(interopResourceId, predicate, newValue)
-        } catch(Exception e){
-            LOGGER.error('Interop client updateMessageVitals, interop resource= '+resourceUri+' interopResourceId='+interopResourceId, e)
-        }
-    }
-    /**
-     * This cannot not be used for the dosage and dosage units because these are separate graphs
+This cannot not be used for the dosage and dosage units because these are separate graphs
      * For now, delete message and then add it new....
-     * @deprecated
-     * @param resourceUri
-     * @param interopResourceId
-     * @param predicate
-     * @param newValue
-     */
-    public void updateMessageMedication(String resourceUri,String interopResourceId, String predicate, String newValue){
-        try{
-            getInteropClients().getMedicationClient().updateMedication(interopResourceId, predicate, newValue);
-        } catch(Exception e){
-            LOGGER.error('Interop client updateMessageMedication, interop resource= '+resourceUri+' interopResourceId='+interopResourceId, e)
-        }
-    }
-    /**
-     * 
-     * @param resourceUri
-     * @param interopResourceId
-     * @param predicate
-     * @param newValue
      */
     public void updateMessageProblem(String resourceUri,String interopResourceId, String predicate, String newValue){
 

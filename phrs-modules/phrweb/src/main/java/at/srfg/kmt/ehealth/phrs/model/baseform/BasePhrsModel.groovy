@@ -27,6 +27,9 @@ public class BasePhrsModel implements  Serializable, Cloneable {
 	String strCreateDate
 	@Transient
 	String strId
+        //resource is newly imported, but not yet saved
+    	@Transient
+	boolean newImport=false
 	//temp fields for UI forms needed, these cause trouble as hidden fields
 	/**
 	 * UI fix
@@ -340,6 +343,9 @@ public class BasePhrsModel implements  Serializable, Cloneable {
 
 	public BasePhrsModel(){
 		super()
+                //transient property
+                newImport =false
+                
 		createId = createId ? createId : UUID.randomUUID().toString()
 		//cacheMap=[:]
 		refersTo=[]

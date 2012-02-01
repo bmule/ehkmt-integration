@@ -291,6 +291,18 @@ public class CommonDao{
 		
 		return single
 	}
+        	/**
+	 * 
+	 * @param ownerUri
+         * @param class
+	 * @return
+	 */
+	public  List crudReadResources(String ownerUri, def clazz){
+		if(ownerUri && clazz){
+			return phrsRepositoryClient.crudReadResource(ownerUri, clazz);
+		}
+		return null
+	}
 	/*
 	 *
 	 * @param entityClazz
@@ -309,7 +321,7 @@ public class CommonDao{
 	 */
 	public def crudReadResourceSingle(String ownerUri, def clazz){
 		def resource
-		if(ownerUri!=null){
+		if(ownerUri && clazz){
 			return phrsRepositoryClient.crudReadResourceSingle(ownerUri, clazz);
 		}
 		return null
@@ -322,7 +334,7 @@ public class CommonDao{
 	public PhrFederatedUser crudReadPhrFederatedUser(String ownerUri){
 		PhrFederatedUser resource
 
-		if(ownerUri!=null){
+		if(ownerUri){
 			return phrsRepositoryClient.crudReadResourceSingle(ownerUri, PhrFederatedUser.class);
 		}
 		return null
@@ -345,7 +357,7 @@ public class CommonDao{
 	 */
 	public  BasePhrOpenId crudReadOpenIdByOwnerUri(String ownerUri){
 		BasePhrOpenId open
-		if(ownerUri!=null){
+		if(ownerUri){
 			open =crudReadResourceSingle(ownerUri,BasePhrOpenId.class)
 		}
 		return open
@@ -357,7 +369,7 @@ public class CommonDao{
 	 */
 	public  BasePhrOpenId crudReadOpenIdByIdentifier(String identifier){
 		BasePhrOpenId open
-		if(identifier!=null){
+		if(identifier){
 			Map map = ['identifier':identifier]
 			List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
 			if(list && list.size()>0){
@@ -373,7 +385,7 @@ public class CommonDao{
 	 */
 	public  PhrFederatedUser crudReadPhrFederatedUserByOpenIdentifier(String identifier){
 		PhrFederatedUser user
-		if(identifier!=null){
+		if(identifier){
 			Map map = ['identifier':identifier]
 			List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
 			if(list && list.size()>0){
@@ -426,7 +438,7 @@ public class CommonDao{
 	 */
 	public BasePhrOpenId crudSaveOpenIdUser(String ownerUri,OpenIdUser openIdUser,boolean createPhrUser){
 		BasePhrOpenId open
-		if(ownerUri!=null){
+		if(ownerUri){
 			open = crudReadOpenIdByIdentifier(openIdUser.identifier)
 
 			if(open){
@@ -561,23 +573,7 @@ public class CommonDao{
 			return ownerUri;
 
 	}
-	/*
-	public String crudSaveResourceOnMatches(String ownerUri,Map matchByExample, def theObject) {
-		
-		if(matchByExample){
-			Map query =  ['identifier':filterProtocolId,
-				'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
-				]
-			//'namespace',filterProtocolNamespace
-			ProfileUserIdentifiers pui = this.getResourceByExampleToSingle(ProfileUserIdentifiers.class, query, false, null)// theOwnerUri)
-			if(pui){
-				ownerUri = pui.ownerUri
-			}
-		}
-		return ownerUri;
 
-}
-*/
  
 	
 }

@@ -316,12 +316,15 @@ class FaceBaseBean implements Serializable{
 		try{
 			if(selected && userService){		
                             InteropProcessor ip= userService.getPhrsStoreClient().getInteropProcessor()
-                            ip.importNewMessages(selected.ownerUri, phrsClass);
+                            List list = ip.importNewMessages(selected.ownerUri, phrsClass);
                                         
                             //validate and update the pci.pixIdentifier object status
-			}
+			} else {
+                            
+                            LOGGER.error('importInteropMessages selected = null, no ownerUri ');
+                        }
 		} catch (Exception e){
-			LOGGER.error(' '+e)
+			LOGGER.error(' Controller importInteropMessages owner='+selected.ownerUri+' resourceType='+phrsClass+e)
 		}
 	}
 	/**
