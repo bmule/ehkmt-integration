@@ -8,8 +8,6 @@ import org.joda.time.DateTime
 import org.primefaces.model.DefaultStreamedContent
 import org.primefaces.model.StreamedContent
 
-//sun.tools.tree.ThisExpression
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorInfoItem
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
@@ -158,9 +156,6 @@ public class MonitorInfoBean extends FaceBaseBean  {
 
         if(getUserService()){
 
-            // Import new interop messages as new domain objects
-
-            //importInteropMessages()
             internalModelList = buildView()
 
             //getUserService().getResources(getDomainClazz());
