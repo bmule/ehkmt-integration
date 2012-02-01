@@ -1,0 +1,2971 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+	xmlns:icady="http://www.icardea.at/phrs/"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:icadyStatus="http://www.icardea.at/phrs/status#"
+	xmlns:icadyCode="http://www.icardea.at/phrs/code#"
+	xmlns:icadyCodeSystem="http://www.icardea.at/phrs/codeSystem#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#">
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Snomed">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.6.96</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>SNOMED</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Loinc">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.6.1</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>LOINC</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Rxnorm">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.6.88</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>RXNORM</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.6.86</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>UMLS</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Phrs">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.X.10.10.10</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>PHRSCodeSystem</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/RouteOfAdministration">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.5.11</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>RouteOfAdministration</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/IheActCode">
+	<icadyCodeSystem:codeSystemCode>1.3.6.1.4.1.19376.1.5.3.2</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>IHEActCode</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration">
+	<icadyCodeSystem:codeSystemCode>2.16.840.1.113883.5.112</icadyCodeSystem:codeSystemCode>
+	<icadyCodeSystem:codeSystemName>HL7 RouteOfAdministration Vocabulary</icadyCodeSystem:codeSystemName>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#MmHg">
+	<skos:prefLabel>Milimeter Hg</skos:prefLabel>
+	<skos:notation>mm[Hg]</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Bps">
+	<skos:prefLabel>Beat per secons</skos:prefLabel>
+	<skos:notation>bps</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Milligram">
+	<skos:prefLabel>milligram</skos:prefLabel>
+	<skos:notation>mg</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Centimeter">
+	<skos:prefLabel>centimeter</skos:prefLabel>
+	<skos:notation>cm</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Meter">
+	<skos:prefLabel>meter</skos:prefLabel>
+	<skos:notation>m</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Kilogram">
+	<skos:prefLabel>kilogram</skos:prefLabel>
+	<skos:notation>kg</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Gram">
+	<skos:prefLabel>gram</skos:prefLabel>
+	<skos:notation>kg</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Tablet">
+	<skos:prefLabel>tablet</skos:prefLabel>
+	<skos:altLabel>pill</skos:altLabel>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Drops">
+	<skos:prefLabel>drops</skos:prefLabel>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Hour">
+	<skos:prefLabel>Hour</skos:prefLabel>
+	<skos:notation>h</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Minute">
+	<skos:prefLabel>Minute</skos:prefLabel>
+	<skos:notation>min</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Second">
+	<skos:prefLabel>Second</skos:prefLabel>
+	<skos:notation>sec</skos:notation>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Day">
+	<skos:prefLabel>Day</skos:prefLabel>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Condition">
+	<skos:prefLabel>Condition</skos:prefLabel>
+	<skos:note>The result of an examination or inquiry.</skos:note>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ConditionULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/code#code">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The HL7 V3 code</rdfs:label>
+	<rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ConditionULMSCode">
+	<icadyCode:codeValue>C0348080</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/code#codeSystem">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The code system</rdfs:comment>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Symptom">
+	<skos:prefLabel>Symptom</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SymptomULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SymptomULMSCode">
+	<icadyCode:codeValue>C1457887</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Finding">
+	<skos:prefLabel>Finding</skos:prefLabel>
+	<skos:note>The result of an examination or inquiry.</skos:note>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FindingULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FindingULMSCode">
+	<icadyCode:codeValue>C0442733</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/FunctionalLimitation">
+	<skos:prefLabel>Functional limitation profile</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FunctionalLimitationULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FunctionalLimitationULMSCode">
+	<icadyCode:codeValue>C0451173</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Complaint">
+	<skos:prefLabel>Complaint</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ComplaintULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ComplaintULMSCode">
+	<icadyCode:codeValue>C0277786</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Problem">
+	<skos:prefLabel>Problem</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ProblemULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ProblemULMSCode">
+	<icadyCode:codeValue>C0033213</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Problem/Diagnosis">
+	<skos:prefLabel>Diagnosis</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DiagnosisULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiagnosisULMSCode">
+	<icadyCode:codeValue>C0011900</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressure">
+	<skos:prefLabel>Systolic blood pressure</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SystolicBloodPressureLoincCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SystolicBloodPressureLoincCode">
+	<icadyCode:codeValue>8480-6</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Fever">
+	<skos:prefLabel>Fever</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FeverULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeverULMSCode">
+	<icadyCode:codeValue>C0015967</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoingHousework">
+	<skos:prefLabel>Doing housework</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DoingHouseworkULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/HouseWork</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoingHouseworkULMSCode">
+	<icadyCode:codeValue>C1571726</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Palpitations">
+	<skos:prefLabel>Palpitations</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PalpitationsULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PalpitationsULMSCode">
+	<icadyCode:codeValue>C0030252</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Fatigue-Symptom">
+	<skos:prefLabel>Fatigue - symptom</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Fatigue-SymptomULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Fatigue-SymptomULMSCode">
+	<icadyCode:codeValue>C0439053</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AFewTimesPerWeek">
+	<skos:prefLabel>A few times per week</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AFewTimesPerWeekPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AFewTimesPerWeekPHRSCode">
+	<icadyCode:codeValue>few_times_per_week</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryMonth">
+	<skos:prefLabel>Every month</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/EveryMonthPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryMonthPHRSCode">
+	<icadyCode:codeValue>every_month</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3Hours">
+	<skos:prefLabel>3 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/3HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3HoursPHRSCode">
+	<icadyCode:codeValue>3_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3PacksPerDay">
+	<skos:prefLabel>3 packs per day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/3PacksPerDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3PacksPerDayPHRSCode">
+	<icadyCode:codeValue>3_pack_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WeightIncreased">
+	<skos:prefLabel>Weight increased</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/WeightIncreasedULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WeightIncreasedULMSCode">
+	<icadyCode:codeValue>C0043094</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OffTreatment_Discontinued">
+	<skos:prefLabel>Off treatment, discontinued</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/OffTreatment_DiscontinuedULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForDiabetes</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForHypertension</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OffTreatment_DiscontinuedULMSCode">
+	<icadyCode:codeValue>C1518544</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheEvening">
+	<skos:prefLabel>in the evening</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/InTheEveningPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheEveningPHRSCode">
+	<icadyCode:codeValue>when_timeofday_evening</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicycleRiding">
+	<skos:prefLabel>Bicycle riding</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BicyleRidingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BicyleRidingULMSCode">
+	<icadyCode:codeValue>C0577368</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Over30Years">
+	<skos:prefLabel>over 30 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Over30YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Over30YearsPHRSCode">
+	<icadyCode:codeValue>over_30_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BruisingSymptom">
+	<skos:prefLabel>Bruising symptom</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BruisingSymptomULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BruisingSymptomULMSCode">
+	<icadyCode:codeValue>C0423797</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ShoppingAssisted">
+	<skos:prefLabel>Shopping assisted</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ShoppingAssistedULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/ShoppingActivities</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ShoppingAssistedULMSCode">
+	<icadyCode:codeValue>C1290968</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Non-smoker">
+	<skos:prefLabel>Non-smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Non-smokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Non-smokerULMSCode">
+	<icadyCode:codeValue>C0337672</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-smoker">
+	<skos:prefLabel>Ex-smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-smokerULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-smokerULMSCode">
+	<icadyCode:codeValue>C0337671</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Jogging">
+	<skos:prefLabel>Jogging</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/JoggingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/JoggingULMSCode">
+	<icadyCode:codeValue>C0022400</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BloodPressure">
+	<skos:prefLabel>Blood pressure</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BloodPressureULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BloodPressureULMSCode">
+	<icadyCode:codeValue>C0005823</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7To12Hours">
+	<skos:prefLabel>7 to 12 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/7To12HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7To12HoursPHRSCode">
+	<icadyCode:codeValue>7_to_12_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker_10_19_day">
+	<skos:prefLabel>Ex-moderate smoker (10-19/day)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-moderateSmoker_10_19_dayULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-moderateSmoker_10_19_dayULMSCode">
+	<icadyCode:codeValue>C0558929</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtNoon">
+	<skos:prefLabel>at noon</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AtNoonPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtNoonPHRSCode">
+	<icadyCode:codeValue>when_timeofday_noon</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/30Minutes">
+	<skos:prefLabel>30 minutes</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/30MinutesPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/30MinutesPHRSCode">
+	<icadyCode:codeValue>30_min_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4Hours">
+	<skos:prefLabel>4 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/4HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4HoursPHRSCode">
+	<icadyCode:codeValue>4_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-trivialSmoker">
+	<skos:prefLabel>Ex-trivial smoker (less than 1/day) C0558928 Ex-light smoker (1-9/day)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-trivialSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-trivialSmokerULMSCode">
+	<icadyCode:codeValue>C0558927</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AdultDiabetesDietC0301580ChildDiabetesDiet">
+	<skos:prefLabel>Adult diabetes diet C0301580 Child diabetes diet</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AdultDiabetesDietC0301580ChildDiabetesDietULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AdultDiabetesDietC0301580ChildDiabetesDietULMSCode">
+	<icadyCode:codeValue>C0301579</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4PacksPerDay">
+	<skos:prefLabel>4 packs per day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/4PacksPerDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4PacksPerDayPHRSCode">
+	<icadyCode:codeValue>4_pack_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultiesDrivingACar">
+	<skos:prefLabel>Difficulties driving a car</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DifficultiesDrivingACarULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DrivingACar</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultiesDrivingACarULMSCode">
+	<icadyCode:codeValue>C0577358</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/afternoon">
+	<skos:prefLabel>afternoon</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/afternoonPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/afternoonPHRSCode">
+	<icadyCode:codeValue>when_timeofday_afternoon</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteSmoker">
+	<skos:prefLabel>Cigarette smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CigaretteSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteSmokerULMSCode">
+	<icadyCode:codeValue>C0337667</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesDriveACar">
+	<skos:prefLabel>Does drive a car</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DoesDriveACarULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DrivingACar</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesDriveACarULMSCode">
+	<icadyCode:codeValue>C0577356</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarSmoker">
+	<skos:prefLabel>Cigar smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CigarSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarSmokerULMSCode">
+	<icadyCode:codeValue>C0337666</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeSmoker">
+	<skos:prefLabel>Pipe smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PipeSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeSmokerULMSCode">
+	<icadyCode:codeValue>C0337665</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Smoker">
+	<skos:prefLabel>Smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokerULMSCode">
+	<icadyCode:codeValue>C0337664</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryHour">
+	<skos:prefLabel>every Hour</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/EveryHourPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryHourPHRSCode">
+	<icadyCode:codeValue>frequency_every_hour</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TemporarayLossOfSpeech">
+	<skos:prefLabel>Temporaray loss of speech</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TemporarayLossOfSpeechULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TemporarayLossOfSpeechULMSCode">
+	<icadyCode:codeValue>C0278249</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/pills">
+	<skos:prefLabel>pills</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/pillsULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationUnits</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/pillsULMSCode">
+	<icadyCode:codeValue>C0039225</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-cigarSmoker">
+	<skos:prefLabel>Ex-cigar smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-cigarSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-cigarSmokerULMSCode">
+	<icadyCode:codeValue>C0425314</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-pipeSmoker">
+	<skos:prefLabel>Ex-pipe smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-pipeSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-pipeSmokerULMSCode">
+	<icadyCode:codeValue>C0425313</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerWeek">
+	<skos:prefLabel>Several times per week</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SeveralTimesPerWeekPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerWeekPHRSCode">
+	<icadyCode:codeValue>several_times_per_week</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5Hours">
+	<skos:prefLabel>5 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/5HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5HoursPHRSCode">
+	<icadyCode:codeValue>5_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3Years">
+	<skos:prefLabel>3 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/3YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/3YearsPHRSCode">
+	<icadyCode:codeValue>3_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformBathingActivity">
+	<skos:prefLabel>Does perform bathing activity</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DoesPerformBathingActivityULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/BathingActivity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformBathingActivityULMSCode">
+	<icadyCode:codeValue>C0562762</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving">
+	<skos:prefLabel>Manage activities of daily living</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLivingULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLivingULMSCode">
+	<icadyCode:codeValue>C1269688</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MoreThan12Hours">
+	<skos:prefLabel>more than 12 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/MoreThan12HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MoreThan12HoursPHRSCode">
+	<icadyCode:codeValue>over_12_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryDay">
+	<skos:prefLabel>Every day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/EveryDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryDayPHRSCode">
+	<icadyCode:codeValue>every_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ClimbingStairs">
+	<skos:prefLabel>Climbing stairs</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ClimbingStairsULMSCode"/>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ClimbingStairsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/ClimbingStairs</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ClimbingStairsULMSCode">
+	<icadyCode:codeValue>C1290942</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Aborted">
+	<skos:prefLabel>Aborted</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AbortedULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AbortedULMSCode">
+	<icadyCode:codeValue>C1705537</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Suspended">
+	<skos:prefLabel>Operation abandoned</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SuspendedULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SuspendedULMSCode">
+	<icadyCode:codeValue>C1705537</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker_40_plus_day">
+	<skos:prefLabel>Ex-very heavy cigarette smoker (40+/day)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker_40_plus_dayULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-veryHeavyCigaretteSmoker_40_plus_dayULMSCode">
+	<icadyCode:codeValue>C0425303</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker_20_39_day">
+	<skos:prefLabel>Ex-heavy cigarette smoker (20-39/day)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker_20_39_dayULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-heavyCigaretteSmoker_20_39_dayULMSCode">
+	<icadyCode:codeValue>C0425302</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ExtraBruisingOrBleeding">
+	<skos:prefLabel>Extra bruising or bleeding</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ExtraBruisingOrBleedingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ExtraBruisingOrBleedingULMSCode">
+	<icadyCode:codeValue>C0019080</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker_1_9_day">
+	<skos:prefLabel>Ex-light cigarette smoker (1-9/day)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker_1_9_dayULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-lightCigaretteSmoker_1_9_dayULMSCode">
+	<icadyCode:codeValue>C0425300</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DailyOrRecreationalActivity">
+	<skos:prefLabel>Daily or Recreational Activity</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DailyOrRecreationalActivityPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DailyOrRecreationalActivityPHRSCode">
+	<icadyCode:codeValue>recreationalActivity</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryWeek">
+	<skos:prefLabel>Every week</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/EveryWeekPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveryWeekPHRSCode">
+	<icadyCode:codeValue>every_week</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/6Hours">
+	<skos:prefLabel>6 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/6HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/6HoursPHRSCode">
+	<icadyCode:codeValue>6_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams_mg">
+	<skos:prefLabel>milligrams (mg)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Milligrams_mgULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationUnits</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Milligrams_mgULMSCode">
+	<icadyCode:codeValue>C0439210</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/IRequireAssistance">
+	<skos:prefLabel>I require assistance</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/IRequireAssistancePHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivityStatus</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/IRequireAssistancePHRSCode">
+	<icadyCode:codeValue>activityNeedAssistance</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolLoweringDrug">
+	<skos:prefLabel>Cholesterol lowering drug</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CholesterolLoweringDrugULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolLoweringDrugULMSCode">
+	<icadyCode:codeValue>C0003277</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SerumCholesterolRaised">
+	<skos:prefLabel>Serum cholesterol raised</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SerumCholesterolRaisedULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SerumCholesterolRaisedULMSCode">
+	<icadyCode:codeValue>C0595929</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Swimming">
+	<skos:prefLabel>Swimming</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SwimmingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SwimmingULMSCode">
+	<icadyCode:codeValue>C0039003</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultyWalkingUpStairs">
+	<skos:prefLabel>Difficulty walking up stairs</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DifficultyWalkingUpStairsULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/ClimbingStairs</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultyWalkingUpStairsULMSCode">
+	<icadyCode:codeValue>C0239067</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7Hours">
+	<skos:prefLabel>7 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/7HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/7HoursPHRSCode">
+	<icadyCode:codeValue>7_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BathingAssisted">
+	<skos:prefLabel>Bathing assisted</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BathingAssistedULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/BathingActivity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BathingAssistedULMSCode">
+	<icadyCode:codeValue>C1290929</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivityStatus">
+	<skos:prefLabel>Activity Status</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ActivityStatusPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivityStatusPHRSCode">
+	<icadyCode:codeValue>S0044</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDay">
+	<skos:prefLabel>When during the day?</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/WhenDuringTheDayPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WhenDuringTheDayPHRSCode">
+	<icadyCode:codeValue>S0043</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/other">
+	<skos:prefLabel>other</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/otherPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationUnits</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/otherPHRSCode">
+	<icadyCode:codeValue>frequency_other</icadyCode:codeValue>
+	<icadyCode:codeValue>S0004</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften_Frequency">
+	<skos:prefLabel>How often? (Frequency)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HowOften_FrequencyPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HowOften_FrequencyPHRSCode">
+	<icadyCode:codeValue>S0042</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong">
+	<skos:prefLabel>Frequency of Activity (how long?)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLongPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLongPHRSCode">
+	<icadyCode:codeValue>S0041</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Skiing">
+	<skos:prefLabel>Skiing</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SkiingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SkiingULMSCode">
+	<icadyCode:codeValue>C0037264</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity_howLong">
+	<skos:prefLabel>Duration of Activity (how long?)</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DurationOfActivity_howLongPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DurationOfActivity_howLongPHRSCode">
+	<icadyCode:codeValue>S0040</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Drug">
+	<skos:prefLabel>Drug</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DrugULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForDiabetes</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForHypertension</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DrugULMSCode">
+	<icadyCode:codeValue>C0013227</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheMorning">
+	<skos:prefLabel>in the morning</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/InTheMorningPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InTheMorningPHRSCode">
+	<icadyCode:codeValue>when_timeofday_morning</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NeedsHelpWithHousework">
+	<skos:prefLabel>Needs help with housework</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/NeedsHelpWithHouseworkULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/HouseWork</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NeedsHelpWithHouseworkULMSCode">
+	<icadyCode:codeValue>C1303027</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Fatigue">
+	<skos:prefLabel>Fatigue</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FatigueULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FatigueULMSCode">
+	<icadyCode:codeValue>C0015672</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FootSwelling">
+	<skos:prefLabel>Foot swelling</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FootSwellingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FootSwellingULMSCode">
+	<icadyCode:codeValue>C0574002</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BleedingGums">
+	<skos:prefLabel>Bleeding gums</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BleedingGumsULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BleedingGumsULMSCode">
+	<icadyCode:codeValue>C0017565</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingFreeWeeks">
+	<skos:prefLabel>Smoking free weeks</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SmokingFreeWeeksULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingFreeWeeksULMSCode">
+	<icadyCode:codeValue>C1271062</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SportsActivities">
+	<skos:prefLabel>Sports Activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SportsActivitiesULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SportsActivitiesULMSCode">
+	<icadyCode:codeValue>C0577513</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtBedtime">
+	<skos:prefLabel>at bedtime</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AtBedtimePHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AtBedtimePHRSCode">
+	<icadyCode:codeValue>when_timeofday_bedtime</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4Years">
+	<skos:prefLabel>4 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/4YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/4YearsPHRSCode">
+	<icadyCode:codeValue>4_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated_CurrentOrEx">
+	<skos:prefLabel>Pipe related, current or ex</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PipeRelated_CurrentOrExPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PipeRelated_CurrentOrExPHRSCode">
+	<icadyCode:codeValue>S0039</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated_CurrentOrEx">
+	<skos:prefLabel>Cigarette related, current or ex</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CigaretteRelated_CurrentOrExPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigaretteRelated_CurrentOrExPHRSCode">
+	<icadyCode:codeValue>S0038</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated_CurrentOrEx">
+	<skos:prefLabel>Cigar related, current or ex</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CigarRelated_CurrentOrExPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CigarRelated_CurrentOrExPHRSCode">
+	<icadyCode:codeValue>S0037</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Diet">
+	<skos:prefLabel>Diet</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DietULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForDiabetes</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForHypertension</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietULMSCode">
+	<icadyCode:codeValue>C0012155</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPES">
+	<skos:prefLabel>Smoking types cigars, cigs, pipe</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPESPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingTypesCigars_Cigs_Pip_TERM_RISK_SMOKING_TYPESPHRSCode">
+	<icadyCode:codeValue>S0036</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Vomiting">
+	<skos:prefLabel>Vomiting</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/VomitingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/VomitingULMSCode">
+	<icadyCode:codeValue>C0042963</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialDiet">
+	<skos:prefLabel>No special diet</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/NoSpecialDietPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DietsToManageRisks</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialDietPHRSCode">
+	<icadyCode:codeValue>S0034</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForCholesterolRisk">
+	<skos:prefLabel>Diet for Cholesterol risk</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DietForCholesterolRiskPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DietsToManageRisks</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForCholesterolRiskPHRSCode">
+	<icadyCode:codeValue>S0033</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForHypertension">
+	<skos:prefLabel>Diet for Hypertension</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DietForHypertensionPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DietsToManageRisks</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForHypertensionPHRSCode">
+	<icadyCode:codeValue>S0032</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-cigaretteSmoker">
+	<skos:prefLabel>Ex-cigarette smoker</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Ex-cigaretteSmokerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Ex-cigaretteSmokerULMSCode">
+	<icadyCode:codeValue>C0459838</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForDiabetesRisk">
+	<skos:prefLabel>Diet for Diabetes risk</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DietForDiabetesRiskPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DietsToManageRisks</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietForDiabetesRiskPHRSCode">
+	<icadyCode:codeValue>S0031</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietsToManageRisks">
+	<skos:prefLabel>Diets to manage risks</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DietsToManageRisksPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DietsToManageRisksPHRSCode">
+	<icadyCode:codeValue>S0030</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/16To20Years">
+	<skos:prefLabel>16 to 20 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/16To20YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/16To20YearsPHRSCode">
+	<icadyCode:codeValue>16_to_20_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ICanDo">
+	<skos:prefLabel>I can do</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ICanDoPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivityStatus</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ICanDoPHRSCode">
+	<icadyCode:codeValue>activityNoAssistance</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerYear">
+	<skos:prefLabel>per year</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PerYearPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerYearPHRSCode">
+	<icadyCode:codeValue>frequency_per_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Insulin">
+	<skos:prefLabel>Insulin</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/InsulinULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DiabetesMedication</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InsulinULMSCode">
+	<icadyCode:codeValue>C0021641</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/15Minutes">
+	<skos:prefLabel>15 minutes</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/15MinutesPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/15MinutesPHRSCode">
+	<icadyCode:codeValue>15_min_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasure">
+	<skos:prefLabel>Body height measure</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BodyHeightMeasureLoincCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyHeightMeasureLoincCode">
+	<icadyCode:codeValue>8306-3</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultiesPerformingGardeningActivities">
+	<skos:prefLabel>Difficulties performing gardening activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DifficultiesPerformingGardeningActivitiesULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/false</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/Gardening</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DifficultiesPerformingGardeningActivitiesULMSCode">
+	<icadyCode:codeValue>C0577468</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyMassIndex">
+	<skos:prefLabel>Body mass index</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BodyMassIndexULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyMassIndexULMSCode">
+	<icadyCode:codeValue>C1305855</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartRate">
+	<skos:prefLabel>Heart rate</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HeartRateULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartRateULMSCode">
+	<icadyCode:codeValue>C0018810</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeat">
+	<skos:prefLabel>Heart rate</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HeartBeatLoincCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HeartBeatLoincCode">
+	<icadyCode:codeValue>8867-4</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformGardeningActivities">
+	<skos:prefLabel>Does perform gardening activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DoesPerformGardeningActivitiesULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/Gardening</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformGardeningActivitiesULMSCode">
+	<icadyCode:codeValue>C0577466</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialMedication">
+	<skos:prefLabel>No special Medication</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/NoSpecialMedicationPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationForRiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialMedicationPHRSCode">
+	<icadyCode:codeValue>S0029</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolMedication">
+	<skos:prefLabel>Cholesterol Medication</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CholesterolMedicationPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationForRiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolMedicationPHRSCode">
+	<icadyCode:codeValue>S0028</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HypertensionMedication">
+	<skos:prefLabel>Hypertension Medication</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HypertensionMedicationPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationForRiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HypertensionMedicationPHRSCode">
+	<icadyCode:codeValue>S0027</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiabetesMedication">
+	<skos:prefLabel>Diabetes Medication</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DiabetesMedicationPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationForRiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiabetesMedicationPHRSCode">
+	<icadyCode:codeValue>S0026</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForCholesterol">
+	<skos:prefLabel>Treatments for Cholesterol</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TreatmentsForCholesterolPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Treatment</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForCholesterolPHRSCode">
+	<icadyCode:codeValue>S0024</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForHypertension">
+	<skos:prefLabel>Treatments for Hypertension</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TreatmentsForHypertensionPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Treatment</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForHypertensionPHRSCode">
+	<icadyCode:codeValue>S0023</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForDiabetes">
+	<skos:prefLabel>Treatments for Diabetes</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TreatmentsForDiabetesPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Treatment</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentsForDiabetesPHRSCode">
+	<icadyCode:codeValue>S0022</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialTreatment">
+	<skos:prefLabel>No Special treatment</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/NoSpecialTreatmentPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForDiabetes</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForHypertension</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DiabetesMedication</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NoSpecialTreatmentPHRSCode">
+	<icadyCode:codeValue>S0021</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerMonth">
+	<skos:prefLabel>per month</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PerMonthPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerMonthPHRSCode">
+	<icadyCode:codeValue>frequency_per_month</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Treatment">
+	<skos:prefLabel>Treatment</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TreatmentPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TreatmentPHRSCode">
+	<icadyCode:codeValue>S0020</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreath">
+	<skos:prefLabel>[D]Shortness of breath</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DShortnessOfBreathULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DShortnessOfBreathULMSCode">
+	<icadyCode:codeValue>C0013404</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Anxiety">
+	<skos:prefLabel>Anxiety</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AnxietyULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AnxietyULMSCode">
+	<icadyCode:codeValue>C0003467</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWell">
+	<skos:prefLabel>Feeling Well</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/FeelingWellULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWellULMSCode">
+	<icadyCode:codeValue>C2127116</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomach">
+	<skos:prefLabel>Sick to Stomach</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SicktoStomachULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomachULMSCode">
+	<icadyCode:codeValue>C0848290</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEat">
+	<skos:prefLabel>Unable to Eat</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/UnableToEatULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEatULMSCode">
+	<icadyCode:codeValue>C0566306</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasion">
+	<skos:prefLabel>on occasion</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/OnOccasionPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasionPHRSCode">
+	<icadyCode:codeValue>frequency_on_occassion</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Complete">
+	<skos:prefLabel>Complete</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CompleteULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CompleteULMSCode">
+	<icadyCode:codeValue>C0205197</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Incomplete">
+	<skos:prefLabel>Incomplete</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/IncompleteULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/IncompleteULMSCode">
+	<icadyCode:codeValue>C0205257</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Runnig">
+	<skos:prefLabel>Runnig</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/RunnigPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RunnigPHRSCode">
+	<icadyCode:codeValue>running</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RiskOf">
+	<skos:prefLabel>Risk of</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/RiskOfULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RiskOfULMSCode">
+	<icadyCode:codeValue>C0332167</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RiskFactors">
+	<skos:prefLabel>Risk Factors</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/RiskFactorsPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RiskFactorsPHRSCode">
+	<icadyCode:codeValue>S0019</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PhysicalActivities">
+	<skos:prefLabel>Physical Activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PhysicalActivitiesPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PhysicalActivitiesPHRSCode">
+	<icadyCode:codeValue>S0018</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Completed">
+	<skos:prefLabel>Completed</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/Completed"/>
+	<icadyCode:codeValue>S0017</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+	<skos:related>http://www.icardea.at/phrs/instances/MedicationStatus</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationStatus">
+	<skos:prefLabel>Medication Status</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/MedicationStatusPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationStatusPHRSCode">
+	<icadyCode:codeValue>S0015</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/false">
+	<skos:prefLabel>false</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/falsePHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/booleans</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/falsePHRSCode">
+	<icadyCode:codeValue>S0014</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/true">
+	<skos:prefLabel>true</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/truePHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/booleans</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/truePHRSCode">
+	<icadyCode:codeValue>S0013</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HouseWork">
+	<skos:prefLabel>House work</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HouseWorkPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HouseWorkPHRSCode">
+	<icadyCode:codeValue>S0012</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Gardening">
+	<skos:prefLabel>Gardening</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/GardeningPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/GardeningPHRSCode">
+	<icadyCode:codeValue>S0011</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DrivingACar">
+	<skos:prefLabel>Driving a car</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DrivingACarPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DrivingACarPHRSCode">
+	<icadyCode:codeValue>S0010</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Soccer">
+	<skos:prefLabel>Soccer</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SoccerULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SoccerULMSCode">
+	<icadyCode:codeValue>C0037393</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeight">
+	<skos:prefLabel>Body weight</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BodyWeightLoincCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BodyWeightLoincCode">
+	<icadyCode:codeValue>3141-9</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DisorderOfCholesterolMetabolism">
+	<skos:prefLabel>Disorder of cholesterol metabolism</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DisorderOfCholesterolMetabolismULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DisorderOfCholesterolMetabolismULMSCode">
+	<icadyCode:codeValue>C0342877</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveningMeal">
+	<skos:prefLabel>Evening meal</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/EveningMealULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/EveningMealULMSCode">
+	<icadyCode:codeValue>307163004</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TemporarayWeakness">
+	<skos:prefLabel>Temporaray weakness</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TemporarayWeaknessULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TemporarayWeaknessULMSCode">
+	<icadyCode:codeValue>C1883552</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1Year">
+	<skos:prefLabel>1 year</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/1YearPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1YearPHRSCode">
+	<icadyCode:codeValue>1_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerMonth">
+	<skos:prefLabel>Several times per month</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SeveralTimesPerMonthPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SeveralTimesPerMonthPHRSCode">
+	<icadyCode:codeValue>several_times_per_month</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AnkleSwelling">
+	<skos:prefLabel>Ankle swelling (and [symptom])</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/AnkleSwellingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AnkleSwellingULMSCode">
+	<icadyCode:codeValue>C0235439</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ClimbingStairsPHRSCode">
+	<icadyCode:codeValue>S0009</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ShoppingActivities">
+	<skos:prefLabel>Shopping activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ShoppingActivitiesPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ShoppingActivitiesPHRSCode">
+	<icadyCode:codeValue>S0008</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BathingActivity">
+	<skos:prefLabel>Bathing activity</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/BathingActivityPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/BathingActivityPHRSCode">
+	<icadyCode:codeValue>S0007</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivitiesOfDailyLiving">
+	<skos:prefLabel>Activities of Daily Living</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ActivitiesOfDailyLivingPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActivitiesOfDailyLivingPHRSCode">
+	<icadyCode:codeValue>S0006</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationForRiskFactors">
+	<skos:prefLabel>Medication for Risk factors</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/MedicationForRiskFactorsPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationForRiskFactorsPHRSCode">
+	<icadyCode:codeValue>S0005</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationUnits">
+	<skos:prefLabel>Medication Units</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/MedicationUnitsPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationUnitsPHRSCode">
+	<icadyCode:codeValue>S0003</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressure">
+	<skos:prefLabel>Diastolic blood pressure</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DiastolicBloodPressureLoincCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/VitalSigns</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiastolicBloodPressureLoincCode">
+	<icadyCode:codeValue>8462-4</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Loinc"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingQuantity">
+	<skos:prefLabel>Smoking quantity</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SmokingQuantityPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingQuantityPHRSCode">
+	<icadyCode:codeValue>S0002</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingDuration">
+	<skos:prefLabel>Smoking duration</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/SmokingDurationPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SmokingDurationPHRSCode">
+	<icadyCode:codeValue>S0001</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ChestPain">
+	<skos:prefLabel>Chest pain</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ChestPainULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ChestPainULMSCode">
+	<icadyCode:codeValue>C0008031</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Active">
+	<skos:prefLabel>Active</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ActiveULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ActiveULMSCode">
+	<icadyCode:codeValue>C0205177</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiabetesMellitus">
+	<skos:prefLabel>Diabetes Mellitus</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DiabetesMellitusULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiabetesMellitusULMSCode">
+	<icadyCode:codeValue>C0011849</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerWeek">
+	<skos:prefLabel>per week</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PerWeekPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerWeekPHRSCode">
+	<icadyCode:codeValue>frequency_per_week</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/21To30Years">
+	<skos:prefLabel>21 to 30 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/21To30YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/21To30YearsPHRSCode">
+	<icadyCode:codeValue>21_to_30_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformShoppingActivities">
+	<skos:prefLabel>Does perform shopping activities</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DoesPerformShoppingActivitiesULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/ManageActivitiesOfDailyLiving</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/true</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/ShoppingActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DoesPerformShoppingActivitiesULMSCode">
+	<icadyCode:codeValue>C0577437</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Rashes">
+	<skos:prefLabel>Rashes</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/RashesULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/RashesULMSCode">
+	<icadyCode:codeValue>C0015230</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TherapeuticDiet">
+	<skos:prefLabel>Therapeutic diet</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/TherapeuticDietULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForDiabetes</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForHypertension</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DietForDiabetesRisk</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DietForHypertension</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/DietForCholesterolRisk</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/TherapeuticDietULMSCode">
+	<icadyCode:codeValue>C0452264</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Walking">
+	<skos:prefLabel>Walking</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/WalkingULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WalkingULMSCode">
+	<icadyCode:codeValue>C0080331</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/45Minutes">
+	<skos:prefLabel>45 minutes</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/45MinutesPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/45MinutesPHRSCode">
+	<icadyCode:codeValue>45_min_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OtherSport">
+	<skos:prefLabel>Other sport</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/OtherSportULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OtherSportULMSCode">
+	<icadyCode:codeValue>0038039</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WeaknessPresent">
+	<skos:prefLabel>Weakness present</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/WeaknessPresentULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WeaknessPresentULMSCode">
+	<icadyCode:codeValue>C0427053</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5To10Years">
+	<skos:prefLabel>5 to 10 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/5To10YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/5To10YearsPHRSCode">
+	<icadyCode:codeValue>5_to_10_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1Hour">
+	<skos:prefLabel>1 hour</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/1HourPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1HourPHRSCode">
+	<icadyCode:codeValue>1_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/booleans">
+	<skos:prefLabel>booleans</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/booleansPHRSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/booleansPHRSCode">
+	<icadyCode:codeValue>booleans</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/11To15Years">
+	<skos:prefLabel>11 to 15 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/11To15YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/11To15YearsPHRSCode">
+	<icadyCode:codeValue>11_to_15_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1PackPerDay">
+	<skos:prefLabel>1 pack  per day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/1PackPerDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/1PackPerDayPHRSCode">
+	<icadyCode:codeValue>1_pack_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationForHighCholesterol">
+	<skos:prefLabel>Medication for High Cholesterol</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/MedicationForHighCholesterolULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MedicationForHighCholesterolULMSCode">
+	<icadyCode:codeValue>C2924556</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Diarrhea">
+	<skos:prefLabel>Diarrhea</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/DiarrheaULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/DiarrheaULMSCode">
+	<icadyCode:codeValue>C0011991</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Cholesterol">
+	<skos:prefLabel>Cholesterol</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CholesterolULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolULMSCode">
+	<icadyCode:codeValue>C0008377</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Hypertension">
+	<skos:prefLabel>Hypertension</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/HypertensionULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskOf</skos:related>
+	<skos:related>http://www.icardea.at/phrs/instances/RiskFactors</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/HypertensionULMSCode">
+	<icadyCode:codeValue>C0020538</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerDay">
+	<skos:prefLabel>per day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/PerDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/PerDayPHRSCode">
+	<icadyCode:codeValue>frequency_per_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolLoweringDiet">
+	<skos:prefLabel>Cholesterol lowering diet</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/CholesterolLoweringDietULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/TreatmentsForCholesterol</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/CholesterolLoweringDietULMSCode">
+	<icadyCode:codeValue>C0311170</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NotSpecified">
+	<skos:prefLabel>Not specified</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/NotSpecifiedPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/WhenDuringTheDay</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/NotSpecifiedPHRSCode">
+	<icadyCode:codeValue>when_timeofday_not_specified</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2Hours">
+	<skos:prefLabel>2 hours</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/2HoursPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/DurationOfActivity_howLong</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2HoursPHRSCode">
+	<icadyCode:codeValue>2_hour_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/VitalSigns">
+	<skos:prefLabel>Vital signs</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/VitalSignsULMSCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/VitalSignsULMSCode">
+	<icadyCode:codeValue>C0518766</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ExtraPillowToSleepAtNight">
+	<skos:prefLabel>Extra pillow to sleep at night</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/ExtraPillowToSleepAtNightULMSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/ExtraPillowToSleepAtNightULMSCode">
+	<icadyCode:codeValue>C0182291</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2PacksPerDay">
+	<skos:prefLabel>2 packs per day</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/2PacksPerDayPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingQuantity</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2PacksPerDayPHRSCode">
+	<icadyCode:codeValue>2_pack_day</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2Years">
+	<skos:prefLabel>2 years</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/2YearsPHRSCode"/>
+	<skos:related>http://www.icardea.at/phrs/instances/SmokingDuration</skos:related>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/2YearsPHRSCode">
+	<icadyCode:codeValue>2_year</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
+	<skos:prefLabel>oral</skos:prefLabel>
+	<icadyCode:code rdf:resource="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationVocabularyCode"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationVocabularyCode">
+	<icadyCode:codeValue>PO</icadyCode:codeValue>
+	<icadyCode:codeSystem rdf:resource="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">HL7 V3 Vital Sign</rdfs:label>
+	<rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 vital sign.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#templIdRoot">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">HL7 V3 Root Template ID</rdfs:label>
+	<rdfs:comment xml:lang="en">The template id used to indetify the message like a certain one (e.g. IHE Survey Observation )</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/Observation">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">HL7 Observation</rdfs:label>
+	<rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 observation.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/Medication">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">HL7 Medication</rdfs:label>
+	<rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#code">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">HL7 Code</rdfs:label>
+	<rdfs:comment xml:lang="en">The Code and Code System infromation used to unique identify an item</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#note">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Short Note</rdfs:label>
+	<rdfs:comment xml:lang="en">a short note</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#status">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">HL7 V3 Status</rdfs:label>
+	<rdfs:comment xml:lang="en">Indicates the HL7 V3 status</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#effectiveTime">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Effective time</rdfs:label>
+	<rdfs:comment xml:lang="en">The effective time must follow the format yyyymmddhhss (e.g. 201006010000)</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#value">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">The Value</rdfs:label>
+	<rdfs:comment xml:lang="en">The value for a measurement</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ValueObject"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/ValueObject">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">Value Object</rdfs:label>
+	<rdfs:comment xml:lang="en">It build the realtion between a value (numeric) and its unit(alfanumeric).</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#unit">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">The Unit</rdfs:label>
+	<rdfs:comment xml:lang="en">The unit for the involved value (from a measurement)</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ValueObject"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#valueCode">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">The Start Date</rdfs:label>
+	<rdfs:comment xml:lang="en">The start date for a HL7 V3 observation</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#startDate">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">The Start Date</rdfs:label>
+	<rdfs:comment xml:lang="en">The start date for a HL7 V3 observation</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#endDate">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">The End Date</rdfs:label>
+	<rdfs:comment xml:lang="en">The end date for a HL7 V3 observation</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/MedicationDosage">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">HL7 Medication</rdfs:label>
+	<rdfs:comment xml:lang="en">Encapsulate all the information for a singular HL7 V3 medication.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#frequency">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The frequency for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#adminRoute">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The administration route for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#dosage">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#dosageValue">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationDosage"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#dosageUnit">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The dosage for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationDosage"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#drugName">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The drug name for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#drug">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">The code system</rdfs:label>
+	<rdfs:comment xml:lang="en">The drug for a singular HL7 V3 medication</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/PhrsActor">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">An PHRS Actor</rdfs:label>
+	<rdfs:comment xml:lang="en">An PHRS Actor is used to define the reation between Name-space, PHR System Id and Protocol Id.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/actor#id">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+	<rdfs:label xml:lang="en">ID</rdfs:label>
+	<rdfs:comment xml:lang="en">The PHR System Unique id</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/actor#namespace">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+	<rdfs:label xml:lang="en">Name Space</rdfs:label>
+	<rdfs:comment xml:lang="en">The name space for a given PHRS actor</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/actor#protocolId">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/actor"/>
+	<rdfs:label xml:lang="en">Protocol ID</rdfs:label>
+	<rdfs:comment xml:lang="en">The protocol ID is the unique id in entire iCardea system</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PhrsActor"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/PHRSRequest">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">PHR System Request.</rdfs:label>
+	<rdfs:comment xml:lang="en">A single reuest for the PHR System (it may contains the answer adress, care provison code, etc).</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/MedicationFrequency">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">HL7 V3 Medication Frequency</rdfs:label>
+	<rdfs:comment xml:lang="en">Describes the relation between an event(e.g. noon) an offest (eg. 30 mis before) and a repeat.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#event">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">event</rdfs:label>
+	<rdfs:comment xml:lang="en">The event for a medication frequency (e.g. every noon)</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#offset">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">offset</rdfs:label>
+	<rdfs:comment xml:lang="en">The offset for a medication frequency (e.g. 30 mins before noon)</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#repeat">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/code"/>
+	<rdfs:label xml:lang="en">repeat</rdfs:label>
+	<rdfs:comment xml:lang="en">The repeat that can be apply on a medication(e.g. every 8 hours)</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/MedicationFrequency"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedProduct">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">A single Manufactured Product for a medicatiin sign in a HL7 V3</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct">
+	<rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">A single Manufactured Product for a medication sign in a HL7 V3.</rdfs:comment>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#classCode">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">The class code for a single Manufactured Product</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedProduct"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#determinerCode">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Manufactured Product</rdfs:label>
+	<rdfs:comment xml:lang="en">A single Manufactured Label Drug for a ManufacturedProduct for a Medication sign in a HL7 V3.</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#dispathedTo">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Distpached to</rdfs:label>
+	<rdfs:comment xml:lang="en">The unique address for where a certain information was distpached.</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/VitalSign"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Observation"/>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/Medication"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#careProcisionCode">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">Care Provision Code</rdfs:label>
+	<rdfs:comment xml:lang="en">A single care provision code code for a PHRS request.</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/hl7V3#wsReplyAddress">
+	<rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+	<rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/hl7V3"/>
+	<rdfs:label xml:lang="en">the WS-adressing reply adress</rdfs:label>
+	<rdfs:comment xml:lang="en">The adress where the answer(response) for the PHRS request may be delivered.</rdfs:comment>
+	<rdfs:domain rdf:resource="http://www.icardea.at/phrs/types/1.0/PHRSRequest"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/60b0a5e2-92a8-49ec-9840-bde841987674">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/PHRSRequest</rdf:type>
+	<protocolId xmlns="http://www.icardea.at/phrs/actor#">14920263490</protocolId>
+	<careProcisionCode xmlns="http://www.icardea.at/phrs/hl7V3#">MEDLIST</careProcisionCode>
+	<wsReplyAddress xmlns="http://www.icardea.at/phrs/hl7V3#">http://localhost:8989/testws/pcc10</wsReplyAddress>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311611</createDate>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/ece393c5-c662-4dca-8ec0-fd0a2a04f5fc">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/5683ce91-3852-46a0-a53d-891abb78d6d0">
+	<skos:note>Free text note for the medication 1.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/ece393c5-c662-4dca-8ec0-fd0a2a04f5fc</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/3628ed6b-3954-4adb-9ba0-2407a40408db</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/02738598-8a49-4450-9a09-7a483eaa5e90</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">200812010000</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201106101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/3628ed6b-3954-4adb-9ba0-2407a40408db">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">25</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/02738598-8a49-4450-9a09-7a483eaa5e90">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/31ef7fe4-e34d-499e-9f42-a498ce7ad9b7</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/31ef7fe4-e34d-499e-9f42-a498ce7ad9b7">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/22b73df3-43f5-45d4-bc32-82386d546708</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/22b73df3-43f5-45d4-bc32-82386d546708">
+	<skos:prefLabel>Prednisone</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0032952</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/645d6be8-52d6-4c42-b5f3-f5b98b8658c7">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/741c07c9-54ca-4275-9b40-b43a9d847837">
+	<skos:note>Free text note for the medication 2.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/645d6be8-52d6-4c42-b5f3-f5b98b8658c7</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/22055b17-960f-42f6-b20d-253a0944a9ac</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/ddd26ae7-6486-40d9-b9d8-77d05adbd999</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">200812010000</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201106101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/22055b17-960f-42f6-b20d-253a0944a9ac">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">40</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/ddd26ae7-6486-40d9-b9d8-77d05adbd999">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/456543c4-7fc4-4ccd-8685-6b82b2798b7e</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/456543c4-7fc4-4ccd-8685-6b82b2798b7e">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/6c6eda97-eefd-4892-91ba-aa12dca81173</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/6c6eda97-eefd-4892-91ba-aa12dca81173">
+	<skos:prefLabel>Pantoprazole (Pantoloc)</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0081876</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/c1d8c827-8e1d-4083-91d2-143c39a4dc73">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/6f2074d6-ae3b-4f1a-8b28-5b3fb54083d1">
+	<skos:note>Free text note for the medication 3.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/c1d8c827-8e1d-4083-91d2-143c39a4dc73</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/2d5a6ff2-98bc-47a4-9f8c-c88bdc3aae59</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/63e5c481-6427-4a12-8541-5e1cc20d80a6</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">199910101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201106101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/2d5a6ff2-98bc-47a4-9f8c-c88bdc3aae59">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">5</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/63e5c481-6427-4a12-8541-5e1cc20d80a6">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/0511e14f-5706-464f-ba46-71cce7b8511b</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/0511e14f-5706-464f-ba46-71cce7b8511b">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/6fdda048-590a-42b5-ac7c-d0c5f8dc40e8</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/6fdda048-590a-42b5-ac7c-d0c5f8dc40e8">
+	<skos:prefLabel>Concor</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0110591</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/d668b153-919e-47a1-a99e-5bdbf5424d44">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/4c0b6cee-cb53-461a-9450-b6d270ad1c77">
+	<skos:note>Free text note for the medication 4.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/d668b153-919e-47a1-a99e-5bdbf5424d44</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/a576358a-554e-46e3-bd4d-3758bbdc27b1</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/70c6b652-5754-4438-a8e4-dcac1d652039</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">199910101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201010101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/a576358a-554e-46e3-bd4d-3758bbdc27b1">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">1</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Drops</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/70c6b652-5754-4438-a8e4-dcac1d652039">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/6776ba56-f326-4266-892d-a112b3958efd</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/6776ba56-f326-4266-892d-a112b3958efd">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/44e008cb-d037-49a7-b6d0-d36f6bfdd488</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/44e008cb-d037-49a7-b6d0-d36f6bfdd488">
+	<skos:prefLabel>Psychopax (Diazepam)</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0012010</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/8709213a-9d63-45b2-a07a-d38af1848f78">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/75d53a87-7be1-443d-858e-a3d2a13e2b2b">
+	<skos:note>Free text note for the medication 5.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/8709213a-9d63-45b2-a07a-d38af1848f78</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/e8aff899-bb57-454d-a09e-0788eabf917e</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/93d554b0-47b3-4e74-8d40-b29d1a75fe0e</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">198010101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">20110601010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/e8aff899-bb57-454d-a09e-0788eabf917e">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">300</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/93d554b0-47b3-4e74-8d40-b29d1a75fe0e">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/8cf1ea5f-1ac1-4c8c-99a2-e8a4996eddb0</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/8cf1ea5f-1ac1-4c8c-99a2-e8a4996eddb0">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/3ca04976-9cd2-4d81-b5c4-d0d44ef057bd</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/3ca04976-9cd2-4d81-b5c4-d0d44ef057bd">
+	<skos:prefLabel>Convulex</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0591288</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/51c50817-bfd0-44ba-a764-1ffef35eba3d">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/b2f7122e-d983-441b-a958-bc80425a371f">
+	<skos:note>Free text note for the medication 6.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/51c50817-bfd0-44ba-a764-1ffef35eba3d</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/fab8a3a4-17f9-4d90-a988-3a41b89e7186</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/e9855d68-98eb-40e6-bbed-7d60de6bf339</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">20090101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201106101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/fab8a3a4-17f9-4d90-a988-3a41b89e7186">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">20</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/e9855d68-98eb-40e6-bbed-7d60de6bf339">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/59d2dd59-3c25-4e28-a80b-6c45cfeb2d97</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/59d2dd59-3c25-4e28-a80b-6c45cfeb2d97">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/433b3f27-f04b-4d83-8786-c2920d0eee52</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/433b3f27-f04b-4d83-8786-c2920d0eee52">
+	<skos:prefLabel>Ebetrexat(Methotrexate)</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0025677</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/1df107c6-15e6-4533-8932-28876fd90778">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/7a897dff-61c5-4b41-891d-17f3b17bccc2">
+	<skos:note>Free text note for the medication 7.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/1df107c6-15e6-4533-8932-28876fd90778</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/92b41d99-1e9d-4401-b6ec-bc57c021ee5b</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/ed301fae-89a0-4ed2-be58-5838716663fe</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">20090101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201106101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/92b41d99-1e9d-4401-b6ec-bc57c021ee5b">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">10</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Milligram</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/ed301fae-89a0-4ed2-be58-5838716663fe">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/96cdfaab-97be-4443-8037-322eb1a8738e</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/96cdfaab-97be-4443-8037-322eb1a8738e">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/d67c20aa-6e09-4fed-9015-ed4df31fbdaf</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/d67c20aa-6e09-4fed-9015-ed4df31fbdaf">
+	<skos:prefLabel>Folsan(Folic Acid)</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0016410</value>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/4677c63c-8cb0-4d0d-b27c-08bbe0305c9e">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationFrequency</rdf:type>
+	<event xmlns="http://www.icardea.at/phrs/hl7V3#">No Event</event>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/79bd2df9-3ca2-4ae3-ba42-aad4f90671d5">
+	<skos:note>Free text note for the medication 8.</skos:note>
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/Medication</rdf:type>
+	<templIdRoot xmlns="http://www.icardea.at/phrs/hl7V3#">1.3.6.1.4.1.19376.1.5.3.1.4.7.1</templIdRoot>
+	<status xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/Complete</status>
+	<frequency xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/4677c63c-8cb0-4d0d-b27c-08bbe0305c9e</frequency>
+	<adminRoute xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/OralAdministration</adminRoute>
+	<dosage xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/76c2c97b-5648-49fb-a34f-28a62b1fb152</dosage>
+	<manufacturedProduct xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/a060a250-5b5c-480d-b9c8-0b135f54d223</manufacturedProduct>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+	<owner xmlns="http://www.icardea.at/phrs#">14920263490</owner>
+	<dateStart xmlns="http://www.icardea.at/phrs/hl7V3#">199910101010</dateStart>
+	<dateEnd xmlns="http://www.icardea.at/phrs/hl7V3#">201010101010</dateEnd>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/76c2c97b-5648-49fb-a34f-28a62b1fb152">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/MedicationDosage</rdf:type>
+	<dosageValue xmlns="http://www.icardea.at/phrs/hl7V3#">1</dosageValue>
+	<dosageUnit xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/instances/MeasureSystem#Tablet</dosageUnit>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/a060a250-5b5c-480d-b9c8-0b135f54d223">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedProduct</rdf:type>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<manufacturedLabeledDrug xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/4fb4e36c-bdbf-4dd2-a4ac-5bb42048f4a4</manufacturedLabeledDrug>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/4fb4e36c-bdbf-4dd2-a4ac-5bb42048f4a4">
+	<rdf:type>http://www.icardea.at/phrs/types/1.0/ManufacturedLabeledDrug</rdf:type>
+	<code xmlns="http://www.icardea.at/phrs/hl7V3#">http://www.icardea.at/phrs/7bef6a71-082a-4d60-86e6-0c8bf40236d2</code>
+	<classCode xmlns="http://www.icardea.at/phrs/hl7V3#">MANU</classCode>
+	<determinerCode xmlns="http://www.icardea.at/phrs/hl7V3#">KIND</determinerCode>
+	<createDate xmlns="http://www.icardea.at/phrs#">201201311750</createDate>
+	<creator xmlns="http://www.icardea.at/phrs#">at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient</creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="http://www.icardea.at/phrs/7bef6a71-082a-4d60-86e6-0c8bf40236d2">
+	<skos:prefLabel>Magnosolv(Magnesium)</skos:prefLabel>
+	<icadyCode:codeSystem>http://www.icardea.at/phrs/instances/codeSystem/Ulms</icadyCode:codeSystem>
+	<value xmlns="http://www.icardea.at/phrs/hl7V3#">C0024467</value>
+</rdf:Description>
+
+</rdf:RDF>
