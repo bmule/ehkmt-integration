@@ -355,7 +355,8 @@ public class MedicationTreatmentInteropUnitTest {
         return res;
 
     }
-   @Test
+
+    @Test
     public void testPersistSampleResource() {
         MedicationTreatment res = new MedicationTreatment();
 
@@ -392,6 +393,7 @@ public class MedicationTreatmentInteropUnitTest {
         assertNotNull("resourceUri is null", res.getResourceUri());
 
     }
+
     @Test
     public void testPersistSampleResourceAltSave() {
         MedicationTreatment res = new MedicationTreatment();

@@ -34,7 +34,7 @@ public class PhrsClientUnitTest {
     public static final String DOSE_TIME_OF_DAY = "http://www.icardea.at/phrs/instances/InTheMorning";
     public static final String DOSE_UNITS = "http://www.icardea.at/phrs/instances/pills";
     public static final String MED_REASON = "http://www.icardea.at/phrs/instances/Cholesterol";
-    private PhrsStoreClient phrsClient=null;
+    private PhrsStoreClient phrsClient = null;
     private GenericTriplestore triplestore;
 
     public PhrsClientUnitTest() {
@@ -93,9 +93,9 @@ public class PhrsClientUnitTest {
     @Test
     public void testSavePhrResourceAndFind() throws Exception {
         System.out.println("testSavePhrResourceAndFind_");
-        PhrsStoreClient sc = PhrsStoreClient.getInstance();
+        phrsClient = PhrsStoreClient.getInstance();
 
-        InteropAccessService iaccess = sc.getInteropService();
+        InteropAccessService iaccess = phrsClient.getInteropService();
         assertNotNull("CommonDao null via InteropAccessService ", iaccess.getCommonDao());
         MedicationTreatment res = new MedicationTreatment();
 
@@ -125,7 +125,7 @@ public class PhrsClientUnitTest {
         assertNotNull(iaccess.getCommonDao());
 
         try {
-            sc.getCommonDao().crudSaveResource(res, USER, USER);
+            phrsClient.getCommonDao().crudSaveResource(res, USER, USER);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,17 +141,17 @@ public class PhrsClientUnitTest {
         List<MedicationTreatment> list = null;
         try {
             //list = phrsClient.getCommonDao().crudReadResources(USER, (Object) MedicationTreatment.class);
-            list = sc.getCommonDao().crudReadMedicationResources(USER);
+            list = phrsClient.getCommonDao().crudReadMedicationResources(USER);
 
             assertNotNull("Null, Expected search results for resource type and user ", list);
             assertTrue("Empty, Expected search results for resource type and user ", !list.isEmpty());
 
             for (MedicationTreatment item : list) {
-                System.out.println("item resUri="+item.getResourceUri());
-                
-                if (item.getResourceUri()!=null && resourceUri.equals(item.getResourceUri())) {
+                System.out.println("item resUri=" + item.getResourceUri());
+
+                if (item.getResourceUri() != null && resourceUri.equals(item.getResourceUri())) {
                     found = true;
-                }else {
+                } else {
                     System.out.println("item  resUri=NULL");
                 }
             }
@@ -166,9 +166,9 @@ public class PhrsClientUnitTest {
     @Test
     public void testSavePhrResource2() throws Exception {
         System.out.println("testSavePhrResourceAndFind");
-        PhrsStoreClient sc = PhrsStoreClient.getInstance();
+        phrsClient = PhrsStoreClient.getInstance();
 
-        InteropAccessService iaccess = sc.getInteropService();
+        InteropAccessService iaccess = phrsClient.getInteropService();
         assertNotNull("CommonDao null via InteropAccessService ", iaccess.getCommonDao());
         MedicationTreatment res = new MedicationTreatment();
 
@@ -198,12 +198,14 @@ public class PhrsClientUnitTest {
 
 
         res.setOwnerUri(USER);
-	res.setCreatorUri(USER); //resourceUri is set before actually saving the the object
+        res.setCreatorUri(USER); //resourceUri is set before actually saving the the object
         res.setType(null);
-        
+
 
         assertNotNull(iaccess.getCommonDao());
-       if(phrsClient==null) phrsClient = PhrsStoreClient.getInstance();
+        if (phrsClient == null) {
+            phrsClient = PhrsStoreClient.getInstance();
+        }
         try {
             //iaccess.getCommonDao().crudSaveResource(res, USER, USER);
             phrsClient.getPhrsRepositoryClient().crudSaveResource(res, "action111");
@@ -246,29 +248,12 @@ public class PhrsClientUnitTest {
     @Test
     public void testInstanceInteropAccess() {
         System.out.println("testInstanceInteropAccess");
-        PhrsStoreClient sc = PhrsStoreClient.getInstance();
-        assertNotNull(sc);
-        at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias = sc.getInteropService();
+        phrsClient = PhrsStoreClient.getInstance();
+        assertNotNull(phrsClient);
+        at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias = phrsClient.getInteropService();
 
         assertNotNull(ias);
     }
-    /*
-     * @Test public void testInstanceInteropAccessOverrideTripleStore() {
-     * System.out.println("testInstanceInteropAccessOverrideTripleStore");
-     * PhrsStoreClient sc = PhrsStoreClient.getInstance(getTripleStore(), true);
-     * assertNotNull(sc);
-     * at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias =
-     * sc.getInteropService();
-     *
-     * assertNotNull(ias); }
-     *
-     * @Test public void testInstanceOverrideTripleStore() {
-     * System.out.println("testInstanceOverrideTripleStore"); GenericTriplestore
-     * triplestore = getTripleStore(); assertNotNull("triplestore null",
-     * triplestore); PhrsStoreClient sc =
-     * PhrsStoreClient.getInstance(getTripleStore(), true);
-     * assertNotNull("PhrsStoreClient nulll", sc); }
-     */
 
     public GenericTriplestore getTripleStore() {
         final TriplestoreConnectionFactory connectionFactory =
@@ -278,20 +263,11 @@ public class PhrsClientUnitTest {
         return triplestore;
     }
 
-    /*
-     * @Test public void testParseReferenceNote() {
-     * System.out.println("testParseReferenceNote"); String expect = "1234";
-     * //String x = "res=" + expect; String x = expect; String result =
-     * at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService.parseReferenceNote(x);
-     * System.out.println("parsed=" + result); assertNotNull("reference note
-     * null", result); assertEquals("reference note expect: " + expect + "
-     * found: " + result, expect, result); }
-     */
     public at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService getInteropAccessService() {
 
-        PhrsStoreClient sc = PhrsStoreClient.getInstance();
-        assertNotNull(sc);
-        at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias = sc.getInteropService();
+        phrsClient = PhrsStoreClient.getInstance();
+        assertNotNull(phrsClient);
+        at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService ias = phrsClient.getInteropService();
         return ias;
     }
 }
