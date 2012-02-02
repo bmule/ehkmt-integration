@@ -199,9 +199,9 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.debug("No Body to process");
             return;
         }
-        final String code = XMLUtil.getCareProvisionCode(body);
-        final String patientId = XMLUtil.getPatientId(body);
-        final String patientNames = XMLUtil.getPatientName(body);
+        final String code = Util.getCareProvisionCode(body);
+        final String patientId = Util.getPatientId(body);
+        final String patientNames = Util.getPatientName(body);
 
         final String message =
                 audit.createMessage(MESSAGE_TYPE, patientId, code, REQUESTER_ROLE);
