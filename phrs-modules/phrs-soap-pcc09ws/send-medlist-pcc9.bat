@@ -1,5 +1,5 @@
-cls
 call title Send Medlist pcc09
+cls
 call mvn compile
 call mvn test-compile
 
