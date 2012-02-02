@@ -140,7 +140,10 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>phrs-message-dispatcher</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>     
+        </dependency> 
+        
+
+     
         <!--Other dependencies-->
         
         <dependency>
@@ -542,8 +545,16 @@
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-structures-v26</artifactId>
             <version>1.0.1</version>
-        </dependency>        
-
+        </dependency> 
+ <!-- causes install trouble. exists in local repository, but ...
+     
+        <dependency>
+            <groupId>tr.com.srdc.icardea</groupId>
+            <artifactId>icardea-atnalog-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        -->
     </dependencies>
  
   <!--  -Dcatalina.home= -->
@@ -609,7 +620,7 @@
                 <version>2.3.2</version>
                 <configuration>
                     <source>1.6</source>
-		    <target>1.6</target>
+                    <target>1.6</target>
                     <compilerId>groovy-eclipse-compiler</compilerId>
                     <verbose>true</verbose>
                 </configuration>

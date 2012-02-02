@@ -102,14 +102,15 @@ public class Audit {
 					"<EventID code="+"\""+code+"\""+"/>"+
 						"<EventTypeCode code="+"\"PCC-9\""+" codeSystemName="+"\"IHE Transactions\""+"/>"+
 					"</EventIdentification>"+
-					"<ActiveParticipant UserID="+"\"Adaptive Care Planner\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"Adaptive Care Planner\""+">"+
 					"</ActiveParticipant>"+
-					"<ActiveParticipant UserID="+"\"EHR\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"false\""+" UserID="+"\"EHR\""+">"+
 					"</ActiveParticipant>"+
 					"<AuditSourceIdentification AuditSourceID="+"\"Adaptive Care Planner\""+">"+
 					"</AuditSourceIdentification>"+
-					"<ParticipantObjectIdentification ParticipantObjectID="+"\""+patientID+"\""+">"+
-					"<ParticipantObjectIDTypeCode code="+"\"iCardea\""+"/>"+
+					"<ParticipantObjectIdentification ParticipantObjectTypeCodeRole="+"\"1\""+" ParticipantObjectTypeCode="+"\"1\""+" ParticipantObjectID="+"\""+patientID+"\""+">"+
+						"<ParticipantObjectIDTypeCode code="+"\"2\""+"/>"+
+						"<ParticipantObjectName>PatientIdentifier</ParticipantObjectName>"+
 					"</ParticipantObjectIdentification>"+
 				"</AuditMessage>";
 			
@@ -121,15 +122,16 @@ public class Audit {
 					"<EventID code="+"\""+code+"\""+"/>"+
 						"<EventTypeCode code="+"\"PCC-10\""+" codeSystemName="+"\"IHE Transactions\""+"/>"+
 					"</EventIdentification>"+
-					"<ActiveParticipant UserID="+"\"PHR\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"PHR\""+">"+
 					"</ActiveParticipant>"+
-					"<ActiveParticipant UserID="+"\"Adaptive Care Planner\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"false\""+" UserID="+"\"Adaptive Care Planner\""+">"+
 					"</ActiveParticipant>"+
 					"<AuditSourceIdentification AuditSourceID="+"\"PHR\""+">"+
 					"</AuditSourceIdentification>"+
-					"<ParticipantObjectIdentification ParticipantObjectID="+"\""+patientID+"\""+">"+
-					"<ParticipantObjectIDTypeCode code="+"\"iCardea\""+"/>"+
-					"</ParticipantObjectIdentification>"+
+					"<ParticipantObjectIdentification ParticipantObjectTypeCodeRole="+"\"1\""+" ParticipantObjectTypeCode="+"\"1\""+" ParticipantObjectID="+"\""+patientID+"\""+">"+
+					"<ParticipantObjectIDTypeCode code="+"\"2\""+"/>"+
+					"<ParticipantObjectName>PatientIdentifier</ParticipantObjectName>"+
+				"</ParticipantObjectIdentification>"+
 				"</AuditMessage>";
 			
 		}
@@ -140,15 +142,16 @@ public class Audit {
 						"<EventID code="+"\"CIED\""+" displayName="+"\"Cardiac Implantable Electronic Device\""+"/>"+
 						"<EventTypeCode code="+"\"PCD-9\""+" codeSystemName="+"\"IHE Transactions\""+"/>"+
 					"</EventIdentification>"+
-					"<ActiveParticipant UserID="+"\"CIED Data Exposure System\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"CIED Data Exposure System\""+">"+
 					"</ActiveParticipant>"+
-					"<ActiveParticipant UserID="+"\"Adaptive Care Planner\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"false\""+" UserID="+"\"Adaptive Care Planner\""+">"+
 					"</ActiveParticipant>"+
 					"<AuditSourceIdentification AuditSourceID="+"\"CIED Data Exposure System\""+">"+
 					"</AuditSourceIdentification>"+
-					"<ParticipantObjectIdentification ParticipantObjectID="+"\""+patientID+"\""+">"+
-					"<ParticipantObjectIDTypeCode code="+"\"iCardea\""+"/>"+
-					"</ParticipantObjectIdentification>"+
+					"<ParticipantObjectIdentification ParticipantObjectTypeCodeRole="+"\"1\""+" ParticipantObjectTypeCode="+"\"1\""+" ParticipantObjectID="+"\""+patientID+"\""+">"+
+					"<ParticipantObjectIDTypeCode code="+"\"2\""+"/>"+
+					"<ParticipantObjectName>PatientIdentifier</ParticipantObjectName>"+
+				"</ParticipantObjectIdentification>"+
 				"</AuditMessage>";
 				
 		}
@@ -159,15 +162,16 @@ public class Audit {
 				        "<EventID code="+"\""+code+"\""+" displayName="+"\"Grant Request Message\""+"/>"+
 				        "<EventTypeCode code="+"\"GRM\""+" codeSystemName="+"\"IHE Transactions\""+"/>"+
 				    "</EventIdentification>"+
-				    "<ActiveParticipant UserID="+"\"Consent Manager\""+">"+
+				    "<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"Consent Manager\""+">"+
 					"</ActiveParticipant>"+
-					"<ActiveParticipant UserID="+"\""+  requesterRole +"\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"false\""+" UserID="+"\""+  requesterRole +"\""+">"+
 					"</ActiveParticipant>"+
 					"<AuditSourceIdentification AuditSourceID="+"\"Consent Manager\""+">"+
 					"</AuditSourceIdentification>"+
-					"<ParticipantObjectIdentification ParticipantObjectID="+"\""+patientID+"\""+">"+
-					"<ParticipantObjectIDTypeCode code="+"\"iCardea\""+"/>"+
-					"</ParticipantObjectIdentification>"+
+					"<ParticipantObjectIdentification ParticipantObjectTypeCodeRole="+"\"1\""+" ParticipantObjectTypeCode="+"\"1\""+" ParticipantObjectID="+"\""+patientID+"\""+">"+
+					"<ParticipantObjectIDTypeCode code="+"\"2\""+"/>"+
+					"<ParticipantObjectName>PatientIdentifier</ParticipantObjectName>"+
+				"</ParticipantObjectIdentification>"+
 				"</AuditMessage>";
 			//TODO
 			// Send ATNA Message: Grant Request Message
@@ -181,15 +185,16 @@ public class Audit {
 						"<EventID code="+"\"Register\""+" displayName="+"\"Registration of Patient\""+"/>"+
 						"<EventTypeCode code="+"\"register\""+" codeSystemName="+"\"IHE Transactions\""+"/>"+
 					"</EventIdentification>"+
-					"<ActiveParticipant UserID="+"\"HIS\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"HIS\""+">"+
 					"</ActiveParticipant>"+
-					"<ActiveParticipant UserID="+"\"Adaptive Care Planner\""+">"+
+					"<ActiveParticipant UserIsRequestor="+"\"true\""+" UserID="+"\"Adaptive Care Planner\""+">"+
 					"</ActiveParticipant>"+
 					"<AuditSourceIdentification AuditSourceID="+"\"HIS\""+">"+
 					"</AuditSourceIdentification>"+
-					"<ParticipantObjectIdentification ParticipantObjectID="+"\""+patientID+"\""+">"+
-					"<ParticipantObjectIDTypeCode code="+"\"iCardea\""+"/>"+
-					"</ParticipantObjectIdentification>"+
+					"<ParticipantObjectIdentification ParticipantObjectTypeCodeRole="+"\"1\""+" ParticipantObjectTypeCode="+"\"1\""+" ParticipantObjectID="+"\""+patientID+"\""+">"+
+					"<ParticipantObjectIDTypeCode code="+"\"2\""+"/>"+
+					"<ParticipantObjectName>PatientIdentifier</ParticipantObjectName>"+
+				"</ParticipantObjectIdentification>"+
 				"</AuditMessage>";
 			//TODO
 			// Send ATNA Message: Patient registration message is received for
