@@ -51,6 +51,12 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         
+        <dependency>
+            <artifactId>icardea-atnalog-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <groupId>tr.com.srdc.icardea</groupId>
+        </dependency>
+        
     </dependencies>
     
     <build>

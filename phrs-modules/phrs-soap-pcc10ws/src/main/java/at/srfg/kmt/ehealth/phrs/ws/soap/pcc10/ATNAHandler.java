@@ -5,7 +5,7 @@
  * Date : Dec 21, 2011
  * User : Mihai Radulescu
  */
-package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
+package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import java.io.InputStream;
@@ -27,7 +27,7 @@ import tr.com.srdc.icardea.atnalog.client.Audit;
  * server.
  * The ATNA message contains :
  * <ul>
- * <li> a message type - always "PCC-9"
+ * <li> a message type - always "PCC-10"
  * <li> a code - the care provision  code - extracted from the message body.
  * <li> an ID - the protocol id - extracted from the message body.
  * <li> a requester Role - always "IHE+RFC-3881".
@@ -61,12 +61,12 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
     /**
      * The only ATNA message type used in this handler.
      */
-    private final String MESSAGE_TYPE = "PCC-9";
+    private final String MESSAGE_TYPE = "PCC-10";
 
     /**
      * The name for the configuration file.
      */
-    private final String CONFIG_FILE = "pcc-9-atna.properties";
+    private final String CONFIG_FILE = "pcc-10-atna.properties";
 
     /**
      * The audit client.
@@ -201,7 +201,6 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
         }
         final String code = Util.getCareProvisionCode(body);
         final String patientId = Util.getPatientId(body);
-        final String patientNames = Util.getPatientName(body);
 
         final String message =
                 audit.createMessage(MESSAGE_TYPE, patientId, code, REQUESTER_ROLE);
