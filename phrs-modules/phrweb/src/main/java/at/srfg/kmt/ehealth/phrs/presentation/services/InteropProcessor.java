@@ -33,13 +33,10 @@ public class InteropProcessor {
     public final static String REFERENCE_NOTE_PREFIX = "resourcephr=";
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
-    
- 
     private MedicationClient medicationClient;
     private ActorClient actorClient;
     private PhrsStoreClient phrsClient;
     private InteropAccessService iaccess;
-
     private boolean printDynabean = false;
 
     public InteropProcessor() {
@@ -56,7 +53,7 @@ public class InteropProcessor {
         if (phrsClient == null) {
             phrsClient = PhrsStoreClient.getInstance();
         }
-        
+
         iaccess = phrsClient.getInteropService();
 
         //get this one, we set the creator differently
@@ -254,6 +251,66 @@ public class InteropProcessor {
         return value;
     }
 
+    public static Double convertDouble(String value) {
+
+        Double newValue = null;
+        if (value != null && !value.isEmpty()) {
+            try {
+                newValue = Double.parseDouble(value);
+            } catch (NumberFormatException numberFormatException) {
+            }
+        }
+        if (newValue == null) {
+            newValue = 0d;
+        }
+        return newValue;
+    }
+
+    public static Integer convertInteger(String value) {
+
+        Integer newValue = null;
+        if (value != null && !value.isEmpty()) {
+            try {
+                newValue = Integer.valueOf(value);
+            } catch (NumberFormatException numberFormatException) {
+            }
+        }
+        if (newValue == null) {
+            newValue = 0;
+        }
+        return newValue;
+    }
+
+    public static String convertDouble(Double value) {
+
+        String newValue = null;
+        if (value != null) {
+            try {
+                newValue = Double.toString(value);
+            } catch (Exception e) {
+            }
+        }
+        if (newValue == null) {
+            newValue = "0";
+        }
+        return newValue;
+    }
+
+    public static String convertInteger(Integer value) {
+
+        String newValue = null;
+        if (value != null) {
+            try {
+                newValue = Integer.toString(value);
+            } catch (Exception e) {
+            }
+        }
+        if (newValue == null) {
+            newValue = "0";
+        }
+        return newValue;
+    }
+
     public Map<String, String> sendMedicationMessage(MedicationTreatment domain) {
         //MedicationTreatment domain = (MedicationTreatment) resource;
 
@@ -296,8 +353,9 @@ public class InteropProcessor {
 
             String freqCode = domain.getFrequencyCode();
             //String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? domain.getTreatmentMatrix().getDosage().toString() : "0";
-            String dosageQuantity = domain.getTreatmentMatrix().getDosageQuantity();
-            String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? domain.getTreatmentMatrix().getDosage().toString() : "0";
+            //String dosageQuantity = domain.getTreatmentMatrix().getDosageQuantity();
+
+            String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? convertDouble(domain.getTreatmentMatrix().getDosage()) : "0";
 
             String doseUnits = domain.getTreatmentMatrix().getDosageUnits();
 
@@ -323,7 +381,7 @@ public class InteropProcessor {
                         dateStringEnd,//dateStringEnd,
                         medicationclient.buildNullFrequency(),//doseInterval, frequency,
                         adminRoute,
-                        dosageQuantity,//dosageValue,
+                        dosageValue,
                         doseUnits,
                         name);
                 if (messageId != null && messageId.length() > 0) {
@@ -713,11 +771,15 @@ public class InteropProcessor {
                     //ISSUE check DOSAGE is QUANTITY but we do not need double? Keep as String
                     //ISSUE check dosage per unit not received from EHR, but web form no longer asks.
 
-                    med.getTreatmentMatrix().setDosage(0d);
+                    //med.getTreatmentMatrix().setDosage(0d);
 
                     Map<String, String> doseAttrs = getMedicationDosageAttributes(dynabean);
+
                     String doseQuantity = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_VALUE, "0");
-                    med.getTreatmentMatrix().setDosageQuantity(doseQuantity);
+
+                    Double dosage = convertDouble(doseQuantity);
+                    med.getTreatmentMatrix().setDosage(dosage != null ? dosage : 0d);
+                    //med.getTreatmentMatrix().setDosageQuantity(doseQuantity);
 
                     String doseUnits = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_UNIT, "http://www.icardea.at/phrs/instances/pills");
                     med.getTreatmentMatrix().setDosageUnits(doseUnits);

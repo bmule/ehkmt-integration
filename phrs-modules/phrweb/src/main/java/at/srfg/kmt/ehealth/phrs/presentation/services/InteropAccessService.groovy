@@ -178,9 +178,8 @@ public class  InteropAccessService implements Serializable{
      * @return
      */
     public String transformStatus(String status){
-        String out=status
-
-        return out
+    
+        return InteropTermTransformer.transformStatus(status)
     }
 
     /**
@@ -241,7 +240,7 @@ public class  InteropAccessService implements Serializable{
     }
      */
     public  String createReferenceNote(String resourceUri){   
-        return InteropProcessor.createReferenceNote()
+        return InteropProcessor.createReferenceNote(resourceUri)
     }
     /**
      *
@@ -266,7 +265,7 @@ public class  InteropAccessService implements Serializable{
 
                 String status 	= this.transformStatus(res.status)
                 //status = status?: null
-                status = status!=null ? status : Constants.STATUS_RUNNING;
+                status = status!=null ? status : Constants.STATUS_COMPELETE//Constants.STATUS_RUNNING;
 
                 String categoryCode 	= this.transformCategory(res.category,resourceType)
                 categoryCode = categoryCode?: null

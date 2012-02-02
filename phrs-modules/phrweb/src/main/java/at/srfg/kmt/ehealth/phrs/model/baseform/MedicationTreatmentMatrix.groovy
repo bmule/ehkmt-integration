@@ -16,12 +16,12 @@ class MedicationTreatmentMatrix implements  Serializable{
 	String treatmentType
 	/**
 	 * could be integer  or double for describing 1.5 mg
+         * Using instead of dosageQuantity
 	 */
 	Double dosage
-	/**
-	 * @deprecated
-	 */
-	String dosageQuantity // take 2 tablets/ twice a day?? better to use interval
+	
+	//deprecated
+        String dosageQuantity 
 	/**
 	 * the parent medication object has dosage info, otherwise these are the modifications
 	 * for this part
