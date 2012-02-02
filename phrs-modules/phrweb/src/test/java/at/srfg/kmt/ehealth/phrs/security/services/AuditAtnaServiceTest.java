@@ -81,7 +81,7 @@ public class AuditAtnaServiceTest {
         boolean result = instance.isAtnalogRequired();
         assertEquals("ATNA loggin is not enabled, see icardea.properties", expResult, result);
     }
-
+    @Ignore
     @Test
     public void testSendAuditMessageGrantForRole() {
         //cant test threaded testSendAuditMessageGrantForRole ?
@@ -94,7 +94,7 @@ public class AuditAtnaServiceTest {
         boolean success = instance.doAuditMessageGrantForRole(patientId, resource, requestorRole);
         assertTrue("ATNA not successful doAuditMessageGrantForRole", success);
     }
-
+    @Ignore
     @Test
     public void testSendAuditMessageForPatientRegistration() {
         //cant test threaded testSendAuditMessageGrantForRole ?
