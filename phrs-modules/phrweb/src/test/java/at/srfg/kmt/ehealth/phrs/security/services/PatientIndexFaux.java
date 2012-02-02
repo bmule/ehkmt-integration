@@ -4,10 +4,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.security.services;
 
-/**
- *
- * @author bmulreni
- */
+
 public class PatientIndexFaux {
     
     public void stop(){

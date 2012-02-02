@@ -15,11 +15,9 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
-import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.Set;
 import junit.framework.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * @since 0.1
  * @see ActorClient
  */
-@Ignore
+
 public class ActorClientUnitTest {
 
     /**

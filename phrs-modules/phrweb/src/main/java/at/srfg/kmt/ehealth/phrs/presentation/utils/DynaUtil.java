@@ -5,10 +5,14 @@
 package at.srfg.kmt.ehealth.phrs.presentation.utils;
 
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import org.apache.commons.beanutils.BasicDynaBean;
 import org.apache.commons.beanutils.DynaBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DynaUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DynaUtil.class);
 
     public static String toString(DynaBean bean) {
         if (bean != null) {
@@ -43,7 +47,8 @@ public class DynaUtil {
                 value = (String) obj;
             }
         } catch (Exception e) {
-            System.out.println("No dyna String (check Object property) property for: " + property);
+            //we know already
+            LOGGER.info("No Dyna String (check Object property) property for: " + property);
         }
 
         if (value == null) {

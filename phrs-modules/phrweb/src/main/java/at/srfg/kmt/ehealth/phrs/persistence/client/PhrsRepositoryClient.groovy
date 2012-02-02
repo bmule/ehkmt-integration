@@ -70,20 +70,22 @@ public class PhrsRepositoryClient implements Serializable{
 
         return phrsStoreClient.getInteropService();
     }
-    /**
+    /*
      * Read a single resource
      * @param theObject
      * @return
-     */
+     * @deprecated
+     * 
+     
     def crudReadResource(def theObject){
-        def result
+    def result
         
-        if(theObject ){
-            result= getPhrsDatastore().get(theObject)
-            //writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)
-        }
-        return result
+    if(theObject ){
+    result= getPhrsDatastore().get(theObject)
+    //writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)
     }
+    return result
+    }*/
     public InteropClients getInteropClients(){
         return  phrsStoreClient.getInteropClients()
     }
@@ -453,22 +455,22 @@ public class PhrsRepositoryClient implements Serializable{
      */
     def writeAuditData(def resourceObj, String action, Map<String,String> params){ 
         
-//        if(resourceObj) {
-//            //create and writes (true)
-//            AuditBase audit=new AuditBase(resourceObj,action)
-//            try {
-//                getPhrsAuditDatastore().save(audit)
-//            } catch (Exception e){
-//                println('Exception '+e)
-//                LOGGER.error('writeAuditData - NULL object '+e)
-//                
-//                writeHistory(resourceObj,action,params)
-//            }
-//
-//            return audit
-//        } else {
-//            LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
-//        }
+        //        if(resourceObj) {
+        //            //create and writes (true)
+        //            AuditBase audit=new AuditBase(resourceObj,action)
+        //            try {
+        //                getPhrsAuditDatastore().save(audit)
+        //            } catch (Exception e){
+        //                println('Exception '+e)
+        //                LOGGER.error('writeAuditData - NULL object '+e)
+        //                
+        //                writeHistory(resourceObj,action,params)
+        //            }
+        //
+        //            return audit
+        //        } else {
+        //            LOGGER.error('{} - NULL object',PhrsConstants.PUBSUB_ACTION_CRUD_WRITE_AUDIT_DATA)
+        //        }
         return null
 
     }

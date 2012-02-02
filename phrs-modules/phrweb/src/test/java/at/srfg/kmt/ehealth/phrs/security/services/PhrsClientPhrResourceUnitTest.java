@@ -50,9 +50,9 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
  * local file based sesame store not the REMOTE triplestore
  */
 
-public class MedicationTreatmentInteropUnitTest {
+public class PhrsClientPhrResourceUnitTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MedicationTreatmentInteropUnitTest.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhrsClientPhrResourceUnitTest.class.getName());
     String PHRS_RESOURCE_CLASS = Constants.PHRS_MEDICATION_CLASS;
     /**
      * The note used in this test
@@ -62,7 +62,6 @@ public class MedicationTreatmentInteropUnitTest {
     public static final String USER = "MedicationTreatmentInteropUnitTest_OwnerUri";
     public static final String USER_PROTOCOL_ID = "unitTest_MedicationTreatmentInteropUnitTest_protocolId";
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
-    public String doseFrequency;
     public static final String doseFrequenceUriDefault = "http://www.icardea.at/phrs/instances/PerDay";
     public static final String DOSE_TIME_OF_DAY = "http://www.icardea.at/phrs/instances/InTheMorning";
     public static final String DOSE_UNITS = Constants.PILL;//Constants.MILLIGRAM
@@ -73,7 +72,6 @@ public class MedicationTreatmentInteropUnitTest {
     private MedicationClient medicationClient;
     private ActorClient actorClient;
     private PhrsStoreClient phrsClient;
-    
     private InteropAccessService iaccess;
     private InteropProcessor iprocess;
     public static final String DRUG_1_QUANTITY = "2";
@@ -104,7 +102,6 @@ public class MedicationTreatmentInteropUnitTest {
 
         //get this one, we set the creator differently
         medicationClient = phrsClient.getInteropClients().getMedicationClient();
-        doseFrequency = medicationClient.buildNullFrequency();
 
         //assign actor
         actorClient = phrsClient.getInteropClients().getActorClient();//new ActorClient(triplestore);
@@ -125,23 +122,24 @@ public class MedicationTreatmentInteropUnitTest {
                 phrsClient.getPhrsDatastore().delete(query);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();shows a distracting error
         }
 
         try {
             if (triplestore != null) {
                 ((GenericTriplestoreLifecycle) triplestore).shutdown();
                 ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
-                triplestore = null;
+
             }
             if (phrsClient != null) {
                 phrsClient.setTripleStore(null);
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-
+            //e.printStackTrace(); shows a distracting error
         }
+        triplestore = null;
+        phrsClient = null;
 
 
     }
@@ -158,7 +156,7 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
-                medicationClient.buildNullFrequency(),//FIXXME must use the buildFrequency
+                medicationClient.buildNullFrequency(),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 drug1_quantity,
                 DOSE_UNITS,
@@ -173,7 +171,7 @@ public class MedicationTreatmentInteropUnitTest {
                 Constants.STATUS_RUNNING,
                 "201006010000",
                 "201006010000",
-                medicationClient.buildNullFrequency(),//FIXXME use buildFrequency NONE
+                medicationClient.buildNullFrequency(),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 drug2_quantity,
                 DOSE_UNITS,
@@ -245,7 +243,7 @@ public class MedicationTreatmentInteropUnitTest {
                     Constants.STATUS_COMPELETE,
                     "201006010000",
                     "201006010000",
-                    doseFrequency,//FIXXME build
+                    medicationClient.buildNullFrequency(),//FIXXME build
                     Constants.HL7V3_ORAL_ADMINISTRATION,
                     DRUG_1_QUANTITY,
                     DOSE_UNITS,
@@ -261,7 +259,7 @@ public class MedicationTreatmentInteropUnitTest {
                     Constants.STATUS_RUNNING,
                     "201006010000",
                     "201006010000",
-                    doseFrequency,//FIXXME Build
+                    medicationClient.buildNullFrequency(),//FIXXME Build
                     Constants.HL7V3_ORAL_ADMINISTRATION,
                     DRUG_2_QUANTITY,
                     DOSE_UNITS,
@@ -481,11 +479,15 @@ public class MedicationTreatmentInteropUnitTest {
         int count = 0;
         for (DynaBean result : beans) {
             count++;
-            System.out.println("--------");
-            System.out.println(DynaUtil.toString(result));
+            if (printDynabean) {
+                System.out.println("--------");
+                System.out.println(DynaUtil.toString(result));
+            }
 
         }
-        System.out.println("--------");
+        if (printDynabean) {
+            System.out.println("--------");
+        }
         for (DynaBean result : beans) {
             count++;
 

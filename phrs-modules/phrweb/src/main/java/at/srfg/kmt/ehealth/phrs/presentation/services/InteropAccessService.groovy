@@ -64,9 +64,6 @@ public class  InteropAccessService implements Serializable{
     b. Constants.HL7V3_FINDING ?
     c. ??
     4. Meds
-    No adminRoute asked...know about Pills, tablets, mg
-    What are other codes for adminroute?
-    I changed my local git copy : Problem client constructors are now "public", they were package scoped
      */
     PhrsStoreClient phrsStoreClient
 
