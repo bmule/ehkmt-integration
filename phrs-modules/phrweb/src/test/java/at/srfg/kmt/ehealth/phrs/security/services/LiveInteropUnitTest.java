@@ -52,7 +52,8 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
  * NOTE: run with sesame REMOTE triple store that is loaded with data or run
  * loadEHR test data
  */
-
+//Ingore - use only for testing against a triple store with data
+@Ignore
 public class LiveInteropUnitTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LiveInteropUnitTest.class.getName());
