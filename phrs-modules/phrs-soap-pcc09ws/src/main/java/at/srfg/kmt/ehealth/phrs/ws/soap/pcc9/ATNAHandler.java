@@ -31,11 +31,12 @@ import tr.com.srdc.icardea.atnalog.client.Audit;
  * <li> a code - the care provision  code - extracted from the message body.
  * <li> an ID - the protocol id - extracted from the message body.
  * <li> a requester Role - always "IHE+RFC-3881".
- * <ul> <br/>
- * This handler is configurated via a properties file named 
- * "pcc-9-atna.properties", placed in the classpath. 
+ * <ul>
+ * <br/>
+ * This handler is configurated via a properties file named
+ * "pcc-9-atna.properties", placed in the classpath.
  * If this file is not loaded then this handler has no effect (no ATNA messages 
- * are send).<br/> 
+ * are send).<br/>
  * This class was not designed to be extended.
  *
  * @author Mihai
@@ -183,7 +184,7 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
     }
 
     /**
-     * Logs a SOAP message body.
+     * Logs a SOAP message body using the ATNA client.
      *
      * @param body the SOAP message body to be log log.
      */
