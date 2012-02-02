@@ -104,7 +104,6 @@ public class LiveInteropUnitTest {
         phrResources = new ArrayList<MedicationTreatment>();
     
         //get fresh instance using "true"
-        System.out.println("--------------initSuite------------------");
         phrsClient = PhrsStoreClient.getInstance(true);
         triplestore = phrsClient.getGenericTriplestore();
 

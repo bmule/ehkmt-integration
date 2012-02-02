@@ -299,14 +299,14 @@ public class CommonDao{
 	 */                  
 	public  List crudReadResources(String ownerUri, def clazz){
 		if(ownerUri && clazz){
-			return phrsRepositoryClient.crudReadResource(ownerUri, clazz);
+			return phrsRepositoryClient.crudReadResources(ownerUri, clazz);
 		}
 		return null
 	}
         //For java unittest,issue with passing class to groovy
  	public  List crudReadMedicationResources(String ownerUri){
 		if(ownerUri){
-			return phrsRepositoryClient.crudReadResource(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class);
+			return phrsRepositoryClient.crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class);
 		}
 		return null
 	}       

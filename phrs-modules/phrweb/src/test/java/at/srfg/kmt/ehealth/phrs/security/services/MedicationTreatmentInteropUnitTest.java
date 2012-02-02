@@ -73,9 +73,7 @@ public class MedicationTreatmentInteropUnitTest {
     private MedicationClient medicationClient;
     private ActorClient actorClient;
     private PhrsStoreClient phrsClient;
-    private List<MedicationTreatment> phrResources;
-    private MedicationTreatment phrMed_1;
-    private MedicationTreatment phrMed_2;
+    
     private InteropAccessService iaccess;
     private InteropProcessor iprocess;
     public static final String DRUG_1_QUANTITY = "2";
@@ -96,15 +94,8 @@ public class MedicationTreatmentInteropUnitTest {
 
     @Before
     public void setUp() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException {
-        phrResources = new ArrayList<MedicationTreatment>();
-        phrMed_1 = createPhrResource("test in phr_ drug_1", 2.0d, "3");
-
-        phrMed_2 = createPhrResource("test_in phr_ drug_2", 4.0d, "4");
-        phrResources.add(phrMed_1);
-        phrResources.add(phrMed_2);
 
         //get fresh instance using "true"
-        System.out.println("--------------initSuite------------------");
         phrsClient = PhrsStoreClient.getInstance(true);
         triplestore = phrsClient.getGenericTriplestore();
 
@@ -725,6 +716,7 @@ public class MedicationTreatmentInteropUnitTest {
     @Test
     public void testSendInteropMessageMedicationClient() {
         System.out.println("testSendInteropMessages");
+        MedicationTreatment phrMed_1 = createPhrResource("test in phr_ drug_1", 2.0d, "3");
 
         Map<String, String> uris = iaccess.sendMessages(phrMed_1);
 

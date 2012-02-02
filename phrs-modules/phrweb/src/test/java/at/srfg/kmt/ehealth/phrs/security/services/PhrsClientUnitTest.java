@@ -88,13 +88,13 @@ public class PhrsClientUnitTest {
         PhrsStoreClient sc = PhrsStoreClient.getInstance();
         assertNotNull(sc);
     }
-//crudSaveResource(def theObject,String action
+
 
     @Test
     public void testSavePhrResourceAndFind() throws Exception {
         System.out.println("testSavePhrResourceAndFind_");
         phrsClient = PhrsStoreClient.getInstance();
-
+        assertNotNull("phrsClient NULL",phrsClient);
         InteropAccessService iaccess = phrsClient.getInteropService();
         assertNotNull("CommonDao null via InteropAccessService ", iaccess.getCommonDao());
         MedicationTreatment res = new MedicationTreatment();

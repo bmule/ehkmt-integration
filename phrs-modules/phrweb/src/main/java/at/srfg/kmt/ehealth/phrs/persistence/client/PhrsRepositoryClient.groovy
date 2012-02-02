@@ -71,13 +71,13 @@ public class PhrsRepositoryClient implements Serializable{
         return phrsStoreClient.getInteropService();
     }
     /**
-     * 
+     * Read a single resource
      * @param theObject
      * @return
      */
     def crudReadResource(def theObject){
         def result
-        //&& getPhrsDatastore().exists(theObject)
+        
         if(theObject ){
             result= getPhrsDatastore().get(theObject)
             //writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)

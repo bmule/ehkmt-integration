@@ -43,45 +43,50 @@ public class ConsentMgrServiceTest {
     public void tearDown() {
     }
 
-    @Ignore
+  
     @Test
     public void testBasicStubConnection() throws Exception {
         String endpoint = null;
 
         ResourceBundle properties = ResourceBundle.getBundle("icardea");
         endpoint = properties.getString("consent.ws.endpoint");
-        System.out.println("endpoint =" + endpoint);
+        
+        //System.out.println("endpoint =" + endpoint);
         // 1. Create the Stub to access the service (proxy if you like) (defaults to URL in the WSDL)
-        //        StockQuoteServiceStub stub = new StockQuoteServiceStub(
-        //            "http://localhost:8080/axis2/services/StockQuoteService"
-        //        );    
         //ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(endpoint + "?wsdl");
         String url = "http://localhost:8080/consenteditor/services/ConsentManagerImplService?wsdl";
         ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(url);
-
+        assertNotNull(stub);
         // 2. Create a request object (here a nested class named after the matching method)
         //     ConsentManagerImplServiceStub.GetSubjects req = new ConsentManagerImplServiceStub.GetSubjects();
         ConsentManagerImplServiceStub.GetSubjects req = new ConsentManagerImplServiceStub.GetSubjects();
-
+        assertNotNull(req);
         // 3. Populate the request object with all the necessary information
         //req.set
-
         // 4. Access the actual web method which returns a response object
         //ConsentManagerImplServiceStub.GetSubjectsResponse res = stub.getSubjects(req);
         ConsentManagerImplServiceStub.GetSubjectsResponse res = stub.getSubjects(req);
-
+        assertNotNull(res);
         // 5. Extract the detail information from the response object
-        System.out.println(res.getGetSubjectsReturn());
+        //System.out.println(res.getGetSubjectsReturn());
     }
 
     /**
      * Test of sslSetup method, of class ConsentMgrService.
      */
-    @Ignore
+ 
     @Test
     public void testSslSetup() throws Exception {
         System.out.println("sslSetup");
-        ConsentMgrService.sslSetup();
+        boolean flag=false;
+        try {
+            ConsentMgrService.sslSetup();
+            flag=true;
+        } catch (Exception e) {
+           e.printStackTrace();
+           fail("exception occured with sslSetup");
+        }
+        assertTrue("Failed ssl setup ",flag);
 
     }
 
@@ -231,7 +236,7 @@ public class ConsentMgrServiceTest {
     /**
      * Test of callGetDecision method, of class ConsentMgrService.
      */
-    @Ignore
+    
     @Test
     public void testCallGetDecision() {
         System.out.println("callGetDecision");
@@ -278,7 +283,7 @@ public class ConsentMgrServiceTest {
     /**
      * Test of callGetResources method, of class ConsentMgrService.
      */
-    @Ignore
+    
     @Test
     public void testCallGetResources() {
         System.out.println("callGetResources");
