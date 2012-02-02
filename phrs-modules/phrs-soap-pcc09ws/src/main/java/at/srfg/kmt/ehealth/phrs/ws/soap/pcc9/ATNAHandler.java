@@ -8,8 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 
-import java.net.MalformedURLException;
+import java.io.InputStream;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Set;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
@@ -18,34 +19,87 @@ import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import tr.com.srdc.icardea.atnalog.client.Audit;
 
 
 /**
  * This SOAP handler is used to used to log any PCC9 interaction to an ATNA
  * server.
- * <br/> This class was not designed to be extended.
+ * The ATNA message contains :
+ * <ul>
+ * <li> a message type - always "PCC-9"
+ * <li> a code - the care provision  code - extracted from the message body.
+ * <li> an ID - the protocol id - extracted from the message body.
+ * <li> a requester Role - always "IHE+RFC-3881".
+ * <ul> <br/>
+ * This handler is configurated via a properties file named 
+ * "pcc-9-atna.properties", placed in the classpath. 
+ * If this file is not loaded then this handler has no effect (no ATNA messages 
+ * are send).<br/> 
+ * This class was not designed to be extended.
  *
  * @author Mihai
  * @version 0.1
  * @since 0.1
  */
 public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
+    
+    /**
+     * The value for the requester role used for this handler.
+     */
+    public static final String REQUESTER_ROLE = "IHE+RFC-3881";
 
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
-     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.DebugHandler</code>.
+     * <code>at.srfg.kmt.ehealth.phrs.ws.soap.ATNAHandler</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ATNAHandler.class);
 
     /**
-     * Builds a
-     * <code>DebugHandler</code> instance.
-     *
+     * The only ATNA message type used in this handler.
      */
-    public ATNAHandler() throws MalformedURLException {
-        // UNIMPLEMENTED
+    private final String MESSAGE_TYPE = "PCC-9";
+
+    /**
+     * The name for the configuration file.
+     */
+    private final String CONFIG_FILE = "pcc-9-atna.properties";
+
+    /**
+     * The audit client.
+     */
+    private Audit audit;
+
+    /**
+     * Builds a
+     * <code>ATNAHandler</code> instance based on a property file configuration
+     * file, the file is named "pcc-9-atna.properties" and it is placed in the
+     * classpath. If this file is not loaded then this handler has no effect 
+     * (no ATNA messages are send).
+     */
+    public ATNAHandler() {
+        final ClassLoader classLoader = ATNAHandler.class.getClassLoader();
+        final InputStream resourceAsStream = 
+                classLoader.getResourceAsStream(CONFIG_FILE);
+
+        if (resourceAsStream == null) {
+            LOGGER.warn("The ATNA configunration file named {} must be placed in the classpath", CONFIG_FILE);
+            LOGGER.warn("NO ATNA AUDIT MESSAGES CAN BE SEND!");
+            return;
+        }
+
+        try {
+            final Properties config = new Properties(); 
+            config.load(resourceAsStream);
+            final String host = config.getProperty("atna-server-host");
+            final String port = config.getProperty("atna-server-port");
+            audit = new Audit(host, Integer.parseInt(port));
+        } catch (Exception exception) {
+            LOGGER.warn("NO ATNA AUDIT MESSAGES CAN BE SEND!");
+            LOGGER.warn(exception.getMessage(), exception);
+        }
     }
 
     /**
@@ -93,7 +147,6 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
 
         try {
             final SOAPHeader header = message.getSOAPHeader();
-            process(header);
             final SOAPBody body = message.getSOAPBody();
             process(body);
         } catch (Exception exception) {
@@ -125,36 +178,8 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             msg.append(header.getValue());
             msg.append('\n');
         }
-        
+
         LOGGER.debug(msg.toString());
-    }
-
-    /**
-     * Logs a SOAP message header. if the message is null then this method has
-     * no effect (it only logs the null message).
-     *
-     * @param header the SOAP level to log.
-     */
-    private void process(SOAPHeader header) {
-
-        if (header == null) {
-            LOGGER.debug("SOAP Header is null nothing to process");
-            return;
-        }
-
-        final Iterator childElements = header.examineAllHeaderElements();
-        if (!childElements.hasNext()) {
-            LOGGER.debug("No SOAP Header to process");
-            return;
-        }
-
-        try {
-            final String headerToString = Util.toString(header);
-            LOGGER.debug("The SOAP header to precess is : {}", headerToString);
-        } catch (Exception exception) {
-            LOGGER.error("The SOAP header can not be parsed.");
-            LOGGER.error(exception.getMessage(), exception);
-        }
     }
 
     /**
@@ -173,14 +198,25 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.debug("No Body to process");
             return;
         }
+        final String code = XMLUtil.getCareProvisionCode(body);
+        final String patientId = XMLUtil.getPatientId(body);
+        final String patientNames = XMLUtil.getPatientName(body);
 
+        final String message =
+                audit.createMessage(MESSAGE_TYPE, patientId, code, REQUESTER_ROLE);
         try {
-            final String bodyToString = Util.toString(body);
-            LOGGER.debug("The SOAP Body to precess is : {}", bodyToString);
-        } catch (Exception exception) {
-            LOGGER.error("The SOAP Body can not be parsed.");
-            LOGGER.error(exception.getMessage(), exception);
-        }
+            LOGGER.debug("Tries to send this the following ATNA message {}", message);
+            if (audit != null) {
+                audit.send_udp(message.getBytes());
+            } else {
+                LOGGER.warn("The ATNA was not initailized, the ATNA message can not eb send.");
+            }
+            
+            LOGGER.debug("The ATNA message was send.");
 
+        } catch (Exception exception) {
+            LOGGER.warn("The folowing ATNA message can not be send {}", message);
+            LOGGER.warn(exception.getMessage(), exception);
+        }
     }
 }
