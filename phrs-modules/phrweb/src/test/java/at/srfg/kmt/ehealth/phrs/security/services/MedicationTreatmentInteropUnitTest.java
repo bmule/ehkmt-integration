@@ -355,9 +355,45 @@ public class MedicationTreatmentInteropUnitTest {
         return res;
 
     }
-
-    @Test
+   @Test
     public void testPersistSampleResource() {
+        MedicationTreatment res = new MedicationTreatment();
+
+        String user = "user123";
+        res.setOwnerUri(user);
+        res.setCreatorUri(user);
+        res.setBeginDate(new Date());
+        //res.setEndDate(new Date());
+        res.setLabel("phr user drug " + DRUG_1_NAME);
+
+        res.setStatus(Constants.STATUS_RUNNING);
+        res.setReasonCode(MED_REASON);
+
+        //res.setReasonCode(value);
+        //res.setPrescribedByName("");
+        MedicationTreatmentMatrix mtm = new MedicationTreatmentMatrix();
+
+        mtm.setDosage(30d);//double
+
+        mtm.setDosageQuantity("99");
+        mtm.setDosageUnits(DOSE_UNITS);
+
+        mtm.setDosageInterval(doseFrequenceUriDefault);
+        mtm.setDosageTimeOfDay(DOSE_TIME_OF_DAY);
+
+        res.setTreatmentMatrix(mtm);
+
+        //save simulation
+        //res.setResourceUri("theResourceUri_" + UUID.randomUUID().toString());
+        //res.setCreateDate(new Date());
+        //res.setModifyDate(res.getCreateDate());*
+        getCommonDao().crudSaveResource(res, user, user);
+
+        assertNotNull("resourceUri is null", res.getResourceUri());
+
+    }
+    @Test
+    public void testPersistSampleResourceAltSave() {
         MedicationTreatment res = new MedicationTreatment();
 
         String user = "user123";
@@ -424,8 +460,6 @@ public class MedicationTreatmentInteropUnitTest {
 
     @Test
     public void testFindAllInteropMessagesForUser() throws Exception {
-
-        //addNewMessagesEhr( "123-resuri-567", "5", "14");
 
         //create EHR records without any reference note for a user
         addNewMessagesEhr(null, null, "5", "14");

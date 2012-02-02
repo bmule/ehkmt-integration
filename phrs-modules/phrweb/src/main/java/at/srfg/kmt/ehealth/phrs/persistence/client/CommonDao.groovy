@@ -296,13 +296,20 @@ public class CommonDao{
 	 * @param ownerUri
          * @param class
 	 * @return
-	 */
+	 */                  
 	public  List crudReadResources(String ownerUri, def clazz){
 		if(ownerUri && clazz){
 			return phrsRepositoryClient.crudReadResource(ownerUri, clazz);
 		}
 		return null
 	}
+        //For java unittest,issue with passing class to groovy
+ 	public  List crudReadMedicationResources(String ownerUri){
+		if(ownerUri){
+			return phrsRepositoryClient.crudReadResource(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.MedicationTreatment.class);
+		}
+		return null
+	}       
 	/*
 	 *
 	 * @param entityClazz
@@ -345,7 +352,7 @@ public class CommonDao{
 	 * @return
 	 */
 	public  List<BasePhrOpenId> crudReadOpenIdUsers(String ownerUri){
-		if(ownerUri!=null){
+		if(ownerUri){
 			return phrsRepositoryClient.crudReadResource(ownerUri, BasePhrOpenId.class);
 		}
 		return null
@@ -469,7 +476,8 @@ public class CommonDao{
 				if(attrs) open.setAttributes(attrs)
 
 			}
-			//store BaseOpenId
+			//store BaseOpenId 
+                        //openidfix
 			phrsRepositoryClient.crudSaveResource(open)
 
 			//register  protocolId from OpenId This updates but we do not unregister Ids with the actor client
