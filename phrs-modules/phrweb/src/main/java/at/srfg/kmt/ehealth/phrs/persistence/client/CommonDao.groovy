@@ -306,7 +306,7 @@ public class CommonDao{
         //For java unittest,issue with passing class to groovy
  	public  List crudReadMedicationResources(String ownerUri){
 		if(ownerUri){
-			return phrsRepositoryClient.crudReadResource(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.MedicationTreatment.class);
+			return phrsRepositoryClient.crudReadResource(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class);
 		}
 		return null
 	}       
