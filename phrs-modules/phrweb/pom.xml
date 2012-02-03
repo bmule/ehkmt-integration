@@ -82,22 +82,14 @@
             </snapshots>
         </repository>  
  
-     
-       <!--
-        <repository>
-            <id>jasperreports</id>
-            <url>http://jasperreports.sourceforge.net/maven2</url>
-        </repository>
-        -->
+    
        
        <!-- itextpdf should be in main maven repository-->
         <repository>
             <id>itextpdf</id>
             <url>http://maven.itextpdf.com/</url>
         </repository>     
- 
-    
-      
+       
     </repositories>
   
     <pluginRepositories>
@@ -322,13 +314,7 @@
             <version>1.9.14</version>
         </dependency>
         
-        <!-- from http://itextpdf.com/download.php#maven -->
-       <!--<dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>4.5.0</version>
-        </dependency>-->
-        
+       
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -534,15 +520,16 @@
             <artifactId>hapi-structures-v26</artifactId>
             <version>1.0.1</version>
         </dependency> 
- <!-- causes install trouble. exists in local repository, but ...
-     
+ <!-- if sources are in a different file structure it cannot find the parent pom and this was done
+mvn install:install-file  -Dfile=icardea-atnalog-client-1.0-SNAPSHOT.jar -DgroupId=tr.com.srdc.icardea -DartifactId=icardea-atnalog-client -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+         -->
         <dependency>
-            <groupId>tr.com.srdc.icardea</groupId>
             <artifactId>icardea-atnalog-client</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <groupId>tr.com.srdc.icardea</groupId>
             <type>jar</type>
-        </dependency>
-        -->
+        </dependency>       
+        
     </dependencies>
  
   <!--  -Dcatalina.home= -->
