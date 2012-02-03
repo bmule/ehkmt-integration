@@ -20,10 +20,18 @@ import org.slf4j.LoggerFactory;
  * Runnable class able to sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-9">PCC09</a> request to a given
  * end-point;
- * the main method requires three one arguments :
- * an URI (String) for the ppc09 end point, an URI (String) for the ppc10(String)
- * end point and a care provision code (String). <br/>
- * To run this class this class from the command line and maven use the 
+ * the main method requires seven one arguments :
+ * <ul>
+ * <li> an URI (String) for the PCC09 end point
+ * <li> an URI (String) for the PCC10(String) end point
+ * <li> a care provision code (String)
+ * <li> an unique patient ID (String)
+ * <li> a patient name concatenated in to a single string. 
+ * <li> a patient surname concatenated in to a single string.
+ * <li> a patient gender (string).
+ * </ul>
+ * <br/>
+ * To run this class this class from the cmand line and maven use the 
  * following command :
  * <pre>
  * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendComplexPcc09MessageExample -Dexec.classpathScope=test -Dexec.args="http://localhost:8080/testpcc9ws http://localhost:8080/responsews COBSCAT"
@@ -69,7 +77,7 @@ public final class SendComplexPcc09MessageExample {
      */
     public static void main(String... args)
             throws JAXBException, MalformedURLException {
-        if (args == null || args.length != 3) {
+        if (args == null || args.length != 7) {
             final IllegalArgumentException exception =
                     new IllegalArgumentException("One argument expected (the PCC9 end point URI).");
             LOGGER.error(exception.getMessage(), exception);
@@ -79,6 +87,11 @@ public final class SendComplexPcc09MessageExample {
         final String endpointURI = args[0];
         final String responseURI = args[1];
         final String careProvisionCode = args[2];
+        final String patientID = args[3];
+        final String patientName = args[4];
+        final String patientSurname = args[5];
+        final String patientAdministrativeGender = args[6];
+
 
 //        final String careProvisionCode = "COBSCAT";
         final String careProvisionReason = "iCardea Barcelona Meeting test";
@@ -95,13 +108,8 @@ public final class SendComplexPcc09MessageExample {
         //String clinicalStatementTimePeriodEnd = "201005011000";
         final String includeCarePlanAttachment = "true";
         final String maximumHistoryStatements = "30";
-        final String patientAdministrativeGender = "M";
 
         final String patientBirthTime = "197903111010";
-
-        final String patientID = "14920263490";
-        final String patientName = "Mopuffus";
-        final String patientSurname = "Lumpkins";
 
         final QUPCIN043100UV01 pcc9Request =
                 QueryFactory.buildPCC9Request(careProvisionCode,
