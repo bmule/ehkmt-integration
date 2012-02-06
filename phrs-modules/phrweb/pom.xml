@@ -102,9 +102,12 @@
             <url>https://github.com/kurtharriger/gmaven/raw/maven/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
-    
+    <!-- 
+     <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home> 
+    /lab0/apache/tomcat/apache-tomcat-6.0.35
+    -->
     <properties>
-        <catalina.home>/lab0/apache/tomcat/apache-tomcat-6.0.35</catalina.home>
+        <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 

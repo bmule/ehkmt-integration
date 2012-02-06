@@ -47,9 +47,11 @@ function processForm(theForm){
     	alert(mess.value);
     	return false;
     }
+    //http://icardea-server.lksdom21.lks.local:4545/idp/u
+    //https://icardea-server.lksdom21.lks.local/idp/u
     //icardea local server accepts short names. We must combine this here otherwise the servlet request must be wrapped
     if(objDropDown.value == "icardea" ){
-    	objHidden.value ="https://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
+    	objHidden.value ="http://icardea-server.lksdom21.lks.local:4545/idp/u="+objUser.value;
     	alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     
