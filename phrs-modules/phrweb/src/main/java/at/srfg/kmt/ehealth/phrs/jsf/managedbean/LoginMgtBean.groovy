@@ -142,7 +142,9 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 				if(temp && temp.length >0){
 					shortname=temp[temp.length-1]
 				}
-			} catch(Exception e){}
+			} catch(Exception e){
+                //
+            }
 		}
 		shortname = ' ...'+HealthyUtils.lastChars(shortname,10)
 		return shortname ?: ''

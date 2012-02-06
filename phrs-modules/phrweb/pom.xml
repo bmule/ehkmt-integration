@@ -111,6 +111,7 @@
     <dependencies>
         
         <!--PHR System dependencies-->
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>phrs-constants</artifactId>
@@ -121,6 +122,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>phrs-persistence-driver</artifactId>
             <version>1.0-SNAPSHOT</version>
+            <!-- from sesame 1.8.0 version core, but we already define commons-beanutils 1.8.3 all beyond the core  -->
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-beanutils</groupId>
+                    <artifactId>commons-beanutils-core</artifactId>
+                   
+                </exclusion>
+                <!--already have 2.7.1 from this brings 2.7.0 -->
+     
+            </exclusions>
         </dependency>
         
         <dependency>
@@ -132,9 +143,37 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>phrs-message-dispatcher</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency> 
-        
+        </dependency>
 
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrweb-ws</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.ws.commons.schema</groupId>
+                    <artifactId>XmlSchema</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-api</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>slf4j-log4j12</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jcl-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+               
+                <exclusion>
+                    <artifactId>icardea-atnalog-client</artifactId>
+                    <groupId>tr.com.srdc.icardea</groupId>
+                </exclusion>
+            
+            </exclusions>
+        </dependency>
      
         <!--Other dependencies-->
         
@@ -142,18 +181,21 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>2.2.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>cupertino</artifactId>
             <version>1.0.1</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>ui-lightness</artifactId>
             <version>1.0.1</version>
+            <scope>compile</scope>
         </dependency>
         
         
@@ -161,36 +203,42 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.6</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>commons-digester</groupId>
             <artifactId>commons-digester</artifactId>
             <version>1.8.1</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>commons-discovery</groupId>
             <artifactId>commons-discovery</artifactId>
             <version>0.4</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
-            <groupId>commons-email</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-email</artifactId>
-            <version>1.1</version>
+            <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>com.dyuproject</groupId>
             <artifactId>dyuproject-openid</artifactId>
             <version>1.1.7</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>com.dyuproject</groupId>
             <artifactId>dyuproject-web</artifactId>
             <version>1.1.7</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
@@ -198,18 +246,21 @@
             <artifactId>groovy-all</artifactId>
             <!--<version>1.8.5</version> but see maven compile, not yet for 1.8.5?-->
             <version>1.8.4</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>com.google.code.guice</groupId>
             <artifactId>guice</artifactId>
             <version>2.0</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>4.0.2.GA</version>
+            <scope>compile</scope>
         </dependency>        
         
         <dependency>
@@ -222,139 +273,319 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mrbean</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-lgpl</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-smile</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-xc</artifactId>
             <version>1.8.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.0</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.codehaus.jra</groupId>
             <artifactId>jra</artifactId>
             <version>1.0-alpha-4</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>jsr250-api</artifactId>
             <version>1.0</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
             <version>2.6.5</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>com.google.code.morphia</groupId>
             <artifactId>morphia</artifactId>
             <version>0.99</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>com.google.code.morphia</groupId>
             <artifactId>morphia-logging-slf4j</artifactId>
             <version>0.99</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
             <version>2.0.9</version>
+            <scope>compile</scope>
         </dependency>
         
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-impl</artifactId>
             <version>2.0.9</version>
+            <scope>compile</scope>
         </dependency>
+
         
-        <dependency>
-            <groupId>net.sourceforge.nekohtml</groupId>
-            <artifactId>nekohtml</artifactId>
-            <version>1.9.14</version>
-        </dependency>
-        
-       
+       <!-- report generation and also primefaces -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
             <version>5.1.3</version>
             <type>jar</type>
+            <scope>compile</scope>
         </dependency>       
-    <!-- will support PDF for web content, but wait for primeface 3.0 integration!
+  
+        
+  
         <dependency>
-            <groupId>com.itextpdf.tool</groupId>
-            <artifactId>xmlworker</artifactId>
-            <version>1.1.1</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+
+              <!-- PIX dependencies--> 
+         
+        <dependency>
+            <groupId>net.sourceforge.nekohtml</groupId>
+            <artifactId>nekohtml</artifactId>
+            <version>1.9.14</version>
+            <scope>compile</scope>
+        </dependency>
+        
+        <!-- why not 1.2 versions? see Pix server. These bring in older
+        dependencies to exclude. Currently overlap with opensaml-->
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+            <!-- we have 2.7.1 elsewhere from org.opensaml:opensaml 
+            xml-apis:xml-apis 1.0.b2, newer from opensaml-->
+           
+            <exclusions>
+                <exclusion>            
+                    <groupId>xalan</groupId>
+                    <artifactId>xalan</artifactId>
+                    
+                </exclusion>
+            
+                <exclusion>            
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                    
+                </exclusion>
+            </exclusions>
+            
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v21</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v22</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v23</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v231</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v24</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v25</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v251</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-structures-v26</artifactId>
+            <version>1.0.1</version>
+            <scope>compile</scope>
+        </dependency> 
+ <!-- if sources are in a different file structure it cannot find the parent pom and this was done.
+ In this case, delete the existing maven entry in the local repository because the pom refers to a parent unknown to 
+this pom.
+
+mvn install:install-file  -Dfile=icardea-atnalog-client-1.0-SNAPSHOT.jar -DgroupId=tr.com.srdc.icardea -DartifactId=icardea-atnalog-client -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+-->
+        <dependency>
+            <artifactId>icardea-atnalog-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <groupId>tr.com.srdc.icardea</groupId>
             <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+<!-- if sources are in a different file structure it cannot find the parent pom and this was done.
+In this case, delete the existing maven entry in the local repository because the pom refers to a parent unknown to 
+this pom. This is the pom from the install:install
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>tr.com.srdc.icardea</groupId>
+  <artifactId>icardea-consenteditor-invoker</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <description>POM was created from install:install-file</description>
+</project>
+
+mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar -DgroupId=tr.com.srdc.icardea -DartifactId=icardea-consenteditor-invoker -Dversion=1.0-SNAPSHOT -Dpackaging=jar
+ We do this to get the Stub and any changes. If a wsdl file will be published
+ then we can probably should eliminate the dependency on the invoker.
+ We exclude most of the following libraries because otherwise
+ we cannot get the dependencies unless we share the same pom parent as 
+ the the invoker module.
+ -->     
+        <!--
+        <dependency>
+            <groupId>tr.com.srdc.icardea</groupId>
+            <artifactId>icardea-consenteditor-invoker</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+					
+                </exclusion>
+                <exclusion>
+                    <groupId>tr.com.srdc.icardea</groupId>
+                    <artifactId>icardea-atnalog-client</artifactId>
+			
+                </exclusion>
+
+                <exclusion>
+                    <groupId>org.opensaml</groupId>
+                    <artifactId>opensaml</artifactId>
+                </exclusion>                      
+                <exclusion>
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2</artifactId>                  
+                    
+                </exclusion>     
+                <exclusion>
+                    <groupId>org.apache.ws.commons.axiom</groupId>
+                    <artifactId>axiom-impl</artifactId>       
+                    
+                </exclusion> 
+                <exclusion>
+                    <groupId>org.apache.ws.commons.axiom</groupId>
+                    <artifactId>axiom-api</artifactId>     
+                    
+                </exclusion>
+                <exclusion>
+                    <groupId>axis</groupId>
+                    <artifactId>axis-wsdl4j</artifactId>       
+                    
+                </exclusion> 
+              
+                <exclusion>
+                    <groupId>org.apache.ws.commons</groupId>
+                    <artifactId>XmlSchema</artifactId>   
+                    
+                </exclusion> 
+            
+                <exclusion>
+                    <groupId>org.apache.ws.commons.neethi</groupId>
+                    <artifactId>neethi</artifactId>      
+                    
+                </exclusion> 
+                <exclusion>
+                    
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2-transport-local</artifactId>  
+                </exclusion>     
+                <exclusion>
+                    <groupId>org.apache.axis2</groupId>
+                    <artifactId>axis2-transport-http</artifactId>    
+                    
+                </exclusion> 
+
+     
+            </exclusions>
         </dependency>
           -->
-        
-        <!-- Consent editor services -->
-        <!--- 
-        Conflicts ? Using code needed in sources
+              <!-- Consent editor services -->
+        <!--
+
         org.slf4j
-        apache-httpclient
-        icardea-consenteditor-invoker
-  			<exclusions>
-				<exclusion>
-					<artifactId>jcl-over-slf4j</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-				<exclusion>
-					<artifactId>log4j-over-slf4j</artifactId>
-					<groupId>org.slf4j</groupId>
-				</exclusion>
-			</exclusions>  
-           
-		<dependency>
-			<groupId>apache-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>3.1</version>
-			<type>jar</type>
-			<scope>compile</scope>
-		</dependency>                    
+        apache-httpclient                 
         -->
+         <!-- Start consent editor dependencies 
+         Because we use a service with all of these...
+         -->
         <dependency>
             <groupId>org.jvnet.hyperjaxb3</groupId>
             <artifactId>hyperjaxb3-ejb-runtime</artifactId>
@@ -405,7 +636,20 @@
             <version>1.5.1</version>
             <type>jar</type>
             <scope>compile</scope>
+            
+                <!-- Brings 1.1
+                other from org.apache.woden and 
+                org.apache.axis2:axis2-transport-local has 1.4.3-->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.ws.commons.schema</groupId>
+                    <artifactId>XmlSchema</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <!--duplicate on org.apache.axis2:axis2-transport-local 
+        XmlSchema 1.4.3 and woden 1.4.2
         <dependency>
             <groupId>org.apache.ws.commons</groupId>
             <artifactId>XmlSchema</artifactId>
@@ -413,6 +657,9 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        -->
+        
+        <!-- dependency for 2.04 found elsewhere
         <dependency>
             <groupId>org.apache.ws.commons.neethi</groupId>
             <artifactId>neethi</artifactId>
@@ -420,6 +667,7 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+        -->
         <dependency>
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2-transport-local</artifactId>
@@ -451,8 +699,8 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--end consent services, audit also included below -->
-        <!-- duplicate
+
+        <!-- duplicates
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
@@ -468,68 +716,61 @@
 			<scope>compile</scope>
 		</dependency>
         -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-        </dependency>
-
-              <!-- PIX dependencies-->  
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-base</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v21</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v22</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v23</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v231</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v24</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v25</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v251</artifactId>
-            <version>1.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>ca.uhn.hapi</groupId>
-            <artifactId>hapi-structures-v26</artifactId>
-            <version>1.0.1</version>
-        </dependency> 
- <!-- if sources are in a different file structure it cannot find the parent pom and this was done
-mvn install:install-file  -Dfile=icardea-atnalog-client-1.0-SNAPSHOT.jar -DgroupId=tr.com.srdc.icardea -DartifactId=icardea-atnalog-client -Dversion=1.0-SNAPSHOT -Dpackaging=jar
-         -->
-        <dependency>
-            <artifactId>icardea-atnalog-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <groupId>tr.com.srdc.icardea</groupId>
-            <type>jar</type>
-        </dependency>       
+        <!--end consent services, audit also included below -->
         
+        <!-- Use for compile, prevent for packaging
+        it comes from org.apache.axis2:axis2-transport-local-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <type>jar</type>
+            <version>2.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--
+        <dependency>
+            <groupId>org.apache.ws.commons.schema</groupId>
+            <artifactId>XmlSchema</artifactId>
+            <type>jar</type>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>-->
+        <!-- excluded from Hapi, could update Hapi later if test ok
+        <dependency>            
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.0.b2</version>
+            <scope>provided</scope>   
+        </dependency> 
+        <dependency>            
+            <groupId>xalan</groupId>
+            <artifactId>xalan</artifactId>
+            <version>2.7.0</version>
+            <scope>provided</scope>          
+        </dependency>
+       
+        <dependency>            
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils-core</artifactId>
+            <version>1.8.0</version>
+            <scope>provided</scope>          
+        </dependency>   -->
+        <!--TODO 
+        xerces-xercesImpl-2.9.1
+        and 
+        org.apache.xerces-xercesImpl-2.9.1 
+        
+        org.apache.xerces:xml-apis:jar:2.9.1 from open saml
+        
+        jaxb-api 2.1 but with jaxb imple 2.1.3
+
+        <dependency>
+            <groupId>com.sun.xml.ws</groupId>
+            <artifactId>webservices-rt</artifactId>
+            <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+ -->
     </dependencies>
  
   <!--  -Dcatalina.home= -->

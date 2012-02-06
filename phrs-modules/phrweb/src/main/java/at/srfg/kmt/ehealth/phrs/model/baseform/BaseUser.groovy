@@ -1,8 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.model.baseform
 
-import java.util.Date
-
-import org.bson.types.ObjectId
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 
@@ -23,13 +20,14 @@ class BaseUser extends BasePhrsMetadata{
 	 * If BaseUser is extended as in PhrFederatedUser, then it includes the primary health OpenId
 	 * That will access this map
 	 */
-	//Map<String,BasePhrOpenId> openIds
+
 	String role;
 	Set<String> roles
 	//expect from OpenID
 	String birthDate //date of birth from external systems
 	String email
 	String fullname
+    String nickname
 	String postCode
 
 	long lastLogin;

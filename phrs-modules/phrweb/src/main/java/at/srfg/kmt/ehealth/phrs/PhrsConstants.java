@@ -35,6 +35,7 @@ public class PhrsConstants  implements Serializable {
 	//From Simple registration: postcode dob fullname email
 	public static final String OPEN_ID_PARAM_EMAIL="email";
 	public static final String OPEN_ID_PARAM_FULL_NAME="fullname";
+    public static final String OPEN_ID_PARAM_NICK_NAME="nickname";
 	public static final String OPEN_ID_PARAM_DATE_OF_BIRTH="dob";
 	public static final String OPEN_ID_PARAM_POST_CODE="postcode";
 	

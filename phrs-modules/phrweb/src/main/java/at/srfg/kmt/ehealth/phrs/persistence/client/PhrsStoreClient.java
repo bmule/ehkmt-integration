@@ -428,7 +428,7 @@ public class PhrsStoreClient implements Serializable {
                     resourceURI, ValueType.RESOURCE);
 
             collection = this.getResourcesAsMaps(subjects);
-        } catch (TripleException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.print("getTermResourcesBySkosRelated  exception  using:"
                     + resourceURI);

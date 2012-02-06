@@ -113,11 +113,11 @@ public class  VocabularyService implements Serializable{
 	 return lvs
 	 }*/
 	public static ModelLabelValue transformPropertyMapToLabelValue(Map propertyMap,String language){
-		ModelLabelValue lv
+		ModelLabelValue lv =null
 
 		if(propertyMap){
 			def res1 = propertyMap.containsKey(PhrsConstants.RDF_MAP_KEY_SUBJECT) ? propertyMap.get(PhrsConstants.RDF_MAP_KEY_SUBJECT): null
-			String key
+			String key=null
 			//depending on the implementation, the results might be string or collection
 
 			if( res1){
@@ -134,7 +134,7 @@ public class  VocabularyService implements Serializable{
 			if(key){
 				//not PhrsConstants.SKOS_RELATED
 				def res2 = propertyMap.containsKey(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) ? propertyMap.get(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) : null
-				String value
+				String value =null
 
 				if( res2){
 					if(res2 instanceof Collection){
@@ -146,7 +146,7 @@ public class  VocabularyService implements Serializable{
 						value = res2
 					}
 					//String lang = language && language instanceof String : language ? language.getLanguage():null
-					lv = new ModelLabelValue(key,value,language ? language:null)
+					if(key && value) lv = new ModelLabelValue(key,value,language ? language:null)
 				}
 			}
 
@@ -168,8 +168,8 @@ public class  VocabularyService implements Serializable{
 		}
 		return allLvs
 	}
-	public static Collection<ModelLabelValue> getTermLabelsById(Collection idList, String language){
-		Collection<ModelLabelValue> allLabels = new ArrayList<ModelLabelValue>()
+	public static Collection<String> getTermLabelsById(Collection idList, String language){
+		Collection<String> allLabels = new ArrayList<String>()
 
 		idList.each() { termId ->
 			ModelLabelValue lv= getTerm(termId,language)
@@ -259,7 +259,7 @@ public class  VocabularyService implements Serializable{
 						} else {
 							value = labelSet
 						}
-						lv = new ModelLabelValue(id,value,language)
+						if(id && value) lv = new ModelLabelValue(id,value,language)
 
 						//String label = labelSet && ! labelSet.isEmpty() ? (String)(labelSet) :""
 						//lv = new ModelLabelValue(id, label, language)
@@ -346,7 +346,7 @@ public class  VocabularyService implements Serializable{
 		Collection<String> temp = VocabularyEnhancer.alternativeVocabValues(tag)
 
 		if(temp && ! temp.isEmpty()){
-
+             //
 		} else {
 			// lookup tag and sort alphabetically, but need language
 			temp = this.getTermsByTag(tag, language)

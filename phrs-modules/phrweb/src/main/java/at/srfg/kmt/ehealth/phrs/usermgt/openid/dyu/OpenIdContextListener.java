@@ -126,6 +126,7 @@ public class OpenIdContextListener implements ServletContextListener,
 			// com.dyuproject.openid.ext.sreq.properties. These are declared
 			// optional in the properties file
 			_relyingParty.addListener(new SRegExtension()
+                    .addExchange(PhrsConstants.OPEN_ID_PARAM_NICK_NAME)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_FULL_NAME)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_EMAIL)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_POST_CODE)

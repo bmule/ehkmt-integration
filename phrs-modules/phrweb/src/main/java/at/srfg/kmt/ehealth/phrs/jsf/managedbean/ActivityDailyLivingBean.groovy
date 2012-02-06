@@ -9,16 +9,15 @@ import javax.faces.event.ActionEvent
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="padlBean")
 @RequestScoped
 public class ActivityDailyLivingBean extends FaceBaseBean  {
-	 //HtmlDataTable dataTable;
-	 //MyData dataItem = new MyData();
-	 //HtmlInputHidden dataItemId = new HtmlInputHidden();
+    private final static Logger LOGGER = LoggerFactory.getLogger(ActivityDailyLivingBean.class);
 
-	//public String buttonId;
 	
 	public ActivityDailyLivingBean() {
 		super();//required!!

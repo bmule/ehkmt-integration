@@ -10,12 +10,15 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="procon")
 @RequestScoped
 public class ProfileContactInfoBean extends FaceBaseBean  {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProfileContactInfoBean.class);
 
 	String contactType
 	boolean pixUpdateInteropActorRegistry=true

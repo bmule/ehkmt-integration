@@ -411,11 +411,11 @@ public class ConfigurationService implements Serializable{
      * @return
      */
     public String extractIcardeaShortUserName(String value){
-        String name
+        String name=null
         if(value){
             String[] parts = value.split('=')
 
-            if(parts.length() > 1){
+            if(parts.length > 1){
                 name=parts[1]
             } else {
                 name=parts[0]
@@ -465,34 +465,47 @@ public class ConfigurationService implements Serializable{
     }
     
     /**
-     * First check if all info is accessible only by role
+     * Allows simple checks for testing and demos without the setup
+     * of additional tools.
+     * 1. isAccessControlLocalForHealthInfo or use other ACL tool
+     * 2. Allows  doctor or nurse to view reports
+     * if all info is accessible only by role
      * <code>isAllHealthInfoAccessibleByRole()</code>
      * @param role 
      */
     public boolean isHealthInfoAccessibleByThisRole(String role) {
-
+        //check
         //from UserSessionService.getSessionAttributeRole();
-        boolean flag = isHealthInfoAccessibleByRole()
-        if(flag && role!=null){
-            //role=role.toLowerCase();
-            switch(role){
-                case [
-					'ROLECODE:DOCTOR',
-					'ROLECODE:NURSE']:
-                return true
-                break
-                default:
-                break
-            }
+        if(isAccessControlLocalForHealthInfo()){
 
+            boolean flag = isHealthInfoAccessibleByRole()
+            if(flag && role!=null){
+                //role=role.toLowerCase();
+                switch(role){
+                    case [
+                        'ROLECODE:DOCTOR',
+                        'ROLECODE:NURSE']:
+                    return true
+                    break
+                    default:
+                    break
+                }
+
+            }
         }
         return false;
 
     }
-        
+    public boolean isAccessControlLocalForHealthInfo(){
+        boolean flag = false
+        String value = this.getProperty('isAccessControlLocalForHealthInfo')
+        if(value!=null) value=value.trim()
+        if(value && value =='true') flag=true
+        return flag
+    }
 
     public String convertLocalRoleToStandardRole(String role){
-        String outRole
+        String outRole=null
 
         if(role!=null){
             //role=role.toLowerCase();

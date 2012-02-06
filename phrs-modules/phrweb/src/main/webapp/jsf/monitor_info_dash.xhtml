@@ -72,16 +72,21 @@ either new page or
 						</p:column>	
 					-->
 					<p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}">
-		
-						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
-							<!-- ok, success view  monitorinfoBean -->
-							<p:commandButton actionListener="#{odlmed.downLoadReport}"
+                        <p:outputPanel layout="block">
+
+							<!-- ok, success view  monitorinfoBean
+							rendered="#{theItem.allowedViewContent eq true
+							-->
+							<p:commandButton actionListener="#{monitorinfoBean.downLoadReport}"
 								image="ui-icon ui-icon-disk"
 								title="#{labels['default.button.view.label']}">
+
+                                <f:setPropertyActionListener value="#{theItem}"
+                                                             target="#{monitorinfoBean.selected}" />
 							</p:commandButton>
 
-						</h:panelGrid>
+                        </p:outputPanel>
 					</p:column>
 					
 					<p:column headerText="User Name" sortBy="#{theItem.name}">
@@ -117,6 +122,23 @@ either new page or
 						style="width:200px;word-wrap:break-word;">
 							<h:outputLabel value="#{theItem.protocolId}" />
 					</p:column>
+                    <!-- test -->
+                    <p:column headerText="Test">
+                        <p:outputPanel layout="block">
+                            <!--
+                                      rendered="#{theItem.allowedViewContent eq true
+                            -->
+                            <p:commandButton actionListener="#{monitorinfoBean.downLoadTestingReport}"
+                                             image="ui-icon ui-icon-disk"
+                                             title="#{labels['default.button.view.label']}">
+
+                                <f:setPropertyActionListener value="#{theItem}"
+                                                             target="#{monitorinfoBean.selected}" />
+
+                            </p:commandButton>
+
+                        </p:outputPanel>
+                    </p:column>
                                                 
 
 

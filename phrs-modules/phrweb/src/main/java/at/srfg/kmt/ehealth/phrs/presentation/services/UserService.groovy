@@ -13,6 +13,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsRepositoryClient
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 
 
 public class UserService  extends CommonDao implements Serializable {
@@ -41,7 +42,10 @@ public class UserService  extends CommonDao implements Serializable {
 	public String getRemoteUser(){
 		return UserSessionService.getRemoteUser()
 	}
+    public ProfileContactInfo getProfileContactInfo(){
 
+        return getProfileContactInfo(getUserPhrId())
+    }
 	/**
 	 * Critical method to determine the User PhrId of the authenticated user. This user has their phrId stored in the session
 	 * 
@@ -113,7 +117,7 @@ public class UserService  extends CommonDao implements Serializable {
 	 */
 	public def getResourceSingle(Class entityClazz, boolean create){
 
-		def single
+		def single  =null
 
 		try {
 			single = phrsRepositoryClient.crudReadResourceSingle( getUserPhrId(),  entityClazz)
@@ -138,7 +142,7 @@ public class UserService  extends CommonDao implements Serializable {
 	 * @return
 	 */
 	public def getResourceByExampleToSingle(Class entityClazz,Map map, boolean create){
-		def single
+		def single =null
 
 		try {
 			single = phrsRepositoryClient.crudReadResourceByExampleToSingle( getUserPhrId(),  entityClazz, map)
@@ -165,7 +169,7 @@ public class UserService  extends CommonDao implements Serializable {
 	 * @return
 	 */
 	public List getResourceByExampleToList(Class entityClazz,Map map){
-		def list
+		def list  =null
 
 		try {
 			list = phrsRepositoryClient.crudReadResourceByExample( getUserPhrId(),  entityClazz, map)

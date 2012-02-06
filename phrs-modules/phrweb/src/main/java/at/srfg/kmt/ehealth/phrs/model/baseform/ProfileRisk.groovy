@@ -107,7 +107,7 @@ public class  ProfileRisk extends CommonModelProps {
 	public ProfileRisk(){
 		super()
 		properties  = new HashMap<String,String>()
-		propertyLists = new HashMap<String,List<String>>()
+		propertyLists = new HashMap<String,Collection<String>>()
 
 		treatmentTypes = new ArrayList<String>();
 		medicationTypes= new ArrayList<String>();

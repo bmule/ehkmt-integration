@@ -38,7 +38,8 @@ public class PhrFederatedUser extends BaseUser {
 
 	Map<String,String> ssoAttributes
 	boolean healthCare=true
-	
+
+    //normall the ownerUri
 	String phrPinId
 
 
@@ -64,7 +65,11 @@ public class PhrFederatedUser extends BaseUser {
 		ssoAttributes=[:]
 
 		this.identifier=identifier
-		this.loginId=identifier
+        //This can be set with a local login
+        this.userId=identifier
+
+		//this.loginId=identifier
+
 		if(attrs){
 			init(attrs)
 			addOpenIdAttributes(identifier,attrs)
@@ -72,13 +77,15 @@ public class PhrFederatedUser extends BaseUser {
 		
 		if(!ownerUri) 	ownerUri=UUID.randomUUID().toString()
 		if(!creatorUri) creatorUri=ownerUri
+        //TODO refactor pin code
 		if(!phrPinId) 	phrPinId = ownerUri//makePhrPinId(ownerUri)
 			
 	}
-	
+	//experimental
 	public  String makePhrPinId(){
 		return makePhrPinId(UUID.randomUUID().toString())
 	}
+    //using ownerUri
 	public  String makePhrPinId(String theOwnerUri){
 		
 		
@@ -106,6 +113,14 @@ public class PhrFederatedUser extends BaseUser {
 	 */
 	private void init( Map<String,String> input){
 		if(input){
+
+            if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_FULL_NAME)){
+                fullname=input.get(PhrsConstants.OPEN_ID_PARAM_FULL_NAME)
+            }
+            if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_NICK_NAME)){
+                nickname=input.get(PhrsConstants.OPEN_ID_PARAM_NICK_NAME)
+            }
+
 			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_EMAIL)){
 				email=input.get(PhrsConstants.OPEN_ID_PARAM_EMAIL)
 			}
@@ -124,9 +139,11 @@ public class PhrFederatedUser extends BaseUser {
 			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_IDENTITY)){
 				identity=input.get(PhrsConstants.OPEN_ID_PARAM_IDENTITY)
 			}
-			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)){
-				claimId=input.get(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)
-			}
+
+
+//			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)){
+//				claimId=input.get(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)
+//			}
 		}
 	}
 

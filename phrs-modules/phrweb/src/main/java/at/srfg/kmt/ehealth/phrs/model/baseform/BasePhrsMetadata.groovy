@@ -29,6 +29,7 @@ class BasePhrsMetadata implements  Serializable{
 	String strCreateDate
 	@Transient
 	String strId
+    boolean newImport=false
 	//temp fields for UI forms needed, these cause trouble as hidden fields
 	/**
 	 * UI fix

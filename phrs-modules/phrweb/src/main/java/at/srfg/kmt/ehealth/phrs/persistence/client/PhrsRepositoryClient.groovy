@@ -23,7 +23,7 @@ import com.google.code.morphia.query.Query
 
 /**
  * 
- * A highlevel DAO
+ * A more detailed document repository DAO
  * Use getPhrsDatastore to create more specific queries and more domain DAOs
  *
  */
@@ -96,12 +96,18 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public List crudReadResources(def clazz){
         //
-        List list
+        List list = null
+        if( clazz){
 
-        // && healthProfileId.length() >2
-
-        Datastore store = getPhrsDatastore()
-        list= store.find(clazz).order('-createDate').asList()
+        try {
+            Datastore store = getPhrsDatastore()
+            Query q = store.createQuery(clazz).order("-createDate");
+            if(q) list = q.asList()
+            //list= store.find(clazz).order('-createDate').asList()
+        } catch (Exception e) {
+            LOGGER.error('',e);
+        }
+        }
 
 
         if(!list) list=[]
@@ -115,16 +121,18 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public List crudReadVersionedResources(String healthProfileId, def clazz){
         //
-        List list
+        List list    =null
 
-        // && healthProfileId.length() >2
-        if(healthProfileId ){
-            //println('crudReadResources 2')
-            //			list= getPhrsDatastore().find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).asList()
+        if(healthProfileId && clazz){
+
+            try {
             Datastore store = getPhrsVersioningDatastore()
-            list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).order('-modifyDate').asList()
-
-
+            //list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).order('-modifyDate').asList()
+            Query q = store.createQuery(clazz).field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equal(healthProfileId).order('-modifyDate')
+            if(q) list = q.asList()
+        } catch (Exception e) {
+            LOGGER.error('',e);
+        }
             //writeAuditdata(clazz,'LIST',[(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER):healthProfileId,'java.util.Class':clazz])
             //writeAuditAction(String creatorOfAction,Set ownerOfResource,
             //Set targetResourceType, String action, Map<String,String> params)
@@ -134,10 +142,27 @@ public class PhrsRepositoryClient implements Serializable{
         if(!list) list=[]
         return list
     }
-
+    /**
+     *
+     * @param healthProfileId   is ownerUri
+     * @param clazz
+     * @return
+     */
     public def crudReadResourceSingle(String healthProfileId, def clazz){
-        Datastore store = getPhrsDatastore()
-        return store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).get()
+
+        if(healthProfileId && clazz){
+            try {
+                Datastore store = getPhrsVersioningDatastore()
+                //list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).order('-modifyDate').asList()
+
+                Query q = store.createQuery(clazz).field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equal(healthProfileId).order('-modifyDate')
+                if(q) return q.get()
+            } catch (Exception e) {
+                LOGGER.error('',e);
+            }
+        }
+            return null
+        //return store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).get()
 
     }
     /**
@@ -150,20 +175,23 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public Query buildMorphiaQuery(String healthProfileId, def clazz, Map map){
         Datastore store = getPhrsDatastore()
-        Query query
+        Query query =null
         try {
             query = store.createQuery(clazz)
             if(healthProfileId){
                 query.field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equals(healthProfileId)
             }
 
-            if(map){clazz
-                map.keySet().each() { key ->
+            if(map){
+
+                map.keySet().each() {  key ->
                     if(key != PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER
                         && key != 'clazz'
                         && map.get(key)){
-                        query.field(key).equal(map.get(key))
 
+                        if(key){
+                            query.field((String)key).equal(map.get((String)key))
+                        }
                     }
                 }
             }
@@ -180,8 +208,6 @@ public class PhrsRepositoryClient implements Serializable{
         Query query = buildMorphiaQuery(healthProfileId,clazz,map)
         if(query) return query.asList()
         else return new ArrayList()
-
-        //return store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).get()
     }
 	
     public def crudReadResourceByExampleToSingle(String healthProfileId, Class clazz, Map map){
@@ -191,20 +217,26 @@ public class PhrsRepositoryClient implements Serializable{
 		
         if(query) return query.get()
         else return null
-
-        //return store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).get()
     }
 
     public List crudReadResources(String healthProfileId, def clazz){
         //
-        List list
+        List list =null
 
-        // && healthProfileId.length() >2
-        if(healthProfileId ){
-            //println('crudReadResources 2')
+        if(healthProfileId && clazz){
+
             //			list= getPhrsDatastore().find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).asList()
-            Datastore store = getPhrsDatastore()
-            list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).order('-createDate').asList()
+            try {
+                Datastore store = getPhrsDatastore()
+                list= store.find(clazz,
+                        PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,
+                        healthProfileId).order('-createDate').asList()
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error(" ownerUri="+healthProfileId+""+clazz+e)
+            }
 
 
             //writeAuditdata(clazz,'LIST',[(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER):healthProfileId,'java.util.Class':clazz])
@@ -246,7 +278,7 @@ public class PhrsRepositoryClient implements Serializable{
     }
 
     public Map writeInteropMessages(def theObject){
-        Map map
+        Map map  =null
         try{
             //def x=getInteropService()
             map= getInteropService().sendMessages(theObject);
@@ -323,7 +355,7 @@ public class PhrsRepositoryClient implements Serializable{
 	
     def crudUpdateResource(def theObject){
         //def selected=theObject
-        String tempId
+        String tempId =null
         try{
             //DB key is null, but there is a stored temp key from the form. Restore it
             tempId = theObject.getTempId()
@@ -348,7 +380,7 @@ public class PhrsRepositoryClient implements Serializable{
                 //create date needs to be converted...
                 if( ! theObject.createDate) {
                     String dateStr=theObject.getTempCreateDate()
-                    Date date
+                    Date date  =null
                     if(dateStr){
                         //println("getTempCreateDate="+dateStr)
                         date = InteropAccessService.transformDateFromMessage(dateStr, new Date())				
@@ -388,6 +420,11 @@ public class PhrsRepositoryClient implements Serializable{
         }
         return flag
     }
+    /*
+             flag = (theObject instanceof HealthProfileOverview
+                || theObject instanceof ProfileUserContactInfo
+                || theObject instanceof ProfileMedicalContactInfo) ? false : true
+     */
     /**
      * 
      * @param theObject
@@ -396,7 +433,7 @@ public class PhrsRepositoryClient implements Serializable{
     def crudDeleteResource(def theObject){//, def selected){
         if(allowDelete(theObject)){
 
-            def keyset
+            def keyset =null
             if(theObject && theObject.resourceUri){
                 keyset = getPhrsDatastore().delete(theObject)
                 //writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_DELETE,null)

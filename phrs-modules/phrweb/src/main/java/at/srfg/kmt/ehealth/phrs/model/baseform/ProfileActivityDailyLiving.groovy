@@ -1,14 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.model.baseform
 
-
-import java.util.Set
-import java.util.TreeMap
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 
-import com.google.code.morphia.annotations.Embedded
 import com.google.code.morphia.annotations.Entity
-import com.google.code.morphia.annotations.Property
 
 @Entity
 public class  ProfileActivityDailyLiving extends CommonModelProps{

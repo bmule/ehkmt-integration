@@ -45,6 +45,7 @@ public class  VocabularyEnhancer implements Serializable {
 		} else {
 
 			list= []
+            //add choice option
 			if(pleaseChoose){
 				ModelLabelValue lv = new ModelLabelValue()
 				lv.id=null

@@ -1,7 +1,8 @@
-package tr.com.srdc.icardea.consenteditor.saml;
+package tr_sample.com.srdc.icardea.consenteditor.saml;
 
-import java.io.FileWriter;
+
 import java.io.IOException;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +13,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerException;
 
 import org.joda.time.DateTime;
+
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.common.impl.SecureRandomIdentifierGenerator;
 import org.opensaml.saml2.core.Assertion;
@@ -24,7 +26,9 @@ import org.opensaml.saml2.core.AuthnStatement;
 import org.opensaml.saml2.core.Conditions;
 import org.opensaml.saml2.core.Issuer;
 import org.opensaml.saml2.core.NameID;
+import org.opensaml.saml2.core.NameIDType;
 import org.opensaml.saml2.core.Response;
+import org.opensaml.saml2.core.Statement;
 import org.opensaml.saml2.core.Status;
 import org.opensaml.saml2.core.StatusCode;
 import org.opensaml.saml2.core.StatusMessage;
@@ -37,13 +41,15 @@ import org.opensaml.xml.XMLObjectBuilder;
 import org.opensaml.xml.XMLObjectBuilderFactory;
 import org.opensaml.xml.io.Marshaller;
 import org.opensaml.xml.io.MarshallingException;
+import org.opensaml.xml.io.Unmarshaller;
 import org.opensaml.xml.io.UnmarshallingException;
 import org.opensaml.xml.schema.XSAny;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import tr.com.srdc.icardea.consenteditor.util.PrettyPrinterUtil;
+import tr_sample.com.srdc.icardea.consenteditor.saml.PrettyPrinterUtil;
 
 /**
 Utility that uses OpenSAML to carry out common SAML tasks.
@@ -181,20 +187,10 @@ public class SAML
 		} catch (ConfigurationException e) {			
 			e.printStackTrace();
 		}
-    	System.out.println(qname.getLocalPart() + " " + qname.getNamespaceURI() + " " + qname.getPrefix());
-    	System.out.println("TRACE STEP SAML 1");
     	XMLObjectBuilderFactory xobf = Configuration.getBuilderFactory();
-    	System.out.println("TRACE STEP SAML 2");
     	XMLObjectBuilder xob = xobf.getBuilder (qname);
-    	System.out.println("TRACE STEP SAML 3");
-    	if(xob == null){
-    		System.out.println("TRACE STEP SAML XOB NULL");
-    	}else{
-    		System.out.println("TRACE STEP SAML XOB NOT NULL");
-    	}
     	XMLObject xo = xob.buildObject(qname);
-    	System.out.println("TRACE STEP SAML 4");
-        return (T) xo;
+    	return (T) xo;
     }
     
     /**

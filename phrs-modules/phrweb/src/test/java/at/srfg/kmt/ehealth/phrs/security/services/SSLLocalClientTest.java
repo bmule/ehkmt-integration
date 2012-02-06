@@ -46,9 +46,18 @@ public class SSLLocalClientTest {
      * Test of sslSetup method, of class SSLLocalClient.
      */
     @Test
-    public void testSslSetup() {
+    public void testSslSetupSetting_1() {
         System.out.println("sslSetup");
-        SSLLocalClient.sslSetup();
+        int configSettings=1;
+        SSLLocalClient.sslSetup(configSettings);
+        // TODO review the generated test code and remove the default call to fail.
+        fail("The test case is a prototype.");
+    }
+        @Test
+    public void testSslSetupSetting_2() {
+        System.out.println("sslSetup");
+        int configSettings=2;
+        SSLLocalClient.sslSetup(configSettings);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

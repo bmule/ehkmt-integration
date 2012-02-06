@@ -22,7 +22,6 @@ import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.jsf.utils.JsfFormUtil
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
-import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService
 import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
@@ -139,9 +138,7 @@ class FaceBaseBean implements Serializable{
 	public String getCurrentUserRole(){
 
 		String value = UserSessionService.getSessionAttributeRole()
-		if(!value){
-			//leave as null
-		}
+
 		return value
 	}
 	/**
@@ -205,7 +202,7 @@ class FaceBaseBean implements Serializable{
 				return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
 			}
 		} catch (Exception e){
-			//println('exception'+e)
+			LOGGER.error('',e)
 		}
 		return  [:]
 	}
@@ -300,7 +297,7 @@ class FaceBaseBean implements Serializable{
 
 	}
 	public List listModel(Class filterClazz){
-		def model
+		def model =null
 		if(getUserService()){
 			model = getUserService().getResources(filterClazz);
 		}
@@ -335,7 +332,7 @@ class FaceBaseBean implements Serializable{
 	 * @return
 	 */
 	public  List filterResultsByStatus(String status, boolean include, List results){
-		List list
+		List list =null
 		if(getUserService()){
 			list = getUserService().filterResultsByStatus(status,include,results);
 		}
@@ -353,7 +350,7 @@ class FaceBaseBean implements Serializable{
 	}
 
 	public List crudReadHistory( Class entityClazz){
-		List list
+		List list  =null
 		if(getUserService()) list = getUserService().crudReadHistory(entityClazz);
 		if(!list) list =[]
 		return list
@@ -482,9 +479,6 @@ class FaceBaseBean implements Serializable{
 		}
 	}
 
-
-	//groovy make the get/set model
-
 	public void crudReadModel(){
 		internalModelList = userService.getResources(domainClazz);
 
@@ -492,7 +486,7 @@ class FaceBaseBean implements Serializable{
 	}
 
 	public void store(){
-		//println('store() uidThisView='+uidThisView);
+
 		//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'Changes save action event ..override '));
 		crudSave();
 		loadModelMain()
@@ -500,22 +494,15 @@ class FaceBaseBean implements Serializable{
 		createInitResource()
 	}
 	public void getStore(){
-		//println('getStore() uidThisView='+uidThisView);
+
 		store();
 	}
-	/*
-	 if(this.keys != null){
-	 this.siteSettings.getRestClient().update(this.unitInstance, this.keys);
-	 }
-	 else{
-	 this.keys = this.siteSettings.getRestClient().create(unitInstance);
-	 this.unitInstance = this.siteSettings.getRestClient().retrieve(this.unit.getPersistenceClass(), this.keys);
-	 }*/
+
 	/**
 	 * Save the selected resource and reload the model list for the UI
 	 */
 	public void crudSave(){
-		//LOGGER.debug('crudSave uidThisView='+uidThisView);
+
 		if(selected){
 
 			if(userService) {
@@ -532,8 +519,7 @@ class FaceBaseBean implements Serializable{
 
 			//FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'save error: selected NULL'));
 		}
-		//refresh model?
-		//return OUTCOME_SUCCESS
+
 	}
 	public void storeModifyFirst(){
 
@@ -553,49 +539,16 @@ class FaceBaseBean implements Serializable{
 		}
 
 	}
-	/*
-	 public void create(ActionEvent actionEvent){
-	 println('edit formCreate')
-	 if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'create mode '));
-	 this.formCreate();
-	 }*/
-	/*
-	 public void delete(ActionEvent actionEvent){
-	 crudDelete();
-	 }
-	 public void create(ActionEvent actionEvent){
-	 println('edit formCreate')
-	 if(actionEvent) println('edit formCreate'+actionEvent.getClass())
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'create mode '));
-	 this.formCreate();
-	 }
-	 public void view(ActionEvent actionEvent){
-	 println('view ActionEvent')
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'View mode '));
-	 this.formView();
-	 }
-	 public void edit(ActionEvent actionEvent){
-	 println('edit ActionEvent')
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'Edit mode '));
-	 this.formEdit();
-	 }
-	 */
-	/*
-	 public void edit(ActionEvent actionEvent){
-	 println('edit ActionEvent')
-	 if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'Edit mode '));
-	 this.formEdit();
-	 }
-	 */
+
 	/**
 	 * UI view action, invokes formView() before showing the UI dialog
 	 */
 	public void view(){
-		//println('view() uidThisView='+uidThisView);
+
 		this.formView();
 	}
 	public void view(ActionEvent event){
-		//println('view(ActionEvent) uidThisView='+uidThisView);
+
 
 		this.formView();
 	}
@@ -604,18 +557,18 @@ class FaceBaseBean implements Serializable{
 	 * The UI has not yet stored the resource
 	 */
 	public void create(){
-		//println('create() uidThisView='+uidThisView);
+
 		this.formCreate();
 	}
 	/**
 	 * UI edit action, invokes formEdit() to prepare this bean before showing the UI dialog
 	 */
 	public void edit(){
-		//println('edit() uidThisView='+uidThisView);
+
 		this.formEdit();
 	}
 	public void edit(ActionEvent event){
-		//println('edit(ActionEvent) uidThisView='+uidThisView);
+
 		this.formEdit();
 	}
 	/**
@@ -638,7 +591,7 @@ class FaceBaseBean implements Serializable{
 	public boolean isNew(){
 
 		if(selected && selected.resourceUri){
-			//println('isNew()=false uidThisView='+uidThisView);
+
 			return false
 		}
 
@@ -672,33 +625,7 @@ class FaceBaseBean implements Serializable{
 	 http://www.logikdev.com/2011/06/13/delete-the-components-holding-unwanted-state/
 	 * @param renderRepsonse
 	 */
-	/*
-	 binding does not work -serialization, but not a good idea coz it copies to session
-	 //binding="#{xxxBean.mainform}"
-	 public boolean clearForm2(){
-	 boolean clearedForm=false
-	 try{
-	 if (mainForm != null) {
-	 mainForm.getChildren().clear();
-	 clearedForm=true
-	 }
-	 } catch (Exception e){
-	 println('exception'+e)
-	 }
-	 return clearedForm
-	 }
-	 public boolean clearForm(){
-	 boolean clearedForm=false
-	 try{
-	 if (mainform != null) {
-	 mainform.getChildren().clear();
-	 clearedForm=true
-	 }
-	 } catch (Exception e){
-	 println('exception'+e)
-	 }
-	 return clearedForm
-	 }*/
+
 	/**
 	 * 
 	 * @param renderRepsonse
@@ -734,7 +661,7 @@ class FaceBaseBean implements Serializable{
 				}
 			} catch (Exception e){
 				LOGGER.error('error find form in JSF tree', e)
-				//println('exception'+e)
+
 			}
 		}
 		return null
@@ -787,7 +714,7 @@ class FaceBaseBean implements Serializable{
 		} catch (Exception e){
 			clearedForm=false
 			LOGGER.error('form clear exception', e)
-			//println('form clear exception'+e)
+
 		}
 
 		//this wipes everything, restarts the view mode reinit construtor etc
@@ -851,15 +778,15 @@ class FaceBaseBean implements Serializable{
 	 http://stackoverflow.com/questions/6942535/jsf-2-with-primefaces-incell-editing-no-updated-object-in-roweditevent-paramet
 	 */
 	public void rowEdit(org.primefaces.event.RowEditEvent event){
-		//println('rowEdit')
+
 		this.rowEditListener(event)
 	}
 	public void onEdit(org.primefaces.event.RowEditEvent event){
-		//println('onEdit')
+
 		this.rowEditListener(event)
 	}
 	public void rowEditListener(org.primefaces.event.RowEditEvent event){
-		//println('rowEditListener')
+
 
 		try {
 			if(event){
@@ -876,15 +803,11 @@ class FaceBaseBean implements Serializable{
 					//remove reference, we are done with it
 					selected=null
 
-				} else {
-					//println('onEditRow getObject = NULL');
 				}
-			} else {
-				//println('onEditRow event = NULL');
 			}
-			listRequestParams()
+			//listRequestParams()
 		} catch (Exception e) {
-			//println('rowEditListener ERROR = ' + e.getMessage());
+
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, 'ERROR ', e.toString()));
 		}
 
@@ -895,7 +818,7 @@ class FaceBaseBean implements Serializable{
 			Map reqParams = fc.getExternalContext().getRequestParameterMap();
 			
 		} catch (Exception e) {
-			
+			//
 		}
 	}
 
@@ -904,9 +827,7 @@ class FaceBaseBean implements Serializable{
 
 		String temp = paramMap.containsKey(name) ? paramMap.get(name) : null
 
-		if(temp) {
-			//println(name+' param found in paramMap! = '+temp)
-		} else {
+		if( ! temp) {
 			temp = paramMap.containsKey(name) ? paramMap.get(name) : null
 
 		}

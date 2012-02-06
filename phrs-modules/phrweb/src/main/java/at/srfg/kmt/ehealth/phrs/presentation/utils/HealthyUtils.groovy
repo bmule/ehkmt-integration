@@ -129,7 +129,7 @@ class HealthyUtils implements Serializable{
 	 * @return
 	 */
 	public static ObsVitalsBodyWeight getCurrentBodyWeightFromAllEntries(String theOwnerUri){
-		ObsVitalsBodyWeight bweight_entry
+		ObsVitalsBodyWeight bweight_entry=null
 		try{
 			com.google.code.morphia.Datastore ds = PhrsStoreClient.getInstance().getPhrsDatastore()
 
@@ -193,7 +193,7 @@ class HealthyUtils implements Serializable{
 			ObsVitalsBodyWeight bhObject 		= getCurrentBodyWeightFromAllEntries(theOwnerUri)
 			
 			Double bh= bhObject ? bhObject.getBodyHeight() : 0d
-			Double height
+			Double height=null
 			if(bh) height = bh
 			else if(bweight) height = bweight.getBodyHeight()
 

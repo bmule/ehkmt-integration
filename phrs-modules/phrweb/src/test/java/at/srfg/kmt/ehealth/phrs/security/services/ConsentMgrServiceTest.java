@@ -1,19 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package at.srfg.kmt.ehealth.phrs.security.services;
-
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerStubInterface;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import java.util.List;
-import java.util.ResourceBundle;
 import static org.junit.Assert.*;
 import org.junit.*;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
+
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+
+import java.rmi.RemoteException;
+import java.util.UUID;
+import org.apache.axis2.AxisFault;
 import org.apache.commons.configuration.PropertiesConfiguration;
 
-@Ignore
 public class ConsentMgrServiceTest {
 
     String ROLE_CODE_DOC = "ROLECODE:DOCTOR";
@@ -43,50 +42,122 @@ public class ConsentMgrServiceTest {
     public void tearDown() {
     }
 
-  
     @Test
-    public void testBasicStubConnection() throws Exception {
+    public void testDecisionRequestString() {
+        ConsentMgrService cms = new ConsentMgrService();
+        assertNotNull(cms);
+        //apply substring(39) to remove <?xml version="1.0" encoding="UTF-16"?> 
+        String requestString = getTestRequestString(true);
+        assertNotNull("requestString  SUBSTRING null" + requestString);
+
+        //System.out.println(" WHOLE message requestString" + requestString);
+
+    }
+
+    public String getTestRequestString(boolean makeSubString) {
+        return this.getTestRequestString(
+                makeSubString,
+                "patientid" + UUID.randomUUID().toString(),
+                "issuerName11111111111111111111111111111111111111",
+                PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR,
+                PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION,
+                PhrsConstants.AUTHORIZE_ACTION_CODE_READ);
+    }
+
+    public String getTestRequestString(boolean makeSubString, String patientId, String issuerName,
+            String subjectCode, String resourceCode, String action) {
+        ConsentMgrService cms = new ConsentMgrService();
+        String requestString = cms.generateRequestAsString(cms.generateSAMLRequest(
+                "1", issuerName, subjectCode, resourceCode, action));
+
+
+        System.out.println(" requestString=" + requestString);
+        String shortRequest = requestString;
+        System.out.println(" requestString.substring(39)=" + shortRequest.substring(39));
+
+        if (makeSubString) {
+            return requestString.substring(39);
+        }
+        return requestString;
+    }
+
+    @Test
+    public void testBasicStubConnectionUsingiCardeaProperties() {
         String endpoint = null;
 
-        ResourceBundle properties = ResourceBundle.getBundle("icardea");
-        endpoint = properties.getString("consent.ws.endpoint");
-        
-        //System.out.println("endpoint =" + endpoint);
+        //ResourceBundle properties = ResourceBundle.getBundle("icardea");
+        //endpoint = properties.getString("consent.ws.endpoint");
+
         // 1. Create the Stub to access the service (proxy if you like) (defaults to URL in the WSDL)
         //ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(endpoint + "?wsdl");
-        String url = "http://localhost:8080/consenteditor/services/ConsentManagerImplService?wsdl";
-        ConsentManagerImplServiceStub stub = new ConsentManagerImplServiceStub(url);
-        assertNotNull(stub);
+        //String url = "http://localhost:8080/consenteditor/services/ConsentManagerImplService?wsdl";
+        String endPoint = ConsentMgrService.getServiceEndpoint();
+        System.out.println("endpoint =" + endpoint);
+        ConsentManagerImplServiceStub stub = null;
+
+        try {
+            stub = new ConsentManagerImplServiceStub(endPoint);
+
+            assertNotNull("ConsentManagerImplServiceStub is null " + stub);
+        } catch (Exception e) {
+            fail("ConsentManagerImplServiceStub exception endpoint=" + endpoint);
+        }
         // 2. Create a request object (here a nested class named after the matching method)
         //     ConsentManagerImplServiceStub.GetSubjects req = new ConsentManagerImplServiceStub.GetSubjects();
-        ConsentManagerImplServiceStub.GetSubjects req = new ConsentManagerImplServiceStub.GetSubjects();
-        assertNotNull(req);
+        ConsentManagerImplServiceStub.GetSubjects req = null;
+        try {
+            req = new ConsentManagerImplServiceStub.GetSubjects();
+            assertNotNull("GetSubjects is null " + req);
+        } catch (Exception e) {
+            fail("ConsentManagerImplServiceStub.GetSubjects exception endpoint=" + endpoint);
+
+        }
         // 3. Populate the request object with all the necessary information
-        //req.set
+        //Do elsewhere, this is beyond the scope of this test.
+
         // 4. Access the actual web method which returns a response object
         //ConsentManagerImplServiceStub.GetSubjectsResponse res = stub.getSubjects(req);
-        ConsentManagerImplServiceStub.GetSubjectsResponse res = stub.getSubjects(req);
-        assertNotNull(res);
+        try {
+            ConsentManagerImplServiceStub.GetSubjectsResponse res = stub.getSubjects(req);
+            assertNotNull("GetSubjectsResponse is null " + res);
+        } catch (RemoteException remoteException) {
+            fail("ConsentManagerImplServiceStub.GetSubjectsResponse exception endpoint=" + endpoint);
+
+        }
         // 5. Extract the detail information from the response object
         //System.out.println(res.getGetSubjectsReturn());
     }
 
+    public void testConsentServiceStub() {
+        ConsentMgrService cms = new ConsentMgrService();
+
+        assertNotNull(cms);
+        ConsentManagerStubInterface stub = cms.getConsentServiceStub();
+        assertNotNull(stub);
+    }
+    /*
+     * @Test public void testGrantAuthorityRequest() { ConsentMgrService cms =
+     * new ConsentMgrService(); String res= cms.grantRightsRequest("191",
+     * "doctor", "condition"); assertNotNull(res);
+    }
+     */
+
     /**
      * Test of sslSetup method, of class ConsentMgrService.
      */
- 
     @Test
     public void testSslSetup() throws Exception {
         System.out.println("sslSetup");
-        boolean flag=false;
+        boolean flag = false;
+        int sslConfig = 2;
         try {
-            ConsentMgrService.sslSetup();
-            flag=true;
+            SSLLocalClient.sslSetup(sslConfig);
+            flag = true;
         } catch (Exception e) {
-           e.printStackTrace();
-           fail("exception occured with sslSetup");
+            e.printStackTrace();
+            fail("exception occured with sslSetup");
         }
-        assertTrue("Failed ssl setup ",flag);
+        assertTrue("Failed ssl setup ", flag);
 
     }
 
@@ -212,7 +283,7 @@ public class ConsentMgrServiceTest {
 
     /**
      * Test of auditGrantRequest method, of class ConsentMgrService.
-     */
+     
     @Ignore
     @Test
     public void testAuditGrantRequest() {
@@ -231,12 +302,11 @@ public class ConsentMgrServiceTest {
         assertEquals(expResult, result);
         System.out.println("is Audit sent? " + result);
 
-    }
+    }*/
 
     /**
      * Test of callGetDecision method, of class ConsentMgrService.
      */
-    
     @Test
     public void testCallGetDecision() {
         System.out.println("callGetDecision");
@@ -283,7 +353,6 @@ public class ConsentMgrServiceTest {
     /**
      * Test of callGetResources method, of class ConsentMgrService.
      */
-    
     @Test
     public void testCallGetResources() {
         System.out.println("callGetResources");

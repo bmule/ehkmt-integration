@@ -32,8 +32,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @deprecated 
- * See <code>LoginServlet</code> There is a problem with JSF Viewscope and 
- * using the servlet filter
+ * See <code>LoginServlet</code> There are issues mixing JSF and 
+ * the servlet filter ... with mixing servlets in general...
  * 
  * A servlet filter that forwards users to the login page if they are not
  * authenticated and redirects the user to their openid provider once they've

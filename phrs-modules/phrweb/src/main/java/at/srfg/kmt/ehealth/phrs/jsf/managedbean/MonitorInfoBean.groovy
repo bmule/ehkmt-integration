@@ -1,11 +1,9 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
-import javax.annotation.PostConstruct
+
 import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
 
-import org.joda.time.DateTime
-import org.primefaces.model.DefaultStreamedContent
 import org.primefaces.model.StreamedContent
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
@@ -13,75 +11,79 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorInfoItem
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
-import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
+
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import at.srfg.kmt.ehealth.phrs.presentation.builder.BuilderUtil
 
 
-@ManagedBean(name="monitorinfoBean")
+@ManagedBean(name = "monitorinfoBean")
 @RequestScoped
-public class MonitorInfoBean extends FaceBaseBean  {
-    String resourceType
-    String targetUserId
-    
-    boolean handledReportRequestParams=false;
-    
+public class MonitorInfoBean extends FaceBaseBean {
+    private final static Logger LOGGER = LoggerFactory.getLogger(MonitorInfoBean.class);
+
+
+
+    boolean handledReportRequestParams = false;
+
     public MonitorInfoBean() {
         super();//required!!
         // setPermittedActions performed by super class
         domainClazz = MonitorInfoItem.class
         setSelected(MonitorInfoItem.newInstance())
 
-        initVocabularies(domainClazz,getLanguage())
+        initVocabularies(domainClazz, getLanguage())
         try {
             loadModelMain()
-        } catch (Exception e){
-            println('ShareBean loadModelMain Exception '+e)
+        } catch (Exception e) {
+            println('ShareBean loadModelMain Exception ' + e)
         }
 
     }
 
-
     // AUTHORIZE_RESOURCE_CODE_PHRS_UNKNOWN
-    private void buildView(){
+    private void buildView() {
 
-        List<PhrFederatedUser> phrUsers=null
+        List<PhrFederatedUser> phrUsers = null
         //Either get a smaller list of subjects using the consent editor
         //or get all users in the PHRS system. More can be offered for sharing
 
-        phrUsers= this.userService.getResources(null, PhrFederatedUser.class);
+        phrUsers = userService.getResources(null, PhrFederatedUser.class);
 
-        if( !phrUsers) phrUsers=[]
+        if (!phrUsers) phrUsers = []
         internalModelList = []
         //which resources?
-        List resourceCodes=config.getConsentSubjectCodes('phr')
+        List resourceCodes = config.getConsentSubjectCodes('phr')
 
         //resourceCodes.add(PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION)
         String action = PhrsConstants.AUTHORIZE_ACTION_CODE_READ
         //Sorting, leave room for higher priority records.
-        int sortOrder=5
-		
-        for(PhrFederatedUser ph:phrUsers){
+        int sortOrder = 5
+
+        for (PhrFederatedUser ph: phrUsers) {
             sortOrder++
             //for each supported resourceCode, check READ permissions
-            for(String resourceType:resourceCodes){
-                try{
-                    boolean permitViewContent= permitUserOnPhrId(ph.getOwnerUri(), resourceType, action )
+            for (String resourceType: resourceCodes) {
+                try {
+                    boolean permitViewContent = permitUserOnPhrId(ph.getOwnerUri(), resourceType, action)
 
-                    boolean permitViewRow=false
+                    boolean permitViewRow = false
                     //check permit for current user, on phrUser with resource type
                     //show row for testing
-                    if(config.isAppModeMonitorListAllUsers()){
-                        permitViewRow=true
+                    if (config.isAppModeMonitorListAllUsers()) {
+                        permitViewRow = true
                         //permitViewContent=true
                     }
 
-                    if(permitViewRow || permitViewContent) {
+                    if (permitViewRow || permitViewContent) {
 
-                        MonitorInfoItem item= new MonitorInfoItem();
-                        item.message=''
-                        permitViewContent= permitUserOnPhrId()
+                        MonitorInfoItem item = new MonitorInfoItem();
+                        item.message = ''
 
-                        item.ownerUri= ph.getOwnerUri()
+
+                        item.ownerUri = ph.getOwnerUri()
                         item.currentUserId = getSessionUserOwnerUri()
                         item.currentUserRole = getCurrentUserRole()
 
@@ -90,81 +92,65 @@ public class MonitorInfoBean extends FaceBaseBean  {
 
                         item.setResourceType(resourceType)
 
-                        ProfileContactInfo pci= userService.getResourceSingle(item.OwnerUri,ProfileContactInfo.class)
+                        ProfileContactInfo pci = userService.getProfileContactInfo(item.getOwnerUri())
 
-                        if(pci){
-                            String name = pci.getLastName() + pci.getLastName() ? ',':'' +pci.getFirstName()	
+
+                        if (pci) {
+                            String name = pci.getLastName() + pci.getLastName() ? ',' : '' + pci.getFirstName()
                             item.setName(name);
-                            String protocolId
+                            String protocolId = null
 
-                            if( pci.getPixIdentifier() ){
+                            if (pci.getPixIdentifier()) {
 
                                 protocolId = pci.getPixIdentifier().getIdentifier()
                                 item.setProtocolId(protocolId)
                             }
 
-                            if(!protocolId){
-                                item.message+='No Protocol ID found in Contact Information'
+                            if (!protocolId) {
+                                item.message += 'No Protocol ID found in the Contact Information'
                             }
 
                             internalModelList.add(item)
                         } else {
                             //item.messageCode=null
-                            item.message+='No contact info or protocolId'
+                            item.message += 'No contact info provided or protocolId'
                         }
-                        item.sortOrder=sortOrder
-                        if(UserSessionService.isSessionUser(ph.getOwnerUri()) ){
+                        item.setSortOrder(sortOrder)
+                        if (UserSessionService.isSessionUser(ph.getOwnerUri())) {
                             //put name
-                            item.name='My Report. '+item.name
-                            item.sortOrder=1
+                            item.setName('My Report. ' + item.name)
+                            item.setSortOrder(1)
                         }
 
                     }
-                                        
-                } catch(Exception e) {
-                    LOGGER.error("",e)
+
+                } catch (Exception e) {
+                    LOGGER.error("", e)
                 }
             }//resource type
         }
 
     }
-    // getUserName(ownerUri)   getLocalProtocolIdByOwnerUri(ownerUri)
-    /*monitor_info_dash.xhtml
-    String currentUserId;
-    String currentUserOwnerUri;
-    String currentUserRole;
-    // boolean currentUserAllowedViewContent=false;
-    String ownerUri;
-    String protocolId;
-    String name;
-    String resourceType;// consent
-    // String resourceTypeLabelCode;//I18
-    // row and content display
-    boolean allowedViewRow = false;
-    // local permission result
-    boolean allowedViewContent = false;
-    // external tool has priority
-    boolean consentViewContent = false;
-     */
 
     /**
      * Override default model, this model is not currently
      * cached
      */
     @Override
-    public void loadModelMain(){
+    public void loadModelMain() {
 
-        if(getUserService()){
+        if (getUserService()) {
 
             internalModelList = buildView()
 
             //getUserService().getResources(getDomainClazz());
         }
-        if( !internalModelList) internalModelList = []
+        if (!internalModelList) internalModelList = []
 
     }
+
     @Override
-    public void setPermittedActions(){
+    public void setPermittedActions() {
         super.setPermittedActions();
         setAllowCreate(false);
         setAllowDelete(false);
@@ -173,168 +159,199 @@ public class MonitorInfoBean extends FaceBaseBean  {
 
     }
     /**
-     * 
+     * Download report and look at  request parameters
      * request parameter resourcecode
-     * request parameter phrid
-     * 
+     * request parameter phrid  or protocolid
+     *
      * Only read action
      * Get role from session user
-     * 
+     *
      * @return
      */
-    public StreamedContent getDownLoadReport(){
-		
-        if(selected){
-            MonitorInfoItem item = (MonitorInfoItem)selected
-            reportValidateRequest(item.ownerUri,true,item.resourceType)
-			
-        } else {
-            // check for resourceType and targetUserId in the request
-            handleReportRequest()
-            if( targetUserId && resourceType){
-                //String ownerUri = getProtocolIdFromPhrId(targetUserId)    
-                
-                reportValidateRequest(targetUserId, true, resourceType)
-                
-            }
+    public StreamedContent getDownLoadReport() {
+        StreamedContent streamedContent = null
+        if (selected) {
+            MonitorInfoItem item = (MonitorInfoItem) selected
+
+            streamedContent = createPermittedReport(item.ownerUri, true, item.resourceType)
+            LOGGER.debug("getDownLoadReport item.ownerUri="+item.ownerUri+" item.resourceType="+item.resourceType)
+        } else if(UserSessionService.getRequestAttributeString('resourcecode')!=null){
+            //JSF will invoke the getters while setting up, at least this request param should be valid
+            streamedContent = handleReportFromExternalRequest()
+            LOGGER.debug("getDownLoadReport external request")
         }
-		
+        return streamedContent
+
     }
-    
- 
-    //FIXXME
-    //@PostConstruct
     /**
-     * Check if there is was a request
-     * Use this method in methods that requirerequest parameters instead of the UI form object
+     *
+     * @return
      */
-    public void handleReportRequest(){
+    public StreamedContent getDownLoadTestingReport() {
+        StreamedContent streamedContent = null
+        if (selected) {
+            MonitorInfoItem item = (MonitorInfoItem) selected
+
+            streamedContent = createTestingReport(item.ownerUri, true, item.resourceType)
+
+        } else if(UserSessionService.getRequestAttributeString('resourcecode')!=null){
+            //JSF will invoke the getters while setting up, at least this request param should be valid
+            streamedContent = BuilderUtil.reportBuildDummy() ;
+        }
+        return streamedContent
+
+    }
+
+    /**
+     * Alternative parameters are expected, not derived from the form
+     * Request param: phrid or protocolid
+     * Request param:resourcecode
+     * @return
+     */
+    public StreamedContent handleReportFromExternalRequest() {
         //controller is invoked but not by ajax, check for these parameters and then it is a request
-                
-
-                
+        StreamedContent reportFile = null
+        String resourceType=null
+        String targetUserId=null
+        //if not from a local form or ajax, check request for resourcecode  and phrid from another page request
         try {
-            resourceType = UserSessionService.getRequestAttributeString('resourcecode')
-            targetUserId = UserSessionService.getRequestAttributeString('phrid')
-        } catch(Exception e){
-            LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType,e)
-        }
-                
-        boolean hasPhrId=false
-        
-        if(targetUserId) hasPhrId = true
-        try {
-            if( !hasPhrId){
-                targetUserId = UserSessionService.getRequestAttributeString('protocolid')
-                targetUserId = getProtocolIdFromPhrId(targetUserId)
+            if (resourceType == null) {
+                resourceType = UserSessionService.getRequestAttributeString('resourcecode')
             }
-        } catch(Exception e){
-            LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType,e)
-        }
-        
-        try {
-            if(resourceType & targetUserId){
-                reportValidateRequest(targetUserId,  hasPhrId,  resourceType)
+            if (targetUserId == null) {
+                targetUserId = UserSessionService.getRequestAttributeString('phrid')
             }
-        } catch(Exception e){
-            LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType,e)
+        } catch (Exception e) {
+            LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType, e)
         }
-        
-    }
-    
-    private String getProtocolIdFromPhrId(String phrId){
-        String value
-        if(phrId){
-            
-        }
-    
-        return value
-    }
-    
-    protected StreamedContent reportValidateRequest(String targetUserId, boolean hasPhrId, String resourceType){
-        boolean permitViewContent= false
-        
-        
-        StreamedContent reportFile		
-		
-        //either one
-        String idType
-        		
-        if(hasPhrId) idType='phrid'	
-		
-        try {
 
-            if(targetUserId && resourceType){				
+        boolean isPhrId = targetUserId ? true : false
 
-                if(hasPhrId){
-                    permitViewContent = permitUserOnPhrId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
-
-                    LOGGER.debug(" request phrId="+targetUserId+" on resourceType="+resourceType+" permitted?")
-                } else {
-
-                    permitViewContent = permitUserOnProtocolId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
-
-                    LOGGER.debug(" request phrId="+targetUserId+" resourceType="+resourceType+" permitted?")
-                }
-                //build report
-                reportFile= reportBuild(targetUserId, idType,resourceType, permitViewContent)
-                if(permitViewContent){
-				
-                    boolean req= permit.auditGrantRequest(targetUserId,  true,resourceType)
-                }
-            }else {
-
-                LOGGER.debug(" request error null found : protocolId or phrId="+hasPhrId+" id="+targetUserId+" resourceType="+resourceType+" permitted? false")
-            }
-        } catch(Exception e){
-            LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType+" idType="+idType,e)
-        }
-        return  reportFile
-
-    }
-
-    protected StreamedContent reportBuild(String targetUserId, String idType, String resourceType, boolean permited){
-        
-        
-        StreamedContent reportFile=null
-        if(targetUserId && resourceType) {
+        if (!isPhrId) {
             try {
-                InputStream stream
-                String downloadFilename
-                if(permited){
 
-                    DateTime stamp=HealthyUtils.formatDate(new DateTime(), null);
-                    downloadFilename='monitor-phrinfo-'+stamp+'.pdf'
+                //passed protocol ID, so try to get the phrId
+                targetUserId = UserSessionService.getRequestAttributeString('protocolid')
 
 
-                } else {
-                    // Forward slash : in resource path
-                    downloadFilename='/monitor_info_intro.pdf'
-                }
-
-                if(stream==null){
-                    //get default file
-                    stream= this.getClass().getResourceAsStream(downloadFilename)
-                }
-                if(stream){
-                    reportFile = new DefaultStreamedContent(stream, 'application/pdf',downloadFilename)
-					
-                }
-            } catch(Exception e){
-                LOGGER.error(" targetUserId="+targetUserId+"idType="+" resourceType="+resourceType+" idType="+idType,e)
+            } catch (Exception e) {
+                LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType, e)
             }
         }
-       return reportFile
+
+        try {
+            if (resourceType && targetUserId) {
+                //this will lookup the
+                reportFile = createPermittedReport(targetUserId, isPhrId, resourceType)
+                LOGGER.debug("creating report for: isPhrId= "+isPhrId+" id="+targetUserId+" resourceType="+resourceType)
+            } else {
+                LOGGER.debug("No params for resourcecode or (phrid or protocolid)")
+            }
+        } catch (Exception e) {
+            LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType, e)
+        }
+        return reportFile
+    }
+
+    private String getProtocolIdFromPhrId(String phrId) {
+
+        return userService.getProtocolId(phrId)
 
     }
 
-    /*
-    public FileDownloadController() { 
-    InputStream stream = this.getClass().getResourceAsStream("monitor_info_intro.pdf"); 
-    reportFile = new DefaultStreamedContent(stream, "application/pdf",
-    "downloaded_file.pdf");
+
+    protected boolean isContentViewPermitted(String targetUserId, boolean isPhrId, String resourceType) {
+        boolean isContentViewPermitted = false
+        //either one
+        String idType = null
+
+        if (isPhrId) idType = 'phrid'
+
+        try {
+
+            if (targetUserId && resourceType) {
+
+
+                if (isPhrId) {
+                    isContentViewPermitted = permitUserOnPhrId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
+
+                    LOGGER.debug(" request phrId=" + targetUserId + " on resourceType=" + resourceType + " permitted?")
+                } else {
+
+                    isContentViewPermitted = permitUserOnProtocolId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
+
+                    LOGGER.debug(" request phrId=" + targetUserId + " resourceType=" + resourceType + " permitted?")
+                }
+
+            } else {
+
+                LOGGER.debug(" request error null found : protocolId or phrId=" + isPhrId + " id=" + targetUserId + " resourceType=" + resourceType + " permitted? false")
+            }
+        } catch (Exception e) {
+            LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType + " idType=" + idType, e)
+        }
+        return isContentViewPermitted
+
     }
-    protected StreamedContent getFile() { 
-    }*/
+    /**
+     *  A permitted Report provides what the end user is allowed to see
+     *
+     *  Determines whether the user is permitted to view the report
+     *  Ultimately, a report is generated, although it might indicate
+     *  that the user has not rights.
+     * @param targetUserId
+     * @param isPhrId
+     * @param resourceType
+     * @return
+     */
+    protected StreamedContent createPermittedReport(String targetUserId, boolean isPhrId, String resourceType) {
+
+        StreamedContent reportFile = null
+
+        //either one
+        String idType = null
+
+        if (isPhrId) idType = 'phrid'
+
+        boolean isPermitted = this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
+
+        reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+        //check null, exception?
+        return reportFile
+
+    }
+    /**
+     * This is for testing
+     * @param targetUserId
+     * @param isPhrId
+     * @param resourceType
+     * @return
+     */
+    public StreamedContent createTestingReport(String targetUserId, boolean isPhrId, String resourceType) {
+
+        StreamedContent reportFile = null
+
+        //either one
+        String idType = null
+
+        if (isPhrId) idType = 'phrid'
+
+        boolean isPermitted = true;
+        //this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
+
+        reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+        //check null, exception?
+        return reportFile
+
+    }
+    //for testing
+
+/*
+public FileDownloadController() {
+InputStream stream = this.getClass().getResourceAsStream("monitor_info_intro.pdf");
+reportFile = new DefaultStreamedContent(stream, "application/pdf",
+"downloaded_file.pdf");
+
+}*/
 
 }

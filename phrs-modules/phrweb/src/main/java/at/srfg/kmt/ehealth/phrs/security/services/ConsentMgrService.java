@@ -1,14 +1,25 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerStubInterface;
+
 import java.io.Serializable;
 import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.security.Security;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.transport.http.HTTPConstants;
@@ -27,25 +38,32 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecision;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecisionResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResources;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResourcesResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerServiceInterface;
 
-//see icardea-consenteditor-invoker  ConsentManagerImplServiceTest SRDC
+
 @SuppressWarnings("serial")
 public class ConsentMgrService implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ConsentMgrService.class);
+
+    private ConsentManagerStubInterface stub = null;
     private String ISSUERNAME = "PHR";
+    private String endpointConsentMgr;
+    private int sslConfigSetting = 2;
+    private AuditAtnaService auditService;
 
     public ConsentMgrService() {
+
+        endpointConsentMgr = getServiceEndpoint();
+        stub = getConsentServiceStub();
+        //get this services
+        auditService = new AuditAtnaService();
+
     }
+
+    public AuditAtnaService getAuditAtnaService() {
+        return auditService;
+    }
+
     public static void timeoutSetup() throws Exception {
         try {
             Options options = new Options();
@@ -59,35 +77,15 @@ public class ConsentMgrService implements Serializable {
 
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         }
     }
-    public static void sslSetup() throws Exception {
-        
-        timeoutSetup();
-        
-        try {
-            boolean atnatls = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
-            if (atnatls) {
-                // Properties for SSL Security Provider
-                System.out.println(" $$$$ SECURE COMMUNICATION .....");
-                String protocolProp = "java.protocol.handler.pkgs";
-                String sunSSLProtocol = "com.sun.net.ssl.internal.www.protocol";
-                String sslStoreProp = "javax.net.ssl.trustStore";
-                String certPath = ConfigurationService.getInstance().getCertificatePath();
 
-                if (certPath == null) {
-                    certPath = ResourceBundle.getBundle("icardea").getString("icardea.home") + "/icardea-caremanager-ws/src/test/resources/jssecacerts";
-                }
-                // Enable SSL communication
-                System.setProperty(protocolProp, sunSSLProtocol);
-                Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-                System.setProperty(sslStoreProp, certPath);
-                System.setProperty("javax.net.ssl.trustStorePassword",
-                        "srfgpass");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public void sslSetup() throws Exception {
+
+        timeoutSetup();
+        SSLLocalClient.sslSetup(sslConfigSetting);
+
     }
 
     public static boolean isMedicalRole(String subjectCode) {
@@ -104,6 +102,11 @@ public class ConsentMgrService implements Serializable {
         return false;
     }
 
+    /**
+     * Local setting, used now for creating alternate test or demo view
+     * @param subjectCode
+     * @return
+     */
     public static boolean isAccessibleByThisRole(String subjectCode) {
         return ConfigurationService.getInstance().isHealthInfoAccessibleByThisRole(subjectCode);
     }
@@ -112,13 +115,26 @@ public class ConsentMgrService implements Serializable {
 
         return ConfigurationService.getInstance().isConsentAction(actionCode);
     }
-
-    // boolean isPhrId
+      public String getProtocolId(String ownerUri){
+          CommonDao dao = PhrsStoreClient.getInstance().getCommonDao();
+          return dao.getProtocolId(ownerUri);
+      }
+              
+              
+    /**
+     * @param targetUser   (user identifier: can send two queries for phr or protocol ID)
+     * @param subjectCode  (role code)
+     * @param idType
+     * @param resourceCode (mediation, basic health, condition, etc)
+     * @param action       (READ,WRITE...)
+     * @return
+     */
     public boolean isPermitted(String targetUser, String subjectCode,
-            String idType, String resourceCode, String action) {
+                               String idType, String resourceCode, String action) {
         boolean flag = false;
 
         try {
+//This is the local setting
             if (isAccessibleByThisRole(subjectCode)) {
 
                 flag = true;
@@ -127,18 +143,22 @@ public class ConsentMgrService implements Serializable {
 
                 sslSetup();
                 String userIdentifier = targetUser;
-
+                //try this identifier, usually the phrId
                 String result = callGetDecision(userIdentifier, ISSUERNAME,
                         subjectCode, resourceCode, action);
                 // try on protocol ID
                 flag = isPermitted(result);
 
+                //usually the phrId is passed
                 if (!idType.equals(PhrsConstants.PROTOCOL_ID_NAME)) {
                     // try on phrId
-                    if (!flag) {
-                        result = callGetDecision(targetUser, ISSUERNAME,
+                    userIdentifier=getProtocolId(targetUser);
+                    if (!flag && userIdentifier!=null && !userIdentifier.isEmpty() ) {
+                        result = callGetDecision(userIdentifier, ISSUERNAME,
                                 subjectCode, resourceCode, action);
                         flag = isPermitted(result);
+                    } else {
+
                     }
                 }
                 if (result != null) {
@@ -166,11 +186,18 @@ public class ConsentMgrService implements Serializable {
 
             e.printStackTrace();
         }
+        this.sendAuditMessage(targetUser, subjectCode, idType, resourceCode, action);
         LOGGER.debug("permission result " + " targetUser phrId" + targetUser
                 + " idType=" + idType + " subjectCode=" + subjectCode
                 + " resourceCode=" + resourceCode + " resourceCode"
                 + "action=" + action + " decision allow?=" + flag + " isAccessibleByThisRole=" + isAccessibleByThisRole(subjectCode));
         return flag;
+    }
+
+    public void sendAuditMessage(String targetUser, String subjectRoleCode,
+                                 String idType, String resourceCode, String action) {
+        //final String patientId, final String resource, final String requestorRole
+        auditService.sendAuditMessageGrant(targetUser, ISSUERNAME, subjectRoleCode);
     }
 
     boolean hasUserByPhrId(String phrId) {
@@ -199,40 +226,89 @@ public class ConsentMgrService implements Serializable {
         return false;
     }
 
-    public String callGetDecision(String patientId, String issuerName,
-            String subjectCode, String resourceCode, String action) {
-
-        ConsentManagerServiceInterface stub;
+    public static String getServiceEndpoint() {
         String endpoint = null;
 
         ResourceBundle properties = ResourceBundle.getBundle("icardea");
         endpoint = properties.getString("consent.ws.endpoint");
-        // ConfigurationService.getInstantce().getEndPoint(ConfigurationService.ENDPOINT_TYPE_CONSENT_WS)
+        if (endpoint != null) endpoint = endpoint.trim();
+        return endpoint;
 
+    }
+
+
+    public ConsentManagerStubInterface getConsentServiceStub() {
+        //ConsentManagerSubInterface stub = null;
+        String endPoint = null;
+        if (stub != null) return stub;
         try {
+            endPoint = getServiceEndpoint();
+            if (endPoint == null) throw new Exception("Endpoint is null");
 
-            stub = new ConsentManagerImplServiceStub(endpoint);
+            //          if(endPoint.startsWith("https")){
+            //              stub = new ConsentManagerImplServiceSecuredStub();
+            //          } else {
+            stub = new ConsentManagerImplServiceStub();
 
-            GetDecision request = new GetDecision();
-            request.setPatientID(patientId);
-            String requestString = generateRequestAsString(generateSAMLRequest(
-                    "1", issuerName, subjectCode, resourceCode, action));
-            requestString = requestString.substring(39);
-            request.setRequestString(requestString);
-            GetDecisionResponse response = stub.getDecision(request);
-            String resultString = response.getGetDecisionReturn();
-            System.out.println(resultString);
-            return resultString;
+            //          }
         } catch (AxisFault e) {
-            e.printStackTrace();
-            LOGGER.error(" patientId=" + patientId, e);
-
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            LOGGER.error(" patientId=" + patientId, e);
+            LOGGER.error("Error created stub with endpoint" + endPoint, e);
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error(" ", e);
+            LOGGER.error("", e);
+        }
+
+        return stub;
+    }
+
+    public String callGetDecision(String patientId, String issuerName,
+                                  String subjectCode, String resourceCode, String action) {
+
+        //ConsentManagerImplServiceStub stub;
+
+        if (patientId != null && !patientId.isEmpty()
+                && subjectCode != null && !subjectCode.isEmpty()
+                && resourceCode != null && !resourceCode.isEmpty()
+                && action != null && !action.isEmpty()) {
+
+            try {
+                stub = getConsentServiceStub();
+
+                GetDecision request = new GetDecision();
+                request.setPatientID(patientId);
+
+                String requestString = generateRequestAsString(generateSAMLRequest(
+                        "1", issuerName, subjectCode, resourceCode, action));
+
+                //remove xml statement at beginning
+                requestString = requestString.substring(39);
+                LOGGER.debug(" requestString =", requestString.substring(39));
+
+                request.setRequestString(requestString);
+
+                GetDecisionResponse response = stub.getDecision(request);
+                String resultString = response.getGetDecisionReturn();
+                //System.out.println("callGetDecision result" + resultString);
+                LOGGER.debug(" callGetDecision patientId=" + patientId
+                        + "issuerName " + issuerName + " subjectCode" + subjectCode
+                        + "resourceCode " + resourceCode + " action" + action
+                        + " decision= " + resultString);
+                return resultString;
+
+//            } catch (AxisFault e) {
+//                e.printStackTrace();
+//                LOGGER.error(" patientId=" + patientId, e);
+//
+//            } catch (RemoteException e) {
+//                e.printStackTrace();
+//                LOGGER.error(" patientId=" + patientId, e);
+            } catch (Exception e) {
+                e.printStackTrace();
+                LOGGER.error(" patientId=" + patientId, e);
+            }
+        } else {
+            LOGGER.debug("callGetDecision received a NULL argument: patientId=" + patientId
+                    + "issuerName " + issuerName + " subjectCode" + subjectCode
+                    + "resourceCode " + resourceCode + " action" + action);
         }
         return "<?xml version=\"1.0\" encoding=\"UTF-16\"?><xacml-saml:XACMLAuthzDecisionStatement xmlns:xacml-saml=\"urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion\"><xacml-context:Response xmlns:xacml-context=\"urn:oasis:names:tc:xacml:2.0:context:schema:os\"><xacml-context:Result><xacml-context:Decision>Deny</xacml-context:Decision></xacml-context:Result></xacml-context:Response></xacml-saml:XACMLAuthzDecisionStatement>";
     }
@@ -243,13 +319,11 @@ public class ConsentMgrService implements Serializable {
      * @return
      */
     public List<String> callGetSubjects() {
-        ConsentManagerImplServiceStub stub;
+
         List<String> list = new ArrayList<String>();
         try {
-            ResourceBundle properties = ResourceBundle.getBundle("icardea");
-            String endpoint = properties.getString("consent.ws.endpoint");
 
-            stub = new ConsentManagerImplServiceStub(endpoint);
+            stub = getConsentServiceStub();
             GetSubjects request = new GetSubjects();
             GetSubjectsResponse response = stub.getSubjects(request);
             ArrayOf_xsd_anyType result = response.getGetSubjectsReturn();
@@ -258,12 +332,12 @@ public class ConsentMgrService implements Serializable {
                 System.out.println("Subject Code: " + o);
                 list.add(o.toString());
             }
-        } catch (AxisFault e) {
-            e.printStackTrace();
-            LOGGER.error(" ", e);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-            LOGGER.error(" ", e);
+//        } catch (AxisFault e) {
+//            e.printStackTrace();
+//            LOGGER.error(" ", e);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//            LOGGER.error(" ", e);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error(" ", e);
@@ -272,15 +346,13 @@ public class ConsentMgrService implements Serializable {
     }
 
     public List<String> callGetResources() {
-        ConsentManagerImplServiceStub stub;
+
         List<String> list = new ArrayList<String>();
         try {
-            ResourceBundle properties = ResourceBundle.getBundle("icardea");
-            String endpoint = properties.getString("consent.ws.endpoint");
-
-            stub = new ConsentManagerImplServiceStub(endpoint);
+            stub = getConsentServiceStub();
             GetResources request = new GetResources();
             GetResourcesResponse response = stub.getResources(request);
+            if (response == null) System.out.println("response null");
             ArrayOf_xsd_anyType result = response.getGetResourcesReturn();
             System.out.println("RESOURCES");
 
@@ -288,66 +360,75 @@ public class ConsentMgrService implements Serializable {
                 System.out.println("Resource Code: " + o);
                 list.add(o.toString());
             }
-        } catch (AxisFault e) {
-            e.printStackTrace();
-        } catch (RemoteException e) {
-            e.printStackTrace();
+//        } catch (AxisFault e) {
+//            e.printStackTrace();
+//             LOGGER.error("",e);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//             LOGGER.error("",e);
         } catch (Exception e) {
             e.printStackTrace();
+            LOGGER.error("", e);
         }
         return list;
     }
 
+    /**
+     * @param patientId
+     * @param idType
+     * @param requesterRole
+     * @param resource
+     * @return true if the auditing option is configured
+     */
     public boolean auditGrantRequest(String patientId, String idType,
-            String requesterRole, String resource) {
+                                     String requesterRole, String resource) {
+        boolean result = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+        ;
+        auditService.sendAuditMessageGrant(patientId, resource, requesterRole);
 
-        boolean result = false;
-        try {
-            sslSetup();
-            /*
-             * String response = callGetDecision(patientId, "srdc", "ROLECODE:"
-             * + requesterRole.toUpperCase(), "RESOURCECODE:" +
-             * resource.toUpperCase().replaceAll(" ", ""), "READ"); result =
-             * response.indexOf("Permit") != -1;
-             */
-            System.out.println("$$$ Grant request for patient '" + patientId
-                    + "' from requestor role '" + requesterRole
-                    + "' for resource '" + resource + "' results in " + result);
 
-            boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
-            // TODO: ATNA
-            // Send ATNA Message: Grant Request Message
-            // +"resource"+ is requested from "+requesterRole+" for
-            // "+patientID+" with result "+result.
-            if (atnalog) {
-                ResourceBundle properties = ResourceBundle.getBundle("icardea");
-                String atnalogServer = properties.getString("atna.log.server");
-
-                String xml = Audit.createMessage("GRM", patientId, resource,
-                        requesterRole);// TODO: Grant Request Message
-                Audit a = null;
-                try {
-                    a = new Audit(atnalogServer, 2861);
-                } catch (UnknownHostException e) {
-
-                    e.printStackTrace();
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-                a.send_udp(a.create_syslog_xml("PHR", xml));
-
-            }
-        } catch (Exception e) {
-            LOGGER.error("patientId=" + patientId + " requesterRole"
-                    + requesterRole + " resourceType=" + resource, e);
-            e.printStackTrace();
-        }
-
+//        if (patientId != null && !patientId.isEmpty()
+//                && idType != null && !idType.isEmpty()
+//                && requesterRole != null && !requesterRole.isEmpty()
+//                && resource != null && !resource.isEmpty()) {
+//
+//            try {
+//                LOGGER.debug("audit GrantRequest request for patient '" + patientId
+//                        + "' from requestor role '" + requesterRole
+//                        + "' for resource '" + resource + "' results in " + result);
+//
+//                boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+//
+//                if (atnalog) {
+//                    sslSetup();
+//                    ResourceBundle properties = ResourceBundle.getBundle("icardea");
+//                    String atnalogServer = properties.getString("atna.log.server");
+//
+//                    String xml = Audit.createMessage("GRM", patientId, resource,
+//                            requesterRole);
+//                    Audit a = null;
+//                    try {
+//                        a = new Audit(atnalogServer, 2861);
+//                    } catch (UnknownHostException e) {
+//
+//                        e.printStackTrace();
+//                    } catch (Exception e) {
+//
+//                        e.printStackTrace();
+//                    }
+//                    a.send_udp(a.create_syslog_xml("PHR", xml));
+//
+//                }
+//            } catch (Exception e) {
+//                LOGGER.error("patientId=" + patientId + " requesterRole"
+//                        + requesterRole + " resourceType=" + resource, e);
+//                e.printStackTrace();
+//            }
+//        }
         return result;
     }
 
-    private String generateRequestAsString(XACMLAuthzDecisionQueryType request) {
+    public String generateRequestAsString(XACMLAuthzDecisionQueryType request) {
         XACMLAuthzDecisionQueryTypeMarshaller marshaller = new XACMLAuthzDecisionQueryTypeMarshaller();
         Element element = null;
         String result = "";
@@ -362,14 +443,19 @@ public class ConsentMgrService implements Serializable {
             result = writer.writeToString(element);
         } catch (MarshallingException e) {
             e.printStackTrace();
+            LOGGER.error(" ", e);
         } catch (ClassCastException e) {
             e.printStackTrace();
+            LOGGER.error(" ", e);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+            LOGGER.error(" ", e);
         } catch (InstantiationException e) {
             e.printStackTrace();
+            LOGGER.error(" ", e);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
+            LOGGER.error(" ", e);
         } catch (Exception e) {
             e.printStackTrace();
             LOGGER.error(" ", e);
@@ -378,9 +464,9 @@ public class ConsentMgrService implements Serializable {
 
     }
 
-    private XACMLAuthzDecisionQueryType generateSAMLRequest(String requestId,
-            String issuer, String subjectId, String resourceId,
-            String actionString) {
+    public XACMLAuthzDecisionQueryType generateSAMLRequest(String requestId,
+                                                           String issuer, String subjectId, String resourceId,
+                                                           String actionString) {
         SAML saml = new SAML();
         XACMLAuthzDecisionQueryType query = saml.create(
                 XACMLAuthzDecisionQueryTypeImpl.class,
@@ -451,5 +537,66 @@ public class ConsentMgrService implements Serializable {
         query.setIssuer(issuer_);
         query.setRequest(request);
         return query;
+    }
+    /*
+     * public String grantRightsRequest(String patientId,String
+     * subjectCode,String resourceType){
+     *
+     * ConsentManagerImplServiceStub stub=getConsentServiceStub();
+     * stub.grantRequest("191", "doctor", "condition"); //stub.g
+     * ConsentManagerImplServiceTest.getInstance().grantRequest("191", "doctor",
+     * "condition");
+     *
+     * }
+     */
+
+    public boolean grantRequest(String patientId, String requesterRole,
+                                String resource) {
+        boolean result = false;
+        try {
+            sslSetup();
+
+
+            String response = callGetDecision(patientId, "srdc", "ROLECODE:"
+                    + requesterRole.toUpperCase(), "RESOURCECODE:"
+                    + resource.toUpperCase().replaceAll(" ", ""), "READ");
+            result = response.indexOf("Permit") != -1;
+            System.out.println("Grant request for patient '" + patientId
+                    + "' from requestor role '" + requesterRole
+                    + "' for resource '" + resource + "' results in " + result);
+            boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+
+            // TODO: ATNA
+            // Send ATNA Message: Grant Request Message
+            // +"resource"+ is requested from "+requesterRole+" for
+            // "+patientID+" with result "+result.
+            if (atnalog) {
+                ResourceBundle properties = ResourceBundle.getBundle("icardea");
+                String atnalogServer = properties.getString("atna.log.server");
+                int port = 2861;
+
+                String xml = Audit.createMessage("GRM", patientId, resource, requesterRole);//TODO: Grant Request Message
+                Audit a = null;
+                try {
+                    a = new Audit(atnalogServer, port);
+                } catch (UnknownHostException e) {
+
+                    e.printStackTrace();
+                }
+                a.send_udp(a.create_syslog_xml("caremanager", xml));
+            }
+        } catch (Exception e) {
+            LOGGER.error(" ", e);
+        }
+
+        return result;
+    }
+
+    public int getSslConfigSetting() {
+        return sslConfigSetting;
+    }
+
+    public void setSslConfigSetting(int sslConfigSetting) {
+        this.sslConfigSetting = sslConfigSetting;
     }
 }

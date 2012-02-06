@@ -4,12 +4,15 @@ import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
 
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="proids")
 @RequestScoped
 public class ProfileUserIdentifiers extends FaceBaseBean  {
-	
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProfileUserIdentifiers.class);
+
 	public ProfileUserIdentifiers() {
 		super();
 		// setPermittedActions performed by super class

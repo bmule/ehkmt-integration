@@ -34,7 +34,15 @@ public class MonitorInfoItem {
 
 	String cacheId;
 
-	public boolean getAllowedViewRow() {
+    public int getSortOrder() {
+        return sortOrder;
+    }
+
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+
+    public boolean getAllowedViewRow() {
 
 		return allowedViewRow || consentViewContent || allowedViewContent;
 	}

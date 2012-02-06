@@ -9,10 +9,13 @@ import org.primefaces.model.chart.CartesianChartModel;
 
 import at.srfg.kmt.ehealth.phrs.jsf.utils.ChartSeriesExt;
 import at.srfg.kmt.ehealth.phrs.jsf.utils.PieChartModelExt;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ManagedBean(name="chartBean")
 @RequestScoped
 public class ChartBean implements Serializable {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ChartBean.class);
 
     /**
 	 * 

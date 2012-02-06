@@ -2,7 +2,8 @@ package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
 import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.primefaces.model.chart.CartesianChartModel
 
 import at.srfg.kmt.ehealth.phrs.jsf.utils.HealthyCharts
@@ -10,11 +11,13 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyHeight
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.opensaml.xml.parse.LoggingErrorHandler
 
 
 @ManagedBean(name="odlbwBean")
 @RequestScoped
 public class ObsBodyWeightBean extends FaceBaseBean  {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObsBodyWeightBean.class);
 
 	CartesianChartModel chartModel
 
@@ -100,7 +103,7 @@ public class ObsBodyWeightBean extends FaceBaseBean  {
 				bh = bheightObj.getBodyHeight()
 			}
 		} catch (Exception e){
-			println('getCurrentBodyHeight Exception '+e)
+			LOGGER.error('getCurrentBodyHeight Exception '+e)
 		}
 		return bh
 	}

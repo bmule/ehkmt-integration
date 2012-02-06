@@ -8,7 +8,8 @@ import javax.faces.bean.ManagedBean
 import javax.faces.bean.SessionScoped
 import javax.faces.context.FacesContext
 import javax.faces.event.ActionEvent
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.primefaces.event.NodeExpandEvent
 import org.primefaces.event.NodeSelectEvent
 import org.primefaces.model.DefaultTreeNode
@@ -31,9 +32,12 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 @ManagedBean(name="menuBean")
 @SessionScoped
 public class MenuController extends FaceCommon{
+    private static final Logger logger = LoggerFactory.getLogger(MenuController.class.getName());
+
 	//PhrsConstants.SESSION_MENU_CURRENT_NODE or this bean if SessionScoped
-	//private static final Logger logger = LoggerFactory.getLogger(MenuController.class.getName());
-	String defaultNodeType='default'
+
+
+    String defaultNodeType='default'
 	TreeNode root,home,sectionPatientInformation, sectionGroupInfoPeople,sectionPrivacy
 	TreeNode sectionObservations,sectionMeds,sectionActionPlan, sectionProfile,sectionMonitoring,sectionContacts,sectionMedicalDocs
 	TreeNode sectionEdu,sectionCommunity

@@ -1,17 +1,21 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
+import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dispatch.api.Dispatcher;
 import at.srfg.kmt.ehealth.phrs.dispatch.impl.SingleDistpatcher;
+
 import java.io.Serializable;
 
 import java.net.UnknownHostException;
 import java.util.ResourceBundle;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tr.com.srdc.icardea.atnalog.client.Audit;
+
 /*
- * TODO create new thread for each send*
- */
+* TODO create new thread for each send*
+*/
 //buildNullFrequency()
 @SuppressWarnings("serial")
 public class AuditAtnaService implements Serializable {
@@ -24,20 +28,60 @@ public class AuditAtnaService implements Serializable {
     private String host = "127.0.0.1";
     private int port = 2861;
     private int portSecure = 8443;
+    private int sslConfigSetting = 2;
 
-    public void setupSSL() {
-        SSLLocalClient.sslSetup();
+    private void setupSSL(int sslConfigSetting) {
+
+        SSLLocalClient.sslSetup(sslConfigSetting);
     }
 
     public AuditAtnaService() {
+
         init();
     }
 
-    /*
-     * try { AuditAtnaService aas = new AuditAtnaService();
-     * aas.sendAuditMessageForPatientRegistration(protocolId) } catch (Exception
-     * e) { e.printStackTrace(); }
+    /**
+     * If configured for SSL, the which setting? Default is 2
+     *
+     * @param sslConfigSetting
      */
+    public AuditAtnaService(int sslConfigSetting) {
+        this.sslConfigSetting = sslConfigSetting;
+
+        init();
+    }
+
+    /**
+     * Sends a test message - for Use by Test cases
+     * 1. patient: testMessage_phruser,
+     * 2. resource: PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH,
+     * 3. subjectCode (role) PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE
+     *
+     * @param threaded - whether to use the threaded version or not.
+     *                 If threaded normally true, depends on ATNA audit config settings also
+     * @throws Exception
+     */
+    public boolean sendTestMessage(boolean threaded) throws Exception {
+        boolean success=false;
+        if (threaded) {
+
+            sendAuditMessageGrant("testMessage_phruser",
+                    PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH,
+                    PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
+        } else {
+            success = doAuditMessageGrant("testMessage_phruser",
+                    PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH,
+                    PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
+
+        }
+        return success;
+    }
+
+    /*
+    * try { AuditAtnaService aas = new AuditAtnaService();
+    * aas.sendAuditMessageForPatientRegistration(protocolId) } catch (Exception
+    * e) { e.printStackTrace(); }
+    */
     private void init() {
         try {
             atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
@@ -48,8 +92,9 @@ public class AuditAtnaService implements Serializable {
                 port = 2861;
 
                 if (secure) {
+
                     port = 8443;
-                    setupSSL();
+                    setupSSL(sslConfigSetting);
                 }
 
                 ResourceBundle properties = ResourceBundle.getBundle("icardea");
@@ -121,7 +166,7 @@ public class AuditAtnaService implements Serializable {
             @Override
             public void run() {
 
-                boolean success = doAuditMessageGrantForRole(patientId, resource, requestorRole);
+                boolean success = doAuditMessageGrant(patientId, resource, requestorRole);
 
             }
         };
@@ -130,15 +175,38 @@ public class AuditAtnaService implements Serializable {
     }
 
     /**
+     * Send Audit message
+     * over a new thread
      *
+     * @param patientId
+     * @param resource
+     * @param requestorRole
+     */
+    public void sendAuditMessageGrant(final String patientId, final String resource, final String requestorRole) {
+
+        final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
+
+        final Runnable task = new Runnable() {
+
+            @Override
+            public void run() {
+
+                boolean success = doAuditMessageGrant(patientId, resource, requestorRole);
+
+            }
+        };
+        dispatcher.dispatch(task);
+
+    }
+
+    /**
      * Only use this method if no separate thread is needed. Normally, use
      * threaded
      * <code>sendAuditMessageGrantForRole</code> There is no separate thread
      * made using the Message Dispatcher, however, this is used by the
      * <code>sendAuditMessageGrantForRole</code> and by the unit tests
-     *
      */
-    public boolean doAuditMessageGrantForRole(final String patientId, final String resource, final String requestorRole) {
+    public boolean doAuditMessageGrant(final String patientId, final String resource, final String requestorRole) {
         boolean success = false;
         try {
             if (atnalog && audit != null) {

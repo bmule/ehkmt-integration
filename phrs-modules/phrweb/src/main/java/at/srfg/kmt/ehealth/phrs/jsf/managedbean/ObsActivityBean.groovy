@@ -5,15 +5,15 @@ import javax.faces.bean.RequestScoped
 
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="odlact")
 @RequestScoped
 public class ObsActivityBean extends FaceBaseBean  {
-// collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
-	//CartesianChartModel chartModel
-	
-	
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObsActivityBean.class);
+
 	public ObsActivityBean() {
 		super();//required!!
 		// setPermittedActions performed by super class
@@ -29,29 +29,9 @@ public class ObsActivityBean extends FaceBaseBean  {
 		} catch (Exception e){
 			println('ObsActivityBean loadModelMain Exception '+e)
 		}
-		/*
-		try{
-			initChartModel()
-		} catch (Exception e){
-			println('ObsActivityBean initChartModel Exception '+e)
-		}*/
+
 		
 	}
-/*
-	public void initChartModel(){
-	
-		try{
-			chartModel = HealthyCharts.createChartBloodPressure(this.getModelMain())
-			
-		} catch (Exception e){
-			println('initChartModel Exception '+e)
-		}
-		if( ! chartModel) chartModel = new CartesianChartModel()
-	}
-
-	public  CartesianChartModel getTestBp(){
-		return HealthyCharts.testBloodPressureChart()
-	}*/
 
 	@Override
 	public void setPermittedActions(){
@@ -85,9 +65,9 @@ public class ObsActivityBean extends FaceBaseBean  {
 	public void storeModifyFirst(){
 		super.storeModifyFirst()
 
-		if(selected){
-
-		}
+//		if(selected){
+//
+//		}
 	}
 }
 

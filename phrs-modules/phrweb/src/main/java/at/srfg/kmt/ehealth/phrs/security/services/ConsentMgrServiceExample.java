@@ -1,5 +1,15 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GenerateRequest;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GenerateRequestResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.security.Security;
@@ -18,16 +28,6 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GenerateRequest;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GenerateRequestResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecision;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetDecisionResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResources;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetResourcesResponse;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjects;
-import tr.com.srdc.icardea.consenteditor.webservice.client.ConsentManagerImplServiceStub.GetSubjectsResponse;
 
 public class ConsentMgrServiceExample {
 	private static ConsentMgrServiceExample instance = null;

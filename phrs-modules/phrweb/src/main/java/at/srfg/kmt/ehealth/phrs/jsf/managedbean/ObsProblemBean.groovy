@@ -5,12 +5,15 @@ import javax.faces.bean.RequestScoped
 
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="odlprobBean")
 @RequestScoped
 public class ObsProblemBean extends FaceBaseBean  {
-	
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObsProblemBean.class);
+
 	
 	public ObsProblemBean() {
 		super();//required!!

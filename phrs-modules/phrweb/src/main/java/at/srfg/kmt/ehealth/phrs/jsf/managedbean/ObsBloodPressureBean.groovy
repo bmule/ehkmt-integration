@@ -8,12 +8,15 @@ import org.primefaces.model.chart.CartesianChartModel
 import at.srfg.kmt.ehealth.phrs.jsf.utils.HealthyCharts
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @ManagedBean(name="odlbpBean")
 @RequestScoped
 public class ObsBloodPressureBean extends FaceBaseBean  {
-	// collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObsBloodPressureBean.class);
+
 	CartesianChartModel chartModel
 
 	public CartesianChartModel getChart02(){

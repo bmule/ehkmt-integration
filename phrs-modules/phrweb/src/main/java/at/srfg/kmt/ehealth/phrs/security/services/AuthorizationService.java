@@ -101,22 +101,19 @@ public class AuthorizationService implements Serializable {
 				requesterRole, resourceCode);
 	}
 
-	/**
-	 * Given the role of user, is their action permitted upon a resource owned
-	 * by another targetUser ? Uses the subjectRole of the logged in user, the
-	 * session Role PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_* or the PHR
-	 * local role
-	 * 
-	 * @param targetUser
-	 * @param roleCode
-	 *            PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_* or the PHR
-	 *            local role
-	 * @param resourceCode
-	 *            PhrsConstants.AUTHORIZE_RESOURCE_CODE_*
-	 * @param action
-	 *            PhrsConstants.AUTHORIZE_ACTION_CODE_READ , WRITE, UPDATE
-	 * @return
-	 */
+    /**
+     *
+     * Given the role of user, is their action permitted upon a resource owned
+     * by another targetUser ? Uses the subjectRole of the logged in user, the
+     * session Role PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_* or the PHR
+     * local role
+     *
+     * RoleCode (subject code) is derived from the Session attribute for role
+     * @param targetUser
+     * @param resourceCode
+     * @param action
+     * @return
+     */
 	public boolean permitAccessOnPhrId(String targetUser, String resourceCode,
 			String action) {
 		String subjectRole = UserSessionService.getSessionAttributeRole();
@@ -124,6 +121,26 @@ public class AuthorizationService implements Serializable {
 		return this.permitAccess(targetUser, true, resourceCode, action,
 				subjectRole);
 	}
+    /**
+
+     *
+     * @param targetUser
+     * @param roleCode
+     *            PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_* or the PHR
+     *            local role
+     * @param resourceCode
+     *            PhrsConstants.AUTHORIZE_RESOURCE_CODE_*
+     * @param action
+     *            PhrsConstants.AUTHORIZE_ACTION_CODE_READ , WRITE, UPDATE
+     * @return
+     */
+    public boolean permitAccessOnPhrId(String targetUser, String resourceCode,
+                                       String action,String roleCode) {
+        // subjectRole  is roleCode
+
+        return this.permitAccess(targetUser, true, resourceCode, action,
+                roleCode);
+    }
 
 	public boolean permitAccessOnProtocolId(String targetUser,
 			String resourceCode, String action) {
@@ -196,22 +213,20 @@ public class AuthorizationService implements Serializable {
 	}
 
 	public String getSessionUserLoginId() {
-		String value = UserSessionService.getSessionAttributeUserLoginId();
+		return UserSessionService.getSessionAttributeUserLoginId();
 
-		return value;
 	}
 
 	public String getSessionUserOwnerUri() {
-		String value = UserSessionService.getSessionAttributePhrId();
+        return UserSessionService.getSessionAttributePhrId();
 
-		return value;
 	}
 
 	/**
 	 * Get the role, but use isMedicalRole() to determine Default is
 	 * PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER
 	 * 
-	 * @return
+	 * @return  session role
 	 */
 	public String getSessionUserRole() {
 
@@ -236,9 +251,8 @@ public class AuthorizationService implements Serializable {
 
 	public String getFilterProtocolId() {
 
-		String value = UserSessionService.getSessionAttributeFilterProtocolId();
+	    return UserSessionService.getSessionAttributeFilterProtocolId();
 
-		return value;
 	}
 
 	public String modify = MODIFY_NO;

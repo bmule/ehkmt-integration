@@ -16,7 +16,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserIdentifiers
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 
 import com.dyuproject.openid.OpenIdUser
-
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 
 /**
  * 
@@ -51,7 +51,7 @@ public class CommonDao{
      */
     public def getResourceSingle(Class entityClazz, boolean create,String theOwnerUri){
 
-        def single
+        def single =null
 
         try {
             single = phrsRepositoryClient.crudReadResourceSingle( theOwnerUri,  entityClazz)
@@ -69,6 +69,9 @@ public class CommonDao{
         }
         return single
     }
+    public ProfileContactInfo getProfileContactInfo(String theOwnerUri){
+        return getResourceSingle(ProfileContactInfo.class,false,theOwnerUri)
+    }
     /**
      *
      * @param theOwnerUri
@@ -81,8 +84,8 @@ public class CommonDao{
         if(theOwnerUri){
 
             user = getResourceSingle(PhrFederatedUser.class, create, theOwnerUri)
-            //already done
-            if(user) user.setOwnerUri(theOwnerUri)
+            //already done, but check after a new create
+            if(user && !user.getOwnerUri()) user.setOwnerUri(theOwnerUri)
 
         }
         return user;
@@ -178,7 +181,9 @@ public class CommonDao{
                         //phrtest user
                         user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
                         user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
-                        updateProtocolId(ownerUri,Constants.PROTOCOL_ID_TEST_PHRUSER,null);
+
+                        updateProtocolId(user.getOwnerUri(),
+                                Constants.PROTOCOL_ID_UNIT_TEST,null);
                                                 
                     } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
 					
@@ -200,7 +205,7 @@ public class CommonDao{
         }
         return user;
     }
-        
+       
     public void updateProtocolId(String owneruri, String protocolId, String namespace){
            
         phrsStoreClient.getInteropProcessor().registerProtocolId( owneruri,protocolId,namespace)
@@ -267,7 +272,7 @@ public class CommonDao{
      */
 	
     public def getResourceByExampleToSingle(Class entityClazz,Map map, boolean create,String theOwnerUri){
-        def single
+        def single =null
 
         try {
             single = phrsRepositoryClient.crudReadResourceByExampleToSingle( theOwnerUri,  entityClazz, map)
@@ -346,7 +351,7 @@ public class CommonDao{
         PhrFederatedUser resource
 
         if(ownerUri){
-            return phrsRepositoryClient.crudReadResourceSingle(ownerUri, PhrFederatedUser.class);
+            return crudReadResourceSingle(ownerUri, PhrFederatedUser.class);
         }
         return null
     }
@@ -367,7 +372,7 @@ public class CommonDao{
      * @return
      */
     public  BasePhrOpenId crudReadOpenIdByOwnerUri(String ownerUri){
-        BasePhrOpenId open
+        BasePhrOpenId open =null
         if(ownerUri){
             open =crudReadResourceSingle(ownerUri,BasePhrOpenId.class)
         }
@@ -379,7 +384,7 @@ public class CommonDao{
      * @return
      */
     public  BasePhrOpenId crudReadOpenIdByIdentifier(String identifier){
-        BasePhrOpenId open
+        BasePhrOpenId open=null
         if(identifier){
             Map map = ['identifier':identifier]
             List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
@@ -395,7 +400,7 @@ public class CommonDao{
      * @return
      */
     public  PhrFederatedUser crudReadPhrFederatedUserByOpenIdentifier(String identifier){
-        PhrFederatedUser user
+        PhrFederatedUser user=null
         if(identifier){
             Map map = ['identifier':identifier]
             List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
@@ -410,7 +415,7 @@ public class CommonDao{
         return user
     }
     /**
-     * 
+     * @deprecated
      * @param ownerUri
      * @param allOpenIdAttributes
      * @throws Exception
@@ -421,7 +426,8 @@ public class CommonDao{
 
             String protocolId = null;
             if ( attributes.containsKey(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID)) {
-                value = attributes.get(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID);
+
+                protocolId = attributes.get(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID);
             }
             //allOpenIdAttributes.containsKey(PhrsConstants.xxx) ? allOpenIdAttributes.get(PhrsConstants.xxx) : null
             if(! protocolId){
@@ -448,7 +454,7 @@ public class CommonDao{
      * @return
      */
     public BasePhrOpenId crudSaveOpenIdUser(String ownerUri,OpenIdUser openIdUser,boolean createPhrUser){
-        BasePhrOpenId open
+        BasePhrOpenId open =null
         if(ownerUri){
             open = crudReadOpenIdByIdentifier(openIdUser.identifier)
 
@@ -573,18 +579,71 @@ public class CommonDao{
     public String getOwnerUriByIdentifierProtocolId(String filterProtocolId,String filterProtocolNamespace) {
         String ownerUri =null;
         if(filterProtocolId){
-            Map query =  ['identifier':filterProtocolId,
-					'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
-            ]
+            Map query =  ['pixIdentifier.identifier':filterProtocolId]
+            //,'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
+
             //'namespace',filterProtocolNamespace
-            ProfileUserIdentifiers pui = this.getResourceByExampleToSingle(ProfileUserIdentifiers.class, query, false, null)// theOwnerUri)
-            if(pui){
-                ownerUri = pui.ownerUri
+            ProfileContactInfo info = this.getResourceByExampleToSingle(ProfileContactInfo.class, query, false, null)
+
+
+            if(info){
+                ownerUri = info.ownerUri
             }
         }
         return ownerUri;
 
     }
+    /**
+     *
+     * @param ownerUri
+     * @return
+     */
+    public boolean hasProtocolId(String ownerUri){
+       String id =   getProtocolId(ownerUri);
+       if(id){
+           return true
+       }
+        return false
+    }
+    /**
+     * get the protocolId
+     * @param ownerUri
+     * @return
+     */
+    public String getProtocolId(String ownerUri){
+        String protocolId=null
+        if(ownerUri){
+
+            //'namespace',filterProtocolNamespace
+
+            ProfileContactInfo info = this.getResourceSingle(ProfileContactInfo.class,false,ownerUri)
+
+            if(info && info.pixIdentifier){
+                protocolId = info.pixIdentifier.identifier
+            }
+        }
+        return ownerUri;
+
+
+    }
+// This is the alternative when this issues about protocolID settle down. Ultimately, and PIX like component is needed
+// to handle various IDs, but the interop component must also use the component.
+//    public String getOwnerUriByIdentifierProtocolId(String filterProtocolId,String filterProtocolNamespace) {
+//        String ownerUri =null;
+//        if(filterProtocolId){
+//            Map query =  ['identifier':filterProtocolId,
+//                    'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
+//            ]
+//            //'namespace',filterProtocolNamespace
+//            ProfileUserIdentifiers pui = this.getResourceByExampleToSingle(ProfileUserIdentifiers.class, query, false, null)// theOwnerUri)
+//            if(pui){
+//                ownerUri = pui.ownerUri
+//            }
+//
+//        }
+//        return ownerUri;
+//
+//    }
 
  
 	

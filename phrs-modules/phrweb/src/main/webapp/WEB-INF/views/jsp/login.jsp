@@ -49,7 +49,7 @@ function processForm(theForm){
     }
     //icardea local server accepts short names. We must combine this here otherwise the servlet request must be wrapped
     if(objDropDown.value == "icardea" ){
-    	objHidden.value ="https://localhost:8443/idp/u="+objUser.value;
+    	objHidden.value ="https://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
     	alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     

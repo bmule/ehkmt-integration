@@ -8,10 +8,13 @@ import javax.faces.bean.RequestScoped
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.presentation.utils.EventDuration
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @ManagedBean(name="actionmgtBean")
 @RequestScoped
 public class ActionActivityMgtBean extends FaceBaseBean  {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ActionActivityMgtBean.class);
 
 	
 	/**

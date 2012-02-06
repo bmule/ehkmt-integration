@@ -107,8 +107,6 @@ public class  InteropAccessService implements Serializable{
         //ownerUri = phrId
         getInteropClients().getActorClient().register(ownerUri,protocolId)
 
-        return
-
     }
     /**
      * 
@@ -568,7 +566,7 @@ public class  InteropAccessService implements Serializable{
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
             
             } catch (java.lang.Error e) {
-                LOGGER.error("sesame throws errors not exception..."+resourceType,,e);
+                LOGGER.error("sesame throws errors not exception..."+resourceType,e);
                 e.printStackTrace();
             }
         }
@@ -678,7 +676,7 @@ This cannot not be used for the dosage and dosage units because these are separa
      *
      */
     public static Date transformDateFromMessage(String dateMessage, Date defaultDate){
-        Date theDate
+        Date theDate =null
         try{
             if(dateMessage){
                 theDate= DateUtil.getFormatedDate( dateMessage)
@@ -762,8 +760,6 @@ This cannot not be used for the dosage and dosage units because these are separa
         //evaluate result
         if( pixIdentifier.status  == PhrsConstants.IDENTIFIER_STATUS_VALID) {
             validated=true;
-        } else {
-
         }
 
 

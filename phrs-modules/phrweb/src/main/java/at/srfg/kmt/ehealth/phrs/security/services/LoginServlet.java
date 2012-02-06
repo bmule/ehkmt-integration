@@ -50,6 +50,7 @@ public class LoginServlet extends HttpServlet {
 		RelyingParty
 				.getInstance()
 		        .addListener(new SRegExtension()
+                    .addExchange(PhrsConstants.OPEN_ID_PARAM_NICK_NAME)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_FULL_NAME)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_EMAIL)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_POST_CODE)

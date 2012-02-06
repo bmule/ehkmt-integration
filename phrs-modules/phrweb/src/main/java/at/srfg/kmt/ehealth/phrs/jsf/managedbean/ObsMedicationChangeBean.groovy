@@ -4,7 +4,8 @@ import java.util.List
 
 import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
-
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
@@ -14,8 +15,8 @@ import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 @ManagedBean(name="odlmed")
 @RequestScoped
 public class ObsMedicationChangeBean extends FaceBaseBean  {
-    // collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
-    //CartesianChartModel chartModel
+    private final static Logger LOGGER = LoggerFactory.getLogger(ObsMedicationChangeBean.class);
+
     String infoType
 
     public ObsMedicationChangeBean() {
@@ -125,18 +126,7 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
         }
         return temp
     }
-    /*
-    public void initChartModel(){
-    try{
-    chartModel = HealthyCharts.createChartBloodPressure(this.getModelMain())
-    } catch (Exception e){
-    println('initChartModel Exception '+e)
-    }
-    if( ! chartModel) chartModel = new CartesianChartModel()
-    }
-    public  CartesianChartModel getTestBp(){
-    return HealthyCharts.testBloodPressureChart()
-    }*/
+
 
     @Override
     public void setPermittedActions(){
@@ -203,9 +193,9 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
     public void storeModifyFirst(){
         super.storeModifyFirst()
 
-        if(selected){
-
-        }
+//        if(selected){
+//
+//        }
     }
         
     @Override

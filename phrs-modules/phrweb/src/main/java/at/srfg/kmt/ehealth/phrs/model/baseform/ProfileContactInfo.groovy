@@ -53,7 +53,7 @@ public class  ProfileContactInfo extends  BasePhrsModel {
 	
 	@Embedded
 	PixIdentifier pixIdentifier
-	
+
 	/*
 	 * support to facilitate feedback tools eg. google talk, skype, etc
 	 */
@@ -224,6 +224,7 @@ public class  ProfileContactInfo extends  BasePhrsModel {
 				break
 					String temp=makeLinkReference(provider,id)
 					out="href='${temp} $id'"
+                    break
 				case 'internetChatId':
 					String temp=makeLinkReference(provider,id)
 					"href='${temp} $id'"
