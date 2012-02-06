@@ -47,6 +47,8 @@ public class ConsentMgrService implements Serializable {
 
     private ConsentManagerStubInterface stub = null;
     private String ISSUERNAME = "PHR";
+    //not used, except to check for the https. The stub contains the 
+    //
     private String endpointConsentMgr;
     private int sslConfigSetting = 2;
     private AuditAtnaService auditService;
@@ -383,48 +385,9 @@ public class ConsentMgrService implements Serializable {
     public boolean auditGrantRequest(String patientId, String idType,
                                      String requesterRole, String resource) {
         boolean result = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
-        ;
+      
         auditService.sendAuditMessageGrant(patientId, resource, requesterRole);
 
-
-//        if (patientId != null && !patientId.isEmpty()
-//                && idType != null && !idType.isEmpty()
-//                && requesterRole != null && !requesterRole.isEmpty()
-//                && resource != null && !resource.isEmpty()) {
-//
-//            try {
-//                LOGGER.debug("audit GrantRequest request for patient '" + patientId
-//                        + "' from requestor role '" + requesterRole
-//                        + "' for resource '" + resource + "' results in " + result);
-//
-//                boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
-//
-//                if (atnalog) {
-//                    sslSetup();
-//                    ResourceBundle properties = ResourceBundle.getBundle("icardea");
-//                    String atnalogServer = properties.getString("atna.log.server");
-//
-//                    String xml = Audit.createMessage("GRM", patientId, resource,
-//                            requesterRole);
-//                    Audit a = null;
-//                    try {
-//                        a = new Audit(atnalogServer, 2861);
-//                    } catch (UnknownHostException e) {
-//
-//                        e.printStackTrace();
-//                    } catch (Exception e) {
-//
-//                        e.printStackTrace();
-//                    }
-//                    a.send_udp(a.create_syslog_xml("PHR", xml));
-//
-//                }
-//            } catch (Exception e) {
-//                LOGGER.error("patientId=" + patientId + " requesterRole"
-//                        + requesterRole + " resourceType=" + resource, e);
-//                e.printStackTrace();
-//            }
-//        }
         return result;
     }
 
@@ -538,18 +501,8 @@ public class ConsentMgrService implements Serializable {
         query.setRequest(request);
         return query;
     }
-    /*
-     * public String grantRightsRequest(String patientId,String
-     * subjectCode,String resourceType){
-     *
-     * ConsentManagerImplServiceStub stub=getConsentServiceStub();
-     * stub.grantRequest("191", "doctor", "condition"); //stub.g
-     * ConsentManagerImplServiceTest.getInstance().grantRequest("191", "doctor",
-     * "condition");
-     *
-     * }
-     */
 
+//srdc code
     public boolean grantRequest(String patientId, String requesterRole,
                                 String resource) {
         boolean result = false;

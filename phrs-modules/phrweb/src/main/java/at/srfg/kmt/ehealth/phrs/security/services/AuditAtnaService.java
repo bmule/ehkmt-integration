@@ -27,7 +27,7 @@ public class AuditAtnaService implements Serializable {
     private Audit audit = null;
     private String host = "127.0.0.1";
     private int port = 2861;
-    private int portSecure = 8443;
+    //private int portSecure = 8443;
     private int sslConfigSetting = 2;
 
     private void setupSSL(int sslConfigSetting) {
@@ -87,14 +87,15 @@ public class AuditAtnaService implements Serializable {
             atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
 
             secure = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
-
+            //port not in this configuration file
+            //atna.tls is true, but ignore...
             if (atnalog) {
                 port = 2861;
 
                 if (secure) {
 
-                    port = 8443;
-                    setupSSL(sslConfigSetting);
+                    //port = 8443;
+                    //setupSSL(sslConfigSetting);
                 }
 
                 ResourceBundle properties = ResourceBundle.getBundle("icardea");
