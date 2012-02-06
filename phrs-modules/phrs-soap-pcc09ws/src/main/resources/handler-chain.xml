@@ -9,5 +9,8 @@
         <javaee:handler>
             <javaee:handler-class>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.PCC9SOAPHandler</javaee:handler-class>
         </javaee:handler>
+        <javaee:handler>
+            <javaee:handler-class>at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.ATNAHandler</javaee:handler-class>
+        </javaee:handler>
     </javaee:handler-chain>
 </javaee:handler-chains>
