@@ -15,6 +15,75 @@
     <packaging>jar</packaging>
     <name>PHRS Web WS</name>
     <modelVersion>4.0.0</modelVersion>
+   <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+        
+        <repository>
+            <id>dyuproject-repo</id>
+            <name>dyuproject-repo</name>
+            <url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
+        </repository>
+        
+        <repository>
+            <id>guice-maven</id>
+            <name>Guice Maven Repository</name>
+            <url>http://guice-maven.googlecode.com/svn/trunk</url>
+        </repository>
+        
+        <repository>
+            <id>morphia-maven</id>
+            <name>Morphia (svn) Maven Repository</name>
+            <url>http://morphia.googlecode.com/svn/mavenrepo/</url>
+        </repository>
+        
+        <!--
+        jboss throws cert exceptions
+        <repository>
+            <id>repository.jboss.org</id>
+            <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        
+        for hapi PIX 
+        -->
+        
+        <repository>
+            <id>hapi-sf</id>
+            <name>HAPI Sourceforge Repository</name>
+            <url>http://hl7api.sourceforge.net/m2</url>
+        </repository>  
+        
+        <!-- for consent mgr -->
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+       <!-- also in maven super pom -->
+        <repository>          
+            <id>central</id>
+            <name>Maven Repository Switchboard</name>
+            <url>http://repo1.maven.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>  
+ 
+    
+       
+       <!-- itextpdf should be in main maven repository-->
+        <repository>
+            <id>itextpdf</id>
+            <url>http://maven.itextpdf.com/</url>
+        </repository>     
+       
+    </repositories>
        <dependencies>
 
            <dependency>
@@ -31,13 +100,21 @@
            </dependency>
        </dependencies>
     -->
+        <dependency>
+	<groupId>commons-httpclient</groupId>
+	<artifactId>commons-httpclient</artifactId>
+	<version>3.1</version>
+                <type>jar</type>
+        <scope>compile</scope>
+        </dependency>
+        <!--
     <dependency>
         <groupId>apache-httpclient</groupId>
         <artifactId>commons-httpclient</artifactId>
         <version>3.1</version>
         <type>jar</type>
         <scope>compile</scope>
-    </dependency>
+    </dependency>-->
     <dependency>
         <groupId>org.jvnet.hyperjaxb3</groupId>
         <artifactId>hyperjaxb3-ejb-runtime</artifactId>
