@@ -76,9 +76,10 @@
         <module>phrs-dataexchange-client</module>
         <module>phrs-soap-pcc09ws</module>
         <module>phrs-soap-pcc10ws</module>
-        <module>phrweb</module> 
         <module>phrs-message-dispatcher</module>
-  </modules>
+        <module>phrweb-ws</module>
+        <module>phrweb</module>
+    </modules>
 
 
 </project>
