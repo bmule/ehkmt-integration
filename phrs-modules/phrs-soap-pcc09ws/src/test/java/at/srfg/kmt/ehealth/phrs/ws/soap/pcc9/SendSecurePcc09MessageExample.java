@@ -79,9 +79,14 @@ public final class SendSecurePcc09MessageExample {
         //        final String keystoreFilePassword = "icardea";
         final String keystoreFilePath = args[2];
         final String keystoreFilePassword = args[3];
+        
+        final String careProvisionCode = args[4];
+        final String patientID = args[5];
+        final String patientName = args[6];
+        final String patientSurname = args[7];
+        final String patientAdministrativeGender = args[8];
 
-
-        final String careProvisionCode = "MEDLIST";
+//        final String careProvisionCode = "MEDLIST";
         final String careProvisionReason = "iCardea Barcelona Meeting test";
         //String careRecordTimePeriodBegin = "201101010000";
         final String careRecordTimePeriodBegin =
@@ -96,13 +101,8 @@ public final class SendSecurePcc09MessageExample {
         //String clinicalStatementTimePeriodEnd = "201005011000";
         final String includeCarePlanAttachment = "true";
         final String maximumHistoryStatements = "30";
-        final String patientAdministrativeGender = "M";
 
         final String patientBirthTime = "197903111010";
-
-        final String patientID = "14920263490";
-        final String patientName = "Mopuffus";
-        final String patientSurname = "Lumpkins";
 
         final QUPCIN043100UV01 pcc9Request =
                 QueryFactory.buildPCC9Request(careProvisionCode,
