@@ -94,8 +94,8 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             final Properties config = new Properties(); 
             config.load(resourceAsStream);
-            final String host = config.getProperty("atna-server-host");
-            final String port = config.getProperty("atna-server-port");
+            final String host = config.getProperty("atna-server-host").trim();
+            final String port = config.getProperty("atna-server-port").trim();
             audit = new Audit(host, Integer.parseInt(port));
         } catch (Exception exception) {
             LOGGER.warn("NO ATNA AUDIT MESSAGES CAN BE SEND!");
