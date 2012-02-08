@@ -359,7 +359,7 @@ public final class VitalSignClient {
         return creator;
     }
 
-    public void setDispathedTo(String resource, String dispatchToID) 
+    public void setDispathedTo(String resource, String dispatchToID)
             throws TripleException {
         if (dispatchToID == null) {
             final NullPointerException exception =
@@ -372,5 +372,13 @@ public final class VitalSignClient {
                 Constants.DISTPATCH_TO,
                 dispatchToID,
                 LITERAL);
+    }
+
+    public String getCodeURI(String code, String dispalyName, String codeSystemURI) {
+        return null;
+    }
+
+    public String getCodeURI(String code, String dispalyName, String codeSystemName, String codeSystemCode) {
+        return null;
     }
 }
