@@ -229,7 +229,8 @@ final class SendPcc09Message {
         final BindingProvider bindingProvider = (BindingProvider) portType;
         final Map<String, Object> reqContext = bindingProvider.getRequestContext();
         LOGGER.debug("Usign the  End point : {}", endpointURI);
-        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getWSDLURI(endpointURI));
+        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointURI);
+//        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, getWSDLURI(endpointURI));
 //        reqContext.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, "http://localhost:8989/testws/pcc9?wsdl");
     }
 
