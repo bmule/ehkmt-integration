@@ -367,12 +367,12 @@ final class QueryFactory {
 
             // IVLTS - time interval
             final IVXBTS beginTimeIterval = new IVXBTS();
-            beginTimeIterval.setValue(clinicalStatementTimePeriodEnd);
+            beginTimeIterval.setValue(clinicalStatementTimePeriodBegin);
             final JAXBElement<IVXBTS> ivltsLow =
                     OBJECT_FACTORY.createIVLTSLow(beginTimeIterval);
 
             final IVXBTS endTimeIterval = new IVXBTS();
-            endTimeIterval.setValue(clinicalStatementTimePeriodBegin);
+            endTimeIterval.setValue(clinicalStatementTimePeriodEnd);
             final JAXBElement<IVXBTS> ivltsHigh =
                     OBJECT_FACTORY.createIVLTSHigh(endTimeIterval);
 
