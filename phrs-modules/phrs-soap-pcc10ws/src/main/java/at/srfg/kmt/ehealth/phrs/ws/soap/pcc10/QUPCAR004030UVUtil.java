@@ -16,6 +16,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
@@ -23,7 +24,6 @@ import org.hl7.v3.QUPCAR004030UVService;
 import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.xml.namespace.QName;
 
 /**
  * Contains a set of common used methods all related with the PCC10 
