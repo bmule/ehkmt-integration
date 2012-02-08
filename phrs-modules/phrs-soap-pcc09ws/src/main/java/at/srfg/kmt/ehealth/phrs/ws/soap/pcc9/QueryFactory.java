@@ -380,7 +380,7 @@ final class QueryFactory {
             // TODO : why you use rest here ? search in the specs.
             ivlts.getRest().add(ivltsLow);
             ivlts.getRest().add(ivltsHigh);
-
+            
             final QUPCMT040300UV01ClinicalStatementTimePeriod period =
                     new QUPCMT040300UV01ClinicalStatementTimePeriod();
             period.setValue(ivlts);
