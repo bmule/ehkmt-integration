@@ -110,7 +110,7 @@ public final class SendComplexPcc09MessageExample {
         final String maximumHistoryStatements = "30";
 
         final String patientBirthTime = "197903111010";
-
+        
         final QUPCIN043100UV01 pcc9Request =
                 QueryFactory.buildPCC9Request(careProvisionCode,
                 careProvisionReason,
