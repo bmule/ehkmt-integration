@@ -228,7 +228,9 @@ public final class QueryFactoryUnitTest {
         final Date date = new Date();
         // one day has 86400 seconds
         final long oneMonth = 1000 * 86400 * 31;
-        final long lastMonth = date.getTime() - oneMonth;
+        final long now = date.getTime();
+        final long lastMonth = now + oneMonth;
+
         return DATE_FORMAT.format(lastMonth);
     }
 
