@@ -301,7 +301,7 @@ final class QueryFactory {
                 OBJECT_FACTORY.createQUPCMT040300UV01PatientId();
         final II patientInstanceId = new II();
         patientInstanceId.setExtension(patientID);
-        patientInstanceId.setRoot("1.2.826.0.1.3680043.2.44.248240.1");
+        patientInstanceId.setRoot("1.2.826.0.1.3680043.2.44.248240.1&ISO");
         patientIdParameter.setValue(patientInstanceId);
         parameterList.setPatientId(patientIdParameter);
 
