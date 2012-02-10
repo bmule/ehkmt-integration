@@ -9,7 +9,6 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +40,14 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(QUPCAR004030UVWebService.class);
+
+    /**
+     * Builds a <code>QUPCAR004030UVWebService</code> instance.
+     */
+    public QUPCAR004030UVWebService() {
+    }
+    
+    
 
     /**
      * Handles a PCC09 query and returns a acknowledge if the query was proper
