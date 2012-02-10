@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://webservice.consenteditor.icardea.srdc.com.tr"
+                  xmlns:impl="http://webservice.consenteditor.icardea.srdc.com.tr"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://webservice.consenteditor.icardea.srdc.com.tr" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://impl.saml.profile.xacml.opensaml.org"/>
+   <element name="getResources">
+    <complexType/>
+   </element>
+   <element name="getResourcesResponse">
+    <complexType>
+     <sequence>
+      <element name="getResourcesReturn" type="impl:ArrayOf_xsd_anyType"/>
+     </sequence>
+    </complexType>
+   </element>
+   <complexType name="ArrayOf_xsd_anyType">
+    <sequence>
+     <element maxOccurs="unbounded" minOccurs="0" name="item" type="xsd:anyType"/>
+    </sequence>
+   </complexType>
+   <element name="getDecision">
+    <complexType>
+     <sequence>
+      <element name="requestString" type="xsd:string"/>
+      <element name="patientID" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getDecisionResponse">
+    <complexType>
+     <sequence>
+      <element name="getDecisionReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="generateRequest">
+    <complexType>
+     <sequence>
+      <element name="requestId" type="xsd:string"/>
+      <element name="issuerName" type="xsd:string"/>
+	  <element name="subjectCode" type="xsd:string"/>
+      <element name="resourceCode" type="xsd:string"/>
+	  <element name="action" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="generateRequestResponse">
+    <complexType>
+     <sequence>
+      <element name="generateRequestReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getSubjects">
+    <complexType/>
+   </element>
+   <element name="getSubjectsResponse">
+    <complexType>
+     <sequence>
+      <element name="getSubjectsReturn" type="impl:ArrayOf_xsd_anyType"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  </wsdl:types>
+  <wsdl:message name="getSubjectsResponse">
+    <wsdl:part name="parameters" element="impl:getSubjectsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getSubjectsRequest">
+    <wsdl:part name="parameters" element="impl:getSubjects">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourcesRequest">
+    <wsdl:part name="parameters" element="impl:getResources">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDecisionRequest">
+    <wsdl:part name="parameters" element="impl:getDecision">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDecisionResponse">
+    <wsdl:part name="parameters" element="impl:getDecisionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateRequestResponse">
+    <wsdl:part name="parameters" element="impl:generateRequestResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourcesResponse">
+    <wsdl:part name="parameters" element="impl:getResourcesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateRequestRequest">
+    <wsdl:part name="parameters" element="impl:generateRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ConsentManagerImpl">
+    <wsdl:operation name="getResources">
+      <wsdl:input name="getResourcesRequest" message="impl:getResourcesRequest">
+    </wsdl:input>
+      <wsdl:output name="getResourcesResponse" message="impl:getResourcesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDecision">
+      <wsdl:input name="getDecisionRequest" message="impl:getDecisionRequest">
+    </wsdl:input>
+      <wsdl:output name="getDecisionResponse" message="impl:getDecisionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateRequest">
+      <wsdl:input name="generateRequestRequest" message="impl:generateRequestRequest">
+    </wsdl:input>
+      <wsdl:output name="generateRequestResponse" message="impl:generateRequestResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSubjects">
+      <wsdl:input name="getSubjectsRequest" message="impl:getSubjectsRequest">
+    </wsdl:input>
+      <wsdl:output name="getSubjectsResponse" message="impl:getSubjectsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ConsentManagerImplSoapBinding" type="impl:ConsentManagerImpl">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getResources">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getResourcesRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResourcesResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDecision">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getDecisionRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDecisionResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateRequest">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="generateRequestRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateRequestResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getSubjects">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="getSubjectsRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getSubjectsResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+      <!--
+  <wsdl:service name="ConsentManagerImplService">
+    <wsdl:port name="ConsentManagerImpl" binding="impl:ConsentManagerImplSoapBinding">
+      <wsdlsoap:address location="http://10.37.129.2:8080/consenteditor/services/ConsentManagerImplService/"/>
+    </wsdl:port>
+  </wsdl:service>
+   -->
+  <wsdl:service name="ConsentManagerImplService">
+      <wsdl:port name="port_8443" binding="impl:ConsentManagerImplSoapBinding">
+          <wsdlsoap:address location="https://10.37.129.2:8443/consenteditor/services/ConsentManagerImplService/"/>
+      </wsdl:port>
+      <wsdl:port name="port_8080" binding="impl:ConsentManagerImplSoapBinding">
+          <wsdlsoap:address location="http://10.37.129.2:8080/consenteditor/services/ConsentManagerImplService/"/>
+      </wsdl:port>
+  </wsdl:service>
+
+
+</wsdl:definitions>
