@@ -30,10 +30,8 @@ import org.slf4j.LoggerFactory;
  * the messages send with this class will contain in the SOAP header the result
  * end point address. The response end point address (URI) is treated according
  * with the <a href="http://en.wikipedia.org/wiki/WS-Addressing">
- * WS-Addressing</a> standards. <br/> 
- * <b>Note : </b> this message sends 
- * <a href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> 
- * based messages.  <br/> 
+ * WS-Addressing</a> standards. <br/> <b>Note : </b> this message sends <a
+ * href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> based messages. <br/>
  * This class can not be extended.
  *
  * @author Mihai
@@ -102,6 +100,9 @@ final class SendPcc09Message {
         // here I obtain the service.
 //        final QUPCAR004040UVPortType portType = ((Service)service).getQUPCAR004040UVPort();
         setWSAddressHandler(portType, responseEndpointURI);
+        
+        setDebugHandler(portType);
+
 
         // I set the end point for the PCC9 end point
         setEndPointURI(portType, endpointURI);
@@ -274,5 +275,15 @@ final class SendPcc09Message {
         //final String endpoint = "http://localhost:8080/phrs/pcc09";
         handlerChain.add(new WSAdressingHeaderEnricher(endpointURI));
         binding.setHandlerChain(handlerChain);
+    }
+
+    private static void setDebugHandler(QUPCAR004040UVPortType portType) throws MalformedURLException {
+        final BindingProvider bindingProvider = (BindingProvider) portType;
+        final Binding binding = bindingProvider.getBinding();
+        final List<Handler> handlerChain = binding.getHandlerChain();
+        //final String endpoint = "http://localhost:8080/phrs/pcc09";
+        handlerChain.add(new DebugHandler());
+        binding.setHandlerChain(handlerChain);
+
     }
 }
