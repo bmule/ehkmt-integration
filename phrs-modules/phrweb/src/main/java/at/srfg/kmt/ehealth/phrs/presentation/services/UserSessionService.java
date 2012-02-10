@@ -421,7 +421,16 @@ public class UserSessionService {
         }
         return value;
     }
-
+    public static void logMap(Map<String,String> map){
+        if(map!=null && !map.isEmpty()){
+            for(String key:map.keySet()){
+                LOGGER.debug(" key="+key+" value="+map.get(key));
+            }
+        }  else {
+            LOGGER.debug(" ....map is null or empty");
+            
+        }
+    }
     public static Map<String, String> extractOpenIdAttributeExchange(
             OpenIdUser user, boolean removeUser) {
 
@@ -431,10 +440,12 @@ public class UserSessionService {
                 map = AxSchemaExtension.remove(user);
             else
                 map = AxSchemaExtension.get(user);
+            LOGGER.error("extract OpenId Attribute Exchange "+" for claimedID"+user.getClaimedId());
+            logMap(map);
         } catch (Exception e) {
 
             if (user != null) LOGGER.error("openIdUser " + user.getIdentifier(), e);
-            else LOGGER.error("openIdUser null", e);
+            else LOGGER.error("extract OpenId Attribute Exchange openIdUser null", e);
         }
         return map;
     }
@@ -452,9 +463,12 @@ public class UserSessionService {
                 map = SRegExtension.remove(user);
             else
                 map = SRegExtension.get(user);
+
+            LOGGER.error("extract OpenId Simple Registration "+" for claimedID"+user.getClaimedId());
+            logMap(map);
         } catch (Exception e) {
             if (user != null) LOGGER.error("OpenIdUser=" + user.getIdentifier(), e);
-            else LOGGER.error("OpenIdUser=null", e);
+            else LOGGER.error("extract OpenId Simple Registration OpenIdUser=null", e);
         }
 
 

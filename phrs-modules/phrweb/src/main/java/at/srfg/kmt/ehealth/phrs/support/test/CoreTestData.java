@@ -228,7 +228,7 @@ public class CoreTestData {
             LOGGER.error("Error creating user test data, ownerUri=null");
         }
         
-        notifySubscribers();
+        notifySubscribers("MEDLIST");
         
         return countAdded;
 
@@ -421,7 +421,7 @@ public class CoreTestData {
 
     }
 
-    public void notifySubscribers() {
+    public void notifySubscribers(String careProvisionCode) {
         try {
             PHRSRequestClient requestClient = this.interopClients.getPHRSRequestClient();
             DynaBeanClient beanClient = this.interopClients.getDynaBeanClient();
@@ -434,8 +434,7 @@ public class CoreTestData {
                         (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
                 final String id =
                         (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
-                final String code =
-                        (String) request.get("xxxxxxx");//http://www.icardea.at/phrs/code
+
                
 
                 final Map<String, String> properties = new HashMap<String, String>();
@@ -443,7 +442,7 @@ public class CoreTestData {
                 properties.put("patientNames", "patientNames");
 
                 //Care Provision Code
-                //properties.put("careProvisionCode", code);
+                properties.put("careProvisionCode", careProvisionCode);
                 properties.put("responseEndpointURI", wsAdress);
 
                 notify("localhost", 5578, properties);

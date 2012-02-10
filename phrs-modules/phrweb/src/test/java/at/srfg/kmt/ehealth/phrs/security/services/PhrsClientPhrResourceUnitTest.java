@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
+import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
@@ -34,7 +35,7 @@ import org.junit.Test;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import org.apache.commons.beanutils.DynaBean;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatmentMatrix;
-import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
+
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
 import java.util.*;
 import org.slf4j.Logger;

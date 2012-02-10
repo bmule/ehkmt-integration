@@ -24,10 +24,10 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
-import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel;
+
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
+
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import org.junit.Before;
@@ -35,7 +35,7 @@ import org.junit.Test;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import org.apache.commons.beanutils.DynaBean;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatmentMatrix;
-import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
+
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
 import java.util.*;
 import org.slf4j.Logger;

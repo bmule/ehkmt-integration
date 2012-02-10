@@ -30,7 +30,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
-import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable
+
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 import at.srfg.kmt.ehealth.phrs.security.services.PixService
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil

@@ -96,6 +96,7 @@ public class AuthenticationUtil {
 			 * identifier, String claimedId, String openIdServer){ return new
 			 * OpenIdUser(identifier, claimedId, openIdServer, null); }
 			 */
+ //			else if (loginWith.equals("icardea") || userLoginIdentifier.contains("/idp")) {                       
 			else if (loginWith.equals("icardea") || userLoginIdentifier.contains("/idp")) {
 
 				String openIdUserName = ConfigurationService.getInstance()
@@ -106,7 +107,7 @@ public class AuthenticationUtil {
 						.getProperty(PhrsConstants.OPENID_DISCOVERY_IDENTIFIER_KEY,
 								"https://127.0.0.1/idp");
 
-                String discoveredOpClaimedId = ConfigurationService.getInstance()
+                        String discoveredOpClaimedId = ConfigurationService.getInstance()
                         .getProperty(PhrsConstants.OPENID_DISCOVERY_CLAIM_ID_KEY,
                                 "https://127.0.0.1/idp");
 
@@ -137,7 +138,11 @@ public class AuthenticationUtil {
                         + openIdUser.getIdentifier()
                         + " claimedId" + openIdUser.getClaimedId());
             }else {
+                if(loginWith.equals("icardea") || userLoginIdentifier.contains("/idp")){
+                    LOGGER.debug("Login Form - loginWith = icardea");
+                } else {
                 LOGGER.debug("Login Form - loginWith = "+loginWith);
+                }
             }
 
 		}
