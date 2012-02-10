@@ -32,6 +32,13 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     private static final Logger LOGGER =
             LoggerFactory.getLogger(MedicationParser.class);
 
+    /**
+     * Builds <code>MedicationParser</code> instance.
+     */
+    public MedicationParser() {
+        // UNIMPLEMENTED
+    }
+
     @Override
     public boolean canParse(REPCMT004000UV01PertinentInformation5 toParse) {
 
@@ -44,5 +51,10 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     @Override
     public void parse(REPCMT004000UV01PertinentInformation5 toParse) throws ParserException {
         LOGGER.debug("Tries to parse {}", toParse);
+    }
+
+    @Override
+    public String toString() {
+        return "MedicationParser";
     }
 }

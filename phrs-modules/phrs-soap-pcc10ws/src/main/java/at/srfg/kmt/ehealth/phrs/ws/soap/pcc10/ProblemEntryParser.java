@@ -35,6 +35,14 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ProblemEntryParser.class);
 
+    /**
+     * Builds
+     * <code>ProblemEntryParser</code> instance.
+     */
+    public ProblemEntryParser() {
+        // UNIMPLEMENTED
+    }
+
     @Override
     public boolean canParse(REPCMT004000UV01PertinentInformation5 toParse) {
         final JAXBElement<POCDMT000040Observation> observation_JAXB =
@@ -92,8 +100,8 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
             LOGGER.warn("To many values for the vital sign value, only one expected");
             return;
         }
-        
-        final CD valueCode =  (CD) value.iterator().next();
+
+        final CD valueCode = (CD) value.iterator().next();
         buildCodeURI(valueCode);
 
 
@@ -104,7 +112,7 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
             System.out.println("time inerval -->" + ivxbts.getValue());
         }
     }
-    
+
     private String buildCodeURI(CD cd) {
         final String code = cd.getCode();
         final String displayName = cd.getDisplayName();
@@ -117,5 +125,10 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
         System.out.println("codeSystemName -->" + codeSystemName);
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "ProblemEntryParser";
     }
 }

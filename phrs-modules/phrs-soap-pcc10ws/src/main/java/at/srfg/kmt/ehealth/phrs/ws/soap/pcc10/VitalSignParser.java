@@ -35,6 +35,14 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VitalSignParser.class);
 
+    /**
+     * Builds
+     * <code>VitalSignParser</code> instance.
+     */
+    public VitalSignParser() {
+        // UNIMPLEMENTED
+    }
+
     @Override
     public boolean canParse(REPCMT004000UV01PertinentInformation5 toParse) {
         final JAXBElement<POCDMT000040Observation> observation_JAXB =
@@ -127,5 +135,10 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         System.out.println("codeSystemName -->" + codeSystemName);
 
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "VitalSignParser";
     }
 }
