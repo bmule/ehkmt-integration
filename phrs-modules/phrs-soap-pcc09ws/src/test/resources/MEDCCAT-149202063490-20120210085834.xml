@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<QUPC_IN043100UV01 xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0">
+	<id extension="3"/>
+	<creationTime value="20120210085834"/>
+	<interactionId root="2.16.840.1.113883.5" extension="QUPC_IN043100UV"/>
+	<processingCode code="D"/>
+	<processingModeCode code="T"/>
+	<acceptAckCode code="AL"/>
+	<receiver typeCode="RCV">
+		<device determinerCode="INSTANCE">
+			<id/>
+			<name/>
+			<telecom value=" "/>
+			<manufacturerModelName>
+			</manufacturerModelName>
+			<softwareName>
+			</softwareName>
+		</device>
+	</receiver>
+	<respondTo typeCode="RSP">
+		<entityRsp determinerCode="INSTANCE">
+			<id/>
+			<name/>
+			<telecom value=" "/>
+		</entityRsp>
+	</respondTo>
+	<sender typeCode="SND">
+		<device determinerCode="INSTANCE">
+			<id/>
+			<name/>
+			<telecom value=" "/>
+			<manufacturerModelName>
+			</manufacturerModelName>
+			<softwareName>
+			</softwareName>
+		</device>
+	</sender>
+	<controlActProcess moodCode="RQO">
+		<id extension="3"/>
+		<code code="QUPC_TE043100UV"/>
+		<effectiveTime value=" "/>
+		<languageCode code=""/>
+		<authorOrPerformer/>
+		<queryByParameter>
+			<statusCode code="new"/>
+			<responseModalityCode code="R"/>
+			<responsePriorityCode code="D"/>
+			<initialQuantity value="1"/>
+			<initialQuantityCode codeSystem="2.16.840.1.113883" code="REPC_RM000100UV"/>
+			<parameterList>
+				<careProvisionCode>
+					<value code="MEDCCAT"/>
+				</careProvisionCode>
+				<patientId>
+					<value root="1.2.826.0.1.3680043.2.44.248240.1" extension="149202063490"/>
+				</patientId>
+				<patientName>
+					<value>
+						<given>Andreas</given>
+						<family>Schmidt</family>
+					</value>
+				</patientName>
+			</parameterList>
+		</queryByParameter>
+	</controlActProcess>
+</QUPC_IN043100UV01>
