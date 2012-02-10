@@ -193,27 +193,23 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             return;
         }
         
-        String code = Util.getCareProvisionCode(body);
+        final String code = Util.getCareProvisionCode(body);
         if (code == null) {
+            LOGGER.debug("No Care Provision Code to process, no ATNA message will be send.");
             return;
         }
-        code = code.trim();
         
-        String patientId = Util.getPatientId(body);
+        final String patientId = Util.getPatientId(body);
         if (patientId == null) {
+            LOGGER.debug("No Patient Id Code to process, no ATNA message will be send.");
             return;
         }
-        patientId = patientId.trim();
-        
-        String patientNames = Util.getPatientName(body);
-        if (patientNames == null) {
-            return;
-        }
-        patientNames = patientNames.trim();
-        
         
         final String message =
-                audit.createMessage(MESSAGE_TYPE, patientId, code, REQUESTER_ROLE);
+                audit.createMessage(MESSAGE_TYPE, 
+                patientId.trim(), 
+                code.trim(), 
+                REQUESTER_ROLE);
         try {
             LOGGER.debug("Tries to send this the following ATNA message {}", message);
             if (audit != null) {
