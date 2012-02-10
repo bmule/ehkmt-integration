@@ -24,27 +24,20 @@ import tr.com.srdc.icardea.atnalog.client.Audit;
 
 /**
  * This SOAP handler is used to used to log any PCC9 interaction to an ATNA
- * server.
- * The ATNA message contains :
- * <ul>
- * <li> a message type - always "PCC-10"
- * <li> a code - the care provision  code - extracted from the message body.
- * <li> an ID - the protocol id - extracted from the message body.
- * <li> a requester Role - always "IHE+RFC-3881".
- * <ul>
- * <br/>
- * This handler is configurated via a properties file named
- * "pcc-9-atna.properties", placed in the classpath.
- * If this file is not loaded then this handler has no effect (no ATNA messages 
- * are send).<br/>
- * This class was not designed to be extended.
+ * server. The ATNA message contains : <ul> <li> a message type - always
+ * "PCC-10" <li> a code - the care provision code - extracted from the message
+ * body. <li> an ID - the protocol id - extracted from the message body. <li> a
+ * requester Role - always "IHE+RFC-3881". <ul> <br/> This handler is
+ * configurated via a properties file named "pcc-9-atna.properties", placed in
+ * the classpath. If this file is not loaded then this handler has no effect (no
+ * ATNA messages are send).<br/> This class was not designed to be extended.
  *
  * @author Mihai
  * @version 0.1
  * @since 0.1
  */
 public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
-    
+
     /**
      * The value for the requester role used for this handler.
      */
@@ -77,12 +70,12 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
      * Builds a
      * <code>ATNAHandler</code> instance based on a property file configuration
      * file, the file is named "pcc-9-atna.properties" and it is placed in the
-     * classpath. If this file is not loaded then this handler has no effect 
-     * (no ATNA messages are send).
+     * classpath. If this file is not loaded then this handler has no effect (no
+     * ATNA messages are send).
      */
     public ATNAHandler() {
         final ClassLoader classLoader = ATNAHandler.class.getClassLoader();
-        final InputStream resourceAsStream = 
+        final InputStream resourceAsStream =
                 classLoader.getResourceAsStream(CONFIG_FILE);
 
         if (resourceAsStream == null) {
@@ -92,7 +85,7 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
         }
 
         try {
-            final Properties config = new Properties(); 
+            final Properties config = new Properties();
             config.load(resourceAsStream);
             final String host = config.getProperty("atna-server-host").trim();
             final String port = config.getProperty("atna-server-port").trim();
@@ -199,8 +192,21 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             LOGGER.debug("No Body to process");
             return;
         }
-        final String code = Util.getCareProvisionCode(body);
-        final String patientId = Util.getPatientId(body);
+
+
+        String code = Util.getCareProvisionCode(body);
+        if (code == null) {
+            LOGGER.warn("No Code information the ATANa message will be not sent");
+            return;
+        }
+        code = code.trim();
+
+        String patientId = Util.getPatientId(body);
+        if (patientId == null) {
+            LOGGER.warn("No Patient Id information the ATANa message will be not sent");
+            return;
+        }
+        patientId = patientId.trim();
 
         final String message =
                 audit.createMessage(MESSAGE_TYPE, patientId, code, REQUESTER_ROLE);
@@ -211,7 +217,7 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
             } else {
                 LOGGER.warn("The ATNA was not initailized, the ATNA message can not eb send.");
             }
-            
+
             LOGGER.debug("The ATNA message was send.");
 
         } catch (Exception exception) {
