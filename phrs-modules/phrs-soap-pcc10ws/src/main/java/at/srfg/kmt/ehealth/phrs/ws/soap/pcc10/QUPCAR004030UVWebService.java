@@ -8,13 +8,11 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
-import at.srfg.kmt.ehealth.phrs.Constants;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
-import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingType;
 import org.hl7.v3.*;
@@ -23,7 +21,16 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- *
+ * Handles HL7 PCC-10 requests. 
+ * More precisely this SOAP based service uses a set of parsers to parse 
+ * HL7 messages and to imported the PHRS repository. <br/>
+ * This WS can parse :
+ * <ul>
+ * <li> HL7 V3 ProblemsEntries  
+ * <li> HL7 V3 Vital Signs
+ * <li> HL7 V3 Medication  
+ * </ul>
+ * 
  * @author mihai
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
@@ -40,11 +47,21 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(QUPCAR004030UVWebService.class);
+    
+    /**
+     * All the parsers used in this ws.
+     */
+    private final Set<Parser<REPCMT004000UV01PertinentInformation5>> parsers;
 
     /**
      * Builds a <code>QUPCAR004030UVWebService</code> instance.
      */
     public QUPCAR004030UVWebService() {
+        parsers = new LinkedHashSet<Parser<REPCMT004000UV01PertinentInformation5>>();
+        parsers.add(new VitalSignParser());
+        parsers.add(new ProblemEntryParser());
+        parsers.add(new MedicationParser());
+        LOGGER.debug("Available parsers {}", parsers);
     }
     
     
@@ -69,12 +86,11 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
             // FIXME : singals the error back to the client.
         }
 
-
         final String property = System.getProperty("pcc10.process");
 
         final boolean processMessage = property == null
                 ? false
-                : Boolean.parseBoolean(property);
+                : Boolean.parseBoolean(property.trim());
         LOGGER.debug("PCC 10 processing is {} ", processMessage ? "enable" : "disabled");
         if (processMessage) {
             process(body);
@@ -104,160 +120,28 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
         LOGGER.debug("Pertinent Information5 amount to process is {}",
                 pertinentInformations.size());
         for (REPCMT004000UV01PertinentInformation5 information5 : pertinentInformations) {
-            process(information5);
+            parse(information5);
         }
     }
-
-    private void process(REPCMT004000UV01PertinentInformation5 pertinentInformation5) {
-        final JAXBElement<POCDMT000040Observation> observation_JAXB =
-                pertinentInformation5.getObservation();
-        final boolean hasObservation = observation_JAXB != null;
-        if (hasObservation) {
-            final POCDMT000040Observation observation = observation_JAXB.getValue();
-            process(observation);
-        }
-
-        final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB =
-                pertinentInformation5.getSubstanceAdministration();
-        final boolean hasSubstanceAdministration = substanceAdministration_JAXB != null;
-        if (hasSubstanceAdministration) {
-            final POCDMT000040SubstanceAdministration substanceAdministration =
-                    substanceAdministration_JAXB.getValue();
-            process(substanceAdministration);
-        }
-    }
-
-    private void process(POCDMT000040Observation observation) {
-        LOGGER.debug("Tries to parse observation : {}", observation);
-        final boolean isProblemEntry = isProblemEntry(observation);
-        final boolean isVitalSign = isVitalSing(observation);
-
-        if (isProblemEntry) {
-            processProblemEntry(observation);
-        }
-
-        if (isVitalSign) {
-            processVitalSign(observation);
-        }
-
-//        final CD code = observation.getCode();
-//        final List<ANY> value = observation.getValue();
-    }
-
-    private boolean isVitalSing(POCDMT000040Observation observation) {
-        final List<II> templateIds = observation.getTemplateId();
-        if (templateIds.size() != 3) {
-            return false;
-        }
-
-        final Set<String> requiredExtensions = new HashSet<String>();
-        requiredExtensions.add(Constants.SIMPLE_OBSERVATIONS);
-        requiredExtensions.add(Constants.VITAL_SIGNS_OBSERVATIONS);
-        requiredExtensions.add(Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
-        for (II instanceId : templateIds) {
-            final String extension = instanceId.getExtension();
-            if (!requiredExtensions.contains(extension)) {
-                LOGGER.warn("This template id extension {} is not specific for a vital sign. The vital sign specific extension are {}.", extension, requiredExtensions);
-                return false;
+    
+    /**
+     * Uses all the registered parsers to parse the given 
+     * <code>REPCMT004000UV01PertinentInformation5</code>.
+     * 
+     * @param information5 the <code>REPCMT004000UV01PertinentInformation5</code>
+     * to be parsed.
+     */
+    private void parse(REPCMT004000UV01PertinentInformation5 information5) {
+        for (Parser<REPCMT004000UV01PertinentInformation5> parser : parsers) {
+            if (parser.canParse(information5)) {
+                try {
+                    parser.parse(information5);
+                    break;
+                } catch (ParserException exception) {
+                    LOGGER.warn("REPCMT004000UV01PertinentInformation5 can not be parsed");
+                    LOGGER.warn(exception.getMessage(), exception);
+                }
             }
         }
-
-        return true;
-    }
-
-    private void processVitalSign(POCDMT000040Observation observation) {
-        LOGGER.debug("Tries to parse this Vital Sign {}", observation);
-        final CD code = observation.getCode();
-        buildCodeURI(code);
-
-        final IVLTS effectiveTime = observation.getEffectiveTime();
-        final String effectiveTimeValue = effectiveTime.getValue();
-        System.out.println("effectiveTime -->" + effectiveTimeValue);
-
-        final List<ANY> value = observation.getValue();
-        if (value.size() != 1) {
-            LOGGER.warn("To many values for the vital sign value, only one expected");
-            return;
-        }
-
-        final PQ quantity;
-        try {
-            quantity = (PQ) value.iterator().next();
-        } catch (ClassCastException exception) {
-            LOGGER.warn("The value list for this vital sign contains wrong types, only PQ allowed.");
-            return;
-        }
-
-        final String quantityValue = quantity.getValue();
-        final String quantityUnit = quantity.getUnit();
-        System.out.println("quantityValue -->" + quantityValue);
-        System.out.println("quantityUnit -->" + quantityUnit);
-    }
-
-    private String buildCodeURI(CD cd) {
-        final String code = cd.getCode();
-        final String displayName = cd.getDisplayName();
-        final String codeSystem = cd.getCodeSystem();
-        final String codeSystemName = cd.getCodeSystemName();
-
-        System.out.println("code -->" + code);
-        System.out.println("displayName -->" + displayName);
-        System.out.println("codeSystem -->" + codeSystem);
-        System.out.println("codeSystemName -->" + codeSystemName);
-
-        return null;
-    }
-
-    private String buildUnitURI(CD cd) {
-
-
-        return null;
-    }
-
-    private boolean isProblemEntry(POCDMT000040Observation observation) {
-        final List<II> templateIds = observation.getTemplateId();
-        if (templateIds.size() != 2) {
-            return false;
-        }
-
-        final Set<String> requiredExtensions = new HashSet<String>();
-        requiredExtensions.add(Constants.PROBLEM_OBSERVATION);
-        requiredExtensions.add(Constants.PROBLEM_ENTRY);
-        for (II instanceId : templateIds) {
-            final String extension = instanceId.getExtension();
-            if (!requiredExtensions.contains(extension)) {
-                LOGGER.warn("This template id extension {} is not specific for a problem entry. The problem entry specific extension are {}.", extension, requiredExtensions);
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private void processProblemEntry(POCDMT000040Observation observation) {
-        LOGGER.debug("Tries to parse this ProblemEntry : {}", observation);
-        final CD code = observation.getCode();
-        buildCodeURI(code);
-
-        final List<ANY> value = observation.getValue();
-        if (value.size() != 1) {
-            LOGGER.warn("To many values for the vital sign value, only one expected");
-            return;
-        }
-        
-        final CD valueCode =  (CD) value.iterator().next();
-        buildCodeURI(valueCode);
-
-
-        final IVLTS effectiveTime = observation.getEffectiveTime();
-        final List<JAXBElement<? extends QTY>> timeIntervals = effectiveTime.getRest();
-        for (JAXBElement timeInterval_JAXB : timeIntervals) {
-            final IVXBTS ivxbts = (IVXBTS) timeInterval_JAXB.getValue();
-            System.out.println("time inerval -->" + ivxbts.getValue());
-        }
-    }
-
-    private void process(POCDMT000040SubstanceAdministration substanceAdministration) {
-        LOGGER.debug("Tries to parse this Medication : {}", substanceAdministration);
     }
 }
