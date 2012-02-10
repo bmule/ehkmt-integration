@@ -8,9 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
+import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.awt.GridLayout;
@@ -97,21 +97,23 @@ public final class DroneUI {
                 final Iterable<String> resources = requestClient.getAllPHRSRequests();
                 for (String resource : resources) {
                     final DynaBean request = beanClient.getDynaBean(resource);
+                    // the care provision code can be also obtained from the reposiotry.
 //                    final String code =
 //                            (String) request.get("http://www.icardea.at/phrs/hl7V3#careProcisionCode");
                     final String wsAdress =
-                            (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
+                            (String) request.get(Constants.HL7V3_REPLY_ADRESS);
                     final String id =
-                            (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
+                            (String) request.get(Constants.PHRS_ACTOR_PROTOCOL_ID);
 
                     final Map<String, String> properties = new HashMap<String, String>();
                     properties.put("patientId", id);
+                    // I am not sure if I need the names and the id, for the 
+                    // moment I ignore the id. Its value will be ignored.
                     properties.put("patientNames", "patientNames");
                     properties.put("careProvisionCode", code);
                     properties.put("responseEndpointURI", wsAdress);
 
                     notify("localhost", 5578, properties);
-
                 }
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
