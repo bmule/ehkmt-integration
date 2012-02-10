@@ -45,7 +45,7 @@
 			<p:outputPanel id="idPanelOmed" layout="block">
 				<h:form id="idFormOmed">
 		<!--  -->
-                                        <h:inputHidden value="#{odlmed.selected.dosageQuantity}" />
+                                        <h:inputHidden value="#{odlmed.selected.treatmentMatrix.dosageQuantity}" />
                                         <h:inputHidden value="#{odlmed.selected.productCode}" />
 					<h:inputHidden value="#{odlmed.selected.statusStandard}" />
 					
@@ -91,7 +91,7 @@
 						<p:message for="label_input" display="text" />
 						
 <!--  					<h:outputLabel for="field_code"
-							value="#{labels['activityItem.label']}"
+							value=" {labels['activityItem.label']}"
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="field_code" layout="block"> 
@@ -114,21 +114,21 @@
 						
 <!--  
 						<h:outputLabel for="displayDate"
-							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							value=" {labels['short.date.label']}  {labels['tip.date.formating']}"
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="displayDate" layout="block">
 
-							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
-								<h:outputLabel value="#{odlmed.selected.displayDate}">
+							<p:outputPanel rendered=" {odlmed.modify eq 'no'}">
+								<h:outputLabel value=" {odlmed.selected.displayDate}">
 									<f:convertDateTime pattern="yyyy-MM-dd" />
 								</h:outputLabel>
 							</p:outputPanel>
  
 							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
 								id="displayDate_input"
-								value="#{odlmed.selected.displayDate}"
-								rendered="#{odlmed.modify eq 'yes'}">
+								value=" {odlmed.selected.displayDate}"
+								rendered=" {odlmed.modify eq 'yes'}">
 								<f:convertDateTime pattern="yyyy/MM/dd" />
 							</p:inputMask>
 					

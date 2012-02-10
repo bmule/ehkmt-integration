@@ -8,12 +8,15 @@ clear
 
 #not needed with groovy compile ./package.bash
 
-tomcat_home="/lab0/apache/tomcat/apache-tomcat-6.0.35/"
-# tomcat_home="/Users/bmulreni/development/development-tools/tomcat6"
-mvn clean 
-mvn compile
-mvn  cargo:deploy  -Dcatalina.home=$tomcat_home
+#tomcat_home="/lab0/apache/tomcat/apache-tomcat-6.0.35/"
 
+tomcat_home="/Users/bmulreni/development/development-tools/tomcat6/"
+mvn clean 
+mvn install -DskipTests=true
+
+# Must install, not just compile
+mvn  cargo:deploy  -Dcatalina.home=$tomcat_home
+#%tomcat_home%
 echo ""
 echo "The phrweb is deployed on :"$tomcat_home
 echo ""

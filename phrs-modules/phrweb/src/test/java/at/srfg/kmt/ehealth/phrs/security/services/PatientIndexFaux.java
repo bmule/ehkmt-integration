@@ -14,7 +14,7 @@ public class PatientIndexFaux {
         return 2575;
     }
     public boolean usesTLS(){
-        return false;
+        return true;
     }
     public void run(String[] args){
         

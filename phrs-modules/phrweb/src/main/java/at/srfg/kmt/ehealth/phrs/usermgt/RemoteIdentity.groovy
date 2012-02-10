@@ -4,9 +4,8 @@ import java.io.Serializable
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 
-import com.google.code.morphia.annotations.Embedded
 
-@Embedded
+//@Embedded
 class RemoteIdentity implements Serializable{
 	
 	String category

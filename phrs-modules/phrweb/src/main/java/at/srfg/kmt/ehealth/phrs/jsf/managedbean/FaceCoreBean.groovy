@@ -44,6 +44,8 @@ class FaceCoreBean implements Serializable{
 	String modify
 	AuthorizationService permit
 
+    List internalModelList
+
 	Map<String,Collection<ModelLabelValue>> internalVocabMap
 
 	/*
@@ -234,9 +236,6 @@ class FaceCoreBean implements Serializable{
 		return  domainClazz ?  domainClazz.newInstance() : new Object();
 	}
 
-	public Collection<ModelLabelValue> getRiskfactorTreatmentsList(String theCode){
 
-		return VocabularyEnhancer.getRiskfactorTreatmentsList(theCode,vocabMap)
-	}
 
 }

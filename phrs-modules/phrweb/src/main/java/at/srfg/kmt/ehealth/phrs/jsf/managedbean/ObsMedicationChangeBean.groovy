@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 
 
 
@@ -50,7 +51,9 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
          * Import new interop messages as new domain objects
          */
         try {
+            LOGGER.error('Controller START import InteropMessages')
             importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
+            LOGGER.error('Controller END import InteropMessages')
         } catch (Exception e){
             LOGGER.error('Medication building list importInteropMessages',e)
         }
@@ -80,8 +83,12 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
             break 
             case 'loadtest':
             
-            at.srfg.kmt.ehealth.phrs.support.test.CoreTestData core=new at.srfg.kmt.ehealth.phrs.support.test.CoreTestData()
-            core.addTestMedications_2_forPortalTestForOwnerUri(Constants.OWNER_URI_CORE_PORTAL_TEST_USER)
+            try {
+                CoreTestData core=new CoreTestData(userService.getPhrsStoreClient())
+                core.addTestMedications_2_forPortalTestForOwnerUri(Constants.OWNER_URI_CORE_PORTAL_TEST_USER)
+            } catch (Exception e) {
+                LOGGER.error("Error loading test data from ObsMedicationChangeBean test loader",e)
+            }
              //using internalModelList
             break            
             default:

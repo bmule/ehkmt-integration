@@ -1,9 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.model.baseform;
 
-import java.util.Map
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
-import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 
 import com.google.code.morphia.annotations.Entity
 /**
@@ -25,21 +23,23 @@ public class PhrFederatedUser extends BaseUser {
 	 */
 	//primary user identifier for whole system
 	//short name vs long name
-	String identifier;
-
+	String identifier
+    String providerIdentifier
+    String claimedId
+    String identity;
 	//if special, idp
 	String domainCode
 
-	//Login identity from login form
-	String identity;
-	//String claimId;
+
+
+	//String claimedId;
 
 	//see email and dateOfBirth in BaseUser
 
 	Map<String,String> ssoAttributes
 	boolean healthCare=true
 
-    //normall the ownerUri
+    //normally the ownerUri
 	String phrPinId
 
 
@@ -50,14 +50,14 @@ public class PhrFederatedUser extends BaseUser {
 		super();
 		ssoAttributes=[:]
 		
-		if(!ownerUri) 	ownerUri=UUID.randomUUID().toString()
+		if(!ownerUri) 	ownerUri=makeOwnerUri()
 		if(!creatorUri) creatorUri=ownerUri
 		if(!phrPinId) 	phrPinId = makePhrPinId(ownerUri)
 	}
 	/**
 	 * When creating user for the first time from an OpenId or SSO, read attributes
 	 * and assign
-	 * @param identifier
+	 * @param identifier  is the claimedId
 	 * @param attrs
 	 */
 	public PhrFederatedUser(String identifier, Map<String,String> attrs) {
@@ -75,36 +75,21 @@ public class PhrFederatedUser extends BaseUser {
 			addOpenIdAttributes(identifier,attrs)
 		}
 		
-		if(!ownerUri) 	ownerUri=UUID.randomUUID().toString()
+		if(!ownerUri) 	ownerUri= PhrFederatedUser.makeOwnerUri()
 		if(!creatorUri) creatorUri=ownerUri
         //TODO refactor pin code
 		if(!phrPinId) 	phrPinId = ownerUri//makePhrPinId(ownerUri)
 			
 	}
-	//experimental
-	public  String makePhrPinId(){
-		return makePhrPinId(UUID.randomUUID().toString())
+
+	public  static String makeOwnerUri(){
+		return PhrsConstants.USER_HEALTH_PROFILE_PREFIX+ PhrsConstants.USER_IDENTIFIER_DELIMITER+UUID.randomUUID().toString();
 	}
     //using ownerUri
-	public  String makePhrPinId(String theOwnerUri){
-		
-		
-		String value =ownerUri
-		/*
-		String input =theOwnerUri
-	
-		//make test users easier to set up
-		if(input && (input.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER) || 
-			  input.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
-			  || input.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1) 
-			  || input == PhrsConstants.AUTHORIZE_USER_ADMIN ) ){
-		  			  
-			value = input
-		} else {
-		
-			value = HealthyUtils.lastChars(input,8)
-		}
-		*/
+	public  static String makePhrPinId(String theOwnerUri){
+
+		String value =theOwnerUri
+
 		return value
 	}
 	/**
@@ -135,15 +120,20 @@ public class PhrFederatedUser extends BaseUser {
 			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_DATE_OF_BIRTH)){
 				birthDate=input.get(PhrsConstants.OPEN_ID_PARAM_DATE_OF_BIRTH)
 			}
-
+            //ISSUE: naming clash: openid identifier is provider,
+            // identity is the OP's identifier for the user's claimedId
 			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_IDENTITY)){
 				identity=input.get(PhrsConstants.OPEN_ID_PARAM_IDENTITY)
 			}
+            //careful of the identifier clash. This is not the PhrFederatedUser.identifier
+            if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_OP_IDENTIFIER)){
+                providerIdentifier=input.get(PhrsConstants.OPEN_ID_PARAM_OP_IDENTIFIER)
+            }
+            // The claimedId *is*  the PhrFederatedUser.identifier unless it is null, then it is the opendUser.identity (the OP's representation of the claimedId)
+            if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)){
+                claimedId=input.get(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)
+            }
 
-
-//			if(input.containsKey(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)){
-//				claimId=input.get(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID)
-//			}
 		}
 	}
 
@@ -152,18 +142,11 @@ public class PhrFederatedUser extends BaseUser {
 		if(attrs){
 			if(ssoAttributes == null ) ssoAttributes=[:]
 			ssoAttributes.putAll(attrs)
+            init(ssoAttributes); //update values
 			//When identifiers are stored by id - ssoAttributes.putAll(identifier,attrs)
 		}
 	}
-	/*
-	 * 
-	 * @return Key is OpenId identifier
-	
-	public Map<String,BasePhrOpenId> findOpenIds(){
 
-		return null;
-
-	} */
 
 	public Set<String> associatedOpenIds(){
 		if(ssoAttributes){

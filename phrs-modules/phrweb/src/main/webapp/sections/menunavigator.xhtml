@@ -8,7 +8,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 <!-- rendered=true/false is controlled in  layout template -->
-<!-- 	<li><a href="#{request.contextPath}/jsf/xx"><h:outputLabel value="#{labels['xx']}"/></a></li>  -->
+<!-- 	<li><a href=" {request.contextPath}/jsf/xx"><h:outputLabel value=" {labels['xx']}"/></a></li>  -->
 <!-- columns="2" cellpadding="10" ui-helper-clearfix id="sidebar1"-->
 
 <!--  layout section is scrollable, no need to add additional component -->
@@ -53,7 +53,7 @@
 					cache="false" dynamic="true"
 					nodeSelectListener="#{menuBean.onNodeSelect}"
 					selectionMode="single" selection="#{menuBean.selectedNode}">
-					<!-- 	<p:ajax event="select" update=":treeform:messages" listener="#{menuBean.onNodeSelect}" />-->
+					<!-- 	<p:ajax event="select" update=":treeform:messages" listener=" {menuBean.onNodeSelect}" />-->
 					<p:treeNode>
 						<h:outputText value="#{ref}" />
 					</p:treeNode>
@@ -61,42 +61,58 @@
 
 			</h:form>
 		</p:panel>
-	<!-- <h:outputText value="#{loginBean.shortname}"  />-->
-		<!-- <br/><h:outputText value="#{loginBean.ownerUri}"  />  -->
-		<!-- rendered="#{loginBean.loggedIn eq true}" -->
+        <br/>
+    <p:toolbar>
+
+        <p:toolbarGroup align="left" rendered="#{loginBean.testMode}">
+            <h:form>
+            <p:commandButton value="Load Msgs" immediate="true"
+                             image="ui-icon-plus" actionListener="#{loginBean.loadInterop}"/>
+            </h:form>
+            <h:form>
+            <p:commandButton value="Load Vitals" immediate="true" onclick=""
+                             image="ui-icon-plus" actionListener="#{loginBean.loadTestData}"/>
+            </h:form>
+        </p:toolbarGroup>
+
+
+    </p:toolbar>
+	<!-- <h:outputText value=" {loginBean.shortname}"  />-->
+		<!-- <br/><h:outputText value=" {loginBean.ownerUri}"  />  -->
+		<!-- rendered=" {loginBean.loggedIn eq true}" -->
 		<!--
 	<p:panel style="width:100%" >
 
 	<h:form> 
-		<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;" 	>
+		<p:treeTable  value=" {menuBean.root}" var="ref" style="width:100%;" 	>
 
 			<p:column  style="width:100%;" selectionMode="single" >	
 				
-				<h:panelGroup rendered="#{ref.type == 'noderoot'}" >
+				<h:panelGroup rendered=" {ref.type == 'noderoot'}" >
 					<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
 				</h:panelGroup>	
 						
-				<h:panelGroup rendered="#{ref.type == 'nodeheaderlink'}">
+				<h:panelGroup rendered=" {ref.type == 'nodeheaderlink'}">
 					<h:outputLink  value="#{request.contextPath}#{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/>
 					</h:outputLink>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{ref.type == 'nodeheader'}">
-					<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+				<h:panelGroup rendered=" {ref.type == 'nodeheader'}">
+					<h:outputText value=" {ref.label}" style="font-size:12pt;"/>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{ref.type == 'node'}">
-					<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+				<h:panelGroup rendered=" {ref.type == 'node'}">
+					<h:outputText value=" {ref.label}" style="font-size:10pt;"/>
 				</h:panelGroup>			
 					
-				<h:panelGroup rendered="#{ref.type eq 'link'}" >
+				<h:panelGroup rendered=" {ref.type eq 'link'}" >
 			
-					<h:outputLink  value="#{request.contextPath}#{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>					
+					<h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>					
 					</h:outputLink>
 				</h:panelGroup>
 				
-				<h:panelGroup rendered="#{ref.type eq 'nodelink'}">
-					<h:outputLink value="#{request.contextPath}#{ref.fileName}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+				<h:panelGroup rendered=" {ref.type eq 'nodelink'}">
+					<h:outputLink value=" {request.contextPath} {ref.fileName}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
 					</h:outputLink>
 				</h:panelGroup>
 							

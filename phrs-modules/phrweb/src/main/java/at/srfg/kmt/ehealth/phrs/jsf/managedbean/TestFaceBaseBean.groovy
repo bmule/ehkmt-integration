@@ -438,14 +438,7 @@ class TestFaceBaseBean implements Serializable{
 		//println('getStore() uidThisView='+uidThisView);
 		store();
 	}
-	/*
-	 if(this.keys != null){
-	 this.siteSettings.getRestClient().update(this.unitInstance, this.keys);
-	 }
-	 else{
-	 this.keys = this.siteSettings.getRestClient().create(unitInstance);
-	 this.unitInstance = this.siteSettings.getRestClient().retrieve(this.unit.getPersistenceClass(), this.keys);
-	 }*/
+
 	/**
 	 * Save the selected resource and reload the model list for the UI
 	 */
@@ -475,6 +468,7 @@ class TestFaceBaseBean implements Serializable{
 	}
 	/**
 	 * Delete the selected resource and reload the model list for the UI
+     * This is overriden by subcontrollers
 	 */
 	public void crudDelete(){
 		//println('delete ')
@@ -488,40 +482,7 @@ class TestFaceBaseBean implements Serializable{
 		}
 
 	}
-	/*
-	 public void create(ActionEvent actionEvent){
-	 println('edit formCreate')
-	 if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'create mode '));
-	 this.formCreate();
-	 }*/
-	/*
-	 public void delete(ActionEvent actionEvent){
-	 crudDelete();
-	 }
-	 public void create(ActionEvent actionEvent){
-	 println('edit formCreate')
-	 if(actionEvent) println('edit formCreate'+actionEvent.getClass())
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'create mode '));
-	 this.formCreate();
-	 }
-	 public void view(ActionEvent actionEvent){
-	 println('view ActionEvent')
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'View mode '));
-	 this.formView();
-	 }
-	 public void edit(ActionEvent actionEvent){
-	 println('edit ActionEvent')
-	 //if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'Edit mode '));
-	 this.formEdit();
-	 }
-	 */
-	/*
-	 public void edit(ActionEvent actionEvent){
-	 println('edit ActionEvent')
-	 if(msgDebug) FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, 'Info', 'Edit mode '));
-	 this.formEdit();
-	 }
-	 */
+
 	/**
 	 * UI view action, invokes formView() before showing the UI dialog
 	 */

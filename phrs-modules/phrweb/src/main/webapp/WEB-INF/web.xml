@@ -95,10 +95,10 @@
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	<!--<load-on-startup>5</load-on-startup> -->
+	<!--<load-on-startup>5</load-on-startup> LoginServlet LoginOpenidDyuServlet-->
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginServlet</servlet-class>
+		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginOpenidDyuServlet</servlet-class>
 		<load-on-startup>5</load-on-startup>
 	</servlet>
 	<servlet-mapping>

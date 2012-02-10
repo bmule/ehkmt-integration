@@ -18,7 +18,7 @@
         PHRS web protal.
         This module can be deployed in to a tomcat 6x web container.
         For deployment use the following command : 
-        "mvn  cargo:deploy -D  -Dcatalina.home=YOUR_TOMCAT"
+        "mvn  cargo:deploy -Dcatalina.home=YOUR_TOMCAT"
     </description>
     <inceptionYear>2011</inceptionYear>
     
@@ -105,9 +105,13 @@
     <!-- 
      <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home> 
     /lab0/apache/tomcat/apache-tomcat-6.0.35
+    /Users/bmulreni/development/development-tools/tomcat6/
+
+      <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home>
+      <catalina.home>D:/srfg/tomcat/phrs-tomcat-6</catalina.home>
     -->
     <properties>
-        <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home>
+        <catalina.home>/Users/bmulreni/development/development-tools/tomcat6</catalina.home>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
@@ -169,7 +173,10 @@
                     <artifactId>jcl-over-slf4j</artifactId>
                     <groupId>org.slf4j</groupId>
                 </exclusion>
-               
+                <exclusion>
+                    <artifactId>slf4j-simple</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
                 <exclusion>
                     <artifactId>icardea-atnalog-client</artifactId>
                     <groupId>tr.com.srdc.icardea</groupId>
@@ -493,15 +500,7 @@ mvn install:install-file  -Dfile=icardea-atnalog-client-1.0-SNAPSHOT.jar -Dgroup
 <!-- if sources are in a different file structure it cannot find the parent pom and this was done.
 In this case, delete the existing maven entry in the local repository because the pom refers to a parent unknown to 
 this pom. This is the pom from the install:install
-<?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>tr.com.srdc.icardea</groupId>
-  <artifactId>icardea-consenteditor-invoker</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <description>POM was created from install:install-file</description>
-</project>
+
 
 mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar -DgroupId=tr.com.srdc.icardea -DartifactId=icardea-consenteditor-invoker -Dversion=1.0-SNAPSHOT -Dpackaging=jar
  We do this to get the Stub and any changes. If a wsdl file will be published
@@ -510,77 +509,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
  we cannot get the dependencies unless we share the same pom parent as 
  the the invoker module.
  -->     
-        <!--
-        <dependency>
-            <groupId>tr.com.srdc.icardea</groupId>
-            <artifactId>icardea-consenteditor-invoker</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-					
-                </exclusion>
-                <exclusion>
-                    <groupId>tr.com.srdc.icardea</groupId>
-                    <artifactId>icardea-atnalog-client</artifactId>
-			
-                </exclusion>
 
-                <exclusion>
-                    <groupId>org.opensaml</groupId>
-                    <artifactId>opensaml</artifactId>
-                </exclusion>                      
-                <exclusion>
-                    <groupId>org.apache.axis2</groupId>
-                    <artifactId>axis2</artifactId>                  
-                    
-                </exclusion>     
-                <exclusion>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-impl</artifactId>       
-                    
-                </exclusion> 
-                <exclusion>
-                    <groupId>org.apache.ws.commons.axiom</groupId>
-                    <artifactId>axiom-api</artifactId>     
-                    
-                </exclusion>
-                <exclusion>
-                    <groupId>axis</groupId>
-                    <artifactId>axis-wsdl4j</artifactId>       
-                    
-                </exclusion> 
-              
-                <exclusion>
-                    <groupId>org.apache.ws.commons</groupId>
-                    <artifactId>XmlSchema</artifactId>   
-                    
-                </exclusion> 
-            
-                <exclusion>
-                    <groupId>org.apache.ws.commons.neethi</groupId>
-                    <artifactId>neethi</artifactId>      
-                    
-                </exclusion> 
-                <exclusion>
-                    
-                    <groupId>org.apache.axis2</groupId>
-                    <artifactId>axis2-transport-local</artifactId>  
-                </exclusion>     
-                <exclusion>
-                    <groupId>org.apache.axis2</groupId>
-                    <artifactId>axis2-transport-http</artifactId>    
-                    
-                </exclusion> 
-
-     
-            </exclusions>
-        </dependency>
-          -->
-              <!-- Consent editor services -->
         <!--
 
         org.slf4j
@@ -640,9 +569,6 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
             <type>jar</type>
             <scope>compile</scope>
             
-                <!-- Brings 1.1
-                other from org.apache.woden and 
-                org.apache.axis2:axis2-transport-local has 1.4.3-->
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.ws.commons.schema</groupId>
@@ -651,26 +577,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
             </exclusions>
         </dependency>
 
-        <!--duplicate on org.apache.axis2:axis2-transport-local 
-        XmlSchema 1.4.3 and woden 1.4.2
-        <dependency>
-            <groupId>org.apache.ws.commons</groupId>
-            <artifactId>XmlSchema</artifactId>
-            <version>1.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        -->
-        
-        <!-- dependency for 2.04 found elsewhere
-        <dependency>
-            <groupId>org.apache.ws.commons.neethi</groupId>
-            <artifactId>neethi</artifactId>
-            <version>2.0.1</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        -->
+
         <dependency>
             <groupId>org.apache.axis2</groupId>
             <artifactId>axis2-transport-local</artifactId>
@@ -702,7 +609,26 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!--duplicate on org.apache.axis2:axis2-transport-local 
+        XmlSchema 1.4.3 and woden 1.4.2
+        <dependency>
+            <groupId>org.apache.ws.commons</groupId>
+            <artifactId>XmlSchema</artifactId>
+            <version>1.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        -->
+        
+        <!-- dependency for 2.04 found elsewhere
+        <dependency>
+            <groupId>org.apache.ws.commons.neethi</groupId>
+            <artifactId>neethi</artifactId>
+            <version>2.0.1</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        -->
         <!-- duplicates
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -722,7 +648,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
         <!--end consent services, audit also included below -->
         
         <!-- Use for compile, prevent for packaging
-        it comes from org.apache.axis2:axis2-transport-local-->
+        On tomcat 6 .20 provided: Xalan and xerces apis, however, tomcat 6 35 does not include-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -788,7 +714,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
                -->
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.1.4</version>
+                <version>1.2.0</version>
                
                 <configuration>
                     <wait>true</wait>

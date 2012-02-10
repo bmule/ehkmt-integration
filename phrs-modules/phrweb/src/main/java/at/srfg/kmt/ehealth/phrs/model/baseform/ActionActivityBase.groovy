@@ -15,7 +15,6 @@ import com.google.code.morphia.annotations.Transient
  }
  */
 
-//  see CalendarEventWrapper with entity CalendarEventWrapper
 @Entity("ActionActivityBase")
 public class  ActionActivityBase extends CommonModelProps{
 

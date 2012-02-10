@@ -14,7 +14,7 @@
     }
     
     #openid_identifier {
-      background-image: url(images/login-bg.gif);
+      background-image: url(../../images/login-bg.gif);
       background-position: 3px 2px;
       background-repeat: no-repeat;
       margin: 0;
@@ -51,7 +51,7 @@ function processForm(theForm){
     //https://icardea-server.lksdom21.lks.local/idp/u
     //icardea local server accepts short names. We must combine this here otherwise the servlet request must be wrapped
     if(objDropDown.value == "icardea" ){
-    	objHidden.value ="http://icardea-server.lksdom21.lks.local:4545/idp/u="+objUser.value;
+    	objHidden.value ="http://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
     	alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     
@@ -88,8 +88,9 @@ function processForm(theForm){
   <p>Login with your <b>OpenID</b> or Local account</p>
   <div id="message"></div>
   <form id="idLoginForm" name="idLoginForm"  method="post" onsubmit="return processForm(this);">
-  	<input type="hidden" name="openid_identifier" id="openid_identifier" value="" />
-  	<table>
+  	  <input type="hidden" name="action" id="action" value="login"/>
+      <input type="hidden" name="openid_identifier" id="openid_identifier" value="" />
+        <table border="0">
   	<tr>
   		<td><b>Login with:</b> </td>
   		<td><b>User name: </b></td>
@@ -105,7 +106,7 @@ function processForm(theForm){
 		    <!-- <option value="phrsopenid">Phrs OpenID provider</option> -->	
 	  	</td>
 	  	<td>
-	  		<input id="username" name="username" type="text" size="90"/>
+                    <input id="username" name="username" type="text"  size="50"  />
 	  	</td>
   	</tr>
   	<tr>
@@ -113,10 +114,14 @@ function processForm(theForm){
 	  	<td></td>
 	  	<td></td>
   	</tr>
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <table border="1" >
   	<tr>
-	  	<td>Local login</td>
-	  	<td>Role</td>
-	  	<td></td>
+                <th width="30px">Local login</th>
+	  	<th width="30px">Role</th>
+	  	<th width="50px"></th>
   	</tr>
     	<tr>
 	  	<td>nurse</td>
@@ -142,11 +147,15 @@ function processForm(theForm){
 	  	<td>Doctor</td>
 	  	<td></td>
   	</tr>  
-          
+      	<tr>
+            <td colspan="3" style="font-size: 10pt;">
+          The prefix <b>phrtest</b> or <b>phruser</b> can be used to create additional local login identifiers 
+  	e.g. <b>phruser123</b> <br/>No passwords are needed in order to facilitate demonstration and testing activities
+                                    
+                </td>
+  	</tr>      
   	</table>
-  	<p>The prefix <b>phrtest</b> or <b>phruser</b> can be used to create additional local login identifiers 
-  	e.g. <b>phruser123</b> No passwords are needed in order to facilitate demonstration and testing activities</p>
-  	<p></p>
+  	
     
 <!--     <input id="xxloginWith" name="xxloginWith" type="text" size="90" value="icardea"/>  -->   
     

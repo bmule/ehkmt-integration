@@ -2,8 +2,6 @@ package at.srfg.kmt.ehealth.phrs.presentation.services;
 
 import static at.srfg.kmt.ehealth.phrs.PhrsConstants.*
 
-import java.io.Serializable
-
 import javax.faces.context.FacesContext
 
 import org.apache.commons.configuration.ConfigurationException
@@ -14,7 +12,7 @@ import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.basesupport.OpenIdProviderItem
-import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+
 
 /**
  * 
@@ -32,7 +30,7 @@ public class ConfigurationService implements Serializable{
     private List<String> rolesLocal=[]
     private List<String> rolesConsentMgr=[]
     
-    private static XMLConfiguration xmlConfig;
+    //private static XMLConfiguration xmlConfig;
     private static PropertiesConfiguration propertiesConfig
     private static PropertiesConfiguration icardeaConfig
 
@@ -76,9 +74,9 @@ public class ConfigurationService implements Serializable{
     }
     private synchronized void init(){
 
-        if(xmlConfig == null) {
-            refreshXMLConfig()
-        }
+//        if(xmlConfig == null) {
+//            refreshXMLConfig()
+//        }
         if(propertiesConfig == null) {
             refreshPropertiesConfig()
         }
@@ -87,13 +85,13 @@ public class ConfigurationService implements Serializable{
         }
     }
 
-    public synchronized void refreshXMLConfig(){
-        try {
-            xmlConfig = new XMLConfiguration("phrs.config.xml");
-        } catch(ConfigurationException e) {
-            LOGGER.error("ConfigurationService error", e);
-        }
-    }
+//    public synchronized void refreshXMLConfig(){
+//        try {
+//            xmlConfig = new XMLConfiguration("phrs.config.xml");
+//        } catch(ConfigurationException e) {
+//            LOGGER.error("ConfigurationService error", e);
+//        }
+//    }
     public synchronized void refreshPropertiesConfig(){
 
 
@@ -103,6 +101,9 @@ public class ConfigurationService implements Serializable{
             LOGGER.error("ConfigurationService error", e);
         }
     }
+    /**
+     * Use  the resource bundle approach
+     */
     public synchronized void refreshPropertiesIcardeaConfig(){
 
 
@@ -149,7 +150,7 @@ public class ConfigurationService implements Serializable{
             if(!value){
                 switch(prop){
 
-                    case PhrsConstants.OPENID_ICARDEA_PROVIDER_KEY:
+                    case PhrsConstants.OPENID_DISCOVERY_IDENTIFIER_KEY:
                     value='https://localhost:8443/idp/'
                     break
                     case 'forwardRedirectIsAuthenticatedToPage':
@@ -400,7 +401,7 @@ public class ConfigurationService implements Serializable{
         String name = shortUserName;
         if(name){
             if( ! name.startsWith('http')){
-                name= this.getProperty(OPENID_ICARDEA_PROVIDER_KEY)+'u='+shortUserName
+                name= this.getProperty(OPENID_DISCOVERY_IDENTIFIER_KEY)+'u='+shortUserName
             }
         }
         return name
@@ -458,9 +459,9 @@ public class ConfigurationService implements Serializable{
         boolean flag = false
         String value = this.getProperty('isAllHealthinfoAccessibleByRole')
         System.out.println("isHealthInfoAccessibleByRole property="+value)
-        if(value!=null) value=value.trim()
+        value= value ? value=value.trim() : null
         if(value && value =='true') flag=true
-        System.out.println("isHealthInfoAccessibleByRole flag="+flag)
+
         return flag
     }
     
@@ -499,11 +500,21 @@ public class ConfigurationService implements Serializable{
     public boolean isAccessControlLocalForHealthInfo(){
         boolean flag = false
         String value = this.getProperty('isAccessControlLocalForHealthInfo')
-        if(value!=null) value=value.trim()
+        value= value ? value=value.trim() : null
         if(value && value =='true') flag=true
         return flag
     }
-
+    public String getConsentUIEndpoint(){
+         //
+        String value = getProperty('consent.web.endpoint')
+        return value ? value=value.trim() : null
+    }
+    public String getConsentServiceEndpoint(){
+        //
+        String value = getProperty('consent.service.endpoint')
+        return value ? value=value.trim() : null
+        
+    }  
     public String convertLocalRoleToStandardRole(String role){
         String outRole=null
 
@@ -551,10 +562,10 @@ public class ConfigurationService implements Serializable{
 
 
     public String getCertificatePath(){
-        String certPath
-        certPath=getProperty('phrs.certpath')
 
-        return certPath
+        String value=getProperty('phrs.certpath')
+
+        return value ? value=value.trim() : null
     }
 
 }

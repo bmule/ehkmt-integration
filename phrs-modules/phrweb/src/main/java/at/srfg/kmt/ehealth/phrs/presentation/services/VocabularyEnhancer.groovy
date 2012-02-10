@@ -1,7 +1,4 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services
-import java.io.Serializable
-import java.util.Collection
-import java.util.Map
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -12,7 +9,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ActionActivityBase
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActivityDailyLiving
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActivityDailyLivingSimple
-import at.srfg.kmt.ehealth.phrs.model.baseform.CalendarEventWrapper
+
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
@@ -426,10 +423,9 @@ public class  VocabularyEnhancer implements Serializable {
 
 			case [
 				ActionActivityBase.class.getCanonicalName(),
-				ActionPlanEvent.class.getCanonicalName(),
-				CalendarEventWrapper.class.getCanonicalName()
+				ActionPlanEvent.class.getCanonicalName()
 			]:
-
+             //, CalendarEventWrapper.class.getCanonicalName()
 				map.put('TAG_ACTION_CATEGORIES', getTerms(PhrsConstants.TAG_ACTION_CATEGORIES,language))
 				break
 

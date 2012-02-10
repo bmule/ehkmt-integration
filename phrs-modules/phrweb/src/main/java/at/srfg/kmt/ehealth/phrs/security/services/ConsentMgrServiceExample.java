@@ -1,19 +1,6 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GenerateRequest;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GenerateRequestResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import java.net.UnknownHostException;
-import java.rmi.RemoteException;
-import java.security.Security;
-import java.util.ResourceBundle;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.*;
 import org.apache.axis2.AxisFault;
 import org.joda.time.DateTime;
 import org.opensaml.saml2.core.Issuer;
@@ -28,6 +15,19 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
+
+import java.net.UnknownHostException;
+import java.rmi.RemoteException;
+import java.security.Security;
+import java.util.ResourceBundle;
 
 public class ConsentMgrServiceExample {
 	private static ConsentMgrServiceExample instance = null;
@@ -128,6 +128,7 @@ public class ConsentMgrServiceExample {
 					"1", issuerName, subjectCode, resourceCode, action));
 			requestString = requestString.substring(39);
 			request.setRequestString(requestString);
+
 			GetDecisionResponse response = stub.getDecision(request);
 			String resultString = response.getGetDecisionReturn();
 			System.out.println(resultString);

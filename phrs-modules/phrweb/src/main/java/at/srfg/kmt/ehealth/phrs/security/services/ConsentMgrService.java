@@ -4,15 +4,15 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
+
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerStubInterface;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 
 import java.io.Serializable;
 import java.net.UnknownHostException;
@@ -45,7 +45,7 @@ public class ConsentMgrService implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ConsentMgrService.class);
 
-    private ConsentManagerStubInterface stub = null;
+    private ConsentManagerImplServiceStub stub = null;
     private String ISSUERNAME = "PHR";
     //not used, except to check for the https. The stub contains the 
     //
@@ -231,15 +231,17 @@ public class ConsentMgrService implements Serializable {
     public static String getServiceEndpoint() {
         String endpoint = null;
 
-        ResourceBundle properties = ResourceBundle.getBundle("icardea");
-        endpoint = properties.getString("consent.ws.endpoint");
+        //ResourceBundle properties = ResourceBundle.getBundle("icardea");
+        //endpoint = properties.getString("consent.ws.endpoint");
+        endpoint = ConfigurationService.getInstance().getConsentServiceEndpoint();
+
         if (endpoint != null) endpoint = endpoint.trim();
         return endpoint;
 
     }
 
 
-    public ConsentManagerStubInterface getConsentServiceStub() {
+    public ConsentManagerImplServiceStub getConsentServiceStub() {
         //ConsentManagerSubInterface stub = null;
         String endPoint = null;
         if (stub != null) return stub;
@@ -286,7 +288,7 @@ public class ConsentMgrService implements Serializable {
                 LOGGER.debug(" requestString =", requestString.substring(39));
 
                 request.setRequestString(requestString);
-
+                              //stub.getDecision(request);
                 GetDecisionResponse response = stub.getDecision(request);
                 String resultString = response.getGetDecisionReturn();
                 //System.out.println("callGetDecision result" + resultString);
@@ -328,12 +330,18 @@ public class ConsentMgrService implements Serializable {
             stub = getConsentServiceStub();
             GetSubjects request = new GetSubjects();
             GetSubjectsResponse response = stub.getSubjects(request);
-            ArrayOf_xsd_anyType result = response.getGetSubjectsReturn();
-            System.out.println("SUBJECTS");
-            for (Object o : result.getItem()) {
-                System.out.println("Subject Code: " + o);
-                list.add(o.toString());
+            if(response!=null){
+                ArrayOf_xsd_anyType result = response.getGetSubjectsReturn();
+                System.out.println("SUBJECTS");
+                for (Object o : result.getItem()) {
+                    System.out.println("Subject Code: " + o);
+                    list.add(o.toString());
+                }
+            } else {
+                LOGGER.error("GetResourcesResponse response is null");
             }
+
+
 //        } catch (AxisFault e) {
 //            e.printStackTrace();
 //            LOGGER.error(" ", e);
@@ -354,13 +362,18 @@ public class ConsentMgrService implements Serializable {
             stub = getConsentServiceStub();
             GetResources request = new GetResources();
             GetResourcesResponse response = stub.getResources(request);
-            if (response == null) System.out.println("response null");
-            ArrayOf_xsd_anyType result = response.getGetResourcesReturn();
-            System.out.println("RESOURCES");
-
-            for (Object o : result.getItem()) {
-                System.out.println("Resource Code: " + o);
-                list.add(o.toString());
+     
+             
+            if(response!=null){
+                ArrayOf_xsd_anyType result = response.getGetResourcesReturn();
+                System.out.println("RESOURCES");
+    
+                for (Object o : result.getItem()) {
+                    System.out.println("Resource Code: " + o);
+                    list.add(o.toString());
+                }   
+            } else {
+                LOGGER.error("GetResourcesResponse response is null");
             }
 //        } catch (AxisFault e) {
 //            e.printStackTrace();

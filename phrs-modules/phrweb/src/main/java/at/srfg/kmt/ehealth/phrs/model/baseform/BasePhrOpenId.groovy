@@ -24,8 +24,8 @@ class BasePhrOpenId {
 
 	String identifier;
 	String identity;
-	String claimId;
-	boolean claimIdAuthenticated=false
+	String claimedId;
+	boolean claimedIdAuthenticated =false
 
 	String protocolId;
 	String protocolNamespace;

@@ -311,15 +311,15 @@ class FaceBaseBean implements Serializable{
 	 */
 	public void importInteropMessages(String phrsClass){
 		try{
-			if(selected && userService){		
-                            InteropProcessor ip= userService.getPhrsStoreClient().getInteropProcessor()
-                            List list = ip.importNewMessages(selected.ownerUri, phrsClass);
-                                        
-                            //validate and update the pci.pixIdentifier object status
+			if(userService && userService.getOwnerUri()){
+                LOGGER.error('FaceBaseBean prepare interop messages for owner='+userService.getOwnerUri());
+                InteropProcessor ip= userService.getPhrsStoreClient().getInteropProcessor()
+                List list = ip.importNewMessages(userService.getOwnerUri(), phrsClass);
+                LOGGER.error('FaceBaseBean END interop messages for owner='+userService.getOwnerUri());
 			} else {
                             
-                            LOGGER.error('importInteropMessages selected = null, no ownerUri ');
-                        }
+                LOGGER.error('importInteropMessages selected = null, no ownerUri ');
+            }
 		} catch (Exception e){
 			LOGGER.error(' Controller importInteropMessages owner='+selected.ownerUri+' resourceType='+phrsClass+e)
 		}
@@ -388,39 +388,26 @@ class FaceBaseBean implements Serializable{
 	public Collection<String> getTermIds(String tag){
 		return VocabularyService.getTermValuesByTag(tag, language)
 	}
-	/*
-	 public boolean getEditMode() {
-	 //println('isEditMode='+internal_editMode)
-	 return internalEditMode;
-	 }
-	 public boolean isEditMode() {
-	 //println('isEditMode='+internal_editMode)
-	 return internalEditMode;
-	 }
-	 public void setEditMode(boolean editMode) {
-	 println('setEditMode='+editMode)
-	 this.internalEditMode = editMode
-	 }*/
 
-	// ******* Lookup helpers, eventually create converter, but here we get locale. TODO We must use tomcat 7 to make parameter method calls from JSF or add EL 2.2 to Tomcat 6??
+
+
 
 	public String resetAction(){
-		//println('resetAction start')
+
 		this.selected = domainClazz.newInstance()
-		//println('resetAction finish')
 	}
 	public String closeAction(javax.faces.event.AjaxBehaviorEvent event){
 		//println('closeAction start')
 		this.selected = domainClazz.newInstance()
-		//println('closeAction finish')
+
 	}
 	/*
 	 closeAction(javax.faces.event.AjaxBehaviorEvent)
 	 */
 	public void resetAction(ActionEvent event){
-		//println('resetAction start ActionEvent')
+
 		this.selected = domainClazz.newInstance()
-		//println('resetAction finish ActionEvent')
+
 	}
 	protected void createInitResource(){
 		this.selected = domainClazz.newInstance()
@@ -610,11 +597,11 @@ class FaceBaseBean implements Serializable{
 	}
 
 	public String outcome(){
-		System.out.println('outcome');
+
 		return 'success';
 	}
 	public String getOutcome(){
-		System.out.println('getOutcome');
+
 		return 'success';
 	}
 	/**

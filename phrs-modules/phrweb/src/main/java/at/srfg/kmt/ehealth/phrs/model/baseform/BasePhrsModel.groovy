@@ -142,8 +142,12 @@ public class BasePhrsModel implements Serializable, Cloneable {
 
     String label //optional, can be user created or system generated. Issue to use Event's label?
 
-    @Indexed
+    //@Indexed
     String note
+
+
+    String systemNote
+
 
     //Map cacheMap
 

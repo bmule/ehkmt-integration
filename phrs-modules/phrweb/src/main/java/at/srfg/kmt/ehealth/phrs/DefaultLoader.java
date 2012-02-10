@@ -4,7 +4,6 @@ package at.srfg.kmt.ehealth.phrs;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +43,9 @@ public class DefaultLoader implements ServletContextListener {
         }
         //System.out.println("DefaultLoader ConstantMapper.ID_CONSTANT_MAPPER END");
         LOGGER.info("DefaultLoader ConstantMapper.ID_CONSTANT_MAPPER END");
+
+
+
     }
 
     /*

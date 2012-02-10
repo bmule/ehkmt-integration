@@ -1,22 +1,20 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client
 
-import java.util.HashMap
-import java.util.Map
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.Constants
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient
+
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrOpenId
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrMessageLog
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserIdentifiers
+
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 
 import com.dyuproject.openid.OpenIdUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 
 /**
  * 
@@ -69,6 +67,33 @@ public class CommonDao{
         }
         return single
     }
+    /**
+     *
+     * @param ownerUri
+     * @return
+     */
+    public String getUserGreetName(String ownerUri){
+        String value=null
+        if(ownerUri){
+          def puser = this.getPhrUser(ownerUri)
+            if(puser){
+                value= puser.getNickname() ? puser.getNickname() : null
+                value= value ? value : puser.getFullname() ?  puser.getFullname() : null
+            }
+            if( ! value)  {
+                def contact = this.getProfileContactInfo(ownerUri)
+                if(contact){
+                    value = contact.getFirstName()
+                    value = value? value : contact.getLastName()
+                }
+            }
+            if( ! value){
+                value= puser.getIdentifier() ? puser.getIdentifier() : null
+            }
+        }
+        return value
+    }
+
     public ProfileContactInfo getProfileContactInfo(String theOwnerUri){
         return getResourceSingle(ProfileContactInfo.class,false,theOwnerUri)
     }
@@ -90,7 +115,9 @@ public class CommonDao{
         }
         return user;
     }
-
+    public PhrFederatedUser getPhrUser(String theOwnerUri){
+        return getPhrUser(theOwnerUri,false);
+    }
 
     /**
      * 
@@ -114,8 +141,10 @@ public class CommonDao{
     }
 
     /**
-     * 
+     *  Find the PhrFederatedUser by the claimedId identifier
      * @param identifier
+     * @param attrs
+     * @param create
      * @return
      * @throws Exception
      */
@@ -128,6 +157,7 @@ public class CommonDao{
             user = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
 
             if(create && ! user){
+             //new ownerUri
                 user = crudCreatePhrUserByOpenId(identifier,attrs)
             }
         }
@@ -150,7 +180,7 @@ public class CommonDao{
             user = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
 
             if(create && ! user){
-                //user = crudCreatePhrUserByOpenId(userId,attrs)
+
 		
                 user= new PhrFederatedUser(userId,null);
 
@@ -158,12 +188,7 @@ public class CommonDao{
                 user.setCanLocalLogin(true)
                 user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
                 user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
-                //    public static final String ICARDEA_DOMAIN_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
-                //    public static final String OWNER_URI_CORE_PORTAL_TEST_USER = "phr/test/testuser";
-                //    public static final String PROTOCOL_ID_UNIT_TEST = "14920263490";
-                //    public static final String PROTOCOL_ID_PIX_TEST_PATIENT = "191";
-                //    public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";		
-				
+
                 if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST) 
                     || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
                     || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
@@ -182,8 +207,8 @@ public class CommonDao{
                         user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
                         user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
 
-                        updateProtocolId(user.getOwnerUri(),
-                                Constants.PROTOCOL_ID_UNIT_TEST,null);
+                        registerProtocolId(user.getOwnerUri(),
+                                Constants.PROTOCOL_ID_PIX_TEST_PATIENT,null);
                                                 
                     } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
 					
@@ -193,6 +218,8 @@ public class CommonDao{
                     } else {
                         user.setOwnerUri(userId);
                     }
+
+                    CoreTestData.createTestUserData();
 				
                 } 
 				
@@ -205,8 +232,13 @@ public class CommonDao{
         }
         return user;
     }
-       
-    public void updateProtocolId(String owneruri, String protocolId, String namespace){
+    /**
+     *
+      * @param owneruri
+     * @param protocolId
+     * @param namespace
+     */
+    public void registerProtocolId(String owneruri, String protocolId, String namespace){
            
         phrsStoreClient.getInteropProcessor().registerProtocolId( owneruri,protocolId,namespace)
         
@@ -214,32 +246,36 @@ public class CommonDao{
 
     /**
      * 
-     * @param identifier
+     * @param identifier is claimedId
      * @param attrs
      * @param createPhrUser
      * @param update
      * @return
      */
-    public PhrFederatedUser updatePhrUser(String identifier,Map attrs,boolean createPhrUser,boolean update){
+    public PhrFederatedUser updatePhrUserByClaimedId(String identity,
+                  Map attrs,boolean createPhrUser,boolean update){
         //Save the updated phrUser with the OpenId attributes
         PhrFederatedUser phrUser =null;
-        boolean exists = existsUserByOpenId(identifier)
-        //if (!ConfigurationService.isAppModeTest()) {
-        try{
-            phrUser = getUserByOpenId(identifier,attrs,true);
+       // boolean exists = existsUserByOpenId(identity)
 
-            if(exists && update){
+        try{
+            //find, but create=false
+            phrUser = getUserByOpenId(identity,attrs,false);
+
+            if(phrUser && update){   //exists
                 //update attributes for this identifier
-                phrUser.addOpenIdAttributes(identifier, attrs);
+                phrUser.addOpenIdAttributes(identity, attrs);
                 crudSaveResource(phrUser, phrUser.getOwnerUri(),phrUser.getOwnerUri());
+
+            }  else if(createPhrUser){
+
+                phrUser= crudCreatePhrUserByOpenId(identity,attrs)
             }
         } catch (Exception e1) {
-            e1.printStackTrace();
-            //LOGGER.error("error creating phrUser", e1);
+            LOGGER.error("error creating phrUser", e1);
             //gives somethings
-            if(phrUser==null){
-                phrUser= new PhrFederatedUser(identifier,null);
-                //phrUser.setIdentifier(identifier);
+            if(createPhrUser && phrUser==null && identity!=null){
+                phrUser=crudCreatePhrUserByOpenId(identity,attrs)
             }
         }
 		
@@ -249,17 +285,40 @@ public class CommonDao{
     /**
      * Creates new phrUser using OpenId attributes or any attributes matching the 
      * required keys
-     * @param identifier
+     * @param identity  -  claimedId becomse the the PhrFederatedUser identity
      * @param attrs
      * @return
      */
-    public PhrFederatedUser crudCreatePhrUserByOpenId(String identifier,Map attrs){
+    //FIXXME
+    public PhrFederatedUser crudCreatePhrUserByOpenId(String identity,Map attrs){
         PhrFederatedUser user =null;
-        try{
-            user = new PhrFederatedUser( identifier, attrs);
-            this.crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri())
-        } catch (Exception e){
-            LOGGER.error('error creating new user from OpenId', e)
+        if(identity) {
+            try{
+                user = new PhrFederatedUser( identity, attrs);
+                crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri())
+            } catch (Exception e){
+                LOGGER.error('error creating new user from OpenId', e)
+            }
+        }  else {
+            LOGGER.error('error creating new user from OpenId, identity(claimedId) is null')
+        }
+        return user
+    }
+
+    public PhrFederatedUser crudCreatePhrUserByOpenId(OpenIdUser openIdUser){
+        PhrFederatedUser user =null;
+        if(openIdUser && extractId(openIdUser)) {
+            try{
+                String id=extractId(openIdUser)
+                Map attrs = UserSessionService.extractOpenIdParameters(openIdUser)
+
+                user = new PhrFederatedUser( id, attrs);
+                crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri())
+            } catch (Exception e){
+                LOGGER.error('error creating new user from OpenId', e)
+            }
+        }  else {
+                LOGGER.error('error creating new user from OpenId, openIdUser is null')
         }
         return user
     }
@@ -284,16 +343,8 @@ public class CommonDao{
                 single.creatorUri = theOwnerUri
             }
         } catch (Exception e){
-            println('getResourceByExample '+e)
             LOGGER.error('getResourceByExample', e)
         }
-        //test
-        List list = phrsRepositoryClient.crudReadResourceByExample( theOwnerUri,  entityClazz, map)
-		
-        if(list) println('getResourceByExampleToSingle list size='+list.size())
-        else println('getResourceByExampleToSingle list=null')
-		
-		
         return single
     }
     /**
@@ -318,17 +369,7 @@ public class CommonDao{
             return phrsRepositoryClient.crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class)
         }
         return null
-    }       
-    /*
-     *
-     * @param entityClazz
-     * @param map
-     * @return null if not found
-     * To automatically create and assign required params, use getResourceByExample(Class entityClazz,Map map, boolean create)
-    public def getResourceByExample(Class entityClazz,Map map){
-    return getResourceByExample(entityClazz, map,false)
-    }*/
-
+    }
     /**
      * 
      * @param ownerUri
@@ -367,7 +408,7 @@ public class CommonDao{
         return null
     }
     /**
-     * 
+     * Find a BasePhrOpenId that each stored each time there is a new login
      * @param ownerUri
      * @return
      */
@@ -398,14 +439,14 @@ public class CommonDao{
      * 
      * @param identifier
      * @return
-     */
+
     public  PhrFederatedUser crudReadPhrFederatedUserByOpenIdentifier(String identifier){
         PhrFederatedUser user=null
         if(identifier){
             Map map = ['identifier':identifier]
-            List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
+            List list= phrsRepositoryClient.crudReadResourceByExample(null, PhrFederatedUser.class, map);
             if(list && list.size()>0){
-                BasePhrOpenId base= list.get(0)
+                PhrFederatedUser base= list.get(0)
                 String ownerUri = base.ownerUri
                 if(ownerUri){
                     user=  crudReadPhrFederatedUser(ownerUri)
@@ -413,41 +454,12 @@ public class CommonDao{
             }
         }
         return user
-    }
+    } */
+  
     /**
-     * @deprecated
-     * @param ownerUri
-     * @param allOpenIdAttributes
-     * @throws Exception
-     */
-    public void registerProtocolId(String ownerUri, Map<String,String> attributes) throws Exception{
-
-        if(attributes){
-
-            String protocolId = null;
-            if ( attributes.containsKey(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID)) {
-
-                protocolId = attributes.get(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID);
-            }
-            //allOpenIdAttributes.containsKey(PhrsConstants.xxx) ? allOpenIdAttributes.get(PhrsConstants.xxx) : null
-            if(! protocolId){
-                LOGGER.error("BaseDaoService registerProtocolId cannot register null protocolID! for ownerUri="+ownerUri)
-                throw new Exception("cannot register null protocolID! for ownerUri="+ownerUri)
-            }
-            //can be null, for now
-            String protocolNamespace = null
-            if (attributes.containsKey(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_NAMESPACE)) {
-                protocolNamespace = attributes.get(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_NAMESPACE);
-            }
-            //This updates but we do not unregister Ids with the actor client
-            ActorClient actorClient= phrsRepositoryClient.getInteropClients().getActorClient()
-            if(protocolNamespace) actorClient.register(protocolNamespace, ownerUri, protocolId)
-            else actorClient.register( ownerUri, protocolId)
-
-        }
-    }
-    /**
-     * 
+     *  Stores the OpenId info.
+     *  This is not the PhrFederatedUser, but a basic copy of the OpenId info
+     *  This might enable  multiple OpenIds per user
      * @param ownerUri
      * @param openIdUser
      * @param createPhrUser
@@ -457,59 +469,52 @@ public class CommonDao{
         BasePhrOpenId open =null
         if(ownerUri){
             open = crudReadOpenIdByIdentifier(openIdUser.identifier)
+            if(!open) open = new BasePhrOpenId()
+            //name clash on PhrFederatedUser- identity is not the same
+            open.identity= openIdUser.identity
+            open.identifier=openIdUser.identifier
+            open.claimedId= openIdUser.claimedId
 
-            if(open){
-                //update
-                open.identity= openIdUser.identity
-                open.identifier=openIdUser.identifier
-                Map attrs = UserSessionService.extractOpenIdParameters(openIdUser)
-                if( ! open.getAttributes()) open.setAttributes(new HashMap<String,String>())
-                open.getAttributes().putAll(attrs)
+            //pen.identifier=openIdUser.identifier
 
-                //We have the OpenIdUser, this is called from is authenticated
-                open.claimIdAuthenticated=true
+            Map attrs = UserSessionService.extractOpenIdParameters(openIdUser)
+            if( ! open.getAttributes()) open.setAttributes(new HashMap<String,String>())
+            open.getAttributes().putAll(attrs)
 
-            } else {
-                //new, create
-                open = new BasePhrOpenId()
-                //We have the OpenIdUser, this is called from is authenticated
-                open.claimIdAuthenticated=true
-
-                open.identifier=openIdUser.identifier
-                open.identity= openIdUser.identity
-                //extremely important
-                open.ownerUri=ownerUri
-                open.creatorUri=ownerUri
-				
-
-                Map<String,String> attrs = UserSessionService.extractOpenIdParameters(openIdUser)
-                if(attrs) open.setAttributes(attrs)
-
+            //We have the OpenIdUser, this is called from is authenticated
+            open.claimedIdAuthenticated=true
+            if(attrs) {
+                open.setAttributes(attrs)
             }
+            //reset
+            open.ownerUri=ownerUri
+            open.creatorUri=ownerUri
+
             //store BaseOpenId 
             //openidfix
             phrsRepositoryClient.crudSaveResource(open)
-
-            //register  protocolId from OpenId This updates but we do not unregister Ids with the actor client
-            /*try{
-            registerProtocolId(ownerUri, open.getAttributes())
-            } catch (Exception e){
-            println("error register open id protocol id for owner="+ownerUri+" "+e)
-            LOGGER.error("crudSaveOpenIdUser cannot register null protocolID! for ownerUri="+ownerUri)
-            }*/
-
-            //get PhrUser, if null create
+           //get PhrUser, if null create
             if(createPhrUser){
                 PhrFederatedUser phrUser= crudReadPhrFederatedUser(ownerUri)
                 if( ! phrUser){
-                    phrUser = new PhrFederatedUser()
-                    phrUser.ownerUri=ownerUri
-					
-                    phrsRepositoryClient.crudSaveResource(phrUser)
+                    //pass IDENTITY not openIdUser.identifier
+                    this.crudCreatePhrUserByOpenId(extractId(openIdUser),attrs)
                 }
             }
         }
         return open
+    }
+    /**
+     * This provides the choosen user id from the OpenId
+     * It will return the user's "claimedId" unless it is null in the OpenId object from the OP (OpenId provider), otherwise, it is
+     * the OpenIdUser "identity" - this is the OP's representation of the "claimedId". For example, from Google, the identity and claimedId
+     * appear to be the same.
+     *
+     * @param openIdUser
+     * @return
+     */
+    public static String extractId(OpenIdUser openIdUser )  {
+            return openIdUser.getClaimedId() ? openIdUser.getClaimedId() :  openIdUser.getIdentity();
     }
 
     /**
@@ -606,7 +611,7 @@ public class CommonDao{
         return false
     }
     /**
-     * get the protocolId
+     * get the ProtocolId stored locally
      * @param ownerUri
      * @return
      */
@@ -622,7 +627,7 @@ public class CommonDao{
                 protocolId = info.pixIdentifier.identifier
             }
         }
-        return ownerUri;
+        return protocolId;
 
 
     }
@@ -644,7 +649,6 @@ public class CommonDao{
 //        return ownerUri;
 //
 //    }
-
+}
  
 	
-}

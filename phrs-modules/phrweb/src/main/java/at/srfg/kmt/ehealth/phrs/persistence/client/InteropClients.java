@@ -1,6 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -8,13 +9,6 @@ import org.apache.commons.beanutils.DynaBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.SchemeClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.TermClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
@@ -37,6 +31,7 @@ public class InteropClients {
     ActorClient actorClient;
     DynaBeanClient dynaBeanClient;
     GenericTriplestore triplestore;
+    PHRSRequestClient phrsRequestClient;
 
     public InteropClients(GenericTriplestore triplestore) throws Exception {
         this.triplestore = triplestore;
@@ -62,15 +57,21 @@ public class InteropClients {
 
         dynaBeanClient = new DynaBeanClient(triplestore);
         //dynaBeanClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
+        
+        phrsRequestClient=new PHRSRequestClient(triplestore);
     }
 
     public GenericTriplestore getTriplestore() {
         return triplestore;
     }
-
-    public VitalSignClient getVitalSignClient() {
+       public VitalSignClient getVitalSignClient() {
 
         return vitalSignClient;
+    }
+
+    public PHRSRequestClient getPHRSRequestClient() {
+
+        return phrsRequestClient;
     }
 
     public MedicationClient getMedicationClient() {

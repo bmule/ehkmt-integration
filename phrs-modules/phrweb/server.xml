@@ -132,6 +132,8 @@ s
 		<Context path="/phrweb" reloadable="true" 
 			docBase="D:\srfg\new-phrs\icardea-phrs\phrweb\target\phrweb"/>
 <!--
+D:\srfg\new-phrs\icardea-phrs\phrweb\target\phrweb
+D:\srfg\new-phrs\icardea-phrs\phrweb\target\phrweb
 <Context path="/phrweb" reloadable="true" 
 docBase="/Users/bmulreni/development/icardea-dev/git-phrs-jan/ehkmt-integration/phrs-modules/phrweb/target/phrweb"/>
 -->			

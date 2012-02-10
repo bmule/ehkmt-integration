@@ -86,7 +86,8 @@ public class  VocabularyService implements Serializable{
 		Set<String> set= new HashSet()
 
 		for(Map<String, Collection<String>> map:colmaps){
-			set.add(map.keySet())
+			//set.add(map.keySet())
+            set.addAll(map.keySet())
 		}
 		return set
 	}

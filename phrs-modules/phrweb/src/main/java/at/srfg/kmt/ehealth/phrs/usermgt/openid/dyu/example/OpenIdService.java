@@ -21,12 +21,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import at.srfg.kmt.ehealth.phrs.security.services.OpenIdConstants;
 import org.codehaus.jra.Get;
 import org.codehaus.jra.HttpResource;
 import org.codehaus.jra.Post;
 import org.mortbay.util.ajax.JSON;
-
-import at.srfg.kmt.ehealth.phrs.usermgt.openid.dyu.Constants;
 
 import com.dyuproject.openid.OpenIdUser;
 import com.dyuproject.openid.RelyingParty;
@@ -63,11 +62,11 @@ public final class OpenIdService extends AbstractService {
 							UrlEncodedParameterMap params) {
 						if ("true".equals(request.getParameter("popup"))) {
 							String returnTo = params
-									.get(Constants.OPENID_TRUST_ROOT)
+									.get(OpenIdConstants.OPENID_TRUST_ROOT)
 									+ request.getContextPath()
 									+ "/popup_verify.html";
-							params.put(Constants.OPENID_RETURN_TO, returnTo);
-							params.put(Constants.OPENID_REALM, returnTo);
+							params.put(OpenIdConstants.OPENID_RETURN_TO, returnTo);
+							params.put(OpenIdConstants.OPENID_REALM, returnTo);
 							params.put("openid.ns.ui",
 									"http://specs.openid.net/extensions/ui/1.0");
 							params.put("openid.ui.mode", "popup");

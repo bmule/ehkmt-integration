@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * @deprecated 
- * See <code>LoginServlet</code> There are issues mixing JSF and 
+ * See <code>LoginOpenidDyuServlet</code> There are issues mixing JSF and
  * the servlet filter ... with mixing servlets in general...
  * 
  * A servlet filter that forwards users to the login page if they are not

@@ -1,17 +1,25 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerStubInterface;
+
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
-import java.util.List;
-import static org.junit.Assert.*;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.*;
 
-import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
-
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.UUID;
-import org.apache.axis2.AxisFault;
-import org.apache.commons.configuration.PropertiesConfiguration;
+
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
+
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
+
+import static org.junit.Assert.*;
 
 public class ConsentMgrServiceTest {
 
@@ -41,7 +49,38 @@ public class ConsentMgrServiceTest {
     @After
     public void tearDown() {
     }
-
+//    @Test
+//    public void testPingLocator(){
+//        org.apache.axis.utilsPingServiceLocator service = new org.apache.axis.utils.PingServiceLocator();
+//        try {
+//            endpoint = new java.net.URL(opts.getURL());
+//        } catch (java.net.MalformedURLException e) {
+//            throw new javax.xml.rpc.ServiceException(e);
+//        }
+//
+//        PingPort port = (PingPort) service.getPing5(endpoint);
+//
+//        /*
+//        *     At this point all preparations are done. Using the port we can
+//        *     now perform as many calls as necessary.
+//        */
+//
+//        // perform call
+//        StringHolder text =
+//                new StringHolder("WSS4J - Scenario 5 - text");
+//        TicketType type =
+//                new TicketType("WSS4J - Scenario 5 - TicketType");
+//
+//        port.ping(type, text);
+//        System.out.println(text.value);
+//
+//        if (opts.isFlagSet('t') > 0) {
+//            long startTime = System.currentTimeMillis();
+//
+//            for (int i = 0; i < 20; i++) {
+//                port.ping(type, text);
+//            }
+//    }
     @Test
     public void testDecisionRequestString() {
         ConsentMgrService cms = new ConsentMgrService();
@@ -80,7 +119,7 @@ public class ConsentMgrServiceTest {
         }
         return requestString;
     }
-
+/*
     @Test
     public void testBasicStubConnectionUsingiCardeaProperties() {
         String endpoint = null;
@@ -127,12 +166,12 @@ public class ConsentMgrServiceTest {
         // 5. Extract the detail information from the response object
         //System.out.println(res.getGetSubjectsReturn());
     }
-
+  */
     public void testConsentServiceStub() {
         ConsentMgrService cms = new ConsentMgrService();
 
         assertNotNull(cms);
-        ConsentManagerStubInterface stub = cms.getConsentServiceStub();
+        ConsentManagerImplServiceStub stub = cms.getConsentServiceStub();
         assertNotNull(stub);
     }
     /*
@@ -324,9 +363,8 @@ public class ConsentMgrServiceTest {
         assertNotNull("decision xml null ", result);
         System.out.println("decision xml= " + result);
 
-        //assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-        //fail("Test fails.");
+
     }
 
     /**
@@ -336,17 +374,15 @@ public class ConsentMgrServiceTest {
     public void testCallGetSubjects() {
         System.out.println("callGetSubjects");
         ConsentMgrService instance = new ConsentMgrService();
-        //List expResult = null;
+
         List<String> result = instance.callGetSubjects();
 
         assertNotNull("callGetSubjects result null", result);
-        if (result == null) {
-        } else {
-            for (String res : result) {
-                System.out.println("subject code= " + result);
-            }
-        }
-        //assertEquals(expResult, result);
+
+        for (String res : result) {
+           System.out.println("subject code= " + res);
+         }
+
 
     }
 
@@ -361,13 +397,10 @@ public class ConsentMgrServiceTest {
         List<String> result = instance.callGetResources();
         assertNotNull("callGetResources result null", result);
 
-        if (result == null) {
-            System.out.println("testCallGetResources result null ");
-        } else {
-            for (String res : result) {
-                System.out.println("res code= " + result);
-            }
+        for (String res : result) {
+          System.out.println("res code= " + res);
         }
+
     }
     /**
      * Test of hasUserByPhrId method, of class ConsentMgrService.

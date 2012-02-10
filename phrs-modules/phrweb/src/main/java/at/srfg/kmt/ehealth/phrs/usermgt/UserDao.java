@@ -8,7 +8,11 @@ import java.util.UUID;
 
 import at.srfg.kmt.ehealth.phrs.model.baseform.AUser;
 
-public class AUserService {
+/**
+ * @deprecated
+ * TODO
+ */
+public class UserDao {
 	private static final Map<String, AUser> TEST_USERS = new HashMap<String, AUser>();
 	static {
 		Map<String, String> attrs = new HashMap<String, String>();
@@ -48,7 +52,7 @@ public class AUserService {
 		return TEST_USERS.values();
 	}
 
-	public AUser getUser(Integer userId) {
+	public AUser getUser(String userId) {
 		return TEST_USERS.get(userId);
 	}
 
@@ -68,11 +72,15 @@ public class AUserService {
 	}
 
 	public void update(AUser user) {
+        /*
 		if (user == null || !TEST_USERS.containsKey(user.getOwnerUri())) {
+
 			throw new RuntimeException("AUser object null or User Id ["
-					+ user.getOwnerUri() + "] invalid.");
-		}
-		TEST_USERS.put(user.getOwnerUri(), user);
+					+ user.getOwnerUri()  + "] invalid.");
+		} */
+        if(user!=null && user.getOwnerUri()!=null) {
+		    TEST_USERS.put(user.getOwnerUri(), user);
+        }
 	}
 
 }

@@ -24,7 +24,7 @@
 	</context-param>
 	<!-- different scenarios:
 	newuser = openid means that openid creates new users and there is no separate login/user creation to create a local user
-	In the future, perhaps a user can add a new claimId while logged in, then when successful that claim ID is added to the user account.
+	In the future, perhaps a user can add a new claimedId while logged in, then when successful that claim ID is added to the user account.
 	 -->
 	<context-param>
 		<param-name>user-management-scenario</param-name>
@@ -81,7 +81,7 @@
 	
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginServlet</servlet-class>
+		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginOpenidDyuServlet</servlet-class>
 		<load-on-startup>5</load-on-startup>
 	</servlet>
 		<servlet-mapping>

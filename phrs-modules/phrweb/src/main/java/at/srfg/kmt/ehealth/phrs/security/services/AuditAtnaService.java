@@ -27,6 +27,7 @@ public class AuditAtnaService implements Serializable {
     private Audit audit = null;
     private String host = "127.0.0.1";
     private int port = 2861;
+    private boolean useMessageDispatcher=false;
     //private int portSecure = 8443;
     private int sslConfigSetting = 2;
 
@@ -109,6 +110,9 @@ public class AuditAtnaService implements Serializable {
 
                 // a.send_udp( a.create_syslog_xml("caremanager", xml) );
             }
+            
+            //messageDispatcher = 
+            //ConfigurationService.getInstance().getProperty("atna.message.dispatcher");
 
         } catch (UnknownHostException e) {
             LOGGER.error("", e);
@@ -184,19 +188,23 @@ public class AuditAtnaService implements Serializable {
      * @param requestorRole
      */
     public void sendAuditMessageGrant(final String patientId, final String resource, final String requestorRole) {
+        if( ! useMessageDispatcher){
+            boolean flag=this.doAuditMessageGrant(patientId, resource, requestorRole);
+        
+        }else {
+            final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
 
-        final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
+            final Runnable task = new Runnable() {
 
-        final Runnable task = new Runnable() {
+                @Override
+                public void run() {
 
-            @Override
-            public void run() {
+                    boolean success = doAuditMessageGrant(patientId, resource, requestorRole);
 
-                boolean success = doAuditMessageGrant(patientId, resource, requestorRole);
-
-            }
-        };
-        dispatcher.dispatch(task);
+                }
+            };
+            dispatcher.dispatch(task);
+        }
 
     }
 
@@ -217,7 +225,6 @@ public class AuditAtnaService implements Serializable {
                         AUDIT_SYSTEM_SOURCE_PHRS,
                         xml));
                 LOGGER.debug("ANTA for patientId= " + patientId + " access of resource=" + resource + " by role=" + requestorRole);
-                System.out.println("sendAuditMessageGrantForRole completed");
             } else {
                 LOGGER.error("ANTA Audit is null, invalid host,configuration or property file flag is false");
             }
@@ -236,17 +243,22 @@ public class AuditAtnaService implements Serializable {
      * @param patientId
      */
     public void sendAuditMessageForPatientRegistration(final String patientId) {
-        final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
+        
+        if( ! useMessageDispatcher){
+            boolean result= this.doAuditMessageForPatientRegistration(patientId);
+        } else {
+            final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
 
-        final Runnable task = new Runnable() {
+            final Runnable task = new Runnable() {
 
-            @Override
-            public void run() {
-                final boolean success = doAuditMessageForPatientRegistration(patientId);
-            }
-        };
+                @Override
+                public void run() {
+                    final boolean success = doAuditMessageForPatientRegistration(patientId);
+                }
+            };
 
-        dispatcher.dispatch(task);
+            dispatcher.dispatch(task);
+        } 
     }
 
     /**
@@ -269,7 +281,7 @@ public class AuditAtnaService implements Serializable {
                         AUDIT_SYSTEM_SOURCE_PHRS,
                         xml));
                 LOGGER.debug("ANTA for patientId= " + patientId);
-                System.out.println("sendAuditMessageGrantForRole completed");
+                
             } else {
                 LOGGER.error("ANTA Audit is null, invalid host, configuration or property file flag is false");
             }
@@ -279,16 +291,5 @@ public class AuditAtnaService implements Serializable {
         }
         return success;
     }
-    /*
-     * public void myMethod(final String... args) {
-     *
-     * final Dispatcher dispatcher = SingleDistpatcher.getDispatcher();
-     *
-     * final Runnable task = new Runnable() {
-     *
-     * @Override public void run() { System.out.println("Here it goes"); for
-     * (String s : args) { System.out.println("--" + s); } } };
-     *
-     * dispatcher.dispatch(task); }
-     */
+
 }

@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrOpenId;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.security.services.OpenIdConstants;
 import com.dyuproject.openid.OpenIdUser;
 import com.dyuproject.openid.RelyingParty;
 import com.dyuproject.openid.ext.AxSchemaExtension;
@@ -161,6 +162,9 @@ public class UserSessionService {
 
                 sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
                         phrUser.getRole());
+
+                String greetName=getCommonDao().getUserGreetName(phrUser.getOwnerUri());
+                if(greetName!=null) sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME,greetName);
             }
         }
         return phrUser;
@@ -262,8 +266,7 @@ public class UserSessionService {
 
             sess = req.getSession(true);
 
-            // Map properties = UserSessionService
-            // .extractOpenIdAllAttributes(openIdUser);
+
             sess.setAttribute(PhrsConstants.SESSION_USER_OPENID_OBJECT,
                     openIdUser);
 
@@ -275,15 +278,18 @@ public class UserSessionService {
 
                     // create or update phrUser and ave, extract params to
                     // 'info' key into openIdUser
-                    Map<String, String> openIdAttrs = new HashMap<String, String>();
 
-                    phrUser = processAuthenticatedUser(openIdUser, openIdAttrs);
+                    Map<String, String> openIdAttrs = extractOpenIdParameters(openIdUser);  //don't remove params openId object
+                    Map<String, String> temp = new HashMap<String, String>();
+                    //get/update or create a new  PhrFederatedUser
+                    phrUser = processAuthenticatedUser(openIdUser, temp);
 
-                    // persist the OpenIdUser as a Phr resource
+                    // persist the OpenIdUser, this is not the PhrFederatedUser
                     // update the data from the incoming userOpenId
+                    //optional, but for debugging and future multiple OpenIds per user
                     BasePhrOpenId basePhrOpenId_2 = getCommonDao()
                             .crudSaveOpenIdUser(phrUser.getOwnerUri(),
-                                    openIdUser, false);
+                                    openIdUser, false);//don't created the PhrFederatedUser
 
                     // put relevant objects into the session
 
@@ -295,7 +301,8 @@ public class UserSessionService {
                         // User OpenId identifier directly instead of
                         // PhrFederatedUser directly
                         sess.setAttribute(PhrsConstants.SESSION_USER_LOGIN_ID,
-                                openIdUser.getIdentifier());
+                                CommonDao.extractId(openIdUser));//claimId
+                        //openIdUser.getIdentifier());
 
                         sess.setAttribute(
                                 PhrsConstants.SESSION_USER_PHR_OWNER_URI,
@@ -322,20 +329,9 @@ public class UserSessionService {
                                     phrUser.getRole());
                         }
 
-                        /*
-                               * // expect this in some OpenId implementations, but
-                               * check Principal principal =
-                               * context.getExternalContext() .getUserPrincipal(); //
-                               * TODO if reimplementing Apache Shiro etc if (principal
-                               * != null) { context.getExternalContext()
-                               * .getSessionMap()
-                               * .put(PhrsConstants.SESSION_USER_PRINCIPAL,
-                               * principal);
-                               *
-                               * } else { LOGGER.debug(
-                               * "No user principal found after OpenID authenication for ownerUri "
-                               * , phrUser.getOwnerUri()); }
-                               */
+                        String greetName=getCommonDao().getUserGreetName(phrUser.getOwnerUri());
+                        if(greetName!=null) sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME,greetName);
+      
                     }
                 } catch (Exception e) {
                     LOGGER.error("OpenId init error context, session ", e);
@@ -461,12 +457,56 @@ public class UserSessionService {
             else LOGGER.error("OpenIdUser=null", e);
         }
 
+
+        /*
+        Normalize and conforms to listener
+         */
+        if(map!=null && !map.isEmpty()){
+
+             if(map.containsKey(OpenIdConstants.SREG_NICKNAME)) {
+                 map.put(PhrsConstants.OPEN_ID_PARAM_NICK_NAME,
+                         map.get(OpenIdConstants.SREG_NICKNAME));
+             }
+            if(map.containsKey(OpenIdConstants.SREG_EMAIL)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_EMAIL,
+                        map.get(OpenIdConstants.SREG_EMAIL));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_LANGUAGE)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_LANGUAGE,
+                        map.get(OpenIdConstants.SREG_LANGUAGE));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_FULLNAME)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_FULL_NAME,
+                        map.get(OpenIdConstants.SREG_FULLNAME));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_POSTCODE)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_POST_CODE,
+                        map.get(OpenIdConstants.SREG_POSTCODE));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_COUNTRY)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_COUNTRY,
+                        map.get(OpenIdConstants.SREG_COUNTRY));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_DOB)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_DATE_OF_BIRTH,
+                        map.get(OpenIdConstants.SREG_DOB));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_GENDER)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_GENDER,
+                        map.get(OpenIdConstants.SREG_GENDER));
+            }
+            if(map.containsKey(OpenIdConstants.SREG_TIMEZONE)) {
+                map.put(PhrsConstants.OPEN_ID_PARAM_TIME_ZONE,
+                        map.get(OpenIdConstants.SREG_TIMEZONE));
+            }
+
+        }
         return map;
     }
-
+    
     public static Map<String, String> extractOpenIdStringAttributes(
             OpenIdUser user) {
-        Map<String, String> map = null;
+        Map<String, String> map = new HashMap<String, String>();
         try {
             Map<String, Object> omap = user.getAttributes();
             if (omap != null && !omap.isEmpty()) {
@@ -496,18 +536,22 @@ public class UserSessionService {
             OpenIdUser openIdUser, boolean includeOpenIdStringAttributes,
             boolean removeUserFromExtensions) {
 
+        Map<String, String> all = new HashMap<String, String>();
+        if (openIdUser == null) return all;
+
         Map<String, String> smap = extractOpenIdSimpleRegistration(openIdUser,
                 removeUserFromExtensions);
 
         Map<String, String> axMap = extractOpenIdAttributeExchange(openIdUser,
                 removeUserFromExtensions);
 
-        Map<String, String> omap = extractOpenIdStringAttributes(openIdUser);
+        if (includeOpenIdStringAttributes) {
+            Map<String, String> omap = extractOpenIdStringAttributes(openIdUser);
 
-        Map<String, String> all = new HashMap<String, String>();
 
-        if (omap != null && !omap.isEmpty()) {
-            all.putAll(omap);
+            if (omap != null && !omap.isEmpty()) {
+                all.putAll(omap);
+            }
         }
         if (smap != null && !smap.isEmpty()) {
             all.putAll(smap);
@@ -515,60 +559,56 @@ public class UserSessionService {
         if (axMap != null && !axMap.isEmpty()) {
             all.putAll(axMap);
         }
-        if (openIdUser.getIdentifier() != null) {
-            if (!all.containsKey(PhrsConstants.OPEN_ID_PARAM_IDENTIFIER))
-                all.put(PhrsConstants.OPEN_ID_PARAM_IDENTIFIER,
-                        openIdUser.getIdentifier());
-            else
-                all.put(PhrsConstants.OPEN_ID_PARAM_IDENTIFIER + "2",
-                        openIdUser.getIdentifier());
-        }
-        // login identity
-        if (openIdUser.getIdentity() != null
-                && !all.containsKey(PhrsConstants.OPEN_ID_PARAM_IDENTITY)) {
-            all.put(PhrsConstants.OPEN_ID_PARAM_IDENTITY,
-                    openIdUser.getIdentity());
-        }
+        String id = CommonDao.extractId(openIdUser);
+        if (id != null) {
 
+            if (!all.containsKey(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID))
+                all.put(PhrsConstants.OPEN_ID_PARAM_CLAIM_ID, id);
+
+        }
+        if (openIdUser.getIdentifier() != null) {
+
+            if (!all.containsKey(PhrsConstants.OPEN_ID_PARAM_OP_IDENTIFIER))
+                all.put(PhrsConstants.OPEN_ID_PARAM_OP_IDENTIFIER, openIdUser.getIdentifier());
+
+        }
+        if (openIdUser.getIdentifier() != null) {
+
+            if (!all.containsKey(PhrsConstants.OPEN_ID_PARAM_IDENTITY))
+                all.put(PhrsConstants.OPEN_ID_PARAM_IDENTITY, openIdUser.getIdentity());
+
+        }
         openIdUser.setAttribute("info", all);
         return all;
     }
 
     public static Map<String, String> extractOpenIdParameters(OpenIdUser user) {
-        Map<String, String> map = new HashMap<String, String>();
-        // FacesContext context = FacesContext.getCurrentInstance();
+
+        return extractOpenIdAllAttributes(user, false, false);
         /*
-           * HttpServletRequest request = (HttpServletRequest) context
-           * .getExternalContext().getRequest(); HttpServletResponse response =
-           * (HttpServletResponse) context .getExternalContext().getResponse();
-           */
-        // we assume that the request has been successfully handled by the
-        // OpenIdServletFilter
-        // OpenIdUser user = (OpenIdUser)
+        Map<String, String> map = new HashMap<String, String>();
+
         // request.getAttribute(OpenIdUser.ATTR_NAME);
         if (user != null) {
-            Map<String, String> sreg = SRegExtension.remove(user);
-            Map<String, String> axschema = AxSchemaExtension.remove(user);
+            Map<String, String> sreg = SRegExtension.get(user);
+            Map<String, String> axschema = AxSchemaExtension.get(user);
 
-            System.err.println("extractOpenIdParameters user: "
-                    + user.getIdentifier());
+            LOGGER.debug("OpenID parameters OP identifier= "
+                    + user.getIdentifier()+" claimedId="+user.getClaimedId());
 
-            LOGGER.debug("extractOpenIdParameters user= "
-                    + user.getIdentifier());
             if (sreg != null && !sreg.isEmpty()) {
                 map.putAll(sreg);
-                System.err.println("sreg: " + sreg);
-                LOGGER.debug("extractOpenIdParameters sreg= " + sreg);
+
+                LOGGER.debug("...sreg= " + sreg);
 
             } else if (axschema != null && !axschema.isEmpty()) {
                 map.putAll(axschema);
-                System.err.println("axschema: " + axschema);
-                LOGGER.debug("extractOpenIdParameters axschema= " + axschema);
+                LOGGER.debug("...axschema= " + axschema);
             }
             user.setAttribute("info", map);
 
         }
-        return map;
+        return map; */
     }
 
     /**
@@ -583,8 +623,7 @@ public class UserSessionService {
             OpenIdUser openIdUser, Map<String, String> attrs) {
 
         // create phrUser if not found by identifier
-        Map<String, String> extract = extractOpenIdAllAttributes(openIdUser,
-                true, true);
+        Map<String, String> extract = extractOpenIdParameters(openIdUser);
         if (attrs == null)
             attrs = new HashMap<String, String>();
         if (extract != null && !extract.isEmpty())
@@ -593,7 +632,7 @@ public class UserSessionService {
         PhrFederatedUser phrUser = null;
         // boolean exists=false;
         try {
-            phrUser = getCommonDao().updatePhrUser(openIdUser.getIdentifier(),
+            phrUser = getCommonDao().updatePhrUserByClaimedId(CommonDao.extractId(openIdUser),
                     attrs, true, true);
         } catch (Exception e1) {
 
@@ -602,8 +641,8 @@ public class UserSessionService {
         }
         if (phrUser == null) {
             phrUser = new PhrFederatedUser();
-            phrUser.setIdentifier(openIdUser.getIdentifier());
-            phrUser.setUserId(openIdUser.getIdentifier());
+            phrUser.setIdentifier(CommonDao.extractId(openIdUser));
+            phrUser.setUserId(CommonDao.extractId(openIdUser));
         }
 
         return phrUser;
@@ -725,7 +764,13 @@ public class UserSessionService {
             return (String) obj;
         return null;
     }
+    public static String getSessionUserGreetName() {
+        Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_GREET_NAME);
 
+        if (obj != null)
+            return (String) obj;
+        return null;
+    }
     /**
      * TODO User principal We will bring back another security package that is
      * compatible
@@ -1056,7 +1101,8 @@ public class UserSessionService {
 
         if (attrName != null && value != null) {
             try {
-                Object sess = FacesContext.getCurrentInstance()
+                //create session if necessary
+                FacesContext.getCurrentInstance()
                         .getExternalContext().getSession(true);
 
                 FacesContext.getCurrentInstance().getExternalContext()

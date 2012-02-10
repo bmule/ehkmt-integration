@@ -145,14 +145,14 @@ public class OpenIdContextListener implements ServletContextListener,
 	 */
 
 	public void onDiscovery(OpenIdUser user, HttpServletRequest request) {
-		System.out.println("OpenIdContextListener discovered user claimId: "
+		System.out.println("OpenIdContextListener discovered user claimedId: "
 				+ user.getClaimedId());
 	}
 
 	public void onPreAuthenticate(OpenIdUser user, HttpServletRequest request,
 			UrlEncodedParameterMap params) {
 		System.out
-				.println("OpenIdContextListener pre-authenticate user claimId: "
+				.println("OpenIdContextListener pre-authenticate user claimedId: "
 						+ user.getClaimedId());
 	}
 

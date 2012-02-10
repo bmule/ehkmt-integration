@@ -55,15 +55,15 @@ public class LoginServlet extends HttpServlet {
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_EMAIL)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_POST_CODE)
 					.addExchange(PhrsConstants.OPEN_ID_PARAM_DATE_OF_BIRTH)
-					)						
+					)
 		        .addListener(new AxSchemaExtension()
 						.addExchange(PhrsConstants.OPEN_ID_PARAM_EMAIL)
 						.addExchange(PhrsConstants.OPEN_ID_PARAM_COUNTRY)
 						.addExchange(PhrsConstants.OPEN_ID_PARAM_LANGUAGE)
 						.addExchange(PhrsConstants.OPEN_ID_PARAM_ROLE)
-						)		        				
+						)
 				.addListener(new RelyingParty.Listener() {
-					
+
 					public void onDiscovery(OpenIdUser user, HttpServletRequest request) {
 						LOGGER.debug("LoginServlet discovered user claimId: "
 								+ user.getClaimedId());
@@ -74,9 +74,9 @@ public class LoginServlet extends HttpServlet {
 						LOGGER.debug("LoginServlet pre-authenticate user claimId: "
 										+ user.getClaimedId());
 					}
-					public void onAuthenticate(OpenIdUser user, HttpServletRequest request) {					
+					public void onAuthenticate(OpenIdUser user, HttpServletRequest request) {
 						if (user != null) {
-	
+
 							LOGGER.debug("LoginServlet onAuthenticate newly authenticated openid user.identity: "
 									+ user.getIdentity());
 							try {
@@ -91,16 +91,16 @@ public class LoginServlet extends HttpServlet {
 							LOGGER.debug("LoginServlet onAuthenticate error Null OpenIdUser: ");
 						}
 					}
-					
+
 					public void onAccess(OpenIdUser user, HttpServletRequest request) {
 						LOGGER.debug("LoginServlet user access: "
 								+ user.getIdentity());
 						LOGGER.debug("info: " + user.getAttribute("info"));
 					}
-		
+
 				});
 	}
-	
+
 	RelyingParty _relyingParty;
 	
 	private final static Logger LOGGER = LoggerFactory
@@ -142,7 +142,7 @@ public class LoginServlet extends HttpServlet {
 	/**
 	 * This method is called by the servlet container to configure this filter;
 	 * The init parameter "forwardUri" is required. The relying party used will
-	 * be the default {@link RelyingParty#getInstance() instance} if it is not
+	 * be the default {@link com.dyuproject.openid.RelyingParty#getInstance() instance} if it is not
 	 * found in the servlet context attributes.
 	 */
 	public void init(ServletConfig config) throws ServletException {
@@ -431,7 +431,7 @@ public class LoginServlet extends HttpServlet {
 		 * Dispatches the request to a view/template.
 		 */
 		public void handle(String forwardUri, HttpServletRequest request,
-				HttpServletResponse response) throws IOException,
+                           HttpServletResponse response) throws IOException,
 				ServletException;
 
 	}

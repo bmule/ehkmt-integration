@@ -1,4 +1,4 @@
-package at.srfg.kmt.ehealth.phrs.usermgt.openid.dyu;
+package at.srfg.kmt.ehealth.phrs.security.services;
 
 
 //========================================================================
@@ -24,7 +24,7 @@ import java.math.BigInteger;
  * @created Sep 8, 2008
  */
 
-public final class Constants
+public final class OpenIdConstants
 {
     
     public static final String DEFAULT_ENCODING = "UTF-8";
@@ -73,13 +73,13 @@ public final class Constants
     public static final String SREG_NICKNAME = "openid.sreg.nickname";
     public static final String SREG_EMAIL = "openid.sreg.email";
     public static final String SREG_FULLNAME = "openid.sreg.fullname";
-    public static final String SREG_DOB = "openid.sreg.dob";
-    public static final String SREG_GENDER = "openid.sreg.gender";
+
     public static final String SREG_POSTCODE = "openid.sreg.postcode";
     public static final String SREG_COUNTRY = "openid.sreg.country";
     public static final String SREG_LANGUAGE = "openid.sreg.language";
     public static final String SREG_TIMEZONE = "openid.sreg.timezone";
-    
+    public static final String SREG_DOB = "openid.sreg.dob";
+    public static final String SREG_GENDER = "openid.sreg.gender";
     
     /**
      * The possible values for openid mode.

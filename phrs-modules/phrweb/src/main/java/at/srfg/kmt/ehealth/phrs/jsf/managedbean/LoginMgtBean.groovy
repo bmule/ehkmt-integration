@@ -16,6 +16,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 /**
  * 
  * Used primarily for logging out
@@ -127,11 +128,11 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 	public String getPhrId() {
 		return UserSessionService.getSessionAttributePhrId();
 	}
-	//println('sessMap '+getSessionMap())
+
 	public String getUsername() {
-		println('sessionMap='+getSessionMap())
-		String userName= userAuthenticatedName()
-		return userName ?: ''
+        String greetName = UserSessionService.getSessionUserGreetName();
+		String userName= greetName ? greetName : userAuthenticatedName()
+		return userName ? userName : ''
 	}
 	//for long user ids, show last
 	public String getShortname(){
@@ -195,10 +196,48 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 			e.printStackTrace();
 		}
 	}
-
+    public boolean getTestMode() {
+        return ConfigurationService.isAppModeTest() || ConfigurationService.getInstance().isAppModeSingleUserTest();
+    }
 	public boolean testMode() {
 		return ConfigurationService.isAppModeTest() || ConfigurationService.getInstance().isAppModeSingleUserTest();
 	}
+    public void getLoadTestData(){
+        LOGGER.error("web form got: getLoadTestData ")
+        try {
+          CoreTestData.addTestBasicHealthVitalsData(getOwnerUri())
+        } catch (Exception e) {
+            LOGGER.error("getLoadTestData failed",e)
+        }
+    }
+    public void getLoadInterop(){
+        LOGGER.error("web form got: getLoadInterop ")
+        try {
+            CoreTestData test= new CoreTestData()
+            test.addTestMedications_2_forPortalTestForOwnerUri(getOwnerUri())
+        } catch (Exception e) {
+            LOGGER.error("getLoadInterop failed",e)
+        }
+    }
+
+    public void loadTestData(){
+        LOGGER.error("web form got: loadTestData ")
+        try {
+            CoreTestData.addTestBasicHealthVitalsData(getOwnerUri())
+        } catch (Exception e) {
+            LOGGER.error("loadTestData failed",e)
+        }
+    }
+    public void loadInterop(){
+        LOGGER.error("web form got: lLoadInterop ")
+        try {
+            CoreTestData test= new CoreTestData()
+            test.addTestMedications_2_forPortalTestForOwnerUri(getOwnerUri())
+        } catch (Exception e) {
+            LOGGER.error("loadInterop failed",e)
+        }
+    }
+
 
 
 

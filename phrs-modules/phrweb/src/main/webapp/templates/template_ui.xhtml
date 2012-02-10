@@ -86,9 +86,8 @@
 			 <!-- restrict access to center content area -->
 			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq false}">
 				<div id="content" class="ui-widget"  style="width:100%;" >
-				
-					<h:outputLabel for="field_action_status"
-							value="#{labels['authenticate_login_please']}"
+				     
+					<h:outputLabel  value="#{labels['authenticate_login_please']}"
 							styleClass="form-dialog-label" />					
 				</div>
 			</p:layoutUnit>	
@@ -101,7 +100,7 @@
 			</p:layoutUnit>
 		</p:layout>
 		<!-- no sidebar or layout 
-		<h:panelGrid rendered="#{param['sidebar']} == 'no'">
+		<h:panelGrid rendered=" {param['sidebar']} == 'no'">
 			<div id="content" class="ui-widget">
 				<ui:insert name="content">...</ui:insert>
 			</div>
@@ -112,7 +111,7 @@
 		
 		<div id="wrapper">
 			<p:panel visible="false" >
-				sidebar=<h:outputText value="#{param['sidebar']}" />
+				sidebar=<h:outputText value=" {param['sidebar']}" />
 			</p:panel>
 	
 			<div id="page">
