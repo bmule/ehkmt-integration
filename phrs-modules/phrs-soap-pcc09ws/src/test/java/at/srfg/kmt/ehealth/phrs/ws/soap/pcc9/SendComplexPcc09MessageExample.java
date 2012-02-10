@@ -96,15 +96,15 @@ public final class SendComplexPcc09MessageExample {
 //        final String careProvisionCode = "COBSCAT";
         final String careProvisionReason = "iCardea Barcelona Meeting test";
         //String careRecordTimePeriodBegin = "201101010000";
-        final String careRecordTimePeriodBegin =
-                QueryFactoryUnitTest.getLastMonthDate();
+//        final String careRecordTimePeriodBegin =
+//                QueryFactoryUnitTest.getLastMonthDate();
         //String careRecordTimePeriodEnd =   "201101011000";
-        final String careRecordTimePeriodEnd = QueryFactoryUnitTest.getNowDate();
-        final String clinicalStatementTimePeriodBegin =
-                QueryFactoryUnitTest.getLastMonthDate();
+//        final String careRecordTimePeriodEnd = QueryFactoryUnitTest.getNowDate();
+//        final String clinicalStatementTimePeriodBegin =
+//                QueryFactoryUnitTest.getLastMonthDate();
         //String clinicalStatementTimePeriodBegin = "201001010000";
-        final String clinicalStatementTimePeriodEnd =
-                QueryFactoryUnitTest.getNowDate();
+//        final String clinicalStatementTimePeriodEnd =
+//                QueryFactoryUnitTest.getNowDate();
         //String clinicalStatementTimePeriodEnd = "201005011000";
         final String includeCarePlanAttachment = "true";
         final String maximumHistoryStatements = "30";
@@ -114,10 +114,10 @@ public final class SendComplexPcc09MessageExample {
         final QUPCIN043100UV01 pcc9Request =
                 QueryFactory.buildPCC9Request(careProvisionCode,
                 careProvisionReason,
-                careRecordTimePeriodBegin,
-                careRecordTimePeriodEnd,
-                clinicalStatementTimePeriodBegin,
-                clinicalStatementTimePeriodEnd,
+                null,
+                null,
+                null,
+                null,
                 includeCarePlanAttachment,
                 maximumHistoryStatements,
                 patientAdministrativeGender,
