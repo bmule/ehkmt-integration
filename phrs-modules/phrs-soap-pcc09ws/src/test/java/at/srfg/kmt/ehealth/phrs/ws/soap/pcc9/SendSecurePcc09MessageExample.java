@@ -106,15 +106,15 @@ public final class SendSecurePcc09MessageExample {
 
         final QUPCIN043100UV01 pcc9Request =
                 QueryFactory.buildPCC9Request(careProvisionCode,
-                careProvisionReason,
-                careRecordTimePeriodBegin,
-                careRecordTimePeriodEnd,
-                clinicalStatementTimePeriodBegin,
-                clinicalStatementTimePeriodEnd,
-                includeCarePlanAttachment,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
                 maximumHistoryStatements,
-                patientAdministrativeGender,
-                patientBirthTime,
+                null,
+                null,
                 patientID,
                 patientName,
                 patientSurname);
