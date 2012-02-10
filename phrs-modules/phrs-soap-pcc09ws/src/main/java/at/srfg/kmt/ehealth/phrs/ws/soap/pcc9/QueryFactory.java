@@ -455,7 +455,7 @@ final class QueryFactory {
 
 //                given.setContent(patientName);
 //                family.setContent(patientSurname);
-
+            
             pn.getContent().add(patientName);
             pn.getContent().add(patientSurname);
 //            pn.getContent().add(OBJECT_FACTORY.createENGiven(given));
