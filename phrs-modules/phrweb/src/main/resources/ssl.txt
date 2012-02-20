@@ -1,0 +1,10 @@
+#CA
+# keytool -keystore srfg-phrs-web-keystore.ks  -storepass icardea -import -trustcacerts -alias root  -file C:\Programme\Apache2.2\htdocs\CA\cacert.crt
+
+# keytool -keystore srfg-phrs-web-keystore.ks  -storepass icardea -list
+
+# Includes CA,core/web, add Consent mgr from tomcat
+# srfg-phrs-web-keystore.ks
+# srfg-phrs-core-keystore.ks
+
+# keytool -keystore srfg-phrs-web-keystore.ks  -storepass icardea -import -trustcacerts -alias consent  -file C:\Programme\Apache2.2\htdocs\CA\cacert.crt
