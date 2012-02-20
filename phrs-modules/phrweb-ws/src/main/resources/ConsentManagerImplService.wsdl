@@ -170,14 +170,24 @@
     </wsdl:port>
   </wsdl:service>
    -->
+    <!--
+ <wsdl:service name="ConsentManagerImplService"><wsdl:port name="ConsentManagerImpl" binding="impl:ConsentManagerImplSoapBinding"><wsdlsoap:address location="http://192.168.101.159:8080/consenteditor/services/ConsentManagerImplService/"/></wsdl:port></wsdl:service>
+
+
+<wsdl:port name="ConsentManagerImpl" binding="impl:ConsentManagerImplSoapBinding"><wsdlsoap:address location="http://192.168.101.159:8080/consenteditor/services/ConsentManagerImplService/"/></wsdl:port>
+   https://icardea-server.lksdom21.lks.local:8443/consenteditor/services/ConsentManagerImplService?wsdl
+    192.168.101.159 issue certificates might need host name, not IP address -->
   <wsdl:service name="ConsentManagerImplService">
       <wsdl:port name="port_8443" binding="impl:ConsentManagerImplSoapBinding">
-          <wsdlsoap:address location="https://10.37.129.2:8443/consenteditor/services/ConsentManagerImplService/"/>
+          <wsdlsoap:address location="https://icardea-server.lksdom21.lks.local:8443/consenteditor/services/ConsentManagerImplService/"/>
       </wsdl:port>
       <wsdl:port name="port_8080" binding="impl:ConsentManagerImplSoapBinding">
-          <wsdlsoap:address location="http://10.37.129.2:8080/consenteditor/services/ConsentManagerImplService/"/>
+          <wsdlsoap:address location="http://127.0.0.1:8080/consenteditor/services/ConsentManagerImplService/"/>
+      </wsdl:port>
+<!-- local test machine-->
+      <wsdl:port name="local" binding="impl:ConsentManagerImplSoapBinding">
+          <wsdlsoap:address location="http://127.0.0.1:8080/consenteditor/services/ConsentManagerImplService/"/>
       </wsdl:port>
   </wsdl:service>
-
 
 </wsdl:definitions>

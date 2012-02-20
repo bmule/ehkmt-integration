@@ -168,13 +168,6 @@
         <type>jar</type>
         <scope>compile</scope>
     </dependency>
-
-   <dependency>
-       <groupId>org.apache.axis2</groupId>
-       <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
-       <version>1.5.3</version>
-       <scope>compile</scope>
-   </dependency>
    <dependency>
        <groupId>org.apache.axis2</groupId>
        <artifactId>axis2-adb</artifactId>
@@ -182,11 +175,26 @@
    </dependency>
    <dependency>
        <groupId>org.apache.axis2</groupId>
+       <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+       <version>1.5.3</version>
+       <scope>provided</scope>
+   </dependency>
+
+   <dependency>
+       <groupId>org.apache.axis2</groupId>
        <artifactId>axis2-adb-codegen</artifactId>
        <version>1.5.3</version>
-       <scope>compile</scope>
+       <scope>provided</scope>
    </dependency>
     </dependencies>
+
+    <!--
+           <groupId>org.apache.axis2</groupId>
+       <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
+
+       <groupId>org.apache.axis2</groupId>
+       <artifactId>axis2-adb-codegen</artifactId>
+    -->
      <!--
      mvn clean axis2-wsdl2code:wsdl2code
      or generate sources phase
@@ -211,6 +219,7 @@
                 <groupId>org.apache.axis2</groupId>
                 <artifactId>axis2-wsdl2code-maven-plugin</artifactId>
                 <version>1.5.3</version>
+
                 <executions>
                     <execution>
                         <goals>
@@ -229,8 +238,9 @@
                     <packageName>at.srfg.kmt.ehealth.phrs.services</packageName>
                     <serviceName>ConsentManagerImplService</serviceName>
 
+
                     <portName>port_8080</portName>
-                    <!-- <portName>port_8443</portName>-->
+                    <!-- use http 8080 on pilot machine<portName>port_8443</portName>-->
                     <wsdlFile>${basedir}/src/main/resources/ConsentManagerImplService.wsdl</wsdlFile>
 
                     <databindingName>adb</databindingName>
