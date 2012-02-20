@@ -35,7 +35,7 @@ public class ToolTests {
     public  void testConfigService(){
         //consent.service.endpoint
         ConfigurationService cs=ConfigurationService.getInstance();
-        assertNotNull(cs);
+        assertNotNull("testConfigService NULL", cs);
         String value= ConfigurationService.getInstance().getProperty("consent.service.endpoint");
         assertNotNull(value);
         System.out.println("value="+value);

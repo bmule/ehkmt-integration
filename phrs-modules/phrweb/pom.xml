@@ -47,6 +47,7 @@
             <name>Morphia (svn) Maven Repository</name>
             <url>http://morphia.googlecode.com/svn/mavenrepo/</url>
         </repository>
+
         
         <!--
         jboss throws cert exceptions
@@ -157,10 +158,15 @@
             <artifactId>phrweb-ws</artifactId>
             <version>1.0-SNAPSHOT</version>
             <exclusions>
+               <!-- older 1.1, later version found , but do not exclude stax -->
                 <exclusion>
                     <groupId>org.apache.ws.commons.schema</groupId>
                     <artifactId>XmlSchema</artifactId>
                 </exclusion>
+               <!-- <exclusion>
+                    <groupId>stax</groupId>
+                    <artifactId>stax-api</artifactId>
+                </exclusion>-->
                 <exclusion>
                     <artifactId>slf4j-api</artifactId>
                     <groupId>org.slf4j</groupId>
@@ -178,13 +184,17 @@
                     <groupId>org.slf4j</groupId>
                 </exclusion>
                 <exclusion>
+                    <artifactId>neethi</artifactId>
+                    <groupId>org.apache.ws.commons.neethi</groupId>
+                </exclusion>
+                <exclusion>
                     <artifactId>icardea-atnalog-client</artifactId>
                     <groupId>tr.com.srdc.icardea</groupId>
                 </exclusion>
             
             </exclusions>
         </dependency>
-     
+   
         <!--Other dependencies-->
         
         <dependency>
@@ -265,13 +275,13 @@
             <version>2.0</version>
             <scope>compile</scope>
         </dependency>
-        
+        <!-- axis or soap validation? -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
             <version>4.0.2.GA</version>
             <scope>compile</scope>
-        </dependency>        
+        </dependency> 
         
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -369,7 +379,22 @@
             <version>0.99</version>
             <scope>compile</scope>
         </dependency>
-
+        <!-- morphia extras, needed for compiling -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>[2.1_3,)</version>
+            <type>jar</type>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.proxytoys</groupId>
+            <artifactId>proxytoys</artifactId>
+            <version>1.0</version>
+            <type>jar</type>
+            <optional>true</optional>
+        </dependency>
+        <!-- jsf -->
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>
             <artifactId>myfaces-api</artifactId>
@@ -411,7 +436,7 @@
             <scope>compile</scope>
         </dependency>
         
-        <!-- why not 1.2 versions? see Pix server. These bring in older
+        <!--  These bring in older
         dependencies to exclude. Currently overlap with opensaml-->
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
@@ -433,9 +458,15 @@
                     <artifactId>xml-apis</artifactId>
                     
                 </exclusion>
+                <exclusion>
+                    <groupId>org.apache.ws.commons.schema</groupId>
+                    <artifactId>XmlSchema</artifactId>
+                </exclusion>                
             </exclusions>
             
         </dependency>
+
+        <!-- TODO remove extras depending on PIX and PDQ queries. Note that tests might use more, therefore update tests -->
         <dependency>
             <groupId>ca.uhn.hapi</groupId>
             <artifactId>hapi-structures-v21</artifactId>
@@ -517,7 +548,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
         -->
          <!-- Start consent editor dependencies 
          Because we use a service with all of these...
-         -->
+
         <dependency>
             <groupId>org.jvnet.hyperjaxb3</groupId>
             <artifactId>hyperjaxb3-ejb-runtime</artifactId>
@@ -609,6 +640,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
                 </exclusion>
             </exclusions>
         </dependency>
+          -->
         <!--duplicate on org.apache.axis2:axis2-transport-local 
         XmlSchema 1.4.3 and woden 1.4.2
         <dependency>
@@ -653,7 +685,7 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
             <type>jar</type>
-            <version>2.3</version>
+            <version>2.5</version>
             <scope>provided</scope>
         </dependency>
         <!--
@@ -775,11 +807,12 @@ mvn install:install-file  -Dfile=icardea-consenteditor-invoker-1.0-SNAPSHOT.jar 
                         <artifactId>groovy-eclipse-compiler</artifactId>
                         <version>2.6.0-01</version>
                     </dependency>
-                    <!--<dependency>
+                    <!--
+                    <dependency>
                         <groupId>org.codehaus.groovy</groupId>
                         <artifactId>groovy-eclipse-batch</artifactId>
                         <version>1.8.4-01</version>
-                    </dependency>-->
+                    </dependency>  -->
                 </dependencies>
             </plugin>
 

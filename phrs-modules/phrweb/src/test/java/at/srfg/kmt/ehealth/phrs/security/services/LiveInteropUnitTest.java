@@ -97,6 +97,7 @@ public class LiveInteropUnitTest {
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+   
     }
 
     @Before
@@ -109,7 +110,7 @@ public class LiveInteropUnitTest {
 
      
         iaccess = phrsClient.getInteropService();
-        iprocess = new InteropProcessor(phrsClient);
+        iprocess = new InteropProcessor();
 
         //get this one, we set the creator differently
         medicationClient = phrsClient.getInteropClients().getMedicationClient();
@@ -125,7 +126,7 @@ public class LiveInteropUnitTest {
 
     @After
     public void tearDown() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException, Exception {
-
+ 
         /*
          * try { if (phrsClient != null) { Query query =
          * phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri
@@ -507,7 +508,7 @@ public class LiveInteropUnitTest {
     @Test
     public void testLoadSampleTestDataSet() {
         System.out.println("testLoadSampleTestDataSet");
-        CoreTestData core = new CoreTestData(this.phrsClient);
+        CoreTestData core = new CoreTestData();
         String dateStr = CoreTestData.makeDateLabelForTitle("dummy_unittest_");
 
 
@@ -537,7 +538,7 @@ public class LiveInteropUnitTest {
 
     public int loadSampleTestDataSet(String owner) {
 
-        CoreTestData core = new CoreTestData(this.phrsClient);
+        CoreTestData core = new CoreTestData();
         //return count
         return core.addTestMedications_2_forPortalTestForOwnerUri(owner);
 

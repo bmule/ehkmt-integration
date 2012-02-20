@@ -38,20 +38,21 @@ public class AuditAtnaServiceTest {
     }
 
     @Test
-    public void testSetupSSL() {
-        System.out.println("setupSSL");
+    public void testAuditAtnaServiceSetup() {
+        System.out.println("testAuditAtnaServiceSetup");
         AuditAtnaService instance = null;
         
         boolean flag = false;
         try {
             instance = new AuditAtnaService();
-            //instance.setupSSL();
+            
             flag = true;
         } catch (Exception e) {
             e.printStackTrace();
+            fail("testAuditAtnaServiceSetup has exception");
+            
         }
-        assertTrue("setupSSL has exception", flag);
-        assertTrue("setupSSL is not configured for SSL, see icardea.properties", instance.isSecure());
+       
     }
 
     @Test
@@ -80,7 +81,7 @@ public class AuditAtnaServiceTest {
         AuditAtnaService instance = new AuditAtnaService();
         boolean expResult = true;
         boolean result = instance.isAtnalogRequired();
-        assertEquals("ATNA loggin is not enabled, see icardea.properties", expResult, result);
+        assertEquals("ATNA loggin is not enabled, see phrs.properties", expResult, result);
     }
     @Ignore
     @Test

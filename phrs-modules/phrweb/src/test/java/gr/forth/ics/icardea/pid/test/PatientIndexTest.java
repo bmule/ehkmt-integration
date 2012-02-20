@@ -7,8 +7,10 @@ import java.security.Security;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+import at.srfg.kmt.ehealth.phrs.security.services.PatientIndexFaux;
 import gr.forth.ics.icardea.pid.HL7Utils;
 //import gr.forth.ics.icardea.pid.PatientIndex;
+import gr.forth.ics.icardea.pid.PatientIndexConstants;
 //import gr.forth.ics.icardea.pid.iCARDEA_Patient;
 
 import org.junit.AfterClass;
@@ -30,13 +32,10 @@ import ca.uhn.hl7v2.model.v25.message.RSP_K23;
 import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.model.v25.segment.PID;
 import ca.uhn.hl7v2.parser.PipeParser;
-import at.srfg.kmt.ehealth.phrs.security.services.PatientIndexFaux;
-import gr.forth.ics.icardea.pid.PatientIndexConstants;
 
 public class  PatientIndexTest {
 	public static final String ICARDEA_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
-	//private static PatientIndex pid = null;
-    private static PatientIndexFaux  pid = null;
+	private static PatientIndexFaux pid = null;
 	private static Connection connection = null;
 	
 	private Message sendAndRecv(Message msg) throws LLPException, HL7Exception, IOException {
@@ -45,12 +44,12 @@ public class  PatientIndexTest {
 		Message response = initiator.sendAndReceive(msg);
 		return response;
 	}
-    /*
+
 	@Test
 	public void testPDQ() throws HL7Exception, LLPException, IOException {
 		Message m = this.pdq("Sfakianakis", "Stelios", null, null);
 		System.out.println("---PDQ----\n"+m.encode());
-	} */
+	}
 	@Test
 	public void testFeed() {
 
@@ -67,10 +66,6 @@ public class  PatientIndexTest {
 		//PID|||102^^^IBOT&1.3.6.1.4.1.21367.2009.1.2.370&ISO||OTHER_IBM_BRIDGE^MARION||19661109|F
 		//PV1||O
 	}
-        
-        //see other query in text file to build a query FROM a device serial number
-        // to get the Protocol ID
-        //PIX query
 	@Test
 	public void testQuery() throws HL7Exception, LLPException, IOException {
 
@@ -133,21 +128,6 @@ public class  PatientIndexTest {
 	//MSH|^~\&|testclient^icardea|SALK^icardea|PID^icardea|iCARDEAPlatform|||QBP^Q22^QBP_Q21|blabla||2.5||||||UNICODE UTF-8
 	//QPD|IHE PDQ Query|query-1|@PID.5.1.1^Duck~@PID.5.2^MARION
 	//RCP|I
-    /**
-     * Demo graphic query. PDQ
-     * see http://openpixpdq.sourceforge.net/messagesamples.html#_pixquery for parsing msg
-     * pdq.php
-     * 
-     * Use Protocol Id to get the patient demographics info  
-     * @param fam_name
-     * @param giv_name
-     * @param sex
-     * @param dob
-     * @return
-     * @throws HL7Exception
-     * @throws LLPException
-     * @throws IOException 
-     */
 	public Message pdq(String fam_name, String giv_name, String sex, String dob) 
 	throws HL7Exception, LLPException, IOException {
 
@@ -163,12 +143,7 @@ public class  PatientIndexTest {
 		a.getMSH().getSendingApplication().parse("testclient^icardea");
 		a.getMSH().getSendingFacility().parse("SALK^icardea");
 		// Set Receiving app identification
-                
-//icardea.pix&1.2.826.0.1.3680043.2.44.248240.1&ISO
-//CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID
-//ORBIS&www.salk.at&DNS   
-                a.getMSH().getReceivingApplication().parse("PID^icardea");
-		//a.getMSH().getReceivingApplication().parse("PID^icardea.pix&1.2.826.0.1.3680043.2.44.248240.1&ISO");
+		a.getMSH().getReceivingApplication().parse("PID^icardea");
 		a.getMSH().getReceivingFacility().parse("iCARDEAPlatform");
 		QPD qpd = a.getQPD();
 		qpd.getQpd1_MessageQueryName().parse("IHE PDQ Query");
@@ -176,7 +151,6 @@ public class  PatientIndexTest {
 
 		final int QIP_FLD_NUM = 3;
 		int k = 0;
-                //iCARDEA_Patient
 		if (fam_name!=null)
 			qpd.getField(QIP_FLD_NUM, k++).parse(PatientIndexConstants.FNAME_SEG_FLD + "^"+fam_name);
 		if (giv_name!=null)
@@ -197,30 +171,43 @@ public class  PatientIndexTest {
 		a.getRCP().getRcp1_QueryPriority().setValue("I"); // immediate mode response
 		return this.sendAndRecv(a);
 	}
-	
+
+    /**
+     * Expects running PID on port 2575
+     * On pilot machine expect  TLS =ture
+     * @throws Exception
+     */
 	@BeforeClass
 	public static void setup() throws Exception {
-		pid = new PatientIndexFaux();//PatientIndex();
-		pid.run(new String[]{"../../icardea-config/config.ini"});
-		
+        System.out.println("here0");
+		pid = new PatientIndexFaux();
+        System.out.println("here1 pid="+pid);
+//../../icardea-config/
+
+		pid.run(new String[]{"config.ini"});
+
+        System.out.println("here2");
 		PipeParser p = new PipeParser();
 		Socket socket = null;
-
+        System.out.println("here3 Pid="+pid);
 		if (pid.usesTLS()) {
+
+            System.out.println("here4");
 			SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
-			SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", pid.port());
+			SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket("localhost", 2575);
 			sslsocket.startHandshake();
 			socket = sslsocket;
 		}
 		else
-			socket = new Socket("localhost", pid.port());
+			socket = new Socket("localhost", 2575);
+System.out.println("here5");
 		connection = new Connection(p, new MinLowerLayerProtocol(), socket);
+System.out.println("here6");
 	}
 
 	@AfterClass
 	public static void cleanup() {
 		pid.stop();
-        //connection.
 	}
 	public static void main(String args[]) {
 

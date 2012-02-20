@@ -3,6 +3,7 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.util.MultiIterable;
@@ -69,12 +70,12 @@ public class PhrsClientPhrResourceUnitTest {
     public static final String MED_REASON = "http://www.icardea.at/phrs/instances/Cholesterol";
     //public static final String MED_DRUG_NAME_URI = "http://www.icardea.at/phrs/hl7V3#drugName";
     //public static final String PILL_URI="http://www.icardea.at/phrs/instances/pills";
-    private GenericTriplestore triplestore;
-    private MedicationClient medicationClient;
-    private ActorClient actorClient;
-    private PhrsStoreClient phrsClient;
-    private InteropAccessService iaccess;
-    private InteropProcessor iprocess;
+    private static GenericTriplestore triplestore;
+    private static MedicationClient medicationClient;
+
+    private static PhrsStoreClient phrsClient;
+    private static InteropAccessService iaccess;
+    private static InteropProcessor iprocess;
     public static final String DRUG_1_QUANTITY = "2";
     public static final String DRUG_2_QUANTITY = "12";
     public static final String DRUG_1_NAME = "Prednisone";
@@ -82,19 +83,47 @@ public class PhrsClientPhrResourceUnitTest {
     public static final String DRUG_1_CODE = "C0032952";
     public static final String DRUG_2_CODE = "C0110591";
     private boolean printDynabean = false;
-
+    private static boolean cleanEnv=false;
+     
     @BeforeClass
     public static void setUpClass() throws Exception {
+                //phrsClient = PhrsStoreClient.getInstance(true); problem with lock and triplestore connection and static init
+        phrsClient = PhrsStoreClient.getInstance(true);
+        triplestore = phrsClient.getGenericTriplestore();
+
+        iaccess = phrsClient.getInteropService();
+        iprocess = new InteropProcessor();//phrsClient);
+
+        //get this one, we set the creator differently
+        medicationClient = phrsClient.getInteropClients().getMedicationClient();
+
+        //assign actor
+
+        ActorClient actorClient = phrsClient.getInteropClients().getActorClient();//new ActorClient(triplestore);
+        actorClient.register(PROTOCOL_ID_NAMESPACE, USER, USER_PROTOCOL_ID);//unit test, use pr
     }
 
     @AfterClass
     public static void tearDownClass() throws Exception {
+        if(phrsClient!=null){
+            Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
+            phrsClient.getPhrsDatastore().delete(query);
+            phrsClient.shutdown();
+            if(cleanEnv && triplestore!=null){
+                ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+            }
+            
+            
+            phrsClient=null;
+        }
+        triplestore=null;
     }
-
+/*
     @Before
     public void setUp() throws GenericRepositoryException, TripleException, IllegalAccessException, InstantiationException {
 
         //get fresh instance using "true"
+        //phrsClient = PhrsStoreClient.getInstance(true); problem with lock and triplestore connection and static init
         phrsClient = PhrsStoreClient.getInstance(true);
         triplestore = phrsClient.getGenericTriplestore();
 
@@ -105,7 +134,8 @@ public class PhrsClientPhrResourceUnitTest {
         medicationClient = phrsClient.getInteropClients().getMedicationClient();
 
         //assign actor
-        actorClient = phrsClient.getInteropClients().getActorClient();//new ActorClient(triplestore);
+
+        ActorClient actorClient = phrsClient.getInteropClients().getActorClient();//new ActorClient(triplestore);
         actorClient.register(PROTOCOL_ID_NAMESPACE, USER, USER_PROTOCOL_ID);//unit test, use pr
 
         //actorClient.register(PROTOCOL_ID_NAMESPACE, Constants.OWNER_URI_CORE_PORTAL_TEST_USER, Constants.PROTOCOL_ID_UNIT_TEST);
@@ -132,9 +162,7 @@ public class PhrsClientPhrResourceUnitTest {
                 ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
 
             }
-            if (phrsClient != null) {
-                phrsClient.setTripleStore(null);
-            }
+
 
         } catch (Exception e) {
             //e.printStackTrace(); shows a distracting error
@@ -143,7 +171,7 @@ public class PhrsClientPhrResourceUnitTest {
         phrsClient = null;
 
 
-    }
+    }*/
 
     public void addNewMessagesEhr(String phrResourceUri, String phrResourceUri2, String drug1_quantity, String drug2_quantity) throws TripleException, IllegalAccessException, InstantiationException {
         medicationClient.setCreator(Constants.EXTERN);//simulate extern
@@ -524,7 +552,7 @@ public class PhrsClientPhrResourceUnitTest {
     @Test
     public void testLoadSampleTestDataSet() {
         System.out.println("testLoadSampleTestDataSet");
-        CoreTestData core = new CoreTestData(this.phrsClient);
+        CoreTestData core = new CoreTestData();
         String dateStr = CoreTestData.makeDateLabelForTitle("dummy_unittest_");
 
 
@@ -554,7 +582,7 @@ public class PhrsClientPhrResourceUnitTest {
 
     public int loadSampleTestDataSet(String owner) {
 
-        CoreTestData core = new CoreTestData(this.phrsClient);
+        CoreTestData core = new CoreTestData();
         //return count
         return core.addTestMedications_2_forPortalTestForOwnerUri(owner);
 
@@ -1485,4 +1513,55 @@ public class PhrsClientPhrResourceUnitTest {
         }
         return newDosageURI;
     }
+    /*
+
+    public void registerProtocolId(String owneruri, String protocolId, String namespace){
+
+        getPhrsStoreClient().getInteropProcessor().registerProtocolId( owneruri,protocolId,namespace)
+
+    }
+     */
+    @Test
+    public void testNotify_Med(){
+        System.out.println("testNotify Med");
+        InteropClients interopClients=phrsClient.getInteropClients();
+
+        String protocolId= "PROTOCOLID_"+USER;
+
+        CommonDao commonDao=phrsClient.getCommonDao();
+        commonDao.registerProtocolId(USER,protocolId,null);
+
+
+        MedicationTreatment phrMed_1 = createPhrResource("test in phr_ drug_1", 2.0d, "3");
+
+        Map<String, String> uris = iaccess.sendMessages(phrMed_1);
+
+        assertNotNull("Messages sent but no message URIs returned!", uris);
+
+        //showMap("message uris by type", uris);
+        //showList("results",list);
+
+        assertTrue(!uris.isEmpty());
+        assertTrue(uris.size() > 0);
+        for (String uri : uris.keySet()) {
+            System.out.println("uri=" + uri);
+        }
+
+
+        assertNotNull("resourceUri is null of sample obj ", phrMed_1.getOwnerUri());
+        //this is the message uri, not the resource uri
+        String interopRef = iaccess.findMessageWithReference(
+                USER, phrMed_1.getResourceUri(), PHRS_RESOURCE_CLASS, null);
+
+        System.out.println("interopRef: " + interopRef);
+        assertNotNull("interopRef is null, cannot find message for " + phrMed_1.getOwnerUri(), interopRef);
+
+
+       //CoreTestData.addTestBasicHealthVitalsData(USER);
+
+       //interopClients.notifyInteropMessageSubscribersByPhrId(protocolId);
+
+    }
+   
+ 
 }

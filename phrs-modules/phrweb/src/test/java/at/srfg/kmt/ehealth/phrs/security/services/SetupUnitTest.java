@@ -126,7 +126,7 @@ public class SetupUnitTest {
             ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).shutdown();
             ((GenericTriplestoreLifecycle) phrsClient.getGenericTriplestore()).cleanEnvironment();
             triplestore = null;
-            phrsClient.setTripleStore(null);
+
             /*
              * System.out.println("shutdown triplestore");
              * ((GenericTriplestoreLifecycle) triplestore).shutdown();

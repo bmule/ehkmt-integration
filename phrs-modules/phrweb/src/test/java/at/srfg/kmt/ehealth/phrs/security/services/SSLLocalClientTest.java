@@ -7,7 +7,7 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import org.junit.*;
 import static org.junit.Assert.*;
 
-@Ignore
+
 public class SSLLocalClientTest {
     
     public SSLLocalClientTest() {
@@ -29,36 +29,43 @@ public class SSLLocalClientTest {
     public void tearDown() {
     }
 
-    /**
-     * Test of sslSetup method, of class SSLLocalClient.
-     */
+  
     @Test
-    public void testSslSetup_String_String() {
-        System.out.println("sslSetup");
-        String certPath = "";
-        String password = "";
-        SSLLocalClient.sslSetup(certPath, password);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testSslSetupLocal() {
+        System.out.println("testSslSetupLocal");
+
+        try {
+            SSLLocalClient.sslSetupLocal();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception"+e);
+        }
+
     }
 
-    /**
-     * Test of sslSetup method, of class SSLLocalClient.
-     */
+
     @Test
     public void testSslSetupSetting_1() {
         System.out.println("sslSetup");
         int configSettings=1;
-        SSLLocalClient.sslSetup(configSettings);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try{
+            SSLLocalClient.sslSetup(configSettings);
+   
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception"+e);
+        }
+        
     }
-        @Test
+    @Test
     public void testSslSetupSetting_2() {
         System.out.println("sslSetup");
         int configSettings=2;
-        SSLLocalClient.sslSetup(configSettings);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        try{
+            SSLLocalClient.sslSetup(configSettings);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception"+e);
+        }
     }
 }
