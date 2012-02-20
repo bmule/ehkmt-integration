@@ -204,7 +204,7 @@ public class LoginServlet extends HttpServlet {
 		 */
 		String requestUri = request.getRequestURI();
 		// String requestUri = request.getRequestURL()
-		System.out.println("request.getRequestURI()="
+		LOGGER.debug("request.getRequestURI()="
 				+ defaultRedirectToApplication 
 				+ " ...request.getRequestURL()="
 				+ request.getRequestURL());
@@ -276,7 +276,7 @@ public class LoginServlet extends HttpServlet {
 					} else {
 						// return to login form
 						request.setAttribute(ERROR_MSG_ATTR, errorMsg);
-						System.out.println("isLocalLogin "
+						LOGGER.debug("isLocalLogin username="+username+" "
 								+ getForwardUriLoginPage());
 						getForwardUriHandler().handle(getForwardUriLoginPage(),
 								request, response);
@@ -301,8 +301,7 @@ public class LoginServlet extends HttpServlet {
 						// response,
 						// then we can verify the user.
 
-						System.out
-								.println("RelyingParty.isAuthResponse authentication, user null, timeout ,redirect to request.getRequestURI()="
+						LOGGER.debug("RelyingParty.isAuthResponse authentication, user null or timeout. redirect to request.getRequestURI()="
 										+ requestUri);
 						// There is no session now, but the verify step should
 						// lead to the onAuthentication event listener
@@ -324,7 +323,7 @@ public class LoginServlet extends HttpServlet {
 								.getIdentifierParameter()) != null)
 							request.setAttribute(ERROR_MSG_ATTR, errorMsg);
 
-						System.out.println("new login forwardUri="
+						LOGGER.debug("new login forwardUri="
 								+ getForwardUriLoginPage());
 						// forward to user login
 						getForwardUriHandler().handle(getForwardUriLoginPage(),
@@ -340,8 +339,7 @@ public class LoginServlet extends HttpServlet {
 					// user already authenticated, however, the session token
 					// was
 					// not found. We already checked this.
-					System.out
-							.println("user.isAuthenticated, but session needs updating ");
+					LOGGER.debug("user.isAuthenticated, but session needs updating ");
 					// setup session with OpenID. We did not find an
 					// authentication
 					// token in the session or the session was not already
@@ -362,9 +360,9 @@ public class LoginServlet extends HttpServlet {
 						response.sendRedirect(defaultRedirectToApplication);
 					} else {
 						// failed verification
-						System.out.println("failed verification ");
+						
 
-						LOGGER.debug("Failed verification identifier="
+						LOGGER.debug("Failed verification, forward back to login page. identifier="
 								+ openIdUser.getIdentifier() + " claimId"
 								+ openIdUser.getClaimedId());
 
@@ -400,8 +398,7 @@ public class LoginServlet extends HttpServlet {
 			request.setAttribute(ERROR_MSG_ATTR, errorMsg);
 			LOGGER.error("error " + errorMsg + " forward to"
 					+ getForwardUriLoginPage());
-			System.out.println("error " + errorMsg + " forward to"
-					+ getForwardUriLoginPage());
+		
 			getForwardUriHandler().handle(getForwardUriLoginPage(), request,
 					response);
 

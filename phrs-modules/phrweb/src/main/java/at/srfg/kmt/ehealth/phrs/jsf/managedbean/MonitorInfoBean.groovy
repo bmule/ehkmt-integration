@@ -38,14 +38,17 @@ public class MonitorInfoBean extends FaceBaseBean {
         try {
             loadModelMain()
         } catch (Exception e) {
-            println('ShareBean loadModelMain Exception ' + e)
+            LOGGER.debug("MonitorInfoBean loadModelMain  "+ e);
         }
 
     }
-
-    // AUTHORIZE_RESOURCE_CODE_PHRS_UNKNOWN
+    /**
+     * Build the list view of reports available to this authenticated user
+     * They see their own personal reports first, followed by a list of users and priviledges
+     * TODO For medical roles, do not disply their personal reports
+     */
     private void buildView() {
-
+        LOGGER.debug("buildView start");
         List<PhrFederatedUser> phrUsers = null
         //Either get a smaller list of subjects using the consent editor
         //or get all users in the PHRS system. More can be offered for sharing
@@ -56,7 +59,7 @@ public class MonitorInfoBean extends FaceBaseBean {
         internalModelList = []
         //which resources?
         List resourceCodes = config.getConsentSubjectCodes('phr')
-
+        LOGGER.debug("buildView resourceCodes "+resourceCodes);
         //resourceCodes.add(PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION)
         String action = PhrsConstants.AUTHORIZE_ACTION_CODE_READ
         //Sorting, leave room for higher priority records.
@@ -64,24 +67,25 @@ public class MonitorInfoBean extends FaceBaseBean {
 
         for (PhrFederatedUser ph: phrUsers) {
             sortOrder++
+            LOGGER.debug('buildView userid='+ph.getIdentifier()+' nickname:'+ ph.getNickname());
             //for each supported resourceCode, check READ permissions
             for (String resourceType: resourceCodes) {
+                LOGGER.debug('buildView resourceType='+resourceType+' nickname:'+ ph.getNickname());
                 try {
                     boolean permitViewContent = permitUserOnPhrId(ph.getOwnerUri(), resourceType, action)
-
+                    LOGGER.debug('buildView permitViewContent resourceType='+resourceType+' permitViewContent:'+permitViewContent);
                     boolean permitViewRow = false
                     //check permit for current user, on phrUser with resource type
                     //show row for testing
                     if (config.isAppModeMonitorListAllUsers()) {
                         permitViewRow = true
+                        LOGGER.debug('buildView isAppModeMonitorListAllUsers permitViewRow='+permitViewRow);
+
                         //permitViewContent=true
                     }
 
-                    if (permitViewRow || permitViewContent) {
-
                         MonitorInfoItem item = new MonitorInfoItem();
                         item.message = ''
-
 
                         item.ownerUri = ph.getOwnerUri()
                         item.currentUserId = getSessionUserOwnerUri()
@@ -94,34 +98,42 @@ public class MonitorInfoBean extends FaceBaseBean {
 
                         ProfileContactInfo pci = userService.getProfileContactInfo(item.getOwnerUri())
 
+                        String theName=userService.getUserGreetName(ph.getOwnerUri())
+                        item.setName(theName);
+                        String protocolId = ph.getProtocolId();
 
-                        if (pci) {
-                            String name = pci.getLastName() + pci.getLastName() ? ',' : '' + pci.getFirstName()
-                            item.setName(name);
-                            String protocolId = null
+                        item.setProtocolId(protocolId)
 
-                            if (pci.getPixIdentifier()) {
-
-                                protocolId = pci.getPixIdentifier().getIdentifier()
-                                item.setProtocolId(protocolId)
-                            }
-
-                            if (!protocolId) {
-                                item.message += 'No Protocol ID found in the Contact Information'
-                            }
-
-                            internalModelList.add(item)
-                        } else {
-                            //item.messageCode=null
-                            item.message += 'No contact info provided or protocolId'
+                        if (!protocolId) {
+                            item.addMessages('No Protocol ID was found to connect health systems')
+                            item.message += ' No Protocol ID was found to connect health systems. '
                         }
+
+                        String pixQueryId= ph.getPixQueryIdUser();
+
+                        item.setPixQueryIdUser(pixQueryId)
+                        item.setPixQueryIdNamespace(ph.getPixQueryIdNamespace())
+
+                        if (!pixQueryId) {
+                            item.addMessages('No CIED Implant ID was found')
+                            item.message += ' No CIED Implant ID was found'
+                        }
+
                         item.setSortOrder(sortOrder)
                         if (UserSessionService.isSessionUser(ph.getOwnerUri())) {
                             //put name
-                            item.setName('My Report. ' + item.name)
+                            item.setName('My Report: ' + theName)
                             item.setSortOrder(1)
                         }
 
+                    if (permitViewRow || permitViewContent) {
+                        internalModelList.add(item)
+                    } else {  //no permission
+                        item.name ='---------'
+                        item.protocolId= '---------'
+                        item.addMessages('test mode')
+                        item.message ='test mode: ' + item.message
+                        internalModelList.add(item)
                     }
 
                 } catch (Exception e) {
@@ -138,9 +150,9 @@ public class MonitorInfoBean extends FaceBaseBean {
      */
     @Override
     public void loadModelMain() {
-
+        LOGGER.debug("loadModelMain");
         if (getUserService()) {
-
+            LOGGER.debug("loadModelMain to buildView");
             internalModelList = buildView()
 
             //getUserService().getResources(getDomainClazz());
@@ -184,18 +196,25 @@ public class MonitorInfoBean extends FaceBaseBean {
 
     }
     /**
-     *
+     *                           item.setPixQueryIdUser(pixQueryId)
+     item.setPixQueryIdNamespace(ph.getPixQueryIdNamespace())
      * @return
      */
     public StreamedContent getDownLoadTestingReport() {
         StreamedContent streamedContent = null
+        LOGGER.debug('getDownLoadTestingReport accessed')
         if (selected) {
             MonitorInfoItem item = (MonitorInfoItem) selected
+            LOGGER.debug('getDownLoadTestingReport selection item ownerUri='+item.ownerUri+' '+item.resourceType)
 
             streamedContent = createTestingReport(item.ownerUri, true, item.resourceType)
 
         } else if(UserSessionService.getRequestAttributeString('resourcecode')!=null){
             //JSF will invoke the getters while setting up, at least this request param should be valid
+            LOGGER.debug('getDownLoadTestingReport Selected item, other request? No ownerUri. Found resource code')
+            streamedContent = BuilderUtil.reportBuildDummy() ;
+        } else {
+            LOGGER.debug('getDownLoadTestingReport no ownerUri or resource code')
             streamedContent = BuilderUtil.reportBuildDummy() ;
         }
         return streamedContent
@@ -213,6 +232,7 @@ public class MonitorInfoBean extends FaceBaseBean {
         StreamedContent reportFile = null
         String resourceType=null
         String targetUserId=null
+        LOGGER.debug('handleReportFromExternalRequest accessed')
         //if not from a local form or ajax, check request for resourcecode  and phrid from another page request
         try {
             if (resourceType == null) {
@@ -238,7 +258,7 @@ public class MonitorInfoBean extends FaceBaseBean {
                 LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType, e)
             }
         }
-
+        LOGGER.debug('handleReportFromExternalRequest accessed targetUserId='+targetUserId+' resourceType'+resourceType)
         try {
             if (resourceType && targetUserId) {
                 //this will lookup the
@@ -252,18 +272,29 @@ public class MonitorInfoBean extends FaceBaseBean {
         }
         return reportFile
     }
-
+    /**
+     *
+     * @param phrId
+     * @return
+     */
     private String getProtocolIdFromPhrId(String phrId) {
 
         return userService.getProtocolId(phrId)
 
     }
 
-
+    /**
+     *
+     * @param targetUserId
+     * @param isPhrId
+     * @param resourceType
+     * @return
+     */
     protected boolean isContentViewPermitted(String targetUserId, boolean isPhrId, String resourceType) {
         boolean isContentViewPermitted = false
         //either one
         String idType = null
+        LOGGER.debug('isContentViewPermitted START  targetUserId='+targetUserId+' resourceType'+resourceType)
 
         if (isPhrId) idType = 'phrid'
 
@@ -275,20 +306,20 @@ public class MonitorInfoBean extends FaceBaseBean {
                 if (isPhrId) {
                     isContentViewPermitted = permitUserOnPhrId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
 
-                    LOGGER.debug(" request phrId=" + targetUserId + " on resourceType=" + resourceType + " permitted?")
+                    LOGGER.debug(" isContentViewPermitted request phrId=" + targetUserId + " on resourceType=" + resourceType + " permitted?")
                 } else {
 
                     isContentViewPermitted = permitUserOnProtocolId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
 
-                    LOGGER.debug(" request phrId=" + targetUserId + " resourceType=" + resourceType + " permitted?")
+                    LOGGER.debug(" isContentViewPermitted request phrId=" + targetUserId + " resourceType=" + resourceType + " permitted?")
                 }
 
             } else {
 
-                LOGGER.debug(" request error null found : protocolId or phrId=" + isPhrId + " id=" + targetUserId + " resourceType=" + resourceType + " permitted? false")
+                LOGGER.debug(" isContentViewPermitted request error null found : protocolId or phrId=" + isPhrId + " id=" + targetUserId + " resourceType=" + resourceType + " permitted? false")
             }
         } catch (Exception e) {
-            LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType + " idType=" + idType, e)
+            LOGGER.error(" isContentViewPermitted targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType + " idType=" + idType, e)
         }
         return isContentViewPermitted
 
@@ -305,6 +336,7 @@ public class MonitorInfoBean extends FaceBaseBean {
      * @return
      */
     protected StreamedContent createPermittedReport(String targetUserId, boolean isPhrId, String resourceType) {
+        LOGGER.debug('createPermittedReport START  targetUserId='+targetUserId+' resourceType'+resourceType)
 
         StreamedContent reportFile = null
 
@@ -314,8 +346,15 @@ public class MonitorInfoBean extends FaceBaseBean {
         if (isPhrId) idType = 'phrid'
 
         boolean isPermitted = this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
+        LOGGER.debug('createPermittedReport isPermitted?  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
 
         reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+
+        if(reportFile==null)
+            LOGGER.debug('createPermittedReport report file NULL  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
+        else
+            LOGGER.debug('createPermittedReport report file NULL  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
+
         //check null, exception?
         return reportFile
 
@@ -328,6 +367,7 @@ public class MonitorInfoBean extends FaceBaseBean {
      * @return
      */
     public StreamedContent createTestingReport(String targetUserId, boolean isPhrId, String resourceType) {
+        LOGGER.debug('createTestingReport START  targetUserId='+targetUserId+' resourceType='+resourceType+' isPhrid?'+isPhrId)
 
         StreamedContent reportFile = null
 
@@ -340,6 +380,12 @@ public class MonitorInfoBean extends FaceBaseBean {
         //this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
 
         reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+
+        if(reportFile==null)
+            LOGGER.debug('createTestingReport report file NULL  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
+        else
+            LOGGER.debug('createTestingReport report file finished targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
+
         //check null, exception?
         return reportFile
 

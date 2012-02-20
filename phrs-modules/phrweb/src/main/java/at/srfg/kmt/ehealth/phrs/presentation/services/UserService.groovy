@@ -63,7 +63,7 @@ public class UserService  extends CommonDao implements Serializable {
 	public  String getUserPhrId(){
 		String phrId = null
 		phrId = UserSessionService.getSessionAttributePhrId()
-		println('userService ownerUri phrId='+phrId)
+		//println('userService ownerUri phrId='+phrId)
 		if(!phrId && ConfigurationService.isAppModeSingleUserTest()){
 			phrId = PhrsConstants.USER_TEST_HEALTH_PROFILE_ID
 			//println('userService ownerUri null, appModeTest, set ownerUri phrId='+phrId)

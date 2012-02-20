@@ -2,12 +2,12 @@ package at.srfg.kmt.ehealth.phrs.model.baseform
 
 import com.google.code.morphia.annotations.Embedded
 /**
- * 
+ *  @deprecated
  * PhrsConstants.IDENTIFIER_TYPE_PIX_* identifier types
  * When the contact info is saved, the validity of the PIX identifier is determined from the PIX server 
  *
  */
-@Embedded
+// @ Embedded
 class PixIdentifier extends PixIdentifierBase{
 
 

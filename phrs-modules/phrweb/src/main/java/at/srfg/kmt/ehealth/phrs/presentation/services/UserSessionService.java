@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrOpenId;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.security.services.ConsentMgrService;
 import at.srfg.kmt.ehealth.phrs.security.services.OpenIdConstants;
 import com.dyuproject.openid.OpenIdUser;
 import com.dyuproject.openid.RelyingParty;
@@ -13,7 +14,9 @@ import com.dyuproject.openid.ext.SRegExtension;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -383,8 +386,14 @@ public class UserSessionService {
     public static String extractRole(Map<String, String> map) {
         String value = null;
         if (map != null && map.containsKey(PhrsConstants.OPEN_ID_PARAM_ROLE)) {
-            value = map.get(PhrsConstants.OPEN_ID_PARAM_ROLE);
+            
+            //value = map.get(PhrsConstants.OPEN_ID_PARAM_ROLE);
+            value = ConsentMgrService.extractMappedRole(map);
+            LOGGER.debug("OpenId role found = "+value);
         } else {
+            LOGGER.debug("No role key found in aux schema map");
+            logMap(map);
+            
             value = PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER;
         }
 
@@ -393,6 +402,7 @@ public class UserSessionService {
         // }
         return value;
     }
+    
 
     /**
      * @param openIdUser
@@ -422,6 +432,7 @@ public class UserSessionService {
         return value;
     }
     public static void logMap(Map<String,String> map){
+        LOGGER.debug("Logging map contents:");
         if(map!=null && !map.isEmpty()){
             for(String key:map.keySet()){
                 LOGGER.debug(" key="+key+" value="+map.get(key));
@@ -431,15 +442,57 @@ public class UserSessionService {
             
         }
     }
+    public static Map<String,String> extractSingleValues(Map inputMap){
+        Map<String,String> extracted=new HashMap<String,String>();
+        if(inputMap!=null && !inputMap.isEmpty()){
+            
+              for(Object key:inputMap.keySet()) {
+
+                  try {
+                      Object obj=inputMap.get((String)key);
+
+                      if(obj instanceof String){
+                          if(obj !=null && ((String) obj).isEmpty())
+                              extracted.put((String)key,(String)obj);
+                          //In case non-standard e.g. role
+                      }  else if(obj instanceof List){
+                          List col=  (List) obj;
+                          if(obj!=null && col.size() > 0) {
+                              Object val= col.get(0);
+                              if(obj instanceof String){
+                                extracted.put((String)key,(String)obj);
+                              }
+                          }
+                      }
+                  } catch (Exception e) {
+                     LOGGER.error("extracting map values",e);
+                  }
+
+              }
+        }
+        return extracted;
+    }
+
     public static Map<String, String> extractOpenIdAttributeExchange(
             OpenIdUser user, boolean removeUser) {
 
         Map<String, String> map = null;
         try {
+            Map attrMap = (Map)user.getAttribute(AxSchemaExtension.ATTR_NAME);
+            map = extractSingleValues(attrMap);
+            String role=extractRole(attrMap);
+            if(role!=null && !role.isEmpty()){
+                map.put(PhrsConstants.OPEN_ID_PARAM_ROLE, role);
+            } else {
+                
+            }
+            //The following casts Map<String,String>
+            /*
             if (removeUser)
                 map = AxSchemaExtension.remove(user);
             else
                 map = AxSchemaExtension.get(user);
+            */
             LOGGER.error("extract OpenId Attribute Exchange "+" for claimedID"+user.getClaimedId());
             logMap(map);
         } catch (Exception e) {
@@ -459,10 +512,12 @@ public class UserSessionService {
             OpenIdUser user, boolean removeUser) {
         Map<String, String> map = null;
         try {
-            if (removeUser)
-                map = SRegExtension.remove(user);
-            else
-                map = SRegExtension.get(user);
+            Map attrMap = (Map)user.getAttribute(AxSchemaExtension.ATTR_NAME);
+            map = extractSingleValues(attrMap);
+//            if (removeUser)
+//                map = SRegExtension.remove(user);
+//            else
+//                map = SRegExtension.get(user);
 
             LOGGER.error("extract OpenId Simple Registration "+" for claimedID"+user.getClaimedId());
             logMap(map);
@@ -474,6 +529,8 @@ public class UserSessionService {
 
         /*
         Normalize and conforms to listener
+        This should not be necessary, PhrContants use same attr alias
+        issue if Axschema and SREG use different aliases !
          */
         if(map!=null && !map.isEmpty()){
 

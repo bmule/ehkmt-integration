@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient
+
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel
@@ -19,20 +19,18 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
-import at.srfg.kmt.ehealth.phrs.model.baseform.PixIdentifier
+
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
+
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileRisk
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple
+
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
 
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
-import at.srfg.kmt.ehealth.phrs.security.services.PixService
+
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil
 
 /**
@@ -42,13 +40,15 @@ import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil
 /*
 See Terminology service and
 status for actions: action.categories.activity.sport
-TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS="http://www.icardea.at/phrs/instances/ActivityStatus"; http://www.icardea.at/phrs/instances/ICanDo http://www.icardea.at/phrs/instances/IRequireAssistance
+TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS='http://www.icardea.at/phrs/instances/ActivityStatus'; http://www.icardea.at/phrs/instances/ICanDo http://www.icardea.at/phrs/instances/IRequireAssistance
  */
 public class  InteropAccessService implements Serializable{
     private final static Logger LOGGER = LoggerFactory.getLogger(InteropAccessService.class);
-    public final static String DATE_PATTERN_INTEROP_DATE_TIME ="yyyyMMddHHmm";
+    public final static String DATE_PATTERN_INTEROP_DATE_TIME ='yyyyMMddHHmm';
     public final static String REFERENCE_NOTE_PREFIX='resourcephr='
-    public final static String DRUG_CODE_DEFAULT_PHR="MyDrugCode";
+    public final static String DRUG_CODE_DEFAULT_PHR='MyDrugCode';
+    
+    public InteropProcessor iprocess;
     /**
      * Expected by the interop services: yyyyMMddHHmm
      */
@@ -65,37 +65,37 @@ public class  InteropAccessService implements Serializable{
     c. ??
     4. Meds
      */
-    PhrsStoreClient phrsStoreClient
-
-    InteropProcessor iprocess;
+   
+  
     /**
      * 
      */
     public InteropAccessService(){
 
-        phrsStoreClient = PhrsStoreClient.getInstance()
+        //phrsStoreClient = PhrsStoreClient.getInstance()
         init()
     }
     /**
-     * 
+     * @deprecated
      * @param phrsStoreClient
      */
     public InteropAccessService(PhrsStoreClient phrsStoreClient){
 
-        this.phrsStoreClient = phrsStoreClient
         init()
     }
     
     private void init(){
-        iprocess=new InteropProcessor(phrsStoreClient);
+        iprocess=new InteropProcessor();
     }
-    
+    public PhrsStoreClient getPhrsStoreClient(){
+        return  PhrsStoreClient.getInstance()
+    }
     public InteropClients getInteropClients(){
-        return phrsStoreClient.getInteropClients()
+        return getPhrsStoreClient().getInteropClients()
     }
     
     public CommonDao getCommonDao(){
-        return phrsStoreClient.getCommonDao()
+        return getPhrsStoreClient().getCommonDao()
     }
 
     /**
@@ -255,6 +255,8 @@ public class  InteropAccessService implements Serializable{
         if(resource && resource instanceof BasePhrsModel){
 
             try{
+                
+                
                 //the resulting message URI that is added to the result list
                 String messageId
 
@@ -277,8 +279,6 @@ public class  InteropAccessService implements Serializable{
                 String dateStringEnd 	= transformDate(res.endDate,(Date)null)
                 dateStringEnd = dateStringEnd?: null
 
-                    
-                    
                 //res.note is by default not sharable
                 /**
                  * Use the note to tag this record. 
@@ -292,16 +292,16 @@ public class  InteropAccessService implements Serializable{
                                 
                 //resourceUri appears only if resource already saved
                 if(!res.resourceUri){
-                    println("sendMessages  (note) resourceUri is null")
-                    LOGGER.debug("sendMessages  (note) resourceUri is null");
-                    throw new Exception(" resourceUri not yet set, PHR object was not yet saved?")   
+
+                    LOGGER.debug('sendMessages  (note) resourceUri is null');
+                    throw new Exception(' resourceUri not yet set, PHR object was not yet saved?')   
                 }
                 String theParentId = res.resourceUri
     
-
+                 boolean notifySubscribers=false;
                 switch ( resourceType ) {
 
-                    case ProfileRisk.getCanonicalName():
+                    case ProfileRisk.class.getCanonicalName():
                     //Risks reported under Problem
                     //ProfileRisk domain=(ProfileRisk)resource
                     if(categoryCode != PhrsConstants.HL7V3_CODE_CATEGORY_RISK){
@@ -309,8 +309,14 @@ public class  InteropAccessService implements Serializable{
                     }
                     
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
-                    
+
+                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                        LOGGER.debug(' Send Interop Message'+actionLabel
+                                + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+
                     if( ! interopRef){
+
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
                             owner,
@@ -331,6 +337,9 @@ public class  InteropAccessService implements Serializable{
                         iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                         
                     }
+                        //notify subscribers about changes
+                        notifySubscribers=true
+
                     break
 
                     case ProfileActivityDailyLiving.class.getCanonicalName():
@@ -338,6 +347,11 @@ public class  InteropAccessService implements Serializable{
                     categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_ADL //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                     
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+
+                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                    LOGGER.debug(' Send Interop Message'+actionLabel
+                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
 
                     if( ! interopRef){
                         // TODO more specific detail code part of finding
@@ -361,7 +375,10 @@ public class  InteropAccessService implements Serializable{
                         iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
 
                    }
-                    break
+                        //notify subscribers about changes
+                        notifySubscribers=true
+
+                        break
 
                     case ActionPlanEvent.class.getCanonicalName():
 
@@ -369,7 +386,12 @@ public class  InteropAccessService implements Serializable{
                     if(valueCode == InteropTermTransformer.CODE_WATCH_SPORT){
                         categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                         String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
-                        
+
+                        String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                        LOGGER.debug(' Send Interop Message'+actionLabel
+                                + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+
                         if( ! interopRef){
                             messageId = getInteropClients().getProblemEntryClient()
                             .addProblemEntry(
@@ -392,13 +414,16 @@ public class  InteropAccessService implements Serializable{
                             iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                         }
                     }
+                        //notify subscribers about changes
+                        notifySubscribers=true
+
                     break
 
                     case MedicationTreatment.class.getCanonicalName():
 
                     MedicationTreatment domain=(MedicationTreatment)resource
                     messageIdMap = iprocess.sendMedicationMessage(domain);
-                    
+                    //notify done already in medication
                     break
 
                     case ObsActivityPhysical.class.getCanonicalName():
@@ -415,7 +440,12 @@ public class  InteropAccessService implements Serializable{
                     }
                    
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
-                    
+
+                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                    LOGGER.debug(' Send Interop Message'+actionLabel
+                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+
                     if( ! interopRef){
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
@@ -436,6 +466,8 @@ public class  InteropAccessService implements Serializable{
                         iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
                         iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                    }
+                        //notify subscribers about changes
+                        notifySubscribers=true
                     break
 
                     case ObsVitalsBloodPressure.class.getCanonicalName():
@@ -447,7 +479,12 @@ public class  InteropAccessService implements Serializable{
                     String value=domain.getSystolic() ? domain.getSystolic().toString() : '0'
                    
                     String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
-    
+
+                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                    LOGGER.debug(' Send Interop Message'+actionLabel
+                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+
                     if( ! interopRef){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
                             Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
@@ -490,6 +527,8 @@ public class  InteropAccessService implements Serializable{
                         iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE , value);
 
                     }
+                        //notify subscribers about changes
+                        notifySubscribers=true
                     break
 
                     case ObsVitalsBodyWeight.class.getCanonicalName():
@@ -499,7 +538,11 @@ public class  InteropAccessService implements Serializable{
                     String value = domain.getBodyWeight() ? domain.getBodyWeight().toString() : '0'
                     // ownerUri, resourceUri, phrsClass,categoryCode,valueCode
                     String interopRef = findMessageWithReference( owner, theParentId,  Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
-                    
+
+                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
+                    LOGGER.debug(' Send Interop Message'+actionLabel
+                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
+                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
                     
                     if( ! interopRef){
                         messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
@@ -524,7 +567,12 @@ public class  InteropAccessService implements Serializable{
                     value = domain.getBodyHeight() ? domain.getBodyHeight().toString() : '0'
                     
                     interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
-                    
+
+
+                    LOGGER.debug(' Send Interop Message'+actionLabel
+                                +' resourceType '+resourceType+' owner '+owner+' refnote '
+                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+
                     if(interopRef){
                         messageId = getInteropClients().getVitalSignClient()
                         .addVitalSign(owner,
@@ -545,6 +593,8 @@ public class  InteropAccessService implements Serializable{
                         iprocess.updateInteropStatement(theParentId, interopRef,HL7V3_VALUE , value);
 
                     }
+                    //notify subscribers about changes
+                        notifySubscribers=true
                     break
 
 //                    case [
@@ -558,17 +608,24 @@ public class  InteropAccessService implements Serializable{
                     default:
                     break
                 }
+
+             if(notifySubscribers) {
+                 LOGGER.debug('Sent interop message, Prepare to notify for owner='+owner);
+                 getInteropClients().notifyInteropMessageSubscribersByPhrId(owner);
+             }
+
             } catch (TripleException e) {
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
-                e.printStackTrace();
+
             
             } catch (Exception e){
                 LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
             
             } catch (java.lang.Error e) {
-                LOGGER.error("sesame throws errors not exception..."+resourceType,e);
-                e.printStackTrace();
+                LOGGER.error('sesame throws errors not exception...'+resourceType,e);
+
             }
+
         }
         return messageIdMap
     }
@@ -633,7 +690,7 @@ This cannot not be used for the dosage and dosage units because these are separa
     }
 
     public String getTest(){
-        return "1234"
+        return '1234'
     }
  
     public List importNewMessages(String ownerUri, String phrsClass)  {
@@ -654,14 +711,14 @@ This cannot not be used for the dosage and dosage units because these are separa
     public void interopDeleteMessage(String resourceUri) {
 
         if (resourceUri == null) {
-            throw new NullPointerException("The resourceURI argument can not be null.");
+            throw new NullPointerException('The resourceURI argument can not be null.');
         }
         try{
             final boolean exists =  getPhrsStoreClient().getGenericTriplestore().exists(resourceUri);
             if (exists) {
                 getPhrsStoreClient().getGenericTriplestore().deleteForSubject(resourceUri);
             } else {
-                LOGGER.warn("No resource for this {} URI, remove has no effect.", resourceUri);
+                LOGGER.warn('No resource for this {} URI, remove has no effect.', resourceUri);
 
             }
         } catch(Exception e){
@@ -711,80 +768,5 @@ This cannot not be used for the dosage and dosage units because these are separa
     }
    
 
-    public boolean sendPixValidationMessage(ProfileContactInfo contactInfo,boolean pixRevalidatePixId){
-        boolean validated=false
-        try{
-            if(contactInfo && contactInfo.pixIdentifier ){
-                //validate and update the pci.pixIdentifier object status. Audit message is sent
-                validated= validatePixIdentifier(contactInfo.ownerUri, contactInfo.pixIdentifier, pixRevalidatePixId);//updateInteropActorRegistry, revalidate
-            }
-        } catch (Exception e){
-            LOGGER.error(' '+e)
-        }
-        return validated
-    }
-    /**
-     * 
-     * @param ownerUri
-     * @param pixIdentifier - the status field is updated with a validation code
-     * @param updateInteropActorRegistry
-     * @param revalidate
-     */
-    public boolean validatePixIdentifier(String ownerUri, PixIdentifier pixIdentifier, boolean pixRevalidatePixId){
-        boolean validated=false;
-        Map map = [:]
-        validated = validatePixIdentifier(ownerUri, pixIdentifier, pixRevalidatePixId,  map);
-
-        return validated;
-
-    }
-
-    public boolean validatePixIdentifier(String ownerUri,PixIdentifier pixIdentifier,boolean pixRevalidatePixId, Map patientInfoMap){
-
-        boolean validated=false;
-
-
-        if( ! pixRevalidatePixId && (pixIdentifier.status = PhrsConstants.IDENTIFIER_STATUS_VALID)){
-            //don't revalidate
-            validated=true;
-
-        } else{
-            try{
-                PixService pixService = new PixService();
-                String status= pixService.validatePatientProtocolId(ownerUri, pixIdentifier,patientInfoMap)
-
-            } catch (Exception e){
-                LOGGER.error('error to setup pix query pixIdentifier identifier='+pixIdentifier.getIdentifier(), e)
-            }
-        }
-        //evaluate result
-        if( pixIdentifier.status  == PhrsConstants.IDENTIFIER_STATUS_VALID) {
-            validated=true;
-        }
-
-
-        //testing, just return true, although the pixIdentifier has the correct information
-        //the flag, supports other logic
-        if(ConfigurationService.isAppModePixTest()){
-            if(!validated){
-                //provide message
-                LOGGER.debug('Configuration AppModeTest PixIdentifier did no validate via PIX, but PHRS component registered it anyways into the PHRS core')
-            }
-            validated=true;
-        }
-
-
-        //register validated protocol ID with the PHRS core component
-        if(validated){
-            //update the interop registry
-            this.registerUser(ownerUri, pixIdentifier.identifier);
-            // if(pixIdentifier.getDomain()) this.registerUser(ownerUri, pixIdentifier.getIdentifier()) with domain pixIdentifier.getDomain()
-
-        }
-
-
-        return validated;
-    }
-    
 
     }

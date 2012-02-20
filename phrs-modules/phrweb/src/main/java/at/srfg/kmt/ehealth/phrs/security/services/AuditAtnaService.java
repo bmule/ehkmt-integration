@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tr.com.srdc.icardea.atnalog.client.Audit;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 
 /*
 * TODO create new thread for each send*
@@ -85,13 +86,15 @@ public class AuditAtnaService implements Serializable {
     */
     private void init() {
         try {
-            atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+            ConfigurationService config = ConfigurationService.getInstance();
+            atnalog = new Boolean(config.getProperty("atna.log","true")).booleanValue();
 
-            secure = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
-            //port not in this configuration file
+            secure = new Boolean(config.getProperty("atna.tls","false")).booleanValue();
+           
+//port not in this configuration file
             //atna.tls is true, but ignore...
             if (atnalog) {
-                port = 2861;
+                port = new Integer(config.getProperty("atna.log.port","2861")).intValue();
 
                 if (secure) {
 
@@ -99,8 +102,8 @@ public class AuditAtnaService implements Serializable {
                     //setupSSL(sslConfigSetting);
                 }
 
-                ResourceBundle properties = ResourceBundle.getBundle("icardea");
-                host = properties.getString("atna.log.server");
+              
+                host = config.getProperty("atna.log.server","127.0.0.1");
 
 
                 // String xml = Audit.createMessage("GRM", patientId, resource,
@@ -217,6 +220,7 @@ public class AuditAtnaService implements Serializable {
      */
     public boolean doAuditMessageGrant(final String patientId, final String resource, final String requestorRole) {
         boolean success = false;
+        LOGGER.debug("prepare doAuditMessageGrant");
         try {
             if (atnalog && audit != null) {
                 String xml = Audit.createMessage("GRM",
@@ -232,7 +236,7 @@ public class AuditAtnaService implements Serializable {
             LOGGER.error("patientId= " + patientId, e);
             e.printStackTrace();
         }
-
+        LOGGER.debug("end doAuditMessageGrant");
         return success;
     }
 

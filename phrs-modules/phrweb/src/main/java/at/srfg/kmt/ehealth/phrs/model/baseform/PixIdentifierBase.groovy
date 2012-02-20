@@ -2,7 +2,7 @@ package at.srfg.kmt.ehealth.phrs.model.baseform
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 /**
- * 
+ *   @deprecated
  * PhrsConstants.IDENTIFIER_TYPE_PIX_* identifier types
  * When the contact info is saved, 
  *

@@ -20,9 +20,22 @@ import at.srfg.kmt.ehealth.phrs.model.basesupport.OpenIdProviderItem
  *
  */
 
-public class ConfigurationService implements Serializable{
+public  class ConfigurationService implements Serializable{
     private final static Logger LOGGER = LoggerFactory.getLogger(ConfigurationService.class);
-    private  static  ConfigurationService m_instance;
+    private static ConfigurationService m_instance  //= new ConfigurationService();
+
+    static {
+        staticInit();
+    }
+
+    protected static void staticInit() {
+        try {
+            m_instance = new ConfigurationService();
+        } catch (Exception ex) {
+            LOGGER.warn(ex.getMessage(), ex);
+            
+        }
+    }
 
     public static final String forwardRedirectIsAuthenticatedToPage = "/jsf/home.xhtml";
     public static final String formwardRedirectFilteredDirectory = "/jsf/";
@@ -34,22 +47,21 @@ public class ConfigurationService implements Serializable{
     private static PropertiesConfiguration propertiesConfig
     private static PropertiesConfiguration icardeaConfig
 
-    /*
-     * Initialization-on-demand holder idiom
-     *
-    private static class LazyHolder {
-    public static final ConfigurationService m_instance = new ConfigurationService();
-    }
-    public static ConfigurationService getInstance() {
-    return LazyHolder.m_instance;
-    } */
+ 
+    // Initialization-on-demand holder idiom
+     
+    //    private static class LazyHolder {
+    //    public static final ConfigurationService m_instance = new ConfigurationService();
+    //    }
+    //    public static ConfigurationService getInstance() {
+    //        return LazyHolder.m_instance;
+    //    } 
 
     public static ConfigurationService getInstance() {
-        if(m_instance==null) {
-            m_instance = new ConfigurationService()
-        }
+
         return m_instance;
     }
+    
     private ConfigurationService(){
         init()
         initRoles()
@@ -72,11 +84,12 @@ public class ConfigurationService implements Serializable{
             PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST
         ]
     }
+
     private synchronized void init(){
 
-//        if(xmlConfig == null) {
-//            refreshXMLConfig()
-//        }
+        //        if(xmlConfig == null) {
+        //            refreshXMLConfig()
+        //        }
         if(propertiesConfig == null) {
             refreshPropertiesConfig()
         }
@@ -85,13 +98,13 @@ public class ConfigurationService implements Serializable{
         }
     }
 
-//    public synchronized void refreshXMLConfig(){
-//        try {
-//            xmlConfig = new XMLConfiguration("phrs.config.xml");
-//        } catch(ConfigurationException e) {
-//            LOGGER.error("ConfigurationService error", e);
-//        }
-//    }
+    //    public synchronized void refreshXMLConfig(){
+    //        try {
+    //            xmlConfig = new XMLConfiguration("phrs.config.xml");
+    //        } catch(ConfigurationException e) {
+    //            LOGGER.error("ConfigurationService error", e);
+    //        }
+    //    }
     public synchronized void refreshPropertiesConfig(){
 
 
@@ -377,8 +390,8 @@ public class ConfigurationService implements Serializable{
             //fall through to default ,no case break
             default:
             values =  [AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH,
-                        AUTHORIZE_RESOURCE_CODE_MEDICATION,
-                        AUTHORIZE_RESOURCE_CODE_CONDITION
+                AUTHORIZE_RESOURCE_CODE_MEDICATION,
+                AUTHORIZE_RESOURCE_CODE_CONDITION
             ]
         }
         /*
@@ -505,7 +518,7 @@ public class ConfigurationService implements Serializable{
         return flag
     }
     public String getConsentUIEndpoint(){
-         //
+        //
         String value = getProperty('consent.web.endpoint')
         return value ? value=value.trim() : null
     }
@@ -566,6 +579,22 @@ public class ConfigurationService implements Serializable{
         String value=getProperty('phrs.certpath')
 
         return value ? value=value.trim() : null
+    }
+
+
+    public int getSubscriberSocketListnerPort(){
+        int subscriberSocketListenerPort =5578;
+        try {
+            String port = getProperty("socket.listener.port","5578");
+            if(port!=null)
+            port=port.trim();
+            else
+            port="5578";
+            subscriberSocketListenerPort =Integer.parseInt(port);
+        } catch (Exception e) {
+            LOGGER.error("error processing socket.listener.port property",e);
+        }
+        return  subscriberSocketListenerPort;
     }
 
 }

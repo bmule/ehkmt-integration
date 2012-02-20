@@ -289,11 +289,12 @@ public class LoginOpenidDyuServlet extends HttpServlet {
                         }
 
                         if (pfu != null) {
-
+                            LOGGER.error("PhrFederatedUser NOT null, send user to application");
                             response.sendRedirect(defaultRedirectToApplication);
                             return;// true
                         } else {
                             // return to login form
+                            LOGGER.error("error PhrFederatedUser is null, send user to login page. Check UserSession.managePhrUserSessionLocalLoginScenario");
                             request.setAttribute(ERROR_MSG_ATTR, errorMsg);
                             LOGGER.debug("isLocalLogin user " + pfu.getIdentifier() + " forward to"
                                     + getForwardUriLoginPage());

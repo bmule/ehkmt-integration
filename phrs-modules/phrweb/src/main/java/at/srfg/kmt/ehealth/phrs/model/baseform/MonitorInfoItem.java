@@ -2,6 +2,9 @@ package at.srfg.kmt.ehealth.phrs.model.baseform;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 
  * Model to support viewing of shared information One row per resourceType
@@ -9,33 +12,52 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
  */
 public class MonitorInfoItem {
 	// current user
-	String currentUserId;
-	String currentUserOwnerUri;
-	String currentUserRole;
+    private String currentUserId;
+    private String currentUserOwnerUri;
+    private String currentUserRole;
 
 	// boolean currentUserAllowedViewContent=false;
 
-	String ownerUri;
-	String protocolId;
-	String name;
-	
-	int sortOrder=2;
+    private String ownerUri;
+    private String protocolId;
+    private String name;
 
-	String resourceType;// consent
+    private String pixQueryIdUser;
+    private String pixQueryIdNamespace;
+
+    private int sortOrder=2;
+
+    private String resourceType;// consent
 	// String resourceTypeLabelCode;//I18
 	// row and content display
-	boolean allowedViewRow = false;
+    private boolean allowedViewRow = false;
 	// local permission result
-	boolean allowedViewContent = false;
+    private boolean allowedViewContent = false;
 	// external tool has priority
-	boolean consentViewContent = false;
+    private boolean consentViewContent = false;
 
-	String message;
+    private String message;
+    private List<String> messages = new ArrayList<String>();
 
-	String cacheId;
+    private String cacheId;
 
     public int getSortOrder() {
         return sortOrder;
+    }
+    public void addMessages(String message){
+         messages.add(message);
+    }
+    public List<String> getMessages(){
+        return messages;
+    }
+    public String toHtmlMessages(){
+        StringBuffer sb = new StringBuffer();
+        for(String m:messages){
+            sb.append(m);
+            if(sb.length()>1)  sb.append("<br/>");
+       }
+
+        return sb.toString();
     }
 
     public void setSortOrder(int sortOrder) {
@@ -178,6 +200,22 @@ public class MonitorInfoItem {
 		this.message = message;
 	}
 
-	// Map<String,String> attributes;
+
+    public String getPixQueryIdUser() {
+        return pixQueryIdUser;
+    }
+
+    public void setPixQueryIdUser(String pixQueryIdUser) {
+        this.pixQueryIdUser = pixQueryIdUser;
+    }
+
+    public String getPixQueryIdNamespace() {
+        return pixQueryIdNamespace;
+    }
+
+    public void setPixQueryIdNamespace(String pixQueryIdNamespace) {
+        this.pixQueryIdNamespace = pixQueryIdNamespace;
+    }
+
 
 }

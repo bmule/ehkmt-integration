@@ -108,22 +108,14 @@ render="#{procon.contactType eq  'healthcare_provider'}"
 					
 					<!-- PIX identifier -->
 					  
-					<p:column headerText="iCARDEA Identifier" sortBy="#{theItem.pixIdentifier.identifier}"
+					<p:column headerText="CIED ID" sortBy="#{theItem.pixQueryIdType}"
 						render="#{theItem.contactType eq  'healthcare_user'}">
-						<b>Protocol ID:</b><br/>
+						<!--<b>Protocol ID:</b><br/>
 						<h:outputLabel value="#{theItem.pixIdentifier.status}" >				
 							<f:converter converterId="labelLookup" />
 						</h:outputLabel>
-						<br/>
-						<h:outputLabel value="#{theItem.pixIdentifier.identifier}" 
-							rendered="#{theItem.pixIdentifier.identifier != null}"/>	
-											
-						<h:panelGroup rendered="#{theItem.ciedIdentifier.identifier != null}">
-							<br/>
-							<b>CIED ID:</b>
-							<h:outputLabel value="#{theItem.ciedIdentifier.identifier}"/>
-						</h:panelGroup>	
-						  					
+						<br/>   pixQueryIdType pixQueryIdUser  -->
+						<h:outputLabel value="#{theItem.pixQueryIdType}"/> - <h:outputLabel value="#{theItem.pixQueryIdUser}"/>
 					</p:column>
 					
 					<!-- prints identifier_cied_number -->

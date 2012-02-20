@@ -15,6 +15,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 import com.dyuproject.openid.OpenIdUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 
 /**
  * 
@@ -26,19 +27,32 @@ public class CommonDao{
 
     private final static Logger LOGGER = LoggerFactory.getLogger(CommonDao.class);
 
-    PhrsRepositoryClient phrsRepositoryClient
-    PhrsStoreClient phrsStoreClient
-
+  
+  
+    public CommonDao(){
+        
+    }  
     /**
-     * 
+     * @deprecated
      */
-    public CommonDao(PhrsRepositoryClient repoClient){
-        //TODO refactoring to eliminate one
-        phrsRepositoryClient=repoClient
-        phrsStoreClient = phrsRepositoryClient.getPhrsStoreClient()
+    public CommonDao(PhrsStoreClient phrsStoreClient){
 		
     }
+    /**
+     * @deprecated
+     */
+    public CommonDao(PhrsRepositoryClient repoClient){
+	
+    }
 
+    
+    public PhrsRepositoryClient getPhrsRepositoryClient(){
+        return getPhrsStoreClient().getPhrsRepositoryClient()
+    }
+    
+    public PhrsStoreClient getPhrsStoreClient(){
+        return PhrsStoreClient.getInstance()
+    }
 
     /**
      * Should use the default method, however, to search for a User  object, there might not be a phrId stored in the session yet
@@ -52,7 +66,7 @@ public class CommonDao{
         def single =null
 
         try {
-            single = phrsRepositoryClient.crudReadResourceSingle( theOwnerUri,  entityClazz)
+            single = getPhrsRepositoryClient().crudReadResourceSingle( theOwnerUri,  entityClazz)
 
             if( !single && create) {
                 single = entityClazz.newInstance()
@@ -180,16 +194,20 @@ public class CommonDao{
             user = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
 
             if(create && ! user){
-
-		
                 user= new PhrFederatedUser(userId,null);
-
+                //owner Uri created automatically
                 user.setUserId(userId);
                 user.setCanLocalLogin(true)
                 user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
                 user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
 
-                if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST) 
+                String testUser = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+
+                if(userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
+                    //phrtest user
+                    CoreTestData.createTestUserData();
+
+                 } else if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
                     || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
                     || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
                     || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
@@ -201,14 +219,6 @@ public class CommonDao{
 						
                         user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID_1);
                         user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
-						
-                    } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
-                        //phrtest user
-                        user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID);
-                        user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);
-
-                        registerProtocolId(user.getOwnerUri(),
-                                Constants.PROTOCOL_ID_PIX_TEST_PATIENT,null);
                                                 
                     } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
 					
@@ -219,7 +229,7 @@ public class CommonDao{
                         user.setOwnerUri(userId);
                     }
 
-                    CoreTestData.createTestUserData();
+
 				
                 } 
 				
@@ -238,10 +248,10 @@ public class CommonDao{
      * @param protocolId
      * @param namespace
      */
-    public void registerProtocolId(String owneruri, String protocolId, String namespace){
-           
-        phrsStoreClient.getInteropProcessor().registerProtocolId( owneruri,protocolId,namespace)
-        
+    public void registerProtocolId(String ownerUri, String protocolId, String namespace){
+
+        //null namespace will use default
+        getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
     }
 
     /**
@@ -334,7 +344,7 @@ public class CommonDao{
         def single =null
 
         try {
-            single = phrsRepositoryClient.crudReadResourceByExampleToSingle( theOwnerUri,  entityClazz, map)
+            single = getPhrsRepositoryClient().crudReadResourceByExampleToSingle( theOwnerUri,  entityClazz, map)
             //if create=true, create if not found
             if( !single && create) {
                 single = entityClazz.newInstance()
@@ -355,7 +365,7 @@ public class CommonDao{
      */                  
     public  List crudReadResources(String ownerUri, def clazz){
         if(ownerUri && clazz){
-            return phrsRepositoryClient.crudReadResources(ownerUri, clazz);
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, clazz);
         }
         return null
     }
@@ -366,7 +376,7 @@ public class CommonDao{
      */
     public  List crudReadMedicationResources(String ownerUri){
         if(ownerUri){
-            return phrsRepositoryClient.crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class)
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment.class)
         }
         return null
     }
@@ -379,7 +389,7 @@ public class CommonDao{
     public def crudReadResourceSingle(String ownerUri, def clazz){
         def resource
         if(ownerUri && clazz){
-            return phrsRepositoryClient.crudReadResourceSingle(ownerUri, clazz);
+            return getPhrsRepositoryClient().crudReadResourceSingle(ownerUri, clazz);
         }
         return null
     }
@@ -403,7 +413,7 @@ public class CommonDao{
      */
     public  List<BasePhrOpenId> crudReadOpenIdUsers(String ownerUri){
         if(ownerUri){
-            return phrsRepositoryClient.crudReadResources(ownerUri, BasePhrOpenId.class);
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, BasePhrOpenId.class);
         }
         return null
     }
@@ -428,7 +438,7 @@ public class CommonDao{
         BasePhrOpenId open=null
         if(identifier){
             Map map = ['identifier':identifier]
-            List list= phrsRepositoryClient.crudReadResourceByExample(null, BasePhrOpenId.class, map);
+            List list= getPhrsRepositoryClient().crudReadResourceByExample(null, BasePhrOpenId.class, map);
             if(list && list.size()>0){
                 open= list.get(0)
             }
@@ -444,7 +454,7 @@ public class CommonDao{
         PhrFederatedUser user=null
         if(identifier){
             Map map = ['identifier':identifier]
-            List list= phrsRepositoryClient.crudReadResourceByExample(null, PhrFederatedUser.class, map);
+            List list= getPhrsRepositoryClient().crudReadResourceByExample(null, PhrFederatedUser.class, map);
             if(list && list.size()>0){
                 PhrFederatedUser base= list.get(0)
                 String ownerUri = base.ownerUri
@@ -492,7 +502,7 @@ public class CommonDao{
 
             //store BaseOpenId 
             //openidfix
-            phrsRepositoryClient.crudSaveResource(open)
+            getPhrsRepositoryClient().crudSaveResource(open)
            //get PhrUser, if null create
             if(createPhrUser){
                 PhrFederatedUser phrUser= crudReadPhrFederatedUser(ownerUri)
@@ -532,7 +542,7 @@ public class CommonDao{
             //resourceUri is set before actually saving the the object
         }
         theObject.type = theObject.getClass().toString()
-        phrsRepositoryClient.crudSaveResource(theObject)
+        getPhrsRepositoryClient().crudSaveResource(theObject)
     }
     /**
      * 	
@@ -568,7 +578,7 @@ public class CommonDao{
                 ref.code=code
                 //deprecated ref.codeValue=codeValue
                 ref.messageType=messageType
-                phrsStoreClient.getPhrsDatastore().save(ref);
+                getPhrsStoreClient().getPhrsDatastore().save(ref);
             }
         } catch(Exception e){
             LOGGER.error('Interop crudSavePhrMessageLog, interop parentId= '+parentId+' interopResourceId='+interopResourceId+' messageType='+messageType, e)
@@ -576,7 +586,7 @@ public class CommonDao{
     }
 
     /**
-     * 
+     * Searches for protocolIdPix
      * @param filterProtocolId
      * @param filterProtocolNamespace
      * @return
@@ -584,12 +594,10 @@ public class CommonDao{
     public String getOwnerUriByIdentifierProtocolId(String filterProtocolId,String filterProtocolNamespace) {
         String ownerUri =null;
         if(filterProtocolId){
-            Map query =  ['pixIdentifier.identifier':filterProtocolId]
+            Map query =  ['protocolIdPix':filterProtocolId]
             //,'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
-
             //'namespace',filterProtocolNamespace
-            ProfileContactInfo info = this.getResourceByExampleToSingle(ProfileContactInfo.class, query, false, null)
-
+            PhrFederatedUser info = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)
 
             if(info){
                 ownerUri = info.ownerUri
@@ -619,36 +627,60 @@ public class CommonDao{
         String protocolId=null
         if(ownerUri){
 
-            //'namespace',filterProtocolNamespace
-
-            ProfileContactInfo info = this.getResourceSingle(ProfileContactInfo.class,false,ownerUri)
-
-            if(info && info.pixIdentifier){
-                protocolId = info.pixIdentifier.identifier
+            PhrFederatedUser pfu= getPhrUser(ownerUri)
+            if(pfu){
+                protocolId = pfu.getProtocolId()
             }
+
+            
         }
         return protocolId;
 
+    }
+        //String pixQueryIdUser
+        //String pixQueryIdNamespace= Constants.ICARDEA_DOMAIN_PIX_OID
+        //String protocolIdUser
+        //String protocolIdPix
+        //String protocolIdNamespacePix
+       public void crudSaveProtocolId(String ownerUri,String protocolId,String namespace,boolean byPixQuery){
+       
+        if(ownerUri && protocolId){
+
+            PhrFederatedUser pfu= getPhrUser(ownerUri)
+            if(pfu){
+                if(byPixQuery){
+                     pfu.setProtocolIdPix(protocolId) 
+                } else {
+                    pfu.setProtocolIdUser(protocolId)
+                }
+                             
+            }
+            if(pfu){
+                //update Actor
+                if(byPixQuery || ! pfu.getProtocolIdPix()){
+                   //update 
+                   registerProtocolId(ownerUri,  protocolId,  null)
+                }//do not overwrite
+            }        
+            
+        }  
+    } 
+ 
+     public String getCiedId(String ownerUri){
+        String id=null
+        if(ownerUri){
+
+            PhrFederatedUser pfu= getPhrUser(ownerUri)
+            if(pfu){
+                id = pfu.getPixQueryIdUser()
+            }
+
+            
+        }
+        return id;
 
     }
-// This is the alternative when this issues about protocolID settle down. Ultimately, and PIX like component is needed
-// to handle various IDs, but the interop component must also use the component.
-//    public String getOwnerUriByIdentifierProtocolId(String filterProtocolId,String filterProtocolNamespace) {
-//        String ownerUri =null;
-//        if(filterProtocolId){
-//            Map query =  ['identifier':filterProtocolId,
-//                    'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
-//            ]
-//            //'namespace',filterProtocolNamespace
-//            ProfileUserIdentifiers pui = this.getResourceByExampleToSingle(ProfileUserIdentifiers.class, query, false, null)// theOwnerUri)
-//            if(pui){
-//                ownerUri = pui.ownerUri
-//            }
-//
-//        }
-//        return ownerUri;
-//
-//    }
+
 }
  
 	

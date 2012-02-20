@@ -45,14 +45,20 @@ public class  ProfileContactInfo extends  BasePhrsModel {
 	
 	@Embedded
 	Set<PhoneInfo> secondaryPhones
-	
 
-	@Embedded
-	PixIdentifier ciedIdentifier
 
-	
-	@Embedded
-	PixIdentifier pixIdentifier
+	//@Embedded
+	//PixIdentifier ciedIdentifier
+
+
+	//@Embedded
+	//PixIdentifier pixIdentifier
+
+    //these are copied to  at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
+    //String protocolIdUser
+
+    String pixQueryIdUser
+    String pixQueryIdType
 
 	/*
 	 * support to facilitate feedback tools eg. google talk, skype, etc
@@ -184,9 +190,9 @@ public class  ProfileContactInfo extends  BasePhrsModel {
 		eventStatus=	PhrsConstants.EVENT_STATUS_NOT_EVENTABLE
 		eventTheme = 	PhrsConstants.EVENT_THEME_DATA_ENTRY
 		
-		pixIdentifier= new PixIdentifier(null,true,true,PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID)
+		//pixIdentifier= new PixIdentifier(null,true,true,PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID)
 	
-		ciedIdentifier= new PixIdentifier(null,false,false,PhrsConstants.IDENTIFIER_TYPE_CIED_NUMBER)
+		//ciedIdentifier= new PixIdentifier(null,false,false,PhrsConstants.IDENTIFIER_TYPE_CIED_NUMBER)
 		
 	}
 	/*

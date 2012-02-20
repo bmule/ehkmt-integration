@@ -15,7 +15,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 @ViewScoped
 public class TestBean extends TestFaceBaseBean  {
 
-	CartesianChartModel chartModel
+	//CartesianChartModel chartModel
 
 	public TestBean() {
 		super();//required!!
@@ -32,13 +32,10 @@ public class TestBean extends TestFaceBaseBean  {
 			println('ObsBodyWeightBean loadModelMain Exception '+e)
 		}
 		
-		try{
-			initChartModel()
-		} catch (Exception e){
-			println('ObsBodyWeightBean initChartModel Exception '+e)
-		}
+
 		
 	}
+    /*
 	public CartesianChartModel getChart01(){
 		if(chartModel) return chartModel
 		else return new CartesianChartModel()
@@ -59,7 +56,7 @@ public class TestBean extends TestFaceBaseBean  {
 	CartesianChartModel temp = new CartesianChartModel()
 	public CartesianChartModel getTestNone(){
 		return temp
-	}
+	} */
 /*
 	@Override
 	public void setPermittedActions(){
@@ -132,7 +129,7 @@ public class TestBean extends TestFaceBaseBean  {
 		}
 		try{
 			if(selected){
-				//store BMI
+				//store BMI    HealthyUtils.computeBMIMetric
 				Double val = HealthyUtils.computeBMIMetric(selected.bodyWeight, selected.bodyHeight)
 				if(!val) val= 0d
 				selected.bmi= val

@@ -11,16 +11,14 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import com.sun.net.ssl.internal.ssl.Provider;
 import java.security.Security;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ResourceBundle;
 
-/**
- *
- * @author mradules
- * @version 1.0-SNAPSHOT
- * @since 1.0-SNAPSHOT
- */
-final class SSLLocalClient {
 
+final class SSLLocalClient {
+    private final static Logger LOGGER = LoggerFactory.getLogger(SSLLocalClient.class);
     private static final String HANDLER_PKGS =
             "java.protocol.handler.pkgs";
     private static final String SUN_SSL_PROTOCOL =
@@ -31,7 +29,7 @@ final class SSLLocalClient {
             "javax.net.ssl.trustStorePassword";
 
     public static void sslSetup(String certPath, String password) {
-        System.out.println("sslSetup certPath=" + certPath + " p=" + password);
+        LOGGER.debug("sslSetup certPath=" + certPath + " p=" + password);
         System.setProperty(HANDLER_PKGS, SUN_SSL_PROTOCOL);
 
         final Provider provider = new Provider();
@@ -40,20 +38,20 @@ final class SSLLocalClient {
         System.setProperty(SSL_STORE_PROTOCOL, certPath);
         System.setProperty(SSL_STORE_PASSWORD, password);
 
-        System.out.println("The SSL comunication was enabled");
+        LOGGER.debug("The SSL comunication was enabled");
     }
 
     /**
-     * Read configuration file
+     javax.net.ssl.trustStore=srfg-phrs-web-keystore.ks
+     javax.net.ssl.trustStorePassword=icardea
      */
     public static void sslSetupLocal() {
 
         ConfigurationService config = ConfigurationService.getInstance();
 
-        String keystoreFilePath = config.getProperty("phr_keystoreFilePath");
+        String keystoreFilePath = config.getProperty("javax.net.ssl.trustStore","srfg-phrs-web-keystore.ks");
 
-        String keystoreFilePassword = config.getProperty("phr_keystoreFilePassword");
-
+        String keystoreFilePassword = config.getProperty("javax.net.ssl.trustStorePassword","icardea");
 
 
         SSLLocalClient.sslSetup(keystoreFilePath, keystoreFilePassword);
@@ -73,11 +71,15 @@ final class SSLLocalClient {
      * Other - no ssl setup or handled elsewhere
      */
     public static void sslSetup(int configSettings) {
-        
-        if (configSettings == 1) {
+
+
+
+        if (configSettings < 3) {
             sslSetupLocal();
-        } else if (configSettings == 2) {
+
+        } else if (configSettings == 3) {
             boolean atnatls = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
+
             if (atnatls) {
                 // Properties for SSL Security Provider
                 System.out.println("SECURE sslSetup 2");

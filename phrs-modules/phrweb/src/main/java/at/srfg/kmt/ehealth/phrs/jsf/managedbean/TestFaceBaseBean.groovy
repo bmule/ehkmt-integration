@@ -55,7 +55,7 @@ class TestFaceBaseBean implements Serializable{
 	List internalModelList
 
 	UserService userService
-	AuthorizationService permit
+	//test AuthorizationService permit
 	Locale locale
 	String language
 	//refactoring not complete
@@ -118,8 +118,8 @@ class TestFaceBaseBean implements Serializable{
 
 	}
 	public void initPermit(){
-		if(userService) permit= userService.getAuthorizationService()
-		permit= UserService.getAuthorizationServiceDefault()
+		//test if(userService) permit= userService.getAuthorizationService()
+		//test permit= UserService.getAuthorizationServiceDefault()
 	}
 
 	/**
@@ -248,7 +248,7 @@ class TestFaceBaseBean implements Serializable{
 
 	}
 	public List listModel(Class filterClazz){
-		def model
+		List model
 		if(getUserService()){
 			model = getUserService().getResources(filterClazz);
 		}
@@ -327,21 +327,7 @@ class TestFaceBaseBean implements Serializable{
 	public Collection<String> getTermIds(String tag){
 		return VocabularyService.getTermValuesByTag(tag, language)
 	}
-	/*
-	 public boolean getEditMode() {
-	 //println('isEditMode='+internal_editMode)
-	 return internalEditMode;
-	 }
-	 public boolean isEditMode() {
-	 //println('isEditMode='+internal_editMode)
-	 return internalEditMode;
-	 }
-	 public void setEditMode(boolean editMode) {
-	 println('setEditMode='+editMode)
-	 this.internalEditMode = editMode
-	 }*/
 
-	// ******* Lookup helpers, eventually create converter, but here we get locale. TODO We must use tomcat 7 to make parameter method calls from JSF or add EL 2.2 to Tomcat 6??
 
 	public String resetAction(){
 		//println('resetAction start')
@@ -568,40 +554,7 @@ class TestFaceBaseBean implements Serializable{
 	 http://www.logikdev.com/2011/06/13/delete-the-components-holding-unwanted-state/
 	 * @param renderRepsonse
 	 */
-	/*
-	 binding does not work -serialization, but not a good idea coz it copies to session
-	 //binding="#{xxxBean.mainform}"
-	 public boolean clearForm2(){
-	 boolean clearedForm=false
-	 try{
-	 if (mainForm != null) {
-	 mainForm.getChildren().clear();
-	 clearedForm=true
-	 }
-	 } catch (Exception e){
-	 println('exception'+e)
-	 }
-	 return clearedForm
-	 }
-	 public boolean clearForm(){
-	 boolean clearedForm=false
-	 try{
-	 if (mainform != null) {
-	 mainform.getChildren().clear();
-	 clearedForm=true
-	 }
-	 } catch (Exception e){
-	 println('exception'+e)
-	 }
-	 return clearedForm
-	 }*/
-	/**
-	 * 
-	 * @param renderRepsonse
-	 * @param event
-	 * 
-	 * reset button should have reset prefix and form Id 'FormId'
-	 */
+
 	public UIComponent findFormComponent(UIComponent component){
 		if(component){
 

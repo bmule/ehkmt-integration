@@ -64,7 +64,7 @@ class HealthyUtils implements Serializable{
 		computeBMIMetric(weight,height)
 	}
 
-	protected static Double computeBMIMetric(Double weight, Double height) {
+	public static Double computeBMIMetric(Double weight, Double height) {
 		Double bmi=0d;
 
 		try {

@@ -30,21 +30,29 @@ import com.google.code.morphia.query.Query
 public class PhrsRepositoryClient implements Serializable{
     private final static Logger LOGGER = LoggerFactory.getLogger(PhrsRepositoryClient.class);
 
-    PhrsStoreClient phrsStoreClient
-    CommonDao commonDao
-    UserService userService
+    //CommonDao commonDao
+    //UserService userService
 
     public PhrsRepositoryClient(){
-
-        phrsStoreClient= PhrsStoreClient.getInstance()
-        userService = new UserService(this)
-        commonDao= (CommonDao)userService
+        //userService = new UserService()
+        //commonDao= (CommonDao)userService
     }
-	
-    public PhrsRepositoryClient(PhrsStoreClient storeClient ){
-		
-        phrsStoreClient = storeClient
-        userService = new UserService(this)
+    
+    public PhrsRepositoryClient(def obj){
+     
+    } 
+    public UserService getUserService(){
+       return new UserService()
+    }
+    public CommonDao getCommonDao(){
+       return (CommonDao) getUserService()
+    }
+    /**
+     *@deprecated
+     */
+    public PhrsRepositoryClient(PhrsStoreClient storeClient ){		
+   
+        userService = new UserService()
         commonDao= (CommonDao)userService
 		
     }
@@ -55,39 +63,29 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public Datastore getPhrsDatastore(){
 
-        return phrsStoreClient.getPhrsDatastore();
+        return getPhrsStoreClient().getPhrsDatastore();
     }
+    
+    public PhrsStoreClient getPhrsStoreClient(){
+        return  PhrsStoreClient.getInstance()
+    }
+    
     public Datastore getPhrsVersioningDatastore(){
 
-        return phrsStoreClient.getPhrsVersioningDatastore();
+        return getPhrsStoreClient().getPhrsVersioningDatastore();
     }
     public Datastore getPhrsAuditDatastore(){
 
-        return phrsStoreClient.getPhrsAuditDatastore();
+        return getPhrsStoreClient().getPhrsAuditDatastore();
     }
 
     public InteropAccessService getInteropService(){
 
-        return phrsStoreClient.getInteropService();
+        return getPhrsStoreClient().getInteropService();
     }
-    /*
-     * Read a single resource
-     * @param theObject
-     * @return
-     * @deprecated
-     * 
-     
-    def crudReadResource(def theObject){
-    def result
-        
-    if(theObject ){
-    result= getPhrsDatastore().get(theObject)
-    //writeAuditData(theObject,theObject,PhrsConstants.PUBSUB_ACTION_CRUD_READ,null)
-    }
-    return result
-    }*/
+
     public InteropClients getInteropClients(){
-        return  phrsStoreClient.getInteropClients()
+        return  getPhrsStoreClient().getInteropClients()
     }
     /**
      * sorted by create date

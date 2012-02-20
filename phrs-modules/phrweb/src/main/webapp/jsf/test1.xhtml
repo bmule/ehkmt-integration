@@ -6,36 +6,19 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.prime.com.tr/ui"
-	xmlns:ft="http://primefaces.prime.com.tr/facestrace"
 	template="/templates/test_template_ui.xhtml">
 
 	<ui:define name="head">
-	
-			<script type="text/javascript">
-			//<![CDATA[ 
-				function onEditComplete(xhr, status, args) {
-					if (args.validationFailed) {
-				
-					} else {
-						widDialogObw.hide();
-					}
-				}
-	     		//]]>			
-			</script>
-				
-		<style type="text/css">
-		.table.innertable td { border:0;
-		}
-	</style>
+
 		<ui:insert name="head"></ui:insert>
 	</ui:define>
 
 
 	<ui:define name="content">
 		<div class="entry">
-<h:form>
-<f:param name="trace" value="true" /> 
-</h:form>
+  <!--<h:form>
+       xmlns:ft="http://primefaces.prime.com.tr/facestrace" <f:param name="trace" value="true" />
+</h:form>    -->
 			<h:form prependId="false">
 
 				<p:growl id="msgs" showDetail="true" />
@@ -114,7 +97,7 @@
 				 </h:form>
 				</p:outputPanel>
 		</p:dialog>
-<ft:trace/>
+<!-- ft:trace/> -->
 	</ui:define>
 
 </ui:composition>

@@ -91,6 +91,7 @@ class InteropTermTransformer implements Serializable{
 					'action.categories.activity.sport'
 				]:
 					out=CODE_WATCH_SPORT
+                break;
 				default:
 					break
 			}
@@ -101,6 +102,9 @@ class InteropTermTransformer implements Serializable{
 	public static String transformCode(String input){
 		transformCode(input,null)
 	}
+    public static String transformCategory(String input){
+        return input
+    }
 
 	/**
 	 * Transform known local Portal resource.status code to an acceptable Interoperability completion code 
@@ -122,7 +126,7 @@ class InteropTermTransformer implements Serializable{
 					,
 					'activityItem_isActiveStatusTrue'
 					,
-					'riskfactor_isActiveStatus',
+					'riskfactor_isActiveStatus'
 					,
 					'riskfactor_isActiveStatus_short'
 					,
@@ -147,7 +151,7 @@ class InteropTermTransformer implements Serializable{
 				case [
 					PhrsConstants.STATUS_INCOMPLETE
 					,
-					'medicationSummary_medicationStatus_false_completed',
+					'medicationSummary_medicationStatus_false_completed'
 					,
 					'medicationSummary_medicationStatus_false'
 					,

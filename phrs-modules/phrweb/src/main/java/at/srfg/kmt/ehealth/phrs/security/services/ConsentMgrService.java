@@ -4,22 +4,17 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
-
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
-
 import java.io.Serializable;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
+import java.util.*;
 import org.apache.axis2.AxisFault;
 import org.apache.axis2.client.Options;
 import org.apache.axis2.transport.http.HTTPConstants;
@@ -38,55 +33,85 @@ import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 import tr.com.srdc.icardea.atnalog.client.Audit;
 import tr.com.srdc.icardea.consenteditor.saml.SAML;
-
-
+/**
+ * 
+ * Includes consent manager code from SRDC
+ */
 @SuppressWarnings("serial")
 public class ConsentMgrService implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(ConsentMgrService.class);
-
     private ConsentManagerImplServiceStub stub = null;
     private String ISSUERNAME = "PHR";
     //not used, except to check for the https. The stub contains the 
     //
-    private String endpointConsentMgr;
-    private int sslConfigSetting = 2;
+    //private String endpointConsentMgr;
+    private int sslConfigSetting = 0;
     private AuditAtnaService auditService;
-
+    private  int timeout=8000;
+    private boolean isSSLConsent=false;
     public ConsentMgrService() {
-
-        endpointConsentMgr = getServiceEndpoint();
+        //1000 * 5
+        //endpointConsentMgr = getServiceEndpoint();
         stub = getConsentServiceStub();
         //get this services
         auditService = new AuditAtnaService();
 
+        String endpoint = ConfigurationService.getInstance().getProperty("consent.web.endpoint","http");
+        sslConfigSetting = endpoint.contains("https") ? 2 : 0;
+        String sslStr = ConfigurationService.getInstance().getProperty("consent.ssl","false");
+        sslStr=sslStr.trim();
+        isSSLConsent = Boolean.parseBoolean(sslStr);
     }
 
     public AuditAtnaService getAuditAtnaService() {
         return auditService;
     }
+    public ConsentManagerImplServiceStub getConsentServiceStub() {
 
-    public static void timeoutSetup() throws Exception {
+        if (stub != null) {
+            return stub;
+        }
         try {
-            Options options = new Options();
-            int timeOutInMilliSeconds = 10000;
-            //options.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeOutInMilliSeconds));
-            //options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeOutInMilliSeconds));
 
-            // or
-            options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
-            options.setProperty(HTTPConstants.CHUNKED, "false");
+            stub = new ConsentManagerImplServiceStub();
+            //No timeout timeoutSetup(stub._getServiceClient().getOptions());
 
+        } catch (AxisFault e) {
+            LOGGER.error(e.getMessage(), e);
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("", e);
+            LOGGER.error(e.getMessage(), e);
+        }
+
+        return stub;
+    }
+    public static void timeoutSetup(Options options) {
+        
+        if(options!=null){
+            try {
+
+                //int timeOutInMilliSeconds = 10000;
+                //options.setProperty(HTTPConstants.SO_TIMEOUT, new Integer(timeOutInMilliSeconds));
+                //options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, new Integer(timeOutInMilliSeconds));
+                String timeoutStr = ConfigurationService.getInstance().getProperty("consent.ws.timeout","20000");
+                int timeout=Integer.parseInt(timeoutStr.trim());
+                options.setProperty(HTTPConstants.SO_TIMEOUT, timeout);
+                options.setProperty(HTTPConstants.CONNECTION_TIMEOUT, timeout);
+                // or
+                //options.setTimeOutInMilliSeconds(timeOutInMilliSeconds);
+                //options.setProperty(HTTPConstants.CHUNKED, "false");
+
+            } catch (Exception e) {
+                LOGGER.error("timeoutSetup ", e);
+            }
         }
     }
 
     public void sslSetup() throws Exception {
 
-        timeoutSetup();
-        SSLLocalClient.sslSetup(sslConfigSetting);
+        //timeoutSetup();
+        if(isSSLConsent)
+            SSLLocalClient.sslSetup(sslConfigSetting);
 
     }
 
@@ -106,6 +131,7 @@ public class ConsentMgrService implements Serializable {
 
     /**
      * Local setting, used now for creating alternate test or demo view
+     *
      * @param subjectCode
      * @return
      */
@@ -117,26 +143,32 @@ public class ConsentMgrService implements Serializable {
 
         return ConfigurationService.getInstance().isConsentAction(actionCode);
     }
-      public String getProtocolId(String ownerUri){
-          CommonDao dao = PhrsStoreClient.getInstance().getCommonDao();
-          return dao.getProtocolId(ownerUri);
-      }
-              
-              
+
+    public String getProtocolId(String ownerUri) {
+        CommonDao dao = PhrsStoreClient.getInstance().getCommonDao();
+        return dao.getProtocolId(ownerUri);
+    }
+
     /**
-     * @param targetUser   (user identifier: can send two queries for phr or protocol ID)
-     * @param subjectCode  (role code)
+     * @param targetUser (user identifier: can send two queries for phr or
+     * protocol ID)
+     * @param subjectCode (role code)
      * @param idType
      * @param resourceCode (mediation, basic health, condition, etc)
-     * @param action       (READ,WRITE...)
+     * @param action (READ,WRITE...)
      * @return
      */
     public boolean isPermitted(String targetUser, String subjectCode,
-                               String idType, String resourceCode, String action) {
+            String resourceCode, String action) {
+        return this.isPermitted(targetUser, subjectCode, "", resourceCode, action);
+    }
+
+    public boolean isPermitted(String targetUser, String subjectCode,
+            String idType, String resourceCode, String action) {
         boolean flag = false;
 
         try {
-//This is the local setting
+            //This is the local setting
             if (isAccessibleByThisRole(subjectCode)) {
 
                 flag = true;
@@ -152,17 +184,16 @@ public class ConsentMgrService implements Serializable {
                 flag = isPermitted(result);
 
                 //usually the phrId is passed
-                if (!idType.equals(PhrsConstants.PROTOCOL_ID_NAME)) {
-                    // try on phrId
-                    userIdentifier=getProtocolId(targetUser);
-                    if (!flag && userIdentifier!=null && !userIdentifier.isEmpty() ) {
-                        result = callGetDecision(userIdentifier, ISSUERNAME,
-                                subjectCode, resourceCode, action);
-                        flag = isPermitted(result);
-                    } else {
-
-                    }
-                }
+//                if (!idType.equals(PhrsConstants.PROTOCOL_ID_NAME)) {
+//                    // try on phrId
+//                    userIdentifier = getProtocolId(targetUser);
+//                    if (!flag && userIdentifier != null && !userIdentifier.isEmpty()) {
+//                        result = callGetDecision(userIdentifier, ISSUERNAME,
+//                                subjectCode, resourceCode, action);
+//                        flag = isPermitted(result);
+//                    } else {
+//                    }
+//                }
                 if (result != null) {
                     LOGGER.debug("result " + " targetUser phrId" + targetUser
                             + "idType = " + idType + " user id="
@@ -189,6 +220,7 @@ public class ConsentMgrService implements Serializable {
             e.printStackTrace();
         }
         this.sendAuditMessage(targetUser, subjectCode, idType, resourceCode, action);
+
         LOGGER.debug("permission result " + " targetUser phrId" + targetUser
                 + " idType=" + idType + " subjectCode=" + subjectCode
                 + " resourceCode=" + resourceCode + " resourceCode"
@@ -197,7 +229,7 @@ public class ConsentMgrService implements Serializable {
     }
 
     public void sendAuditMessage(String targetUser, String subjectRoleCode,
-                                 String idType, String resourceCode, String action) {
+            String idType, String resourceCode, String action) {
         //final String patientId, final String resource, final String requestorRole
         auditService.sendAuditMessageGrant(targetUser, ISSUERNAME, subjectRoleCode);
     }
@@ -215,15 +247,16 @@ public class ConsentMgrService implements Serializable {
     /**
      * Test for "Permit" in
      * <code><xacml-context:Decision>Permit</xacml-context:Decision></code>
+     * Permit or Deny
      *
-     * @param XACMLAuthzDecisionStatement
+     * @param decsionResponse is the String XACMLAuthzDecisionStatement
      * @return
      */
-    protected boolean isPermitted(String XACMLAuthzDecisionStatement) {
+    protected boolean isPermitted(String xacmlAuthzDecisionStatement) {
         // <xacml-context:Decision>Deny</xacml-context:Decision>
 
-        if (XACMLAuthzDecisionStatement != null) {
-            return (XACMLAuthzDecisionStatement.indexOf("Permit") != -1);
+        if (xacmlAuthzDecisionStatement != null) {
+            return (xacmlAuthzDecisionStatement.indexOf("Permit") != -1);
         }
         return false;
     }
@@ -235,37 +268,17 @@ public class ConsentMgrService implements Serializable {
         //endpoint = properties.getString("consent.ws.endpoint");
         endpoint = ConfigurationService.getInstance().getConsentServiceEndpoint();
 
-        if (endpoint != null) endpoint = endpoint.trim();
+        if (endpoint != null) {
+            endpoint = endpoint.trim();
+        }
         return endpoint;
 
     }
 
 
-    public ConsentManagerImplServiceStub getConsentServiceStub() {
-        //ConsentManagerSubInterface stub = null;
-        String endPoint = null;
-        if (stub != null) return stub;
-        try {
-            endPoint = getServiceEndpoint();
-            if (endPoint == null) throw new Exception("Endpoint is null");
-
-            //          if(endPoint.startsWith("https")){
-            //              stub = new ConsentManagerImplServiceSecuredStub();
-            //          } else {
-            stub = new ConsentManagerImplServiceStub();
-
-            //          }
-        } catch (AxisFault e) {
-            LOGGER.error("Error created stub with endpoint" + endPoint, e);
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
-
-        return stub;
-    }
 
     public String callGetDecision(String patientId, String issuerName,
-                                  String subjectCode, String resourceCode, String action) {
+            String subjectCode, String resourceCode, String action) {
 
         //ConsentManagerImplServiceStub stub;
 
@@ -288,7 +301,7 @@ public class ConsentMgrService implements Serializable {
                 LOGGER.debug(" requestString =", requestString.substring(39));
 
                 request.setRequestString(requestString);
-                              //stub.getDecision(request);
+                //stub.getDecision(request);
                 GetDecisionResponse response = stub.getDecision(request);
                 String resultString = response.getGetDecisionReturn();
                 //System.out.println("callGetDecision result" + resultString);
@@ -314,7 +327,7 @@ public class ConsentMgrService implements Serializable {
                     + "issuerName " + issuerName + " subjectCode" + subjectCode
                     + "resourceCode " + resourceCode + " action" + action);
         }
-        return "<?xml version=\"1.0\" encoding=\"UTF-16\"?><xacml-saml:XACMLAuthzDecisionStatement xmlns:xacml-saml=\"urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion\"><xacml-context:Response xmlns:xacml-context=\"urn:oasis:names:tc:xacml:2.0:context:schema:os\"><xacml-context:Result><xacml-context:Decision>Deny</xacml-context:Decision></xacml-context:Result></xacml-context:Response></xacml-saml:XACMLAuthzDecisionStatement>";
+        return "<?xml version=\"1.0\" encoding=\"UTF-16\"?><xacml-saml:XACMLAuthzDecisionStatement xmlns:xacml-saml=\"urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion\"><xacml-context:Response xmlns:xacml-context=\"urn:oasis:names:tc:xacml:2.0:context:schema:os\"><xacml-context:Result><xacml-context:Decision>Deny Deny</xacml-context:Decision></xacml-context:Result></xacml-context:Response></xacml-saml:XACMLAuthzDecisionStatement>";
     }
 
     /**
@@ -330,7 +343,39 @@ public class ConsentMgrService implements Serializable {
             stub = getConsentServiceStub();
             GetSubjects request = new GetSubjects();
             GetSubjectsResponse response = stub.getSubjects(request);
-            if(response!=null){
+            if (response != null) {
+                ArrayOf_xsd_anyType result = response.getGetSubjectsReturn();
+                System.out.println("SUBJECTS");
+                for (Object o : result.getItem()) {
+                    System.out.println("Subject Code: " + o);
+                    list.add(o.toString());
+                }
+            } else {
+                LOGGER.error("GetResourcesResponse response is null");
+            }
+
+
+//        } catch (AxisFault e) {
+//            e.printStackTrace();
+//            LOGGER.error(" ", e);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//            LOGGER.error(" ", e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            LOGGER.error(" ", e);
+        }
+        return list;
+    }
+      public static List<String> callGetSubjects(ConsentManagerImplServiceStub stub) {
+
+        List<String> list = new ArrayList<String>();
+        try {
+
+            
+            GetSubjects request = new GetSubjects();
+            GetSubjectsResponse response = stub.getSubjects(request);
+            if (response != null) {
                 ArrayOf_xsd_anyType result = response.getGetSubjectsReturn();
                 System.out.println("SUBJECTS");
                 for (Object o : result.getItem()) {
@@ -362,16 +407,16 @@ public class ConsentMgrService implements Serializable {
             stub = getConsentServiceStub();
             GetResources request = new GetResources();
             GetResourcesResponse response = stub.getResources(request);
-     
-             
-            if(response!=null){
+
+
+            if (response != null) {
                 ArrayOf_xsd_anyType result = response.getGetResourcesReturn();
                 System.out.println("RESOURCES");
-    
+
                 for (Object o : result.getItem()) {
                     System.out.println("Resource Code: " + o);
                     list.add(o.toString());
-                }   
+                }
             } else {
                 LOGGER.error("GetResourcesResponse response is null");
             }
@@ -396,9 +441,9 @@ public class ConsentMgrService implements Serializable {
      * @return true if the auditing option is configured
      */
     public boolean auditGrantRequest(String patientId, String idType,
-                                     String requesterRole, String resource) {
+            String requesterRole, String resource) {
         boolean result = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
-      
+
         auditService.sendAuditMessageGrant(patientId, resource, requesterRole);
 
         return result;
@@ -441,8 +486,8 @@ public class ConsentMgrService implements Serializable {
     }
 
     public XACMLAuthzDecisionQueryType generateSAMLRequest(String requestId,
-                                                           String issuer, String subjectId, String resourceId,
-                                                           String actionString) {
+            String issuer, String subjectId, String resourceId,
+            String actionString) {
         SAML saml = new SAML();
         XACMLAuthzDecisionQueryType query = saml.create(
                 XACMLAuthzDecisionQueryTypeImpl.class,
@@ -517,13 +562,13 @@ public class ConsentMgrService implements Serializable {
 
 //srdc code
     public boolean grantRequest(String patientId, String requesterRole,
-                                String resource) {
+            String resource) {
         boolean result = false;
         try {
             sslSetup();
 
 
-            String response = callGetDecision(patientId, "srdc", "ROLECODE:"
+            String response = callGetDecision(patientId, "phr", "ROLECODE:"
                     + requesterRole.toUpperCase(), "RESOURCECODE:"
                     + resource.toUpperCase().replaceAll(" ", ""), "READ");
             result = response.indexOf("Permit") != -1;
@@ -564,5 +609,80 @@ public class ConsentMgrService implements Serializable {
 
     public void setSslConfigSetting(int sslConfigSetting) {
         this.sslConfigSetting = sslConfigSetting;
+    }
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN,
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE,
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_FAMILY_MEMBER,
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PSYCHIATRIST,
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHARMACIST,
+//            PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DENTIST,
+//            PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_ADMIN,
+//            PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_TEST
+//RZ-iCARDEA-Admin
+//RZ-iCARDEA-Doctor-Cardiologist
+//RZ-iCARDEA-Doctor-Electrophysiologist
+//RZ-iCARDEA-Doctor-Physician
+//RZ-iCARDEA-Nurse
+// String mappedRole= ConsentMgrService.getMedicalRoleMapping(list);
+
+    public static String extractMappedRole(Map inputMap) {
+        String mappedRole = null;
+        if (inputMap != null && inputMap.containsKey(PhrsConstants.OPEN_ID_PARAM_ROLE)) {
+            Object obj = inputMap.get(PhrsConstants.OPEN_ID_PARAM_ROLE);
+            if (obj != null) {
+                if (obj instanceof Collection) {
+                    mappedRole = ConsentMgrService.getMedicalRoleMapping((Collection) obj);
+                } else if (obj instanceof String) {
+                    mappedRole = ConsentMgrService.getMedicalRoleMapping((String) obj);
+                }
+            }
+        }
+        return mappedRole;
+
+    }
+
+    /**
+     *
+     * @param roles
+     * @return
+     */
+    public static String getMedicalRoleMapping(Collection<String> roles) {
+        String selectedRole = null;
+
+        if (roles != null) {
+            for (String role : roles) {
+
+                selectedRole = getMedicalRoleMapping(role);
+                if (selectedRole != null) {
+                    break;
+                }
+            }
+
+        }
+
+        return selectedRole;
+    }
+
+    /**
+     * Primarily for mapping OpenId roles to consent mgt roles that are used by
+     * the PHR and Consent mgr
+     *
+     * @param role
+     * @return null if there is no medical mapping
+     */
+    public static String getMedicalRoleMapping(String role) {
+        String selectedRole = null;
+
+        if (role != null) {
+            String lower = role.toLowerCase();
+
+            if (lower.contains("doctor")) {
+                selectedRole = PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN;
+            } else if (lower.contains("nurse")) {
+                selectedRole = PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE;
+            }
+        }
+
+        return selectedRole;
     }
 }

@@ -93,37 +93,62 @@
 					
 					<h:inputHidden value="#{procon.selected.origin}" />
 					<h:inputHidden value="#{procon.selected.originStatus}" />
-					
-					<h:inputHidden value="#{procon.selected.pixIdentifier.type}" />
-					<h:inputHidden value="#{procon.selected.pixIdentifier.domain}" />
-					
+
+                    <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+                        <f:facet name="header">
+                            <p:commandButton value="#{labels['default.button.create.label']}"
+                                             title="#{labels['default.button.create.label']}"
+                                             process="idFormPcon"
+                                             update="msgs idFormPcon idItemTablePcon"
+                                             oncomplete="onEditComplete(xhr,status,args)"
+                                             actionListener="#{procon.store}" image="ui-icon ui-icon-check" />
+
+                            <!-- p:commandButton type="reset"
+                                       value="#{procon.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+                                       onclick="widDialogPcon.hide();" immediate="true"
+                                       image="ui-icon ui-icon-close" />-->
+
+                            <p:commandButton rendered="#{procon.modify eq 'yes'}"
+                                             value="#{labels['default.button.reset.label']}"
+                                             actionListener="#{procon.refresh}" immediate="true"
+                                             onsuccess="widDialogPcon.hide()"
+                                             image="ui-icon ui-icon-close" />
+
+                            <p:commandButton  rendered="#{procon.modify eq 'no'}"
+                                              value="#{labels['default.button.close.label']}"
+                                              reset="true"
+                                              onsuccess="widDialogPcon.hide()"
+                                              image="ui-icon ui-icon-close" />
+                        </f:facet>
+                    </h:panelGrid>
+
 					<h:panelGrid columns="3">
-					<!--  pixIdentifier.identifier ciedIdentifier.identifier-->
-						<h:outputLabel for="field_identifier_pix"
-							value="iCARDEA Protocol ID"
-							styleClass="form-dialog-label" />
-						<p:outputPanel id="field_identifier_pix" layout="block">
-							<h:outputLabel value="#{procon.selected.pixIdentifier.identifier}"
-								rendered="#{procon.modify eq 'no'}" />
-							<p:inputText value="#{procon.selected.pixIdentifier.identifier}" 
-								id="field_identifier_pix_input"
-								required="true" requiredMessage="#{labels['default_required_field']}"
-								rendered="#{procon.modify eq 'yes'}" />
-						</p:outputPanel>
-						<p:message for="field_identifier_pix_input" display="text" />
-						
-						<h:outputLabel for="field_identifier_cied"
-							value="CIED identifier"
-							styleClass="form-dialog-label" />
-						<p:outputPanel id="field_identifier_cied" layout="block">
-							<h:outputLabel value="#{procon.selected.ciedIdentifier.identifier}"
-								rendered="#{procon.modify eq 'no'}" />
-							<p:inputText value="#{procon.selected.ciedIdentifier.identifier}" 
-								id="field_identifier_cied_input"
-								required="true" requiredMessage="#{labels['default_required_field']}"
-								rendered="#{procon.modify eq 'yes'}" />
-						</p:outputPanel>
-						<p:message for="field_identifier_cied_input" display="text" />
+
+                    <h:outputLabel for="field_identifier_cied"
+                                   value="CIED Serial Number"
+                                   styleClass="form-dialog-label" />
+
+                    <p:outputPanel id="field_identifier_cied" layout="block">
+                        <h:outputLabel value="#{procon.selected.pixQueryIdType}"
+                                       rendered="#{procon.modify eq 'no'}" />
+                        <h:selectOneMenu value=" {procon.selected.pixQueryIdType}"
+                                         id="field_pixQueryIdType_input"
+                                         rendered="#{procon.modify eq 'yes'}">
+                            <f:selectItem itemLabel="model:Maximo"
+                                          itemValue="cied:model:Maximo" noSelectionOption="true"/>
+                            <f:selectItem itemLabel="Patient ID"
+                                          itemValue="pid"/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="#{procon.selected.pixQueryIdUser}"
+                                       rendered="#{procon.modify eq 'no'}" />
+                        <p:inputText value="#{procon.selected.pixQueryIdUser}"
+                                     id="field_identifier_cied_input"
+                                     required="true" requiredMessage="#{labels['default_required_field']}"
+                                     rendered="#{procon.modify eq 'yes'}" />
+                    </p:outputPanel>
+                    <p:message for="field_identifier_cied_input" display="text" />
+
 
 										
 						<h:outputLabel for="field_firstName"
@@ -231,7 +256,8 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 							</p:inputMask>
 						</p:outputPanel>					
 						<p:message for="birthdateDateField_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}"/> 
-	 -->											
+	 -->
+
 						<h:outputLabel for="field_2"
 							value="Street Address"
 							styleClass="form-dialog-label" />
@@ -240,14 +266,25 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								rendered="#{procon.modify eq 'no'}" />								
 							<p:inputTextarea value="#{procon.selected.addressText}" 
 								id="field_2_input"
-								autoResize="false" cols="30" rows="3" 
+								autoResize="false" cols="30" rows="2"
 								rendered="#{procon.modify eq 'yes'}" />
 						</p:outputPanel>
 						<p:message for="field_2_input" display="text" />
 
-						<h:outputLabel for="field_3"
+                    <h:outputLabel for="address_segment"
+                                   value=" "
+                                   styleClass="form-dialog-label" />
+     <h:panelGrid id="address_segment" columns="3" cellpadding="4" style="margin:0 auto;">
+						<h:outputLabel
 							value="Postal Code"
 							styleClass="form-dialog-label" />
+                         <h:outputLabel
+                            value="City"
+                            styleClass="form-dialog-label" />
+                         <h:outputLabel
+                        value="Country"
+                        styleClass="form-dialog-label" />
+
 						<p:outputPanel id="field_3" layout="block">
 							<h:outputLabel value="#{procon.selected.postalCode}"
 								rendered="#{procon.modify eq 'no'}" />
@@ -255,11 +292,7 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="field_3_input"
 								rendered="#{procon.modify eq 'yes'}" />
 						</p:outputPanel>
-						<p:message for="field_3_input" display="text" />
 
-						<h:outputLabel for="field_4"
-							value="City"
-							styleClass="form-dialog-label" />
 						<p:outputPanel id="field_4" layout="block">
 							<h:outputLabel value="#{procon.selected.city}"
 								rendered="#{procon.modify eq 'no'}" />
@@ -267,11 +300,8 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="field_4_input"
 								rendered="#{procon.modify eq 'yes'}" />
 						</p:outputPanel>
-						<p:message for="field_4_input" display="text" />																		
 
-						<h:outputLabel for="field_5"
-							value="Country"
-							styleClass="form-dialog-label" />
+
 						<p:outputPanel id="field_5" layout="block">
 							<h:outputLabel value="#{procon.selected.country}"
 								rendered="#{procon.modify eq 'no'}" />
@@ -279,8 +309,9 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="field_5_input"
 								rendered="#{procon.modify eq 'yes'}" />
 						</p:outputPanel>
-						<p:message for="field_5_input" display="text" />
 
+    </h:panelGrid>
+     <p:message for="address_segment" display="text" />
 						<h:outputLabel for="field_internetChatProvider" render="#{procon.selected.contactType eq 'healthcare_user'}"
 							value="Internet Chat Service"
 							styleClass="form-dialog-label" />							
@@ -292,26 +323,26 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="field_internetChatProvider_input"
 								rendered="#{procon.modify eq 'yes'}">
 										<f:selectItem itemLabel="Google"
-											itemValue="Google" noSelectionOption="true"></f:selectItem>
+											itemValue="Google" noSelectionOption="true"/>
 										<f:selectItem itemLabel="Skype"
-											itemValue="Skype"></f:selectItem>
+											itemValue="Skype"/>
 										<f:selectItem itemLabel="Other"
-											itemValue="Other"></f:selectItem>
+											itemValue="Other"/>
 							</h:selectOneMenu>	
 							<p:inputText value="#{procon.selected.internetChatId}" 
 								id="internetChatId_input"
 								rendered="#{procon.modify eq 'yes'}" />						
 						</p:outputPanel>
 						<p:message for="internetChatId_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}"/>
-
-						<h:outputLabel for="field_internetVoiceProvider" render="#{procon.selected.contactType eq 'healthcare_user'}"
+  <!--
+						<h:outputLabel for="field_internetVoiceProvider" render=" {procon.selected.contactType eq 'healthcare_user'}"
 							value="Internet Voice Service"
 							styleClass="form-dialog-label" />							
-						<p:outputPanel id="field_internetVoiceProvider" layout="block" render="#{procon.selected.contactType eq 'healthcare_user'}">
+						<p:outputPanel id="field_internetVoiceProvider" layout="block" render=" {procon.selected.contactType eq 'healthcare_user'}">
 							<h:outputLabel value="#{procon.selected.internetVoiceProvider}"
 								rendered="#{procon.modify eq 'no'}">
 							</h:outputLabel>
-							<h:selectOneMenu value="#{procon.selected.internetVoiceProvider}"
+							<h:selectOneMenu value=" {procon.selected.internetVoiceProvider}"
 								id="field_internetVoiceProvider_input"
 								rendered="#{procon.modify eq 'yes'}">
 										<f:selectItem itemLabel="Google"
@@ -325,8 +356,8 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="internetVoiceId_input"
 								rendered="#{procon.modify eq 'yes'}" />			
 						</p:outputPanel>
-						<p:message for="internetVoiceId_input" display="text" render="#{procon.selected.contactType eq 'healthcare_user'}" />
-
+						<p:message for="internetVoiceId_input" display="text" render=" {procon.selected.contactType eq 'healthcare_user'}" />
+ -->
 						<h:outputLabel for="field_note_contact"
 							value="#{labels['default.comments.label']}"
 							styleClass="form-dialog-label" />
@@ -342,33 +373,7 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 						<p:message for="field_note_contact_input" display="text" />
 					</h:panelGrid>
 
-					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
-						<f:facet name="header">
-							<p:commandButton value="#{labels['default.button.create.label']}"
-								title="#{labels['default.button.create.label']}"
-								process="idFormPcon" 
-								update="msgs idFormPcon idItemTablePcon"
-								oncomplete="onEditComplete(xhr,status,args)"
-								actionListener="#{procon.store}" image="ui-icon ui-icon-check" />
 
-							<!-- p:commandButton type="reset"
-								value="#{procon.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
-								onclick="widDialogPcon.hide();" immediate="true"
-								image="ui-icon ui-icon-close" />-->
-								
-						<p:commandButton rendered="#{procon.modify eq 'yes'}" 
-							value="#{labels['default.button.reset.label']}" 						
-							actionListener="#{procon.refresh}" immediate="true" 
-							onsuccess="widDialogPcon.hide()"									
-							image="ui-icon ui-icon-close" />
-					
-						<p:commandButton  rendered="#{procon.modify eq 'no'}" 
-							value="#{labels['default.button.close.label']}" 						
-							reset="true"
-							onsuccess="widDialogPcon.hide()"
-							image="ui-icon ui-icon-close" />								
-						</f:facet>
-					</h:panelGrid>
 				</h:form>
 			</p:outputPanel>
 		</p:dialog>

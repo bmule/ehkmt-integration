@@ -8,8 +8,7 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient;
-import at.srfg.kmt.ehealth.phrs.jsf.managedbean.ObsBloodPressureBean;
+
 import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -20,7 +19,9 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 
 import java.util.Date;
 
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
+
 import java.awt.event.ActionEvent;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -49,10 +50,15 @@ public class CoreTestData {
     public static final String DATE_PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm";
     private MedicationClient client;
     private InteropClients interopClients;
+
     //coreTestData.addMedication_forAnyUnitTest(owner,"10","to import");
     //coreTestData.addTestMedication_1_forAnyUnitTest(owner,"10","to import");
     private CommonDao commonDao;
 
+    /**
+     * @param interopClients
+     * @deprecated
+     */
     public CoreTestData(InteropClients interopClients) {
         this.interopClients = interopClients;
 
@@ -61,6 +67,10 @@ public class CoreTestData {
         commonDao = PhrsStoreClient.getInstance().getCommonDao();
     }
 
+    /**
+     * @param storeClient
+     * @deprecated
+     */
     public CoreTestData(PhrsStoreClient storeClient) {
         this.interopClients = storeClient.getInteropClients();
 
@@ -80,24 +90,23 @@ public class CoreTestData {
     public static String formatTimeDate(DateTime dateTime, String pattern) {
 
         DateTimeFormatter dtf = DateTimeFormat.forPattern(pattern);
-        String formattedTime = dateTime.toString(dtf);
-        return formattedTime;
+        return dateTime.toString(dtf);
     }
 
     public String makeDateLabelForTitle() {
-        String dateStr = formatTimeDate(new DateTime(), DATE_PATTERN_DATE_TIME);
+
         return makeDateLabelForTitle(" test:");
     }
 
     public static String makeDateLabelForTitle(String prefix) {
         String dateStr = formatTimeDate(new DateTime(), DATE_PATTERN_DATE_TIME);
-        return prefix + new Date().toString();
+        return prefix + dateStr;
     }
 
     /**
      * @param owner
      * @param quantity DRUG_CODE_1 Drug name and code "Drug-Eluting Stents",
-     * "C1322815"
+     *                 "C1322815"
      */
     public void addMedication_forAnyUnitTest(String owner, String quantity, String note) {
         this.addTestMedication_1_forAnyUnitTest(owner, quantity, note,
@@ -111,8 +120,8 @@ public class CoreTestData {
      *
      * @param owner
      * @param quantity
-     * @param note - can be null, but defaults to blank, put the resourceUri
-     * string pattern here when needed for testing
+     * @param note     - can be null, but defaults to blank, put the resourceUri
+     *                 string pattern here when needed for testing
      * @param drugName
      * @param drugCode
      */
@@ -138,23 +147,26 @@ public class CoreTestData {
         } catch (Exception e) {
             System.out.println("" + e);
             LOGGER.debug("ERROR addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + owner, e);
-            ;
+
 
         }
+        interopClients.notifyInteropMessageSubscribers();  //"MEDLIST"
     }
 
     /**
      * Bilateral test data owner = Constants.OWNER_URI_CORE_PORTAL_TEST_USER
      */
     public void addTestMedications_2_forPortalTestUser() {
-        final String owner = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;
+
+        //final String owner = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;   x
+        String owner = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
         this.addTestMedications_2_forPortalTestForOwnerUri(owner);
     }
 
     /**
      * @param owner
      * @return int expected count of records, not the actual. We test the
-     * expected vs found
+     *         expected vs found
      */
     public int addTestMedications_2_forPortalTestForOwnerUri(String owner) {
         int countAdded = 8;//update this if added more manually...needed by tests
@@ -227,9 +239,9 @@ public class CoreTestData {
         } else {
             LOGGER.error("Error creating user test data, ownerUri=null");
         }
-        
-        notifySubscribers("MEDLIST");
-        
+
+        interopClients.notifyInteropMessageSubscribers();  //"MEDLIST"
+
         return countAdded;
 
     }
@@ -238,7 +250,7 @@ public class CoreTestData {
         Set<DynaBean> beans = null;
         try {
             final Iterable<String> uris = client.getMedicationURIsForUser(owner);
-            final DynaBeanClient dynaBeanClient = new DynaBeanClient(interopClients.getTriplestore());
+            final DynaBeanClient dynaBeanClient = new DynaBeanClient(PhrsStoreClient.getInstance().getTripleStore());
             beans = new HashSet<DynaBean>();
 
             for (String uri : uris) {
@@ -260,91 +272,132 @@ public class CoreTestData {
         }
         return beans;
     }
+
     public static final String PROTOCOL_ID_190 = "190";
 
     /**
-     *
+     * Create users and test data for 190 and 191
      */
     public static void createTestUserData() {
         try {
-            LOGGER.debug("Start preparing test data for phrtest191, phrtest190, phrtestm and " + PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
-            boolean createUser = true;
-            PhrsStoreClient sc = PhrsStoreClient.getInstance();
-            createTestUserData("phrtest" + Constants.PROTOCOL_ID_PIX_TEST_PATIENT, Constants.PROTOCOL_ID_PIX_TEST_PATIENT, sc, createUser);
-            createTestUserData("phrtest" + PROTOCOL_ID_190, PROTOCOL_ID_190, sc, createUser);
-            createTestUserData(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST, Constants.PROTOCOL_ID_PIX_TEST_PATIENT, sc, createUser);
-            createTestUserData("phrtestm", Constants.PROTOCOL_ID_UNIT_TEST, sc, createUser);
-            LOGGER.debug("Created test data for phrtest191, phrtest190, phrtestm and " + PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+            
+
+            createTestUserData(false);
+
+            
         } catch (Exception e) {
-            LOGGER.error("Error creating user test data, creating PhrsStoreClient ? ", e);
+            LOGGER.error("Error creating user test user data", e);
         }
     }
 
-    /**
-     * Create user test data with login identifiers: phrtest190 and phrtest191
-     *
-     * @param nickname - one word, beginnning with phrtest
-     *
-     * @param protocolId
-     * @param sc
-     * @param sc
-     */
-    public static void createTestUserData(String nickname, String protocolId, PhrsStoreClient sc, boolean createUser) {
+    public static void createTestUserData(boolean addMedications) {
 
+//       test.user.1.cied.pixQueryIdType=cied:model:Maximo
+//     test.user.1.cied.serial=PZC123456S
+//     test.user.1.pid=191
+//     test.user.1.name=Suzie Mayr
+//     test.user.1.firstname=Suzie
+//     test.user.1.lastname=Mayr
+        String loginUserIdOwnerUri = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+        LOGGER.debug("Creating test data for test user = " + loginUserIdOwnerUri);
         try {
+            String pixQueryIdUser = ConfigurationService.getInstance().getProperty("test.user.1.cied.serial", "PZC123456S");
+            String pixQueryIdType = ConfigurationService.getInstance().getProperty("test.user.1.cied.pixQueryIdType", "cied:model:Maximo");
+            String protocolId = ConfigurationService.getInstance().getProperty("test.user.1.pid", "191");
+            //phrtest ..
+
+
+            String firstname = ConfigurationService.getInstance().getProperty("test.user.1.firstname", "Suzie");
+            String lastname = ConfigurationService.getInstance().getProperty("test.user.1.lastname", "Mayr");
+            String fullname = ConfigurationService.getInstance().getProperty("test.user.1.name", "Suzie Mayr");
+
+
             CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
-            String ownerUri = PhrFederatedUser.makeOwnerUri();
-            PhrFederatedUser user = commonDao.getPhrUser(ownerUri, true);
-            user.setOwnerUri(ownerUri);
-            user.setNickname(nickname);
-            user.setIdentifier(nickname);
+            // String ownerUri         = PhrFederatedUser.makeOwnerUri();
+            PhrFederatedUser user = commonDao.getPhrUser(loginUserIdOwnerUri, true);
 
-            commonDao.crudSaveResource(user, ownerUri, "CoreTestData createTestUserData");
+            user.setOwnerUri(loginUserIdOwnerUri);
+            user.setUserId(loginUserIdOwnerUri);
+            user.setIdentifier(loginUserIdOwnerUri);//init to local identifier, but could later assign to an OpenId.
 
-            ProfileContactInfo info = commonDao.getProfileContactInfo(ownerUri);
-            PixIdentifier pixIdentifier = new PixIdentifier(protocolId, true, true, PhrsConstants.IDENTIFIER_TYPE_PIX_PROTOCOL_ID);
-            pixIdentifier.setDomain(Constants.ICARDEA_DOMAIN_PIX_OID);
-            commonDao.crudSaveResource(info, ownerUri, "CoreTestData createTestUserData");
+            user.setNickname(fullname);
+            user.setCanLocalLogin(true);
 
-            commonDao.registerProtocolId(ownerUri, protocolId, Constants.ICARDEA_DOMAIN_PIX_OID);
-            info.setPixIdentifier(pixIdentifier);
+            user.setProtocolIdUser(protocolId);//Constants.ICARDEA_DOMAIN_PIX_OID);
+            user.setProtocolIdPix(protocolId);//Constants.ICARDEA_DOMAIN_PIX_OID);
 
-            ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
-            bp1.setSystolic(110);
-            bp1.setDiastolic(70);
-            bp1.setBeginDate(new Date());
-            bp1.setEndDate(new Date());
-            bp1.setNote("note id " + makeSimpleId());
-            bp1.setSystemNote(bp1.getNote());
-            commonDao.crudSaveResource(bp1, ownerUri, "CoreTestData createTestUserData");
+            user.setPixQueryIdUser(pixQueryIdUser);
+            user.setPixQueryIdType(pixQueryIdType);
 
-            ObsVitalsBloodPressure bp2 = new ObsVitalsBloodPressure();
-            bp2.setSystolic(125);
-            bp2.setDiastolic(84);
-            bp2.setBeginDate(new Date());
-            bp2.setEndDate(new Date());
-            bp2.setNote("note id " + makeSimpleId());
-            bp2.setSystemNote(bp2.getNote());
-            commonDao.crudSaveResource(bp2, ownerUri, "CoreTestData createTestUserData");
+            user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
 
-            ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
-            bw1.setBodyWeight(75d);
-            bw1.setBodyHeight(173d);
-            bw1.setBeginDate(new Date());
-            bw1.setEndDate(new Date());
-            bw1.setNote("note id " + makeSimpleId());
-            bw1.setSystemNote(bw1.getNote());
-            commonDao.crudSaveResource(bw1, ownerUri, "CoreTestData createTestUserData");
+            commonDao.crudSaveResource(user, user.getOwnerUri(), "CoreTestData createTestUserData");
+            //register PID
+            commonDao.getPhrsStoreClient().getInteropClients().registerProtocolId(user.getOwnerUri(), protocolId, null);
+            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, null);
 
-            ObsVitalsBodyWeight bw2 = new ObsVitalsBodyWeight();
-            bw2.setBodyWeight(75d);
-            bw2.setBodyHeight(173d);
-            bw2.setBeginDate(new Date());
-            bw2.setEndDate(new Date());
-            bw2.setNote("note id " + makeSimpleId());
-            bw2.setSystemNote(bw2.getNote());
-            commonDao.crudSaveResource(bw2, ownerUri, "CoreTestData createTestUserData");
-            LOGGER.debug("Created test data for  nickname " + nickname + " ownerUri " + ownerUri + " protocolId " + protocolId);
+            ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
+            info.setFirstName(firstname);
+            info.setLastName(lastname);
+            info.setPixQueryIdUser(pixQueryIdUser);
+            info.setPixQueryIdType(pixQueryIdType);
+
+            commonDao.crudSaveResource(info, user.getOwnerUri(), "CoreTestData createTestUserData");
+
+            //register user PID
+            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, null);
+            //or getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
+            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, Constants.ICARDEA_DOMAIN_PIX_OID);
+            //info.setPixIdentifier(pixIdentifier);
+
+            List listBp = commonDao.crudReadResources(loginUserIdOwnerUri, ObsVitalsBloodPressure.class);
+            if (listBp == null) {
+                ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
+                bp1.setSystolic(110);
+                bp1.setDiastolic(70);
+                bp1.setBeginDate(new Date());
+                bp1.setEndDate(new Date());
+                bp1.setNote("note id " + makeSimpleId());
+                bp1.setSystemNote(bp1.getNote());
+                commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
+            }
+
+            listBp = commonDao.crudReadResources(loginUserIdOwnerUri, ObsVitalsBloodPressure.class);
+            if (listBp == null) {
+                ObsVitalsBloodPressure bp2 = new ObsVitalsBloodPressure();
+                bp2.setSystolic(125);
+                bp2.setDiastolic(84);
+                bp2.setBeginDate(new Date());
+                bp2.setEndDate(new Date());
+                bp2.setNote("note id " + makeSimpleId());
+                bp2.setSystemNote(bp2.getNote());
+                commonDao.crudSaveResource(bp2, user.getOwnerUri(), "CoreTestData createTestUserData");
+            }
+            List listBw = commonDao.crudReadResources(loginUserIdOwnerUri, ObsVitalsBodyWeight.class);
+            if (listBw == null) {
+                ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
+                bw1.setBodyWeight(75d);
+                bw1.setBodyHeight(173d);
+                bw1.setBeginDate(new Date());
+                bw1.setEndDate(new Date());
+                bw1.setNote("note id " + makeSimpleId());
+                bw1.setSystemNote(bw1.getNote());
+                commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
+            }
+
+            listBw = commonDao.crudReadResources(loginUserIdOwnerUri, ObsVitalsBodyWeight.class);
+            if (listBw == null) {
+                ObsVitalsBodyWeight bw2 = new ObsVitalsBodyWeight();
+                bw2.setBodyWeight(75d);
+                bw2.setBodyHeight(173d);
+                bw2.setBeginDate(new Date());
+                bw2.setEndDate(new Date());
+                bw2.setNote("note id " + makeSimpleId());
+                bw2.setSystemNote(bw2.getNote());
+                commonDao.crudSaveResource(bw2, user.getOwnerUri(), "CoreTestData createTestUserData");
+            }
+            LOGGER.debug("Created test data for  fullname " + fullname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
+
 
         } catch (Exception e) {
             LOGGER.error("Error creating user test data", e);
@@ -376,6 +429,7 @@ public class CoreTestData {
                 CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
 
                 ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
+
                 bp1.setSystolic(160);
                 bp1.setDiastolic(90);
                 bp1.setBeginDate(new Date());
@@ -421,61 +475,4 @@ public class CoreTestData {
 
     }
 
-    public void notifySubscribers(String careProvisionCode) {
-        try {
-            PHRSRequestClient requestClient = this.interopClients.getPHRSRequestClient();
-            DynaBeanClient beanClient = this.interopClients.getDynaBeanClient();
-            final Iterable<String> resources = requestClient.getAllPHRSRequests();
-            for (String resource : resources) {
-                final DynaBean request = beanClient.getDynaBean(resource);
-//                    final String code =
-//                            (String) request.get("http://www.icardea.at/phrs/hl7V3#careProcisionCode");
-                final String wsAdress =
-                        (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
-                final String id =
-                        (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
-
-               
-
-                final Map<String, String> properties = new HashMap<String, String>();
-                properties.put("patientId", id);
-                properties.put("patientNames", "patientNames");
-
-                //Care Provision Code
-                properties.put("careProvisionCode", careProvisionCode);
-                properties.put("responseEndpointURI", wsAdress);
-
-                notify("localhost", 5578, properties);
-                LOGGER.error("Finished - Notified Core after Loading test data ");
-
-            }
-            LOGGER.error("Finished - Notified Core after Loading test data ");
-        } catch (Exception e) {
-            LOGGER.error("Failed to Notify Core after Loading test data "+e.getMessage(), e);
-        }
-    }
-
-    private void notify(String host, int port, Map<String, String> params) {
-        LOGGER.debug("Tries to dispach this properties {}.", params);
-        try {
-            final Socket socket = new Socket(host, port);
-            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            objectOutputStream.writeObject(params);
-        } catch (Exception e) {
-            LOGGER.error("Prameters : {} can not be dispathed.", params);
-            LOGGER.error(e.getMessage(), e);
-        }
-
-        LOGGER.debug("The {} was distpatched", params);
-    }
-
-    public static void main(String[] args) {
-
-        System.out.println("x=" + makeSimpleId());
-
-        System.out.println("y=" + makeSimpleId());
-
-        System.out.println("z=" + makeSimpleId());
-
-    }
 }

@@ -1,4 +1,3 @@
-<%@ page session="false" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
@@ -52,7 +51,10 @@ function processForm(theForm){
     //icardea local server accepts short names. We must combine this here otherwise the servlet request must be wrapped
     if(objDropDown.value == "icardea" ){
     	objHidden.value ="http://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
-    	alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
+    	//alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
+    } else if( objDropDown.value == "testmachine1"){
+        objHidden.value ="http://kmt53.salzburgresearch.at:4545/idp/u="+objUser.value;
+        alert("Your actual TEST OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     
     if(objDropDown.value =='local'){
@@ -79,13 +81,14 @@ function processForm(theForm){
 
 </script>
 </head>
+    <!--< @ page session="false" % > -->
 <body>
 <!-- onchange="changeHiddenInput(this)"   <div style="color:red;font-size:1.4em">&nbsp;${openid_servlet_filter_msg}</div>-->
 <div id="container">
 
   <div style="clear:both"></div>
 
-  <p>Login with your <b>OpenID</b> or Local account</p>
+  <p>Login with your <b>iCARDEA OpenID</b> or Local account</p>
   <div id="message"></div>
   <form id="idLoginForm" name="idLoginForm"  method="post" onsubmit="return processForm(this);">
   	  <input type="hidden" name="action" id="action" value="login"/>
@@ -98,10 +101,12 @@ function processForm(theForm){
   	<tr>  	
 	  	<td>
 		    <select id="loginWith" name="loginWith">
-			   <option selected="selected" value="local">PHR User Account (begins with 'phruser')</option>	    
-		    	<option  value="icardea">iCARDEA User Account</option>
+			<option selected="selected" value="local">PHR User Account (begins with 'phruser')</option>	    
+		    	<option  value="icardea">iCARDEA Open ID Account</option>
+                        <option  value="testmachine1">Test machine</option>
+                        <!--
 		    	<option value="google">Google</option>
-		    	<option value="yahoo">Yahoo</option>	    	
+		    	<option value="yahoo">Yahoo</option>-->	    	
 		    </select>	  
 		    <!-- <option value="phrsopenid">Phrs OpenID provider</option> -->	
 	  	</td>
@@ -137,7 +142,7 @@ function processForm(theForm){
 	  	<td>phrtest</td>
 	  	<td><!--Nurse--></td>
 	  	<td>Test EHR with 
-                    <br/>protocolId= 14920263490
+                    <br/>protocolId= 191
                     <br/>phrId     = phr/test/testuser
                 
                 </td>

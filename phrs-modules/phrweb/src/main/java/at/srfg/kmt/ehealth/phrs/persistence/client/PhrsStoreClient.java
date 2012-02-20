@@ -19,11 +19,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.TermClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
 
@@ -39,12 +35,35 @@ import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
  * Provide wrapper over store API .getLogger(PhrsStoreClient.class);
  */
 @SuppressWarnings("serial")
-public class PhrsStoreClient implements Serializable {
+public  class PhrsStoreClient implements Serializable {
 
+    static boolean TEST = true;
     private static final Logger LOGGER = LoggerFactory.getLogger(PhrsStoreClient.class);
-    private static PhrsStoreClient m_instance = null;
-    private GenericTriplestore triplestore;
-    private TermClient termClient;
+    //private static PhrsStoreClient m_instance = null;
+    private static PhrsStoreClient m_instance;
+
+//    static {
+//        try {
+//            m_instance = new PhrsStoreClient();
+//        } catch (Exception ex) {
+//            LOGGER.warn(ex.getMessage(), ex);
+//            throw new IllegalStateException(ex);
+//        }
+//    }
+    static {
+        staticInit();
+    }
+
+    protected static void staticInit() {
+        try {
+            m_instance = new PhrsStoreClient();
+        } catch (Exception ex) {
+            LOGGER.warn(ex.getMessage(), ex);
+            throw new IllegalStateException(ex);
+        }
+    }
+    //private GenericTriplestore triplestore;
+    
     private Mongo mongo;
     private int mongoPort = 27017;
     private String mongoHost = "127.0.0.1";
@@ -56,95 +75,49 @@ public class PhrsStoreClient implements Serializable {
     private InteropClients interopClients;
     private InteropAccessService interopService;
     private InteropProcessor interopProcessor;
-    static boolean TEST = true;
+    private GenericTriplestore tripleStore;
 
     private PhrsStoreClient() {
         configure(false);
     }
 
     /**
-     * Used primarily for testing
      *
-     * @param triplestore - can be null
-     * @param useTestStores - the document repository, not the triplestore
+     * @return
      */
-    private PhrsStoreClient(GenericTriplestore triplestore, boolean useTestStores) {
-        //option to set triplestore
-        this.triplestore = triplestore;
-        configure(useTestStores);
-    }
-
     public static PhrsStoreClient getInstance() {
-        if (m_instance == null) {
-            m_instance = new PhrsStoreClient();
-        }
         return m_instance;
     }
 
     /**
-     * Support especially testing. Creates a new instance
+     * Use test document repositories, primarily for unit testing The test
+     * repository for the interop store is handled by the a configuration file
      *
-     * @param createNewInstance - use once to create or initialize a new
-     * instance in cases where one needs to switch to testStores. In the
-     * following code, one can use
-     * <code>getInstance()</code> to refer to this new instance.
-     * @param useTestStores - the document repository, not the triplestore
-     * @return
+     * @param useTestDocumentRepositoryStores
      */
-    public static PhrsStoreClient getInstance(boolean createNewInstance, boolean useTestStores) {
-        if (m_instance == null || createNewInstance) {
-            m_instance = new PhrsStoreClient(null, useTestStores);
-        }
-        return m_instance;
-    }
-
-    /**
-     * Especially for unit testing, if needed, otherwise get the triplestore for
-     * initialization or cleanup
-     *
-     * Creates a new instance but using this triplestore.
-     *
-     * @param triplestore
-     * @param useTestStores - the document repository, not the triplestore
-     * @return
-     */
-    public static PhrsStoreClient getInstance(GenericTriplestore triplestore, boolean useTestStores) {
-        if (m_instance == null) {
-            m_instance = new PhrsStoreClient(triplestore, useTestStores);
-        }
-        if (triplestore != null) {
-            m_instance.setTripleStore(triplestore);
-        }
-        return m_instance;
-    }
-
-    private void configure(boolean useTestStores) {
-        if (useTestStores) {
+    private void configure(boolean useTestDocumentRepositoryStores) {
+        if (useTestDocumentRepositoryStores) {
             assignTestStoresNames();
         }
-
+        //assignTripleStore();
+        
         initPhrsDb();
         initClients();
+        
     }
 
     /**
-     * For Testing
+     * For unit tests, do not use in production, not thread safe
      *
      * @param newInstance - true create new instance
      * @return
      */
     public static PhrsStoreClient getInstance(boolean newInstance) {
-        if (newInstance) {
-            m_instance = new PhrsStoreClient();
-        } else if (m_instance == null) {
-            m_instance = new PhrsStoreClient();
-        }
+        // if (newInstance) {
+        //   staticInit();
+        // }
 
         return m_instance;
-    }
-
-    public void setTripleStore(GenericTriplestore triplestore) {
-        this.triplestore = triplestore;
     }
 
     /**
@@ -153,8 +126,25 @@ public class PhrsStoreClient implements Serializable {
      * @return
      */
     public GenericTriplestore getTripleStore() {
-        return triplestore;
+        //will open connection if closed, but how does one close a connection?
+        //return tripleStore;
+        return  TriplestoreConnectionFactory.getInstance().getTriplestore();
     }
+    /**
+     * shutdown when closing application, see DefaultLoader a servlet context listener 
+     */
+    public  void shutdown(){     
+       
+        try {
+            GenericTriplestore triplestore=getTripleStore();
+            if(triplestore!=null){
+                ((GenericTriplestoreLifecycle) triplestore).shutdown();
+            }
+        } catch (GenericRepositoryException e) {
+            LOGGER.error("closeConnection()",e);
+        }
+    }
+
     /*
      * Initialization-on-demand holder idiom if instance fails will get
      * ambiguous java.lang.NoClassDefFoundError Must remove m_instance private
@@ -277,57 +267,60 @@ public class PhrsStoreClient implements Serializable {
      * Initialize interop store and clients for interoperability
      */
     private void initClients() {
-
+        
         try {
-            if (triplestore == null) {
-                final TriplestoreConnectionFactory connectionFactory = TriplestoreConnectionFactory.getInstance();
+            GenericTriplestore tripleStore=getTripleStore();
+//            if (tripleStore == null) {
+//                final TriplestoreConnectionFactory connectionFactory = TriplestoreConnectionFactory.getInstance();
+//                tripleStore = connectionFactory.getTriplestore();            
+//            }           
+            phrsRepositoryClient = new PhrsRepositoryClient();
+            interopClients = new InteropClients();
+            interopService = new InteropAccessService();
+            interopProcessor = new InteropProcessor();
+            //test here  for exception
 
-                triplestore = connectionFactory.getTriplestore();
-            }
 
-            phrsRepositoryClient = new PhrsRepositoryClient(this);
-            interopClients = new InteropClients(triplestore);
-            interopService = new InteropAccessService(this);
-            interopProcessor = new InteropProcessor(this);
-            termClient = interopClients.getTermClient();
-            if (termClient == null) {
-                System.out.println("getTermClient NULL");
-                LOGGER.error("getTermClient NULL");
-            }
+
+ 
+            //final TriplestoreConnectionFactory connectionFactory = TriplestoreConnectionFactory.getInstance();
+            //tripleStore = connectionFactory.getTriplestore();
+            
+            //only init the static class now
+            //GenericTriplestore tripleStore=getTripleStore();
+            
+
+            
+           
+            
         } catch (GenericRepositoryException e) {
-            e.printStackTrace();
-            System.out.println("initInteropStore  GenericRepositoryException ");
+
             LOGGER.error("initInteropStore GenericRepositoryException NULL", e);
         } catch (Exception e) {
-            System.out.println("initInteropStore  Exception ");
-            e.printStackTrace();
+
             LOGGER.error("error initInteropStore", e);
         }
 
-        if (triplestore == null) {
-            System.out.println("initInteropStore  triple store null ");
+        if (getTripleStore() == null) {
+
             LOGGER.error("initInteropStore  triple store null");
         }
         if (interopClients == null) {
-            System.out.println("initInteropStore  interopClients  null ");
+
             LOGGER.error("initInteropStore interopClients null");
         }
         if (interopService == null) {
-            System.out.println("initInteropStore  interopService  null ");
+
             LOGGER.error("initInteropStore  interopService null");
         }
     }
 
     public TermClient getTermClient() {
-        if (termClient == null) {
-            System.out.println("getTermClient NULL");
-            LOGGER.error("getTermClient NULL");
-        }
-        return termClient;
+        return this.getInteropClients().getTermClient();
     }
 
     public GenericTriplestore getGenericTriplestore() {
-        return triplestore;
+        return getTripleStore();
     }
 
     /**
@@ -377,9 +370,9 @@ public class PhrsStoreClient implements Serializable {
                             Collections.singleton(subject));
                 }
             } catch (TripleException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             } catch (Exception e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return map;
@@ -424,28 +417,15 @@ public class PhrsStoreClient implements Serializable {
             String resourceURI, String language) {
         Collection<Map<String, Collection<String>>> collection = null;
         try {
-            final Iterable<String> subjects = triplestore.getForPredicateAndValue(Constants.SKOS_RELATED,
+            final Iterable<String> subjects = getTripleStore().getForPredicateAndValue(Constants.SKOS_RELATED,
                     resourceURI, ValueType.RESOURCE);
 
             collection = this.getResourcesAsMaps(subjects);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.print("getTermResourcesBySkosRelated  exception  using:"
-                    + resourceURI);
+            LOGGER.error("getTermResourcesBySkosRelated  exception  using:"
+                    + resourceURI, e);
         }
-        /*
-         * if (TEST && collection == null) System.out
-         * .print("getTermResourcesBySkosRelated results NULL using:" +
-         * resourceURI);
-         *
-         * if (TEST && collection != null && collection.isEmpty()) System.out
-         * .print("getTermResourcesBySkosRelated results EMPTY using:" +
-         * resourceURI);
-         *
-         * System.out.print("getTermResourcesBySkosRelated for " + resourceURI);
-         * if (collection != null) System.out.println(" size=" +
-         * collection.size()); else System.out.println(" =NULL results");
-         */
+
         return collection;
     }
 
@@ -471,11 +451,11 @@ public class PhrsStoreClient implements Serializable {
         try {
             dyna = getDynaBeanClient().getDynaBean(interopResourceUri);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } catch (TripleException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         return dyna;
     }
@@ -508,9 +488,9 @@ public class PhrsStoreClient implements Serializable {
     public void updateTriple(String subjectUri, String predicate, String newValue, boolean updateDate)
             throws Exception {
         if (subjectUri != null && predicate != null && newValue != null) {
-            
+
             try {
-                final boolean resourceExists = triplestore.exists(subjectUri);
+                final boolean resourceExists = getTripleStore().exists(subjectUri);
                 if (!resourceExists) {
                     final String msg =
                             String.format("There is no resource for this URI %s ", subjectUri);
@@ -536,12 +516,12 @@ public class PhrsStoreClient implements Serializable {
                     final ValueType type = isPropertyLiteral
                             ? ValueType.LITERAL
                             : ValueType.RESOURCE;
-                    triplestore.delete(subjectUri, predicate);
-                    triplestore.persist(subjectUri, predicate, newValue, type);
+                    getTripleStore().delete(subjectUri, predicate);
+                    getTripleStore().persist(subjectUri, predicate, newValue, type);
                 } else {
                     //known as Literal
-                    triplestore.delete(subjectUri, predicate);
-                    triplestore.persist(subjectUri, predicate, newValue, ValueType.LITERAL);
+                    getTripleStore().delete(subjectUri, predicate);
+                    getTripleStore().persist(subjectUri, predicate, newValue, ValueType.LITERAL);
                 }
 
                 // NOTA BENE : the update operatin is responsible for the UPDATE_DATE property.
@@ -551,9 +531,9 @@ public class PhrsStoreClient implements Serializable {
                     setUpdateDate(subjectUri);
                 }
             } catch (Exception e) {
-                    LOGGER.error("Error on triple update for subjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
-                    throw new Exception("Error on triple update forsubjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
-  
+                LOGGER.error("Error on triple update for subjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
+                throw new Exception("Error on triple update forsubjectUri=" + subjectUri + " predicate=" + predicate + " newValue=" + newValue);
+
             }
 
         } else {
@@ -565,13 +545,13 @@ public class PhrsStoreClient implements Serializable {
     private void setUpdateDate(String subjectUri) {
         try {
             final boolean updateDateExists =
-                    triplestore.exists(subjectUri, Constants.UPDATE_DATE);
+                    getTripleStore().exists(subjectUri, Constants.UPDATE_DATE);
             if (updateDateExists) {
-                triplestore.delete(subjectUri, Constants.UPDATE_DATE);
+                getTripleStore().delete(subjectUri, Constants.UPDATE_DATE);
             }
 
             final String newDate = DateUtil.getFormatedDate(new Date());
-            triplestore.persist(subjectUri, Constants.UPDATE_DATE, newDate, LITERAL);
+            getTripleStore().persist(subjectUri, Constants.UPDATE_DATE, newDate, LITERAL);
         } catch (Exception e) {
             LOGGER.error(" setUpdateDate subjectUri=" + subjectUri, e);
         }

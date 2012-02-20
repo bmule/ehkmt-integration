@@ -1,100 +1,56 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services;
 
+import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
-import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
-import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import static org.junit.Assert.*;
-import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
-import org.apache.commons.beanutils.DynaBean;
-import java.util.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
+import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
+import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
+import java.util.*;
+import org.apache.commons.beanutils.DynaBean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class InteropProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InteropProcessor.class.getName());
     public final static String DATE_PATTERN_INTEROP_DATE_TIME = "yyyyMMddHHmm";
     public final static String REFERENCE_NOTE_PREFIX = "resourcephr=";
-    public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_UNIT_TEST;
+    public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_PIX_TEST_PATIENT;//Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
-    private MedicationClient medicationClient;
-    private ActorClient actorClient;
-    private PhrsStoreClient phrsClient;
-    private InteropAccessService iaccess;
+
+    
     private boolean printDynabean = false;
+    
 
-    public InteropProcessor() {
-        init();
+    public InteropProcessor() {  
+        initInterop();
     }
-
+    /**
+     * @deprecated
+    * @param phrsClient 
+    */
     public InteropProcessor(PhrsStoreClient phrsClient) {
-        this.phrsClient = phrsClient;
-
-        init();
+    
+        initInterop();
     }
 
-    protected void init() {
-        if (phrsClient == null) {
-            phrsClient = PhrsStoreClient.getInstance();
-        }
-
-        iaccess = phrsClient.getInteropService();
-
-        //get this one, we set the creator differently
-        medicationClient = phrsClient.getInteropClients().getMedicationClient();
-
-        //assign actor
-        actorClient = phrsClient.getInteropClients().getActorClient();//new ActorClient(triplestore);
-
-        setupTest();
+    protected void initInterop() {   
+       //setupTest();
 
     }
 
-    private void setupTest() {
-        boolean hasTest = false;
-        try {
-            //Constants.PHRS_NAMESPACE
-            String p1 = actorClient.getProtocolId(PROTOCOL_ID_NAMESPACE, Constants.OWNER_URI_CORE_PORTAL_TEST_USER);
-            if (p1 != null) {
-                hasTest = true;
-            }
-        } catch (Exception e) {
-            LOGGER.error("Failed to find protocolId for user, must create - user=" + Constants.PROTOCOL_ID_UNIT_TEST + " for namespace=" + PROTOCOL_ID_NAMESPACE, e);
-        }
-        try {
-            //Constants.PHRS_NAMESPACE
-            String p1 = actorClient.getProtocolId(Constants.OWNER_URI_CORE_PORTAL_TEST_USER);
-            if (p1 != null) {
-                hasTest = true;
-            }
-        } catch (Exception e) {
-            LOGGER.error("Failed to find protocolId for user, must create - user=" + Constants.OWNER_URI_CORE_PORTAL_TEST_USER + " for default namespace=" + Constants.PHRS_NAMESPACE, e);
-        }
-        try {
-            if (!hasTest) {
-                actorClient.register(PROTOCOL_ID_NAMESPACE, Constants.OWNER_URI_CORE_PORTAL_TEST_USER, Constants.PROTOCOL_ID_UNIT_TEST);
-            }
-            //actorClient.register(Constants.OWNER_URI_CORE_PORTAL_TEST_USER, Constants.PROTOCOL_ID_UNIT_TEST);
-        } catch (Exception e) {
-            LOGGER.error("Failed to Register Test protocol ID=" + Constants.PROTOCOL_ID_UNIT_TEST + " for namespace=" + PROTOCOL_ID_NAMESPACE, e);
-        }
-    }
+
 
 // +++++++++++++++ start helpers
     public CommonDao getCommonDao() {
@@ -104,21 +60,27 @@ public class InteropProcessor {
     public InteropClients getInteropClients() {
         return getPhrsStoreClient().getInteropClients();
     }
-
+    /**
+     * 
+     * 
+     * @param repositoryObject 
+     */
+    // TODO Remove after deprecating InteropAccessService
     public void sendMessages(Object repositoryObject) {
+        InteropAccessService iaccess = new InteropAccessService();
         iaccess.sendMessages(repositoryObject);
     }
 
     public int loadSampleTestDataSet(String owner) {
 
-        CoreTestData core = new CoreTestData(phrsClient);
+        CoreTestData core = new CoreTestData();
         //return count
         return core.addTestMedications_2_forPortalTestForOwnerUri(owner);
 
     }
 
     public PhrsStoreClient getPhrsStoreClient() {
-        return phrsClient;
+        return PhrsStoreClient.getInstance();
     }
 
     public static int showList(String title, List<String> results) {
@@ -207,7 +169,7 @@ public class InteropProcessor {
                             try {
                                 referenceNote = DynaUtil.getStringProperty(dynaBean, Constants.SKOS_NOTE);
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                 LOGGER.error(e.getMessage(),e);
                                 // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
                             }
                             if (referenceNote != null) {
@@ -224,21 +186,21 @@ public class InteropProcessor {
                                 }
                             }
                         } catch (Exception e) {
-                            e.printStackTrace();
+                             LOGGER.error(e.getMessage(),e);
                             //LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e);
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                 LOGGER.error(e.getMessage(),e);
                 // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
             }
         }
         return beans;
 
     }
-
-    public String buildNullFrequency() {
+ //private MedicationClient medicationClient   = phrsClient.getInteropClients().getMedicationClient();
+    public String buildNullFrequency(MedicationClient medicationClient) {
         String value = null;
         try {
             value = medicationClient.buildNullFrequency();
@@ -332,11 +294,11 @@ public class InteropProcessor {
         String status = transformStatus(res.getStatus());
         status = status != null && status.length() > 0 ? status : Constants.STATUS_RUNNING;
 
-        String categoryCode = transformCategory(res.getCategory(), resourceType);
-        categoryCode = categoryCode != null ? categoryCode : null;
+        //String categoryCode = transformCategory(res.getCategory(), resourceType);
+        //categoryCode = categoryCode != null ? categoryCode : null;
 
-        String valueCode = transformCode(res.getCode());
-        valueCode = valueCode != null ? valueCode : null;
+        //String valueCode = transformCode(res.getCode());
+        //valueCode = valueCode != null ? valueCode :  xx;
 
         String dateStringStart = transformDate(res.getBeginDate(), res.getEndDate());
         dateStringStart = dateStringStart != null ? dateStringStart : null;
@@ -369,9 +331,14 @@ public class InteropProcessor {
 
             String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
 
+            String actionLabel=interopRef==null ? "CREATE" : "UPDATE ref="+interopRef;
+            LOGGER.debug(" Send Interop Message"+actionLabel+ " resourceType "+resourceType+" owner "+owner+" refnote "+" status "+status+" dateStart "+dateStringStart
+                    +" dateEnd "+dateStringEnd+" doseVale "+dosageValue+" doseUnits "+doseUnits+ " drugName "+name);
 
             if (interopRef == null) {
                 String referenceNote = createReferenceNote(domain.getResourceUri());
+
+                LOGGER.debug("Interop referenceNote " +referenceNote);
 
                 messageId = medicationclient.addMedicationSign(
                         owner,
@@ -384,11 +351,14 @@ public class InteropProcessor {
                         dosageValue,
                         doseUnits,
                         name);
+
                 if (messageId != null && messageId.length() > 0) {
 
                     messageIdMap.put("default", messageId);
                 }
             } else {
+
+ 
                 //update
                 updateMessageMedication(theParentId, interopRef, Constants.HL7V3_STATUS, status);
                 updateMessageMedication(theParentId, interopRef, Constants.HL7V3_START_DATE, dateStringStart);
@@ -400,7 +370,7 @@ public class InteropProcessor {
 
                 //Drug name change requires code. Dont update. updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);                                           
                 //This needs a URI
-                String newDosageURI = buildMedicationDosage(dosageValue, doseUnits);
+                String newDosageURI = buildMedicationDosage(medicationclient,dosageValue, doseUnits);
 
 
                 //PHRS_MEDICATION_DOSAGE if updating or HL7V3_DOSAGE if retrieving from EHR data
@@ -426,14 +396,18 @@ public class InteropProcessor {
                     updateMessageMedication(theParentId, interopRef, Constants.HL7V3_END_DATE, dateStringEnd);
                 }
             }
-
+          //Notify all,this is a shotgun notification for all care provision codes
+          //Issue, if the protocolId is not yet defined, then we try to notify
+          LOGGER.debug("Sent interop message, Prepare to notify for owner="+owner);
+          getInteropClients().notifyInteropMessageSubscribersByPhrId(owner);
+          
         } catch (RuntimeException e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
 
         } catch (TripleException e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
         } catch (Exception e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
         }
 
         return messageIdMap;
@@ -453,8 +427,8 @@ public class InteropProcessor {
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
         //owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode
         //String value = findInteropMessageWithReferenceTag(ownerUri, resourceUri, phrsClass, categoryCode);
-        String value = findMessageWithReference(ownerUri, resourceUri, phrsClass);
-        return value;
+        return findMessageWithReference(ownerUri, resourceUri, phrsClass);
+       
     }
 
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass) {
@@ -488,13 +462,13 @@ public class InteropProcessor {
                             }
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            LOGGER.error(e.getMessage(),e);
                             // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                 LOGGER.error(e.getMessage(),e);
             }
         }
 
@@ -511,25 +485,19 @@ public class InteropProcessor {
         }
         return referenceNote;
     }
-
+        /*
     public void createManufactureName(String subjectUri, String drugName, String drugCode) {
         MedicationClient medicationClient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
-        /*
-         * triplestore.persist(subject,
-         * "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
-         * buildManufacturedProduct(drugName, drugCode), RESOURCE);
-         */
+
         String newDrugProductUri = null;
         try {
             newDrugProductUri = medicationClient.buildManufacturedProduct(drugName, drugCode);
         } catch (TripleException e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(),e);
         }
 
-
-        assertNotNull(newDrugProductUri);
 
         try {
             // update 
@@ -539,27 +507,27 @@ public class InteropProcessor {
                     PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI,
                     newDrugProductUri);
         } catch (TripleException e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
         } catch (Exception e) {
-            e.printStackTrace();
+             LOGGER.error(e.getMessage(),e);
         }
     }
-
+     */
     public String transformStatus(String status) {
-        String out = status;
-
+        
+        String out=   InteropTermTransformer.transformStatus(status);
         return out;
     }
 
     public String transformCode(String code) {
-        String out = code;
-
+      
+        String out=   InteropTermTransformer.transformCode(code);
         return out;
     }
 
     public String transformCategory(String category, String type) {
-        String out = category;
-
+        
+        String out = InteropTermTransformer.transformCategory(category);
         return out;
     }
 
@@ -593,9 +561,17 @@ public class InteropProcessor {
         return importNewMessages(ownerUri, phrsClass, importMessage, null);
     }
 
+    /**
+     * Import messages
+     * @param ownerUri
+     * @param phrsClass
+     * @param importMessage
+     * @param phrResources
+     * @return
+     */
     public List<String> importNewMessages(String ownerUri, String phrsClass, boolean importMessage, List phrResources) {
 
-        List<String> list = new ArrayList();
+        List<String> list = new ArrayList<String>();
         if (ownerUri != null && phrsClass != null) {
 
             try {
@@ -627,6 +603,7 @@ public class InteropProcessor {
                                     //add only the URI
                                     list.add(dynaBean.getDynaClass().getName());
                                 }
+                                //collecting if caller needs it
                                 if (phrResources != null) {
                                     phrResources.add(repositoryObject);
                                 }
@@ -657,17 +634,16 @@ public class InteropProcessor {
                             }
 
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            
                             LOGGER.error(" message error, interop ownerUri= " + ownerUri, e);
                         }
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                
                 LOGGER.error("", e);
             } catch (java.lang.Error e) {
-                //System.out.println("java lang error sesame error");
-                e.printStackTrace();
+           
                 LOGGER.error("possible sesame error", e);
             }
         }
@@ -689,6 +665,7 @@ public class InteropProcessor {
 
         return valid;
     }
+
 
     /**
      *
@@ -851,11 +828,11 @@ public class InteropProcessor {
             if (obj != null) {
                 if (obj instanceof DynaBean) {
                     return (DynaBean) obj;
-                }
-            } else if (obj instanceof String) {
-                DynaBeanClient dbc = PhrsStoreClient.getInstance().getInteropClients().getDynaBeanClient();
-                DynaBean dynaBean = dbc.getDynaBean((String) obj);
+                } else if (obj instanceof String) {
+                    DynaBeanClient dbc = PhrsStoreClient.getInstance().getInteropClients().getDynaBeanClient();
+                    DynaBean dynaBean = dbc.getDynaBean((String) obj);
 
+                }
             }
         } catch (Exception e) {
             LOGGER.error("", e);
@@ -1027,7 +1004,7 @@ public class InteropProcessor {
         return theDate;
     }
 
-    public String buildMedicationDosage(String dosageValue, String dosageUnits) {
+    public String buildMedicationDosage(MedicationClient medicationClient,String dosageValue, String dosageUnits) {
         String newDosageURI = null;
         try {
             newDosageURI = medicationClient.buildDosage(dosageValue, dosageUnits);
@@ -1090,7 +1067,7 @@ public class InteropProcessor {
     public void updateInteropStatement(String interopResourceId, String predicate, String newValue)
             throws Exception {
         if (interopResourceId != null && newValue != null && predicate != null) {
-            phrsClient.updateTriple(interopResourceId, predicate, newValue, true);
+            getPhrsStoreClient().updateTriple(interopResourceId, predicate, newValue, true);
         }
 
     }
@@ -1106,7 +1083,7 @@ public class InteropProcessor {
     public void updateInteropStatement(String phrResourceUri, String interopResourceId, String predicate, String newValue)
             throws Exception {
         if (interopResourceId != null && newValue != null && predicate != null) {
-            phrsClient.updateTriple(interopResourceId, predicate, newValue, true);
+            getPhrsStoreClient().updateTriple(interopResourceId, predicate, newValue, true);
         }
         //updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
     }
@@ -1119,7 +1096,7 @@ public class InteropProcessor {
      */
     public void updateInteropReferenceNote(String interopResourceId, String newValue) throws Exception {
         if (interopResourceId != null && newValue != null) {
-            phrsClient.updateSkosNote(interopResourceId, newValue);
+            getPhrsStoreClient().updateSkosNote(interopResourceId, newValue);
         }
     }
 
@@ -1141,7 +1118,9 @@ public class InteropProcessor {
         }
         return success;
     }
-
+     /**
+        @deprecated
+      */
     public void registerProtocolId(String owneruri, String protocolId, String namespace) {
         //phrsStoreClient.getInteropClients().getActorClient().register
         if (namespace == null) {
@@ -1158,4 +1137,5 @@ public class InteropProcessor {
         }
 
     }
+
 }
