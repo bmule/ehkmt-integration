@@ -1,6 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.*;
 
 import java.io.ObjectOutputStream;
@@ -54,27 +55,6 @@ public class InteropClients {
 
     private void init() {
 
-        /*
-        vitalSignClient = new VitalSignClient(triplestore);
-        vitalSignClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-
-        medicationClient = new MedicationClient(triplestore);
-        medicationClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-
-        problemEntryClient = new ProblemEntryClient(triplestore);
-        problemEntryClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-
-        schemeClient = new SchemeClient(triplestore);
-
-        actorClient = new ActorClient(triplestore);
-
-        termClient = new TermClient(triplestore);
-
-        dynaBeanClient = new DynaBeanClient(triplestore);
-        //dynaBeanClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-
-        phrsRequestClient = new PHRSRequestClient(triplestore);
-        */
     }
 
     public GenericTriplestore getTriplestore() {
@@ -85,7 +65,9 @@ public class InteropClients {
     public VitalSignClient getVitalSignClient() {
 
         try {
-            return new VitalSignClient(getTriplestore());
+            VitalSignClient vitalSignClient = new VitalSignClient(getTriplestore());
+            vitalSignClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
+            return  vitalSignClient;
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
         }
@@ -105,7 +87,9 @@ public class InteropClients {
 
     public MedicationClient getMedicationClient() {
         try {
-            return new MedicationClient(getTriplestore());
+            MedicationClient medicationClient = new MedicationClient(getTriplestore());
+            medicationClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
+            return medicationClient;
 
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
@@ -115,7 +99,9 @@ public class InteropClients {
 
     public ProblemEntryClient getProblemEntryClient() {
         try {
-            return new ProblemEntryClient(getTriplestore());
+            ProblemEntryClient problemEntryClient = new ProblemEntryClient(getTriplestore());
+            problemEntryClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
+            return problemEntryClient;
 
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
