@@ -72,9 +72,8 @@ public class UserSessionService {
      */
     public static void redirectAndLogin() {
 
-        if (ConfigurationService.isAppModeSingleUserTest()
-                ) {
-            System.out.println("redirectAndLogin isAppModeTest="
+        if (ConfigurationService.isAppModeSingleUserTest()) {
+            LOGGER.debug("redirectAndLogin isAppModeTest="
                     + ConfigurationService.isAppModeSingleUserTest());
         } else {
             // TODO config page

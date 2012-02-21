@@ -163,9 +163,9 @@ public  class ConfigurationService implements Serializable{
             if(!value){
                 switch(prop){
 
-                    case PhrsConstants.OPENID_DISCOVERY_IDENTIFIER_KEY:
-                    value='https://localhost:8443/idp/'
-                    break
+                    //case PhrsConstants.OPENID_DISCOVERY_IDENTIFIER_KEY:
+                    //value='https://localhost:8443/idp/'
+                    //break
                     case 'forwardRedirectIsAuthenticatedToPage':
                     value='/jsf/home.xhtml'
                     break
@@ -206,8 +206,9 @@ public  class ConfigurationService implements Serializable{
         return label
     }
     public static boolean isAppModeTest() {
-
-        String testValue = getInitParameter("testmode");
+        //application.testmode
+        String testValue = ConfigurationService.getInstance().getProperty('application.testmode','true').trim()
+        //was testmode
         if (testValue != null
             && ("true".equalsIgnoreCase(testValue))) {
             return true;
@@ -215,8 +216,12 @@ public  class ConfigurationService implements Serializable{
         return false;
     }
     public static boolean isAppModeSingleUserTest() {
-
-        String testValue = getInitParameter("testsingleusermode");
+//consent.mode.local
+//user.mode.singleuser
+//consultation.reports.listall
+//pix.mode.test
+        String testValue = ConfigurationService.getInstance().getProperty('user.mode.singleuser','false').trim()
+        //was testsingleusermode
         if (testValue != null
             && ("true".equalsIgnoreCase(testValue))) {
             return true;
@@ -225,16 +230,16 @@ public  class ConfigurationService implements Serializable{
     }
     //isAppModeSingleUserTest
     public static boolean isAppModePixTest() {
-
-        String testValue = getInitParameter("testpixmode");
+        String testValue = ConfigurationService.getInstance().getProperty('pix.mode.test','false').trim()
+        //was testpixmode
         if (testValue != null && ("true".equalsIgnoreCase(testValue))) {
             return true;
         }
         return false;
     }
     public static boolean isAppModeRoleTest() {
-
-        String testValue = getInitParameter("testrolemode");
+        String testValue = ConfigurationService.getInstance().getProperty('consent.mode.roletest','false').trim()
+        //was testrolemode
         if (testValue != null && ("true".equalsIgnoreCase(testValue))) {
             return true;
         }
@@ -242,8 +247,8 @@ public  class ConfigurationService implements Serializable{
     }
 
     public static boolean isAppModeMonitorListAllUsers() {
-
-        String testValue = getInitParameter("monitorlistall");
+        String testValue = ConfigurationService.getInstance().getProperty('consultation.reports.listall','true').trim()
+        //was monitorlistall
         if (testValue != null && ("true".equalsIgnoreCase(testValue))) {
             return true;
         }

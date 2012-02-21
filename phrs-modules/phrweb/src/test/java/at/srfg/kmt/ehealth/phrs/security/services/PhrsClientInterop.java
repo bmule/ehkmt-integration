@@ -188,6 +188,7 @@ public class PhrsClientInterop {
 
     @Test
     public void testRegisterPid() {
+        System.out.println("testRegisterPid");
         //register PID
         //In setup this was done actorClient.register(PROTOCOL_ID_NAMESPACE, USER, USER_PROTOCOL_ID);//unit test, use pr
         String pid = "PID123";
@@ -206,8 +207,8 @@ public class PhrsClientInterop {
     public void makePHRSRequest_PCC09(String protocolId, String careProvisioncode) {
         InteropClients interopClients = phrsClient.getInteropClients();
         PHRSRequestClient requestClient = interopClients.getPHRSRequestClient();
-        String REPLY_URI = "myReplyUri";
-        String CODE = careProvisioncode != null ? careProvisioncode : "myCareProvisionCode";
+        String REPLY_URI = "http://localhost:8989/testws/pcc10";
+        String CODE = careProvisioncode != null ? careProvisioncode : careProvisioncode;
 
 
         try {
@@ -220,9 +221,9 @@ public class PhrsClientInterop {
 
     @Test
     public void testNotifySubscribers() {
-        System.out.println("testNotify Med");
+        System.out.println("testNotifySubscribers");
         String protocolId = "PROTOCOLID_" + USER;
-        makePHRSRequest_PCC09(protocolId, null);
+        makePHRSRequest_PCC09(protocolId, "COBSCAT");
 
         CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.registerProtocolId(USER, protocolId, null);
@@ -255,9 +256,10 @@ public class PhrsClientInterop {
 
     @Test
     public void testMessageVitalsBP() {
+        System.out.println("testMessageVitalsBP");
         String theUser = USER + "_BP";
         String protocolId = "PROTOCOLID_" + theUser;
-        makePHRSRequest_PCC09(protocolId, null);
+        makePHRSRequest_PCC09(protocolId, "COBSCAT");
         CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.registerProtocolId(theUser, protocolId, null);
 
@@ -283,9 +285,10 @@ public class PhrsClientInterop {
 
     @Test
     public void testMessageVitalsProblem() {
+        System.out.println("testMessageVitalsProblem");
         String theUser = USER + "_Problem";
         String protocolId = "PROTOCOLID_" + theUser;
-        makePHRSRequest_PCC09(protocolId, null);
+        makePHRSRequest_PCC09(protocolId, "COBSCAT");
         CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.registerProtocolId(theUser, protocolId, null);
 
@@ -313,9 +316,10 @@ public class PhrsClientInterop {
 
     @Test
     public void testMessageVitalsBW() {
+        System.out.println("testMessageVitalsBW");
         String theUser = USER + "_BW";
         String protocolId = "PROTOCOLID_" + theUser;
-        makePHRSRequest_PCC09(protocolId, null);
+        makePHRSRequest_PCC09(protocolId, "COBSCAT");
         CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.registerProtocolId(theUser, protocolId, null);
 
@@ -342,9 +346,10 @@ public class PhrsClientInterop {
 
     @Test
     public void testMessageVitalsADL() {
+        System.out.println("testMessageVitalsADL");
         String theUser = USER + "_ADL";
         String protocolId = "PROTOCOLID_" + theUser;
-        makePHRSRequest_PCC09(protocolId, null);
+        makePHRSRequest_PCC09(protocolId, "COBSCAT");
         CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.registerProtocolId(theUser, protocolId, null);
 

@@ -47,7 +47,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 		/**
 		 * Test setup, single user mode
 		 */
-		if(ConfigurationService.getInstance().isAppModeSingleUserTest()){
+		if(ConfigurationService.isAppModeSingleUserTest()){
 			makeTestLogin()
 		}
 	}
@@ -85,7 +85,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 		//public static final String forwardRedirectIndexPage = "/index.xhtml";
 		try {
 			//don't logout the single test user phrtest
-			if( ! ConfigurationService.getInstance().isAppModeSingleUserTest()){
+			if( ! ConfigurationService.isAppModeSingleUserTest()){
 				UserSessionService.invalidateSession();
 			}
 			String contextName=FacesContext.getCurrentInstance().getExternalContext().getContextName()
@@ -197,10 +197,10 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 		}
 	}
     public boolean getTestMode() {
-        return ConfigurationService.isAppModeTest() || ConfigurationService.getInstance().isAppModeSingleUserTest();
+        return ConfigurationService.isAppModeTest() || ConfigurationService.isAppModeSingleUserTest();
     }
 	public boolean testMode() {
-		return ConfigurationService.isAppModeTest() || ConfigurationService.getInstance().isAppModeSingleUserTest();
+		return ConfigurationService.isAppModeTest() || ConfigurationService.isAppModeSingleUserTest();
 	}
     public void getLoadTestData(){
         LOGGER.error("web form got: getLoadTestData ")

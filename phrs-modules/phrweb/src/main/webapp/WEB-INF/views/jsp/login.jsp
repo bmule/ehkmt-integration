@@ -53,7 +53,7 @@ function processForm(theForm){
     	objHidden.value ="http://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
     	//alert("Your actual iCARDEA OpenID identifier is: "+objHidden.value);
     } else if( objDropDown.value == "testmachine1"){
-        objHidden.value ="http://kmt53.salzburgresearch.at:4545/idp/u="+objUser.value;
+        objHidden.value ="http://192.168.1.101:4545/idp/u="+objUser.value;
         alert("Your actual TEST OpenID identifier is: "+objHidden.value);
     } else objHidden.value = objUser.value; 
     
@@ -102,7 +102,7 @@ function processForm(theForm){
 	  	<td>
 		    <select id="loginWith" name="loginWith">
 			<option selected="selected" value="local">PHR User Account (begins with 'phruser')</option>	    
-		    	<option  value="icardea">iCARDEA Open ID Account</option>
+		    	<option  value="icardea">iCARDEA Open ID</option>
                         <option  value="testmachine1">Test machine</option>
                         <!--
 		    	<option value="google">Google</option>

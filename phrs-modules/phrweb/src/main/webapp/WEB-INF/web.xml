@@ -9,7 +9,9 @@
 	<!-- testmode testmode=true disables saving of PhrUser when the OpenId session 
 		is started it allows null protocol IDs that will be set with a default. Useful 
 		for single user mode testing testmode= -->
-	<context-param>
+        <!--see phrs.properties for testmode testsingleusermode testrolemode testpixmode monitorlistall	
+        start deprecated-->
+        <context-param>
 		<param-name>testmode</param-name>
 		<param-value>true</param-value>
 	</context-param>
@@ -32,6 +34,8 @@
 		<param-name>monitorlistall</param-name>
 		<param-value>true</param-value>
 	</context-param>
+        <!-- end deprecated-->
+        
 	<!-- testrolemode testpixmode -->
 	<!-- offer a GUI selection list of protocol IDs for testing -->
 	<context-param>

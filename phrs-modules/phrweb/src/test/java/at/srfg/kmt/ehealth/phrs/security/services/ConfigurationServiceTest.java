@@ -86,12 +86,40 @@ public class ConfigurationServiceTest {
     }
 
     @Test
-    public void testisHealthInfoAccessibleByThisRole() {
-        System.out.println("testisHealthInfoAccessibleByThisRole");
-        String subjectCode = ROLE_CODE_DOC;
-        boolean expResult = true;
-        boolean result = ConfigurationService.getInstance().isHealthInfoAccessibleByThisRole(subjectCode);
-        assertEquals(expResult, result);
+    public void testConfigProperties() {
+        System.out.println("testConfigProperties");
+
+        try {
+            boolean result = false;
+            //only to test the parsing of the property: test result,result
+            result = ConfigurationService.isAppModeTest();
+            assertEquals(result, result);
+
+            result = ConfigurationService.isAppModeSingleUserTest();
+            assertEquals(result, result);
+
+            result = ConfigurationService.isAppModePixTest();
+            assertEquals(result, result);
+
+            result = ConfigurationService.isAppModeRoleTest();
+            assertEquals(result, result);
+
+            result = ConfigurationService.isAppModeMonitorListAllUsers();
+            assertEquals(result, result);
+
+            String testValue = ConfigurationService.getInstance().getProperty("application.testmode").trim();
+            assertNotNull(testValue);
+            testValue = ConfigurationService.getInstance().getProperty("user.mode.singleuser").trim();
+            assertNotNull(testValue);
+            testValue = ConfigurationService.getInstance().getProperty("pix.mode.test").trim();
+            assertNotNull(testValue);
+            testValue = ConfigurationService.getInstance().getProperty("consent.mode.roletest").trim();
+            assertNotNull(testValue);
+            testValue = ConfigurationService.getInstance().getProperty("consultation.reports.listall").trim();
+            assertNotNull(testValue);
+        } catch (Exception e) {
+            fail("error parsing or phrs.properties property is not boolean");
+        }
 
     }
 

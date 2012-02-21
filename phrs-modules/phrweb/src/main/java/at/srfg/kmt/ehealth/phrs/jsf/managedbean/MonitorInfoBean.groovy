@@ -17,7 +17,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.presentation.builder.BuilderUtil
-
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 
 @ManagedBean(name = "monitorinfoBean")
 @RequestScoped
@@ -25,7 +25,8 @@ public class MonitorInfoBean extends FaceBaseBean {
     private final static Logger LOGGER = LoggerFactory.getLogger(MonitorInfoBean.class);
 
 
-
+    //ConfigurationService cfrom FaceBaseBean
+    
     boolean handledReportRequestParams = false;
 
     public MonitorInfoBean() {
@@ -58,7 +59,7 @@ public class MonitorInfoBean extends FaceBaseBean {
         if (!phrUsers) phrUsers = []
         internalModelList = []
         //which resources?
-        List resourceCodes = config.getConsentSubjectCodes('phr')
+        List resourceCodes = ConfigurationService.getInstance().getConsentSubjectCodes('phr')
         LOGGER.debug("buildView resourceCodes "+resourceCodes);
         //resourceCodes.add(PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION)
         String action = PhrsConstants.AUTHORIZE_ACTION_CODE_READ
@@ -77,7 +78,7 @@ public class MonitorInfoBean extends FaceBaseBean {
                     boolean permitViewRow = false
                     //check permit for current user, on phrUser with resource type
                     //show row for testing
-                    if (config.isAppModeMonitorListAllUsers()) {
+                    if (ConfigurationService.isAppModeMonitorListAllUsers()) {
                         permitViewRow = true
                         LOGGER.debug('buildView isAppModeMonitorListAllUsers permitViewRow='+permitViewRow);
 
