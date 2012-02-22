@@ -28,8 +28,10 @@ public class InteropProcessor {
     public final static String REFERENCE_NOTE_PREFIX = "resourcephr=";
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_PIX_TEST_PATIENT;//Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
-
     
+   
+     
+     
     private boolean printDynabean = false;
     
 
@@ -70,7 +72,11 @@ public class InteropProcessor {
         InteropAccessService iaccess = new InteropAccessService();
         iaccess.sendMessages(repositoryObject);
     }
-
+    /**
+     * Also needs the ProtocolID for any new Interop messages
+     * @param owner
+     * @return 
+     */
     public int loadSampleTestDataSet(String owner) {
 
         CoreTestData core = new CoreTestData();
@@ -143,13 +149,24 @@ public class InteropProcessor {
      */
     public Set<DynaBean> findInteropMessagesForUser(String ownerUri, String phrsClass, boolean onlyNewMessages) {
         Set<DynaBean> beans = new HashSet<DynaBean>();
+        
         if (ownerUri != null && phrsClass != null) {
             try {
-
+                //FIXID
+                String protocolId=this.getProtocolId(ownerUri);
+                if(protocolId !=null && ! protocolId.isEmpty()){
+                // ok 
+                } else {
+                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+ownerUri+" phrClass="+phrsClass);
+                    return beans;
+                }
+                
                 final Map<String, String> queryMap = new HashMap<String, String>();
 
                 queryMap.put(Constants.RDFS_TYPE, phrsClass);
-                queryMap.put(Constants.OWNER, ownerUri);
+                //FIXID
+                queryMap.put(Constants.OWNER, protocolId);
+                //queryMap.put(Constants.OWNER, ownerUri);
 
                 Iterable<String> resources = getPhrsStoreClient().getGenericTriplestore().getForPredicatesAndValues(queryMap);
 
@@ -273,6 +290,10 @@ public class InteropProcessor {
         return newValue;
     }
 
+    public String getProtocolId(String ownerUri){   
+       return  getCommonDao().getProtocolId(ownerUri);     
+    }
+    
     public Map<String, String> sendMedicationMessage(MedicationTreatment domain) {
         //MedicationTreatment domain = (MedicationTreatment) resource;
 
@@ -284,12 +305,27 @@ public class InteropProcessor {
          *
          */
         //create reference to phrweb object for note
-        String messageId = null;
+        
+        //FIXID
         Map<String, String> messageIdMap = new HashMap<String, String>();
+        BasePhrsModel res = (BasePhrsModel) domain;
+        
+        String owner = res.getOwnerUri();
+        
+        String protocolId=getProtocolId(owner);
+        
+        if(protocolId !=null && ! protocolId.isEmpty()){
+           // ok 
+        } else {
+            LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+owner);
+            return messageIdMap;
+        }
+        
+        String messageId = null;
+        
 
         String resourceType = domain.getClass().getCanonicalName();
-        BasePhrsModel res = (BasePhrsModel) domain;
-        String owner = res.getOwnerUri();
+
 
         String status = transformStatus(res.getStatus());
         status = status != null && status.length() > 0 ? status : Constants.STATUS_RUNNING;
@@ -307,6 +343,8 @@ public class InteropProcessor {
         dateStringEnd = dateStringEnd != null ? dateStringEnd : null;
 
         String theParentId = res.getResourceUri();
+        
+
 
         try {
 
@@ -341,7 +379,7 @@ public class InteropProcessor {
                 LOGGER.debug("Interop referenceNote " +referenceNote);
 
                 messageId = medicationclient.addMedicationSign(
-                        owner,
+                        protocolId,//FIXID owner,
                         referenceNote,
                         status,
                         dateStringStart,
@@ -398,8 +436,9 @@ public class InteropProcessor {
             }
           //Notify all,this is a shotgun notification for all care provision codes
           //Issue, if the protocolId is not yet defined, then we try to notify
-          LOGGER.debug("Sent interop message, Prepare to notify for owner="+owner);
-          getInteropClients().notifyInteropMessageSubscribersByPhrId(owner);
+          LOGGER.debug("Sening interop message, Prepare to notify for owner="+owner);
+          
+          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId);
           
         } catch (RuntimeException e) {
              LOGGER.error(e.getMessage(),e);
@@ -433,8 +472,7 @@ public class InteropProcessor {
 
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass) {
 
-        //List<String> list = new ArrayList();
-        //Set<DynaBean> queryResultBeans = new HashSet<DynaBean>();
+
         String result = null;
         if (ownerUri != null && phrsClass != null && resourceUri != null) {
 
@@ -687,7 +725,9 @@ public class InteropProcessor {
         }
         return theObject;
     }
-
+    
+ 
+    
     public Object transformInteropMedicationMessage(String givenOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
         Object theObject = null;
         try {

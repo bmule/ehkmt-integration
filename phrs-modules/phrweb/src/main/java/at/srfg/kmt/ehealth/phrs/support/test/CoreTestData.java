@@ -50,9 +50,8 @@ public class CoreTestData {
     public static final String DATE_PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm";
     private MedicationClient client;
     private InteropClients interopClients;
-
     //coreTestData.addMedication_forAnyUnitTest(owner,"10","to import");
-    //coreTestData.addTestMedication_1_forAnyUnitTest(owner,"10","to import");
+    //coreTestData.addTestMedication_1_forAnyUnitTest(protocolId,"10","to import");
     private CommonDao commonDao;
 
     /**
@@ -104,12 +103,12 @@ public class CoreTestData {
     }
 
     /**
-     * @param owner
+     * @param protcolId
      * @param quantity DRUG_CODE_1 Drug name and code "Drug-Eluting Stents",
-     *                 "C1322815"
+     * "C1322815"
      */
-    public void addMedication_forAnyUnitTest(String owner, String quantity, String note) {
-        this.addTestMedication_1_forAnyUnitTest(owner, quantity, note,
+    public void addMedication_forAnyUnitTest(String protcolId, String quantity, String note) {
+        this.addTestMedication_1_forAnyUnitTest(protcolId, quantity, note,
                 DRUG_NAME_1,
                 DRUG_CODE_1);
     }
@@ -118,18 +117,19 @@ public class CoreTestData {
      * Dates 201011030000,201105051010 ... status = Completed,
      * Constants.MILLIGRAM
      *
-     * @param owner
+     * @param protcolId
      * @param quantity
-     * @param note     - can be null, but defaults to blank, put the resourceUri
-     *                 string pattern here when needed for testing
+     * @param note - can be null, but defaults to blank, put the resourceUri
+     * string pattern here when needed for testing
      * @param drugName
      * @param drugCode
      */
-    public void addTestMedication_1_forAnyUnitTest(String owner, String quantity, String note, String drugName, String drugCode) {
+    public void addTestMedication_1_forAnyUnitTest(String protcolId, String quantity, String note, String drugName, String drugCode) {
         String theNote = note != null ? note : "";
+
         try {
             client.addMedicationSign(
-                    owner,
+                    protcolId,
                     theNote,//"Free text note for the medication.",
                     STATUS_1,
                     "201011030000",
@@ -140,17 +140,17 @@ public class CoreTestData {
                     Constants.MILLIGRAM,
                     drugName + makeDateLabelForTitle(),
                     drugCode);
-            LOGGER.debug("END addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + owner);
+            LOGGER.debug("END addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + protcolId);
         } catch (TripleException e) {
             System.out.println("" + e);
-            LOGGER.debug("ERROR addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + owner, e);
+            LOGGER.debug("ERROR addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + protcolId, e);
         } catch (Exception e) {
             System.out.println("" + e);
-            LOGGER.debug("ERROR addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + owner, e);
+            LOGGER.debug("ERROR addTestMedication_1_forAnyUnitTest  preparing test data for owner= " + protcolId, e);
 
 
         }
-        interopClients.notifyInteropMessageSubscribers();  //"MEDLIST"
+        interopClients.notifyInteropMessageSubscribersByProtocolId(protcolId);  //"MEDLIST"
     }
 
     /**
@@ -164,13 +164,21 @@ public class CoreTestData {
     }
 
     /**
-     * @param owner
+     * @param owner - the ProtocolId is determined.
      * @return int expected count of records, not the actual. We test the
-     *         expected vs found
+     * expected vs found
      */
     public int addTestMedications_2_forPortalTestForOwnerUri(String owner) {
         int countAdded = 8;//update this if added more manually...needed by tests
 
+        String protocolId = this.interopClients.getProtocolId(owner);
+
+        if (protocolId != null && !protocolId.isEmpty()) {
+            // ok 
+        } else {
+            LOGGER.error("No protocolID yet for User, No TEST messages for ownerUri=" + owner);
+            return 0;
+        }
         if (owner != null) {
 
             try {
@@ -240,16 +248,21 @@ public class CoreTestData {
             LOGGER.error("Error creating user test data, ownerUri=null");
         }
 
-        interopClients.notifyInteropMessageSubscribers();  //"MEDLIST"
+        interopClients.notifyInteropMessageSubscribersByProtocolId(protocolId);  //"MEDLIST"
 
         return countAdded;
 
     }
 
-    public Set getDynaBeans(String owner) {
+    /**
+     *
+     * @param protocolId
+     * @return
+     */
+    public Set getDynaBeans(String protocolId) {
         Set<DynaBean> beans = null;
         try {
-            final Iterable<String> uris = client.getMedicationURIsForUser(owner);
+            final Iterable<String> uris = client.getMedicationURIsForUser(protocolId);
             final DynaBeanClient dynaBeanClient = new DynaBeanClient(PhrsStoreClient.getInstance().getTripleStore());
             beans = new HashSet<DynaBean>();
 
@@ -272,7 +285,6 @@ public class CoreTestData {
         }
         return beans;
     }
-
     public static final String PROTOCOL_ID_190 = "190";
 
     /**
@@ -280,11 +292,11 @@ public class CoreTestData {
      */
     public static void createTestUserData() {
         try {
-            
+
 
             createTestUserData(true);
 
-            
+
         } catch (Exception e) {
             LOGGER.error("Error creating user test user data", e);
         }
@@ -320,11 +332,11 @@ public class CoreTestData {
             user.setCreatorUri(user.getOwnerUri());
             user.setUserId(loginUserIdOwnerUri);
             user.setIdentifier(loginUserIdOwnerUri);//init to local identifier, but could later assign to an OpenId.
-               
+
             user.setCanLocalLogin(true);
-  
-            
-            
+
+
+
             user.setNickname(fullname);
             user.setCanLocalLogin(true);
 
@@ -342,7 +354,7 @@ public class CoreTestData {
             //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, null);
 
             ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
-            if(info==null){
+            if (info == null) {
                 info = new ProfileContactInfo();
                 info.setOwnerUri(user.getOwnerUri());
                 info.setCreatorUri(user.getOwnerUri());
@@ -360,10 +372,10 @@ public class CoreTestData {
             //or getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
             //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, Constants.ICARDEA_DOMAIN_PIX_OID);
             //info.setPixIdentifier(pixIdentifier);
-             
+
             //List listBp = commonDao.crudReadResources(loginUserIdOwnerUri, (Object)ObsVitalsBloodPressure.class);
-            if ( addObservations) {
-          
+            if (addObservations) {
+
                 ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
                 bp1.setSystolic(110);
                 bp1.setDiastolic(70);
@@ -373,23 +385,20 @@ public class CoreTestData {
                 bp1.setSystemNote(bp1.getNote());
                 commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
             }
-/*
-            listBp = commonDao.crudReadResources(loginUserIdOwnerUri, (Object)ObsVitalsBloodPressure.class);
-            if (listBp !=null && ! listBp.isEmpty()) {
-                //
-            } else {
-                ObsVitalsBloodPressure bp2 = new ObsVitalsBloodPressure();
-                bp2.setSystolic(125);
-                bp2.setDiastolic(84);
-                bp2.setBeginDate(new Date());
-                bp2.setEndDate(new Date());
-                bp2.setNote("note id " + makeSimpleId());
-                bp2.setSystemNote(bp2.getNote());
-                commonDao.crudSaveResource(bp2, user.getOwnerUri(), "CoreTestData createTestUserData");
-            }
-            * */
-            
-            if ( addObservations) {
+            /*
+             * listBp = commonDao.crudReadResources(loginUserIdOwnerUri,
+             * (Object)ObsVitalsBloodPressure.class); if (listBp !=null && !
+             * listBp.isEmpty()) { // } else { ObsVitalsBloodPressure bp2 = new
+             * ObsVitalsBloodPressure(); bp2.setSystolic(125);
+             * bp2.setDiastolic(84); bp2.setBeginDate(new Date());
+             * bp2.setEndDate(new Date()); bp2.setNote("note id " +
+             * makeSimpleId()); bp2.setSystemNote(bp2.getNote());
+             * commonDao.crudSaveResource(bp2, user.getOwnerUri(), "CoreTestData
+             * createTestUserData"); }
+            *
+             */
+
+            if (addObservations) {
                 ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
                 bw1.setBodyWeight(75d);
                 bw1.setBodyHeight(173d);
@@ -402,18 +411,16 @@ public class CoreTestData {
 
             //listBw = commonDao.crudReadResources(loginUserIdOwnerUri, (Object)ObsVitalsBodyWeight.class);
             /*
-            if ( addObservations) {
-                ObsVitalsBodyWeight bw2 = new ObsVitalsBodyWeight();
-                bw2.setBodyWeight(75d);
-                bw2.setBodyHeight(173d);
-                bw2.setBeginDate(new Date());
-                bw2.setEndDate(new Date());
-                bw2.setNote("note id " + makeSimpleId());
-                bw2.setSystemNote(bw2.getNote());
-                commonDao.crudSaveResource(bw2, user.getOwnerUri(), "CoreTestData createTestUserData");
-            }
-            * */
-            
+             * if ( addObservations) { ObsVitalsBodyWeight bw2 = new
+             * ObsVitalsBodyWeight(); bw2.setBodyWeight(75d);
+             * bw2.setBodyHeight(173d); bw2.setBeginDate(new Date());
+             * bw2.setEndDate(new Date()); bw2.setNote("note id " +
+             * makeSimpleId()); bw2.setSystemNote(bw2.getNote());
+             * commonDao.crudSaveResource(bw2, user.getOwnerUri(), "CoreTestData
+             * createTestUserData"); }
+            *
+             */
+
             LOGGER.debug("Created test data for  fullname " + fullname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
 
 
@@ -492,5 +499,4 @@ public class CoreTestData {
         }
 
     }
-
 }

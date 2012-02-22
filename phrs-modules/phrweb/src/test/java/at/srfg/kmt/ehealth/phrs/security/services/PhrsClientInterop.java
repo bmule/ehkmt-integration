@@ -714,6 +714,7 @@ public class PhrsClientInterop {
 
                 final Map<String, String> properties = new HashMap<String, String>();
                 properties.put("patientId", id);
+                //properties.put("phrId", phrId);
                 properties.put("patientNames", "patientNames");
 
                 //Care Provision Code
