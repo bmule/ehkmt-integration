@@ -99,7 +99,7 @@
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	<!--<load-on-startup>5</load-on-startup> LoginServlet LoginOpenidDyuServlet
+	<!--<load-on-startup>5</load-on-startup> LoginServlet LoginOpenidDyuServlet -->
 	<servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginOpenidDyuServlet</servlet-class>
@@ -108,7 +108,7 @@
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/login</url-pattern>
-	</servlet-mapping>                      -->
+	</servlet-mapping>                     
 
 	<!-- alternative in case later we want to filter OpenId on *.xhtml <url-pattern>*.faces</url-pattern> -->
 

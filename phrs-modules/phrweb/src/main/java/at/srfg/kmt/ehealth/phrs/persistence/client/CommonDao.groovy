@@ -76,7 +76,7 @@ public class CommonDao{
                 single.creatorUri = theOwnerUri
             }
         } catch (Exception e){
-            println("getResourceSingle "+e)
+           
             LOGGER.error('getResourceSingle', e)
         }
         return single
@@ -89,21 +89,25 @@ public class CommonDao{
     public String getUserGreetName(String ownerUri){
         String value=null
         if(ownerUri){
-          def puser = this.getPhrUser(ownerUri)
-            if(puser){
-                value= puser.getNickname() ? puser.getNickname() : null
-                value= value ? value : puser.getFullname() ?  puser.getFullname() : null
-            }
-            if( ! value)  {
-                def contact = this.getProfileContactInfo(ownerUri)
-                if(contact){
-                    value = contact.getFirstName()
-                    value = value? value : contact.getLastName()
+         try{
+                PhrFederatedUser puser = getPhrUser(ownerUri)
+                if(puser){
+                    value= puser.getNickname()
+                    if(!value) value= puser.getFullname()
                 }
-            }
-            if( ! value){
-                value= puser.getIdentifier() ? puser.getIdentifier() : null
-            }
+                if( ! value)  {
+                    ProfileContactInfo contact = getProfileContactInfo(ownerUri)
+                    if(contact){
+                        value = contact.getFirstName()
+                        if(!value) value= contact.getLastName()
+                    }
+                }
+                if( ! value && puser){
+                    value= puser.getIdentifier()
+                }
+         } catch (Exception e){
+             LOGGER.error('greet name ownerUri='+ownerUri,e)
+         }
         }
         return value
     }
@@ -112,7 +116,7 @@ public class CommonDao{
         return getResourceSingle(ProfileContactInfo.class,false,theOwnerUri)
     }
     /**
-     *
+     * 
      * @param theOwnerUri
      * @param create
      * @return
@@ -189,56 +193,66 @@ public class CommonDao{
         //if exists ...get
         //replace - update or create if new
         PhrFederatedUser user=null;
+        boolean saveUser=true;
         if(userId){
-            Map query =  ['userId':userId] //do not search on identifier, that is for sso or openIDs
-            user = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
+             String testUser = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+             
+            if(userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
+               //phrtest user ALWAYS reset this user
+               CoreTestData.createTestUserData();
+             
 
-            if(create && ! user){
-                user= new PhrFederatedUser(userId,null);
-                //owner Uri created automatically
-                user.setUserId(userId);
-                user.setCanLocalLogin(true)
-                user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
-                user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
+             } else {
+             
+                Map query =  ['userId':userId] //do not search on identifier, that is for sso or openIDs
+                user = this.getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
 
-                String testUser = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+                if(create && ! user){
+                    user= new PhrFederatedUser(userId,null);
+                    //owner Uri created automatically
+                    user.setUserId(userId);
+                    user.setCanLocalLogin(true)
+                    user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
+                    user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
+                     //remove
+                    if(userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
+                        //phrtest user
+                        //CoreTestData.createTestUserData();
+                        saveUser=false;
 
-                if(userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
-                    //phrtest user
-                    CoreTestData.createTestUserData();
+                    } else if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
+                        || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
+                        || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
+                        || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
 
-                 } else if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
-                    || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN) 
-                    || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
-                    || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
-                                        
-                    //for phrtest or phrtest1, give it one known ownuri so that we have one test user with a known ownerUri
-                    //these refer to test data created in the database that might be extracted later for sample data
-					
-                    if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1)){
-						
-                        user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID_1);
-                        user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
-                                                
-                    } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
-					
-                        user.setOwnerUri(userId);
-                        user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);                                              
-						
-                    } else {
-                        user.setOwnerUri(userId);
-                    }
+                        //for phrtest or phrtest1, give it one known ownuri so that we have one test user with a known ownerUri
+                        //these refer to test data created in the database that might be extracted later for sample data
+
+                        if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1)){
+
+                            user.setOwnerUri(PhrsConstants.USER_TEST_HEALTH_PROFILE_ID_1);
+                            user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
+
+                        } else if(userId.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)){
+
+                            user.setOwnerUri(userId);
+                            user.setRole(PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE);                                              
+
+                        } else {
+                            user.setOwnerUri(userId);
+                        }
 
 
-				
-                } 
-				
-                if(attrs){
-                    user.getAttributes().putAll(attrs)
-                } 
-                this.crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri());
 
-            }
+                    } 
+
+                    if(attrs){
+                        user.getAttributes().putAll(attrs)
+                    } 
+                    if(saveUser) this.crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri());
+
+                }
+             }
         }
         return user;
     }

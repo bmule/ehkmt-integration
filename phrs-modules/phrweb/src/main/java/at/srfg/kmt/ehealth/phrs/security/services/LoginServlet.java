@@ -163,9 +163,9 @@ public class LoginServlet extends HttpServlet {
 				RelyingParty.class.getName());
 */
 		// default config if null
-		if (_relyingParty == null)
+		if (_relyingParty == null) {
 			_relyingParty = RelyingParty.getInstance();
-
+        }
 		_forwardHandler = DEFAULT_FORWARD_URI_HANDLER;
 	}
 
@@ -334,7 +334,7 @@ public class LoginServlet extends HttpServlet {
 
 				// ReplyingParty has onAuthenticate listener that sets up the
 				// user,
-				// there should already be session?
+				// Is there a session auth user? Not yet, setup
 				if (openIdUser.isAuthenticated()) {
 					// user already authenticated, however, the session token
 					// was
@@ -344,9 +344,12 @@ public class LoginServlet extends HttpServlet {
 					// authentication
 					// token in the session or the session was not already
 					// created
+                                        //check
 					UserSessionService
 							.managePhrUserSessionByOpenIdUserLoginScenario(
 									openIdUser, request);
+                                        response.sendRedirect(defaultRedirectToApplication);
+                                        
 					return;// true;
 				}
 
@@ -357,6 +360,10 @@ public class LoginServlet extends HttpServlet {
 							response)) {
 						// authenticated
 						// redirect to home to remove the query params
+                                                //check
+                                            	UserSessionService
+							.managePhrUserSessionByOpenIdUserLoginScenario(
+									openIdUser, request);
 						response.sendRedirect(defaultRedirectToApplication);
 					} else {
 						// failed verification

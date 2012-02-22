@@ -5,19 +5,22 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient;
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatmentMatrix;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
+import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
-import java.util.Date;
-import java.util.List;
+
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.*;
+
+import org.apache.commons.beanutils.DynaBean;
 import org.junit.*;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -27,8 +30,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
 import com.google.code.morphia.query.Query;
-import java.util.Map;
-import java.util.UUID;
 
 public class PhrsClientInterop {
 
@@ -54,13 +55,14 @@ public class PhrsClientInterop {
     @AfterClass
     public static void tearDownClass() throws Exception {
         if (phrsClient != null) {
-            Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
-            phrsClient.getPhrsDatastore().delete(query);
+            //Query query = phrsClient.getPhrsDatastore().createQuery(MedicationTreatment.class).filter("ownerUri =", USER);
+            //phrsClient.getPhrsDatastore().delete(query);
 
+           
             phrsClient.shutdown();
-            if (cleanEnv && triplestore != null) {
-                ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
-            }
+           // if (cleanEnv && triplestore != null) {
+           //     ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+           // }
             phrsClient = null;
         }
         triplestore = null;
@@ -102,8 +104,7 @@ public class PhrsClientInterop {
      * // if (phrsClient != null) { // phrsClient.setTripleStore(null); // }
      *
      * } catch (Exception e) { //e.printStackTrace(); shows a distracting error
-     * } triplestore = null; phrsClient = null;
-    }
+     * } triplestore = null; phrsClient = null; }
      */
 
     @Ignore
@@ -203,6 +204,65 @@ public class PhrsClientInterop {
 
 
     }
+    public static final String DRUG_1_QUANTITY = "2";
+    public static final String DRUG_2_QUANTITY = "12";
+    public static final String DRUG_1_NAME = "Prednisone";
+    public static final String DRUG_2_NAME = "Concor 2";
+    public static final String DRUG_1_CODE = "C0032952";
+    public static final String DRUG_2_CODE = "C0110591";
+    //addNewMessagesEhr("xxxx", "zzzzz", "5", "14");
+
+    public void addNewMessagesEhr(String ownerUri,String phrResourceUri, String phrResourceUri2, String drug1_quantity, String drug2_quantity) throws TripleException, IllegalAccessException, InstantiationException {
+        InteropClients interopClients = phrsClient.getInteropClients();
+        MedicationClient medicationClient = interopClients.getMedicationClient();
+        medicationClient.setCreator(Constants.EXTERN);//simulate extern
+
+
+        final String resourceURI_1 =
+                medicationClient.addMedicationSign(
+                ownerUri,
+                //NOTE,
+                phrResourceUri != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri : NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                drug1_quantity,
+                DOSE_UNITS,
+                //label1 != null ? label1 : "EHRDrug1"
+                DRUG_1_NAME,
+                DRUG_1_CODE);
+
+        final String resourceURI_2 =
+                medicationClient.addMedicationSign(
+                ownerUri,
+                phrResourceUri2 != null ? InteropAccessService.REFERENCE_NOTE_PREFIX + phrResourceUri2 : NOTE,
+                Constants.STATUS_RUNNING,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                drug2_quantity,
+                DOSE_UNITS,
+                DRUG_2_NAME,
+                DRUG_2_CODE);
+
+        final Iterable<String> uris = medicationClient.getMedicationURIsForUser(USER);
+        final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
+        final Set<DynaBean> beans = new HashSet<DynaBean>();
+        for (String uri : uris) {
+            final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
+            beans.add(dynaBean);
+        }
+        /*
+         * if (printDynabean) { for (DynaBean dynaBean : beans) { final String
+         * toString = DynaBeanUtil.toString(dynaBean);
+         * System.out.println(toString); } }
+         */
+
+
+    }
 
     public void makePHRSRequest_PCC09(String protocolId, String careProvisioncode) {
         InteropClients interopClients = phrsClient.getInteropClients();
@@ -225,8 +285,12 @@ public class PhrsClientInterop {
         String protocolId = "PROTOCOLID_" + USER;
         makePHRSRequest_PCC09(protocolId, "COBSCAT");
 
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(USER, protocolId, null);
+
+        InteropClients interopClients = phrsClient.getInteropClients();
+        interopClients.registerProtocolId(USER, protocolId, null);
+        //CommonDao commonDao = phrsClient.getCommonDao();
+        //commonDao.registerProtocolId(USER, protocolId, null);
+
 
         //CoreTestData.addTestBasicHealthVitalsData(USER);
         //Need to pass each throu
@@ -242,6 +306,7 @@ public class PhrsClientInterop {
         bp1.setResourceUri(USER + "_" + UUID.randomUUID().toString());
         InteropAccessService iaccess = phrsClient.getInteropService();
         Object obj = (Object) bp1;
+        //sends messages and then notifies
         Map uris = iaccess.sendMessages(obj);
 
         //commonDao.crudSaveResource(bp1, USER, USER);
@@ -260,8 +325,8 @@ public class PhrsClientInterop {
         String theUser = USER + "_BP";
         String protocolId = "PROTOCOLID_" + theUser;
         makePHRSRequest_PCC09(protocolId, "COBSCAT");
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(theUser, protocolId, null);
+        InteropClients interopClients = phrsClient.getInteropClients();
+        interopClients.registerProtocolId(USER, protocolId, null);
 
         ObsVitalsBloodPressure item = new ObsVitalsBloodPressure();
         item.setSystolic(160);
@@ -289,8 +354,8 @@ public class PhrsClientInterop {
         String theUser = USER + "_Problem";
         String protocolId = "PROTOCOLID_" + theUser;
         makePHRSRequest_PCC09(protocolId, "COBSCAT");
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(theUser, protocolId, null);
+        InteropClients interopClients = phrsClient.getInteropClients();
+        interopClients.registerProtocolId(USER, protocolId, null);
 
         ObsProblem item = new ObsProblem();
 
@@ -320,8 +385,8 @@ public class PhrsClientInterop {
         String theUser = USER + "_BW";
         String protocolId = "PROTOCOLID_" + theUser;
         makePHRSRequest_PCC09(protocolId, "COBSCAT");
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(theUser, protocolId, null);
+        InteropClients interopClients = phrsClient.getInteropClients();
+        interopClients.registerProtocolId(USER, protocolId, null);
 
 
         ObsVitalsBodyWeight item = new ObsVitalsBodyWeight();
@@ -350,8 +415,8 @@ public class PhrsClientInterop {
         String theUser = USER + "_ADL";
         String protocolId = "PROTOCOLID_" + theUser;
         makePHRSRequest_PCC09(protocolId, "COBSCAT");
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(theUser, protocolId, null);
+        InteropClients interopClients = phrsClient.getInteropClients();
+        interopClients.registerProtocolId(USER, protocolId, null);
 
         ProfileActivityDailyLiving item = new ProfileActivityDailyLiving();
 
@@ -374,7 +439,169 @@ public class PhrsClientInterop {
         assertNotNull("uris null ", uris);
         assertFalse("uris empty ", uris.isEmpty());
     }
-
+    @Test
+    public void testCoreTestDataWithNotify(){
+        makePHRSRequest_PCC09("191", "COBSCAT");
+        
+        CoreTestData.createTestUserData();
+        CommonDao commonDao = phrsClient.getCommonDao();
+        
+        String greetName= commonDao.getUserGreetName("phrtest");
+        System.out.println("greetName= "+greetName);
+        assertNotNull("Greet name null",greetName);
+        assertFalse("Greet name emtpy",greetName.isEmpty()); 
+    }
+        @Test
+    public void testContactInfo(){
+        CommonDao commonDao = phrsClient.getCommonDao();
+      
+        String greetName= commonDao.getUserGreetName("phrtest");
+        System.out.println("greetName= "+greetName);
+        assertNotNull("Greet name null",greetName);
+        assertFalse("Greet name emtpy",greetName.isEmpty()); 
+    }
+    @Test
+    public void testSingleResourceCRUD(){
+            CommonDao commonDao = phrsClient.getCommonDao(); 
+            String loginUserIdOwnerUri="user_testSingleResource";
+            PhrFederatedUser user = commonDao.getPhrUser(loginUserIdOwnerUri, true);                     
+            user.setOwnerUri(loginUserIdOwnerUri);
+            user.setCreatorUri(user.getOwnerUri());
+            user.setUserId(loginUserIdOwnerUri);
+            user.setIdentifier(loginUserIdOwnerUri);//init to local identifier, but could later assign to an OpenId.         
+            commonDao.crudSaveResource(user, user.getOwnerUri(), "CoreTestData createTestUserData");
+            
+            
+            // 
+            PhrFederatedUser user2 = commonDao.getPhrUser(loginUserIdOwnerUri, true);                     
+            user2.setOwnerUri(loginUserIdOwnerUri);
+            user2.setCreatorUri(loginUserIdOwnerUri);
+            user2.setUserId(loginUserIdOwnerUri);
+            user2.setIdentifier(loginUserIdOwnerUri);//init to local identifier, but could later assign to an OpenId.         
+            commonDao.crudSaveResource(user2, user2.getOwnerUri(), "CoreTestData createTestUserData");
+              List list= commonDao.getPhrsRepositoryClient().crudReadResources(loginUserIdOwnerUri, (Object)PhrFederatedUser.class);
+            if(list!=null){
+                for(Object obj:list){
+                    PhrFederatedUser item=(PhrFederatedUser)obj;
+                    System.out.println("item: "+item.getOwnerUri()+" dbId:" +item.getId());
+                }
+            }          
+            List list2= commonDao.getPhrsRepositoryClient().crudReadResources(loginUserIdOwnerUri, (Object)PhrFederatedUser.class);
+//            if(list!=null){
+//                for(Object obj:list){
+//                    PhrFederatedUser item=(PhrFederatedUser)obj;
+//                    System.out.println("item: "+item.getOwnerUri()+" dbId:" +item.getId());
+//                }
+//            }
+            
+            System.out.println("DB IDs second:"+user2.getId().toString()+ " first:"+user.getId().toString());
+            assertEquals("DB ID not same:",user2.getId().toString(),user.getId().toString());
+            
+            PhrFederatedUser user3 = commonDao.getPhrUser(loginUserIdOwnerUri, true);                     
+            user3.setOwnerUri(loginUserIdOwnerUri);
+            user3.setCreatorUri(loginUserIdOwnerUri);
+            user3.setUserId(loginUserIdOwnerUri);
+            user3.setIdentifier(loginUserIdOwnerUri);//init to local identifier, but could later assign to an OpenId.         
+            commonDao.crudSaveResource(user3, user3.getOwnerUri(), "CoreTestData createTestUserData");
+            
+            list= commonDao.getPhrsRepositoryClient().crudReadResources(loginUserIdOwnerUri, (Object)PhrFederatedUser.class);
+            if(list!=null){
+                for(Object obj:list){
+                    PhrFederatedUser item=(PhrFederatedUser)obj;
+                     System.out.println("item: "+item.getOwnerUri()+" dbId:" +item.getId());
+                }
+            }
+    }
+    @Test
+    public void testRegisterProtocolIDMultiple(){
+        //
+        
+        InteropClients interopClients = phrsClient.getInteropClients();
+        String phrId="testRegisterProtocolIDMultipleSameUser";//+//+UUID.randomUUID().toString();
+        
+        String pid_1="A1_1_PROTOCOLID_"+phrId;
+        
+        interopClients.registerProtocolId(phrId, pid_1, null);
+        
+        String pid_expected=interopClients.getProtocolId(phrId);
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to pid_1",pid_1,pid_expected);
+        
+        String pid_2="A1_2_PROTOCOLID_FINAL";//+phrId;
+        
+        interopClients.registerProtocolId(phrId, pid_2, null);
+        pid_expected=interopClients.getProtocolId(phrId);
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to new pid_2",pid_2,pid_expected);
+       
+        
+    }
+     
+        @Test
+    public void testRegisterGetUser(){
+        //
+        
+        InteropClients interopClients = phrsClient.getInteropClients();
+        String phrId="testRegisterProtocolIDMultipleSameUser";//+//+UUID.randomUUID().toString();
+       
+        String expect="A1_2_PROTOCOLID_FINAL";
+        
+        String existingPid=interopClients.getProtocolId(phrId);
+        System.out.println("existingPid "+existingPid+" FOR phrId="+phrId+" expectPID0"+expect);
+       
+        assertEquals("Found PID not equal to new pid_2",expect,existingPid);
+       
+        
+    }
+       @Test
+    public void testRegisterProtocolIDMultipleTimes(){
+        //
+        
+        InteropClients interopClients = phrsClient.getInteropClients();
+        String phrId="A1_testRegisterProtocolIDMultipleTimes"+new Date().getTime();//+//+UUID.randomUUID().toString();
+        
+        String pid_1="A1_1_PROTOCOLID_"+phrId;
+        
+        interopClients.registerProtocolId(phrId, pid_1, null);
+        
+        String pid_expected=interopClients.getProtocolId(phrId);
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to pid_1",pid_1,pid_expected);
+        
+        String pid_2="A1_2_PROTOCOLID_"+phrId;
+        
+        interopClients.registerProtocolId(phrId, pid_2, null);
+        pid_expected=interopClients.getProtocolId(phrId);
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to new pid_2",pid_2,pid_expected);
+       
+        
+    }
+        @Test
+    public void testRegisterProtocolIDMultipleTimes_CommonDao(){
+        //
+        InteropClients interopClients = phrsClient.getInteropClients();
+        CommonDao commonDao = phrsClient.getCommonDao();
+       
+        String phrId="1_testRegisterProtocolIDMultipleTimes_CommonDao"+new Date().getTime();
+        String pid_1="1_1_PROTOCOLID_"+phrId;
+        
+        commonDao.registerProtocolId(phrId, pid_1, null);
+        
+        String pid_expected=interopClients.getProtocolId(phrId);
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to pid_1",pid_1,pid_expected);
+        
+        String pid_2="1_2_PROTOCOLID_"+phrId;
+        
+        commonDao.registerProtocolId(phrId, pid_2, null);
+        pid_expected=interopClients.getProtocolId(phrId);
+        
+        System.out.println("pid_expected "+pid_expected+" phrId="+phrId);
+        assertEquals("Found PID not equal to new pid_2",pid_2,pid_expected);
+       
+        
+    }
     @Test
     public void testNotifySubscribersByResourceChange() {
         String theUser = USER + "_ByResourceChange";
@@ -383,8 +610,8 @@ public class PhrsClientInterop {
 
         String protocolId = "PROTOCOLID_" + theUser;
 
-        CommonDao commonDao = phrsClient.getCommonDao();
-        commonDao.registerProtocolId(theUser, protocolId, null);
+      
+        interopClients.registerProtocolId(USER, protocolId, null);
 
         //CoreTestData.addTestBasicHealthVitalsData(USER);
         //Need to pass each throu
@@ -399,7 +626,7 @@ public class PhrsClientInterop {
         //bp1.setResourceUri(theUser+"_"+UUID.randomUUID().toString());
 
         //Map uris = phrsClient.getInteropService().sendMessages(bp1);
-
+        CommonDao commonDao = phrsClient.getCommonDao();
         commonDao.crudSaveResource(bp1, theUser, theUser);
         //saves and sends message...and notify...
 
@@ -409,4 +636,115 @@ public class PhrsClientInterop {
         //interopClients.notifyInteropMessageSubscribersByPhrId(protocolId);
 
     }
+
+    @Test
+    public void testNotifyDirectly() {
+        try {
+            String user=USER+"_"+UUID.randomUUID().toString();
+            addNewMessagesEhr(user,"med1", "med2", "5", "14");
+
+            String protocolId = "PROTOCOLID_" +user ;
+            makePHRSRequest_PCC09(protocolId, "MEDLIST");
+
+            InteropClients interopClients = phrsClient.getInteropClients();
+            interopClients.registerProtocolId(user, protocolId, null);
+
+            //InteropClients interopClients = phrsClient.getInteropClients();
+
+            //interopClients.notifyInteropMessageSubscribersByPhrId(protocolId);
+            String selectedCareProvisionCode = null;
+            notifyInteropMessageSubscribers(selectedCareProvisionCode, protocolId);
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public PHRSRequestClient getPHRSRequestClient() {
+        return phrsClient.getInteropClients().getPHRSRequestClient();
+    }
+
+    public DynaBeanClient getDynaBeanClient() {
+        return phrsClient.getInteropClients().getDynaBeanClient();
+    }
+    /*
+     * Usually there is NO selectedCareProvisionCode, just fire on all Or we
+     * pass the resourceType and select the prov code
+     */
+
+    public void notifyInteropMessageSubscribers(String selectedCareProvisionCode, String protocolId) throws Exception {
+        PHRSRequestClient requestClient = getPHRSRequestClient();
+        DynaBeanClient beanClient = getDynaBeanClient();
+        final Iterable<String> resources = requestClient.getAllPHRSRequests();
+        for (String resource : resources) {
+            final DynaBean request = beanClient.getDynaBean(resource);
+
+            boolean sendNotification = false;
+            String careProvisionCode = (String) request.get(Constants.HL7V3_CARE_PROVISION_CODE);
+            //filter on careProvisionCode  ?
+            if (selectedCareProvisionCode == null) {
+                sendNotification = true;
+            } else {
+                if (careProvisionCode == null) {
+                    sendNotification = false;
+                } else if (careProvisionCode.equalsIgnoreCase(selectedCareProvisionCode)) {
+                    sendNotification = true;
+                }
+
+            }
+            String id = (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
+            //filter on protocolId ?
+            if (id == null) {
+                sendNotification = false;
+            } else if (protocolId != null) {
+                if (id.equals(protocolId)) {
+                    sendNotification = true;
+                } else {
+                    sendNotification = false;
+                }
+            }
+
+            if (sendNotification) {
+                final String wsAdress =
+                        (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
+
+
+                final Map<String, String> properties = new HashMap<String, String>();
+                properties.put("patientId", id);
+                properties.put("patientNames", "patientNames");
+
+                //Care Provision Code
+                properties.put("careProvisionCode", careProvisionCode);
+                properties.put("responseEndpointURI", wsAdress);
+                int port = ConfigurationService.getInstance().getSubscriberSocketListnerPort();
+
+                notifyInteropMessageSubscribers("localhost", port, properties);
+
+
+            }
+            System.out.println("END notifyInteropMessageSubscribers notify=" + sendNotification + " protocolId" + protocolId + " selectedCareProvisionCode " + selectedCareProvisionCode);
+
+        }
+        System.out.println("Finished - Notified Core after Loading test data ");
+
+    }
+
+    public void notifyInteropMessageSubscribers(String host, int port, Map<String, String> params) {
+        System.out.println("Tries to dispach this properties {}." + params);
+        try {
+            final Socket socket = new Socket(host, port);
+            final ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+            objectOutputStream.writeObject(params);
+             System.out.println("Prameters : {}  dispathed." + params);
+        } catch (Exception e) {
+            System.out.println("Prameters : {} can not be dispathed." + params);
+            System.out.println(e.getMessage() + e);
+        }
+
+        System.out.println("The  was distpatched" + params);
+    }
+  
 }

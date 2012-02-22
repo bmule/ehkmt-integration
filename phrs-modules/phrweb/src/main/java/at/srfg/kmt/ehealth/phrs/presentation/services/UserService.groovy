@@ -215,7 +215,7 @@ public class UserService  extends CommonDao implements Serializable {
 	}
 
 	public void crudSaveResource(def theObject){
-		println("user service crudSaveResource")
+		
 		loadCommonPropertiesForCreate(theObject)
 		phrsRepositoryClient.crudSaveResource(theObject)
 	}

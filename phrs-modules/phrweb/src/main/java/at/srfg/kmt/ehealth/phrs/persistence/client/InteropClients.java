@@ -282,32 +282,32 @@ public class InteropClients {
         for (String resource : resources) {
             final DynaBean request = beanClient.getDynaBean(resource);
 
-            boolean notify = false;
+            boolean sendNotification = false;
             String careProvisionCode = (String) request.get(Constants.HL7V3_CARE_PROVISION_CODE);
             //filter on careProvisionCode  ?
             if (selectedCareProvisionCode == null) {
-                notify = true;
+                sendNotification = true;
             } else {
                 if (careProvisionCode == null) {
-                    notify = false;
+                    sendNotification = false;
                 } else if (careProvisionCode.equalsIgnoreCase(selectedCareProvisionCode)) {
-                    notify = true;
+                    sendNotification = true;
                 }
 
             }
             String id = (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
             //filter on protocolId ?
             if (id == null) {
-                notify = false;
+                sendNotification = false;
             } else if (protocolId != null) {
                 if (id.equals(protocolId)) {
-                    notify = true;
+                    sendNotification = true;
                 } else {
-                    notify = false;
+                    sendNotification = false;
                 }
             }
 
-            if (notify) {
+            if (sendNotification) {
                 final String wsAdress =
                         (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
 
@@ -321,11 +321,11 @@ public class InteropClients {
                 properties.put("responseEndpointURI", wsAdress);
                 int port = ConfigurationService.getInstance().getSubscriberSocketListnerPort();
 
-                notify("localhost", port, properties);
+                notifyInteropMessageSubscribers("localhost", port, properties);
 
 
             }
-            LOGGER.debug("END notifyInteropMessageSubscribers notify="+notify+ " protocolId" + protocolId+ " selectedCareProvisionCode "+selectedCareProvisionCode);
+            LOGGER.debug("END notifyInteropMessageSubscribers notify="+sendNotification+ " protocolId" + protocolId+ " selectedCareProvisionCode "+selectedCareProvisionCode);
 
         }
         LOGGER.debug("Finished - Notified Core after Loading test data ");
@@ -345,7 +345,7 @@ public class InteropClients {
         return properties;
     }
 
-    public void notify(String host, int port, Map<String, String> params) {
+    public void notifyInteropMessageSubscribers(String host, int port, Map<String, String> params) {
         LOGGER.debug("Tries to dispach this properties {}.", params);
         try {
             final Socket socket = new Socket(host, port);

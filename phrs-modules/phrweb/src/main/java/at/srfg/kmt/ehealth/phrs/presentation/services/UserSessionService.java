@@ -917,8 +917,9 @@ public class UserSessionService {
     public static String getSessionAttributeRole() {
         String userId = getSessionAttributeUserLoginId();
         if (userId != null) {
-            if ("phrtest".equals(userId)) return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE;
-            if ("phrtest1".equals(userId)) return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN;
+            if(userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE;
+    
+            if (PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1.equals(userId)) return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN;
         }
 
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE);

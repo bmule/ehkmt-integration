@@ -150,11 +150,12 @@ public class PhrsRepositoryClient implements Serializable{
 
         if(healthProfileId && clazz){
             try {
-                Datastore store = getPhrsVersioningDatastore()
+                Datastore store = getPhrsDatastore()
                 //list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).order('-modifyDate').asList()
 
                 Query q = store.createQuery(clazz).field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equal(healthProfileId).order('-modifyDate')
                 if(q) return q.get()
+                
             } catch (Exception e) {
                 LOGGER.error('',e);
             }
@@ -163,6 +164,33 @@ public class PhrsRepositoryClient implements Serializable{
         //return store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).get()
 
     }
+    
+//    public def crudReadResourceSingle(String healthProfileId, def clazz){
+//                List list =null
+//
+//        if(healthProfileId && clazz){
+//
+//            try {
+//                Datastore store = getPhrsDatastore()
+//                list= store.find(clazz,
+//                        PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,
+//                        healthProfileId).order('-createDate').asList()
+//
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                LOGGER.error(" ownerUri="+healthProfileId+""+clazz+e)
+//            }
+//
+//        }
+//    
+//        def single
+//        if(list && list.size() > 0){
+//            single = list[0]
+//        }
+//        
+//        return single
+//    }
     /**
      * 
      * @param healthProfileId

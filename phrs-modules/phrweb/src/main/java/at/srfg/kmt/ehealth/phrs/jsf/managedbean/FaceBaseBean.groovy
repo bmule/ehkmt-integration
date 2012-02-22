@@ -496,7 +496,7 @@ class FaceBaseBean implements Serializable{
 
 				storeModifyFirst()
 				userService.crudSaveResource(selected)
-				loadModelMain()
+				//tuesday loadModelMain()
 			} else{
 				LOGGER.error('crudSave userService NULL')
 			}

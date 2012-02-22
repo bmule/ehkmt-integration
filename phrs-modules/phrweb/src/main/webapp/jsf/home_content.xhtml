@@ -14,9 +14,9 @@
  -->
 <h:body>
 	<ui:composition>
-		<p>
+		<!--<p>
 			Your PHR Identifier is:
-			<h:outputText value="#{loginBean.phrId}"
+			<h:outputText value=" {loginBean.phrId}"
 				style="font-size:12pt;font-weight:bold;"></h:outputText>
 			Please give this to your Nurse. It can be copied and pasted into a
 			email message or other text document and given to the nurse.
@@ -28,11 +28,12 @@
 		<p>Please keep your contact information up-to-date, this can be
 			helpful for for informing Healthcare professionals of your contact
 			information</p>
-		<p>
+		--><p>Your CIED serial number of your implant is important for registering your data in the iCARDEA system.</p>
+                <p>
 			<h:panelGroup>
-				<a
+				Click here to Update your CIED number and <a
 					href="#{request.contextPath}/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user"><h:outputText
-						value="Update your Contact Information" style="font-size:12pt;" />
+						value="Contact Information" style="font-size:12pt;text-decoration:underline;" />
 				</a>
 			</h:panelGroup>
 		</p>

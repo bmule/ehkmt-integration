@@ -5,8 +5,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-
-import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,15 +45,15 @@ public class DefaultLoader implements ServletContextListener {
         //System.out.println("DefaultLoader ConstantMapper.ID_CONSTANT_MAPPER END");
         LOGGER.info("DefaultLoader ConstantMapper.ID_CONSTANT_MAPPER END");
 
-        try {
-            //this will also init most of the application DB and triplestore setup, therefore problems here might
-            //cause the context to fail here rather than later...
-            //It will reset the test user protocol Ids ,etc
-            CoreTestData.createTestUserData();
-            LOGGER.debug("Default loader create test user");
-        } catch (Exception e) {
-            LOGGER.error("CoreTestData fail",e);  //To change body of catch statement use File | Settings | File Templates.
-        }
+//        try {
+//            //this will also init most of the application DB and triplestore setup, therefore problems here might
+//            //cause the context to fail here rather than later...
+//            //It will reset the test user protocol Ids ,etc
+//            CoreTestData.createTestUserData();
+//            LOGGER.debug("Default loader create test user");
+//        } catch (Exception e) {
+//            LOGGER.error("CoreTestData fail",e);  //To change body of catch statement use File | Settings | File Templates.
+//        }
 
 
     }
@@ -76,7 +74,7 @@ public class DefaultLoader implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
        
         try {
-             PhrsStoreClient.getInstance().shutdown();
+             if(PhrsStoreClient.getInstance()!=null) PhrsStoreClient.getInstance().shutdown();
         } catch (Exception e) {
             LOGGER.error("contextDestroyed closing Sesame connection",e);
         }

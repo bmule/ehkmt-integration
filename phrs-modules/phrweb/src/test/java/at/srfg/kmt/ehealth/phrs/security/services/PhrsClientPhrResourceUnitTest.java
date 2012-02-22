@@ -172,7 +172,7 @@ public class PhrsClientPhrResourceUnitTest {
 
 
     }*/
-
+     //addNewMessagesEhr("xxxx", "zzzzz", "5", "14");
     public void addNewMessagesEhr(String phrResourceUri, String phrResourceUri2, String drug1_quantity, String drug2_quantity) throws TripleException, IllegalAccessException, InstantiationException {
         medicationClient.setCreator(Constants.EXTERN);//simulate extern
 

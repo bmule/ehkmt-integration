@@ -23,7 +23,7 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProfileContactInfoBean.class);
 
 
-    public String contactType
+    String contactType
     boolean pixUpdateInteropActorRegistry=true
     boolean pixRevalidatePixId=true
 

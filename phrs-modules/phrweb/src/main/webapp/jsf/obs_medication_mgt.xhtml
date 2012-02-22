@@ -58,15 +58,16 @@
 
 			<p:fieldset legend="#{labels['medicationSummary.label']}">
 			 
-			<p:breadCrumb> 	
-				<p:menuitem value="Current" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
-					immediate="true"/>			
+			<p:breadCrumb>
+                <p:menuitem value="All" url="/jsf/obs_medication_mgt.xhtml?view=all"
+                            immediate="true"/>
+                <p:menuitem value="All" url="/jsf/obs_medication_mgt.xhtml?view=all"
+                            immediate="true"/>
 				<p:menuitem value="Current" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
 					immediate="true"/>
 				<p:menuitem value="Inactive" url="/jsf/obs_medication_mgt.xhtml?view=inactive"
 					immediate="true"/>
-				<p:menuitem value="All" url="/jsf/obs_medication_mgt.xhtml?view=all"
-					immediate="true"/>
+
             </p:breadCrumb>
                 <!--
                      <p:menuitem value="Load Test Data" url="/jsf/obs_medication_mgt.xhtml?view=loadtest"
@@ -134,13 +135,13 @@ rendered="XX{infotype eq 'history'}"
 					</p:outputPanel>
 					
 					<p:outputPanel rendered="#{theItem.originStatus eq 'PHRS_INTEROP.IMPORT'}">
-						<hr/>
-						<h:graphicImage title="#{labels['imported_medical_data']}" alt="#{labels['imported_medical_data']}" id="image1" 
-						value="/images/imported.png" />			
-									
-						<h:outputLabel value="#{labels['imported_medical_data']}" style="font-style:italic;color:red;" />
-						<!--   do lookup for nice label e.g. originLabel or  use jstl 2.2 
-						<h:outputLabel value=" {theItem.origin}" style="font-style:italic;" />-->
+						<br/>
+                        <!--<h:graphicImage title="#{labels['imported_medical_data']}" alt="#{labels['imported_medical_data']}" id="image1"
+                              value="/images/imported.png" />	-->
+
+                        <h:outputLabel value="#{labels['imported_medical_data']}" style="font-style:italic;color:red;" />
+                              <!--   do lookup for nice label e.g. originLabel or  use jstl 2.2
+                              <h:outputLabel value=" {theItem.origin}" style="font-style:italic;" />-->
 					</p:outputPanel>					
 					
 				</p:column>
