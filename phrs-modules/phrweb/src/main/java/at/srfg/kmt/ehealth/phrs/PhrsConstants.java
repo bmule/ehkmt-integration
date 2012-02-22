@@ -105,6 +105,11 @@ public class PhrsConstants implements Serializable {
     public static final String AUTHORIZE_RESOURCE_CODE_TESTRESULT = "RESOURCECODE:TESTRESULT";
     public static final String AUTHORIZE_RESOURCE_CODE_IMMUNIZATION = "RESOURCECODE:IMMUNIZATION";
 
+    //additional for use in notifications
+    //public static final String AUTHORIZE_RESOURCE_CODE_VITALS = "";
+    //public static final String AUTHORIZE_RESOURCE_CODE_PROBLEMS = ";
+    //public static final String AUTHORIZE_RESOURCE_CODE_ = 
+  
     public static final String AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN = "ROLECODE:DOCTOR";
     public static final String AUTHORIZE_ROLE_SUBJECT_CODE_NURSE = "ROLECODE:NURSE";
 

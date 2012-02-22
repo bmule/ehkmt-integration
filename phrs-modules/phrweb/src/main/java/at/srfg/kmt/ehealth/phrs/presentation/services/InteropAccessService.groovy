@@ -125,7 +125,8 @@ public class  InteropAccessService implements Serializable{
      * @return
      */
     public String getProtocolId(String ownerUri, String protocolNamespace){
-        return getInteropClients().getActorClient().getProtocolId(protocolNamespace, ownerUri)
+        return  getCommonDao().getProtocolId(ownerUri); 
+        
     }
     /**
      * 
@@ -133,7 +134,8 @@ public class  InteropAccessService implements Serializable{
      * @return
      */
     public String getProtocolId(String ownerUri){
-        return getInteropClients().getActorClient().getProtocolId( ownerUri)
+        return  getCommonDao().getProtocolId(ownerUri); 
+        
     }
     /**
      * 
@@ -255,13 +257,23 @@ public class  InteropAccessService implements Serializable{
         if(resource && resource instanceof BasePhrsModel){
 
             try{
-                
+        
                 
                 //the resulting message URI that is added to the result list
                 String messageId
 
                 BasePhrsModel res = (BasePhrsModel)resource
                 String owner 	= res.ownerUri
+                //FIXID
+                String protocolId=getProtocolId(owner)
+        
+                if(protocolId !=null && ! protocolId.isEmpty()){
+                // ok 
+                } else {
+                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+owner+" resourceType="+resourceType);
+                    return messageIdMap
+                }            
+                String notifyType=null
 
                 String status 	= this.transformStatus(res.status)
                 //status = status?: null
@@ -319,7 +331,7 @@ public class  InteropAccessService implements Serializable{
 
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
-                            owner,
+                            protocolId,//owner,
                             categoryCode,// TODO more specific detail code part of finding
                             status,
                             dateStringStart,
@@ -357,7 +369,7 @@ public class  InteropAccessService implements Serializable{
                         // TODO more specific detail code part of finding
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
-                            owner,
+                            protocolId,//owner,
                             categoryCode,
                             status,
                             dateStringStart,
@@ -395,7 +407,7 @@ public class  InteropAccessService implements Serializable{
                         if( ! interopRef){
                             messageId = getInteropClients().getProblemEntryClient()
                             .addProblemEntry(
-                                owner,
+                                protocolId,//owner,
                                 categoryCode,
                                 status,
                                 dateStringStart,
@@ -449,7 +461,7 @@ public class  InteropAccessService implements Serializable{
                     if( ! interopRef){
                         messageId = getInteropClients().getProblemEntryClient()
                         .addProblemEntry(
-                            owner,
+                            protocolId,//owner,
                             categoryCode,
                             status,
                             dateStringStart,
@@ -486,7 +498,8 @@ public class  InteropAccessService implements Serializable{
                             +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
 
                     if( ! interopRef){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
+                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                            protocolId,//owner,
                             Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
                             referenceNote,
                             dateStringStart,
@@ -510,7 +523,8 @@ public class  InteropAccessService implements Serializable{
                     interopRef_2 = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
                               
                     if( ! interopRef_2 ){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
+                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                            protocolId,//owner,
                             categoryCode,
                             referenceNote,
                             dateStringStart,
@@ -545,7 +559,8 @@ public class  InteropAccessService implements Serializable{
                             +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
                     
                     if( ! interopRef){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(owner,
+                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                            protocolId,//owner,
                             categoryCode,
                             referenceNote,
                             dateStringStart,
@@ -575,7 +590,8 @@ public class  InteropAccessService implements Serializable{
 
                     if(interopRef){
                         messageId = getInteropClients().getVitalSignClient()
-                        .addVitalSign(owner,
+                        .addVitalSign(
+                            protocolId,//owner,
                             categoryCode,
                             referenceNote,
                             dateStringStart,
@@ -610,8 +626,8 @@ public class  InteropAccessService implements Serializable{
                 }
 
              if(notifySubscribers) {
-                 LOGGER.debug('Sent interop message, Prepare to notify for owner='+owner);
-                 getInteropClients().notifyInteropMessageSubscribersByPhrId(owner);
+                 LOGGER.debug('Sent interop message, Prepare to notify for owner='+owner+" notifyType "+notifyType);
+                 getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId,notifyType);//owner,
              }
 
             } catch (TripleException e) {

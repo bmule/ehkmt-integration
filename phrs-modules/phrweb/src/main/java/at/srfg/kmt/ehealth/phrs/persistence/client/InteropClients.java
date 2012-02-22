@@ -215,7 +215,7 @@ public class InteropClients {
     //Check interop.subscribers.notify
 
     /**
-     *
+     * Notify subscribers about ALL USERS!
      */
     public void notifyInteropMessageSubscribers() {
         try {
@@ -237,11 +237,24 @@ public class InteropClients {
         } catch (Exception e) {
             LOGGER.error("Failed to Notify subscriptions" + e.getMessage(), e);
         }
+    }/**
+     * 
+     * @param protocolId
+     * @param resourceType - from the resource Type can determine the 
+     * care provision Codes
+     */
+        public void notifyInteropMessageSubscribersByProtocolId(String protocolId, String resourceType) {
+        try {
+            notifyInteropMessageSubscribers(null, protocolId);
+        } catch (Exception e) {
+            LOGGER.error("Failed to Notify subscriptions" + e.getMessage(), e);
+        }
     }
 
     /**
-     * Look up PhrId from registered ProtocolId. If it is not found, either we did not register it or the user did not
-     * orovide yet a Pix identifier for us to lookup in PIX
+     * 
+     * Notify subscribers but only if we find a protocolId 
+     * Look up PhrId from local store, not Interop Component
      * @param phrId
      * @return
      */
@@ -367,6 +380,10 @@ public class InteropClients {
      */
     public void registerProtocolId(String owneruri, String protocolId, String namespace) {
         registerUser(owneruri,protocolId,namespace);
+    }
+    
+    
+    
 //        if (namespace == null) {
 //            namespace = Constants.ICARDEA_DOMAIN_PIX_OID;
 //
@@ -380,7 +397,7 @@ public class InteropClients {
 //            LOGGER.error("owneruri= " + owneruri + " protocolId= " + protocolId, e);
 //        }
 
-    }
+    
     /**
      *
      * @param ownerUri
@@ -432,59 +449,34 @@ public class InteropClients {
      * @return
      */
     public String getProtocolId(String ownerUri, String protocolNamespace){
-        if (protocolNamespace == null) {
-            protocolNamespace = Constants.ICARDEA_DOMAIN_PIX_OID;
+        CommonDao commonDao= PhrsStoreClient.getInstance().getCommonDao();
+        return commonDao.getProtocolId(ownerUri); 
+     }
 
-        }
-        String value= null;
-        try {
-            value=getActorClient().getProtocolId(protocolNamespace, ownerUri);
-        } catch (Exception e) {
-            LOGGER.error(" ownerUri "+ownerUri+" protocolNamespace "+protocolNamespace,e);
-        }
+//        if (protocolNamespace == null) {
+//            protocolNamespace = Constants.ICARDEA_DOMAIN_PIX_OID;
+//
+//        }
+
+       
         
-        return value;
-    }
+//        String value= null;
+//        try {
+//            value=getActorClient().getProtocolId(protocolNamespace, ownerUri);
+//        } catch (Exception e) {
+//            LOGGER.error(" ownerUri "+ownerUri+" protocolNamespace "+protocolNamespace,e);
+//        }
+//        
+//        return value;
 
     /**
      *
      * @param phrId
      * @return
      */
-    public String getProtocolId(String phrId) {
+    public String getProtocolId(String ownerUri) {
 
-        return getProtocolId(phrId,null);
+        return getProtocolId(ownerUri,null);
     }
 
-
-    /*
-    private void setupTest() {
-        try{
-            ActorClient actorClient = new ActorClient();
-            boolean hasTestProtocolId = false; //register the 191 protocol ID
-            try {
-                //Constants.PHRS_NAMESPACE
-                String p1 = actorClient.getProtocolId(Constants.ICARDEA_DOMAIN_PIX_OID, Constants.OWNER_URI_CORE_PORTAL_TEST_USER);
-                if (p1 != null) {
-                    hasTestProtocolId = true;
-                }
-            } catch (Exception e) {
-                LOGGER.error("Failed to find protocolId for user, must create - user=" + Constants.OWNER_URI_CORE_PORTAL_TEST_USER + " for namespace=" + Constants.OWNER_URI_CORE_PORTAL_TEST_USER, e);
-            }
-            try {
-                //Constants.PHRS_NAMESPACE
-                String p1 = actorClient.getProtocolId(Constants.OWNER_URI_CORE_PORTAL_TEST_USER);
-                if (p1 != null) {
-                    hasTestProtocolId = true;
-                }
-            } catch (Exception e) {
-                LOGGER.error("Failed to find protocolId for user, must create - user=" + Constants.OWNER_URI_CORE_PORTAL_TEST_USER + " for default namespace=" + Constants.PHRS_NAMESPACE, e);
-            }
-
-
-
-        } catch (Exception e) {
-            LOGGER.error("Failed to Register Test protocol ID=" + USER_PROTOCOL_ID + " for namespace=" + PROTOCOL_ID_NAMESPACE, e);
-        }
-    } */
 }
