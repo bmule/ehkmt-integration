@@ -110,7 +110,8 @@ final class VitalSignTask implements PCCTask {
         final String responseURI = (String) properties.get("responseEndpointURI");
 
         try {
-            final QUPCIN043200UV01 request = buildMessage(responseURI);
+            final String owner = (String) properties.get("patientId");
+            final QUPCIN043200UV01 request = buildMessage(owner,responseURI);
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -156,10 +157,9 @@ final class VitalSignTask implements PCCTask {
         LOGGER.debug("{} = {}", passwdProp, passwd);
     }
 
-    private QUPCIN043200UV01 buildMessage(String wsAddress)
+    private QUPCIN043200UV01 buildMessage(String owner, String wsAddress)
             throws TripleException, IllegalAccessException, InstantiationException {
 
-        final String owner = Constants.PROTOCOL_ID_UNIT_TEST;
         final TriplestoreConnectionFactory connectionFactory =
                 TriplestoreConnectionFactory.getInstance();
         final GenericTriplestore triplestore = connectionFactory.getTriplestore();
