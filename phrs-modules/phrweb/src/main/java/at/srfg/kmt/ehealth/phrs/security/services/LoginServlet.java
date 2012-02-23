@@ -334,7 +334,7 @@ public class LoginServlet extends HttpServlet {
 
 				// ReplyingParty has onAuthenticate listener that sets up the
 				// user,
-				// Is there a session auth user? Not yet, setup
+				// Is there a session auth user? Not yet, setup  session
 				if (openIdUser.isAuthenticated()) {
 					// user already authenticated, however, the session token
 					// was
@@ -361,7 +361,7 @@ public class LoginServlet extends HttpServlet {
 						// authenticated
 						// redirect to home to remove the query params
                                                 //check
-                                            	UserSessionService
+                        UserSessionService
 							.managePhrUserSessionByOpenIdUserLoginScenario(
 									openIdUser, request);
 						response.sendRedirect(defaultRedirectToApplication);

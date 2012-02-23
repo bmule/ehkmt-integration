@@ -2,7 +2,6 @@ package at.srfg.kmt.ehealth.phrs.presentation.services;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
@@ -15,11 +14,11 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
-import java.util.*;
 import org.apache.commons.beanutils.DynaBean;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.*;
 
 public class InteropProcessor {
 
@@ -72,18 +71,7 @@ public class InteropProcessor {
         InteropAccessService iaccess = new InteropAccessService();
         iaccess.sendMessages(repositoryObject);
     }
-    /**
-     * Also needs the ProtocolID for any new Interop messages
-     * @param owner
-     * @return 
-     */
-    public int loadSampleTestDataSet(String owner) {
 
-        CoreTestData core = new CoreTestData();
-        //return count
-        return core.addTestMedications_2_forPortalTestForOwnerUri(owner);
-
-    }
 
     public PhrsStoreClient getPhrsStoreClient() {
         return PhrsStoreClient.getInstance();
@@ -153,7 +141,7 @@ public class InteropProcessor {
         if (ownerUri != null && phrsClass != null) {
             try {
                 //FIXID
-                String protocolId=this.getProtocolId(ownerUri);
+                String protocolId= getProtocolId(ownerUri);
                 if(protocolId !=null && ! protocolId.isEmpty()){
                 // ok 
                 } else {
@@ -187,7 +175,7 @@ public class InteropProcessor {
                                 referenceNote = DynaUtil.getStringProperty(dynaBean, Constants.SKOS_NOTE);
                             } catch (Exception e) {
                                  LOGGER.error(e.getMessage(),e);
-                                // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
+
                             }
                             if (referenceNote != null) {
                                 String aboutResourceUri = parseReferenceNote((String) referenceNote);
@@ -204,13 +192,12 @@ public class InteropProcessor {
                             }
                         } catch (Exception e) {
                              LOGGER.error(e.getMessage(),e);
-                            //LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e);
+
                         }
                     }
                 }
             } catch (Exception e) {
                  LOGGER.error(e.getMessage(),e);
-                // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
             }
         }
         return beans;
@@ -470,6 +457,13 @@ public class InteropProcessor {
        
     }
 
+    /**
+     *
+     * @param ownerUri  is used to find ProtocolId
+     * @param resourceUri
+     * @param phrsClass
+     * @return
+     */
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass) {
 
 
@@ -614,6 +608,7 @@ public class InteropProcessor {
 
             try {
                 //Find new messages (true),ignore known messages that have been imported
+                //pass ownerUri, the protocolId is found or not
                 Set<DynaBean> results = findInteropMessagesForUser(ownerUri, phrsClass, true);
                 //check each results, has it been tagged?
 
@@ -691,6 +686,12 @@ public class InteropProcessor {
 
     }
 
+    /**
+     *
+     * @param givenOwnerUri
+     * @param messageOwner
+     * @return
+     */
     public boolean compareOwners(String givenOwnerUri, String messageOwner) {
         boolean valid = false;
         //should be ok, check again
@@ -706,7 +707,7 @@ public class InteropProcessor {
 
 
     /**
-     *
+     *   Transform message to medication resource
      * @param givenOwnerUri
      * @param phrsClass
      * @param dynabean
@@ -725,9 +726,16 @@ public class InteropProcessor {
         }
         return theObject;
     }
-    
- 
-    
+
+
+    /**
+     *
+     * @param givenOwnerUri
+     * @param phrsClass
+     * @param dynabean
+     * @param messageResourceUri
+     * @return
+     */
     public Object transformInteropMedicationMessage(String givenOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
         Object theObject = null;
         try {
@@ -743,11 +751,11 @@ public class InteropProcessor {
                 }
                 //Map props = bean.getProperties() //check ownerUri of message
 
+                //FIXID need to compare owner-->PID to messageOwner PID
+                //if (!compareOwners(givenOwnerUri, messageOwner)) {
+                //    LOGGER.error("Message ownerUri does not match given givenOwnerUri=" + givenOwnerUri + " med.OwnerUri=");
 
-                if (!compareOwners(givenOwnerUri, messageOwner)) {
-                    LOGGER.error("Message ownerUri does not match given givenOwnerUri=" + givenOwnerUri + " med.OwnerUri=");
-
-                } else {
+                //} else {
 
                     // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
                     // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
@@ -831,7 +839,7 @@ public class InteropProcessor {
                         //System.out.println("medication imported resourceUri=" + med.getResourceUri() + " name=" + med.getTitle() + " code=" + med.getProductCode());
                         LOGGER.debug("medication imported  name=" + med.getTitle() + " code=" + med.getProductCode());
                     }
-                }
+                //}
 
             }
         } catch (Exception e) {
@@ -863,24 +871,6 @@ public class InteropProcessor {
         return value;
     }
 
-    public DynaBean getByDynabeanOrUri(Object obj) {
-        try {
-            if (obj != null) {
-                if (obj instanceof DynaBean) {
-                    return (DynaBean) obj;
-                } else if (obj instanceof String) {
-                    DynaBeanClient dbc = PhrsStoreClient.getInstance().getInteropClients().getDynaBeanClient();
-                    DynaBean dynaBean = dbc.getDynaBean((String) obj);
-
-                }
-            }
-        } catch (Exception e) {
-            LOGGER.error("", e);
-        }
-
-        return null;
-
-    }
 
     /**
      * Get the dosage details and put them into a map
@@ -888,22 +878,19 @@ public class InteropProcessor {
      * @param medicationDynabean
      * @return
      */
-    public Map getMedicationDosageAttributes(DynaBean medicationDynabean) {
-        Map map = null;
+    public Map<String,String> getMedicationDosageAttributes(DynaBean medicationDynabean) {
+        Map<String,String> map = null;
         try {
             DynaBean dynaBean = (DynaBean) DynaUtil.getDynaBeanProperty(medicationDynabean, Constants.HL7V3_DOSAGE); //http://www.icardea.at/phrs/hl7V3#dosage  (medicationDynabean);
 
             if (dynaBean != null) {
 
-
-
                 //DynaBeanClient dbc = PhrsStoreClient.getInstance().getInteropClients().getDynaBeanClient();
                 //DynaBean dynaBean = dbc.getDynaBean(uri);
 
-                if (dynaBean != null) {
                     String dosage = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DOSAGE_VALUE); //Constants.HL7V3_DOSAGE
                     String units = DynaUtil.getValueResourceUri(dynaBean, Constants.HL7V3_DOSAGE_UNIT);
-                    map = new HashMap();
+                    map = new HashMap<String,String>();
 
                     if (dosage != null) {
                         dosage = dosage.trim();
@@ -917,8 +904,6 @@ public class InteropProcessor {
                     if (units != null && units.length() > 0) {
                         map.put(Constants.HL7V3_DOSAGE_UNIT, units);
                     }
-                }
-
 
             }
 
@@ -957,8 +942,8 @@ public class InteropProcessor {
     //    MANUFACTURED_LABEL_DRUG = 
     //            ICARDEA_HL7V3_NS + "#manufacturedLabeledDrug";
     //    
-    public Map getMedicationNameAttributes(DynaBean medicationDynabean) {
-        Map map = null;
+    public Map<String,String> getMedicationNameAttributes(DynaBean medicationDynabean) {
+        Map<String,String> map = null;
         try {
             DynaBean dynaBeanMfgProduct = DynaUtil.getDynaBeanProperty(
                     medicationDynabean,
@@ -994,7 +979,7 @@ public class InteropProcessor {
                         drugId = DynaUtil.getStringProperty(codeBean, Constants.HL7V3_VALUE);
                     }
 
-                    map = new HashMap();
+                    map = new HashMap<String,String>();
 
                     if (name != null) {
                         name = name.trim();

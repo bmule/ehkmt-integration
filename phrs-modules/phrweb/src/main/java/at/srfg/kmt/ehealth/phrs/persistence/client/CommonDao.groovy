@@ -257,15 +257,15 @@ public class CommonDao{
         return user;
     }
     /**
-     *
-      * @param owneruri
+     *  @deprecated
+     * @param owneruri
      * @param protocolId
      * @param namespace
      */
     public void registerProtocolId(String ownerUri, String protocolId, String namespace){
 
         //null namespace will use default
-        getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
+       // getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
     }
 
     /**

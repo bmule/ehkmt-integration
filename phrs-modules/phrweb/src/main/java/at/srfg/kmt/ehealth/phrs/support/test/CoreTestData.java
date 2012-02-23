@@ -349,9 +349,10 @@ public class CoreTestData {
             //user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
 
             commonDao.crudSaveResource(user, user.getOwnerUri(), "CoreTestData createTestUserData");
-            //register PID
-            commonDao.getPhrsStoreClient().getInteropClients().registerProtocolId(user.getOwnerUri(), protocolId, null);
-            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, null);
+
+            //register PID.
+            //commonDao.getPhrsStoreClient().getInteropClients().registerProtocolId(user.getOwnerUri(), protocolId, null);
+
 
             ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
             if (info == null) {

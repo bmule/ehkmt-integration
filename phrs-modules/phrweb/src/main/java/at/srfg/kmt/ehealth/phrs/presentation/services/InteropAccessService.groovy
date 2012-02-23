@@ -1,4 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services
+
 import static at.srfg.kmt.ehealth.phrs.Constants.*
 
 import java.util.Date
@@ -15,7 +16,7 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil
 import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
+//import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
@@ -35,19 +36,19 @@ import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil
 
 /**
  * Used by the PhrsStoreClient to send messages whenever an appropriate resource is saved
- * 
+ *
  */
 /*
 See Terminology service and
 status for actions: action.categories.activity.sport
 TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS='http://www.icardea.at/phrs/instances/ActivityStatus'; http://www.icardea.at/phrs/instances/ICanDo http://www.icardea.at/phrs/instances/IRequireAssistance
  */
-public class  InteropAccessService implements Serializable{
+public class InteropAccessService implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(InteropAccessService.class);
-    public final static String DATE_PATTERN_INTEROP_DATE_TIME ='yyyyMMddHHmm';
-    public final static String REFERENCE_NOTE_PREFIX='resourcephr='
-    public final static String DRUG_CODE_DEFAULT_PHR='MyDrugCode';
-    
+    public final static String DATE_PATTERN_INTEROP_DATE_TIME = 'yyyyMMddHHmm';
+    public final static String REFERENCE_NOTE_PREFIX = 'resourcephr='
+    public final static String DRUG_CODE_DEFAULT_PHR = 'MyDrugCode';
+
     public InteropProcessor iprocess;
     /**
      * Expected by the interop services: yyyyMMddHHmm
@@ -65,12 +66,11 @@ public class  InteropAccessService implements Serializable{
     c. ??
     4. Meds
      */
-   
-  
+
     /**
-     * 
+     *
      */
-    public InteropAccessService(){
+    public InteropAccessService() {
 
         //phrsStoreClient = PhrsStoreClient.getInstance()
         init()
@@ -79,71 +79,73 @@ public class  InteropAccessService implements Serializable{
      * @deprecated
      * @param phrsStoreClient
      */
-    public InteropAccessService(PhrsStoreClient phrsStoreClient){
+    public InteropAccessService(PhrsStoreClient phrsStoreClient) {
 
         init()
     }
-    
-    private void init(){
-        iprocess=new InteropProcessor();
+
+    private void init() {
+        iprocess = new InteropProcessor();
     }
-    public PhrsStoreClient getPhrsStoreClient(){
-        return  PhrsStoreClient.getInstance()
+
+    public PhrsStoreClient getPhrsStoreClient() {
+        return PhrsStoreClient.getInstance()
     }
-    public InteropClients getInteropClients(){
+
+    public InteropClients getInteropClients() {
         return getPhrsStoreClient().getInteropClients()
     }
-    
-    public CommonDao getCommonDao(){
+
+    public CommonDao getCommonDao() {
         return getPhrsStoreClient().getCommonDao()
     }
 
     /**
-     * 
+     *
      * @param ownerUri
      * @param protocolId
      */
-    public void registerUser(String ownerUri, String protocolId){
+    public void registerUser(String ownerUri, String protocolId) {
         //ownerUri = phrId
-        getInteropClients().getActorClient().register(ownerUri,protocolId)
+        getInteropClients().getActorClient().register(ownerUri, protocolId)
 
     }
     /**
-     * 
+     *
      * @param ownerUri
      * @param protocolId
      * @param protocolNamespace
      */
-    public void registerUser(String ownerUri, String protocolId, String protocolNamespace){
+    public void registerUser(String ownerUri, String protocolId, String protocolNamespace) {
 
-        getInteropClients().getActorClient().register(protocolNamespace,ownerUri,protocolId)
+        getInteropClients().getActorClient().register(protocolNamespace, ownerUri, protocolId)
     }
     /**
-     * 
+     *
      * @param ownerUri
      * @param protocolNamespace
      * @return
      */
-    public String getProtocolId(String ownerUri, String protocolNamespace){
-        return  getCommonDao().getProtocolId(ownerUri); 
-        
+    public String getProtocolId(String ownerUri, String protocolNamespace) {
+        return getCommonDao().getProtocolId(ownerUri);
+
     }
     /**
-     * 
+     *
      * @param ownerUri
      * @return
      */
-    public String getProtocolId(String ownerUri){
-        return  getCommonDao().getProtocolId(ownerUri); 
-        
+    public String getProtocolId(String ownerUri) {
+        return getCommonDao().getProtocolId(ownerUri);
+
     }
     /**
-     * 
+     *
      * @param resource
      * @return
      */
-    public Map sendMessages(def resource){
-        sendMessages(resource,null)
+    public Map sendMessages(def resource) {
+        sendMessages(resource, null)
     }
 
     /**
@@ -153,22 +155,22 @@ public class  InteropAccessService implements Serializable{
      * @param attrs
      * @return
      */
-    public Map sendMessages(def resource, Map attrs){
-        String resourceType= resource.getClass().getCanonicalName()
+    public Map sendMessages(def resource, Map attrs) {
+        String resourceType = resource.getClass().getCanonicalName()
         //write list to MessageInterop
-        return sendMessages(resource,resourceType,null,attrs )
+        return sendMessages(resource, resourceType, null, attrs)
     }
     /**
-     * 
+     *
      * @param resource
      * @param action - allows finer details for handling other client services e.g. delete
      * @param attrs
      * @return
      */
-    public Map sendMessages(def resource, String action,Map attrs){
-        String resourceType= resource.getClass().getCanonicalName()
+    public Map sendMessages(def resource, String action, Map attrs) {
+        String resourceType = resource.getClass().getCanonicalName()
         //write MessageInterop
-        return sendMessages(resource,resourceType,action,attrs )
+        return sendMessages(resource, resourceType, action, attrs)
     }
 
     /**
@@ -177,8 +179,8 @@ public class  InteropAccessService implements Serializable{
      * @param status
      * @return
      */
-    public String transformStatus(String status){
-    
+    public String transformStatus(String status) {
+
         return InteropTermTransformer.transformStatus(status)
     }
 
@@ -188,19 +190,19 @@ public class  InteropAccessService implements Serializable{
      * @param code
      * @return
      */
-    public String transformCode(String code){
-        String out=code
+    public String transformCode(String code) {
+        String out = code
 
         return out
     }
     /**
-     * 
+     *
      * @param category
      * @param type
      * @return
      */
-    public String transformCategory(String category, String type){
-        String out=category
+    public String transformCategory(String category, String type) {
+        String out = category
 
         return out
     }
@@ -210,22 +212,22 @@ public class  InteropAccessService implements Serializable{
      * @param date
      * @param dateTime
      * @return
-     * 
+     *
      */
-    public String transformDate(Date date, Date defaultDate){
+    public String transformDate(Date date, Date defaultDate) {
         Date theDate = date
-        if(!theDate) {
-            if(defaultDate) theDate = defaultDate
+        if (!theDate) {
+            if (defaultDate) theDate = defaultDate
         }
-        if(theDate){
+        if (theDate) {
 
-            return HealthyUtils.formatDate( theDate, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
+            return HealthyUtils.formatDate(theDate, (String) null, DATE_PATTERN_INTEROP_DATE_TIME)
         }
         return null
     }
 
-    public static def getDynaBeanPropertyValue(DynaBean bean, String property, String defaultValue){
-        return DynaUtil.getStringProperty(bean,property,defaultValue)
+    public static def getDynaBeanPropertyValue(DynaBean bean, String property, String defaultValue) {
+        return DynaUtil.getStringProperty(bean, property, defaultValue)
 
     }
     /*
@@ -239,7 +241,8 @@ public class  InteropAccessService implements Serializable{
     return null
     }
      */
-    public  String createReferenceNote(String resourceUri){   
+
+    public String createReferenceNote(String resourceUri) {
         return InteropProcessor.createReferenceNote(resourceUri)
     }
     /**
@@ -251,367 +254,373 @@ public class  InteropAccessService implements Serializable{
      * There can multiple messages per PHR portal object e.g. Systolic and Diastolic messages. Upon updates, the values can be updated
      *  Theses can be stored interop message table.  Useful if these are to be deleted
      */
-    public Map sendMessages(def resource,String resourceType, String action,Map attrs){
-        Map messageIdMap=[:]
+    public Map sendMessages(def resource, String resourceType, String action, Map attrs) {
+        Map messageIdMap = [:]
 
-        if(resource && resource instanceof BasePhrsModel){
+        if (resource && resource instanceof BasePhrsModel) {
 
-            try{
-        
-                
+            try {
+
                 //the resulting message URI that is added to the result list
                 String messageId
 
-                BasePhrsModel res = (BasePhrsModel)resource
-                String owner 	= res.ownerUri
+                BasePhrsModel res = (BasePhrsModel) resource
+                String owner = res.ownerUri
                 //FIXID
-                String protocolId=getProtocolId(owner)
-        
-                if(protocolId !=null && ! protocolId.isEmpty()){
-                // ok 
+                String protocolId = getProtocolId(owner)
+
+                if (protocolId) {
+                    // ok
                 } else {
-                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+owner+" resourceType="+resourceType);
+                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri=" + owner + " resourceType=" + resourceType);
                     return messageIdMap
-                }            
-                String notifyType=null
+                }
+                String notifyType = null
 
-                String status 	= this.transformStatus(res.status)
+                String status = this.transformStatus(res.status)
                 //status = status?: null
-                status = status!=null ? status : Constants.STATUS_COMPELETE//Constants.STATUS_RUNNING;
+                status = status != null ? status : Constants.STATUS_COMPELETE//Constants.STATUS_RUNNING;
 
-                String categoryCode 	= this.transformCategory(res.category,resourceType)
-                categoryCode = categoryCode?: null
+                String categoryCode = this.transformCategory(res.category, resourceType)
+                categoryCode = categoryCode ?: null
 
-                String valueCode 	= this.transformCode(res.code)
-                valueCode = valueCode?: null
+                String valueCode = this.transformCode(res.code)
+                valueCode = valueCode ?: null
 
-                String dateStringStart 	= transformDate(res.beginDate,res.endDate)
-                dateStringStart = dateStringStart?: transformDate(new Date(),new Date())
+                String dateStringStart = transformDate(res.beginDate, res.endDate)
+                dateStringStart = dateStringStart ?: transformDate(new Date(), new Date())
 
-                String dateStringEnd 	= transformDate(res.endDate,(Date)null)
-                dateStringEnd = dateStringEnd?: null
+                String dateStringEnd = transformDate(res.endDate, (Date) null)
+                dateStringEnd = dateStringEnd ?: null
 
                 //res.note is by default not sharable
                 /**
                  * Use the note to tag this record. 
                  * Be sure to write note to multiple messages such as Vital signs with separate messages for Body weight, height, sys, diastolic
-                 * 				
+                 *
                  */
                 //note cannot be null
-                                
+
                 String referenceNote = createReferenceNote(res.resourceUri) //'' //res.note is by default not sharable
-                
-                                
+
                 //resourceUri appears only if resource already saved
-                if(!res.resourceUri){
+                if (!res.resourceUri) {
 
                     LOGGER.debug('sendMessages  (note) resourceUri is null');
-                    throw new Exception(' resourceUri not yet set, PHR object was not yet saved?')   
+                    throw new Exception(' resourceUri not yet set, PHR object was not yet saved?')
                 }
                 String theParentId = res.resourceUri
-    
-                 boolean notifySubscribers=false;
-                switch ( resourceType ) {
+
+                boolean notifySubscribers = false;
+
+                switch (resourceType) {
 
                     case ProfileRisk.class.getCanonicalName():
-                    //Risks reported under Problem
-                    //ProfileRisk domain=(ProfileRisk)resource
-                    if(categoryCode != PhrsConstants.HL7V3_CODE_CATEGORY_RISK){
-                        categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_RISK  //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
-                    }
-                    
-                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
-
-                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                        LOGGER.debug(' Send Interop Message'+actionLabel
-                                + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
-
-                    if( ! interopRef){
-
-                        messageId = getInteropClients().getProblemEntryClient()
-                        .addProblemEntry(
-                            protocolId,//owner,
-                            categoryCode,// TODO more specific detail code part of finding
-                            status,
-                            dateStringStart,
-                            dateStringEnd,
-                            referenceNote,
-                            valueCode);
-
-                        if(messageId)  {
-                            messageIdMap.put(categoryCode,messageId)
+                        //Risks reported under Problem
+                        //ProfileRisk domain=(ProfileRisk)resource
+                        if (categoryCode != PhrsConstants.HL7V3_CODE_CATEGORY_RISK) {
+                            categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_RISK  //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
                         }
-                    } else {
-                       //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-                        
-                    }
-                        //notify subscribers about changes
-                        notifySubscribers=true
 
-                    break
+                        //No need to update, write again
+                        String interopRef = null // findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)
+
+                        String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
+
+                        if (!interopRef) {
+
+                            messageId = getInteropClients().getProblemEntryClient()
+                                    .addProblemEntry(
+                                    protocolId,//owner,
+                                    categoryCode,// TODO more specific detail code part of finding
+                                    status,
+                                    dateStringStart,
+                                    dateStringEnd,
+                                    referenceNote,
+                                    valueCode);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
+                        } else {
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+
+                        }
+                        //notify subscribers about changes
+                        notifySubscribers = true
+
+                        break
 
                     case ProfileActivityDailyLiving.class.getCanonicalName():
 
-                    categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_ADL //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
-                    
-                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+                        categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_ADL //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
 
-                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                    LOGGER.debug(' Send Interop Message'+actionLabel
-                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+                        String interopRef = null  //findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)
 
-                    if( ! interopRef){
-                        // TODO more specific detail code part of finding
-                        messageId = getInteropClients().getProblemEntryClient()
-                        .addProblemEntry(
-                            protocolId,//owner,
-                            categoryCode,
-                            status,
-                            dateStringStart,
-                            dateStringEnd,
-                            referenceNote,
-                            valueCode);
+                        String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if(messageId)  {
-                            messageIdMap.put(categoryCode,messageId)
+                        if (!interopRef) {
+                            // TODO more specific detail code part of finding
+                            messageId = getInteropClients().getProblemEntryClient()
+                                    .addProblemEntry(
+                                    protocolId,//owner,
+                                    categoryCode,
+                                    status,
+                                    dateStringStart,
+                                    dateStringEnd,
+                                    referenceNote,
+                                    valueCode);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
+                        } else {
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+
                         }
-                    } else {
-                        //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-
-                   }
                         //notify subscribers about changes
-                        notifySubscribers=true
+                        notifySubscribers = true
 
                         break
 
                     case ActionPlanEvent.class.getCanonicalName():
 
-                    //send message only for the sports identifier resource.code= action.categories.activity.sport
-                    if(valueCode == InteropTermTransformer.CODE_WATCH_SPORT){
-                        categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
-                        String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
+                        //send message only for the sports identifier resource.code= action.categories.activity.sport
+                        if (valueCode == InteropTermTransformer.CODE_WATCH_SPORT) {
+                            categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
 
-                        String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                        LOGGER.debug(' Send Interop Message'+actionLabel
-                                + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+                            //No need to update, write again
+                            String interopRef = null // findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)
 
-                        if( ! interopRef){
-                            messageId = getInteropClients().getProblemEntryClient()
-                            .addProblemEntry(
-                                protocolId,//owner,
-                                categoryCode,
-                                status,
-                                dateStringStart,
-                                dateStringEnd,
-                                referenceNote,
-                                valueCode);
+                            String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                            LOGGER.debug(' Send Interop Message' + actionLabel
+                                    + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                    + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                            if(messageId)  {
-                                messageIdMap.put(categoryCode,messageId)
+                            if (!interopRef) {
+                                messageId = getInteropClients().getProblemEntryClient()
+                                        .addProblemEntry(
+                                        protocolId,//owner,
+                                        categoryCode,
+                                        status,
+                                        dateStringStart,
+                                        dateStringEnd,
+                                        referenceNote,
+                                        valueCode);
+
+                                if (messageId) {
+                                    messageIdMap.put(categoryCode, messageId)
+                                }
+
+                            } else {
+                                //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                             }
+                        }
+                        //notify subscribers about changes
+                        notifySubscribers = true
 
+                        break
+
+                    case MedicationTreatment.class.getCanonicalName():
+
+                        MedicationTreatment domain = (MedicationTreatment) resource
+                        messageIdMap = iprocess.sendMedicationMessage(domain);
+                        //notify done already in medication
+                        break
+
+                    //case ObsActivityPhysical.class.getCanonicalName():
+
+                    //    break
+
+                    case ObsProblem.class.getCanonicalName():
+
+                        ObsProblem domain = (ObsProblem) resource
+
+                        if (categoryCode != Constants.HL7V3_SYMPTOM) {
+                            categoryCode = Constants.HL7V3_SYMPTOM
+                            //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
+                        }
+
+                        //No need to update, write again
+                        String interopRef = null // findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)
+
+                        String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
+
+                        if (!interopRef) {
+                            messageId = getInteropClients().getProblemEntryClient()
+                                    .addProblemEntry(
+                                    protocolId,//owner,
+                                    categoryCode,
+                                    status,
+                                    dateStringStart,
+                                    dateStringEnd,
+                                    referenceNote,
+                                    valueCode);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
                         } else {
                             //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
                             iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
                             iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
                             iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
                         }
-                    }
                         //notify subscribers about changes
-                        notifySubscribers=true
-
-                    break
-
-                    case MedicationTreatment.class.getCanonicalName():
-
-                    MedicationTreatment domain=(MedicationTreatment)resource
-                    messageIdMap = iprocess.sendMedicationMessage(domain);
-                    //notify done already in medication
-                    break
-
-                    case ObsActivityPhysical.class.getCanonicalName():
-
-                    break
-
-                    case ObsProblem.class.getCanonicalName():
-
-                    ObsProblem domain=(ObsProblem)resource
-
-                    if(categoryCode != Constants.HL7V3_SYMPTOM){
-                        categoryCode = Constants.HL7V3_SYMPTOM
-                        //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
-                    }
-                   
-                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode)
-
-                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                    LOGGER.debug(' Send Interop Message'+actionLabel
-                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
-
-                    if( ! interopRef){
-                        messageId = getInteropClients().getProblemEntryClient()
-                        .addProblemEntry(
-                            protocolId,//owner,
-                            categoryCode,
-                            status,
-                            dateStringStart,
-                            dateStringEnd,
-                            referenceNote,
-                            valueCode);
-
-                        if(messageId)  {
-                            messageIdMap.put(categoryCode,messageId)
-                        }
-                    } else {
-                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-                   }
-                        //notify subscribers about changes
-                        notifySubscribers=true
-                    break
+                        notifySubscribers = true
+                        break
 
                     case ObsVitalsBloodPressure.class.getCanonicalName():
 
-                    ObsVitalsBloodPressure domain=(ObsVitalsBloodPressure)resource
-                    //not using category code, instead we split form into a few pieces
-                    categoryCode=Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE                
-                    
-                    String value=domain.getSystolic() ? domain.getSystolic().toString() : '0'
-                   
-                    String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+                        ObsVitalsBloodPressure domain = (ObsVitalsBloodPressure) resource
+                        //not using category code, instead we split form into a few pieces
+                        categoryCode = Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE
 
-                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                    LOGGER.debug(' Send Interop Message'+actionLabel
-                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+                        String value = domain.getSystolic() ? domain.getSystolic().toString() : '0'
 
-                    if( ! interopRef){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
-                            protocolId,//owner,
-                            Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
-                            referenceNote,
-                            dateStringStart,
-                            status,
-                            value,
-                            Constants.MM_HG);
+                        String interopRef = null //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
 
-                        if(messageId) {
-                            messageIdMap.put(categoryCode,messageId)
+                        String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
+
+                        if (!interopRef) {
+                            messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                                    protocolId,//owner,
+                                    Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                                    referenceNote,
+                                    dateStringStart,
+                                    status,
+                                    value,
+                                    Constants.MM_HG);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
+                        } else {
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
                         }
-                    } else {
-                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
-                    }
 
-                    categoryCode=Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
-                    value=domain.getDiastolic() ? domain.getDiastolic().toString() : '0'
-                    
-                    String interopRef_2 = null
-                    interopRef_2 = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
-                              
-                    if( ! interopRef_2 ){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
-                            protocolId,//owner,
-                            categoryCode,
-                            referenceNote,
-                            dateStringStart,
-                            status,
-                            value,
-                            Constants.MM_HG);
+                        categoryCode = Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
+                        value = domain.getDiastolic() ? domain.getDiastolic().toString() : '0'
 
-                        if(messageId)  {
-                            messageIdMap.put(categoryCode,messageId)
+                        //No need to update, write again
+                        String interopRef_2 = null
+                        interopRef_2 = null //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
+
+                        if (!interopRef_2) {
+                            messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                                    protocolId,//owner,
+                                    categoryCode,
+                                    referenceNote,
+                                    dateStringStart,
+                                    status,
+                                    value,
+                                    Constants.MM_HG);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
+                        } else {
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE, value);
+
                         }
-                    } else {
-                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE , value);
-
-                    }
                         //notify subscribers about changes
-                        notifySubscribers=true
-                    break
+                        notifySubscribers = true
+                        break
 
                     case ObsVitalsBodyWeight.class.getCanonicalName():
 
-                    ObsVitalsBodyWeight domain=(ObsVitalsBodyWeight)resource
-                    categoryCode=Constants.ICARDEA_INSTANCE_BODY_WEIGHT
-                    String value = domain.getBodyWeight() ? domain.getBodyWeight().toString() : '0'
-                    // ownerUri, resourceUri, phrsClass,categoryCode,valueCode
-                    String interopRef = findMessageWithReference( owner, theParentId,  Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
+                        ObsVitalsBodyWeight domain = (ObsVitalsBodyWeight) resource
+                        categoryCode = Constants.ICARDEA_INSTANCE_BODY_WEIGHT
+                        String value = domain.getBodyWeight() ? domain.getBodyWeight().toString() : '0'
 
-                    String actionLabel=interopRef==null ? 'CREATE' : 'UPDATE ref='+interopRef;
-                    LOGGER.debug(' Send Interop Message'+actionLabel
-                            + ' resourceType '+resourceType+' owner '+owner+' refnote '
-                            +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
-                    
-                    if( ! interopRef){
-                        messageId = getInteropClients().getVitalSignClient().addVitalSign(
-                            protocolId,//owner,
-                            categoryCode,
-                            referenceNote,
-                            dateStringStart,
-                            status,
-                            value,
-                            Constants.KILOGRAM);
+                        //No need to update, write again
+                        String interopRef = null //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
 
-                        if(messageId)  messageIdMap.put(categoryCode,messageId)
-                    } else {
-                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                       
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, value);
+                        String actionLabel = interopRef == null ? 'CREATE' : 'UPDATE ref=' + interopRef;
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                    }
-                    
-                    categoryCode=Constants.ICARDEA_INSTANCE_BODY_HEIGHT
-                    value = domain.getBodyHeight() ? domain.getBodyHeight().toString() : '0'
-                    
-                    interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS,categoryCode)
+                        if (!interopRef) {
+                            messageId = getInteropClients().getVitalSignClient().addVitalSign(
+                                    protocolId,//owner,
+                                    categoryCode,
+                                    referenceNote,
+                                    dateStringStart,
+                                    status,
+                                    value,
+                                    Constants.KILOGRAM);
 
+                            if (messageId) messageIdMap.put(categoryCode, messageId)
+                        } else {
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
 
-                    LOGGER.debug(' Send Interop Message'+actionLabel
-                                +' resourceType '+resourceType+' owner '+owner+' refnote '
-                                +' status '+status+' dateStart '+dateStringStart+' dateEnd '+dateStringEnd);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, value);
 
-                    if(interopRef){
-                        messageId = getInteropClients().getVitalSignClient()
-                        .addVitalSign(
-                            protocolId,//owner,
-                            categoryCode,
-                            referenceNote,
-                            dateStringStart,
-                            Constants.STATUS_COMPELETE,//use instead of current status
-                            value,
-                            Constants.CENTIMETER);
-
-                        if(messageId)  {
-                            messageIdMap.put(categoryCode,messageId)
                         }
-                    } else {
-                        //update
-                         //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                        iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                        iprocess.updateInteropStatement(theParentId, interopRef,HL7V3_VALUE , value);
 
-                    }
-                    //notify subscribers about changes
-                        notifySubscribers=true
-                    break
+                        categoryCode = Constants.ICARDEA_INSTANCE_BODY_HEIGHT
+                        value = domain.getBodyHeight() ? domain.getBodyHeight().toString() : '0'
+
+                        //No need to update, write again
+                        interopRef = null //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
+
+
+                        LOGGER.debug(' Send Interop Message' + actionLabel
+                                + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
+                                + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
+
+                        if (interopRef) {
+                            messageId = getInteropClients().getVitalSignClient()
+                                    .addVitalSign(
+                                    protocolId,//owner,
+                                    categoryCode,
+                                    referenceNote,
+                                    dateStringStart,
+                                    Constants.STATUS_COMPELETE,//use instead of current status
+                                    value,
+                                    Constants.CENTIMETER);
+
+                            if (messageId) {
+                                messageIdMap.put(categoryCode, messageId)
+                            }
+                        } else {
+                            //update
+                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
+
+                        }
+                        //notify subscribers about changes
+                        notifySubscribers = true
+                        break
 
 //                    case [
 //                        ProfileContactInfo.class.getCanonicalName(),
@@ -622,101 +631,98 @@ public class  InteropAccessService implements Serializable{
 //                    break
 
                     default:
-                    break
+                        break
                 }
 
-             if(notifySubscribers) {
-                 LOGGER.debug('Sent interop message, Prepare to notify for owner='+owner+" notifyType "+notifyType);
-                 getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId,notifyType);//owner,
-             }
+                if (notifySubscribers) {
+                    LOGGER.debug('Sent interop message, Prepare to notify for owner=' + owner + ' protocolId=' + protocolId + " notifyType " + notifyType);
+                    getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, notifyType);//owner,
+                }
 
             } catch (TripleException e) {
-                LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
+                LOGGER.error('Interop client error sending message for resource= ' + resourceType, e)
 
-            
-            } catch (Exception e){
-                LOGGER.error('Interop client error sending message for resource= '+resourceType, e)
-            
+
+            } catch (Exception e) {
+                LOGGER.error('Interop client error sending message for resource= ' + resourceType, e)
+
             } catch (java.lang.Error e) {
-                LOGGER.error('sesame throws errors not exception...'+resourceType,e);
+                LOGGER.error('sesame throws errors not exception...' + resourceType, e);
 
             }
 
         }
         return messageIdMap
     }
- 
-    
 
     /**
-     * 
+     *
      * @param ownerUri
      * @param resourceUri
      * @param categoryCode - this can be null, it is used to select a  specific code within a phrsClass e.g. ObservationClass includes resources by code for Body height, symptom
      * @param phrsClass - The Phrs class Constants.PHRS_MEDICATION_CLASS, PHRS_VITAL_SIGN_CLASS, PHRS_OBSERVATION_ENTRY_CLASS
      * @return
      */
-    public String findMessageWithReference(String ownerUri,String resourceUri,String phrsClass, String categoryCode){
-        
-        String value = iprocess.findMessageWithReference( ownerUri, resourceUri, phrsClass,categoryCode)
+    public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
+
+        String value = iprocess.findMessageWithReference(ownerUri, resourceUri, phrsClass, categoryCode)
         return value
     }
+
     /**
-     * 
+     *
      * @param resourceUri
      * @param interopId
      * @return
      */
-    public boolean removeMessage(String resourceUri,String interopId){
-        boolean exists=false
-        if(interopId){
-            try{
+    public boolean removeMessage(String resourceUri, String interopId) {
+        boolean exists = false
+        if (interopId) {
+            try {
                 getInteropClients().getProblemEntryClient().deleteProblemEntry(interopId)
                 this.interopDeleteMessage(interopId)
-                exists=true
-            } catch(Exception e){
-                LOGGER.error('Interop client removeMessage resource= '+resourceUri+' interopResourceId='+interopId, e)
+                exists = true
+            } catch (Exception e) {
+                LOGGER.error('Interop client removeMessage resource= ' + resourceUri + ' interopResourceId=' + interopId, e)
             }
         }
         return exists
     }
 
-
- 
     /**
-     * 
-This cannot not be used for the dosage and dosage units because these are separate graphs
+     *
+     This cannot not be used for the dosage and dosage units because these are separate graphs
      * For now, delete message and then add it new....
      */
-    public void updateMessageProblem(String resourceUri,String interopResourceId, String predicate, String newValue){
+    public void updateMessageProblem(String resourceUri, String interopResourceId, String predicate, String newValue) {
 
-        try{
+        try {
             getInteropClients().getProblemEntryClient().updateProblemEntry(interopResourceId, predicate, newValue)
-        } catch(Exception e){
-            LOGGER.error('Interop client updateMessageProblem, interop resource= '+resourceUri+' interopResourceId='+interopResourceId, e)
+        } catch (Exception e) {
+            LOGGER.error('Interop client updateMessageProblem, interop resource= ' + resourceUri + ' interopResourceId=' + interopResourceId, e)
         }
     }
     /**
-     * 
+     *
      * @param referenceId
      * @return
      */
-    public def getInteropResourceDynabeanByExternalReferenceId(String referenceId){
+    public def getInteropResourceDynabeanByExternalReferenceId(String referenceId) {
         return getInteropClients().getResourceDynabean(referenceId)
     }
 
-    public String getTest(){
+    public String getTest() {
         return '1234'
     }
- 
-    public List importNewMessages(String ownerUri, String phrsClass)  {
-        
-        return iprocess.importNewMessages( ownerUri,  phrsClass,  true)
+
+    public List importNewMessages(String ownerUri, String phrsClass) {
+
+        return iprocess.importNewMessages(ownerUri, phrsClass, true)
     }
-    
-    public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage)  {
-        
-        return iprocess.importNewMessages( ownerUri,  phrsClass,  importMessage)
+
+    public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage) {
+
+        return iprocess.importNewMessages(ownerUri, phrsClass, importMessage)
     }
 
     /**
@@ -729,16 +735,16 @@ This cannot not be used for the dosage and dosage units because these are separa
         if (resourceUri == null) {
             throw new NullPointerException('The resourceURI argument can not be null.');
         }
-        try{
-            final boolean exists =  getPhrsStoreClient().getGenericTriplestore().exists(resourceUri);
+        try {
+            final boolean exists = getPhrsStoreClient().getGenericTriplestore().exists(resourceUri);
             if (exists) {
                 getPhrsStoreClient().getGenericTriplestore().deleteForSubject(resourceUri);
             } else {
                 LOGGER.warn('No resource for this {} URI, remove has no effect.', resourceUri);
 
             }
-        } catch(Exception e){
-            LOGGER.error(' interop resourceUri= '+resourceUri, e)
+        } catch (Exception e) {
+            LOGGER.error(' interop resourceUri= ' + resourceUri, e)
         }
     }
     /**
@@ -748,27 +754,26 @@ This cannot not be used for the dosage and dosage units because these are separa
      * @return
      *
      */
-    public static Date transformDateFromMessage(String dateMessage, Date defaultDate){
-        Date theDate =null
-        try{
-            if(dateMessage){
-                theDate= DateUtil.getFormatedDate( dateMessage)
+    public static Date transformDateFromMessage(String dateMessage, Date defaultDate) {
+        Date theDate = null
+        try {
+            if (dateMessage) {
+                theDate = DateUtil.getFormatedDate(dateMessage)
             }
-            if(! theDate){
+            if (!theDate) {
                 theDate = defaultDate ? defaultDate : new Date()
             }
-        } catch (Exception e){
-            LOGGER.error('transforming date',e)
+        } catch (Exception e) {
+            LOGGER.error('transforming date', e)
         }
         return theDate
     }
 
-
     /**
      * @deprecated
      */
-    public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri,PhrsStoreClient client){
-        return this.transformInteropMessage(givenOwnerUri,phrsClass,bean,messageResourceUri)
+    public def transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean bean, String messageResourceUri, PhrsStoreClient client) {
+        return this.transformInteropMessage(givenOwnerUri, phrsClass, bean, messageResourceUri)
     }
     /**
      * Already know this is new (origin and no resource tag) but must update this record? Get the resourceURI and then update the note with local resourceUri
@@ -777,12 +782,11 @@ This cannot not be used for the dosage and dosage units because these are separa
      * @param bean
      * @return
      */
-  
+
     //DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
-    public def transformInteropMessage(String givenOwnerUri,String phrsClass, DynaBean bean, String messageResourceUri){
-        return iprocess.transformInteropMessage(givenOwnerUri,phrsClass,bean,messageResourceUri)
+    public def transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean bean, String messageResourceUri) {
+        return iprocess.transformInteropMessage(givenOwnerUri, phrsClass, bean, messageResourceUri)
     }
-   
 
 
-    }
+}
