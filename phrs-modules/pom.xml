@@ -79,6 +79,7 @@
         <module>phrs-message-dispatcher</module>
         <module>phrweb-ws</module>
         <module>phrweb</module>
+        <module>servicecheck-client</module>
     </modules>
 
 
