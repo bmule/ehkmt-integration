@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 
-public class BuilderUtil {
-    private final static Logger LOGGER = LoggerFactory.getLogger(BuilderUtil.class);
+public class ReportUtil {
+    private final static Logger LOGGER = LoggerFactory.getLogger(ReportUtil.class);
 
     /**
      * Dummy report, no access
      * @return
      */
     public static StreamedContent reportBuildDummy() {
-        return BuilderUtil.reportBuildDummy(null, null, null);
+        return ReportUtil.reportBuildDummy(null, null, null);
     }
 
     /**
@@ -35,7 +35,7 @@ public class BuilderUtil {
         reportFile = new DefaultStreamedContent(stream, "application/pdf", downloadFilename);
 
         //get default file
-        stream = BuilderUtil.class.getResourceAsStream(downloadFilename);
+        stream = ReportUtil.class.getResourceAsStream(downloadFilename);
 
         if (stream != null) {
             reportFile = new DefaultStreamedContent(stream, "application/pdf", downloadFilename);
@@ -71,7 +71,7 @@ public class BuilderUtil {
                 LOGGER.debug(" request error null found : protocolId or phrId=" + isPhrId + " id=" + targetUserId + " resourceType=" + resourceType + " permitted? false");
             }
             LOGGER.debug("creating report for: isPhrId= "+isPhrId+" id="+targetUserId+" resourceType="+resourceType) ;
-            reportFile = BuilderUtil.reportBuildForResourceType(targetUserId, idType, resourceType, isPermitted);
+            reportFile = ReportUtil.reportBuildForResourceType(targetUserId, idType, resourceType, isPermitted);
         } catch (Exception e) {
             LOGGER.error(" targetUserId=" + targetUserId + "idType=" + " resourceType=" + resourceType + " idType=" + idType, e);
         }
@@ -98,7 +98,7 @@ public class BuilderUtil {
                 String stamp = HealthyUtils.formatDate(new DateTime(), null);
                 downloadFilename = "monitor-phrinfo-" + stamp + ".pdf";
                 //get default file
-                stream = BuilderUtil.class.getResourceAsStream(downloadFilename);
+                stream = ReportUtil.class.getResourceAsStream(downloadFilename);
 
                 if (stream != null) {
                     reportFile = new DefaultStreamedContent(stream, "application/pdf", downloadFilename);
@@ -106,7 +106,7 @@ public class BuilderUtil {
 
             } else {
                 // get dummy report
-                reportFile = BuilderUtil.reportBuildDummy(targetUserId, idType, resourceType);
+                reportFile = ReportUtil.reportBuildDummy(targetUserId, idType, resourceType);
             }
 
 
@@ -118,5 +118,6 @@ public class BuilderUtil {
         return reportFile;
 
     }
+
 
 }

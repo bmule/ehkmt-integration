@@ -1,8 +1,6 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services
 
-import java.io.Serializable
-import java.util.List
-import java.util.Map
+
 
 public class ModelLabelValue implements Serializable {
 

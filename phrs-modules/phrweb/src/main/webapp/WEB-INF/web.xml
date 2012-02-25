@@ -100,16 +100,27 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<!--<load-on-startup>5</load-on-startup> LoginServlet LoginOpenidDyuServlet -->
-	<servlet>
+	<!--
+    <servlet>
 		<servlet-name>LoginServlet</servlet-name>
 		<servlet-class>at.srfg.kmt.ehealth.phrs.security.services.LoginOpenidDyuServlet</servlet-class>
 		<load-on-startup>5</load-on-startup>
 	</servlet>
+
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/login</url-pattern>
-	</servlet-mapping>                     
-
+	</servlet-mapping>
+   -->
+    <servlet>
+        <servlet-name>openIdServlet</servlet-name>
+        <servlet-class>at.srfg.kmt.ehealth.phrs.security.services.login.LoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>openIdServlet</servlet-name>
+        <url-pattern>/openid</url-pattern>
+        <url-pattern>/openid/*</url-pattern>
+    </servlet-mapping>
 	<!-- alternative in case later we want to filter OpenId on *.xhtml <url-pattern>*.faces</url-pattern> -->
 
 	<!-- <context-param> <param-name>com.sun.faces.enableViewStateIdRendering</param-name> 

@@ -1,13 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean
 
-import java.io.Serializable
-import java.util.ArrayList
-import java.util.Collection
-import java.util.List
-import java.util.Locale
-import java.util.Map
-import java.util.UUID
-
+import at.srfg.kmt.ehealth.phrs.jsf.utils.JsfFormUtil
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
+import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 import javax.faces.application.Application
 import javax.faces.application.FacesMessage
 import javax.faces.application.ViewHandler
@@ -15,20 +10,10 @@ import javax.faces.component.UIComponent
 import javax.faces.component.UIViewRoot
 import javax.faces.context.FacesContext
 import javax.faces.event.ActionEvent
-
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.presentation.services.*
 
-import at.srfg.kmt.ehealth.phrs.jsf.utils.JsfFormUtil
-import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
-import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
-import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue
-import at.srfg.kmt.ehealth.phrs.presentation.services.UserService
-import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
-import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer
-import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyService
-import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
-import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor
 /**
  * 
  * Includes UserServices and vocabulary helper methods to support child beans
@@ -255,14 +240,7 @@ class FaceBaseBean implements Serializable{
 	protected boolean checkSession(){
 		return UserSessionService.hasSession();
 	}
-	/*
-	 * 
-	 protected void setDomainClazz(Class clazz, boolean created selected item){
-	 domainClazz = clazz.getClass()
-	 //setSelected(domainClazz.);
-	 println('setDomainClazz'+domainClazz.class)
-	 setSelected(domainClazz.newInstance())
-	 }*/
+
 	/**
 	 * This method does not perform a query,  the model must be loaded in either the Postcontruct or constructor
 	 * of the subclass

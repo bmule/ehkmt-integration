@@ -123,17 +123,17 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
 
       
 
-    public void updateIdentifiers(){
-       ProfileContactInfo info= (ProfileContactInfo)selected
-
-        LOGGER.debug('updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId ')
-
-        if(info){
-            PixService pixService= new PixService();
-            pixService.updateProtocolIdFromUserProvidedCiedId( info.ownerUri, info.getPixQueryIdUser(),info.getPixQueryDeviceModel())
-        }
-
-    }
+//    public void updateIdentifiers(){
+//       ProfileContactInfo info= (ProfileContactInfo)selected
+//
+//        LOGGER.debug('updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId ')
+//
+//        if(info){
+//            PixService pixService= new PixService();
+//            pixService.updateProtocolIdFromUserProvidedCiedId( info.ownerUri, info.getPixQueryIdUser(),info.getPixQueryDeviceModel())
+//        }
+//
+//    }
         
             
     public boolean getContactTypeMedical(){
@@ -211,16 +211,16 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
         if(contactType == PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER){
             if(selected) {
                 selected.healthcareRole = PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER
-                selected.pixQueryIdType=PixService.PIX_QUERY_TYPE_DEFAULT
+                //selected.pixQueryIdType=PixService.PIX_QUERY_TYPE_DEFAULT
             }
 
         }
     }
 
 
-    @Override
-    public void storeModifyFirst(){
-        super.storeModifyFirst()
+  //  @Override
+  //  public void storeModifyFirst(){
+  //      super.storeModifyFirst()
 //        try{
 //            if(selected){
 //                //validate pix identifier, and update the status of the identifier
@@ -233,15 +233,9 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
 //        } catch (Exception e){
 //            LOGGER.error(' '+e)
 //        }
-        try{
-            if(selected){
-                updateIdentifiers()
-            }
-        } catch (Exception e){
-            LOGGER.error(' updateIdentifiers '+e)
-        }
 
-    }
+
+   //}
  
 
 }

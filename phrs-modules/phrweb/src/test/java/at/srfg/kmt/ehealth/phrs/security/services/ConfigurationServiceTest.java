@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package at.srfg.kmt.ehealth.phrs.security.services;
-
-import static org.junit.Assert.*;
-import org.junit.*;
 
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import java.util.List;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import static org.junit.Assert.*;
+import org.junit.*;
 
 public class ConfigurationServiceTest {
 

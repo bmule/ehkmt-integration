@@ -1,16 +1,14 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
-import javax.faces.bean.ManagedBean
-import javax.faces.bean.RequestScoped
-
-import org.primefaces.model.chart.CartesianChartModel
 
 import at.srfg.kmt.ehealth.phrs.jsf.utils.HealthyCharts
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import javax.faces.bean.ManagedBean
+import javax.faces.bean.RequestScoped
+import org.primefaces.model.chart.CartesianChartModel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
 
 @ManagedBean(name="odlbpBean")
 @RequestScoped

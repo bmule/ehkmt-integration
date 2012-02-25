@@ -122,8 +122,13 @@
                         </f:facet>
                     </h:panelGrid>
 
-					<h:panelGrid columns="3">
 
+
+                    <h:inputHidden value="#{procon.selected.pixQueryIdType}" />
+
+                    <h:inputHidden value="#{procon.selected.pixQueryIdUser}" />
+                    <h:panelGrid columns="3">
+   <!--
                     <h:outputLabel for="field_identifier_cied"
                                    value="CIED Serial Number"
                                    styleClass="form-dialog-label" />
@@ -148,7 +153,7 @@
                                      rendered="#{procon.modify eq 'yes'}" />
                     </p:outputPanel>
                     <p:message for="field_identifier_cied_input" display="text" />
-
+  -->
 
 										
 						<h:outputLabel for="field_firstName"
@@ -323,7 +328,7 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 								id="field_internetChatProvider_input"
 								rendered="#{procon.modify eq 'yes'}">
 										<f:selectItem itemLabel="Google"
-											itemValue="Google" noSelectionOption="true"/>
+											itemValue="Google"/>
 										<f:selectItem itemLabel="Skype"
 											itemValue="Skype"/>
 										<f:selectItem itemLabel="Other"
@@ -380,78 +385,5 @@ render="#{procon.selected.contactType eq  'healthcare_provider'}
 
 	</ui:composition>
 </h:body>
-<!-- 
-time_mm_5= 5 minutes	
-time_mm_10=10 minutes	
-time_mm_15=15 minutes	
-time_mm_30=30 minutes
-time_mm_45=45 minutes
-time_hh_1=1 hour	
-time_hh_2=2 hour
-time_hh_3=3 hour
-time_hh_4=4 hour
-time_hh_5=5 hour	
-time_dd_1=All Day
-time_dd_2=2 days
-time_dd_3=3 days
-time_dd_4=4 days
-time_dd_5=5 days
-time_dd_6=6 days
-time_ww_1=1 week
-time_ww_2=2 weeks
-time_ww_3=3 weeks
-time_mo_1=1 month
 
-						<h:selectOneMenu value="#{procon.selected.durationCode}"
-							rendered="#{procon.modify eq 'yes'}">
-							<f:selectItem itemLabel="#{labels['time_dd_1']}"
-								itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_mm_5']}"
-								itemValue="time_mm_5"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_mm_15']}"
-								itemValue="time_mm_15"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_mm_30']}"
-								itemValue="time_mm_30"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_mm_45']}"
-								itemValue="time_mm_45"></f:selectItem>
-								
-							<f:selectItem itemLabel="#{labels['time_hh_1']}"
-								itemValue="time_hh_1"></f:selectItem>								
-							<f:selectItem itemLabel="#{labels['time_hh_2']}"
-								itemValue="time_hh_2"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_3']}"
-								itemValue="time_hh_3"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_4']}"
-								itemValue="time_hh_4"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_5']}"
-								itemValue="time_hh_5"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_6']}"								
-								itemValue="time_hh_6"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_7']}"								
-								itemValue="time_hh_7"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_8']}"								
-								itemValue="time_hh_8"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_hh_9']}"								
-								itemValue="time_hh_9"></f:selectItem>
-																																
-							<f:selectItem itemLabel="#{labels['time_dd_2']}"
-								itemValue="time_dd_2"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_dd_3']}"
-								itemValue="time_dd_3"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_dd_4']}"
-								itemValue="time_dd_4"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_dd_5']}"
-								itemValue="time_dd_5"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_dd_6']}"
-								itemValue="time_dd_6"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_ww_1']}"
-								itemValue="time_ww_1"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_ww_2']}"
-								itemValue="time_ww_2"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_ww_3']}"
-								itemValue="time_ww_3"></f:selectItem>
-							<f:selectItem itemLabel="#{labels['time_mo_1']}"
-								itemValue="time_mo_1"></f:selectItem>
-						</h:selectOneMenu>
-						-->
 </html>

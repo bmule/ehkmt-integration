@@ -13,12 +13,8 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel
 
 
-/*
- TODO http://johannburkard.de/blog/programming/java/date-time-parsing-formatting-joda-time.html
- Revise date fixing using joda and joda utils
- plus minutes, etc
- */
-public class PhrsScheduleEvent extends DefaultScheduleEvent implements Serializable {
+
+public class PhrsScheduleEvent extends DefaultScheduleEvent implements ScheduleEvent, Serializable {
 	//BasePhrsModel base
 	String status
 	String code

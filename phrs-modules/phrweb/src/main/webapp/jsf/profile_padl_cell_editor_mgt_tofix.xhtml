@@ -57,18 +57,18 @@
 								<f:facet name="input">
 									<h:selectOneRadio value="#{theItem.status}">
 										<f:selectItem itemLabel="I can do this without assistance"
-											itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
+											itemValue="http://www.icardea.at/phrs/instances/ICanDo"/>
 										<f:selectItem itemLabel="I require assistance"
-											itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>
+											itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"/>
 										
 										<f:selectItem itemLabel="Not answered"
-											itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
+											itemValue="default.no_answer.label" />
 									</h:selectOneRadio>
 								</f:facet>
 							</p:cellEditor>
 
 						</p:column>
-		
+                        <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
 				
 						<p:column headerText="#{labels['default.comments.label']}">
 							<p:cellEditor>
@@ -128,8 +128,7 @@ process="@parent"
 						 editing onchange="x{padlBean.store}" valueChangeListener="X{padlBean.store}" 
 											<f:selectItem
 										itemLabel="#{labels['default_activeStatusNotSpecified']}"
-										itemValue="default_activeStatusNotSpecified"
-										noSelectionOption="true"></f:selectItem>
+										itemValue="default_activeStatusNotSpecified"/>
 							<f:selectItems value=" {padlBean.vocabMap.TAG_ACTIVITIES_OF_DAILY_LIVING_STATUS}"
 							
 										var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />									

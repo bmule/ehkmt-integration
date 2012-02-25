@@ -1,36 +1,27 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
-import gr.forth.ics.icardea.pid.PatientIndexConstants;
-import java.io.IOException;
-import java.net.Socket;
-import java.security.Security;
-
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
-
-import gr.forth.ics.icardea.pid.HL7Utils;
-
-
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Ignore;
-import org.junit.Test;
-//import static org.junit.Assert.*;
-
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.app.Connection;
-import ca.uhn.hl7v2.app.ConnectionHub;
 import ca.uhn.hl7v2.app.Initiator;
 import ca.uhn.hl7v2.llp.LLPException;
 import ca.uhn.hl7v2.llp.MinLowerLayerProtocol;
 import ca.uhn.hl7v2.model.Message;
-
 import ca.uhn.hl7v2.model.v25.datatype.CX;
 import ca.uhn.hl7v2.model.v25.message.QBP_Q21;
 import ca.uhn.hl7v2.model.v25.message.RSP_K23;
-import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.model.v25.segment.PID;
+import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.parser.PipeParser;
+import gr.forth.ics.icardea.pid.HL7Utils;
+import gr.forth.ics.icardea.pid.PatientIndexConstants;
+import java.io.IOException;
+import java.net.Socket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Ignore;
+import org.junit.Test;
 
 @Ignore
 public class  PatientIndexFauxTest {

@@ -115,10 +115,10 @@ actionmgtBean used with schedule calendar
 								value="#{actionmgtBean.selected.status}"
 								rendered="#{actionmgtBean.modify eq 'yes'}">
 								<f:selectItem itemLabel="#{labels['action_isActiveStatusTrue']}"
-									itemValue="action_isActiveStatusTrue" noSelectionOption="true"></f:selectItem>
+									itemValue="action_isActiveStatusTrue" />
 								<f:selectItem
 									itemLabel="#{labels['action_isActiveStatusFalse']}"
-									itemValue="action_isActiveStatusFalse" ></f:selectItem>
+									itemValue="action_isActiveStatusFalse" />
 
 							</h:selectOneRadio>
 						</p:outputPanel>					
@@ -166,39 +166,39 @@ actionmgtBean used with schedule calendar
 						
 									</p:outputPanel>
 								</h:panelGrid>-->
-							
+                            <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
 
 								<h:selectOneMenu value="#{actionmgtBean.selected.durationCode}"
 									id="toDate_input"
 									rendered="#{actionmgtBean.modify eq 'yes'}">								
 									<f:selectItem itemLabel="#{labels['time_dd_1']}"
-										itemValue="time_dd_1" noSelectionOption="true"></f:selectItem>
+										itemValue="time_dd_1" />
 									<f:selectItem itemLabel="#{labels['time_mm_5']}"
-										itemValue="time_mm_5"></f:selectItem>
+										itemValue="time_mm_5"/>
 									<f:selectItem itemLabel="#{labels['time_mm_15']}"
-										itemValue="time_mm_15"></f:selectItem>
+										itemValue="time_mm_15"/>
 									<f:selectItem itemLabel="#{labels['time_mm_30']}"
-										itemValue="time_mm_30"></f:selectItem>
+										itemValue="time_mm_30"/>
 									<f:selectItem itemLabel="#{labels['time_mm_45']}"
-										itemValue="time_mm_45"></f:selectItem>
+										itemValue="time_mm_45"/>
 									<f:selectItem itemLabel="#{labels['time_hh_1']}"
-										itemValue="time_hh_1"></f:selectItem>
+										itemValue="time_hh_1"/>
 									<f:selectItem itemLabel="#{labels['time_hh_2']}"
-										itemValue="time_hh_2"></f:selectItem>
+										itemValue="time_hh_2"/>
 									<f:selectItem itemLabel="#{labels['time_hh_3']}"
-										itemValue="time_hh_3"></f:selectItem>
+										itemValue="time_hh_3"/>
 									<f:selectItem itemLabel="#{labels['time_hh_4']}"
-										itemValue="time_hh_4"></f:selectItem>
+										itemValue="time_hh_4"/>
 									<f:selectItem itemLabel="#{labels['time_hh_5']}"
-										itemValue="time_hh_5"></f:selectItem>
+										itemValue="time_hh_5"/>
 									<f:selectItem itemLabel="#{labels['time_hh_6']}"
-										itemValue="time_hh_6"></f:selectItem>
+										itemValue="time_hh_6"/>
 									<f:selectItem itemLabel="#{labels['time_hh_7']}"
-										itemValue="time_hh_7"></f:selectItem>
+										itemValue="time_hh_7"/>
 									<f:selectItem itemLabel="#{labels['time_hh_8']}"
-										itemValue="time_hh_8"></f:selectItem>
+										itemValue="time_hh_8"/>
 									<f:selectItem itemLabel="#{labels['time_hh_9']}"
-										itemValue="time_hh_9"></f:selectItem>
+										itemValue="time_hh_9"/>
 								</h:selectOneMenu>
 							</p:outputPanel>
 							<!-- <f:facet name="header">
@@ -314,23 +314,23 @@ time_mo_1=1 month
 	replace:default_date_from_label,default_date_to_label
  
 		<f:selectItem itemLabel="#{labels['time_dd_2']}"
-			itemValue="time_dd_2"></f:selectItem>
+			itemValue="time_dd_2"/>
 		<f:selectItem itemLabel="#{labels['time_dd_3']}"
-			itemValue="time_dd_3"></f:selectItem>
+			itemValue="time_dd_3"/>
 		<f:selectItem itemLabel="#{labels['time_dd_4']}"
-			itemValue="time_dd_4"></f:selectItem>
+			itemValue="time_dd_4"/>
 		<f:selectItem itemLabel="#{labels['time_dd_5']}"
-			itemValue="time_dd_5"></f:selectItem>
+			itemValue="time_dd_5"/>
 		<f:selectItem itemLabel="#{labels['time_dd_6']}"
-			itemValue="time_dd_6"></f:selectItem>
+			itemValue="time_dd_6"/>
 		<f:selectItem itemLabel="#{labels['time_ww_1']}"
-			itemValue="time_ww_1"></f:selectItem>
+			itemValue="time_ww_1"/>
 		<f:selectItem itemLabel="#{labels['time_ww_2']}"
-			itemValue="time_ww_2"></f:selectItem>
+			itemValue="time_ww_2"/>
 		<f:selectItem itemLabel="#{labels['time_ww_3']}"
-			itemValue="time_ww_3"></f:selectItem>
+			itemValue="time_ww_3"/>
 		<f:selectItem itemLabel="#{labels['time_mo_1']}"
-			itemValue="time_mo_1"></f:selectItem>
+			itemValue="time_mo_1"/>
 											   
 <h:outputLabel value="#{actionmgtBean.selected.allDay}" styleClass="form-dialog-label" /> 
 -->

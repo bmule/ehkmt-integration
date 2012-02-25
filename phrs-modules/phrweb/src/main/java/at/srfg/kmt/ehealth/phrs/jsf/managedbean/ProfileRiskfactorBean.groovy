@@ -1,14 +1,12 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
-import javax.faces.bean.ManagedBean
-import javax.faces.bean.RequestScoped
-
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileRisk
-
+import javax.faces.bean.ManagedBean
+import javax.faces.bean.RequestScoped
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @ManagedBean(name="riskBean")
 @RequestScoped

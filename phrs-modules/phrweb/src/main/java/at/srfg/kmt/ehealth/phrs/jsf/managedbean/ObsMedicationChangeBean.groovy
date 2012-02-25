@@ -1,17 +1,14 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
-import java.util.List
 
-import javax.faces.bean.ManagedBean
-import javax.faces.bean.RequestScoped
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
-
-
+import javax.faces.bean.ManagedBean
+import javax.faces.bean.RequestScoped
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 @ManagedBean(name="odlmed")
 @RequestScoped

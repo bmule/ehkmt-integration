@@ -13,7 +13,6 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
-import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
 import org.apache.commons.beanutils.DynaBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,33 +26,31 @@ public class InteropProcessor {
     public final static String REFERENCE_NOTE_PREFIX = "resourcephr=";
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_PIX_TEST_PATIENT;//Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
-    
-   
-     
-     
+
+
     private boolean printDynabean = false;
-    
 
-    public InteropProcessor() {  
+
+    public InteropProcessor() {
         initInterop();
     }
+
     /**
+     * @param phrsClient
      * @deprecated
-    * @param phrsClient 
-    */
+     */
     public InteropProcessor(PhrsStoreClient phrsClient) {
-    
+
         initInterop();
     }
 
-    protected void initInterop() {   
-       //setupTest();
+    protected void initInterop() {
+        //setupTest();
 
     }
 
 
-
-// +++++++++++++++ start helpers
+    // +++++++++++++++ start helpers
     public CommonDao getCommonDao() {
         return getPhrsStoreClient().getCommonDao();
     }
@@ -61,10 +58,9 @@ public class InteropProcessor {
     public InteropClients getInteropClients() {
         return getPhrsStoreClient().getInteropClients();
     }
+
     /**
-     * 
-     * 
-     * @param repositoryObject 
+     * @param repositoryObject
      */
     // TODO Remove after deprecating InteropAccessService
     public void sendMessages(Object repositoryObject) {
@@ -128,27 +124,26 @@ public class InteropProcessor {
 // +++++++++++++++ end helpers
 
     /**
-     *
      * @param ownerUri
      * @param phrsClass
      * @param onlyNewMessages - true collect only new messages; false - all
-     * message, known and unknown to phrweb portal
+     *                        message, known and unknown to phrweb portal
      * @return
      */
     public Set<DynaBean> findInteropMessagesForUser(String ownerUri, String phrsClass, boolean onlyNewMessages) {
         Set<DynaBean> beans = new HashSet<DynaBean>();
-        
+
         if (ownerUri != null && phrsClass != null) {
             try {
                 //FIXID
-                String protocolId= getProtocolId(ownerUri);
-                if(protocolId !=null && ! protocolId.isEmpty()){
-                // ok 
+                String protocolId = getProtocolId(ownerUri);
+                if (protocolId != null && !protocolId.isEmpty()) {
+                    // ok
                 } else {
-                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+ownerUri+" phrClass="+phrsClass);
+                    LOGGER.error("No protocolID yet for User, no send messages for ownerUri=" + ownerUri + " phrClass=" + phrsClass);
                     return beans;
                 }
-                
+
                 final Map<String, String> queryMap = new HashMap<String, String>();
 
                 queryMap.put(Constants.RDFS_TYPE, phrsClass);
@@ -174,7 +169,7 @@ public class InteropProcessor {
                             try {
                                 referenceNote = DynaUtil.getStringProperty(dynaBean, Constants.SKOS_NOTE);
                             } catch (Exception e) {
-                                 LOGGER.error(e.getMessage(),e);
+                                LOGGER.error(e.getMessage(), e);
 
                             }
                             if (referenceNote != null) {
@@ -191,19 +186,20 @@ public class InteropProcessor {
                                 }
                             }
                         } catch (Exception e) {
-                             LOGGER.error(e.getMessage(),e);
+                            LOGGER.error(e.getMessage(), e);
 
                         }
                     }
                 }
             } catch (Exception e) {
-                 LOGGER.error(e.getMessage(),e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return beans;
 
     }
- //private MedicationClient medicationClient   = phrsClient.getInteropClients().getMedicationClient();
+
+    //private MedicationClient medicationClient   = phrsClient.getInteropClients().getMedicationClient();
     public String buildNullFrequency(MedicationClient medicationClient) {
         String value = null;
         try {
@@ -277,10 +273,10 @@ public class InteropProcessor {
         return newValue;
     }
 
-    public String getProtocolId(String ownerUri){   
-       return  getCommonDao().getProtocolId(ownerUri);     
+    public String getProtocolId(String ownerUri) {
+        return getCommonDao().getProtocolId(ownerUri);
     }
-    
+
     public Map<String, String> sendMedicationMessage(MedicationTreatment domain) {
         //MedicationTreatment domain = (MedicationTreatment) resource;
 
@@ -292,24 +288,24 @@ public class InteropProcessor {
          *
          */
         //create reference to phrweb object for note
-        
+
         //FIXID
         Map<String, String> messageIdMap = new HashMap<String, String>();
         BasePhrsModel res = (BasePhrsModel) domain;
-        
+
         String owner = res.getOwnerUri();
-        
-        String protocolId=getProtocolId(owner);
-        
-        if(protocolId !=null && ! protocolId.isEmpty()){
-           // ok 
+
+        String protocolId = getProtocolId(owner);
+
+        if (protocolId != null && !protocolId.isEmpty()) {
+            // ok
         } else {
-            LOGGER.error("No protocolID yet for User, no send messages for ownerUri="+owner);
+            LOGGER.error("No protocolID yet for User, no send messages for ownerUri=" + owner);
             return messageIdMap;
         }
-        
+
         String messageId = null;
-        
+
 
         String resourceType = domain.getClass().getCanonicalName();
 
@@ -330,8 +326,6 @@ public class InteropProcessor {
         dateStringEnd = dateStringEnd != null ? dateStringEnd : null;
 
         String theParentId = res.getResourceUri();
-        
-
 
         try {
 
@@ -353,29 +347,49 @@ public class InteropProcessor {
             adminRoute = tranformMedicationAdminRoute(adminRoute, doseUnits);
 
             MedicationClient medicationclient = getInteropClients().getMedicationClient();
+            String productCode = domain.getProductCode();
 
-            String interopRef = findMessageWithReference(owner, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
+            String interopRef = null;
+            //create new message each time rather than update.
+            //findMessageWithReference(owner, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
 
-            String actionLabel=interopRef==null ? "CREATE" : "UPDATE ref="+interopRef;
-            LOGGER.debug(" Send Interop Message"+actionLabel+ " resourceType "+resourceType+" owner "+owner+" refnote "+" status "+status+" dateStart "+dateStringStart
-                    +" dateEnd "+dateStringEnd+" doseVale "+dosageValue+" doseUnits "+doseUnits+ " drugName "+name);
+            String actionLabel = interopRef == null ? "CREATE" : "UPDATE ref=" + interopRef;
+
+            LOGGER.debug(" Send Interop Message" + actionLabel + " resourceType " + resourceType + " owner " + owner + " refnote " + " status " + status + " dateStart " + dateStringStart
+                    + " dateEnd " + dateStringEnd + " doseValue " + dosageValue + " doseUnits " + doseUnits + " drugName " + name + " productCode " + productCode);
 
             if (interopRef == null) {
                 String referenceNote = createReferenceNote(domain.getResourceUri());
 
-                LOGGER.debug("Interop referenceNote " +referenceNote);
+                LOGGER.debug("Interop referenceNote " + referenceNote);
 
-                messageId = medicationclient.addMedicationSign(
-                        protocolId,//FIXID owner,
-                        referenceNote,
-                        status,
-                        dateStringStart,
-                        dateStringEnd,//dateStringEnd,
-                        medicationclient.buildNullFrequency(),//doseInterval, frequency,
-                        adminRoute,
-                        dosageValue,
-                        doseUnits,
-                        name);
+                if (productCode != null && !productCode.isEmpty()) {
+
+                    messageId = medicationclient.addMedicationSign(
+                            protocolId,//FIXID owner,
+                            referenceNote,
+                            status,
+                            dateStringStart,
+                            dateStringEnd,//dateStringEnd,
+                            medicationclient.buildNullFrequency(),//doseInterval, frequency,
+                            adminRoute,
+                            dosageValue,
+                            doseUnits,
+                            name,
+                            productCode);
+                } else {
+                    messageId = medicationclient.addMedicationSign(
+                            protocolId,//FIXID owner,
+                            referenceNote,
+                            status,
+                            dateStringStart,
+                            dateStringEnd,//dateStringEnd,
+                            medicationclient.buildNullFrequency(),//doseInterval, frequency,
+                            adminRoute,
+                            dosageValue,
+                            doseUnits,
+                            name);
+                }
 
                 if (messageId != null && messageId.length() > 0) {
 
@@ -383,7 +397,7 @@ public class InteropProcessor {
                 }
             } else {
 
- 
+
                 //update
                 updateMessageMedication(theParentId, interopRef, Constants.HL7V3_STATUS, status);
                 updateMessageMedication(theParentId, interopRef, Constants.HL7V3_START_DATE, dateStringStart);
@@ -395,7 +409,7 @@ public class InteropProcessor {
 
                 //Drug name change requires code. Dont update. updateMessageMedication(theParentId, interopRef, HL7V3_ADMIN_ROUTE, adminRoute);                                           
                 //This needs a URI
-                String newDosageURI = buildMedicationDosage(medicationclient,dosageValue, doseUnits);
+                String newDosageURI = buildMedicationDosage(medicationclient, dosageValue, doseUnits);
 
 
                 //PHRS_MEDICATION_DOSAGE if updating or HL7V3_DOSAGE if retrieving from EHR data
@@ -421,45 +435,44 @@ public class InteropProcessor {
                     updateMessageMedication(theParentId, interopRef, Constants.HL7V3_END_DATE, dateStringEnd);
                 }
             }
-          //Notify all,this is a shotgun notification for all care provision codes
-          //Issue, if the protocolId is not yet defined, then we try to notify
-          LOGGER.debug("Sening interop message, Prepare to notify for owner="+owner);
-          
-          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId);
-          
+            //Notify all,this is a shotgun notification for all care provision codes
+            //Issue, if the protocolId is not yet defined, then we try to notify
+            LOGGER.debug("Sening interop message, Prepare to notify for owner=" + owner);
+
+            getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId);
+            //          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, resourceType);
+
         } catch (RuntimeException e) {
-             LOGGER.error(e.getMessage(),e);
+            LOGGER.error(e.getMessage(), e);
 
         } catch (TripleException e) {
-             LOGGER.error(e.getMessage(),e);
+            LOGGER.error(e.getMessage(), e);
         } catch (Exception e) {
-             LOGGER.error(e.getMessage(),e);
+            LOGGER.error(e.getMessage(), e);
         }
 
         return messageIdMap;
     }
 
     /**
-     *
      * @param ownerUri
      * @param resourceUri
      * @param categoryCode - this can be null, it is used to select a specific
-     * code within a phrsClass e.g. ObservationClass includes resources by code
-     * for Body height, symptom
-     * @param phrsClass - The Phrs class Constants.PHRS_MEDICATION_CLASS,
-     * PHRS_VITAL_SIGN_CLASS, PHRS_OBSERVATION_ENTRY_CLASS
+     *                     code within a phrsClass e.g. ObservationClass includes resources by code
+     *                     for Body height, symptom
+     * @param phrsClass    - The Phrs class Constants.PHRS_MEDICATION_CLASS,
+     *                     PHRS_VITAL_SIGN_CLASS, PHRS_OBSERVATION_ENTRY_CLASS
      * @return
      */
     public String findMessageWithReference(String ownerUri, String resourceUri, String phrsClass, String categoryCode) {
         //owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS,categoryCode
         //String value = findInteropMessageWithReferenceTag(ownerUri, resourceUri, phrsClass, categoryCode);
         return findMessageWithReference(ownerUri, resourceUri, phrsClass);
-       
+
     }
 
     /**
-     *
-     * @param ownerUri  is used to find ProtocolId
+     * @param ownerUri    is used to find ProtocolId
      * @param resourceUri
      * @param phrsClass
      * @return
@@ -494,13 +507,13 @@ public class InteropProcessor {
                             }
 
                         } catch (Exception e) {
-                            LOGGER.error(e.getMessage(),e);
+                            LOGGER.error(e.getMessage(), e);
                             // LOGGER.error(" message error, interop ownerUri= "+ownerUri+" messageResourceUri="+messageResourceUri, e)
                         }
                     }
                 }
             } catch (Exception e) {
-                 LOGGER.error(e.getMessage(),e);
+                LOGGER.error(e.getMessage(), e);
             }
         }
 
@@ -517,48 +530,49 @@ public class InteropProcessor {
         }
         return referenceNote;
     }
-        /*
-    public void createManufactureName(String subjectUri, String drugName, String drugCode) {
-        MedicationClient medicationClient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
 
-        String newDrugProductUri = null;
-        try {
-            newDrugProductUri = medicationClient.buildManufacturedProduct(drugName, drugCode);
-        } catch (TripleException e) {
-             LOGGER.error(e.getMessage(),e);
-        } catch (Exception e) {
+    /*
+   public void createManufactureName(String subjectUri, String drugName, String drugCode) {
+       MedicationClient medicationClient = PhrsStoreClient.getInstance().getInteropClients().getMedicationClient();
+
+       String newDrugProductUri = null;
+       try {
+           newDrugProductUri = medicationClient.buildManufacturedProduct(drugName, drugCode);
+       } catch (TripleException e) {
             LOGGER.error(e.getMessage(),e);
-        }
+       } catch (Exception e) {
+           LOGGER.error(e.getMessage(),e);
+       }
 
 
-        try {
-            // update 
-            medicationClient.updateMedication(
-                    subjectUri,
-                    //Constants.MANUFACTURED_PRODUCT,
-                    PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI,
-                    newDrugProductUri);
-        } catch (TripleException e) {
-             LOGGER.error(e.getMessage(),e);
-        } catch (Exception e) {
-             LOGGER.error(e.getMessage(),e);
-        }
-    }
-     */
+       try {
+           // update
+           medicationClient.updateMedication(
+                   subjectUri,
+                   //Constants.MANUFACTURED_PRODUCT,
+                   PhrsConstants.MEDICATION_PROPERTY_MANUFACTURED_PRODUCT_URI,
+                   newDrugProductUri);
+       } catch (TripleException e) {
+            LOGGER.error(e.getMessage(),e);
+       } catch (Exception e) {
+            LOGGER.error(e.getMessage(),e);
+       }
+   }
+    */
     public String transformStatus(String status) {
-        
-        String out=   InteropTermTransformer.transformStatus(status);
+
+        String out = InteropTermTransformer.transformStatus(status);
         return out;
     }
 
     public String transformCode(String code) {
-      
-        String out=   InteropTermTransformer.transformCode(code);
+
+        String out = InteropTermTransformer.transformCode(code);
         return out;
     }
 
     public String transformCategory(String category, String type) {
-        
+
         String out = InteropTermTransformer.transformCategory(category);
         return out;
     }
@@ -595,15 +609,16 @@ public class InteropProcessor {
 
     /**
      * Import messages
+     *
      * @param ownerUri
      * @param phrsClass
      * @param importMessage
-     * @param phrResources
-     * @return
+     * @param interopMessageIds    pass a non null list to collect interopMessageIds
+     * @return  transformed PHR resources
      */
-    public List<String> importNewMessages(String ownerUri, String phrsClass, boolean importMessage, List phrResources) {
+    public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage, List<String> interopMessageIds) {
 
-        List<String> list = new ArrayList<String>();
+        List transformedResources = new ArrayList();
         if (ownerUri != null && phrsClass != null) {
 
             try {
@@ -624,23 +639,23 @@ public class InteropProcessor {
                             messageUri = dynaBean.getDynaClass().getName();
 
                             //http://www.icardea.at/phrs#owner
-                            String owner = DynaUtil.getStringProperty(dynaBean, Constants.OWNER);
-
-                            String creator = DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
+                            //protocol ID, not phrs ownerUri
+                            String protocolId = DynaUtil.getStringProperty(dynaBean, Constants.OWNER);
+                            LOGGER.debug(" importNewMessages for protocolId interop ownerUri= " + ownerUri+" protocolId "+protocolId);
+                            //String creator = DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
 
                             Object repositoryObject = transformInteropMessage(ownerUri, phrsClass, dynaBean, messageUri);
 
                             if (repositoryObject != null) {
 
-                                if (dynaBean.getDynaClass().getName() != null) {
-                                    //add only the URI
-                                    list.add(dynaBean.getDynaClass().getName());
-                                }
+                                transformedResources.add(repositoryObject);
+
                                 //collecting if caller needs it
-                                if (phrResources != null) {
-                                    phrResources.add(repositoryObject);
+                                if (interopMessageIds != null && dynaBean.getDynaClass()!=null && dynaBean.getDynaClass().getName() != null) {
+                                    interopMessageIds.add(dynaBean.getDynaClass().getName());     //add only the URI
                                 }
                             }
+                           //Import and mark the interop resource
                             if (importMessage && repositoryObject != null) {
                                 //save transformed resource to local store
 
@@ -667,27 +682,27 @@ public class InteropProcessor {
                             }
 
                         } catch (Exception e) {
-                            
+
                             LOGGER.error(" message error, interop ownerUri= " + ownerUri, e);
                         }
                     }
                 }
             } catch (Exception e) {
-                
+
                 LOGGER.error("", e);
             } catch (java.lang.Error e) {
-           
+
                 LOGGER.error("possible sesame error", e);
             }
         }
 
 
-        return list;
+        return  transformedResources;
 
     }
 
+
     /**
-     *
      * @param givenOwnerUri
      * @param messageOwner
      * @return
@@ -707,149 +722,145 @@ public class InteropProcessor {
 
 
     /**
-     *   Transform message to medication resource
+     * Transform message to medication resource
+     *
      * @param givenOwnerUri
      * @param phrsClass
      * @param dynabean
      * @param messageResourceUri
      * @return a new phr resource the property originImported is set to True.
-     * This is a transient property that is detected later when persisting the
-     * imported resource for the first time
-     *
-     *
+     *         This is a transient property that is detected later when persisting the
+     *         imported resource for the first time
      */
     public Object transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
         Object theObject = null;
         //Import medications
         if (Constants.PHRS_MEDICATION_CLASS.equals(phrsClass)) {
-            theObject = this.transformInteropMedicationMessage(givenOwnerUri, phrsClass, dynabean, messageResourceUri);
+            theObject = transformInteropMedicationMessage(givenOwnerUri, phrsClass, dynabean, messageResourceUri);
         }
         return theObject;
     }
 
 
     /**
-     *
      * @param givenOwnerUri
      * @param phrsClass
      * @param dynabean
      * @param messageResourceUri
      * @return
      */
-    public Object transformInteropMedicationMessage(String givenOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
+    public Object transformInteropMedicationMessage(String phrOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
         Object theObject = null;
-        try {
+        if (dynabean != null && phrsClass != null) {
+            try {
 
-            if (dynabean != null && phrsClass != null) {
+
                 LOGGER.debug("phrsClass=" + phrsClass + " bean properties =");
 
                 //switch (phrsClass) {
                 //   case Constants.PHRS_MEDICATION_CLASS:
-                String messageOwner = DynaUtil.getStringProperty(dynabean, Constants.OWNER, null);
-                if (messageOwner != null) {
-                    messageOwner = messageOwner.trim();
+                String protocolId = DynaUtil.getStringProperty(dynabean, Constants.OWNER, null);
+                if (protocolId != null) {
+                    protocolId = protocolId.trim();
                 }
-                //Map props = bean.getProperties() //check ownerUri of message
 
-                //FIXID need to compare owner-->PID to messageOwner PID
-                //if (!compareOwners(givenOwnerUri, messageOwner)) {
-                //    LOGGER.error("Message ownerUri does not match given givenOwnerUri=" + givenOwnerUri + " med.OwnerUri=");
+                // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
+                // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
+                // Constants.HL7V3_DRUG_NAME Constants.HL7V3_CODE
 
-                //} else {
+                MedicationTreatment med = new MedicationTreatment();
+                med.setNewImport(true);
 
-                    // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
-                    // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
-                    // Constants.HL7V3_DRUG_NAME Constants.HL7V3_CODE
+                med.setOwnerUri(phrOwnerUri);
+                med.setPID(protocolId);//which PID
 
-                    MedicationTreatment med = new MedicationTreatment();
-                    med.setNewImport(true);
+                med.setCreatorUri(DynaUtil.getStringProperty(dynabean, Constants.CREATOR, "EHR"));//FIXXME
 
-                    med.setOwnerUri(messageOwner);
+                String stdStatus = DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_STATUS, null);
 
-                    med.setCreatorUri(DynaUtil.getStringProperty(dynabean, Constants.CREATOR, "EHR"));//FIXXME 
+                //keep original
+                med.setStatusStandard(stdStatus);
+                //med.status = "medicationSummary_medicationStatus_true"
+                //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)
 
-                    String stdStatus = DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_STATUS, null);//TODO default
+                med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS));
+                //there is no code here, but it is likely a dynabean
+                //deprecated med.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE, null));
+                //check the origin of this message....
+                med.setOrigin(DynaUtil.getStringProperty(dynabean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR));
 
-                    med.setStatusStandard(stdStatus); //med.status = "medicationSummary_medicationStatus_true"
-                    //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)
+                med.setOriginStatus(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED);
 
-                    med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS));
-                    //there is no code here, but it is likely a dynabean
-                    //deprecated med.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE, null));//TODO is this drug code?
-                    //check the origin of this message....
-                    med.setOrigin(DynaUtil.getStringProperty(dynabean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR));
-
-                    med.setOriginStatus(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED);
-
-                    med.setExternalReference(messageResourceUri);
+                med.setExternalReference(messageResourceUri);
 
 
-                    Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
-                    String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
-                    med.setTitle(medName);
-                    String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
-                    med.setProductCode(productCode);
+                Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
+                String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
+                med.setTitle(medName);
+                String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
+                med.setProductCode(productCode);
 
-                    med.getTreatmentMatrix().setAdminRoute(DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_ADMIN_ROUTE, Constants.HL7V3_ORAL_ADMINISTRATION));
-                    //this is a uri to another dynabean with dosage and units
+                med.getTreatmentMatrix().setAdminRoute(DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_ADMIN_ROUTE, Constants.HL7V3_ORAL_ADMINISTRATION));
+                //this is a uri to another dynabean with dosage and units
 
-                    //ISSUE check DOSAGE is QUANTITY but we do not need double? Keep as String
-                    //ISSUE check dosage per unit not received from EHR, but web form no longer asks.
+                //ISSUE check DOSAGE is QUANTITY but we do not need double? Keep as String
+                //ISSUE check dosage per unit not received from EHR, but web form no longer asks.
 
-                    //med.getTreatmentMatrix().setDosage(0d);
+                //med.getTreatmentMatrix().setDosage(0d);
 
-                    Map<String, String> doseAttrs = getMedicationDosageAttributes(dynabean);
+                Map<String, String> doseAttrs = getMedicationDosageAttributes(dynabean);
 
-                    String doseQuantity = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_VALUE, "0");
+                String doseQuantity = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_VALUE, "0");
 
-                    Double dosage = convertDouble(doseQuantity);
-                    med.getTreatmentMatrix().setDosage(dosage != null ? dosage : 0d);
-                    //med.getTreatmentMatrix().setDosageQuantity(doseQuantity);
+                Double dosage = convertDouble(doseQuantity);
+                med.getTreatmentMatrix().setDosage(dosage != null ? dosage : 0d);
+                //med.getTreatmentMatrix().setDosageQuantity(doseQuantity);
 
-                    String doseUnits = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_UNIT, "http://www.icardea.at/phrs/instances/pills");
-                    med.getTreatmentMatrix().setDosageUnits(doseUnits);
+                String doseUnits = getMapValue(doseAttrs, Constants.HL7V3_DOSAGE_UNIT, "http://www.icardea.at/phrs/instances/pills");
+                med.getTreatmentMatrix().setDosageUnits(doseUnits);
 
-                    //FIXXME - TOD and interval are not expected from EHR.  this create the frequency node
-                    String interval = "http://www.icardea.at/phrs/instances/other";
-                    med.getTreatmentMatrix().setDosageInterval(interval);
+                //FIXXME - TOD and interval are not expected from EHR.  this create the frequency node
+                String interval = "http://www.icardea.at/phrs/instances/other";
+                med.getTreatmentMatrix().setDosageInterval(interval);
 
-                    String tod = "http://www.icardea.at/phrs/instances/NotSpecified";
-                    med.getTreatmentMatrix().setDosageTimeOfDay(tod);
-
-
-                    //dates. always need a start date
-                    String dateBegin = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_START);
-                    //set new date if not found
-                    Date beginDate = transformDateFromMessage(dateBegin, new Date());	//HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
-
-                    String dateEnd = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_END, null);
-                    Date endDate = transformDateFromMessage(dateEnd, (Date) null);		//HealthyUtils.formatDate( dateEnd, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)//transformDate(dateEnd)
-
-                    med.setBeginDate(beginDate);
-                    med.setEndDate(endDate);
+                String tod = "http://www.icardea.at/phrs/instances/NotSpecified";
+                med.getTreatmentMatrix().setDosageTimeOfDay(tod);
 
 
-                    med.setCreateDate(new Date());
-                    med.setModifyDate(med.getCreateDate());
-                    med.setType(MedicationTreatment.class.toString());
+                //dates. always need a start date
+                String dateBegin = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_START);
+                //set new date if not found
+                Date beginDate = transformDateFromMessage(dateBegin, new Date());    //HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
 
-                    theObject = med;
+                String dateEnd = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_END, null);
+                Date endDate = transformDateFromMessage(dateEnd, (Date) null);        //HealthyUtils.formatDate( dateEnd, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)//transformDate(dateEnd)
 
-                    if (med != null) {
-                        //System.out.println("medication imported resourceUri=" + med.getResourceUri() + " name=" + med.getTitle() + " code=" + med.getProductCode());
-                        LOGGER.debug("medication imported  name=" + med.getTitle() + " code=" + med.getProductCode());
-                    }
+                med.setBeginDate(beginDate);
+                med.setEndDate(endDate);
+
+
+                med.setCreateDate(new Date());
+                med.setModifyDate(med.getCreateDate());
+                med.setType(MedicationTreatment.class.toString());
+
+                theObject = med;
+
+                if (med != null) {
+                    //System.out.println("medication imported resourceUri=" + med.getResourceUri() + " name=" + med.getTitle() + " code=" + med.getProductCode());
+                    LOGGER.debug("medication imported  name=" + med.getTitle() + " code=" + med.getProductCode());
+                }
                 //}
 
-            }
-        } catch (Exception e) {
 
-            if (dynabean != null) {
-                LOGGER.error(
-                        "Interop Message transformation failed, ownerUri=" + givenOwnerUri + " phrsClass=" + phrsClass, e);
-            } else {
-                LOGGER.error("Interop Message transformation failed, dynabean NULL, ownerUri="
-                        + givenOwnerUri + " phrsClass=" + phrsClass, e);
+            } catch (Exception e) {
+
+                if (dynabean != null) {
+                    LOGGER.error(
+                            "Interop Message transformation failed, phrOwnerUri=" + phrOwnerUri + " phrsClass=" + phrsClass, e);
+                } else {
+                    LOGGER.error("Interop Message transformation failed, dynabean NULL. ownerUri="
+                            + phrOwnerUri + " phrsClass=" + phrsClass, e);
+                }
             }
         }
         return theObject;
@@ -878,8 +889,8 @@ public class InteropProcessor {
      * @param medicationDynabean
      * @return
      */
-    public Map<String,String> getMedicationDosageAttributes(DynaBean medicationDynabean) {
-        Map<String,String> map = null;
+    public Map<String, String> getMedicationDosageAttributes(DynaBean medicationDynabean) {
+        Map<String, String> map = null;
         try {
             DynaBean dynaBean = (DynaBean) DynaUtil.getDynaBeanProperty(medicationDynabean, Constants.HL7V3_DOSAGE); //http://www.icardea.at/phrs/hl7V3#dosage  (medicationDynabean);
 
@@ -888,22 +899,22 @@ public class InteropProcessor {
                 //DynaBeanClient dbc = PhrsStoreClient.getInstance().getInteropClients().getDynaBeanClient();
                 //DynaBean dynaBean = dbc.getDynaBean(uri);
 
-                    String dosage = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DOSAGE_VALUE); //Constants.HL7V3_DOSAGE
-                    String units = DynaUtil.getValueResourceUri(dynaBean, Constants.HL7V3_DOSAGE_UNIT);
-                    map = new HashMap<String,String>();
+                String dosage = DynaUtil.getStringProperty(dynaBean, Constants.HL7V3_DOSAGE_VALUE); //Constants.HL7V3_DOSAGE
+                String units = DynaUtil.getValueResourceUri(dynaBean, Constants.HL7V3_DOSAGE_UNIT);
+                map = new HashMap<String, String>();
 
-                    if (dosage != null) {
-                        dosage = dosage.trim();
-                    }
-                    if (dosage != null && dosage.length() > 0) {
-                        map.put(Constants.HL7V3_DOSAGE_VALUE, dosage);
-                    }
-                    if (units != null) {
-                        units = units.trim();
-                    }
-                    if (units != null && units.length() > 0) {
-                        map.put(Constants.HL7V3_DOSAGE_UNIT, units);
-                    }
+                if (dosage != null) {
+                    dosage = dosage.trim();
+                }
+                if (dosage != null && dosage.length() > 0) {
+                    map.put(Constants.HL7V3_DOSAGE_VALUE, dosage);
+                }
+                if (units != null) {
+                    units = units.trim();
+                }
+                if (units != null && units.length() > 0) {
+                    map.put(Constants.HL7V3_DOSAGE_UNIT, units);
+                }
 
             }
 
@@ -942,8 +953,8 @@ public class InteropProcessor {
     //    MANUFACTURED_LABEL_DRUG = 
     //            ICARDEA_HL7V3_NS + "#manufacturedLabeledDrug";
     //    
-    public Map<String,String> getMedicationNameAttributes(DynaBean medicationDynabean) {
-        Map<String,String> map = null;
+    public Map<String, String> getMedicationNameAttributes(DynaBean medicationDynabean) {
+        Map<String, String> map = null;
         try {
             DynaBean dynaBeanMfgProduct = DynaUtil.getDynaBeanProperty(
                     medicationDynabean,
@@ -979,7 +990,7 @@ public class InteropProcessor {
                         drugId = DynaUtil.getStringProperty(codeBean, Constants.HL7V3_VALUE);
                     }
 
-                    map = new HashMap<String,String>();
+                    map = new HashMap<String, String>();
 
                     if (name != null) {
                         name = name.trim();
@@ -1012,7 +1023,6 @@ public class InteropProcessor {
      * @param date
      * @param dateTime
      * @return
-     *
      */
     public static Date transformDateFromMessage(String dateMessage, Date defaultDate) {
         Date theDate = null;
@@ -1029,7 +1039,7 @@ public class InteropProcessor {
         return theDate;
     }
 
-    public String buildMedicationDosage(MedicationClient medicationClient,String dosageValue, String dosageUnits) {
+    public String buildMedicationDosage(MedicationClient medicationClient, String dosageValue, String dosageUnits) {
         String newDosageURI = null;
         try {
             newDosageURI = medicationClient.buildDosage(dosageValue, dosageUnits);
@@ -1042,7 +1052,6 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param resourceUri
      * @param interopResourceId
      * @param predicate
@@ -1064,7 +1073,7 @@ public class InteropProcessor {
      * This cannot not be used directly for the drug name and code or dosage and
      * dosage units - these nodes must be created and the URI assigned here
      *
-     * @param resourceUri - not used directly to update the
+     * @param resourceUri       - not used directly to update the
      * @param interopResourceId
      * @param predicate
      * @param newValue
@@ -1082,12 +1091,10 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param interopResourceId
      * @param predicate
      * @param newValue
      * @throws Exception
-     *
      */
     public void updateInteropStatement(String interopResourceId, String predicate, String newValue)
             throws Exception {
@@ -1098,8 +1105,7 @@ public class InteropProcessor {
     }
 
     /**
-     *
-     * @param phrResourceUri - currently not needed
+     * @param phrResourceUri    - currently not needed
      * @param interopResourceId
      * @param predicate
      * @param newValue
@@ -1114,7 +1120,6 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param interopResourceId
      * @param value
      * @throws Exception
@@ -1126,7 +1131,6 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param resourceUri
      * @param interopResourceId
      * @param predicate
@@ -1143,9 +1147,10 @@ public class InteropProcessor {
         }
         return success;
     }
-     /**
-        @deprecated
-      */
+
+    /**
+     * @deprecated
+     */
     public void registerProtocolId(String owneruri, String protocolId, String namespace) {
         //phrsStoreClient.getInteropClients().getActorClient().register
         if (namespace == null) {

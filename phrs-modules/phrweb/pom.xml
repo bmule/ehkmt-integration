@@ -29,13 +29,13 @@
             <url>http://repository.primefaces.org</url>
             <layout>default</layout>
         </repository>
-        
+         <!--
         <repository>
             <id>dyuproject-repo</id>
             <name>dyuproject-repo</name>
             <url>http://dyuproject.googlecode.com/svn/repos/maven2</url>
         </repository>
-        
+          -->
         <repository>
             <id>guice-maven</id>
             <name>Guice Maven Repository</name>
@@ -117,7 +117,42 @@
     </properties>
 
     <dependencies>
-        
+        <!--
+        <dependency>
+            <groupId>com.dyuproject</groupId>
+            <artifactId>dyuproject-openid</artifactId>
+            <version>1.1.7</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dyuproject</groupId>
+            <artifactId>dyuproject-web</artifactId>
+            <version>1.1.7</version>
+            <scope>compile</scope>
+        </dependency>-->
+
+        <dependency>
+            <groupId>org.openid4java</groupId>
+            <artifactId>openid4java-consumer</artifactId>
+            <version>0.9.6</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <!--PHR System dependencies-->
 
         <dependency>
@@ -151,6 +186,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>phrs-message-dispatcher</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>phrs-soap-pcc09ws</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -247,19 +288,7 @@
             <scope>compile</scope>
         </dependency>
         
-        <dependency>
-            <groupId>com.dyuproject</groupId>
-            <artifactId>dyuproject-openid</artifactId>
-            <version>1.1.7</version>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>com.dyuproject</groupId>
-            <artifactId>dyuproject-web</artifactId>
-            <version>1.1.7</version>
-            <scope>compile</scope>
-        </dependency>
+
         
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
@@ -528,6 +557,7 @@ mvn install:install-file  -Dfile=icardea-atnalog-client-1.0-SNAPSHOT.jar -Dgroup
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
+
 <!-- if sources are in a different file structure it cannot find the parent pom and this was done.
 In this case, delete the existing maven entry in the local repository because the pom refers to a parent unknown to 
 this pom. This is the pom from the install:install

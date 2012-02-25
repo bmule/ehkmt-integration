@@ -1,38 +1,22 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services
 
-import static at.srfg.kmt.ehealth.phrs.Constants.*
+//import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
 
-import java.util.Date
-import java.util.Map
-
-import org.apache.commons.beanutils.DynaBean
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import at.srfg.kmt.ehealth.phrs.Constants
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
-
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil
-import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
-import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
-//import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
-
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving
-
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileRisk
-
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
-
-import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
-
 import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil
+import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
+import org.apache.commons.beanutils.DynaBean
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import static at.srfg.kmt.ehealth.phrs.Constants.*
+import at.srfg.kmt.ehealth.phrs.model.baseform.*
 
 /**
  * Used by the PhrsStoreClient to send messages whenever an appropriate resource is saved

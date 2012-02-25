@@ -239,13 +239,19 @@ public class InteropClients {
         }
     }
 
-
-//        public void notifyInteropMessageSubscribersByProtocolId(String protocolId, String resourceType) {
-//        try {
-//            notifyInteropMessageSubscribers(null, protocolId);
-//        } catch (Exception e) {
-//            LOGGER.error("Failed to Notify subscriptions" + e.getMessage(), e);
-//        } }
+/**
+ * 
+ * @param protocolId
+ * @param resourceType 
+ */
+   public void notifyInteropMessageSubscribersByProtocolId(String protocolId, String resourceType) {
+        try {
+            //future type will inform specific single or multiple requests
+            notifyInteropMessageSubscribers(null, protocolId);
+        } catch (Exception e) {
+            LOGGER.error("Failed to Notify subscriptions" + e.getMessage(), e);
+        } 
+    }
 
 
     /**

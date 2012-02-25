@@ -8,16 +8,12 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.PHRSRequestClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
-import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
 
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.*;
 
 import org.apache.commons.beanutils.DynaBean;
@@ -26,16 +22,11 @@ import org.junit.*;
 import static org.junit.Assert.*;
 
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
-import com.google.code.morphia.query.Query;
 
-import javax.xml.bind.JAXBException;
-
-public class PhrsClientInterop {
+public class PhrsClientInteropTest {
 
     public static final String NOTE = "to import";
     public static final String USER = "user_unittest_PhrsClientInterop";//MedicationClientUnitTest.class.getName();
@@ -49,7 +40,7 @@ public class PhrsClientInterop {
     private static boolean cleanEnv = false;
     private static PhrFederatedUser pfu;
 
-    public PhrsClientInterop() {
+    public PhrsClientInteropTest() {
     }
 
     @BeforeClass
@@ -421,7 +412,7 @@ public class PhrsClientInterop {
 
     @Test
     public void testCoreTestDataWithNotify() {
-        makePHRSRequest_PCC09("191", "COBSCAT");
+        //makePHRSRequest_PCC09("191", "COBSCAT");
 
         CoreTestData.createTestUserData();  //on user PID 191, ownerUri= phrtest
         CommonDao commonDao = phrsClient.getCommonDao();
@@ -622,7 +613,7 @@ public class PhrsClientInterop {
     public DynaBeanClient getDynaBeanClient() {
         return phrsClient.getInteropClients().getDynaBeanClient();
     }
-
+    
     @Test
     public void testNotifyInteropMessageSubscribers() throws Exception{//String selectedCareProvisionCode, String protocolId) throws Exception {
         
@@ -632,10 +623,11 @@ public class PhrsClientInterop {
         DynaBeanClient beanClient = getDynaBeanClient();
         final Iterable<String> resources = requestClient.getAllPHRSRequests();
         int count=0;
+       
         for (String resource : resources) {
-            
+           
             final DynaBean request = beanClient.getDynaBean(resource);
-             count=count+1;
+            count++;
             System.out.println("--------- count="+count);
            
             boolean sendNotification = false;
@@ -681,7 +673,7 @@ public class PhrsClientInterop {
                 int port = ConfigurationService.getInstance().getSubscriberSocketListnerPort();
                 System.out.println("--------------");
                 System.out.println("OK CAN NOTIFY pid=" + id + " careProvisionCode=" + careProvisionCode);
-                System.out.println("....Properties {} " + properties);
+                System.out.println("....Properties  " + properties);
                 //notifyInteropMessageSubscribers("localhost", port, properties);
 
 

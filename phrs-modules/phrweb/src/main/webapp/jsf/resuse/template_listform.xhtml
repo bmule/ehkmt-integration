@@ -136,7 +136,7 @@
 		</h:form>
 		
 	<h:form prependId="false">
-			<p:messages showDetail="true"></p:messages>
+			<p:messages showDetail="true"/>
 			<p:growl id="msgs" showDetail="true" />
 	
 		<p:dialog closable="false" 
@@ -185,7 +185,7 @@
 							id="idField_2_input"
 							rendered="#{OOOBean.modify eq 'yes'}">
 							<f:selectItem itemLabel="Please Choose"
-								itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>								
+								itemValue="default.no_answer.label"/>
 							<f:selectItems value="#{OOOBean.vocabMap.TAG_ZZZZ}" var="lv"
 								itemLabel="#{lv.label}" itemValue="#{lv.id}" />
 						</h:selectOneMenu>
@@ -197,10 +197,9 @@
 										<p:outputPanel id="idField_status" layout="block">
 														<h:selectOneRadio value="#{OOOBean.selected.status}">
 															<f:selectItem itemLabel="#{labels['default_activeStatusTrue']}"
-																itemValue="default_activeStatusTrue"
-																noSelectionOption="true"></f:selectItem>
+																itemValue="default_activeStatusTrue"/>
 															<f:selectItem itemLabel="#{labels['default_activeStatusFalse']}"
-																itemValue="default_activeStatusFalse" ></f:selectItem>
+																itemValue="default_activeStatusFalse" />
 														</h:selectOneRadio>					
 										</p:outputPanel>
 										<p:message for="idField_status" display="text" /> 	
@@ -213,7 +212,7 @@
 						<p:inputText  value="#{OOOBean.selected.priority}"
 							id="intField_1_input"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:convertNumber integerOnly="true"  pattern="9999"></f:convertNumber>
+							<f:convertNumber integerOnly="true"  pattern="9999"/>
 						</p:inputText>
 					</p:outputPanel>
 					<p:message for="intField_1_input" display="text" /> 
@@ -227,7 +226,7 @@
 						<p:inputText  value="#{OOOBean.selected.priority}"
 							id="doubleField_1_input"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:convertNumber  maxFractionDigits="1" ></f:convertNumber>
+							<f:convertNumber  maxFractionDigits="1" />
 						</p:inputText>
 					</p:outputPanel>									
 					<p:message for="doubleField_1_input" display="text" /> 
@@ -377,7 +376,7 @@ if the JSF lifecyle is messed up the same dialog form will appear again and agai
 	
 	-->
 	<h:form prependId="false">
-		<p:messages showDetail="true"></p:messages>
+		<p:messages showDetail="true"/>
 		<!--<p:growl id="msgs" showDetail="true" />-->
 		<p:dialog closable="true" 
 			widgetVar="widDialogChart00" 

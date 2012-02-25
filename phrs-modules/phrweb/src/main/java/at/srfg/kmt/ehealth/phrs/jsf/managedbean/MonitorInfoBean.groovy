@@ -1,23 +1,19 @@
 package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
 
-import javax.faces.bean.ManagedBean
-import javax.faces.bean.RequestScoped
-
-import org.primefaces.model.StreamedContent
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorInfoItem
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
+import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportUtil
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
-
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import javax.faces.bean.ManagedBean
+import javax.faces.bean.RequestScoped
+import org.primefaces.model.StreamedContent
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import at.srfg.kmt.ehealth.phrs.presentation.builder.BuilderUtil
-import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 
 @ManagedBean(name = "monitorinfoBean")
 @RequestScoped
@@ -213,10 +209,10 @@ public class MonitorInfoBean extends FaceBaseBean {
         } else if(UserSessionService.getRequestAttributeString('resourcecode')!=null){
             //JSF will invoke the getters while setting up, at least this request param should be valid
             LOGGER.debug('getDownLoadTestingReport Selected item, other request? No ownerUri. Found resource code')
-            streamedContent = BuilderUtil.reportBuildDummy() ;
+            streamedContent = ReportUtil.reportBuildDummy() ;
         } else {
             LOGGER.debug('getDownLoadTestingReport no ownerUri or resource code')
-            streamedContent = BuilderUtil.reportBuildDummy() ;
+            streamedContent = ReportUtil.reportBuildDummy() ;
         }
         return streamedContent
 
@@ -349,7 +345,7 @@ public class MonitorInfoBean extends FaceBaseBean {
         boolean isPermitted = this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
         LOGGER.debug('createPermittedReport isPermitted?  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
 
-        reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+        reportFile = ReportUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
 
         if(reportFile==null)
             LOGGER.debug('createPermittedReport report file NULL  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)
@@ -380,7 +376,7 @@ public class MonitorInfoBean extends FaceBaseBean {
         boolean isPermitted = true;
         //this.isContentViewPermitted(targetUserId, isPhrId, resourceType)
 
-        reportFile = BuilderUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
+        reportFile = ReportUtil.handlePermittedReport(targetUserId, isPhrId, resourceType, isPermitted)
 
         if(reportFile==null)
             LOGGER.debug('createTestingReport report file NULL  targetUserId='+targetUserId+' resourceType'+resourceType+' isPermitted='+isPermitted)

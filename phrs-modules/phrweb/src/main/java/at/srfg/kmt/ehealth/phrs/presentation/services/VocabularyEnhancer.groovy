@@ -1,26 +1,10 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services
 
+import at.srfg.kmt.ehealth.phrs.Constants
+import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-
-import at.srfg.kmt.ehealth.phrs.PhrsConstants
-import at.srfg.kmt.ehealth.phrs.Constants
-import at.srfg.kmt.ehealth.phrs.model.baseform.ActionActivityBase
-import at.srfg.kmt.ehealth.phrs.model.baseform.ActionPlanEvent
-import at.srfg.kmt.ehealth.phrs.model.baseform.ActivityDailyLiving
-import at.srfg.kmt.ehealth.phrs.model.baseform.ActivityDailyLivingSimple
-
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsActivityPhysical
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileRisk
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
-
+import at.srfg.kmt.ehealth.phrs.model.baseform.*
 
 public class  VocabularyEnhancer implements Serializable {
 

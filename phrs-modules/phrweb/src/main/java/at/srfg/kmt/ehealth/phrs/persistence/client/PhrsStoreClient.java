@@ -1,19 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client;
 
-import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.beanutils.DynaBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
@@ -22,13 +8,18 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService;
-
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import com.google.code.morphia.Datastore;
 import com.google.code.morphia.Morphia;
 import com.mongodb.Mongo;
+import org.apache.commons.beanutils.DynaBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
 import java.util.*;
 
-import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.*;
+import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 
 /**
  *

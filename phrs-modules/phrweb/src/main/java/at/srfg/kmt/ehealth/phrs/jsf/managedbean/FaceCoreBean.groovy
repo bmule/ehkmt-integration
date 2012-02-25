@@ -2,21 +2,15 @@ package at.srfg.kmt.ehealth.phrs.jsf.managedbean
 
 // collector observable lists or maps http://mrhaki.blogspot.com/2009/09/groovy-goodness-observable-map-and-list.html
 
-import java.util.Collection
 
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
+import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 import javax.faces.application.Application
 import javax.faces.application.ViewHandler
 import javax.faces.component.UIViewRoot
 import javax.faces.context.FacesContext
 import javax.faces.event.ActionEvent
-
-import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
-import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue
-import at.srfg.kmt.ehealth.phrs.presentation.services.UserService
-import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
-import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer
-import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyService
-import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
+import at.srfg.kmt.ehealth.phrs.presentation.services.*
 
 /**
  * 

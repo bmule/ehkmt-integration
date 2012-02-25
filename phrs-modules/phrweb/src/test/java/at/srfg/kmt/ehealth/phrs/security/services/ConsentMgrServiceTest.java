@@ -2,25 +2,13 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
-import org.apache.commons.configuration.PropertiesConfiguration;
-import org.junit.*;
-
-import java.rmi.RemoteException;
+import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 import java.util.List;
 import java.util.UUID;
-
-//import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.ArrayOf_xsd_anyType;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecision;
-
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetDecisionResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResources;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetResourcesResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjects;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub.GetSubjectsResponse;
-import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 import org.apache.axis2.AxisFault;
-
+import org.apache.commons.configuration.PropertiesConfiguration;
 import static org.junit.Assert.*;
+import org.junit.*;
 
 public class ConsentMgrServiceTest {
 

@@ -1,15 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client
 
-import java.io.Serializable
-import java.util.Date
-import java.util.List
-import java.util.Map
-import java.util.Set
-
-import org.bson.types.ObjectId
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.model.baseform.HealthProfileOverview
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
@@ -17,9 +7,11 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
 import at.srfg.kmt.ehealth.phrs.model.basesupport.AuditBase
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService
-
 import com.google.code.morphia.Datastore
 import com.google.code.morphia.query.Query
+import org.bson.types.ObjectId
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * 
@@ -52,8 +44,8 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public PhrsRepositoryClient(PhrsStoreClient storeClient ){		
    
-        userService = new UserService()
-        commonDao= (CommonDao)userService
+        //userService = new UserService()
+        //commonDao= (CommonDao)userService
 		
     }
 
@@ -254,8 +246,7 @@ public class PhrsRepositoryClient implements Serializable{
             //			list= getPhrsDatastore().find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,healthProfileId).asList()
             try {
                 Datastore store = getPhrsDatastore()
-                list= store.find(clazz,
-                        PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,
+                list= store.find(clazz,PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER,
                         healthProfileId).order('-createDate').asList()
 
 

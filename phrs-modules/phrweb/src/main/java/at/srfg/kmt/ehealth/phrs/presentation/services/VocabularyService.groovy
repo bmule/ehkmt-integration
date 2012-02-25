@@ -1,15 +1,10 @@
 package at.srfg.kmt.ehealth.phrs.presentation.services;
 
 
-import java.io.Serializable
-import java.util.List
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.i18n.I18Tool
 import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
-
-
 
 public class  VocabularyService implements Serializable{
 
@@ -33,7 +28,7 @@ public class  VocabularyService implements Serializable{
 		//Set<ModelLabelValue> toAdd = []
 
 		boolean found=false
-		vocab.each() { lv ->
+		vocab.each() {  lv ->
 			found=false
 			for(def mm:modelMain){
 				//check one for null or blank

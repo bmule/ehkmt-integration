@@ -10,12 +10,26 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.codec.Base64.InputStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 
-public class BuilderPdfitext {
-       /** Path to the resulting PDF file. */
+public class ReportToolPdf extends ReportTool{
+    private final static Logger LOGGER = LoggerFactory
+            .getLogger(ReportToolPdf.class);
+
+    public ReportToolPdf() {
+    }
+
+    public ReportToolPdf(ResourceBundle resourceBundle) {
+        super(resourceBundle);
+    }
+
+    /** Path to the resulting PDF file. */
     public static final String RESULT
         = "testbuilder.pdf";
  
@@ -25,7 +39,7 @@ public class BuilderPdfitext {
      */
     public static void main(String[] args)
     	throws DocumentException, IOException {
-    	new BuilderPdfitext().createPdf(RESULT);
+    	new ReportToolPdf().createPdf(RESULT);
     }
  
     /**

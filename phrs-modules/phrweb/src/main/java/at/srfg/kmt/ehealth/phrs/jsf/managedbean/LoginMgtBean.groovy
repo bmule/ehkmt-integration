@@ -2,7 +2,6 @@ package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
 import java.io.Serializable
 
-import javax.annotation.PostConstruct
 import javax.faces.bean.ManagedBean
 import javax.faces.bean.SessionScoped
 import javax.faces.context.FacesContext
@@ -17,6 +16,11 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
+import at.srfg.kmt.ehealth.phrs.security.services.login.LoginServiceImpl
+import at.srfg.kmt.ehealth.phrs.security.services.login.LoginService
+import javax.servlet.http.HttpServletRequest
+import at.srfg.kmt.ehealth.phrs.jsf.utils.WebUtil
+import javax.faces.application.FacesMessage
 /**
  * 
  * Used primarily for logging out
@@ -30,9 +34,10 @@ import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 @SessionScoped
 public class LoginMgtBean extends FaceCommon implements Serializable{
 	private final static Logger LOGGER = LoggerFactory.getLogger(LoginMgtBean.class);
-	//String username
 
-	String password;
+    String username
+    String loginType
+	String password
 
 	boolean loggedIn=false;
 
@@ -68,9 +73,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 	}
 
 
-	@PostConstruct
-	public void init(){
-	}
 
 	public void logout(ActionEvent actionEvent) {
 		logout()
@@ -154,7 +156,9 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
 	public String getRole() {
 
 		String role= UserSessionService.getSessionAttributeRole()
-		if(role && role.contains(PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX)){ 
+
+		if(role && role.contains(PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX)){
+            //remove prefix:, but TODO make ref to i18 and replace with '_'
 			role=role.replace(':'+PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX, '')
 		} else {
 			role=''
@@ -229,7 +233,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
         }
     }
     public void loadInterop(){
-        LOGGER.error("web form got: lLoadInterop ")
+        LOGGER.error("web form got: loadInterop ")
         try {
             CoreTestData test= new CoreTestData()
             test.addTestMedications_2_forPortalTestForOwnerUri(getOwnerUri())
@@ -237,6 +241,75 @@ public class LoginMgtBean extends FaceCommon implements Serializable{
             LOGGER.error("loadInterop failed",e)
         }
     }
+
+    public void getProcessLogin(){
+        processLogin()
+    }
+
+    public void processLogin(){
+       LoginService ls= new LoginServiceImpl();
+
+       try {
+           if(ls.isLocalLogin(username,loginType)){
+               LOGGER.debug("processLogin isLocalLogin: "+username+" username="+username)
+
+               handleLocalLogin()
+           } else {
+               FacesContext context= FacesContext.getCurrentInstance()
+               // request.contextPath}#{'/login'}"
+
+               //pass to OpenID
+               //String loginServletUrl="/login"
+               String appReturnUrl=WebUtil.getUrl(context,"/openid");
+               LOGGER.debug("processLogin OpenId will return locally to: "+appReturnUrl+" username="+username)
+
+               //Discover endpoint OpenID
+               String providerEndpointDiscovered=ls.createRedirect(username,appReturnUrl);
+               LOGGER.debug("processLogin OpenId redirect to providerEndpointDiscovered: "+providerEndpointDiscovered+" , OpenId OP will return locally to openId servlet at: "+appReturnUrl+" username="+username)
+               if(providerEndpointDiscovered){
+                  redirect(providerEndpointDiscovered)
+               }  else {
+                   //TODO check session for
+                   WebUtil.addFacesMessageSeverityError("Login Status", "Open ID login failed.");
+                   // <p:growl id="loginMsgs" showDetail="true" />
+
+               }
+
+           }
+       } catch (Exception e) {
+           LOGGER.error("processLogin failed processLogin openid ");
+       }
+
+    }
+    public void handleLocalLogin(){
+        FacesContext context= FacesContext.getCurrentInstance()
+        if(context){
+            HttpServletRequest req =(HttpServletRequest)context.getExternalContext().getRequest();
+
+            PhrFederatedUser pfu = UserSessionService.managePhrUserSessionLocalLoginScenario(
+                    username, req)
+
+            String userMessageCode=null
+            if (pfu != null) {
+
+                LOGGER.debug('success local login, redirect  user handleLocalLogin= '+username)
+               //TODO  userMessageCode success to flash message
+
+            } else {
+                LOGGER.debug('error handleLocalLogin creating local user null');
+                if (userMessageCode == null) {
+                    userMessageCode = PhrsConstants.DEFAULT_ERROR_MSG_OPEN_ID
+                }
+                WebUtil.addFacesMessageSeverityError("Login Status", "Local login failed, use a login ID prefixed with phr e.g. phrtest, or loginId: nurse");
+                //TODO userMessageCode error to flash message
+
+            }
+        } else {
+            LOGGER.debug('error handleLocalLogin FacesContext null');
+        }
+        
+    }
+
 
 
 

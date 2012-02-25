@@ -52,8 +52,8 @@ public class ActionActivityScheduleBean extends FaceBaseBean implements
 	// private ScheduleModel lazyEventModel;
 
 	// selected vs event
-	private ScheduleEvent event = new PhrsScheduleEvent(); // new
-															// DefaultScheduleEvent();
+	private ScheduleEvent event = new PhrsScheduleEvent();
+                //new DefaultScheduleEvent(); // new
 
 	boolean TEST = false;
 

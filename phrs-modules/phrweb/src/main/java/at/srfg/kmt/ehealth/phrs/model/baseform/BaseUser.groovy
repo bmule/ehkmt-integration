@@ -27,6 +27,10 @@ class BaseUser extends BasePhrsMetadata{
 	String birthDate //date of birth from external systems
 	String email
 	String fullname
+    //if available,otherwise fullname
+    String lastname
+    String firstname
+
     String nickname
 	String postCode
 

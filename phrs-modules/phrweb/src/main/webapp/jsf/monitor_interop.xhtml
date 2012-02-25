@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/template_ui.xhtml">
+
+    <ui:define name="head">
+
+        <script type="text/javascript">
+            //
+            function onEditComplete(xhr, status, args) {
+                if (args.validationFailed) {
+
+                } else {
+                    widDialogMphr.hide();
+                }
+            }
+            //
+        </script>
+
+        <style type="text/css">
+            .table.innertable td {
+                border: 0;
+            }
+        </style>
+        <ui:insert name="head"></ui:insert>
+    </ui:define>
+    <!--
+    <h:outputLabel value="#{theItem.label}" />
+    <h:outputLabel  value="#{item.resourceType}"/>
+    <h:outputLabel value="#{item.label}"/>
+    <h:outputLabel  value="#{item.code}"/>
+    <h:outputLabel  value="#{item.summary}"/>
+
+    <h:outputLabel value="#{item.status}"/>
+    <h:outputLabel value="#{item.statusStandard}"/>
+
+    <h:outputLabel value="#{item.PID}"/>
+    <h:outputLabel value="#{item.ownerUri}"/>
+
+    commandImportMessages
+    commandProcessIdentifier
+    pixQueryIdType
+    pixQueryIdUser
+    pidPix
+    pidUser
+
+    selectedResourceType
+    -->
+
+    <ui:define name="content">
+
+        <h:form>
+            <h:panelGrid columns="3">
+                <f:facet name="header">
+                    <p:row rowspan="3">
+                        We need to determine your Patient ID in order to import your health data from external sources. Please Provide either your CIED Implant identifier or your patient identifier.
+                        <br/>
+                        The status column will indicate whether or not your patient identifier was found.
+                    </p:row>
+                    <p:row>
+                        <p:column>ID Type</p:column>
+                        <p:column>Code</p:column>
+                        <p:column>Status</p:column>
+                    </p:row>
+
+
+                </f:facet>
+                <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
+                <p:row>
+
+                    <p:column>
+                        <h:outputLabel value="#{interopBean.selected.pixQueryIdType}"
+                                       rendered="#{interopBean.modify eq 'no'}"/>
+
+                        <h:selectOneMenu value=" {interopBean.selected.pixQueryIdType}"
+                                         id="field_pixQueryIdType_input"
+                                         rendered="#{interopBean.modify eq 'yes'}"
+                                         required="true">
+
+                            <f:selectItem label="... Please Select Identifier type..." noSelectionOption="true"
+                                          itemValue=""/>
+                            <f:selectItem itemLabel="Implant model:Maximo"
+                                          itemValue="cied:model:Maximo"/>
+                            <f:selectItem itemLabel="Patient ID"
+                                          itemValue="pid"/>
+                        </h:selectOneMenu>
+
+                        <p:message for="field_pixQueryIdUser_input" display="text"
+                                   rendered="#{interopBean.modify eq 'yes'}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputLabel value="#{interopBean.selected.pixQueryIdUser}"
+                                       rendered="#{interopBean.modify eq 'no'}"/>
+
+                        <p:inputText value="#{interopBean.selected.pixQueryIdUser}"
+                                     id="field_pixQueryIdUser_input"
+                                     required="true" requiredMessage="#{labels['default_required_field']}"
+                                     rendered="#{interopBean.modify eq 'yes'}"/>
+
+                        <p:message for="field_pixQueryIdUser_input" display="text"
+                                   rendered="#{interopBean.modify eq 'yes'}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputLabel value="#{interopBean.statusMessagePid}"/>
+
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column colspan="3">
+
+                        <p:commandButton value="create" rendered="#{interopBean.allowCommandIdentify}"
+                                         title="Submit"
+                                         image="ui-icon-plus" actionListener="#{interopBean.commandProcessIdentifier}"
+                                         ajax="false"/> Update your Identifier
+
+                    </p:column>
+                </p:row>
+
+            </h:panelGrid>
+        </h:form>
+         <!-- obs_medication_mgt.xhtml command link to -->
+
+        <h:form prependId="false">
+            <p:messages/>
+            <p:growl id="msgs" showDetail="true"/>
+            <p:toolbar>
+                <p:toolbarGroup align="left">
+                    <h:form prependId="false">
+
+                        <p:commandButton value="create" rendered="#{interopBean.allowCommandImport}"
+                                         title="Import New Info"
+                                         image="ui-icon-plus" actionListener="#{interopBean.commandImportMessages}"
+                                         ajax="false"/>
+                    </h:form>
+                </p:toolbarGroup>
+            </p:toolbar>
+            <p:fieldset legend="Electronic Health Records available for importing">
+
+
+                <p:dataTable widgetVar="widItemTableMphr" id="idItemTableMphr"
+                             var="theItem" value="#{interopBean.modelMain}">
+
+                    <p:column headerText="User Name" sortBy="#{theItem.label}">
+                        <h:outputLabel value="#{theItem.label}"/>
+                    </p:column>
+
+                    <p:column headerText="Information Type"
+                              sortBy="#{theItem.resourceType}">
+                        <h:outputLabel value="#{theItem.resourceType}">
+                            <f:converter converterId="labelLookup"/>
+                        </h:outputLabel>
+                    </p:column>
+
+                    <p:column headerText="Summary" sortBy="#{theItem.protocolId}"
+                              style="width:200px;word-wrap:break-word;">
+
+                        <h:outputText value="#{theItem.summary}"/>
+                    </p:column>
+                    <!--
+
+                            <p:column headerText="User Name" sortBy="#{theItem.label}">
+                           <h:outputLabel value="#{theItem.label}" />
+                           <h:outputLabel value="#{theItem.code}"/>
+                           <h:outputLabel value="#{theItem.summary}"/>
+
+                           <h:outputLabel value="#{theItem.status}"/>
+                           <h:outputLabel value="#{theItem.statusStandard}"/>
+
+                           <h:outputLabel value="#{theItem.PID}"/>
+                           <h:outputLabel value="#{theItem.ownerUri}"/>
+                       </p:column>
+                    -->
+
+
+                </p:dataTable>
+                <p>
+                    <h:outputLink  value=" {request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText value="Medications List" style="font-size:10pt;"/></h:outputLink>
+
+                </p>
+            </p:fieldset>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

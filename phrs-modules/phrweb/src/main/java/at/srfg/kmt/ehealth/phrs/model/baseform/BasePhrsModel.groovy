@@ -109,6 +109,7 @@ public class BasePhrsModel implements Serializable, Cloneable {
      */
     String origin
     String originStatus //origin status does not comply always to UI status
+    String PID
     /*
       * This is the message identifier
       */

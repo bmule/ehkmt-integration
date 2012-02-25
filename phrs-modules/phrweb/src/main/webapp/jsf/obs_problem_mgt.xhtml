@@ -157,7 +157,7 @@ prependId="false"
 					
 					<h:inputHidden value="#{odlprobBean.selected.origin}" />
 					<h:inputHidden value="#{odlprobBean.selected.originStatus}" />
-													
+                        <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
 									<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;" >	
 										
 										<h:outputLabel for="idField_code" value="#{labels['obsIssue.issueCode.label']}" styleClass="form-dialog-label" />
@@ -170,7 +170,7 @@ prependId="false"
 											<h:selectOneMenu value="#{odlprobBean.selected.code}"
 												rendered="#{odlprobBean.modify eq 'yes'}">
 												<f:selectItem itemLabel="Please Choose"
-													itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>								
+													itemValue="default.no_answer.label"/>
 												<f:selectItems value="#{odlprobBean.vocabMap.TAG_PROBLEM_SYMPTOM}" var="lv"
 													itemLabel="#{lv.label}" itemValue="#{lv.id}" />
 											</h:selectOneMenu>
@@ -181,10 +181,9 @@ prependId="false"
 										<p:outputPanel id="idField_status" layout="block">
 														<h:selectOneRadio value="#{odlprobBean.selected.status}">
 															<f:selectItem itemLabel="#{labels['default_activeStatusTrue']}"
-																itemValue="default_activeStatusTrue"
-																noSelectionOption="true"></f:selectItem>
+																itemValue="default_activeStatusTrue"/>
 															<f:selectItem itemLabel="#{labels['default_activeStatusFalse']}"
-																itemValue="default_activeStatusFalse" ></f:selectItem>
+																itemValue="default_activeStatusFalse" />
 														</h:selectOneRadio>					
 										</p:outputPanel>
 										<p:message for="idField_status" display="text" /> 	

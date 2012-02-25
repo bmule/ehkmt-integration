@@ -1,10 +1,4 @@
-/*
- * Project  :iCardea
- * File     : ActorClientUnitTest.java
- * Encoding : UTF-8
- * Date     : Dec 6, 2011
- * User     : Mihai Radulescu
- */
+
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 

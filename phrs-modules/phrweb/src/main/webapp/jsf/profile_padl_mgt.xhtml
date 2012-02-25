@@ -155,15 +155,15 @@ prependId="false"
 								<p:outputPanel id="idField_status" layout="block">
 										<h:selectOneRadio value="#{padlBean.selected.status}">
 											<f:selectItem itemLabel="I can do this without assistance"
-												itemValue="http://www.icardea.at/phrs/instances/ICanDo"></f:selectItem>
+												itemValue="http://www.icardea.at/phrs/instances/ICanDo"/>
 											<f:selectItem itemLabel="I require assistance"
-												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"></f:selectItem>									
+												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"/>
 											<f:selectItem itemLabel="Not answered"
-												itemValue="default.no_answer.label" noSelectionOption="true"></f:selectItem>
+												itemValue="default.no_answer.label" />
 										</h:selectOneRadio>					
 								</p:outputPanel>
-								<p:message for="idField_status" display="text" /> 
-	
+								<p:message for="idField_status" display="text" />
+                            <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
 			           			<h:outputLabel for="field_note"
 									value="#{labels['default.comments.label']}"
 									styleClass="form-dialog-label" />  
