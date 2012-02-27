@@ -134,14 +134,18 @@ public class PlainHttpsClientTest {
      * Test of socket connect method, of class PlainHttpsClient.
      */
     @Test
-    public void testPortOpen() throws Exception {
+    public void testSocketConnect() throws Exception {
         LOGGER.info("TEST TCP PORTS");
         boolean allOK = true;
         for (URL serverURL : testURLs) {
             String host = serverURL.getHost();
             int port = serverURL.getPort();
-            LOGGER.info("connect to {}", serverURL.toString());
-            allOK = PlainHttpsClient.socketConnect(host, port);
+            if (port > 0) {
+                LOGGER.info("testing {}:{}", host, port);
+                allOK = PlainHttpsClient.socketConnect(host, port);
+            } else {
+                LOGGER.info("skipped testing {}", serverURL);
+            }
         }
         assert allOK;
     }
@@ -160,7 +164,7 @@ public class PlainHttpsClientTest {
             } else {
                 LOGGER.info("skipped testing {}", serverURL);
             }
-            
+
         }
         assert allOK;
     }
@@ -169,7 +173,7 @@ public class PlainHttpsClientTest {
      * Test of connect method, of class PlainHttpsClient.
      */
     @Test
-    public void testUdpReachable() throws Exception {
+    public void testSendUDP() throws Exception {
         LOGGER.info("checking udp port reachabilty: {}:{}", "localhost", 44444);
         assert PlainHttpsClient.sendUDP("localhost", 44444);
     }
