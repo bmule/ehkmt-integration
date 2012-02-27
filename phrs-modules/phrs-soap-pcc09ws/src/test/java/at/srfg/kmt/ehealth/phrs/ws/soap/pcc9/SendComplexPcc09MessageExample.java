@@ -126,7 +126,7 @@ public final class SendComplexPcc09MessageExample {
                 patientName,
                 patientSurname);
 
-        LOGGER.info("Tries to send a PCC9 query ({}) to {}", pcc9Request, endpointURI);
+        LOGGER.info("Tries to send a PCC9 query ({}) to {}", pcc9Request, endpointURI+" careProvisionCode: "+careProvisionCode+" patientID: "+patientID);
         final MCCIIN000002UV01 ack =
                 SendPcc09Message.sendMessage(pcc9Request, endpointURI, responseURI);
 
