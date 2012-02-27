@@ -4,10 +4,19 @@
  */
 package at.srfg.kmt.ehealth.phrs;
 
+import com.sun.net.httpserver.HttpsServer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.logging.Level;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -20,18 +29,42 @@ import org.slf4j.LoggerFactory;
 public class PlainHttpsClientTest {
 
     final static Logger LOGGER = LoggerFactory.getLogger(PlainHttpsClientTest.class);
-    static String ip;
-    static int port;
     static File tsFile;
     static String tsPassword;
+    static PropertiesConfiguration icardeaConfig;
+    static Set<URL> testURLs = new HashSet<URL>();
 
     @BeforeClass
     public static void setup() {
         LOGGER.info("TEST SETUP");
-        ip = "localhost";
-        port = 8089;
+
+
+        try {
+            icardeaConfig = new PropertiesConfiguration("icardea.properties");
+            LOGGER.info("Config input" + icardeaConfig);
+            Iterator<String> it = icardeaConfig.getKeys();
+
+            while (it.hasNext()) {
+                String key = it.next();
+                String value = icardeaConfig.getProperty(key).toString();
+                try {
+                    testURLs.add(new URL(value));
+                    LOGGER.info("-> {} added to test ({})", key, value);
+                } catch (MalformedURLException ex) {
+                    LOGGER.info("--> {} ignored", key);
+                }
+            }
+        } catch (ConfigurationException e) {
+            LOGGER.error("ConfigurationService error", e);
+        }
+
         tsPassword = "icardea";
-        tsFile = new File("D:\\git-clones\\ehkmt-integration\\phrs-modules\\phrs-soap-pcc09ws\\src\\main\\resources\\srfg-phrs-core-keystore.ks");
+        tsFile = new File(".." + File.separator
+                + "phrs-soap-pcc09ws" + File.separator
+                + "src" + File.separator
+                + "main" + File.separator
+                + "resources" + File.separator
+                + "srfg-phrs-core-keystore.ks");
 
 
         if (System.getProperty("javax.net.ssl.trustStore") == null) {
@@ -101,9 +134,20 @@ public class PlainHttpsClientTest {
      * Test of socket connect method, of class PlainHttpsClient.
      */
     @Test
-    public void testPortOpen() throws Exception {
-        LOGGER.info("TEST TCP PORT {}:{}", ip, port);
-        assert PlainHttpsClient.socketConnect(ip, port);
+    public void testSocketConnect() throws Exception {
+        LOGGER.info("TEST TCP PORTS");
+        boolean allOK = true;
+        for (URL serverURL : testURLs) {
+            String host = serverURL.getHost();
+            int port = serverURL.getPort();
+            if (port > 0) {
+                LOGGER.info("testing {}:{}", host, port);
+                allOK = PlainHttpsClient.socketConnect(host, port);
+            } else {
+                LOGGER.info("skipped testing {}", serverURL);
+            }
+        }
+        assert allOK;
     }
 
     /**
@@ -111,15 +155,25 @@ public class PlainHttpsClientTest {
      */
     @Test
     public void testHttpsConnect() throws Exception {
-        LOGGER.info("TEST HTTPS SERVER https://{}:{}", ip, port);
-        assert PlainHttpsClient.connect(ip, port);
+        LOGGER.info("TEST HTTPS SERVERS");
+        boolean allOK = true;
+        for (URL serverURL : testURLs) {
+            if (serverURL.getProtocol().equals("https")) {
+                LOGGER.info("testing {}", serverURL);
+                allOK = PlainHttpsClient.connect(serverURL);
+            } else {
+                LOGGER.info("skipped testing {}", serverURL);
+            }
+
+        }
+        assert allOK;
     }
 
     /**
      * Test of connect method, of class PlainHttpsClient.
      */
     @Test
-    public void testUdpReachable() throws Exception {
+    public void testSendUDP() throws Exception {
         LOGGER.info("checking udp port reachabilty: {}:{}", "localhost", 44444);
         assert PlainHttpsClient.sendUDP("localhost", 44444);
     }

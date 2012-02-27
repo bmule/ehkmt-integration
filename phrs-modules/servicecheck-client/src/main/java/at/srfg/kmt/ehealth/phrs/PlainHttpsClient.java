@@ -22,11 +22,26 @@ public class PlainHttpsClient {
     public static boolean connect(String host, int port) {
 
         final String serverURL = "https://" + host + ":" + port;
-
+        return connect(serverURL);
+    }
+ 
+    public static boolean connect(String serverURL) {
+     
         try {
-            URL url = new URL(serverURL);
+            return connect(new URL(serverURL));
+        } catch (MalformedURLException ex) {
+            LOGGER.error("URL {} not valid", serverURL);
+            LOGGER.error("...FAIL");
+            LOGGER.trace("{}", ex.getLocalizedMessage());
+            return false;
+            
+        }
 
-            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+    }
+    public static boolean connect(URL serverURL) {
+            try {
+
+            HttpsURLConnection conn = (HttpsURLConnection) serverURL.openConnection();
 
 
             conn.connect();
@@ -48,18 +63,13 @@ public class PlainHttpsClient {
             LOGGER.info("...OK");
             return true;
 
-        } catch (MalformedURLException ex) {
-            LOGGER.error("URL {} not valid", serverURL);
-            LOGGER.error("...FAIL");
-            LOGGER.trace("{}", ex.getLocalizedMessage());
-            return false;
         } catch (UnknownHostException ex) {
-            LOGGER.error("Host {} unknown", host);
+            LOGGER.error("Host {} unknown", serverURL);
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getLocalizedMessage());
             return false;
         } catch (ConnectException ex) {
-            LOGGER.error("Cannot connect to {}:{}", host, port);
+            LOGGER.error("TCP connection faild to {}", serverURL);
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getLocalizedMessage());
             return false;
@@ -84,7 +94,12 @@ public class PlainHttpsClient {
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getLocalizedMessage());
             return false;
-        } catch (IOException ex) {
+        } catch (IllegalArgumentException ex) {
+            LOGGER.error("Port unreachable {} ", port);
+            LOGGER.error("...FAIL");
+            LOGGER.trace("{}", ex.getStackTrace());
+            return false;
+        }catch (IOException ex) {
             LOGGER.error("IOException {} ", ex.getMessage());
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getStackTrace());
