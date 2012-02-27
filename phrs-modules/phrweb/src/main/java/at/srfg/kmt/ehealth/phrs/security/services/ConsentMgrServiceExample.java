@@ -50,8 +50,7 @@ public class ConsentMgrServiceExample {
 	}
 
 	private void sslSetup() throws Exception{
-		boolean atnatls = new Boolean(ResourceBundle.getBundle("icardea")
-				.getString("atna.tls")).booleanValue();
+		boolean atnatls = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("atna.tls"));
 		if (atnatls) {
 			// Properties for SSL Security Provider
 			System.out.println(" $$$$ SECURE COMMUNICATION .....");
@@ -82,8 +81,8 @@ public class ConsentMgrServiceExample {
 			System.out.println("$$$ Grant request for patient '" + patientId
 					+ "' from requestor role '" + requesterRole
 					+ "' for resource '" + resource + "' results in " + result);
-			boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea")
-					.getString("atna.log")).booleanValue();
+
+			boolean atnalog = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("atna.log"));
 			// TODO: ATNA
 			// Send ATNA Message: Grant Request Message
 			// +"resource"+ is requested from "+requesterRole+" for

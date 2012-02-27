@@ -66,7 +66,7 @@ public class WebUtil {
         String url = null;
         try {
             if (context != null) {
-                getUrl((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
+                WebUtil.getUrl((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest(),
                         relativePath);
             }
         } catch (Exception e) {

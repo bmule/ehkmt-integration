@@ -59,7 +59,7 @@ public class ReportToolTransformer {
 
         List<ModelLabelValue> props = new ArrayList<ModelLabelValue>();
         props.add(new ModelLabelValue("drugCode", resource.getProductCode()));
-        props.add(new ModelLabelValue("drugCode", resource.getProductCode()));
+        //props.add(new ModelLabelValue("drugCode", resource.getProductCode()));
         
         if (resource.getTreatmentMatrix() != null) {
             if (resource.getTreatmentMatrix().getDosage() != null)

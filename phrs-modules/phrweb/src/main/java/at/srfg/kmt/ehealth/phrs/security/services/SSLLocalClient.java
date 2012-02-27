@@ -71,14 +71,18 @@ final class SSLLocalClient {
      * Other - no ssl setup or handled elsewhere
      */
     public static void sslSetup(int configSettings) {
-
-
-
+ /*
+        String openIdTest = ConfigurationService.getInstance().getProperty("openid.test.url", "http://kmt23.salzburgresearch.at:4545/idp/u=bob");
+        System.out.println("LoginServiceImpl  openid.test.url  " + openIdTest);
+        System.out.println("LoginServiceImpl  getEndpointApplicationHome " + LoginUtils.getEndpointApplicationHome());
+        System.out.println("LoginServiceImpl  getEndpointLoginPage " + LoginUtils.getEndpointLoginPage());
+   */
         if (configSettings < 3) {
             sslSetupLocal();
 
         } else if (configSettings == 3) {
-            boolean atnatls = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
+            // boolean atnatls = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.tls")).booleanValue();
+            boolean atnatls = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("atna.tls"));
 
             if (atnatls) {
                 // Properties for SSL Security Provider

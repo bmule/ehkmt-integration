@@ -290,19 +290,17 @@ public class CoreTestData {
     /**
      * Create users and test data for 190 and 191
      */
-    public static void createTestUserData() {
+    public static PhrFederatedUser createTestUserData() {
+        PhrFederatedUser user=null;
         try {
-
-
-            createTestUserData(true);
-
-
-        } catch (Exception e) {
+            user= createTestUserData(true);
+       } catch (Exception e) {
             LOGGER.error("Error creating user test user data", e);
         }
+        return user;
     }
 
-    public static void createTestUserData(boolean addObservations) {
+    public static PhrFederatedUser createTestUserData(boolean addObservations) {
 
 //       test.user.1.cied.pixQueryIdType=cied:model:Maximo
 //     test.user.1.cied.serial=PZC123456S
@@ -312,6 +310,7 @@ public class CoreTestData {
 //     test.user.1.lastname=Mayr
         String loginUserIdOwnerUri = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
         LOGGER.debug("Creating test data for test user = " + loginUserIdOwnerUri);
+        PhrFederatedUser user =null;
         try {
             String pixQueryIdUser = ConfigurationService.getInstance().getProperty("test.user.1.cied.serial", "PZC123456S");
             String pixQueryIdType = ConfigurationService.getInstance().getProperty("test.user.1.cied.pixQueryIdType", "cied:model:Maximo");
@@ -326,7 +325,7 @@ public class CoreTestData {
 
             CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
             // String ownerUri         = PhrFederatedUser.makeOwnerUri();
-            PhrFederatedUser user = commonDao.getPhrUser(loginUserIdOwnerUri, true);
+            user = commonDao.getPhrUser(loginUserIdOwnerUri, true);
 
             user.setOwnerUri(loginUserIdOwnerUri);
             user.setCreatorUri(user.getOwnerUri());
@@ -353,28 +352,22 @@ public class CoreTestData {
             //register PID.
             //commonDao.getPhrsStoreClient().getInteropClients().registerProtocolId(user.getOwnerUri(), protocolId, null);
 
-
+            
             ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
             if (info == null) {
                 info = new ProfileContactInfo();
                 info.setOwnerUri(user.getOwnerUri());
                 info.setCreatorUri(user.getOwnerUri());
                 info.setType(info.getClass().getCanonicalName());
+
             }
             info.setFirstName(firstname);
             info.setLastName(lastname);
-            info.setPixQueryIdUser(pixQueryIdUser);
-            info.setPixQueryIdType(pixQueryIdType);
+            
 
             commonDao.crudSaveResource(info, user.getOwnerUri(), "CoreTestData createTestUserData");
 
-            //register user PID
-            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, null);
-            //or getPhrsStoreClient().getInteropClients().registerProtocolId( ownerUri,  protocolId,  namespace)
-            //commonDao.registerProtocolId(user.getOwnerUri(), protocolId, Constants.ICARDEA_DOMAIN_PIX_OID);
-            //info.setPixIdentifier(pixIdentifier);
-
-            //List listBp = commonDao.crudReadResources(loginUserIdOwnerUri, (Object)ObsVitalsBloodPressure.class);
+  
             if (addObservations) {
 
                 ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
@@ -386,18 +379,7 @@ public class CoreTestData {
                 bp1.setSystemNote(bp1.getNote());
                 commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
             }
-            /*
-             * listBp = commonDao.crudReadResources(loginUserIdOwnerUri,
-             * (Object)ObsVitalsBloodPressure.class); if (listBp !=null && !
-             * listBp.isEmpty()) { // } else { ObsVitalsBloodPressure bp2 = new
-             * ObsVitalsBloodPressure(); bp2.setSystolic(125);
-             * bp2.setDiastolic(84); bp2.setBeginDate(new Date());
-             * bp2.setEndDate(new Date()); bp2.setNote("note id " +
-             * makeSimpleId()); bp2.setSystemNote(bp2.getNote());
-             * commonDao.crudSaveResource(bp2, user.getOwnerUri(), "CoreTestData
-             * createTestUserData"); }
-            *
-             */
+
 
             if (addObservations) {
                 ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
@@ -410,17 +392,6 @@ public class CoreTestData {
                 commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
             }
 
-            //listBw = commonDao.crudReadResources(loginUserIdOwnerUri, (Object)ObsVitalsBodyWeight.class);
-            /*
-             * if ( addObservations) { ObsVitalsBodyWeight bw2 = new
-             * ObsVitalsBodyWeight(); bw2.setBodyWeight(75d);
-             * bw2.setBodyHeight(173d); bw2.setBeginDate(new Date());
-             * bw2.setEndDate(new Date()); bw2.setNote("note id " +
-             * makeSimpleId()); bw2.setSystemNote(bw2.getNote());
-             * commonDao.crudSaveResource(bw2, user.getOwnerUri(), "CoreTestData
-             * createTestUserData"); }
-            *
-             */
 
             LOGGER.debug("Created test data for  fullname " + fullname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
 
@@ -428,7 +399,7 @@ public class CoreTestData {
         } catch (Exception e) {
             LOGGER.error("Error creating user test data", e);
         }
-
+        return user;
     }
 
     /**

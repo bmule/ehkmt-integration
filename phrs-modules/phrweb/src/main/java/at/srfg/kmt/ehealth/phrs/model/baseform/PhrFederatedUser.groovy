@@ -83,14 +83,17 @@ public class PhrFederatedUser extends BaseUser {
     }
 
 
-
+    /**
+     * OpenId identifier, registration model
+     * This can include updates, the logic checks if this is updating an existing user or creating a new user
+     **/
     public PhrFederatedUser(String theIdentifier, RegistrationModel model) {
         super();
         this.lastLogin = new Date().time
-        if (!ownerUri) ownerUri = PhrFederatedUser.makeOwnerUri()
-        if (!creatorUri) creatorUri = ownerUri
-        if (identifier == null) this.identifier = theIdentifier
-        if (userId == null) userId = identifier
+        if (! ownerUri) ownerUri = PhrFederatedUser.makeOwnerUri()
+        if (! creatorUri) creatorUri = ownerUri
+        if (! identifier) this.identifier = theIdentifier
+        if (! userId) userId = identifier
 
         if (model) {
             updateRegistrationData(model)
@@ -109,20 +112,24 @@ public class PhrFederatedUser extends BaseUser {
     public static String makePhrPinId(String theOwnerUri) {
         return theOwnerUri
     }
-
+    /**
+     * update or create 
+     * If updating, it does not replace existing data with null from a "new" registration model, e.g. if the email exists, it will not be replaced with null a second time
+     * 
+     */
     public updateRegistrationData(RegistrationModel model) {
 
-        this.claimedId = model.getClaimedId()
-        this.identity = model.getOpenId()
-        this.providerIdentifier = model.getProvider()
-        this.shortUserId = model.getLocalShortId()
-        this.nickname = model.getNickname()
-        this.fullname = model.getFullName()
+        this.claimedId =    model.getClaimedId()        ? model.getClaimedId()  : this.claimedId
+        this.identity =     model.getOpenId()           ? model.getOpenId()     : this.identity 
+        this.providerIdentifier = model.getProvider()   ? model.getProvider() : this.providerIdentifier 
+        this.shortUserId =  model.getLocalShortId()     ? model.getLocalShortId() : this.shortUserId
+        this.nickname =     model.getNickname()         ? model.getNickname()   : this.nickname
+        this.fullname =     model.getFullName()         ? model.getFullName()   : this.fullname
         //no telephone
-        this.email = model.getEmailAddress()
-        this.lastname = model.getLastName()
-        this.firstname = model.getFirstName()
-        this.birthDate = model.getDateOfBirth()
+        this.email =        model.getEmailAddress()     ? model.getEmailAddress() : this.email
+        this.lastname =     model.getLastName()         ? model.getLastName()   : this.lastname 
+        this.firstname =    model.getFirstName()        ? model.getFirstName()  : this.firstname 
+        this.birthDate =    model.getDateOfBirth()      ? model.getDateOfBirth() : this.birthDate
 
         //verified, role
         this.role = model.getRole() ? model.role : this.role
@@ -130,14 +137,17 @@ public class PhrFederatedUser extends BaseUser {
             if (!roles) roles = []
             roles.add(model.getRole())
         }
-        this.verified = model.is_verified
+        
+        this.verified = model.getIs_verified() ? model.getIs_verified() : this.verified 
     }
 
     /**
      * Either the id from PIX or from the User
      */
     public String getProtocolId() {
-        return protocolIdPix ? protocolIdPix : protocolIdUser
+        String theId= protocolIdPix ? protocolIdPix : protocolIdUser
+        if(theId) return theId
+        return null
     }
     /**
      * Either the normalized namspace from PIX or the default Constants.ICARDEA_DOMAIN_PIX_OID

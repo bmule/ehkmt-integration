@@ -442,7 +442,7 @@ public class ConsentMgrService implements Serializable {
      */
     public boolean auditGrantRequest(String patientId, String idType,
             String requesterRole, String resource) {
-        boolean result = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+        boolean result = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("atna.log"));
 
         auditService.sendAuditMessageGrant(patientId, resource, requesterRole);
 
@@ -575,7 +575,7 @@ public class ConsentMgrService implements Serializable {
             System.out.println("Grant request for patient '" + patientId
                     + "' from requestor role '" + requesterRole
                     + "' for resource '" + resource + "' results in " + result);
-            boolean atnalog = new Boolean(ResourceBundle.getBundle("icardea").getString("atna.log")).booleanValue();
+            boolean atnalog = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("atna.log"));
 
             // TODO: ATNA
             // Send ATNA Message: Grant Request Message

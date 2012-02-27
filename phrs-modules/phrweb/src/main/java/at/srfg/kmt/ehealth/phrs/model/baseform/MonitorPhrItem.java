@@ -16,6 +16,8 @@ public class MonitorPhrItem {
     private String statusStandard;
     private String code;
 
+    private String action;
+    private String actionOutcome;
 
     private String label;
     /**
@@ -100,4 +102,19 @@ public class MonitorPhrItem {
         return reportTool;
     }
 
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getActionOutcome() {
+        return actionOutcome;
+    }
+
+    public void setActionOutcome(String actionOutcome) {
+        this.actionOutcome = actionOutcome;
+    }
 }

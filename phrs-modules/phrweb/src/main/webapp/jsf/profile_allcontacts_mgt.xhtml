@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="/templates/template_ui.xhtml">
+
+	<ui:define name="head">
+		<title></title>
+
+		<ui:insert name="head"></ui:insert>
+	</ui:define>
+
+	<ui:define name="content">
+
+		<h:outputScript target="head">
+			<script type="text/javascript">
+			//<![CDATA[                
+				function onEditComplete(xhr, status, args) {
+					if (window.console && window.console.firebug) {
+						console.log("onEditComplete outputScript");
+					}
+					if (args.validationFailed) {
+
+					} else {
+						widDialogAcontacts.hide();
+					}
+				}
+				//]]>
+			</script>
+
+		</h:outputScript>
+	<!--	 allowCreate=<h:outputLabel value="#{allcontacts.allowCreate}"/>
+		
+		contactTypeMedical=<h:outputLabel value="#{allcontacts.contactTypeMedical}"/>
+		contactType=<h:outputLabel value="#{allcontacts.contactType}"/>-->
+		<h:form prependId="false">
+			<p:messages />
+			<!-- show validation messages for create form contents -->
+			<p:growl id="msgs" showDetail="true" />
+			<!-- shows the validation messages for dialog contents -->
+			<!-- 
+
+render="#{allcontacts.contactType eq  'healthcare_user'}"
+render="#{allcontacts.contactType eq  'healthcare_provider'}"
+ -->
+
+			<p:fieldset
+				legend="#{allcontacts.contactType eq  'healthcare_user' ? labels['contactInfo.personal.label'] : labels['contactInfo.medical.label']}">
+				<!-- 
+
+			<label value="${labels.contactInfo.medical.label}"  	if="${formElementRole.visible}"/>
+			<label value="${labels.contactInfo.personal.label}"     if="@{composer.contactType == 'healthcare_user'}"/>
+ 			render="#{allcontacts.contactType eq  'healthcare_provider'}"
+ -->
+				<p:toolbar>
+					<p:toolbarGroup align="left">
+						<p:commandButton value="create" immediate="true"
+							rendered="#{allcontacts.allowCreate}"
+							title="#{labels['default.button.newform.label']}"
+							image="ui-icon-plus" actionListener="#{allcontacts.create}"
+							update="idPanelAcontacts" oncomplete="widDialogAcontacts.show()" >
+							<f:setPropertyActionListener value="#{allcontacts.contactType}"
+									target="#{allcontacts.contactType}" />							
+							<f:setPropertyActionListener value="yes"
+									target="#{allcontacts.modify}" />
+							</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+<!-- paginator="true"  -->
+				<p:dataTable id="idItemTableAcontacts"
+					widgetVar="widItemTableAcontacts" var="theItem"
+					value="#{allcontacts.modelMain}" rows="20"  scrollable="yes">
+
+					<p:column style="width:50px" headerText="Options">
+						<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
+
+							<!-- ok, success view  allcontacts 
+							<p:commandButton update="idPanelAcontacts"
+								disabled="#{theItem.status eq 'default.no_answer.label'}"
+								oncomplete="widDialogAcontacts.show()" image="ui-icon ui-icon-search"
+								title="#{labels['default.button.view.label']}">
+								<f:setPropertyActionListener value="#{theItem}"
+									target="#{allcontacts.selected}" />
+								<f:setPropertyActionListener value="no"
+									target="#{allcontacts.modify}" />
+							</p:commandButton>
+-->
+							<p:commandButton update="idPanelAcontacts"
+								oncomplete="widDialogAcontacts.show()" image="ui-icon ui-icon-pencil"
+								title="#{labels['default.button.edit.label']}">
+								<f:setPropertyActionListener value="#{theItem}"
+									target="#{allcontacts.selected}" />
+								<f:setPropertyActionListener value="yes"
+									target="#{allcontacts.modify}" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+		
+					<p:column headerText="Name" sortBy="#{theItem.lastName}">
+						<h:outputLabel value="#{theItem.lastName}" />,<h:outputLabel
+							value="#{theItem.firstName}" />
+						<!--  <h:outputLabel value="#{theItem.middleName}" />-->
+					</p:column>
+					
+					<!-- PIX identifier -->
+					  
+					<p:column headerText="CIED ID" sortBy="#{theItem.pixQueryIdType}"
+						render="#{theItem.contactType eq  'healthcare_user'}">
+						<!--<b>Protocol ID:</b><br/>
+						<h:outputLabel value="#{theItem.pixIdentifier.status}" >				
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+						<br/>   pixQueryIdType pixQueryIdUser  -->
+						<h:outputLabel value="#{theItem.pixQueryIdType}"/> - <h:outputLabel value="#{theItem.pixQueryIdUser}"/>
+					</p:column>
+					
+					<!-- prints identifier_cied_number -->
+					<!-- identifier_cied_number
+					<p:column headerText="CIED Identifier" sortBy="#{theItem.ciedIdentifier.identifier}"
+						render="#{theItem.contactType eq  'healthcare_user'}">
+						<h:outputLabel value="#{theItem.ciedIdentifier.identifier}"/>
+					</p:column>
+						 -->				
+					<p:column headerText="Role" sortBy="#{theItem.healthcareRole}">
+						<h:outputLabel value="#{theItem.healthcareRole}">				
+							<f:converter converterId="labelLookup" />
+						</h:outputLabel>
+					</p:column>
+
+					<p:column headerText="Telephone">
+						<h:outputLabel value="#{theItem.primaryTelephone}" />
+					</p:column>
+					
+					<p:column headerText="Address">
+						<h:outputLabel value="#{theItem.addressText}" />
+						<br/>
+						<h:outputLabel value="#{theItem.postalCode}" />
+						<h:outputLabel value="#{theItem.city}" />
+						<br/>
+						<h:outputLabel value="#{theItem.country}" />
+					</p:column>
+					
+					<p:column headerText="Email" sortBy="#{theItem.email}">
+						<h:outputLabel value="#{theItem.email}" />
+						<!-- email_obj -->
+					</p:column>
+
+					<!-- internetChatId_obj internetSystemFederatedId_obj-->
+					
+					<p:column headerText="Internet Services">
+						<h:panelGrid columns="3" style="border:none;">						
+							<h:outputLabel value="Chat"/>
+							<h:outputLabel value="#{theItem.internetChatProvider}"/>
+							<h:outputLabel value="#{theItem.internetChatId}"/>	
+<!-- 
+							<h:outputLabel value="#{theItem.internetChatProvider}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+
+							<h:outputLabel value="Voice"/>
+							<h:outputLabel value="#{theItem.internetVoiceProvider}"/>
+							<h:outputLabel value="#{theItem.internetVoiceId}"/>	
+
+							<h:outputLabel value="#{theItem.internetVoiceProvider}">
+								<f:converter converterId="labelLookup" />
+							</h:outputLabel>
+ -->							
+													
+						</h:panelGrid>
+					</p:column>
+					
+					<p:column headerText="Organization" sortBy="#{theItem.organization}">
+						<h:outputLabel value="#{theItem.organization}" />
+					</p:column>
+					
+					<p:column headerText="#{labels['default.comments.label']}">
+						<h:outputText value="#{theItem.note}" />
+					</p:column>
+					<!--  expander  -->
+				</p:dataTable>
+
+			</p:fieldset>
+
+		</h:form>
+
+		<!-- form dialog -->
+		<!--  add dialog here and wrap with the form profile_allcontacts_dialog.xhtml-->
+
+		<ui:include src="./profile_allcontacts_dialog.xhtml" />
+
+		<!--<p:dialog widgetVar="widDialogAcontacts" id="idDialogAcontacts"
+			modal="true"	appendToBody="true"
+			header="Action Details" width="600" showEffect="clip"
+			hideEffect="clip">
+
+			<p:outputPanel id="idPanelAcontacts" layout="block">
+				<h:form id="idFormAcontacts">
+				
+				test
+				</h:form>
+			</p:outputPanel>
+		</p:dialog>-->
+
+
+	</ui:define>
+</ui:composition>

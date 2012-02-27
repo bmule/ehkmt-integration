@@ -39,6 +39,7 @@ public class MenuController extends FaceCommon{
 
     String defaultNodeType='default'
 	TreeNode root,home,sectionPatientInformation, sectionGroupInfoPeople,sectionPrivacy
+    TreeNode dashboard,dashBoardMonitorPhrImports
 	TreeNode sectionObservations,sectionMeds,sectionActionPlan, sectionProfile,sectionMonitoring,sectionContacts,sectionMedicalDocs
 	TreeNode sectionEdu,sectionCommunity
 	TreeNode test
@@ -59,23 +60,11 @@ public class MenuController extends FaceCommon{
 
 	public MenuController() {
 
-		Map setupNodes = [root:root,
-					home:home,
-					sectionPatientInformation:sectionPatientInformation,
-					sectionObservations:sectionObservations,
-					sectionActionPlan:sectionActionPlan,
-					sectionProfile:sectionProfile,
-					sectionGroupInfoPeople:sectionGroupInfoPeople,
-					sectionEdu:sectionEdu,
-					sectionContacts:sectionContacts,
-					sectionCommunity:sectionCommunity]
-
-		init(this.getLocale(), setupNodes)
+		init(this.getLocale())
 		
 		//previous if using request or view scope
 		//String requestNodeTag=UserSessionService.getRequestParameter(PhrsConstants.MENU_CONTROL_REQUEST_PARAMETER_SELECTED_NODE)
 		//String requestNodeTag=UserSessionService.getSessionAttribute(PhrsConstants.MENU_CONTROL_REQUEST_PARAMETER_SELECTED_NODE)
-		
 
 	}
 
@@ -83,9 +72,8 @@ public class MenuController extends FaceCommon{
 	/**
 	 * 
 	 * @param locale
-	 * @param setupNodes
 	 */
-	public void init(Locale locale, Map setupNodes) {
+	public void init(Locale locale) {
 		//DefaultTreeNode.DEFAULT_TYPE, Folder
 
 		boolean codedLabel=false
@@ -95,9 +83,10 @@ public class MenuController extends FaceCommon{
 
 
 		home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
-//		sectionMonitoring   = new DefaultTreeNode(new DocumentReference("Monitoring",		"", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionPatientInformation), sectionPatientInformation)
 
-		sectionMonitoring   = new DefaultTreeNode(new DocumentReference("Monitoring",		"", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)
+        dashBoardMonitorPhrImports   = new DefaultTreeNode(new DocumentReference("Import Health Data","/jsf/monitor_interop.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)
+
+		sectionMonitoring   = new DefaultTreeNode(new DocumentReference("Monitoring","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)
 		
 		sectionPatientInformation = new DefaultTreeNode(new DocumentReference("Patient Information","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)
 
@@ -164,8 +153,8 @@ public class MenuController extends FaceCommon{
 		addMenuItems(profile, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionProfile,codedLabel)
 
 		//contact info of healthcare persons,other
-		Map mapContacts=['/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_provider':'My Contacts']
-		//'profile_contact_info_iframe.xhtml?typecontact=healthcare_provider':'My Contacts']
+		Map mapContacts=['/jsf/profile_allcontacts_mgt.xhtml?typecontact=healthcare_provider':'My Contacts']
+
 
 		addMenuItems(mapContacts, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionContacts,codedLabel)
 

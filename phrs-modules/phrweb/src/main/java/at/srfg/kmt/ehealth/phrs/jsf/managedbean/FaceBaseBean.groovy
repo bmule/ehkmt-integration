@@ -249,10 +249,6 @@ class FaceBaseBean implements Serializable{
 	 * @return
 	 */
 	public List getModelMain(){
-		//if(internalModelList) println('internal_model size '+internalModelList.size())
-		//if( ! internalModelList) {
-		//	loadModelMain()
-		//}
 		return internalModelList
 	}
 	public void setModelMain(List theModelList){
@@ -261,14 +257,15 @@ class FaceBaseBean implements Serializable{
 	}
 
 	/**
-	 * This is the default load for the model. 
+	 * This is the default load for the model.
+     * Domain controllers can override when needed
 	 */
 	public void loadModelMain(){
 		if(getUserService()){
 
 			// Import new interop messages as new domain objects
 
-			//do import manually by subclasses not automatically 
+			//do import manually by subclasses not automatically. This filters by ownerUri of a user ..default is ownerUri or filter user
 			internalModelList = getUserService().getResources(getDomainClazz());
 		}
 		if( !internalModelList) internalModelList = []

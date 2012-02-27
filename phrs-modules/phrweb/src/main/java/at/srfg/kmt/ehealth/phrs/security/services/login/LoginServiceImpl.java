@@ -1,17 +1,13 @@
 package at.srfg.kmt.ehealth.phrs.security.services.login;
 
 
-import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import org.openid4java.discovery.DiscoveryInformation;
 import org.openid4java.message.AuthRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
@@ -46,20 +42,56 @@ public class LoginServiceImpl implements LoginService {
         String salkServer = properties.getString("salk.server");
 
         //FIXXME phrs use profiles
-        boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea")
-                .getString("salk.usage")).booleanValue();
-
+        boolean specialUsage = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("salk.usage"));
+        // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
         LOGGER.debug("special openId usage " + specialUsage);
 
-        if (specialUsage == true) {
+        if (specialUsage) {
             username = salkServer + "/idp/u=" + username; //only valid for SALK server
+        }
+        LOGGER.debug("createRedirect " + username + " returnUrl=" + returnUrl + " salkServer=" + salkServer + "  special openId usage=" + specialUsage);
+        LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
+
+        DiscoveryInformation discovery = RegistrationService
+                .performDiscoveryOnUserSuppliedIdentifier(username);
+
+
+        if (returnUrl == null) returnUrl = LoginUtils.getOpenIdReturnToUrl();
+
+        LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
+
+        AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
+
+        String redirectUrl = authRequest.getDestinationUrl(true);
+
+        return redirectUrl;
+    }
+
+
+    public String createRedirect(String username, String returnUrl, String openIdProviderId) {
+        //openid.provider.1
+        String server = ConfigurationService.getInstance().getProperty(openIdProviderId);
+        if (server == null) {
+            server = ConfigurationService.getInstance().getProperty("openid.provider.1", "https://icardea-server.lksdom21.lks.local/idp/");
+        }
+        //FIXXME phrs use profiles
+        server = server.trim();
+
+        boolean specialUsage = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("salk.usage"));
+        // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
+        LOGGER.debug("createRedirect special openId usage " + specialUsage + " " + username + " returnUrl=" + returnUrl + " openIdProviderId=" + openIdProviderId + " server=" + server);
+
+        if (specialUsage) {
+            //includes .../idp
+            if (server.endsWith("/")) username = server + "u=" + username;
+            else username = server + "/u=" + username; //only valid for SALK server
         }
         LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
         DiscoveryInformation discovery = RegistrationService
                 .performDiscoveryOnUserSuppliedIdentifier(username);
 
         //String url = RegistrationService.getReturnToUrl();
-        if (returnUrl == null) returnUrl = RegistrationService.getReturnToUrl();
+        if (returnUrl == null) returnUrl = LoginUtils.getOpenIdReturnToUrl();
 
         LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
 
@@ -111,16 +143,6 @@ public class LoginServiceImpl implements LoginService {
     }
 
 
-    public String getUriApplicationHome() {
-        return getEndpointApplicationHome();
-
-    }
-
-    public String getUriLoginPage() {
-        return getEndpointLoginPage();
-    }
-
-
     public String getCurrentIP() {
         String hostname = "";
         try {
@@ -136,66 +158,13 @@ public class LoginServiceImpl implements LoginService {
     void main() {
         LoginServiceImpl logserv = new LoginServiceImpl();
         String openIdTest = ConfigurationService.getInstance().getProperty("openid.test.url", "http://kmt23.salzburgresearch.at:4545/idp/u=bob");
-
-
+        System.out.println("LoginServiceImpl  openid.test.url  " + openIdTest);
+        System.out.println("LoginServiceImpl  getEndpointApplicationHome " + LoginUtils.getEndpointApplicationHome());
+        System.out.println("LoginServiceImpl  getEndpointLoginPage " + LoginUtils.getEndpointLoginPage());
         String redirect = logserv.createRedirect(openIdTest);
         System.out.println("LoginServiceImpl " + redirect);
 
     }
 
-    public static String getEndpointApplicationHome() {
-        String uri = ConfigurationService.getInstance().getProperty("auth.application.home.uri", "/index.xhtml");
 
-        return uri;
-
-    }
-
-    public static String getEndpointLoginPage() {
-        String uri = ConfigurationService.getInstance().getProperty("auth.application.login.uri", "/WEB-INF/views/jsp/login.jsp");
-
-        return uri;
-
-    }
-
-    public static String getEndpointApplicationHome(HttpServletRequest request) {
-        String uri = ConfigurationService.getInstance().getProperty("auth.application.home.uri", "/index.xhtml");
-
-        String endpoint = request.getContextPath() + uri;
-
-        LOGGER.debug("getEndpointApplicationHome endpoint=" + endpoint);
-        return endpoint;
-
-    }
-
-    public static String getEndpointLoginPage(HttpServletRequest request) {
-        String uri = ConfigurationService.getInstance().getProperty("auth.application.login.uri", "/WEB-INF/views/jsp/login.jsp");
-
-        String endpoint = request.getContextPath()
-                + uri;
-        LOGGER.debug("getEndpointApplicationHome endpoint=" + endpoint);
-        return endpoint;
-
-    }
-
-    public boolean isLocalLogin(String username, String loginType) {
-        boolean isLocal = false;
-
-        //String loginType = request
-        //        .getParameter(PhrsConstants.OPEN_ID_PARAM_NAME_LOGIN_WITH);
-        //if (loginType != null) {
-        //}
-
-        /**
-         * Check for local login
-         */
-        if (username != null &&
-                (username.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
-                        || username.equals(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)
-                        || username.equals(ConfigurationService.getInstance().getProperty("test.user.1.login.id", "phrtest")))
-                ) {
-            isLocal = true;
-        }
-        LOGGER.debug("isLocalLogin =" + isLocal + " username=" + username);
-        return isLocal;
-    }
 }

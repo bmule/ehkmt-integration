@@ -87,14 +87,14 @@ public class AuditAtnaService implements Serializable {
     private void init() {
         try {
             ConfigurationService config = ConfigurationService.getInstance();
-            atnalog = new Boolean(config.getProperty("atna.log","true")).booleanValue();
+            atnalog = Boolean.parseBoolean(config.getProperty("atna.log", "true"));
 
-            secure = new Boolean(config.getProperty("atna.tls","false")).booleanValue();
+            secure = Boolean.parseBoolean(config.getProperty("atna.tls", "false"));
            
 //port not in this configuration file
             //atna.tls is true, but ignore...
             if (atnalog) {
-                port = new Integer(config.getProperty("atna.log.port","2861")).intValue();
+                port = Integer.parseInt(config.getProperty("atna.log.port", "2861"));
 
                 if (secure) {
 

@@ -34,34 +34,53 @@
 		-->
 	<p:panel id="loginpanel" closable="false" style="width:100%"  >
 
-        <p:messages id="loginMsgs" showDetail="true" autoUpdate="true"/>
-        <h:panelGroup rendered="#{loginBean.loggedIn eq false}" >
+        <!-- put on home page <p:messages id="msgs" showDetail="true" autoUpdate="true"/>-->
+
 				<!--<h:form>
 					<h:outputLink  value="#{request.contextPath}#{'/login'}"
 					rendered="#{loginBean.loggedIn eq false}">Login</h:outputLink>
 				</h:form>
-                -->
-
-                <h:form>
-                    *<p:inputText value="#{loginBean.username}"
-                             id="login_username"
-                             required="true"
-                             requiredMessage="Please provide your login identifier"/>
-
-                    <p:commandButton value="Login"  title="Login"
-                            ajax="false" actionListener="#{loginBean.processLogin}"/>
-                </h:form>
+                <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>
                  <br/>* OpenId or local login ID (phrtest,nurse. Demo: prefix Id with phr)
-			</h:panelGroup>
+                -->
+        <!--
+        <h:panelGroup rendered="#{loginBean.loggedIn eq false}" >
+                <h:form>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Login with "/>
+                        <h:selectOneMenu value="#{loginBean.loginType}"
+                                         required="true"
+                                         requiredMessage="Please choose one option, a local or iCARDEA login name">
+                            <f:selectItem label="... Please Choose ..." noSelectionOption="true" itemValue=""/>
+                            <f:selectItem itemLabel="Local login name (phrtest, nurse)"     itemValue="local.provider.1"/>
+                            <f:selectItem itemLabel="iCARDEA login name"   itemValue="openid.provider.1"/>
+                        </h:selectOneMenu>
+
+                        <h:outputLabel value="User ID "/>
+                        <p:inputText value="#{loginBean.username}"
+                                 id="login_username"
+                                 required="true"
+                                 requiredMessage="Please provide your login identifier"/>
+
+                        <h:outputLabel value=" "/>
+                        <p:commandButton value="Login"  title="Login" update="msgs"  ajax="false"
+                                 actionListener="#{loginBean.processLogin}"/>
+                    </h:panelGrid>
+                </h:form>
+		</h:panelGroup>
+        -->
 			<!-- under the test mode, we set the loggedIn to true in the loginBean and automatically
 			the 'phrtest' user is assigned as default -->
 			<h:panelGroup rendered="#{loginBean.loggedIn eq true}" >
-				<h:form>					 		
-					<p:commandLink value="Logout: #{loginBean.shortname}"  
-						actionListener="#{loginBean.logout}"/>
-				 </h:form>
-				 <br/>
-				 <h:panelGroup rendered="#{loginBean.roleShow eq true}">
+                <!--loginBean-->
+                <h:form>
+                    <p:commandLink value="Logout"
+                                   actionListener="#{loginBean.logout}"/>
+                </h:form>
+                <br/>
+               <h:outputLabel value="#{loginBean.greetname}"/>
+ 			    <h:panelGroup rendered="#{loginBean.roleShow eq true}">
+                     <br/>
 					  <h:outputLabel value="Role: #{loginBean.role}" />				 
 				 </h:panelGroup>
 

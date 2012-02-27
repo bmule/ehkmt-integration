@@ -25,12 +25,8 @@ public class PhrsConstants implements Serializable {
     public static final String OPEN_ID_PARAM_CLAIM_ID = "claimid";
 
     public static final String OPEN_ID_PARAM_NAME_LOGIN = "openid_identifier";
-    public static final String OPEN_ID_PARAM_NAME_LOGIN_WITH = "loginWith";
-    public static final String OPENID_USER_ID_PREFIX_KEY = "openid.claimed_id.user";
+    public static final String OPEN_ID_PARAM_NAME_LOGIN_WITH = "loginType";//loginWith
 
-    public static final String OPENID_DISCOVERY_IDENTIFIER_KEY = "openid.identity.discovery";
-    public static final String OPENID_DISCOVERY_CLAIM_ID_KEY = "openid.claimed_id.discovery";
-    public static final String OPENID_ICARDEA_PROVIDER_USER_SUFFIX = "/idp/u=";
 
     /**
      * Alias names, see axschema.properties for alias= URI and sreq.properties
@@ -310,7 +306,7 @@ public class PhrsConstants implements Serializable {
     public final static String PHRS_AUDIT_DATABASE_NAME = "phrsaudits1";
 
     public final static String SESSION_PARAM_NAME_FILTER_HEALTH_PROFILE_ID = "filterHealthProfileId";
-    public final static String USER_ID_TEST = AUTHORIZE_USER_PREFIX_TEST;//"testuser";
+    //public final static String USER_ID_TEST = AUTHORIZE_USER_PREFIX_TEST;
     public final static String USER_ID_GUEST = "phrsguest";
 
     public final static String USER_TEST_HEALTH_PROFILE_ID = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;

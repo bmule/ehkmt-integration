@@ -11,9 +11,9 @@
 	<ui:define name="head">
 		<ui:insert name="head"></ui:insert>
 	</ui:define>
-
+    <!-- Will provide same view as /jsf/home.xhtml but it is outside the /jsf folder if we need more protection -->
 	<ui:define name="content">
-
+        <p:messages id="msgs" showDetail="true" autoUpdate="true"/>
 		<p:fieldset toggleable="false" legend="Home">
 			<h:outputText value="#{labels['message_home']}" />
 			<h:panelGroup rendered="#{loginBean.loggedIn eq true}">

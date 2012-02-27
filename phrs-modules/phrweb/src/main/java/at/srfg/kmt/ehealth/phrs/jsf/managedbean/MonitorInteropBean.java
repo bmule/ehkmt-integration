@@ -57,6 +57,10 @@ public class MonitorInteropBean {
     private boolean allowCommandIdentify = true;
     private boolean allowCommandImport = true;
 
+
+    // for dialogs or forms to control view or edit mode of fields
+    public String modify=AuthorizationService.MODIFY_YES;
+
     public MonitorInteropBean() {
         initTools();
 
@@ -73,6 +77,7 @@ public class MonitorInteropBean {
 
         ownerUri = userService.getOwnerUri();
         phrUser = userService.getPhrUser(ownerUri);
+        determineStatusPID(phrUser);
 
         if (phrUser != null) {
             pixQueryIdUser = phrUser.getPixQueryIdUser();
@@ -113,18 +118,24 @@ public class MonitorInteropBean {
 
     public String getPixQueryIdUser() {
 
-        return pixQueryIdUser;
+        if (phrUser != null) {
+            return phrUser.getPixQueryIdUser() !=null ? phrUser.getPixQueryIdUser()  : null;
+        }
+        return null;
     }
 
     public void setPixQueryIdUser(String pixQueryIdUser) {
         this.pixQueryIdUser = pixQueryIdUser;
     }
 
+    /**
+     * @return    when unassigned, PixService.PIX_QUERY_TYPE_DEFAULT
+     */
     public String getPixQueryIdType() {
         if (phrUser != null) {
-            return phrUser.getPixQueryIdUser();
+            return phrUser.getPixQueryIdType() !=null ? phrUser.getPixQueryIdType()  :PixService.PIX_QUERY_TYPE_DEFAULT;
         }
-        return null;
+        return PixService.PIX_QUERY_TYPE_DEFAULT;
     }
 
     public void setPixQueryIdType(String pixQueryIdType) {
@@ -204,8 +215,8 @@ public class MonitorInteropBean {
         this.statusMessagePid = statusMessagePid;
     }
 
-    public String modify() {
-        return "false";
+    public String getModify() {
+        return modify;
     }
 
     public boolean getAllowCommandIdentify() {
@@ -236,6 +247,48 @@ public class MonitorInteropBean {
         return authorizationService;
     }
 
+    public void addStatusMessagePID(String msg){
+        statusMessagePid =   statusMessagePid==null ? "" : statusMessagePid ;
+    }
+
+    /**
+     * Perform new query on user, what identifiers are available?
+     */
+    public void determineStatusPID(PhrFederatedUser phrUser){
+        //in case it was not already done...refresh user
+        this.phrUser = phrUser;
+
+        this.setPidPixFound(false);
+        this.setPidUserFound(false);
+
+            
+        if(phrUser!=null){
+            //pixQueryIdUser = phrUser.getPixQueryIdUser();
+            //pixQueryIdType = phrUser.getPixQueryIdType();
+            
+            if(phrUser.getProtocolIdPix()!=null){
+                this.setPidPixFound(true);
+                addStatusMessagePID("Patient ID found, ID is: "+phrUser.getProtocolIdPix());
+            }
+
+            if(phrUser.getProtocolIdUser()!=null){
+                //no msg, but update flag
+                this.setPidUserFound(true);
+                if( ! this.isPidPixFound()) addStatusMessagePID("Patient ID provided by User, ID is: "+phrUser.getProtocolIdPix());
+
+            }
+        }   else {
+            addStatusMessagePID("Error could not find PHR user for account: "+getOwnerUri());
+        }
+
+    }
+    /**
+     * get the latest stored resource and check 
+     */
+    public void determineStatusPID(){
+        phrUser = userService.getPhrUser(ownerUri);
+        determineStatusPID(phrUser);
+    }
     /**
      *  Import health records
      */
@@ -246,16 +299,21 @@ public class MonitorInteropBean {
             List transformedMsgs = interopProcessor.importNewMessages(
                     getOwnerUri(),
                     Constants.PHRS_MEDICATION_CLASS,
-                    true); //true import the records
+                    true); //true: import the records
             int count=0;
-            if(transformedMsgs!=null && ! transformedMsgs.isEmpty()) count=transformedMsgs.size();
+            if(transformedMsgs != null && ! transformedMsgs.isEmpty()){
+                count=transformedMsgs.size();
+            }
 
-            if(count==0){
-                WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
+            if(count > 0){
 
-            }  else {
+                //reset model main, in request scope
+                //if reshow....setModelMain(transformedMsgs);
                 WebUtil.addFacesMessageSeverityInfo("Import Status", "Successfully imported " + count + " Medication records. Please check your Medications list");
 
+            }  else {
+
+                WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
             }
         } catch (Exception e) {
             LOGGER.error("Error with commandImportMessages",e);
@@ -270,6 +328,7 @@ public class MonitorInteropBean {
      * getTransformedNewMessages
      */
     public void commandProcessIdentifier(ActionEvent actionEvent) {
+        System.out.println("commandProcessIdentifier");
         LOGGER.debug("Start commandProcessIdentifier for owner=" + this.getOwnerUri()
                 + " pixQueryType" + this.getPixQueryIdType()
                 + " pixQueryIdUser" + this.getPixQueryIdUser()
@@ -292,8 +351,15 @@ public class MonitorInteropBean {
                     && getPixQueryIdUser()!=null && ! getPixQueryIdUser().isEmpty()){
                // getPixQueryDeviceModel
                 PixService pixService= new PixService();
-                //String pid= pixService.updateProtocolIdFromUserProvidedCiedId( getOwnerUri(), getPixQueryIdUser(),getPixQueryIdType());
-                outcome=true;
+                //perform PIX query and update user account
+               String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId( getOwnerUri(), getPixQueryIdUser(),getPixQueryIdType());
+               
+               if(returnPid !=null && !returnPid.isEmpty()){
+                  outcome=true; 
+               }
+                
+                //determine status and refresh new user account
+                determineStatusPID();
             } else {
                 LOGGER.error("updateIdentifiers Null value found: updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "+
                         getOwnerUri()+" PixQueryIdType "+ getPixQueryIdType()+ " PixQueryIdUser"+getPixQueryIdUser());
@@ -304,7 +370,18 @@ public class MonitorInteropBean {
         }
         return outcome;
     }
-
+    //        try{
+//            if(selected){
+//                //validate pix identifier, and update the status of the identifier
+//                ProfileContactInfo contactInfo = selected
+//                if(userService && contactInfo && contactInfo.pixIdentifier ){
+//                    boolean validated= sendPixValidationMessage(contactInfo)
+//                }
+//
+//            }
+//        } catch (Exception e){
+//            LOGGER.error(' '+e)
+//        }
 
 }
 

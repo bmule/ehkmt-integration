@@ -10,6 +10,7 @@ import at.srfg.kmt.ehealth.phrs.security.services.login.RegistrationModel
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.security.services.login.LoginUtils
 
 /**
  *
@@ -202,13 +203,8 @@ public class CommonDao {
                         //CoreTestData.createTestUserData();
                         saveUser = false;
 
-                    } else if (userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
-                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN)
-                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
-                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
-
-                        //for phrtest or phrtest1, give it one known ownuri so that we have one test user with a known ownerUri
-                        //these refer to test data created in the database that might be extracted later for sample data
+                    } else if (LoginUtils.isLocalLogin(userId)) {
+                        //just clean up the ownerUris and roles for tests etc
 
                         if (userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1)) {
 
@@ -225,10 +221,10 @@ public class CommonDao {
                         }
 
                     }
-
                     if (attrs) {
-                        user.getAttributes().putAll(attrs)
+                        user.setAttributes(attrs)
                     }
+
                     if (saveUser) this.crudSaveResource(user, user.getOwnerUri(), user.getOwnerUri());
 
                 }
@@ -236,6 +232,12 @@ public class CommonDao {
         }
         return user;
     }
+    /*
+                       } else if (userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)
+                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_ADMIN)
+                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_PREFIX_AUTO_USER)
+                            || userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
+     */
     /**
      * @deprecated
      * Updates interop component registry for actors
@@ -515,41 +517,7 @@ public class CommonDao {
 
     }
 
-    //String pixQueryIdUser
-    //String pixQueryIdNamespace= Constants.ICARDEA_DOMAIN_PIX_OID
-    //String protocolIdUser
-    //String protocolIdPix
-    //String protocolIdNamespacePix
-    /**
-     *
-     * @param ownerUri
-     * @param protocolId
-     * @param namespace
-     * @param byPixQuery
-     */
-    public void crudSaveProtocolId(String ownerUri, String protocolId, String namespace, boolean byPixQuery) {
 
-        if (ownerUri && protocolId) {
-
-            PhrFederatedUser pfu = getPhrUser(ownerUri)
-            if (pfu) {
-                if (byPixQuery) {
-                    pfu.setProtocolIdPix(protocolId)
-                } else {
-                    pfu.setProtocolIdUser(protocolId)
-                }
-
-            }
-            if (pfu) {
-                //update Actor
-                if (byPixQuery || !pfu.getProtocolIdPix()) {
-                    //update
-                    registerProtocolId(ownerUri, protocolId, null)
-                }//do not overwrite
-            }
-
-        }
-    }
     /**
      * Get the CIED serial number (prefix of cied:)
      * that includes parts

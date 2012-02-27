@@ -86,7 +86,7 @@ public class LabelLookupConverter implements Converter {
 	public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2)
 			throws ConverterException {
 		if(arg2 !=null) {
-			return arg2.toString();
+			return arg2;
 		}
 		return arg2;
 

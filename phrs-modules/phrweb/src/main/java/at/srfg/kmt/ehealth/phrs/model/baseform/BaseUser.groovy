@@ -12,16 +12,13 @@ class BaseUser extends BasePhrsMetadata{
 	String userId;
 	// owneruri status, type, etc from BasePhrsMetadata
 
-	//not supported, but the use of OpenIds might reveal users with multiple user accounts
-	Set<String> aliasConfirmedOwnerUris
-	Set<String> aliasOwnerUris
 	Map<String,String> attributes
 	/**
 	 * If BaseUser is extended as in PhrFederatedUser, then it includes the primary health OpenId
 	 * That will access this map
 	 */
 
-	String role;
+	String role
 	Set<String> roles
 	//expect from OpenID
 	String birthDate //date of birth from external systems
@@ -34,7 +31,7 @@ class BaseUser extends BasePhrsMetadata{
     String nickname
 	String postCode
 
-	long lastLogin;
+	long lastLogin
 	//local login possible instead of SSO or OpenId. For testing, crude test admin support,
 	boolean canLocalLogin=false;
 	String localPassword
@@ -49,8 +46,7 @@ class BaseUser extends BasePhrsMetadata{
 	}
 	public BaseUser(String ownerUri ){
 		attributes = [:]
-		aliasOwnerUris=[]
-		aliasConfirmedOwnerUris=[]
+
 		role=PhrsConstants.SESSION_USER_AUTHORITY_ROLE
 		roles = new HashSet()
 		roles.add(role)
@@ -61,8 +57,7 @@ class BaseUser extends BasePhrsMetadata{
 	}
 	public BaseUser(){
 		attributes = [:]
-		aliasOwnerUris=[]
-		aliasConfirmedOwnerUris=[]
+
 		role=PhrsConstants.SESSION_USER_AUTHORITY_ROLE
 		roles = new HashSet()
 		roles.add(role)

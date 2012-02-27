@@ -1,21 +1,16 @@
 package at.srfg.kmt.ehealth.phrs.presentation.utils
 
-import groovy.time.TimeCategory
-import groovy.time.TimeDuration
-
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Collection
-import java.util.Date
-import java.util.LinkedList
-import java.util.List
-
-import org.joda.time.DateTime
-
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.i18n.I18Tool
 import at.srfg.kmt.ehealth.phrs.model.basesupport.CalendarEventSetter
+import groovy.time.TimeCategory
+import groovy.time.TimeDuration
+import java.text.SimpleDateFormat
+import org.joda.time.DateTime
 
+/**
+ * @deprecated
+ */
 class CalendarCoreUtils {
 
 	/**
@@ -375,12 +370,21 @@ class CalendarCoreUtils {
 		}
 		return dateTimes
 	}
-
+    /**
+     * @deprecated
+     * @param calendarEvents
+     * @return
+     */
 	public static Collection calendarEventCleaner(Collection<CalendarEventSetter> calendarEvents){
 		return calendarEventCleaner( calendarEvents, null);
 	}
-	/*
+     /**
+     @deprecated
+      */
 	 public static List calendarEventCleaner(Collection<CalendarEventSetter> calendarEvents, Integer endDateMillsecFix){
+         return []
+     }
+    /*
 	 Collection acceptedEvents= []
 	 //add one hour if enddate problem
 	 int endDateMillisecondFix = endDateMillsecFix ? endDateMillsecFix : 3600000

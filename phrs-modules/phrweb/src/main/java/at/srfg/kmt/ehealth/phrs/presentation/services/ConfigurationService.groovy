@@ -419,20 +419,16 @@ public class ConfigurationService implements Serializable {
         ]*/
         return values
     }
-    /**
-     *
-     * @param shortUserName
-     * @return
-     */
-    public String makeIcardeaOpenIdentifier(String shortUserName) {
-        String name = shortUserName;
-        if (name) {
-            if (!name.startsWith('http')) {
-                name = this.getProperty(OPENID_DISCOVERY_IDENTIFIER_KEY) + 'u=' + shortUserName
-            }
-        }
-        return name
-    }
+
+//    public String makeIcardeaOpenIdentifier(String shortUserName) {
+//        String name = shortUserName;
+//        if (name) {
+//            if (!name.startsWith('http')) {
+//                name = this.getProperty(OPENID_DISCOVERY_IDENTIFIER_KEY) + 'u=' + shortUserName
+//            }
+//        }
+//        return name
+//    }
     /**
      *
      * @param value

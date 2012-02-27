@@ -27,7 +27,7 @@ public class I18Tool {
 	}
 	 */
 	public  Locale getLocale(String language){
-		Locale locale = getLocale(language); //new Locale("fr", "CA", "UNIX");
+		Locale locale = new Locale(language);
 		return locale;
 	}
 	public  Locale getLocale(){

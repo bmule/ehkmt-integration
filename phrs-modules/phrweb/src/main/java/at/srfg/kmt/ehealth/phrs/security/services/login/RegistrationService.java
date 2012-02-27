@@ -20,9 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
-
 import java.util.List;
-import java.util.ResourceBundle;
 
 
 public class RegistrationService {
@@ -193,6 +191,10 @@ public class RegistrationService {
                 FetchResponse fetchResp = (FetchResponse) authSuccess
                         .getExtension(AxMessage.OPENID_NS_AX);
 
+                //Is SREG always supported?
+                //ret.setOpenId(verified.getIdentifier());
+                //ret.setIs_verified("true");
+                //ret.setClaimedId();
                 try {
                     Object roleObj = fetchResp.getAttributeValues("label");
                     String role = LoginUtils.processRole(roleObj);
@@ -228,10 +230,10 @@ public class RegistrationService {
             if (authSuccess.hasExtension(SRegMessage.OPENID_NS_SREG)) {
                 MessageExtension extension = authSuccess.getExtension(SRegMessage.OPENID_NS_SREG);
                 if (extension instanceof SRegResponse) {
-
+                    //TODO check claimedId vs OP's??
                     ret.setOpenId(verified.getIdentifier());
                     ret.setIs_verified("true");
-                    //ret.setClaimedId();
+
 
                     SRegResponse sRegResponse = (SRegResponse) extension;
 
@@ -288,7 +290,7 @@ public class RegistrationService {
     }
 
     /**
-     * @deprecated Use alternative
+     * @deprecated Use alternative, this should not happen, but in case of failure elsewhere.
      * Generates the returnToUrl parameter that is passed to the OP.
      * Alternatively, a returnUrl can be provided to the calling method
      * <p/>
@@ -299,30 +301,29 @@ public class RegistrationService {
      *                        cracked open to get at the raw HttpServlet goodies inside.
      * @return String - the returnToUrl to be used for the authentication request.
      */
+    //we do not use this. The context path is known
 
     public static String getReturnToUrl() {
-        ResourceBundle properties = ResourceBundle.getBundle("icardea");
-        String salkServer = properties.getString("salk.server");
+        return LoginUtils.getOpenIdReturnToUrl();
 
-        String securePort = "6060";//properties.getString("secure.port");
-        String uri = "/phrweb/openid";
+       //ResourceBundle properties = ResourceBundle.getBundle("icardea");
+       //String salkServer = properties.getString("salk.server");
+       //return salkServer + ":" + securePort + uri; //only valid for SALK server
+       //	  String url = salkServer + ":"+securePort+"/phrweb/servlet/loginServlet?"; //only valid for SALK server
 
-        return salkServer + ":" + securePort + uri; //only valid for SALK server
 
+//        try {
+//              InetAddress addr = InetAddress.getLocalHost();
+//
+//              // Get IP Address
+//              byte[] ipAddr = addr.getAddress();
+//              String ipadd = ipAddr.toString();
+//              // Get hostname
+//              String hostname = addr.getHostAddress();
+//              url = "https://"+ hostname + ":"+securePort+"/icardea_careplaneditor/servlet/loginServlet?";
+//          } catch (UnknownHostException e) {
+//          }
 
-        //	  String url = salkServer + ":"+securePort+"/phrweb/servlet/loginServlet?"; //only valid for SALK server
-
-        /*try {
-              InetAddress addr = InetAddress.getLocalHost();
-
-              // Get IP Address
-              byte[] ipAddr = addr.getAddress();
-              String ipadd = ipAddr.toString();
-              // Get hostname
-              String hostname = addr.getHostAddress();
-              url = "https://"+ hostname + ":"+securePort+"/icardea_careplaneditor/servlet/loginServlet?";
-          } catch (UnknownHostException e) {
-          }*/
 
     }
 

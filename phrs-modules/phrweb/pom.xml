@@ -108,11 +108,11 @@
     /lab0/apache/tomcat/apache-tomcat-6.0.35
     /Users/bmulreni/development/development-tools/tomcat6/
 
-      <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6</catalina.home>
-      <catalina.home>D:/srfg/tomcat/phrs-tomcat-6</catalina.home>
+      <catalina.home>${icardea.home}/srfg/tomcat/phrs-tomcat-6/</catalina.home>
+      <catalina.home>D:/srfg/tomcat/phrs-tomcat-6/</catalina.home>
     -->
     <properties>
-        <catalina.home>/Users/bmulreni/development/development-tools/tomcat6</catalina.home>
+        <catalina.home>D:/srfg/tomcat/phrs-tomcat-6/</catalina.home>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
     </properties>
 
@@ -138,6 +138,8 @@
             <version>0.9.6</version>
             <type>pom</type>
         </dependency>
+        <!--
+        Velocity 1.5 is already used, be careful, and do not yet replace or excluce Velocity 1.5 and dependencies
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
@@ -153,6 +155,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        -->
         <!--PHR System dependencies-->
 
         <dependency>

@@ -46,28 +46,15 @@ public class  ProfileContactInfo extends  BasePhrsModel {
 	@Embedded
 	Set<PhoneInfo> secondaryPhones
 
-
-	//@Embedded
-	//PixIdentifier ciedIdentifier
-
-
-	//@Embedded
-	//PixIdentifier pixIdentifier
-
-    //these are copied to  at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
-    //String protocolIdUser
-
+    
+/**
+ *@deprecated
+ */
     String pixQueryIdUser
+ /**
+ *@deprecated
+ */   
     String pixQueryIdType
-
-	/*
-	 * support to facilitate feedback tools eg. google talk, skype, etc
-	 */
-	//@ Embedded
-	//FeedbackAccessInfo feedbackToolInfo
-	/*
-	 * http://www.fastcompany.com/blog/chris-dannen/techwatch/six-brilliant-ways-use-google-voice
-	 */
 
 	/*
 	 * voip - initial support to facilitate google talk, skype, etc

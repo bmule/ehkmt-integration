@@ -417,7 +417,7 @@ public class  VocabularyService implements Serializable{
 	 * This only write the label, the value is already there.
 	 */
 	public static String getLabelsFormatted(def codes) {
-		return getLabelsFormatted(codes)
+		return getLabelsFormatted(codes,'en')
 	}
 	public static String getLabelsFormatted(def codes, String language) {
 		def labels //stringbuffer or string

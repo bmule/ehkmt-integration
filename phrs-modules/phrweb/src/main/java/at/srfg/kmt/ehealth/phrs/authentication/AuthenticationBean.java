@@ -72,7 +72,7 @@ public class AuthenticationBean {
 		return map;
 
 	}
-	// http://stackoverflow.com/questions/1470591/basic-security-in-jsf
+
 	/*
 	 * <filter> <filter-name>AuthenticationFilter</filter-name>
 	 * <filter-class>restricted.AuthenticationFilter</filter-class> </filter>

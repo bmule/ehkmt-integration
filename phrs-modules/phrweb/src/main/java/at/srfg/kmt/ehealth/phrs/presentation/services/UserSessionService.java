@@ -970,7 +970,47 @@ public class UserSessionService {
       return WebUtil.getUrlByFacesContext(relativePath);
     }
 
+    /**
+     * Set error messages from servlet into session and then pick up by JSF based page after Open ID login attempt
+     * @param req
+     * @param errorMsg  if null, the attribute is removed
+     */
+    public static void setSessionLoginErrorMsg(HttpServletRequest req, String errorMsg) {
 
+        if (req != null) {
 
+            try {
+                HttpSession sess = req.getSession(true);
+                if(sess!=null){
+                    if (errorMsg != null) {
+                        sess.setAttribute(PhrsConstants.ERROR_MSG_ATTR, errorMsg);
+                    } else {
+                        sess.removeAttribute(PhrsConstants.ERROR_MSG_ATTR);
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.debug("Error setting error message as session attribute from Openid login", e);
+            }
+        }
+    }
 
+    /**
+     *   Status of the Open ID login
+     * @return  is_verified = true, false, or null if not set by OpenId LoginServlet or registration service
+     *
+     */
+    public static Boolean getSessionAttributeOpenIdIsVerified(){
+           Boolean verified=null;
+           Object obj=UserSessionService.getSessionAttribute("is_verified");
+           if(obj!=null){
+               try {
+                   if(obj instanceof String) verified = Boolean.parseBoolean((String)obj);
+                   else if(obj instanceof Boolean)  verified = (Boolean)obj;
+               } catch (Exception e) {
+                  LOGGER.error("Boolean parsing exception on Session attribute is_verified");
+               }
+           }
+
+        return verified;
+    }
 }
