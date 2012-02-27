@@ -6,11 +6,11 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrMessageLog
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
+import at.srfg.kmt.ehealth.phrs.security.services.login.LoginUtils
 import at.srfg.kmt.ehealth.phrs.security.services.login.RegistrationModel
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import at.srfg.kmt.ehealth.phrs.security.services.login.LoginUtils
 
 /**
  *
@@ -511,12 +511,15 @@ public class CommonDao {
                 protocolId = pfu.getProtocolId()
             }
 
-
         }
         return protocolId;
 
     }
+    public String getProtocolId(String ownerUri,String namespace) {
 
+        return getProtocolId(ownerUri);
+
+    }
 
     /**
      * Get the CIED serial number (prefix of cied:)

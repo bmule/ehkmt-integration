@@ -450,10 +450,9 @@ public class  VocabularyEnhancer implements Serializable {
 			case ObsVitalsBodyWeight.class.getCanonicalName():
 			
 				break
-		
+		    //				ProfileUserContactInfo.class.getCanonicalName(),
 			case [
 				ProfileContactInfo.class.getCanonicalName(),
-				ProfileUserContactInfo.class.getCanonicalName(),
 				ProfileMedicalContactInfo.class.getCanonicalName()
 			]:
 				map.put('TAG_ROLES_MEDICAL_PROFESSIONAL', 	getTerms(PhrsConstants.TAG_ROLES_MEDICAL_PROFESSIONAL,language))

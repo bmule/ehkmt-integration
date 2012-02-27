@@ -8,32 +8,28 @@ import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
-
-import at.srfg.kmt.ehealth.phrs.model.baseform.*;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight;
+import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-
-import java.util.Date;
-
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
-import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
-
-import java.awt.event.ActionEvent;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
-
-import java.util.*;
-
 import org.apache.commons.beanutils.DynaBean;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class CoreTestData {
 
@@ -159,7 +155,7 @@ public class CoreTestData {
     public void addTestMedications_2_forPortalTestUser() {
 
         //final String owner = Constants.OWNER_URI_CORE_PORTAL_TEST_USER;   x
-        String owner = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
+        String owner = ConfigurationService.getInstance().getProperty("test.user.1.login.id", "phrtest");
         this.addTestMedications_2_forPortalTestForOwnerUri(owner);
     }
 
@@ -189,59 +185,59 @@ public class CoreTestData {
 
                 final MedicationClient client = new MedicationClient(triplestore);
 
-                client.addMedicationSign(owner, "Free text note for the medication 1.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 1.",
                         Constants.STATUS_COMPELETE, "200812010000", "201106101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "25", Constants.MILLIGRAM,
                         "Prednisone", "C0032952");
 
-                client.addMedicationSign(owner, "Free text note for the medication 2.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 2.",
                         Constants.STATUS_COMPELETE, "200812010000", "201106101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "40", Constants.MILLIGRAM,
                         "Pantoprazole (Pantoloc)", "C0081876");
 
-                client.addMedicationSign(owner, "Free text note for the medication 3.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 3.",
                         Constants.STATUS_COMPELETE, "199910101010", "201106101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "5", Constants.MILLIGRAM,
                         "Concor", "C0110591");
 
-                client.addMedicationSign(owner, "Free text note for the medication 4.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 4.",
                         Constants.STATUS_COMPELETE, "199910101010", "201010101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "1", Constants.DROPS,
                         "Psychopax (Diazepam)", "C0012010");
 
-                client.addMedicationSign(owner, "Free text note for the medication 5.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 5.",
                         Constants.STATUS_COMPELETE, "198010101010", "20110601010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "300", Constants.MILLIGRAM,
                         "Convulex", "C0591288");
 
-                client.addMedicationSign(owner, "Free text note for the medication 6.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 6.",
                         Constants.STATUS_COMPELETE, "20090101010", "201106101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "20", Constants.MILLIGRAM,
                         "Ebetrexat(Methotrexate)", "C0025677");
 
-                client.addMedicationSign(owner, "Free text note for the medication 7.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 7.",
                         Constants.STATUS_COMPELETE, "20090101010", "201106101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "10", Constants.MILLIGRAM,
                         "Folsan(Folic Acid)", "C0016410");
 
-                client.addMedicationSign(owner, "Free text note for the medication 8.",
+                client.addMedicationSign(protocolId, "Free text note for the medication 8.",
                         Constants.STATUS_COMPELETE, "199910101010", "201010101010",
                         client.buildNullFrequency(),
                         Constants.HL7V3_ORAL_ADMINISTRATION, "1", Constants.TABLET,
                         "Magnosolv(Magnesium)", "C0024467");
-                LOGGER.debug("END addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner);
+                LOGGER.debug("END addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner+" pid="+protocolId);
             } catch (TripleException e) {
                 e.printStackTrace();
-                LOGGER.debug("ERROR addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner, e);
+                LOGGER.debug("ERROR addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner+" pid="+protocolId, e);
             } catch (Exception e) {
-                LOGGER.debug("ERROR addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner, e);
+                LOGGER.debug("ERROR addTestMedications_2_forPortalTestForOwnerUri  preparing test data for owner= " + owner+" pid="+protocolId, e);
                 e.printStackTrace();
             }
         } else {

@@ -1,9 +1,9 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
-import at.srfg.kmt.ehealth.phrs.model.baseform.HealthProfileOverview
+import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
 import at.srfg.kmt.ehealth.phrs.model.basesupport.AuditBase
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropAccessService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService
@@ -429,19 +429,15 @@ public class PhrsRepositoryClient implements Serializable{
      */
     public boolean allowDelete(def theObject){
         boolean flag = true
-
+        //changed from ProfileUserContactInfo ,theObject instanceof HealthProfileOverview
         if( theObject) {
-            flag = (theObject instanceof HealthProfileOverview
-                || theObject instanceof ProfileUserContactInfo
+            flag = (theObject instanceof ProfileContactInfo
+                || theObject instanceof PhrFederatedUser
                 || theObject instanceof ProfileMedicalContactInfo) ? false : true
         }
         return flag
     }
-    /*
-             flag = (theObject instanceof HealthProfileOverview
-                || theObject instanceof ProfileUserContactInfo
-                || theObject instanceof ProfileMedicalContactInfo) ? false : true
-     */
+
     /**
      * 
      * @param theObject

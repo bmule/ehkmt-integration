@@ -295,9 +295,11 @@ public class InteropClients {
         PHRSRequestClient requestClient = getPHRSRequestClient();
         DynaBeanClient beanClient = getDynaBeanClient();
         final Iterable<String> resources = requestClient.getAllPHRSRequests();
+       int countRequests=0;
+       int countNotified=0;
         for (String resource : resources) {
             final DynaBean request = beanClient.getDynaBean(resource);
-
+            countRequests++;
             boolean sendNotification = false;
             String careProvisionCode = (String) request.get(Constants.HL7V3_CARE_PROVISION_CODE);
             //filter on careProvisionCode  ?
@@ -324,6 +326,7 @@ public class InteropClients {
             }
 
             if (sendNotification) {
+                countNotified++;
                 final String wsAdress =
                         (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
 
@@ -344,7 +347,7 @@ public class InteropClients {
             LOGGER.debug("END notifyInteropMessageSubscribers notify="+sendNotification+ " protocolId" + protocolId+ " selectedCareProvisionCode "+selectedCareProvisionCode);
 
         }
-        LOGGER.debug("Finished - Notified Core after Loading test data ");
+        LOGGER.debug("Finished - Notified Core after Loading test data countPHRSRequests found="+countRequests+" countNotified=" +countNotified);
 
     }
 

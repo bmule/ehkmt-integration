@@ -4,7 +4,9 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants
 
 import com.google.code.morphia.annotations.Entity
 
-
+/**
+ * @deprecated Using ProfileContactInfo
+ */
 
 @Entity
 public class  ProfileUserContactInfo extends ProfileContactInfo{

@@ -2,7 +2,7 @@ package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileUserContactInfo
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
@@ -25,7 +25,8 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
         super();//required!!
 
         //initial setup. Load actual object later
-        domainClazz = ProfileUserContactInfo.class
+        //changed ProfileUserContactInfo
+        domainClazz = ProfileContactInfo.class
         setSelected(domainClazz.newInstance())
 
         contactType =PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER
@@ -49,7 +50,8 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
             if(userService){
                 internalModelList = []
                 //add single record
-                ProfileUserContactInfo contactInfo = userService.getResourceSingle(ProfileUserContactInfo, true) //create if needed
+                // ProfileUserContactInfo contactInfo = userService.getResourceSingle(ProfileUserContactInfo, true) //create if needed
+                ProfileContactInfo contactInfo = (ProfileContactInfo)userService.getResourceSingle(ProfileContactInfo, true) //create if needed
                 //only one, "selected"  can be referenced by the jsf page without using the list modelMain
                 selected=contactInfo
                 getModelMain().add(contactInfo)
@@ -113,112 +115,4 @@ public class ProfileContactInfoBean extends FaceBaseBean  {
     }
 
 
-  //  @Override
-  //  public void storeModifyFirst(){
-  //      super.storeModifyFirst()
-//        try{
-//            if(selected){
-//                //validate pix identifier, and update the status of the identifier
-//                ProfileContactInfo contactInfo = selected
-//                if(userService && contactInfo && contactInfo.pixIdentifier ){
-//                    boolean validated= sendPixValidationMessage(contactInfo)
-//                }
-//             
-//            }
-//        } catch (Exception e){
-//            LOGGER.error(' '+e)
-//        }
-
-
-   //}
-//    private void loadContactType(){
-//
-//        contactType =PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER
-//        domainClazz = ProfileUserContactInfo.class
-//        selected = new ProfileUserContactInfo()
-//        setAllowCreate(false);
-//        setAllowDelete(false);
-
-//        if(!contactType){
-//            String temp =doTypeContact()
-//
-//            switch(temp){
-//
-//                case PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER:
-//                contactType =temp
-//                domainClazz = ProfileUserContactInfo.class
-//                selected = new ProfileUserContactInfo()
-//                setAllowCreate(false);
-//                setAllowDelete(false);
-//                break
-//
-//                case PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_PROVIDER:
-//                contactType =temp
-//                domainClazz = ProfileMedicalContactInfo.class
-//                selected = new ProfileMedicalContactInfo()
-//                setAllowCreate(true);
-//                setAllowDelete(false);
-//                break
-//
-//                default:
-//                println('ERROR Contact info typecontact='+temp ? temp : 'null')
-//
-//                contactType=PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER
-//                domainClazz = ProfileUserContactInfo.class
-//                selected = new ProfileUserContactInfo()
-//                break
-//            }
-//
-//            if(contactType) println('constructor contactType set to = '+temp)
-//        }
-//    }
-//    private void setup(){
-
-
-//            loadModelMain()
-//            if(!contactType) loadContactType()
-//            if(contactType == PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER){
-//                if(getModelMain()==null) internalModelList = []
-//                if(getModelMain().isEmpty()){
-//                    if(userService){
-//                        //add one record
-//                        ProfileUserContactInfo info= userService.getResourceSingle(ProfileUserContactInfo, true)
-//                        //info.setLastName('?')
-//                        //info.setFirstName('???')
-//
-//                        getModelMain().add(info)
-//                    }
-//                }
-//            }
-    //initIdentifiers()
-//        } catch (Exception e){
-//            LOGGER.error('ProfileContactInfoBean loadModelMain Exception '+e)
-//        }
-//
-//
-//    }
-
-//    public void updateIdentifiers(){
-//       ProfileContactInfo info= (ProfileContactInfo)selected
-//
-//        LOGGER.debug('updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId ')
-//
-//        if(info){
-//            PixService pixService= new PixService();
-//            pixService.updateProtocolIdFromUserProvidedCiedId( info.ownerUri, info.getPixQueryIdUser(),info.getPixQueryDeviceModel())
-//        }
-//
-//    }
-//        //this is determined too late if using request param
-//        //Issue: fired by super contructor before known in domain controller!
-//        //if(!contactType) loadContactType()
-//        if(contactType == PhrsConstants.PARAM_NAME_CONTACT_TYPE_HEALTH_CARE_USER){
-//            setAllowCreate(false);
-//            setAllowDelete(false);
-//        } else {
-//            setAllowCreate(true);
-//            setAllowDelete(false);
-//        }
-//
-//        setModify(AuthorizationService.MODIFY_YES)
 }

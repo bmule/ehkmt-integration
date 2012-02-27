@@ -1,14 +1,14 @@
 package at.srfg.kmt.ehealth.phrs.model.baseform
 
-import java.util.Date
-import java.util.Set
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 
 import com.google.code.morphia.annotations.Embedded
 import com.google.code.morphia.annotations.Entity
 import com.google.code.morphia.annotations.Transient
-
+/**
+ * User Contact information
+ */
 @Entity
 public class  ProfileContactInfo extends  BasePhrsModel {
 	String contactType

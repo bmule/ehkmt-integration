@@ -293,7 +293,11 @@ public class MonitorInteropBean {
      *  Import health records
      */
     public void commandImportMessages(ActionEvent actionEvent) {
-        try {
+        commandImportMessages();
+
+    }
+    public void commandImportMessages() {
+                try {
             System.out.println("commandImportMessage");
             LOGGER.debug("Start MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
             List transformedMsgs = interopProcessor.importNewMessages(
@@ -321,13 +325,15 @@ public class MonitorInteropBean {
 
         LOGGER.debug("END MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
         initModelMain();
-
     }
-
+       public void commandProcessIdentifier(ActionEvent actionEvent) {
+            commandProcessIdentifier();
+            
+        }
     /**
      * getTransformedNewMessages
      */
-    public void commandProcessIdentifier(ActionEvent actionEvent) {
+    public void commandProcessIdentifier() {
         System.out.println("commandProcessIdentifier");
         LOGGER.debug("Start commandProcessIdentifier for owner=" + this.getOwnerUri()
                 + " pixQueryType" + this.getPixQueryIdType()

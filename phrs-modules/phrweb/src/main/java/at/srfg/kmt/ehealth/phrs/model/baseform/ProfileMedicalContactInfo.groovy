@@ -6,7 +6,8 @@ import com.google.code.morphia.annotations.Entity
 
 
 @Entity
-public class  ProfileMedicalContactInfo extends ProfileContactInfo{
+public class  ProfileMedicalContactInfo extends BaseProfileContactInfo{
+//extends ProfileContactInfo
 
 	String noteAgents //secretary, nurse names and other notes
 	

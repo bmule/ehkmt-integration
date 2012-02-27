@@ -44,13 +44,14 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
     //problem with coding of status...could get interop code PhrsConstants.STATUS_COMPLETE etc
     @Override
     public void loadModelMain(){
-        /**
+        /*
          * Import new interop messages as new domain objects
          */
+        //FIXXME IMPORT Remove if desired. Import UI should handle
         try {
-            LOGGER.error('Controller START import InteropMessages')
+            LOGGER.error('ObsMedicationChangeBean START loadModelMain  import InteropMessages')
             importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
-            LOGGER.error('Controller END import InteropMessages')
+            LOGGER.error('ObsMedicationChangeBean END loadModelMain import InteropMessages')
         } catch (Exception e){
             LOGGER.error('Medication building list importInteropMessages',e)
         }
