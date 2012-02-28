@@ -186,7 +186,7 @@ final class ProblemEntryTask implements PCCTask {
         // This lines wipe out the triple store repository files.
         try {
             ((GenericTriplestoreLifecycle) triplestore).shutdown();
-            ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+            //((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
