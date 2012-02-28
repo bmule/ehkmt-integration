@@ -4,13 +4,16 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
-import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
-import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
+import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import java.util.HashSet;
 import java.util.Set;
+import javax.xml.bind.JAXBException;
 import junit.framework.Assert;
+import org.apache.commons.beanutils.DynaBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -339,4 +342,5 @@ public class ActorClientUnitTest {
                 actorClient.getProtocolIdsInNamespace(NAME_SPACE);
         Assert.assertEquals(1, protocolId.size());
     }
+    
 }

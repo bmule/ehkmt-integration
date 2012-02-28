@@ -240,7 +240,7 @@ public class InteropAccessService implements Serializable {
      */
     public Map sendMessages(def resource, String resourceType, String action, Map attrs) {
         Map messageIdMap = [:]
-
+        LOGGER.debug('sendMessages START resourceType= '+resourceType+' action='+action);
         if (resource && resource instanceof BasePhrsModel) {
 
             try {
@@ -296,7 +296,7 @@ public class InteropAccessService implements Serializable {
                 String theParentId = res.resourceUri
 
                 boolean notifySubscribers = false;
-
+                LOGGER.debug('sendMessages SWITCH resourceType= '+resourceType+' protocolId='+protocolId+' status='+status+' dateStart='+dateStringStart);
                 switch (resourceType) {
 
                     case ProfileRisk.class.getCanonicalName():
@@ -340,10 +340,15 @@ public class InteropAccessService implements Serializable {
                         notifySubscribers = true
 
                         break
-
+//Constants.HL7V3_COMPILANT
+//Constants.HL7V3_FINDING
+//status
+//Constants.STATUS_COMPELETE
+//Constants.STATUS_ACTIVE
                     case ProfileActivityDailyLiving.class.getCanonicalName():
 
-                        categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_ADL //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
+                        categoryCode =  Constants.HL7V3_FINDING
+                            //PhrsConstants.HL7V3_CODE_CATEGORY_ADL This is finding...
 
                         String interopRef = null  //findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)
 
@@ -423,6 +428,8 @@ public class InteropAccessService implements Serializable {
                     case MedicationTreatment.class.getCanonicalName():
 
                         MedicationTreatment domain = (MedicationTreatment) resource
+                        LOGGER.debug('sendMessages prepare sendMedicationMessage MedicationTreatment resourceType= '+resourceType+' protocolId='+protocolId+' status='+status+' dateStart='+dateStringStart);
+
                         messageIdMap = iprocess.sendMedicationMessage(domain);
                         //notify done already in medication
                         break
@@ -435,10 +442,12 @@ public class InteropAccessService implements Serializable {
 
                         ObsProblem domain = (ObsProblem) resource
 
-                        if (categoryCode != Constants.HL7V3_SYMPTOM) {
-                            categoryCode = Constants.HL7V3_SYMPTOM
+                        //if (categoryCode != Constants.HL7V3_SYMPTOM) {
+                            categoryCode = Constants.HL7V3_COMPILANT
+                                //Constants.HL7V3_SYMPTOM
                             //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
-                        }
+                            //HL7V3_FINDING
+                        //}
 
                         //No need to update, write again
                         String interopRef = null // findMessageWithReference(owner, theParentId, Constants.PHRS_OBSERVATION_ENTRY_CLASS, categoryCode)

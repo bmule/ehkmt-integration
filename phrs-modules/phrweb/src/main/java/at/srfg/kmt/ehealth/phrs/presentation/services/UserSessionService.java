@@ -6,41 +6,38 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.security.services.login.RegistrationModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UserSessionService {
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(UserSessionService.class);
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(UserSessionService.class);
     // The configuration.xml will have these
 
 //    public static final String forwardRedirectIsAuthenticatedToPage = "/jsf/home.xhtml";
 //    public static final String formwardRedirectFilteredDirectory = "/jsf/";
 //    public static final String forwardRedirectLoginPage = "/WEB-INF/views/jsp/login.jsp";
-
     // public static final String forwardRedirectLoginPageAlternate =
     // "/WEB-INF/views/jsp/login.jsp";
-
     public static CommonDao getCommonDao() {
         return PhrsStoreClient.getInstance().getCommonDao();
     }
-
 
     public static boolean isSessionUser(String targetUserOwnerUri) {
 
         if (targetUserOwnerUri != null) {
             String sessionUser = UserSessionService.getSessionAttributePhrId();
-            if (sessionUser != null && targetUserOwnerUri.equals(sessionUser))
+            if (sessionUser != null && targetUserOwnerUri.equals(sessionUser)) {
                 return true;
+            }
         }
         return false;
 
@@ -82,15 +79,13 @@ public class UserSessionService {
         // FacesContext.getCurrentInstance().responseComplete(). If use
         // response.sendRedirect then must call ..responseComplete afterwards
         try {
-            FacesContext.getCurrentInstance().getExternalContext()
-                    .redirect(uri);// "article.jsp?article_id=" + articleId);
+            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);// "article.jsp?article_id=" + articleId);
         } catch (IOException e) {
             LOGGER.error("uri=" + uri, e);
         } catch (Exception e) {
             LOGGER.error("uri=" + uri, e);
         }
     }
-
 
     /**
      * Handle PhrFederatedUser by OpenId
@@ -108,12 +103,15 @@ public class UserSessionService {
         if (req != null) {
             String theUserId = localId;
 
-            if (theUserId == null)
+            if (theUserId == null) {
                 theUserId = req.getParameter(PhrsConstants.OPEN_ID_PARAM_NAME_LOGIN);
-            if (theUserId == null)
+            }
+            if (theUserId == null) {
                 theUserId = req.getParameter("username");
-            if (theUserId == null)
+            }
+            if (theUserId == null) {
                 throw new Exception("Missing user name or invalid parameter");
+            }
 
             theUserId = theUserId.trim();
 
@@ -189,7 +187,9 @@ public class UserSessionService {
                 //sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE, model.getRole());
                 try {
                     String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
-                    if (greetName != null) sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
+                    if (greetName != null) {
+                        sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
+                    }
                 } catch (Exception e1) {
                     LOGGER.error("error creating greetname", e1);
                 }
@@ -197,13 +197,77 @@ public class UserSessionService {
         }
         return phrUser;
     }
-
     /**
+     * Demo only no password
      * @param localId
-     * @param req
+     * @return
+     * @throws Exception 
+     */
+    public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(String localId) throws Exception {
+        return managePhrUserSessionLocalLoginScenario(localId);
+    }
+    /**
+     * Manage local login
+     * @param localId
+     * @param password
      * @return
      * @throws Exception
      */
+    public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(String localId,String password, Map<String,String> attrs) throws Exception {
+
+        PhrFederatedUser phrUser = null;
+        if (localId != null && !localId.isEmpty()) {
+            String theUserId = localId;
+     
+
+            theUserId = theUserId.trim();
+
+            // assign admin regardless of case to a constant 'admin' name
+            if (PhrsConstants.AUTHORIZE_USER_ADMIN.equalsIgnoreCase(theUserId)) {
+                theUserId = PhrsConstants.AUTHORIZE_USER_ADMIN;
+            }
+
+            // find it or create it....
+            Map<String, String> map = null;// attributes, see parameter
+
+            phrUser = getCommonDao().getPhrUserByLocalUserId(theUserId,
+                    map, true);// create if not found
+
+
+            putSessionAttributeString(PhrsConstants.SESSION_USER_LOGIN_ID,
+                    phrUser.getUserId());
+
+            putSessionAttributeString(PhrsConstants.SESSION_USER_PHR_OWNER_URI,
+                    phrUser.getOwnerUri());
+
+            //putSessionAttributeString(PhrsConstants.SESSION_USER_PHR_OBJECT,
+            //        phrUser);
+
+            putSessionAttributeString(
+                    PhrsConstants.SESSION_USER_AUTHENTICATION_NAME,
+                    phrUser.getOwnerUri());
+
+            putSessionAttributeString(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
+                    phrUser.getRole());
+
+            String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
+            
+            if (greetName != null) {
+                putSessionAttributeString(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
+            }
+
+        } else {
+            throw new Exception("UserId null or blank");
+        }
+        return phrUser;
+    }
+    /**
+    * @deprecated
+    * @param localId
+    * @param req
+    * @return
+    * @throws Exception 
+    */
     public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(
             String localId, HttpServletRequest req) throws Exception {
 
@@ -211,13 +275,15 @@ public class UserSessionService {
         if (req != null) {
             String theUserId = localId;
 
-            if (theUserId == null)
-                theUserId = req
-                        .getParameter(PhrsConstants.OPEN_ID_PARAM_NAME_LOGIN);
-            if (theUserId == null)
+            if (theUserId == null) {
+                theUserId = req.getParameter(PhrsConstants.OPEN_ID_PARAM_NAME_LOGIN);
+            }
+            if (theUserId == null) {
                 theUserId = req.getParameter("username");
-            if (theUserId == null)
+            }
+            if (theUserId == null) {
                 throw new Exception("Missing user name or invalid parameter");
+            }
 
             theUserId = theUserId.trim();
 
@@ -240,8 +306,8 @@ public class UserSessionService {
                 sess.setAttribute(PhrsConstants.SESSION_USER_PHR_OWNER_URI,
                         phrUser.getOwnerUri());
 
-                sess.setAttribute(PhrsConstants.SESSION_USER_PHR_OBJECT,
-                        phrUser);
+                //sess.setAttribute(PhrsConstants.SESSION_USER_PHR_OBJECT,
+                //        phrUser);
 
                 sess.setAttribute(
                         PhrsConstants.SESSION_USER_AUTHENTICATION_NAME,
@@ -251,7 +317,9 @@ public class UserSessionService {
                         phrUser.getRole());
 
                 String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
-                if (greetName != null) sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
+                if (greetName != null) {
+                    sess.setAttribute(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
+                }
             }
         }
         return phrUser;
@@ -263,34 +331,31 @@ public class UserSessionService {
      * @param localId
      * @return
      * @throws Exception
-     */
-    public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(
-            String localId) throws Exception {
-
-        PhrFederatedUser phrUser = null;
-        FacesContext context = UserSessionService.getFacesContext();
-        if (context != null) {
-            HttpServletRequest req = (HttpServletRequest) context
-                    .getExternalContext().getRequest();
-            phrUser = managePhrUserSessionLocalLoginScenario(localId, req);
-
-
-        }
-        return phrUser;
+     *
+     * public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(
+     * String localId) throws Exception {
+     *
+     * PhrFederatedUser phrUser = null; FacesContext context =
+     * UserSessionService.getFacesContext(); if (context != null) {
+     * HttpServletRequest req = (HttpServletRequest)
+     * context.getExternalContext().getRequest(); phrUser =
+     * managePhrUserSessionLocalLoginScenario(localId, req);
+     *
+     *
+     * }
+     * return phrUser;
     }
-
+     */
     /**
      * To facilitate testing and demonstration
      * <p/>
      * Automatic user setup for local login without password for:
      * <p/>
-     * 1. prefix: phruser*
-     * 2. prefix: phrtest*
+     * 1. prefix: phruser* 2. prefix: phrtest
+     *
      * <p/>
-     * or Actual user names:
-     * 3. ellen    role nurse
-     * 4. phruser  role nurse
-     * 5. phruser1 role doctor
+     * or Actual user names: 3. ellen role nurse 4. phruser role nurse 5.
+     * phruser1 role doctor
      *
      * @param theUserName
      * @return
@@ -311,7 +376,6 @@ public class UserSessionService {
         }
         return false;
     }
-
 
     public static void logMap(Map<String, String> map) {
         LOGGER.debug("Logging map contents:");
@@ -335,8 +399,9 @@ public class UserSessionService {
                     Object obj = inputMap.get((String) key);
 
                     if (obj instanceof String) {
-                        if (obj != null && ((String) obj).isEmpty())
+                        if (obj != null && ((String) obj).isEmpty()) {
                             extracted.put((String) key, (String) obj);
+                        }
                         //In case non-standard e.g. role
                     } else if (obj instanceof List) {
                         List col = (List) obj;
@@ -356,7 +421,6 @@ public class UserSessionService {
         return extracted;
     }
 
-
     public static void sessionInit(boolean create, Map<String, String> newSessionAttrs) {
 
         //HttpSession session=null;
@@ -367,8 +431,7 @@ public class UserSessionService {
             if (context != null) {
                 // cleanup .. in case there is an error, remove any keys before
                 // invalidating
-                removeUserSessionKeys(context.getExternalContext()
-                        .getSessionMap());
+                removeUserSessionKeys(context.getExternalContext().getSessionMap());
                 // invalidate session
                 context.getExternalContext().invalidateSession();
             }
@@ -433,8 +496,9 @@ public class UserSessionService {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             if (context != null && context.getExternalContext() != null) {
-                if (context.getExternalContext().getSession(false) != null)
+                if (context.getExternalContext().getSession(false) != null) {
                     exists = true;
+                }
             }
         } catch (Exception e) {
             LOGGER.error("", e);
@@ -447,8 +511,7 @@ public class UserSessionService {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             if (context != null && context.getExternalContext() != null) {
-                principal = FacesContext.getCurrentInstance()
-                        .getExternalContext().getUserPrincipal();
+                principal = FacesContext.getCurrentInstance().getExternalContext().getUserPrincipal();
             }
         } catch (Exception e) {
             LOGGER.error("getUserPrincipal" + e);
@@ -467,8 +530,7 @@ public class UserSessionService {
         try {
             FacesContext context = FacesContext.getCurrentInstance();
             if (context != null && context.getExternalContext() != null) {
-                remoteUser = FacesContext.getCurrentInstance()
-                        .getExternalContext().getRemoteUser();
+                remoteUser = FacesContext.getCurrentInstance().getExternalContext().getRemoteUser();
             }
         } catch (Exception e) {
             LOGGER.error("getUserPrincipal" + e);
@@ -478,37 +540,44 @@ public class UserSessionService {
     }
 
     /**
-     * Remove PhrsConstants.SESSION_USER_PHR_OWNER_URI,
-     * SESSION_USER_PHR_FILTER_URI,
-     * SESSION_USER_PHR_OBJECT,SESSION_USER_OPENID_OBJECT
+     * Clear the session map, if fails, then remove important keys
+     * PhrsConstants.SESSION_USER_PHR_OWNER_URI, SESSION_USER_PHR_FILTER_URI,
+     * SESSION_USER_PHR_OBJECT,SESSION_USER_OPENID_OBJECT OPEN_ID_IS_VERIFIED
      *
-     * @param map
+     * @param map session map
      */
     public static void removeUserSessionKeys(Map map) {
+
         if (map != null && !map.isEmpty()) {
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_PHR_OWNER_URI))
-                map.remove(PhrsConstants.SESSION_USER_PHR_OWNER_URI);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_AUTHORITY_ROLE))
-                map.remove(PhrsConstants.SESSION_USER_AUTHORITY_ROLE);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_PHR_FILTER_OWNER_URI))
-                map.remove(PhrsConstants.SESSION_USER_PHR_FILTER_OWNER_URI);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_PHR_OBJECT))
-                map.remove(PhrsConstants.SESSION_USER_PHR_OBJECT);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_OPENID_OBJECT))
-                map.remove(PhrsConstants.SESSION_USER_OPENID_OBJECT);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_AUTHENTICATION_NAME))
-                map.remove(PhrsConstants.SESSION_USER_AUTHENTICATION_NAME);
-
-            if (map.containsKey(PhrsConstants.SESSION_USER_LOGIN_ID))
-                map.remove(PhrsConstants.SESSION_USER_LOGIN_ID);
-
+            try {
+                map.clear();
+            } catch (Exception e) {
+            }
         }
+        if (map != null && !map.isEmpty()) {
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_PHR_OWNER_URI);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_AUTHORITY_ROLE);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_PHR_FILTER_OWNER_URI);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_PHR_OBJECT);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_OPENID_OBJECT);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_AUTHENTICATION_NAME);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.SESSION_USER_LOGIN_ID);
+            map = UserSessionService.removeSessionAttr(map, PhrsConstants.OPEN_ID_IS_VERIFIED);
+        }
+    }
+
+    public static Map removeSessionAttr(Map map, String propertyName) {
+        try {
+            if (propertyName != null && map != null && !map.isEmpty() && map.containsKey(propertyName)) {
+
+                if (map.containsKey(propertyName)) {
+                    map.remove(propertyName);
+                }
+            }
+        } catch (Exception e) {
+        }
+
+        return map;
     }
 
     /**
@@ -519,16 +588,18 @@ public class UserSessionService {
     public static String getSessionAttributePhrId() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PHR_OWNER_URI);
 
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getSessionUserGreetName() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_GREET_NAME);
 
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
@@ -541,8 +612,9 @@ public class UserSessionService {
     public static Principal getSessionAttributeUserPrincipal() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PRINCIPAL);
 
-        if (obj != null && obj instanceof Principal)
+        if (obj != null && obj instanceof Principal) {
             return (Principal) obj;
+        }
         return null;
     }
 
@@ -589,8 +661,9 @@ public class UserSessionService {
      */
     public static String getSessionAttributeFilterPhrId() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PHR_FILTER_OWNER_URI);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
@@ -600,66 +673,76 @@ public class UserSessionService {
      */
     public static String getSessionAttributeString(String attrName) {
         Object obj = getSessionAttribute(attrName);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getSessionAttributeRole() {
         String userId = getSessionAttributeUserLoginId();
         if (userId != null) {
-            if (userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE))
+            if (userId.startsWith(PhrsConstants.AUTHORIZE_USER_VT_SCENARIO_NURSE)) {
                 return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_NURSE;
+            }
 
-            if (PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1.equals(userId))
+            if (PhrsConstants.AUTHORIZE_USER_PREFIX_TEST_1.equals(userId)) {
                 return PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_PHYSICIAN;
+            }
         }
 
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getSessionAttributeFilterProtocolId() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_ID);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getSessionAttributeFilterProtocolNamespace() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PHR_FILTER_PROTOCOL_NAMESPACE);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getRequestParameterFilterProtocolId() {
         Object obj = getRequestAttributeString(PhrsConstants.REQUEST_USER_PHR_FILTER_PROTOCOL_ID);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getRequestParameterFilterProtocolNamespace() {
         Object obj = getRequestAttributeString(PhrsConstants.REQUEST_USER_PHR_FILTER_PROTOCOL_NAMESPACE);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getRequestParameterFilterOwnerUri() {
         Object obj = getRequestAttributeString(PhrsConstants.REQUEST_USER_PHR_FILTER_OWNER_URI);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getRequestAttributeString(String attrName) {
         Object obj = getRequestParameter(attrName);
-        if (obj != null)
+        if (obj != null) {
             return (String) obj;
+        }
         return null;
     }
 
@@ -679,37 +762,48 @@ public class UserSessionService {
 //    }
     public static PhrFederatedUser getSessionAttributePhrUser() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_PHR_OBJECT);
-        if (obj != null)
+        if (obj != null) {
             return (PhrFederatedUser) obj;
+        }
         return null;
     }
 
     public static String getSessionAttributeUserAuthenticatedName() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_AUTHENTICATION_NAME);
 
-        if (obj != null && obj instanceof String)
+        if (obj != null && obj instanceof String) {
             return (String) obj;
+        }
         return null;
     }
 
     public static String getSessionAttributeUserLoginId() {
         Object obj = getSessionAttribute(PhrsConstants.SESSION_USER_LOGIN_ID);
 
-        if (obj != null && obj instanceof String)
+        if (obj != null && obj instanceof String) {
             return (String) obj;
+        }
         return null;
     }
 
     /**
+     * Gets the sessionMap from the FacesContext, however it does not create a
+     * session if one does not exist
+     *
      * @return
      */
     public static Map getSessionMap() {
         Map map = null;
         try {
-            map = FacesContext.getCurrentInstance().getExternalContext()
-                    .getSessionMap();
+            if (FacesContext.getCurrentInstance() != null) {
+                Object sess = FacesContext.getCurrentInstance().getExternalContext().getSession(false);
+                if (sess != null) {
+                    //getSessionMap creates session automatically
+                    map = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
+                }
+            }
         } catch (Exception e) {
-            LOGGER.error("", e);
+            LOGGER.error("getSessionMap ", e);
         }
         return map;
     }
@@ -723,14 +817,12 @@ public class UserSessionService {
         try {
             if (FacesContext.getCurrentInstance() != null) {
 
-                Object sess = FacesContext.getCurrentInstance()
-                        .getExternalContext().getSession(false);
+                Object sess = FacesContext.getCurrentInstance().getExternalContext().getSession(false);
                 if (sess != null) {
 
                     Map map = null;
                     try {
-                        map = FacesContext.getCurrentInstance()
-                                .getExternalContext().getSessionMap();
+                        map = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
                     } catch (Exception e) {
                         LOGGER.error("", e);
                     }
@@ -760,8 +852,7 @@ public class UserSessionService {
             if (FacesContext.getCurrentInstance() != null) {
                 Map map = null;
                 try {
-                    map = FacesContext.getCurrentInstance()
-                            .getExternalContext().getRequestParameterMap();
+                    map = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
                 } catch (Exception e) {
                     LOGGER.error("attrName=" + attrName, e);
                 }
@@ -788,12 +879,10 @@ public class UserSessionService {
     public static boolean checkSessionMap(String note, String paramName) {
         boolean flag = false;
         try {
-            Object sess = FacesContext.getCurrentInstance()
-                    .getExternalContext().getSession(false);
+            Object sess = FacesContext.getCurrentInstance().getExternalContext().getSession(false);
             if (sess != null) {
 
-                Map map = FacesContext.getCurrentInstance()
-                        .getExternalContext().getSessionMap();
+                Map map = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
                 flag = map.containsKey(paramName);
                 System.out.println("session map note=" + note + " parm="
                         + paramName + " flag=" + flag);
@@ -818,15 +907,16 @@ public class UserSessionService {
     }
 
     public static boolean hasSessionAttribute(HttpServletRequest request,
-                                              String attrName) {
+            String attrName) {
         boolean flag = false;
         if (request != null && attrName != null) {
             // request
             HttpSession sess = request.getSession(false);
             if (sess != null) {
                 Object value = sess.getAttribute(attrName);
-                if (value != null)
+                if (value != null) {
                     flag = true;
+                }
             }
 
         }
@@ -842,8 +932,7 @@ public class UserSessionService {
                 Object sess = context.getExternalContext().getSession(false);
                 if (sess != null && attrName != null) {
 
-                    Map map = FacesContext.getCurrentInstance()
-                            .getExternalContext().getSessionMap();
+                    Map map = FacesContext.getCurrentInstance().getExternalContext().getSessionMap();
                     flag = map.containsKey(attrName);
 
                 }
@@ -859,11 +948,9 @@ public class UserSessionService {
         if (attrName != null && value != null) {
             try {
                 //create session if necessary
-                FacesContext.getCurrentInstance()
-                        .getExternalContext().getSession(true);
+                FacesContext.getCurrentInstance().getExternalContext().getSession(true);
 
-                FacesContext.getCurrentInstance().getExternalContext()
-                        .getSessionMap().put(attrName, value);
+                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(attrName, value);
 
             } catch (Exception e) {
                 LOGGER.error("", e);
@@ -881,10 +968,8 @@ public class UserSessionService {
      */
     public static void updateRequestToSessionParameters() {
 
-        String filterProtcolId = UserSessionService
-                .getRequestParameterFilterProtocolId();
-        String filterProtcolNamespace = UserSessionService
-                .getRequestParameterFilterProtocolNamespace();
+        String filterProtcolId = UserSessionService.getRequestParameterFilterProtocolId();
+        String filterProtcolNamespace = UserSessionService.getRequestParameterFilterProtocolNamespace();
 
         if (filterProtcolId != null) {
             putSessionAttributeString(
@@ -958,7 +1043,7 @@ public class UserSessionService {
      * @return
      */
     public static String getUrl(FacesContext context, String relativePath) {
-        return WebUtil.getUrl(context,relativePath);
+        return WebUtil.getUrl(context, relativePath);
     }
 
     /**
@@ -967,13 +1052,15 @@ public class UserSessionService {
      * @return
      */
     public static String getUrlByFacesContext(String relativePath) {
-      return WebUtil.getUrlByFacesContext(relativePath);
+        return WebUtil.getUrlByFacesContext(relativePath);
     }
 
     /**
-     * Set error messages from servlet into session and then pick up by JSF based page after Open ID login attempt
+     * Set error messages from servlet into session and then pick up by JSF
+     * based page after Open ID login attempt
+     *
      * @param req
-     * @param errorMsg  if null, the attribute is removed
+     * @param errorMsg if null, the attribute is removed
      */
     public static void setSessionLoginErrorMsg(HttpServletRequest req, String errorMsg) {
 
@@ -981,10 +1068,11 @@ public class UserSessionService {
 
             try {
                 HttpSession sess = req.getSession(true);
-                if(sess!=null){
+                if (sess != null) {
                     if (errorMsg != null) {
                         sess.setAttribute(PhrsConstants.ERROR_MSG_ATTR, errorMsg);
                     } else {
+                        //if null remove it
                         sess.removeAttribute(PhrsConstants.ERROR_MSG_ATTR);
                     }
                 }
@@ -995,21 +1083,26 @@ public class UserSessionService {
     }
 
     /**
-     *   Status of the Open ID login
-     * @return  is_verified = true, false, or null if not set by OpenId LoginServlet or registration service
+     * Status of the Open ID login
+     *
+     * @return is_verified = true, false, or null if not set by OpenId
+     * LoginServlet or registration service
      *
      */
-    public static Boolean getSessionAttributeOpenIdIsVerified(){
-           Boolean verified=null;
-           Object obj=UserSessionService.getSessionAttribute("is_verified");
-           if(obj!=null){
-               try {
-                   if(obj instanceof String) verified = Boolean.parseBoolean((String)obj);
-                   else if(obj instanceof Boolean)  verified = (Boolean)obj;
-               } catch (Exception e) {
-                  LOGGER.error("Boolean parsing exception on Session attribute is_verified");
-               }
-           }
+    public static Boolean getSessionAttributeOpenIdIsVerified() {
+        Boolean verified = null;
+        Object obj = UserSessionService.getSessionAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED);
+        if (obj != null) {
+            try {
+                if (obj instanceof String) {
+                    verified = Boolean.parseBoolean((String) obj);
+                } else if (obj instanceof Boolean) {
+                    verified = (Boolean) obj;
+                }
+            } catch (Exception e) {
+                LOGGER.error("Boolean parsing exception on Session attribute is_verified");
+            }
+        }
 
         return verified;
     }

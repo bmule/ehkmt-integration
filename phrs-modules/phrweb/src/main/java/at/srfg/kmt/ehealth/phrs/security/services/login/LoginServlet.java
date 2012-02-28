@@ -47,7 +47,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
 
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
+        LOGGER.debug("OpenID servlet");
 
         ResourceBundle properties = ResourceBundle.getBundle("icardea");
         String applicationServer = properties.getString("salk.server");
@@ -79,7 +79,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
 //                System.out.println("user_fullname: "+model.getFullName());
 //                System.out.println("user_openid: "+ model.getOpenId());
 //
-            session.setAttribute("is_verified", model.getIs_verified());
+            session.setAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED, model.getIs_verified());
 //                session.setAttribute("user_role", model.getRole());
 //                session.setAttribute("user_fullname", model.getFullName());
 //                session.setAttribute("user_email", model.getEmailAddress());
@@ -93,6 +93,14 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                         + " openId " + model.getOpenId()
                         + " fullname " + model.getFullName()
                         + " nickname " + model.getNickname());
+            }else {
+                if(model ==null){
+                  LOGGER.debug("Registration model is null");  
+                } else {
+                   
+                    LOGGER.debug("Registration model ok, but is_verified NOT TRUE = "+model.getIs_verified());  
+                    
+                }
             }
 
 
@@ -113,7 +121,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         if (success) {
             try {
                 //setup session and create user account
-
+                LOGGER.debug("Openid Servlet - prepare User account by openID managePhrUserSessionByOpenIdUserLoginScenario for "+identifier);
                 UserSessionService.managePhrUserSessionByOpenIdUserLoginScenario(identifier, model, req);
                 success = true;
 
@@ -137,10 +145,10 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
         if (success) {
             String endpoint = this.getApplicationHomeUrl(req);
             LOGGER.debug(" login preparation success, redirect  user loginId= " + identifier + " to endpoint=" + endpoint);
-
+            UserSessionService.setSessionLoginErrorMsg(req, null);//remove any error msg with null
             resp.sendRedirect(endpoint);
             //remove any messages
-            UserSessionService.setSessionLoginErrorMsg(req, null);
+            
         } else {
 
             if (errorMsg == null) {

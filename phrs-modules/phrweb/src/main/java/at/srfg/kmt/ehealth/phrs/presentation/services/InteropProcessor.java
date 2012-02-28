@@ -296,6 +296,7 @@ public class InteropProcessor {
         String owner = res.getOwnerUri();
 
         String protocolId = getProtocolId(owner);
+        LOGGER.debug("sendMedicationMessage  START owner= "+owner+" protocolId="+protocolId);
 
         if (protocolId != null && !protocolId.isEmpty()) {
             // ok
@@ -437,7 +438,7 @@ public class InteropProcessor {
             }
             //Notify all,this is a shotgun notification for all care provision codes
             //Issue, if the protocolId is not yet defined, then we try to notify
-            LOGGER.debug("Sening interop message, Prepare to notify for owner=" + owner);
+            LOGGER.debug("Sending interop message, Prepare to notify for owner=" + owner);
 
             getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId);
             //          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, resourceType);

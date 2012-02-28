@@ -29,7 +29,7 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
         try {
             loadModelMain()
         } catch (Exception e){
-            println('ObsMedicationChangeBean loadModelMain Exception '+e)
+            LOGGER.error('ObsMedicationChangeBean loadModelMain Exception '+e)
         }
         /*
         try{

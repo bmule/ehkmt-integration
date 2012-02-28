@@ -22,17 +22,15 @@
 	<ui:composition>
 		<!-- invoke Login servlet -->
 	<!--
-  <p:commandButton value="#{labels['default.button.create.label']}"
-      title="#{labels['default.button.create.label']}"
+  <p:commandButton value=" {labels['default.button.create.label']}"
+      title=" {labels['default.button.create.label']}"
       process="idFormPcon"
       update="msgs idFormPcon idItemTablePcon"
-      actionListener="#{loginBean.store}"
+      actionListener=" {loginBean.store}"
       image="ui-icon ui-icon-check" />
 
-
-
 		-->
-	<p:panel id="loginpanel" closable="false" style="width:100%"  >
+	<p:panel id="loginpanel" closable="false" style="width:100%">
 
         <!-- put on home page <p:messages id="msgs" showDetail="true" autoUpdate="true"/>-->
 
@@ -52,10 +50,8 @@
                     <p:commandLink value="Logout"
                                    actionListener="#{loginBean.logout}"/>
                 </h:form>
-                <br/>
                <h:outputLabel value="#{loginBean.greetname}"/>
  			    <h:panelGroup rendered="#{loginBean.roleShow eq true}">
-                     <br/>
 					  <h:outputLabel value="Role: #{loginBean.role}" />				 
 				 </h:panelGroup>
 
@@ -79,22 +75,11 @@
 
 			</h:form>
 		</p:panel>
-        <br/>
-    <p:toolbar>
-
-        <p:toolbarGroup align="left" rendered="#{loginBean.testMode}">
-            <h:form>
-            <p:commandButton value="Load Meds" immediate="true"
-                             image="ui-icon-plus" actionListener="#{loginBean.loadInterop}"/>
-            </h:form>
-            <h:form>
-            <p:commandButton value="Load Vitals" immediate="true" onclick=""
-                             image="ui-icon-plus" actionListener="#{loginBean.loadTestData}"/>
-            </h:form>
-        </p:toolbarGroup>
-
-
-    </p:toolbar>
+                <p:panel id="testPanel" closable="false" style="width:100%">
+                    <h:form>
+                            <h:outputLink  value="#{request.contextPath}#{'/jsf/vt.xhtml'}">Test</h:outputLink>
+                    </h:form>
+                </p:panel>
 	<!-- <h:outputText value=" {loginBean.shortname}"  />-->
 		<!-- <br/><h:outputText value=" {loginBean.ownerUri}"  />  -->
 		<!-- rendered=" {loginBean.loggedIn eq true}" -->
@@ -107,11 +92,11 @@
 			<p:column  style="width:100%;" selectionMode="single" >	
 				
 				<h:panelGroup rendered=" {ref.type == 'noderoot'}" >
-					<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
+					<h:outputText value=" {ref.label}" style="font-size:14pt;"/>
 				</h:panelGroup>	
 						
 				<h:panelGroup rendered=" {ref.type == 'nodeheaderlink'}">
-					<h:outputLink  value="#{request.contextPath}#{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+					<h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value="  {ref.label}" style="font-size:12pt;"/>
 					</h:outputLink>
 				</h:panelGroup>
 				
@@ -125,12 +110,12 @@
 					
 				<h:panelGroup rendered=" {ref.type eq 'link'}" >
 			
-					<h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>					
+					<h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>					
 					</h:outputLink>
 				</h:panelGroup>
 				
 				<h:panelGroup rendered=" {ref.type eq 'nodelink'}">
-					<h:outputLink value=" {request.contextPath} {ref.fileName}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+					<h:outputLink value=" {request.contextPath} {ref.fileName}" style="font-size:10pt;"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>
 					</h:outputLink>
 				</h:panelGroup>
 							

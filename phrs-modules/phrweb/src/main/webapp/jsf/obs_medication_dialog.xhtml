@@ -95,15 +95,15 @@
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="field_code" layout="block"> 
-							<h:outputLabel value="#{odlmed.selected.code}" rendered="#{odlmed.modify eq 'no'}">
+							<h:outputLabel value=" {odlmed.selected.code}" rendered=" {odlmed.modify eq 'no'}">
 								<f:converter converterId="labelLookup" />
 							</h:outputLabel>
   								
-							<h:selectOneMenu value="#{odlmed.selected.code}"
-								rendered="#{odlmed.modify eq 'yes'}">
+							<h:selectOneMenu value=" {odlmed.selected.code}"
+								rendered=" {odlmed.modify eq 'yes'}">
 								<f:selectItems
-									value="#{odlmed.vocabMap.TAG_PHYSICAL_ACTIVITIES}" var="lv"
-									itemLabel="#{lv.label}" itemValue="#{lv.id}" />
+									value=" {odlmed.vocabMap.TAG_PHYSICAL_ACTIVITIES}" var="lv"
+									itemLabel=" {lv.label}" itemValue=" {lv.id}" />
 
 							</h:selectOneMenu>
 						</p:outputPanel>
@@ -125,7 +125,7 @@
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="9999/99/99" required="true" requiredMessage=" {labels['default_required_field']}"
 								id="displayDate_input"
 								value=" {odlmed.selected.displayDate}"
 								rendered=" {odlmed.modify eq 'yes'}">
@@ -201,10 +201,10 @@
 						<p:message for="endDate_input" display="text" />
 												
 						<!-- 	TODO displayDate or beginDate ?-->
-						<!-- 	<p:calendar required="true"  requiredMessage="#{labels['default_required_field']}" 
+						<!-- 	<p:calendar required="true"  requiredMessage=" {labels['default_required_field']}" 
 								id="displayDate_input"
-								rendered="#{odlmed.modify eq 'yes'}" title="yyyy-MM-dd"
-								value="#{odlmed.selected.displayDate}" showOn="button"
+								rendered=" {odlmed.modify eq 'yes'}" title="yyyy-MM-dd"
+								value=" {odlmed.selected.displayDate}" showOn="button"
 								pattern="yyyy-MM-dd" />		-->	
   
 						<h:outputLabel for="field_dosage"

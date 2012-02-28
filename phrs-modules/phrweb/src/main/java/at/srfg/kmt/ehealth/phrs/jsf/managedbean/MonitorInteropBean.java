@@ -2,47 +2,34 @@ package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.jsf.utils.WebUtil;
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
 import at.srfg.kmt.ehealth.phrs.security.services.PixService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.faces.application.FacesMessage;
+import java.io.Serializable;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+// View scope complains about Audit client not serializable
 @ManagedBean(name = "interopBean")
 @RequestScoped
+public class MonitorInteropBean implements Serializable {
 
-public class MonitorInteropBean {
-
-    private final static Logger LOGGER = LoggerFactory
-            .getLogger(MonitorInteropBean.class);
-
+    private final static Logger LOGGER = LoggerFactory.getLogger(MonitorInteropBean.class);
     protected UserService userService;
     protected InteropProcessor interopProcessor;
     protected AuthorizationService authorizationService;
-
     protected MonitorPhrItem selected = null;
-
     protected String selectedResourceType;
     protected List<MonitorPhrItem> modelMain;
-
-
     private String ownerUri;
     private PhrFederatedUser phrUser;
-
     //cied:model:xxxxxx or //pid:///
     private String pixQueryIdType;
     private String pixQueryIdUser;
@@ -50,18 +37,25 @@ public class MonitorInteropBean {
     private String pidUser;
     private ReportToolTransformer toolTransformer;
     private String statusMessagePid;
-
     private boolean pidPixFound;
     private boolean pidUserFound;
-
     private boolean allowCommandIdentify = true;
     private boolean allowCommandImport = true;
-
-
     // for dialogs or forms to control view or edit mode of fields
-    public String modify=AuthorizationService.MODIFY_YES;
+    public String modify = AuthorizationService.MODIFY_YES;
 
     public MonitorInteropBean() {
+        userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+        ownerUri = userService.getOwnerUri();
+        initTools();
+
+        initModelMain();
+
+    }
+
+    public MonitorInteropBean(String theOwnerUri) {
+        userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+        ownerUri = theOwnerUri;
         initTools();
 
         initModelMain();
@@ -70,12 +64,12 @@ public class MonitorInteropBean {
 
     private void initTools() {
 
-        userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+
         interopProcessor = PhrsStoreClient.getInstance().getInteropProcessor();
         authorizationService = new AuthorizationService();
         toolTransformer = new ReportToolTransformer();
 
-        ownerUri = userService.getOwnerUri();
+
         phrUser = userService.getPhrUser(ownerUri);
         determineStatusPID(phrUser);
 
@@ -88,7 +82,7 @@ public class MonitorInteropBean {
 
     }
 
-    public void initModelMain() {
+    private void initModelMain() {
         LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
         List transformedMsgs = interopProcessor.importNewMessages(
                 getOwnerUri(),
@@ -119,7 +113,7 @@ public class MonitorInteropBean {
     public String getPixQueryIdUser() {
 
         if (phrUser != null) {
-            return phrUser.getPixQueryIdUser() !=null ? phrUser.getPixQueryIdUser()  : null;
+            return phrUser.getPixQueryIdUser() != null ? phrUser.getPixQueryIdUser() : null;
         }
         return null;
     }
@@ -129,11 +123,11 @@ public class MonitorInteropBean {
     }
 
     /**
-     * @return    when unassigned, PixService.PIX_QUERY_TYPE_DEFAULT
+     * @return when unassigned, PixService.PIX_QUERY_TYPE_DEFAULT
      */
     public String getPixQueryIdType() {
         if (phrUser != null) {
-            return phrUser.getPixQueryIdType() !=null ? phrUser.getPixQueryIdType()  :PixService.PIX_QUERY_TYPE_DEFAULT;
+            return phrUser.getPixQueryIdType() != null ? phrUser.getPixQueryIdType() : PixService.PIX_QUERY_TYPE_DEFAULT;
         }
         return PixService.PIX_QUERY_TYPE_DEFAULT;
     }
@@ -143,9 +137,11 @@ public class MonitorInteropBean {
     }
 
     public String getPidPix() {
-        return pidPix;
+        if (phrUser != null && phrUser.getProtocolIdPix() != null && !phrUser.getProtocolIdPix().isEmpty()) {
+            return phrUser.getProtocolIdPix();
+        }
+        return null;
     }
-
 
     public void setPidPix(String pidPix) {
         this.pidPix = pidPix;
@@ -247,132 +243,138 @@ public class MonitorInteropBean {
         return authorizationService;
     }
 
-    public void addStatusMessagePID(String msg){
-        statusMessagePid =   statusMessagePid==null ? "" : statusMessagePid ;
+    public void addStatusMessagePID(String msg) {
+        statusMessagePid = statusMessagePid == null ? "" : statusMessagePid;
     }
 
     /**
      * Perform new query on user, what identifiers are available?
      */
-    public void determineStatusPID(PhrFederatedUser phrUser){
+    public void determineStatusPID(PhrFederatedUser phrUser) {
         //in case it was not already done...refresh user
         this.phrUser = phrUser;
 
         this.setPidPixFound(false);
         this.setPidUserFound(false);
 
-            
-        if(phrUser!=null){
+
+        if (phrUser != null) {
             //pixQueryIdUser = phrUser.getPixQueryIdUser();
             //pixQueryIdType = phrUser.getPixQueryIdType();
-            
-            if(phrUser.getProtocolIdPix()!=null){
+
+            if (phrUser.getProtocolIdPix() != null) {
                 this.setPidPixFound(true);
-                addStatusMessagePID("Patient ID found, ID is: "+phrUser.getProtocolIdPix());
+                addStatusMessagePID("Patient ID found, ID is: " + phrUser.getProtocolIdPix());
             }
 
-            if(phrUser.getProtocolIdUser()!=null){
+            if (phrUser.getProtocolIdUser() != null) {
                 //no msg, but update flag
                 this.setPidUserFound(true);
-                if( ! this.isPidPixFound()) addStatusMessagePID("Patient ID provided by User, ID is: "+phrUser.getProtocolIdPix());
+                if (!this.isPidPixFound()) {
+                    addStatusMessagePID("Patient ID provided by User, ID is: " + phrUser.getProtocolIdPix());
+                }
 
             }
-        }   else {
-            addStatusMessagePID("Error could not find PHR user for account: "+getOwnerUri());
+        } else {
+            addStatusMessagePID("Error could not find PHR user for account: " + getOwnerUri());
         }
 
     }
+
     /**
-     * get the latest stored resource and check 
+     * get the latest stored resource and check
      */
-    public void determineStatusPID(){
+    public void determineStatusPID() {
         phrUser = userService.getPhrUser(ownerUri);
         determineStatusPID(phrUser);
     }
-    /**
-     *  Import health records
-     */
-    public void commandImportMessages(ActionEvent actionEvent) {
-        commandImportMessages();
+
+    public void commandTest() {
+       
+        LOGGER.debug("commandTest()");
+        WebUtil.addFacesMessageSeverityInfo("commandTest", "commandTest()");
 
     }
+
+    /**
+     * Import health records
+     */
     public void commandImportMessages() {
-                try {
-            System.out.println("commandImportMessage");
+        try {
+            
             LOGGER.debug("Start MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
             List transformedMsgs = interopProcessor.importNewMessages(
                     getOwnerUri(),
                     Constants.PHRS_MEDICATION_CLASS,
                     true); //true: import the records
-            int count=0;
-            if(transformedMsgs != null && ! transformedMsgs.isEmpty()){
-                count=transformedMsgs.size();
+            int count = 0;
+            if (transformedMsgs != null && !transformedMsgs.isEmpty()) {
+                count = transformedMsgs.size();
             }
 
-            if(count > 0){
+            if (count > 0) {
 
                 //reset model main, in request scope
                 //if reshow....setModelMain(transformedMsgs);
                 WebUtil.addFacesMessageSeverityInfo("Import Status", "Successfully imported " + count + " Medication records. Please check your Medications list");
 
-            }  else {
+            } else {
 
                 WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
             }
         } catch (Exception e) {
-            LOGGER.error("Error with commandImportMessages",e);
+            LOGGER.error("Error with commandImportMessages", e);
         }
 
         LOGGER.debug("END MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
         initModelMain();
     }
-       public void commandProcessIdentifier(ActionEvent actionEvent) {
-            commandProcessIdentifier();
-            
-        }
+
     /**
      * getTransformedNewMessages
      */
     public void commandProcessIdentifier() {
-        System.out.println("commandProcessIdentifier");
+      
         LOGGER.debug("Start commandProcessIdentifier for owner=" + this.getOwnerUri()
                 + " pixQueryType" + this.getPixQueryIdType()
                 + " pixQueryIdUser" + this.getPixQueryIdUser()
                 + " phrUser pid=" + this.getProtocolId()
                 + " pixPid" + getPidPix());
         //
-        boolean outcome=updateIdentifiers();
+        boolean outcome = updateIdentifiers();
         this.setStatusMessagePid("Your patient identifier is ok " + getPidPix() + " " + this.getProtocolId());
     }
 
-    public boolean updateIdentifiers(){
-        boolean outcome=false;
-        try{
+    public boolean updateIdentifiers() {
+        boolean outcome = false;
+        try {
 
-            LOGGER.debug("updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "+
-                    getOwnerUri()+" PixQueryIdType "+ getPixQueryIdType()+ " PixQueryIdUser"+getPixQueryIdUser());
+            LOGGER.debug("updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
+                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
 
-            if(getOwnerUri()!= null && !getOwnerUri().isEmpty()
-                    && getPixQueryIdType()!=null && ! getPixQueryIdType().isEmpty()
-                    && getPixQueryIdUser()!=null && ! getPixQueryIdUser().isEmpty()){
-               // getPixQueryDeviceModel
-                PixService pixService= new PixService();
+            if (getOwnerUri() != null && !getOwnerUri().isEmpty()
+                    && getPixQueryIdType() != null && !getPixQueryIdType().isEmpty()
+                    && getPixQueryIdUser() != null && !getPixQueryIdUser().isEmpty()) {
+                // getPixQueryDeviceModel
+                PixService pixService = new PixService();
                 //perform PIX query and update user account
-               String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId( getOwnerUri(), getPixQueryIdUser(),getPixQueryIdType());
-               
-               if(returnPid !=null && !returnPid.isEmpty()){
-                  outcome=true; 
-               }
+                String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
+                LOGGER.error("updateIdentifiers returnPid value found from updateProtocolIdFromUserProvidedCiedId: returnPid= "+returnPid
+                        + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
                 
+                if (returnPid != null && !returnPid.isEmpty()) {
+                    outcome = true;
+                }
+
                 //determine status and refresh new user account
                 determineStatusPID();
             } else {
-                LOGGER.error("updateIdentifiers Null value found: updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "+
-                        getOwnerUri()+" PixQueryIdType "+ getPixQueryIdType()+ " PixQueryIdUser"+getPixQueryIdUser());
+                LOGGER.error("updateIdentifiers Null value found: updateIdentifiers from updateProtocolIdFromUserProvidedCiedId "
+                        + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
             }
-        } catch (Exception e){
-            LOGGER.error("Error updateIdentifiers  updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "+
-                    getOwnerUri()+" PixQueryIdType "+ getPixQueryIdType()+ " PixQueryIdUser"+getPixQueryIdUser());
+        } catch (Exception e) {
+            LOGGER.error("Error updateIdentifiers  updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
+                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
         }
         return outcome;
     }
@@ -388,7 +390,4 @@ public class MonitorInteropBean {
 //        } catch (Exception e){
 //            LOGGER.error(' '+e)
 //        }
-
 }
-
-   

@@ -25,8 +25,9 @@ public class ObsProblem extends CommonModelProps{
 		eventStatus=	PhrsConstants.EVENT_STATUS_EVENTABLE_NOT_ACTIONABLE
 		eventTheme = 	PhrsConstants.EVENT_THEME_DATA_ENTRY
 		//default category
-		category=Constants.HL7V3_SYMPTOM
-		
+		category=Constants.HL7V3_COMPILANT
+        //Constants.HL7V3_SYMPTOM
+		//HL7V3_FINDING
 	}
 	
 }

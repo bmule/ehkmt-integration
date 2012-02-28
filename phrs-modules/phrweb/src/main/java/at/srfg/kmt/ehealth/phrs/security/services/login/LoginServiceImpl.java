@@ -1,6 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.security.services.login;
 
-
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import org.openid4java.discovery.DiscoveryInformation;
@@ -16,8 +15,6 @@ import java.util.ResourceBundle;
 
 //import flex.messaging.FlexContext;
 //import flex.messaging.FlexSession;
-
-
 /**
  * Consolidates business logic from the UI code for Registration activities.
  * <p/>
@@ -29,8 +26,8 @@ import java.util.ResourceBundle;
  * @author J Steven Perry
  * @author http://makotoconsulting.com
  */
-
 public class LoginServiceImpl implements LoginService {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginServiceImpl.class.getName());
 
     public String createRedirect(String username) {
@@ -52,11 +49,12 @@ public class LoginServiceImpl implements LoginService {
         LOGGER.debug("createRedirect " + username + " returnUrl=" + returnUrl + " salkServer=" + salkServer + "  special openId usage=" + specialUsage);
         LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
 
-        DiscoveryInformation discovery = RegistrationService
-                .performDiscoveryOnUserSuppliedIdentifier(username);
+        DiscoveryInformation discovery = RegistrationService.performDiscoveryOnUserSuppliedIdentifier(username);
 
 
-        if (returnUrl == null) returnUrl = LoginUtils.getOpenIdReturnToUrl();
+        if (returnUrl == null) {
+            returnUrl = LoginUtils.getOpenIdReturnToUrl();
+        }
 
         LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
 
@@ -67,37 +65,66 @@ public class LoginServiceImpl implements LoginService {
         return redirectUrl;
     }
 
+    /**
+     *
+     * @param loginId
+     * @param openIdProviderId   - the key from the UI e.g. openid.provider.1
+     * @return
+     */
+    public String createRedirectForLoginType(String loginId,  String openIdProviderId) {
+        String redirectUrl = null;
+        String username = loginId;
+        try {
 
-    public String createRedirect(String username, String returnUrl, String openIdProviderId) {
-        //openid.provider.1
-        String server = ConfigurationService.getInstance().getProperty(openIdProviderId);
-        if (server == null) {
-            server = ConfigurationService.getInstance().getProperty("openid.provider.1", "https://icardea-server.lksdom21.lks.local/idp/");
+
+            String server = ConfigurationService.getInstance().getProperty(openIdProviderId);
+            if (server == null) {
+                server = ConfigurationService.getInstance().getProperty("openid.provider.1", "https://icardea-server.lksdom21.lks.local/idp/");
+            }
+            String returnUrl  = ConfigurationService.getInstance().getProperty("openid.returnurl.default", "http://icardea-server.lksdom21.lks.local:6060/phrweb/openid");
+
+
+            //FIXXME phrs use profiles
+            server = server.trim();
+            returnUrl = returnUrl.trim();
+            //TODO use profile for openID provider see key   openid.provider.1.profile
+
+            boolean specialUsage = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("salk.usage"));
+            // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
+            LOGGER.debug("createRedirect special openId usage " + specialUsage + " " + username + " returnUrl=" + returnUrl + " openIdProviderId=" + openIdProviderId + " server=" + server);
+
+            if (specialUsage) {
+                //includes .../idp
+                if (server.endsWith("/")) {
+                    username = server + "u=" + username;
+                } else {
+                    username = server + "/u=" + username; //only valid for SALK server
+                }
+            }
+            LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
+            DiscoveryInformation discovery = RegistrationService.performDiscoveryOnUserSuppliedIdentifier(username);
+            if (discovery == null) {
+                LOGGER.error("Discovery FAILED (null). Username=" + username);
+                throw new Exception("Discovery FAILED (null), username=" + username);
+            }
+            //String url = RegistrationService.getReturnToUrl();
+            if (returnUrl == null) {
+                returnUrl = LoginUtils.getOpenIdReturnToUrl();
+            }
+
+            LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
+
+            AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
+            
+            if (authRequest == null) {
+                LOGGER.error("AuthRequest FAILED (null). Username=" + username);
+                throw new Exception("AuthRequest FAILED,(null). Username= " + username);
+            }
+            redirectUrl = authRequest.getDestinationUrl(true);
+            
+        } catch (Exception e) {
+            LOGGER.error("OpenId error createRedirect username="+username, e);
         }
-        //FIXXME phrs use profiles
-        server = server.trim();
-
-        boolean specialUsage = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("salk.usage"));
-        // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
-        LOGGER.debug("createRedirect special openId usage " + specialUsage + " " + username + " returnUrl=" + returnUrl + " openIdProviderId=" + openIdProviderId + " server=" + server);
-
-        if (specialUsage) {
-            //includes .../idp
-            if (server.endsWith("/")) username = server + "u=" + username;
-            else username = server + "/u=" + username; //only valid for SALK server
-        }
-        LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
-        DiscoveryInformation discovery = RegistrationService
-                .performDiscoveryOnUserSuppliedIdentifier(username);
-
-        //String url = RegistrationService.getReturnToUrl();
-        if (returnUrl == null) returnUrl = LoginUtils.getOpenIdReturnToUrl();
-
-        LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
-
-        AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
-
-        String redirectUrl = authRequest.getDestinationUrl(true);
 
         return redirectUrl;
     }
@@ -126,10 +153,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     /**
-     * @deprecated Logout handled by JSF LoginBean
-     *             This would actually fail in the servlet with JSF context
-     *             unless we have the request or JSF context can be used
-     *             Must set attribute of new session with  is_verified  false
+     * @deprecated Logout handled by JSF LoginBean This would actually fail in
+     * the servlet with JSF context unless we have the request or JSF context
+     * can be used Must set attribute of new session with is_verified false
      */
     public void doLogout() {
 //		FlexSession mySession= FlexContext.getFlexSession();
@@ -141,7 +167,6 @@ public class LoginServiceImpl implements LoginService {
 
         //TODO control is_verified variable from Registration Model
     }
-
 
     public String getCurrentIP() {
         String hostname = "";
@@ -165,6 +190,4 @@ public class LoginServiceImpl implements LoginService {
         System.out.println("LoginServiceImpl " + redirect);
 
     }
-
-
 }

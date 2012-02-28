@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/template_ui.xhtml">
+
+    <ui:define name="head">
+
+
+        <style type="text/css">
+            .table.innertable td {
+                border: 0;
+            }
+        </style>
+        <ui:insert name="head"></ui:insert>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <p:fieldset legend="Test Commands, Test Data loader"> 
+
+
+            <p:messages/>
+            <p:growl id="msgs" showDetail="true"/>
+
+            <p:toolbar>
+
+                <p:toolbarGroup align="left" rendered="#{loginBean.testMode}">
+                   <h:form>
+                        <p:commandButton value="Command Test check log" 
+                                         ajax="false"
+                                         image="ui-icon-plus" 
+                                         actionListener="#{vtestBean.commandTest}"/>
+                    </h:form> 
+                    <h:form>
+                        <p:commandButton value="Load Meds vtestBean"
+                                         ajax="false"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.loadInterop}"/>
+                    </h:form>
+                    <h:form>
+                        <p:commandButton ajax="false"
+                                         value="Import Messages"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.commandImportMessages}"
+                                         />
+                        Import any available records from the Hospital for test patient
+                    </h:form>
+
+ 
+                </p:toolbarGroup>
+
+            </p:toolbar>
+            
+            
+            
+            <h:form>
+                <h:panelGrid columns="3" border="1" style="border-style:thin solid;border-color:grey;">
+       
+                    <h:outputLabel value="Query (no update) VT TEST User CIED and Patient Identifier"/>
+                    <h:outputLabel value="ID Type"/>
+                    <h:outputLabel value="Code"/>
+
+                    <h:panelGroup>                      
+                        <p:commandButton  ajax="false"
+                                          value="Update"
+                                          rendered="#{vtestBean.allowCommandIdentify}"
+                                          title="Submit"
+                                          image="ui-icon-arrowrefresh-1-w"
+                                          actionListener="#{vtestBean.commandProcessIdentifier}"
+                                          />
+                        <h:outputLabel value="#{vtestBean.statusMessagePid}"/>
+                    </h:panelGroup> 
+
+                    <h:panelGroup>                
+                        <h:selectOneMenu value="#{vtestBean.pixQueryIdType}"
+                                         id="field_pixQueryIdType_input"
+                                         rendered="#{vtestBean.modify eq 'yes'}"
+                                         required="true">
+
+                            <f:selectItem itemLabel="Please Select Identifier type..." noSelectionOption="true"
+                                          itemValue=""/>
+                            <f:selectItem itemLabel="Implant model:Maximo"
+                                          itemValue="cied:model:Maximo"/>
+                            <f:selectItem itemLabel="Patient ID"
+                                          itemValue="pid"/>
+                        </h:selectOneMenu>
+
+                        <p:message for="field_pixQueryIdType_input" display="text"/>
+                    </h:panelGroup>
+
+
+                    <h:panelGroup> 
+                        <p:inputText value="#{vtestBean.pixQueryIdUser}"
+                                     id="field_pixQueryIdUser_input"
+                                     required="true" 
+                                     requiredMessage="#{labels['default_required_field']}"/>
+
+                        <p:message for="field_pixQueryIdUser_input" display="text"/>                           
+                    </h:panelGroup>
+
+
+
+
+                </h:panelGrid>
+            </h:form>
+        </p:fieldset>
+
+
+    </ui:define>
+
+</ui:composition>

@@ -1,6 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
-
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
@@ -43,6 +42,7 @@ import org.slf4j.LoggerFactory;
 public class PixService implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PixService.class);
+    public final static String TEST_CIED = "model:Maximo/serial:PZC123456S";
     // public final static String IDENTIFIER_TYPE_PROTOCOL_ID = "PROTOCOL";
     // public final static String IDENTIFIER_TYPE_CIED = "CIED";
     public static final String ICARDEA_PIX_CIED_FULL_NAMESPACE = "CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID";
@@ -67,8 +67,6 @@ public class PixService implements Serializable {
     private int pix_port = 2575;
     private String pix_host = "localhost";
     private boolean pix_tls = true;
-
-
     public final static String PIX_QUERY_TYPE_PREFIX_CIED = "cied";
     public final static String PIX_QUERY_TYPE_PREFIX_PID = "pid";
     public final static String PIX_QUERY_TYPE_DEFAULT = "cied:model:Maximo";
@@ -93,6 +91,8 @@ public class PixService implements Serializable {
 
         try {
             pid = queryProtocolIdById(cied, ICARDEA_PIX_CIED_FULL_NAMESPACE);
+            LOGGER.error("getPatientProtocolIdByCIED returnPid value found: updateIdentifiers  pid= " + pid
+                    + " from query on CiED= " + cied);
         } catch (Exception e) {
             LOGGER.error("Error invoking queryProtocolIdById for cied=" + cied, e);  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -161,16 +161,52 @@ public class PixService implements Serializable {
     }
 
     /**
+     * Provides More logging detail than parse(String reponse) - logs the query
+     * id and namespace
+     *
      * @param response
-     * @param id
-     * @param namespace
+     * @param id - that was queried only for reporting
+     * @param namespace - that was queried
      * @return
      */
     public static String parsePid(String response, String id, String namespace) {
         String pid = null;
 
         if (response != null) {
-            LOGGER.debug("PIX query response of id=" + id + " namespace0" + namespace);
+            LOGGER.debug("parsePid response of id=" + id + " namespace0" + namespace);
+        }
+
+        if (response != null && response.contains("PID")) {
+
+            pid = parsePid(response);
+
+            //final split on "^"
+            if (pid != null) {
+                LOGGER.debug("PIX query - protocol ID found for =" + id + " " + " PID=" + pid);
+            } else {
+                LOGGER.debug("PIX query - protocol ID not found for =" + id + " in response:" + response);
+            }
+        } else if (response != null && !response.contains("PID")) {
+            LOGGER.debug("PIX query - query reponse not found, reponse does not contain PID. Protocol ID not found for id=" + id);
+        } else {
+            LOGGER.debug("PIX query - query reponse null. Protocol ID not found for id=" + id);
+        }
+
+        return pid;
+
+    }
+
+    /**
+     * Extract the PID element
+     *
+     * @param response
+     * @return returns the patient ID (protocol ID)
+     */
+    public static String parsePid(String response) {
+        String pid = null;
+
+        if (response != null) {
+            LOGGER.debug("parsePid response is NULL");
         }
 
         if (response != null && response.contains("PID")) {
@@ -197,14 +233,14 @@ public class PixService implements Serializable {
 
             //final split on "^"
             if (pid != null) {
-                LOGGER.debug("PIX query - protocol ID found for =" + id + " " + " PID=" + pid);
+                LOGGER.debug("parsePid =" + " " + " PID=" + pid + " from response=" + response);
             } else {
-                LOGGER.debug("PIX query - protocol ID not found for =" + id + " in response:" + response);
+                LOGGER.debug("parsePid  =" + " in response:" + response);
             }
         } else if (response != null && !response.contains("PID")) {
-            LOGGER.debug("PIX query - query reponse not found, reponse does not contain PID. Protocol ID not found for id=" + id);
+            LOGGER.debug("PIX query - query reponse not found, reponse does not contain the element called PID. Protocol ID not found in reponse =" + response);
         } else {
-            LOGGER.debug("PIX query - query reponse null. Protocol ID not found for id=" + id);
+            LOGGER.debug("PIX query - query reponse null. Protocol ID not found in reponse =" + response);
         }
 
         return pid;
@@ -218,7 +254,6 @@ public class PixService implements Serializable {
 //ORBIS&www.salk.at&DNS
 //Use as namespace of ID that we pass: e.g. the CIED implant serial number CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID
 //No connection hub needed  see gr.forth.ics.icardea.listener.CDAConverter EHR listener
-
     /**
      * Send message PIX querx
      *
@@ -571,7 +606,7 @@ public class PixService implements Serializable {
 //        return resultMap;
 //    }
     public PID getPatientMessage(String fam_name, String giv_name, String sex,
-                                 String dob) {
+            String dob) {
 
         PID pid = null;
         try {
@@ -591,7 +626,7 @@ public class PixService implements Serializable {
 
     // a.getMSH().getSendingApplication().parse("testclient^icardea");
     protected Message pdq(String fam_name, String giv_name, String sex,
-                          String dob) throws HL7Exception, LLPException, IOException,
+            String dob) throws HL7Exception, LLPException, IOException,
             Exception {
 
         QBP_Q21 a = new QBP_Q21();
@@ -641,7 +676,6 @@ public class PixService implements Serializable {
         // response
         return this.sendAndRecvPixMessage(a);
     }
-
     private boolean useMessageDispatcher = true;
 
     public boolean isUseMessageDispatcher() {
@@ -681,7 +715,6 @@ public class PixService implements Serializable {
 //        }
     }
 
-
     /**
      * @param ownerUri
      * @param pixQueryIdUser
@@ -694,11 +727,11 @@ public class PixService implements Serializable {
     /**
      * @param ownerUri
      * @param pixQueryIdUser "cied" pixQueryIdType -->Serial number or "pid"
-     *                       pixQueryIdType --> protocolId
+     * pixQueryIdType --> protocolId
      * @param pixQueryIdType cied or pid
-     * @param requeryPix     requery even if there is a current PIX protocol ID
+     * @param requeryPix requery even if there is a current PIX protocol ID
      * @return The protocolId if successful. Either from PIX or a test
-     *         protocolId enter via the UI
+     * protocolId enter via the UI
      */
     public String updateIdentifierFromUser(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType, boolean requeryPix) {
 
@@ -751,8 +784,8 @@ public class PixService implements Serializable {
                     theProtocolId = pfu.getProtocolId(); //protocolIdUser;
 
                 } else {
-                    //CIED type contains model info, but remove cied part
-                    StringBuffer pixQueryString = new StringBuffer();
+
+
                     boolean okPixQuery = false;
 
                     //Query? if exists, requery only if indicated (requeryPix) or if critical inputs changed type or serial number
@@ -775,16 +808,9 @@ public class PixService implements Serializable {
                         if (type.startsWith("cied:")) {
                             type = type.replaceFirst("cied:", type);
                         }
-                        //  else if(type.startsWith(PIX_QUERY_TYPE_PREFIX_CIED)) {
-
-                        pixQueryString.append("model:");
-
-                        pixQueryString.append(type);
-
-                        // pixQueryString.append(PIX_QUERY_TYPE_DEFAULT);
-
-                        pixQueryString.append("/serial:");
-                        pixQueryString.append(pixQueryIdUser);
+                        //  else if(type.startsWith(PIX_QUERY_TYPE_PREFIX_CIED)) 
+                        //CIED type contains model info, but remove cied part
+                        String pixQueryString = PixService.makePixIdentifier(pixQueryIdType, pixQueryIdUser);
 
                         LOGGER.debug("updateIdentifiers CIED for  protocolIdUser ownerUri=" + ownerUri
                                 + " pixQueryIdType= " + pixQueryIdType
@@ -797,7 +823,7 @@ public class PixService implements Serializable {
                             LOGGER.debug("updateIdentifiers Pix pixQueryString " + pixQueryString);
 
                             //do query
-                            String pixProtocolId = getPatientProtocolIdByCIED(pixQueryString.toString());
+                            String pixProtocolId = getPatientProtocolIdByCIED(pixQueryString);
 
                             if (pixProtocolId != null && !pixProtocolId.isEmpty()) {
                                 pfu.setProtocolIdPix(pixProtocolId);
@@ -826,5 +852,44 @@ public class PixService implements Serializable {
         }
 
         return theProtocolId;
+    }
+
+    /**
+     * Assemble an identifier derived from the UI and model
+     *
+     * @param pixQueryIdType prefix indicates the identifier type to query and
+     * formatting of the model info e.g. cied:model:Maximo
+     * @param pixQueryIdUser
+     * @return
+     *
+     */
+    //TODO makePixIdentifier make templates for type prefixes
+    public static String makePixIdentifier(String pixQueryIdType, String pixQueryIdUser) {
+        StringBuffer sb = null;
+        if (pixQueryIdType != null && pixQueryIdUser != null && !pixQueryIdType.isEmpty() && !pixQueryIdUser.isEmpty()) {
+            //ok
+        } else {
+            return null;
+        }
+        String type = pixQueryIdType;
+        if (type.startsWith("cied:")) {
+            type = type.replaceFirst("cied:", "");
+        }
+        sb = new StringBuffer();
+        //  else if(type.startsWith(PIX_QUERY_TYPE_PREFIX_CIED)) {
+
+        //sb.append("model:"); included
+
+        sb.append(type);
+
+        // pixQueryString.append(PIX_QUERY_TYPE_DEFAULT);
+
+        sb.append("/serial:");
+        sb.append(pixQueryIdUser);
+
+        LOGGER.debug("makePixIdentifier CIED "
+                + " pixQueryIdType= " + pixQueryIdType
+                + " type= " + type + " pixQueryString= " + sb);
+        return sb.toString();
     }
 }

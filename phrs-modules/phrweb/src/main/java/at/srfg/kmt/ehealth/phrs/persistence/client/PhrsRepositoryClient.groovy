@@ -1,6 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.persistence.client
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
+import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsMetadata
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileMedicalContactInfo
@@ -214,7 +215,7 @@ public class PhrsRepositoryClient implements Serializable{
                 }
             }
         } catch(Exception e){
-            println(' '+e)
+            LOGGER.error(' '+e)
         }
 
         return query
@@ -251,8 +252,8 @@ public class PhrsRepositoryClient implements Serializable{
 
 
             } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.error(" ownerUri="+healthProfileId+""+clazz+e)
+                
+                LOGGER.error(' ownerUri='+healthProfileId+' '+clazz,e)
             }
 
 
@@ -300,7 +301,7 @@ public class PhrsRepositoryClient implements Serializable{
             //def x=getInteropService()
             map= getInteropService().sendMessages(theObject);
         } catch(Exception e){
-            e.printStackTrace()
+           
             LOGGER.error('writeInteropMessages ', e)
         }
         return map
@@ -324,13 +325,17 @@ public class PhrsRepositoryClient implements Serializable{
                     theObject.setCreateDate(new Date())
                     theObject.setModifyDate(theObject.getCreateDate())
                     def keyset = getPhrsDatastore().save(theObject)
-                    //Do not send messages after a fresh import from the interop service
-                    if( ! theObject.getNewImport()) {
+                    //Mignt not send messages after a fresh import from the interop service ??
+                    //if( ! theObject.getNewImport()) {  
+                     LOGGER.debug('sending interop message after CREATE Resource ')
                         writeInteropMessages(theObject)
-                    }else {
-                        //reset, after persisted
-                        theObject.setNewImport(false)
-                    }
+                    //}else {
+                        //reset, after persisted  or  BasePhrsMetadata
+                        if(theObject instanceof BasePhrsMetadata) {
+                            theObject.setNewImport(false)
+                        }
+                       
+                    //}
                     //TODO if there is an error, make the resource uri null
                     //writeAuditData(theObject,action,null)
                 }
@@ -407,6 +412,9 @@ public class PhrsRepositoryClient implements Serializable{
 				
                 }
                 def keyset = getPhrsDatastore().save(theObject)
+                //send message updates
+                LOGGER.debug('sending interop message after UPDATE resource')
+                writeInteropMessages(theObject)
                         
                 //writeAuditData(theObject,PhrsConstants.PUBSUB_ACTION_CRUD_UPDATE,null)
             } else if(theObject){

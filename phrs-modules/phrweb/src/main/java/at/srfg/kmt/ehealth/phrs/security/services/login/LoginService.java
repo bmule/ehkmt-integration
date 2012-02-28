@@ -19,12 +19,11 @@ public interface LoginService {
     /**
      *
      * @param username  Short name
-     * @param redirectUrl
      * @param openIdProviderId
      * @return
      */
     //TODO  Detect an email based OpenId or a normal openID.  openIdProviderId only if passed a real OpenID
-    String createRedirect(String username,String redirectUrl,String openIdProviderId) ;
+    String createRedirectForLoginType(String username,String openIdProviderId) ;
     //not used
 	RegistrationModel handleValidation();
 
