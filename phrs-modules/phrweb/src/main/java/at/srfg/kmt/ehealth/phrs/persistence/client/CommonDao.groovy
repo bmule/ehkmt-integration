@@ -182,7 +182,7 @@ public class CommonDao {
 
             if (userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
                 //phrtest user ALWAYS reset this user
-                CoreTestData.createTestUserData();
+                user = CoreTestData.createTestUserData()
 
 
             } else {

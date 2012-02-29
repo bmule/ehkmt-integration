@@ -67,7 +67,7 @@ public class InteropClients {
         try {
             VitalSignClient vitalSignClient = new VitalSignClient(getTriplestore());
             vitalSignClient.setCreator(PhrsConstants.INTEROP_CREATOR_DEFAULT_PHR);
-            return  vitalSignClient;
+            return vitalSignClient;
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
         }
@@ -77,7 +77,7 @@ public class InteropClients {
 
     public PHRSRequestClient getPHRSRequestClient() {
         try {
-            return new PHRSRequestClient(getTriplestore() );
+            return new PHRSRequestClient(getTriplestore());
 
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
@@ -111,7 +111,7 @@ public class InteropClients {
 
     public SchemeClient getSchemeClient() {
         try {
-            return new SchemeClient(getTriplestore() );
+            return new SchemeClient(getTriplestore());
 
         } catch (Exception e) {
             LOGGER.error("getVitalSignClient ", e);
@@ -239,25 +239,25 @@ public class InteropClients {
         }
     }
 
-/**
- * 
- * @param protocolId
- * @param resourceType 
- */
-   public void notifyInteropMessageSubscribersByProtocolId(String protocolId, String resourceType) {
+    /**
+     * @param protocolId
+     * @param resourceType
+     */
+
+    public void notifyInteropMessageSubscribersByProtocolId(String careProvisionCode, String protocolId) {
         try {
             //future type will inform specific single or multiple requests
-            notifyInteropMessageSubscribers(null, protocolId);
+            notifyInteropMessageSubscribers(careProvisionCode, protocolId);
         } catch (Exception e) {
             LOGGER.error("Failed to Notify subscriptions" + e.getMessage(), e);
-        } 
+        }
     }
 
 
     /**
-     * 
-     * Notify subscribers but only if we find a protocolId 
+     * Notify subscribers but only if we find a protocolId
      * from a PhrId lookup from local store, not Interop Component Actor registry
+     *
      * @param phrId
      * @return
      */
@@ -286,68 +286,72 @@ public class InteropClients {
     }
 
 
-
     /**
      * @param selectedCareProvisionCode
      */
     public void notifyInteropMessageSubscribers(String selectedCareProvisionCode, String protocolId) throws Exception {
-        LOGGER.debug("START notifyInteropMessageSubscribers protocolId " + protocolId+ " selectedCareProvisionCode "+selectedCareProvisionCode);
+        LOGGER.debug("START notifyInteropMessageSubscribers protocolId " + protocolId + " selectedCareProvisionCode " + selectedCareProvisionCode);
         PHRSRequestClient requestClient = getPHRSRequestClient();
         DynaBeanClient beanClient = getDynaBeanClient();
         final Iterable<String> resources = requestClient.getAllPHRSRequests();
-       int countRequests=0;
-       int countNotified=0;
+        int countRequests = 0;
+        int countNotified = 0;
         for (String resource : resources) {
-            final DynaBean request = beanClient.getDynaBean(resource);
-            countRequests++;
-            boolean sendNotification = false;
-            String careProvisionCode = (String) request.get(Constants.HL7V3_CARE_PROVISION_CODE);
-            //filter on careProvisionCode  ?
-            if (selectedCareProvisionCode == null) {
-                sendNotification = true;
-            } else {
-                if (careProvisionCode == null) {
-                    sendNotification = false;
-                } else if (careProvisionCode.equalsIgnoreCase(selectedCareProvisionCode)) {
-                    sendNotification = true;
-                }
-
-            }
-            String id = (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
-            //filter on protocolId ?
-            if (id == null) {
-                sendNotification = false;
-            } else if (protocolId != null) {
-                if (id.equals(protocolId)) {
-                    sendNotification = true;
+            try {
+                final DynaBean request = beanClient.getDynaBean(resource);
+                countRequests++;
+                boolean sendNotification = false;
+                boolean sendNotificationCareprovision = false;
+                String careProvisionCode = (String) request.get(Constants.HL7V3_CARE_PROVISION_CODE);
+                //filter on careProvisionCode  ?
+                if (selectedCareProvisionCode == null) {
+                    sendNotificationCareprovision = true;
                 } else {
-                    sendNotification = false;
+                    sendNotificationCareprovision = true;
+                    if (careProvisionCode != null && !careProvisionCode.isEmpty()
+                            && careProvisionCode.equalsIgnoreCase(selectedCareProvisionCode)) {
+                        sendNotificationCareprovision = true;
+                    } else {
+                        sendNotificationCareprovision = false;
+                    }
+
                 }
+                String id = (String) request.get("http://www.icardea.at/phrs/actor#protocolId");
+                //filter on protocolId ?
+                if (id == null) {
+                    sendNotification = false;
+                } else if (protocolId != null) {
+                    if (id.equals(protocolId)) {
+                        sendNotification = true;
+                    } else {
+                        sendNotification = false;
+                    }
+                }
+
+                if (sendNotification && sendNotificationCareprovision) {
+                    countNotified++;
+                    final String wsAdress =
+                            (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
+
+
+                    final Map<String, String> properties = new HashMap<String, String>();
+                    properties.put("patientId", id);
+                    properties.put("patientNames", "patientNames");
+
+                    //Care Provision Code
+                    properties.put("careProvisionCode", careProvisionCode);
+                    properties.put("responseEndpointURI", wsAdress);
+                    int port = ConfigurationService.getInstance().getSubscriberSocketListnerPort();
+
+                    notifyInteropMessageSubscribers("localhost", port, properties);
+
+                }
+                LOGGER.debug("END notifyInteropMessageSubscribers notify=" + sendNotification + " protocolId" + protocolId + " selectedCareProvisionCode " + selectedCareProvisionCode);
+            } catch (Exception e) {
+                LOGGER.error("Failed to Notify subscriptions pid="+protocolId + e.getMessage(), e);
             }
-
-            if (sendNotification) {
-                countNotified++;
-                final String wsAdress =
-                        (String) request.get("http://www.icardea.at/phrs/hl7V3#wsReplyAddress");
-
-
-                final Map<String, String> properties = new HashMap<String, String>();
-                properties.put("patientId", id);
-                properties.put("patientNames", "patientNames");
-
-                //Care Provision Code
-                properties.put("careProvisionCode", careProvisionCode);
-                properties.put("responseEndpointURI", wsAdress);
-                int port = ConfigurationService.getInstance().getSubscriberSocketListnerPort();
-
-                notifyInteropMessageSubscribers("localhost", port, properties);
-
-
-            }
-            LOGGER.debug("END notifyInteropMessageSubscribers notify="+sendNotification+ " protocolId" + protocolId+ " selectedCareProvisionCode "+selectedCareProvisionCode);
-
         }
-        LOGGER.debug("Finished - Notified Core after Loading test data countPHRSRequests found="+countRequests+" countNotified=" +countNotified);
+        LOGGER.debug("Finished - Notified Core after Loading test data countPHRSRequests found=" + countRequests + " countNotified=" + countNotified);
 
     }
 
@@ -382,13 +386,14 @@ public class InteropClients {
      * @deprecated
      * @param owneruri
      * @param protocolId
-     * @param namespace      if null defaults to Constants.ICARDEA_DOMAIN_PIX_OID
+     * @param namespace  if null defaults to Constants.ICARDEA_DOMAIN_PIX_OID
+     *
      */
     public void registerProtocolId(String owneruri, String protocolId, String namespace) {
-        registerUser(owneruri,protocolId,namespace);
+        registerUser(owneruri, protocolId, namespace);
     }
 
-    
+
 //        if (namespace == null) {
 //            namespace = Constants.ICARDEA_DOMAIN_PIX_OID;
 //
@@ -403,15 +408,15 @@ public class InteropClients {
 //        }
 
     /**
-     *  @deprecated
      * @param ownerUri
      * @param protocolId
      * @param protocolNamespace
+     * @deprecated
      */
-        public void registerUser(String ownerUri, String protocolId, String protocolNamespace){
-            //
-        }
-    
+    public void registerUser(String ownerUri, String protocolId, String protocolNamespace) {
+        //
+    }
+
 //
 //    public void registerUser(String ownerUri, String protocolId, String protocolNamespace){
 //        if(ownerUri!=null && protocolId!=null){
@@ -451,16 +456,16 @@ public class InteropClients {
 //            LOGGER.error(" Null input: ownerUri "+ownerUri+" protocolId "+protocolId+" protocolNamespace "+protocolNamespace);
 //        }
 //    }
+
     /**
-     *
      * @param ownerUri
      * @param protocolNamespace
      * @return
      */
-    public String getProtocolId(String ownerUri, String protocolNamespace){
-        CommonDao commonDao= PhrsStoreClient.getInstance().getCommonDao();
-        return commonDao.getProtocolId(ownerUri); 
-     }
+    public String getProtocolId(String ownerUri, String protocolNamespace) {
+        CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
+        return commonDao.getProtocolId(ownerUri);
+    }
 
 //        if (protocolNamespace == null) {
 //            protocolNamespace = Constants.ICARDEA_DOMAIN_PIX_OID;
@@ -477,13 +482,12 @@ public class InteropClients {
 //        return value;
 
     /**
-     *
      * @param phrId
      * @return
      */
     public String getProtocolId(String ownerUri) {
 
-        return getProtocolId(ownerUri,null);
+        return getProtocolId(ownerUri, null);
     }
 
 }

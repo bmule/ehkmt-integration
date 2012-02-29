@@ -515,7 +515,7 @@ public class Constants {
     
     public static final String ICARDEA_DOMAIN_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
     public static final String OWNER_URI_CORE_PORTAL_TEST_USER = "phr/test/testuser";
-    public static final String PROTOCOL_ID_UNIT_TEST = "14920263490";
+    public static final String PROTOCOL_ID_UNIT_TEST = "191";//"AAA14920263490BBB";
     public static final String PROTOCOL_ID_PIX_TEST_PATIENT = "191";
     public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";
 

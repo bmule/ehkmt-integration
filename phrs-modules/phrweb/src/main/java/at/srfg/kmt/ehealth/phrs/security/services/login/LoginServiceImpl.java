@@ -35,19 +35,21 @@ public class LoginServiceImpl implements LoginService {
     }
 
     public String createRedirect(String username, String returnUrl) {
+        LOGGER.debug("LoginServiceImpl createRedirect(username,loginType) special openId usage for " + username+" returnUrl "+returnUrl);
         ResourceBundle properties = ResourceBundle.getBundle("icardea");
         String salkServer = properties.getString("salk.server");
 
         //FIXXME phrs use profiles
         boolean specialUsage = Boolean.parseBoolean(ResourceBundle.getBundle("icardea").getString("salk.usage"));
         // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
-        LOGGER.debug("special openId usage " + specialUsage);
+
 
         if (specialUsage) {
             username = salkServer + "/idp/u=" + username; //only valid for SALK server
         }
-        LOGGER.debug("createRedirect " + username + " returnUrl=" + returnUrl + " salkServer=" + salkServer + "  special openId usage=" + specialUsage);
-        LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
+        LOGGER.debug("LoginServiceImpl createRedirect ##############AT Discovery for: username="
+                + username + " returnUrl=" + returnUrl
+                + " salkServer=" + salkServer + "  special openId usage=" + specialUsage);
 
         DiscoveryInformation discovery = RegistrationService.performDiscoveryOnUserSuppliedIdentifier(username);
 
@@ -56,12 +58,12 @@ public class LoginServiceImpl implements LoginService {
             returnUrl = LoginUtils.getOpenIdReturnToUrl();
         }
 
-        LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
+        LOGGER.debug("LoginServiceImpl  before authRequest ##############AT return url:" + returnUrl);
 
         AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
-
+        LOGGER.debug("LoginServiceImpl authRequest created redirectUrl:" + returnUrl);
         String redirectUrl = authRequest.getDestinationUrl(true);
-
+        LOGGER.debug("LoginServiceImpl authRequest.getDestinationUrl(true) redirectUrl:" + redirectUrl);
         return redirectUrl;
     }
 
@@ -71,7 +73,7 @@ public class LoginServiceImpl implements LoginService {
      * @param openIdProviderId   - the key from the UI e.g. openid.provider.1
      * @return
      */
-    public String createRedirectForLoginType(String loginId,  String openIdProviderId) {
+    public String createRedirectForLoginType(String loginId,  String openIdProviderId) throws Exception {
         String redirectUrl = null;
         String username = loginId;
         try {
@@ -112,14 +114,15 @@ public class LoginServiceImpl implements LoginService {
                 returnUrl = LoginUtils.getOpenIdReturnToUrl();
             }
 
-            LOGGER.debug("LoginServiceImpl " + "##############AT return url:" + returnUrl);
-
+          
+            LOGGER.debug("LoginServiceImpl  before authRequest ##############AT return url:" + returnUrl);
             AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
             
             if (authRequest == null) {
                 LOGGER.error("AuthRequest FAILED (null). Username=" + username);
                 throw new Exception("AuthRequest FAILED,(null). Username= " + username);
             }
+            LOGGER.debug("LoginServiceImpl authRequest created redirectUrl:" + returnUrl);
             redirectUrl = authRequest.getDestinationUrl(true);
             
         } catch (Exception e) {

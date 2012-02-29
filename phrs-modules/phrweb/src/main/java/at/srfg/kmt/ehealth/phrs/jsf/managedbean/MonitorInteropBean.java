@@ -55,7 +55,7 @@ public class MonitorInteropBean implements Serializable {
 
     public MonitorInteropBean(String theOwnerUri) {
         userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
-        ownerUri = theOwnerUri;
+        this.ownerUri = theOwnerUri;
         initTools();
 
         initModelMain();

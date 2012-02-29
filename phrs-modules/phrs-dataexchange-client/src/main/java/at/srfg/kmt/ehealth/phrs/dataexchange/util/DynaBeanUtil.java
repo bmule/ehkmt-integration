@@ -35,7 +35,8 @@ public final class DynaBeanUtil {
     public static String toString(DynaBean bean) {
 
         if (bean == null) {
-            throw new NullPointerException("The bean argument can not be null.");
+            return null;
+            //throw new NullPointerException("The bean argument can not be null.");
         }
 
         final StringBuffer msg = new StringBuffer();

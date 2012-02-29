@@ -48,13 +48,13 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
          * Import new interop messages as new domain objects
          */
         //FIXXME IMPORT Remove if desired. Import UI should handle
-        try {
-            LOGGER.error('ObsMedicationChangeBean START loadModelMain  import InteropMessages')
-            importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
-            LOGGER.error('ObsMedicationChangeBean END loadModelMain import InteropMessages')
-        } catch (Exception e){
-            LOGGER.error('Medication building list importInteropMessages',e)
-        }
+//        try {
+//            LOGGER.error('ObsMedicationChangeBean START loadModelMain  import InteropMessages')
+//            importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
+//            LOGGER.error('ObsMedicationChangeBean END loadModelMain import InteropMessages')
+//        } catch (Exception e){
+//            LOGGER.error('Medication building list importInteropMessages',e)
+//        }
         /**
          * load model
          */

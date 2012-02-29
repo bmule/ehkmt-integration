@@ -51,13 +51,19 @@ public class RegistrationService {
         ConsumerManager consumerManager = getConsumerManager();
         try {
             // Perform discover on the User-Supplied Identifier
+            LOGGER.debug("performDiscoveryOnUserSuppliedIdentifier userSuppliedIdentifier "+userSuppliedIdentifier);
             List<DiscoveryInformation> discoveries = consumerManager.discover(userSuppliedIdentifier);
+
+            LOGGER.debug("performDiscoveryOnUserSuppliedIdentifier AFTER Discovery discoveries = "+discoveries);
+
             // Pass the discoveries to the associate() method...
             ret = consumerManager.associate(discoveries);
+            LOGGER.debug("performDiscoveryOnUserSuppliedIdentifier AFTER Association DiscoveryInformation  "+ret);
+
 
         } catch (DiscoveryException e) {
             String message = "Error occurred during discovery!";
-            LOGGER.error(message, e);
+            LOGGER.error(" performDiscoveryOnUserSuppliedIdentifier FAILED "+message, e);
             throw new RuntimeException(message, e);
         }
         return ret;

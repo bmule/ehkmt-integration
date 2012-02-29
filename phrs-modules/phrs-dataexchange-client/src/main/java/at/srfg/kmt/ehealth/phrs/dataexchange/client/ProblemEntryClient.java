@@ -183,8 +183,10 @@ public final class ProblemEntryClient {
                 startDateStr,
                 LITERAL);
 
+        //DateUtil.getFormatedDate(new Date())
+        //Problem ongoing, problem not ended
         final String endDateStr = endDate == null
-                ? DateUtil.getFormatedDate(new Date())
+                ? ""
                 : endDate;
         triplestore.persist(subject,
                 HL7V3_END_DATE,

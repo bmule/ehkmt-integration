@@ -23,7 +23,7 @@ public interface LoginService {
      * @return
      */
     //TODO  Detect an email based OpenId or a normal openID.  openIdProviderId only if passed a real OpenID
-    String createRedirectForLoginType(String username,String openIdProviderId) ;
+    String createRedirectForLoginType(String username,String openIdProviderId) throws Exception;
     //not used
 	RegistrationModel handleValidation();
 

@@ -259,7 +259,7 @@ public class InteropAccessService implements Serializable {
                     LOGGER.error("No protocolID yet for User, no send messages for ownerUri=" + owner + " resourceType=" + resourceType);
                     return messageIdMap
                 }
-                String notifyType = null
+                String careProvisionCode = null
 
                 String status = this.transformStatus(res.status)
                 //status = status?: null
@@ -300,6 +300,8 @@ public class InteropAccessService implements Serializable {
                 switch (resourceType) {
 
                     case ProfileRisk.class.getCanonicalName():
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
+
                         //Risks reported under Problem
                         //ProfileRisk domain=(ProfileRisk)resource
                         if (categoryCode != PhrsConstants.HL7V3_CODE_CATEGORY_RISK) {
@@ -346,6 +348,7 @@ public class InteropAccessService implements Serializable {
 //Constants.STATUS_COMPELETE
 //Constants.STATUS_ACTIVE
                     case ProfileActivityDailyLiving.class.getCanonicalName():
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
 
                         categoryCode =  Constants.HL7V3_FINDING
                             //PhrsConstants.HL7V3_CODE_CATEGORY_ADL This is finding...
@@ -385,6 +388,7 @@ public class InteropAccessService implements Serializable {
                         break
 
                     case ActionPlanEvent.class.getCanonicalName():
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
 
                         //send message only for the sports identifier resource.code= action.categories.activity.sport
                         if (valueCode == InteropTermTransformer.CODE_WATCH_SPORT) {
@@ -440,6 +444,8 @@ public class InteropAccessService implements Serializable {
 
                     case ObsProblem.class.getCanonicalName():
 
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
+
                         ObsProblem domain = (ObsProblem) resource
 
                         //if (categoryCode != Constants.HL7V3_SYMPTOM) {
@@ -483,6 +489,7 @@ public class InteropAccessService implements Serializable {
 
                     case ObsVitalsBloodPressure.class.getCanonicalName():
 
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_COBSCAT
                         ObsVitalsBloodPressure domain = (ObsVitalsBloodPressure) resource
                         //not using category code, instead we split form into a few pieces
                         categoryCode = Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE
@@ -546,6 +553,8 @@ public class InteropAccessService implements Serializable {
                         break
 
                     case ObsVitalsBodyWeight.class.getCanonicalName():
+
+                        careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_COBSCAT
 
                         ObsVitalsBodyWeight domain = (ObsVitalsBodyWeight) resource
                         categoryCode = Constants.ICARDEA_INSTANCE_BODY_WEIGHT
@@ -628,8 +637,8 @@ public class InteropAccessService implements Serializable {
                 }
 
                 if (notifySubscribers) {
-                    LOGGER.debug('Sent interop message, Prepare to notify for owner=' + owner + ' protocolId=' + protocolId + " notifyType " + notifyType);
-                    getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, notifyType);//owner,
+                    LOGGER.debug('Sent interop message, Prepare to notify for owner=' + owner + ' protocolId=' + protocolId + " careProvisionCode " + careProvisionCode);
+                    getInteropClients().notifyInteropMessageSubscribersByProtocolId(careProvisionCode,protocolId);//owner,
                 }
 
             } catch (TripleException e) {
@@ -739,46 +748,6 @@ public class InteropAccessService implements Serializable {
         } catch (Exception e) {
             LOGGER.error(' interop resourceUri= ' + resourceUri, e)
         }
-    }
-    /**
-     * Transform to date string yyyyMMddHHmm
-     * @param date
-     * @param dateTime
-     * @return
-     *
-     */
-    public static Date transformDateFromMessage(String dateMessage, Date defaultDate) {
-        Date theDate = null
-        try {
-            if (dateMessage) {
-                theDate = DateUtil.getFormatedDate(dateMessage)
-            }
-            if (!theDate) {
-                theDate = defaultDate ? defaultDate : new Date()
-            }
-        } catch (Exception e) {
-            LOGGER.error('transforming date', e)
-        }
-        return theDate
-    }
-
-    /**
-     * @deprecated
-     */
-    public def transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean bean, String messageResourceUri, PhrsStoreClient client) {
-        return this.transformInteropMessage(givenOwnerUri, phrsClass, bean, messageResourceUri)
-    }
-    /**
-     * Already know this is new (origin and no resource tag) but must update this record? Get the resourceURI and then update the note with local resourceUri
-     * @param givenOwnerUri
-     * @param phrsClass
-     * @param bean
-     * @return
-     */
-
-    //DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
-    public def transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean bean, String messageResourceUri) {
-        return iprocess.transformInteropMessage(givenOwnerUri, phrsClass, bean, messageResourceUri)
     }
 
 

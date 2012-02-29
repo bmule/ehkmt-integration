@@ -80,6 +80,25 @@
                             <h:outputLink  value="#{request.contextPath}#{'/jsf/vt.xhtml'}">Test</h:outputLink>
                     </h:form>
                 </p:panel>
+                <br/>
+      <p:toolbar>
+         <p:toolbarGroup align="left" rendered="#{loginBean.testMode}">
+            <h:form>
+                <p:commandButton value="Test Load Meds"
+                             immediate="true"
+                             image="ui-icon-plus"
+                             actionListener="#{loginBean.loadInterop}"/>
+            </h:form>
+            <h:form>
+                <p:commandButton value="Test Load Vitals"
+                             immediate="true" onclick=""
+                             image="ui-icon-plus"
+                             actionListener="#{loginBean.loadTestData}"/>
+            </h:form>
+        </p:toolbarGroup>
+
+
+    </p:toolbar>               
 	<!-- <h:outputText value=" {loginBean.shortname}"  />-->
 		<!-- <br/><h:outputText value=" {loginBean.ownerUri}"  />  -->
 		<!-- rendered=" {loginBean.loggedIn eq true}" -->

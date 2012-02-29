@@ -164,9 +164,10 @@ public final class MedicationClient {
                 Constants.HL7V3_DATE_START,
                 startDateStr,
                 LITERAL);
-
+        //DateUtil.getFormatedDate(new Date())
+        //No end date on active medications!
         final String endDateStr = endDate == null
-                ? DateUtil.getFormatedDate(new Date())
+                ? ""
                 : endDate;
         triplestore.persist(subject,
                 Constants.HL7V3_DATE_END,

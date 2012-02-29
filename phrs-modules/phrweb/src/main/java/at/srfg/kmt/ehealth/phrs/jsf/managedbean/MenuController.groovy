@@ -195,11 +195,11 @@ public class MenuController extends FaceCommon{
 		
 		
 		//add test options
-		if(ConfigurationService.isAppModeTest()){
-			test   = new DefaultTreeNode(new DocumentReference("____","/jsf/test1.xhtml",
-				PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)
-			//option load,etc
-		}
+//		if(ConfigurationService.isAppModeTest()){
+//			test   = new DefaultTreeNode(new DocumentReference("____","/jsf/test1.xhtml",
+//				PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)
+//			//option load,etc
+//		}
 
 
 	}

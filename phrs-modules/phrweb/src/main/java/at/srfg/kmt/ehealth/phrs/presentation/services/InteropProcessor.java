@@ -27,6 +27,9 @@ public class InteropProcessor {
     public static final String USER_PROTOCOL_ID = Constants.PROTOCOL_ID_PIX_TEST_PATIENT;//Constants.PROTOCOL_ID_UNIT_TEST;
     public static final String PROTOCOL_ID_NAMESPACE = Constants.ICARDEA_DOMAIN_PIX_OID;
 
+    public static final String CARE_PROVISION_CODE_MEDLIST = "MEDLIST";
+    public static final String CARE_PROVISION_CODE_MEDCCAT = "MEDCCAT";
+    public static final String CARE_PROVISION_CODE_COBSCAT = "COBSCAT";
 
     private boolean printDynabean = false;
 
@@ -438,9 +441,9 @@ public class InteropProcessor {
             }
             //Notify all,this is a shotgun notification for all care provision codes
             //Issue, if the protocolId is not yet defined, then we try to notify
-            LOGGER.debug("Sending interop message, Prepare to notify for owner=" + owner);
+            LOGGER.debug("Sending interop message, Prepare to notify for owner=" + owner+" CareProvisionCode"+ CARE_PROVISION_CODE_MEDLIST);
 
-            getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId);
+            getInteropClients().notifyInteropMessageSubscribersByProtocolId(CARE_PROVISION_CODE_MEDLIST,protocolId);
             //          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, resourceType);
 
         } catch (RuntimeException e) {
@@ -1035,7 +1038,11 @@ public class InteropProcessor {
                 theDate = defaultDate != null ? defaultDate : new Date();
             }
         } catch (Exception e) {
-            LOGGER.error("transforming date", e);
+            LOGGER.error("transforming date exception on date string="+dateMessage, e);
+        }
+        if( theDate==null) {
+            if(defaultDate != null) theDate = defaultDate;
+            else  theDate = new Date();
         }
         return theDate;
     }

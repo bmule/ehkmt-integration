@@ -304,7 +304,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             FacesContext context = UserSessionService.getFacesContext()
             if (context) {
 
-                PhrFederatedUser pfu = UserSessionService.managePhrUserSessionLocalLoginScenario(username, null,null)
+                PhrFederatedUser pfu = UserSessionService.managePhrUserSessionLocalLoginScenario(username, null, null)
 
                 String userMessageCode = null
                 if (pfu != null) {
@@ -336,24 +336,27 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         }
     }
 
-
-        //build IP, protocol also
-        //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr()
-        //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteHost()
-        //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemotePort()
-        //String appReturnUrl = LoginUtils.getOpenIdReturnToUrl(context);
+    //build IP, protocol also
+    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr()
+    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteHost()
+    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemotePort()
+    //String appReturnUrl = LoginUtils.getOpenIdReturnToUrl(context);
 
     private void processOpenIdLogin() throws Exception {
+
         try {
-            LOGGER.debug('processLogin START OpenId discovery  ' + ' username=' + username + '  LoginType: ' + loginType)
+            LOGGER.debug('processLogin OpenId START Discovery  createRedirectForLoginType(username,loginType)' + ' username=' + username + '  LoginType: ' + loginType)
             LoginService loginService = new LoginServiceImpl();
+
             //Discover endpoint OpenID  where UI form field loginType is the property key of Open ID server
             String providerEndpointDiscovered = loginService.createRedirectForLoginType(username, loginType);
 
-            LOGGER.debug('processLogin OpenId AFTER Discovery. Redirect to providerEndpointDiscovered: '+ providerEndpointDiscovered + ' for username=' + username)
+            LOGGER.debug('processLogin OpenId: AFTER Discovery. Redirect to providerEndpointDiscovered: '
+                    + providerEndpointDiscovered + ' for username=' + username)
 
             if (providerEndpointDiscovered) {
                 redirect(providerEndpointDiscovered)
+                //LOGGER.debug('After redirect(providerEndpointDiscovered)... This never returnsshould not')
             } else {
 
                 WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. No provider endpoint was discovered ');
@@ -362,12 +365,9 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                         + ' providerEndpointDiscovered: ' + providerEndpointDiscovered
                         + ' username: ' + username + ' loginType' + loginType)
             }
-            //} else { //no appReturnUrl
-            //    LOGGER.debug('processOpenIdLogin failed no appReturnUrl: appReturnUrl:' + appReturnUrl + ' for user ' + username)
-            //    WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. Error with appReturnUrl ' + appReturnUrl);
-            //}
+
         } catch (Exception e) {
-            LOGGER.error('processOpenIdLogin failed, username=' + username,e);
+            LOGGER.error('processOpenIdLogin failed, username=' + username, e);
             WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. ');
 
         }
@@ -376,6 +376,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
      * user interfaces invokes this public method
      */
     public void processLogin() {
+
         try {
             LOGGER.debug('processLogin START user: ' + username + ' loginType: ' + loginType)
             if (username && loginType) {
@@ -390,20 +391,22 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                 }
             } else {
                 //fail,
-                if (!username)
+                if ( ! username) {
                     WebUtil.addFacesMessageSeverityError('Login Status',
                             'Login name is missing =' + username);
-                if (!loginType) if (!loginType)
+                }
+                if ( !loginType) {
                     WebUtil.addFacesMessageSeverityError('Login Status',
                             'Please choose one account type, local or Open ID =' + username);
+                }
             }
 
         } catch (Exception e) {
-            LOGGER.error('processLogin failed processLogin local login ',e);
+            LOGGER.error('processLogin failed processLogin local login ', e);
             WebUtil.addFacesMessageSeverityError('Login Status', 'Login failed for User ID: ' + username)
         }
         LOGGER.debug('processLogin END user: ' + username + ' loginType: ' + loginType)
-        WebUtil.addFacesMessageSeverityError('Login Status','Login failed for User ID: ' + username)
+        WebUtil.addFacesMessageSeverityError('Login Status', 'Login failed for User ID: ' + username)
     }
 
 }

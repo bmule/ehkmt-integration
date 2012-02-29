@@ -35,10 +35,24 @@
                                          ajax="false"
                                          image="ui-icon-plus" 
                                          actionListener="#{vtestBean.commandTest}"/>
-                    </h:form> 
+                    </h:form>
+
                     <h:form>
-                        <p:commandButton value="Load Meds vtestBean"
-                                         ajax="false"
+                        <p:commandButton value="Load Meds loginBean"
+                                         immediate="true"
+                                         image="ui-icon-plus"
+                                         actionListener="#{loginBean.loadInterop}"/>
+                    </h:form>
+                    <h:form>
+                        <p:commandButton value="Load Vitals"
+                                         immediate="true" onclick=""
+                                         image="ui-icon-plus"
+                                         actionListener="#{loginBean.loadTestData}"/>
+                    </h:form>
+
+                    <h:form>
+                        <p:commandButton value="Load Meds vtestBean (error)"
+                                         immediate="true"
                                          image="ui-icon-plus"
                                          actionListener="#{vtestBean.loadInterop}"/>
                     </h:form>
@@ -50,16 +64,50 @@
                                          />
                         Import any available records from the Hospital for test patient
                     </h:form>
-
+                    <h:form>
+                        <p:commandButton ajax="false"
+                                         value="Load test problem/meds"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.loadTestProblemsMedicationsNotify}"
+                                />
+                        Load messages and notifies subscribers (no save to document db)
+                    </h:form>
+                    <h:form>
+                        <p:commandButton ajax="false"
+                                         value="loadTestProblemNotify"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.loadTestProblemNotify}"
+                                />
+                        Send messages and notify for Test Problems (no save to document db)
+                    </h:form>
+                    <h:form>
+                        <p:commandButton ajax="false"
+                                         value="loadTestMedicationNoDrugCodeNotify"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.loadTestMedicationNoDrugCodeNotify}"
+                                />
+                        Send messages and notify for Test Medication *No Drug Code*   (no save to document db)
+                    </h:form>
+                    <h:form>
+                        <p:commandButton ajax="false"
+                                         value="loadTestMedicationWithDrugCodeNotify"
+                                         image="ui-icon-plus"
+                                         actionListener="#{vtestBean.loadTestMedicationWithDrugCodeNotify}"
+                                />
+                    </h:form>
+                    Send messages and notify for Test Medication With Drug Code  (no save to document db)
+ <!--
+    loadTestProblemNotify
+    loadTestMedicationNoDrugCodeNotify
+    loadTestMedicationWithDrugCodeNotify
+ -->
  
                 </p:toolbarGroup>
 
             </p:toolbar>
-            
-            
-            
+
             <h:form>
-                <h:panelGrid columns="3" border="1" style="border-style:thin solid;border-color:grey;">
+                <h:panelGrid columns="3" border="1" style="border-style:solid;border-color:grey;">
        
                     <h:outputLabel value="Query (no update) VT TEST User CIED and Patient Identifier"/>
                     <h:outputLabel value="ID Type"/>
@@ -108,6 +156,10 @@
 
                 </h:panelGrid>
             </h:form>
+
+            <p>
+                 <h:commandLink value="#{request.contextPath}/jsf/test1.xhtml">JSF ViewScope Check</h:commandLink>
+            </p>
         </p:fieldset>
 
 

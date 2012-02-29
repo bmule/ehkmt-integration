@@ -1507,6 +1507,7 @@ public class PhrsClientPhrResourceUnitTest {
                 theDate = defaultDate != null ? defaultDate : new Date();
             }
         } catch (Exception e) {
+
             LOGGER.error("transforming date", e);
         }
         return theDate;
