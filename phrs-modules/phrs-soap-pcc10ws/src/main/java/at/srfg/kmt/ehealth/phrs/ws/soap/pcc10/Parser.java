@@ -31,8 +31,9 @@ public interface Parser<T> {
      * Parses the given object.
      * 
      * @param toParse the object to be parsed.
+     * @param userId the user id that  may be involved, it may be null.
      * @throws ParserException by any kind of error.
      */
-    void parse(T toParse) throws ParserException;
+    void parse(T toParse, String userId) throws ParserException;
 
 }
