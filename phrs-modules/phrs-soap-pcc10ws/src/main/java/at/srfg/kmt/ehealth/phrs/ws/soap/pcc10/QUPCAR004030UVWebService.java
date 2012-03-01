@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 import javax.jws.HandlerChain;
 import javax.jws.WebService;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.ws.BindingType;
 import org.hl7.v3.*;
@@ -114,13 +115,32 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
+        final JAXBElement<REPCMT004000UV01RecordTarget> recordTarget_JAXB = 
+                careProvisionEvent.getRecordTarget();
+        final REPCMT004000UV01RecordTarget recordTarget = recordTarget_JAXB.getValue();
+        final JAXBElement<COCTMT050000UVPatient> patient_JAXB = recordTarget.getPatient();
+        final COCTMT050000UVPatient patient = patient_JAXB.getValue();
+        final List<II> ids = patient.getId();
+        
+        if (ids.isEmpty()) {
+            LOGGER.error("No ids found - the parsing can not be appiled");
+            return;
+        }
+        
+        if (ids.size() > 1) {
+            LOGGER.warn("Mutiple ids found, fuzzy logic - the involved patient Id it may be wrong.");
+        }
+        // Because there is only one user id and name space (spcifed by FROTH) I
+        // only use the fist one. The list must ocontain only one element
+        final String patientId = ids.get(0).getExtension();
+        
         final List<REPCMT004000UV01PertinentInformation5> pertinentInformations =
                 careProvisionEvent.getPertinentInformation3();
 
         LOGGER.debug("Pertinent Information5 amount to process is {}",
                 pertinentInformations.size());
         for (REPCMT004000UV01PertinentInformation5 information5 : pertinentInformations) {
-            parse(information5);
+            parse(information5, patientId);
         }
     }
     
@@ -131,11 +151,11 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
      * @param information5 the <code>REPCMT004000UV01PertinentInformation5</code>
      * to be parsed.
      */
-    private void parse(REPCMT004000UV01PertinentInformation5 information5) {
+    private void parse(REPCMT004000UV01PertinentInformation5 information5, String id) {
         for (Parser<REPCMT004000UV01PertinentInformation5> parser : parsers) {
             if (parser.canParse(information5)) {
                 try {
-                    parser.parse(information5);
+                    parser.parse(information5, id);
                     break;
                 } catch (ParserException exception) {
                     LOGGER.warn("REPCMT004000UV01PertinentInformation5 can not be parsed");
