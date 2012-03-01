@@ -9,10 +9,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ProblemEntryClient;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight;
-import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
-import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo;
+import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
@@ -390,8 +387,28 @@ public class CoreTestData {
                 commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
                 //does automatic notify upon save
             }
+            /*
+               try {
+            client.addProblemEntry(
+                    protocolId,
+                    Constants.HL7V3_SYMPTOM,
+                    Constants.STATUS_COMPELETE,
+                    "201008200000",
+                    "",
+                    "loaded by core test data Free text note",
+                    "http://www.icardea.at/phrs/instances/BleedingGums");
+        } catch (TripleException e) {
+            LOGGER.error("loadTestProblem Constants.HL7V3_UNABLE_TO_EAT", e);  //To change body of catch statement use File | Settings | File Templates.
+        }
+             */
+            ObsProblem prob=new ObsProblem();
+             prob.setBeginDate(new Date());
+            prob.setStatus("default_activeStatusTrue");
+            prob.setCode("http://www.icardea.at/phrs/instances/BleedingGums");
 
-
+            prob.setNote("note " + makeSimpleId());
+            prob.setSystemNote(prob.getNote());
+            commonDao.crudSaveResource(prob, user.getOwnerUri(), "CoreTestData createTestUserData");
             LOGGER.debug("Created test data for  fullname " + fullname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
 
 
@@ -604,6 +621,7 @@ public class CoreTestData {
                 bp2.setBeginDate(new Date());
                 bp2.setEndDate(new Date());
                 bp2.setNote("note id " + makeSimpleId());
+
                 bp2.setSystemNote(bp2.getNote());
                 commonDao.crudSaveResource(bp2, ownerUri, "CoreTestData addTestBasicHealthVitalsData");
 
@@ -612,6 +630,7 @@ public class CoreTestData {
                 bw1.setBodyHeight(171d);
                 bw1.setBeginDate(new Date());
                 bw1.setEndDate(new Date());
+                bw1.setMeasurementUnit(Constants.KILOGRAM);
                 bw1.setNote("note id " + makeSimpleId());
                 bw1.setSystemNote(bw1.getNote());
                 commonDao.crudSaveResource(bw1, ownerUri, "CoreTestData addTestBasicHealthVitalsData");
@@ -623,6 +642,7 @@ public class CoreTestData {
                 bw2.setEndDate(new Date());
                 bw2.setNote("note id " + makeSimpleId());
                 bw2.setSystemNote(bw2.getNote());
+                bw2.setMeasurementUnit(Constants.KILOGRAM);
                 commonDao.crudSaveResource(bw2, ownerUri, "CoreTestData addTestBasicHealthVitalsData");
                 LOGGER.debug("Created test data BP and BW for ownerUri " + ownerUri);
 

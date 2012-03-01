@@ -5,6 +5,7 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class PhrsConstants implements Serializable {
+
     public final static String ICARDEA_DOMAIN_PIX_CIED="CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID";
     public final static String MENU_CONTROL_REQUEST_PARAMETER_SELECTED_NODE = "requestnode";
 

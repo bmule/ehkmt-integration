@@ -275,7 +275,7 @@ public class InteropAccessService implements Serializable {
                 dateStringStart = dateStringStart ?: transformDate(new Date(), new Date())
 
                 String dateStringEnd = transformDate(res.endDate, (Date) null)
-                dateStringEnd = dateStringEnd ?: null
+                dateStringEnd = dateStringEnd ?: InteropProcessor.DEFAULT_DATE_STRING // blank
 
                 //res.note is by default not sharable
                 /**

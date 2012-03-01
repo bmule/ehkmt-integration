@@ -31,6 +31,9 @@ public class InteropProcessor {
     public static final String CARE_PROVISION_CODE_MEDCCAT = "MEDCCAT";
     public static final String CARE_PROVISION_CODE_COBSCAT = "COBSCAT";
 
+    public final static String UNKNOWN_DRUG_CODE="";//unknown  is normally blank TODO find actual code for unknown or undefined?
+    public final static String DEFAULT_DATE_STRING="";
+    public final static String DEFAULT_DRUG_LABEL="UNKNOWN";
     private boolean printDynabean = false;
 
 
@@ -326,15 +329,15 @@ public class InteropProcessor {
         String dateStringStart = transformDate(res.getBeginDate(), res.getEndDate());
         dateStringStart = dateStringStart != null ? dateStringStart : null;
 
-        String dateStringEnd = transformDate(res.getEndDate(), (Date) null);
-        dateStringEnd = dateStringEnd != null ? dateStringEnd : null;
+        String dateStringEnd = transformDate(res.getEndDate(), null);
+        dateStringEnd = dateStringEnd != null ? dateStringEnd : InteropProcessor.DEFAULT_DATE_STRING;//blank
 
         String theParentId = res.getResourceUri();
 
         try {
 
 
-            String name = domain.getLabel() != null ? domain.getLabel() : domain.getCode();
+            String name = domain.getLabel() != null ? domain.getLabel() : InteropProcessor.DEFAULT_DRUG_LABEL;
 
             String freqCode = domain.getFrequencyCode();
             //String dosageValue = domain.getTreatmentMatrix().getDosage() != null ? domain.getTreatmentMatrix().getDosage().toString() : "0";
@@ -352,7 +355,12 @@ public class InteropProcessor {
 
             MedicationClient medicationclient = getInteropClients().getMedicationClient();
             String productCode = domain.getProductCode();
-
+            //assign default
+            if(productCode!=null && !productCode.isEmpty()) {
+                //
+            }  else {
+                productCode= InteropProcessor.UNKNOWN_DRUG_CODE;
+            }
             String interopRef = null;
             //create new message each time rather than update.
             //findMessageWithReference(owner, theParentId, Constants.PHRS_MEDICATION_CLASS, null);
@@ -367,7 +375,7 @@ public class InteropProcessor {
 
                 LOGGER.debug("Interop referenceNote " + referenceNote);
 
-                if (productCode != null && !productCode.isEmpty()) {
+                if (productCode != null ) {
 
                     messageId = medicationclient.addMedicationSign(
                             protocolId,//FIXID owner,

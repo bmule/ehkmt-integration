@@ -36,7 +36,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     String loginType = 'local.provider.1'    // local_1, openid_icardea_1, null or blank
     String password
 
-    boolean loggedIn = false;
 
     public LoginMgtBean() {
 
@@ -73,7 +72,11 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     }
 
     public Map getSessionMap() {
-        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+        
+        if(FacesContext.getCurrentInstance() != null){
+            return FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
+        }
+        return null;
     }
 
 
@@ -84,8 +87,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     }
 
     public void logout() {
-
-        loggedIn = false
 
         // invalidate OpenId RelyingParty and Http session, must redirect
         // afterwards. Response OK, but this session scoped bean is ending
@@ -109,11 +110,24 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         if (!userName) userName = UserSessionService.getRequestParameter(PhrsConstants.OPEN_ID_PARAM_NAME_LOGIN)
         return userName
     }
+    public String getLoginStatus() {
+        LOGGER.debug('getLoginStatus')
+          if(UserSessionService.loggedIn()) return "true"
+          return "false"
+    }
+     public String loginStatus() {
+         LOGGER.debug('loginStatus')
+          if(UserSessionService.loggedIn()) return "true"
+          return "false"
+    }   
+    public boolean getLoggedIn() {
+        LOGGER.debug('getLoggedIn')
+        isLoggedIn()
+    }
+    public boolean isLoggedIn() {
+        boolean result = UserSessionService.loggedIn();
 
-    public boolean isloggedIn() {
-        boolean loginStatus = UserSessionService.loggedIn();
-
-        if (!loginStatus) {
+        if ( ! result) {
             //boolean isVerified = UserSessionService.getSessionAttributeOpenIdIsVerified()
             String msg = UserSessionService.getSessionAttribute(PhrsConstants.ERROR_MSG_ATTR)
             if (msg) {
@@ -126,7 +140,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             }
         }
 
-        return loginStatus
+        return result
     }
 
     public String getStatus() {
@@ -302,22 +316,24 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             LOGGER.debug('processLogin isLocalLogin:  loginType=' + loginType + ' username=' + username)
 
             FacesContext context = UserSessionService.getFacesContext()
+
+            LOGGER.debug("START processLocalLogin isLoggedIn ="+UserSessionService.loggedIn()+" sessionMap {} " + UserSessionService.getSessionMap())
             if (context) {
 
                 PhrFederatedUser pfu = UserSessionService.managePhrUserSessionLocalLoginScenario(username, null, null)
 
                 String userMessageCode = null
                 if (pfu != null) {
-
-                    LOGGER.debug('success local login, redirect  user handleLocalLogin= ' + username)
+                   // String redirectUrl=context.getExternalContext().getRequestContextPath() + "/index.xhtml";
+                    LOGGER.debug('processLocalLogin success local login, redirect  user handleLocalLogin= ' + username)
                     //TODO  userMessageCode success to flash message
                     //new page, should have session params set
-                    Map map = UserSessionService.getSessionMap()
-                    LOGGER.debug("sessionMap {} " + map)
-                    redirect(context.getExternalContext().getRequestContextPath() + "/index.xhtml")
+
+                    LOGGER.debug(" processLocalLogin isLoggedIn ="+UserSessionService.loggedIn()+" sessionMap {} " + UserSessionService.getSessionMap())
+                    //no causes problem redirect(redirectUrl)
 
                 } else {
-                    LOGGER.debug('error handleLocalLogin creating local user null');
+                    LOGGER.debug('processLocalLogin error handleLocalLogin creating local user null');
                     if (userMessageCode == null) {
                         userMessageCode = PhrsConstants.DEFAULT_ERROR_MSG_OPEN_ID
                     }
@@ -406,7 +422,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             WebUtil.addFacesMessageSeverityError('Login Status', 'Login failed for User ID: ' + username)
         }
         LOGGER.debug('processLogin END user: ' + username + ' loginType: ' + loginType)
-        WebUtil.addFacesMessageSeverityError('Login Status', 'Login failed for User ID: ' + username)
+        WebUtil.addFacesMessageSeverityInfo('Login Status', 'Login successful for User ID: ' + username)
     }
 
 }
