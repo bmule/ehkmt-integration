@@ -365,8 +365,9 @@ public class CoreTestData {
             if (addObservations) {
 
                 ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
-                bp1.setSystolic(110);
-                bp1.setDiastolic(70);
+                bp1.setSystolic(140);
+                bp1.setDiastolic(85);
+                bp1.setHeartRate(75);
                 bp1.setBeginDate(new Date());
                 bp1.setEndDate(new Date());
                 bp1.setNote("note " + makeSimpleId());
@@ -374,7 +375,7 @@ public class CoreTestData {
                 commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
                 //does automatic notify upon save
             }
-
+             /*
 
             if (addObservations) {
                 ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
@@ -386,7 +387,7 @@ public class CoreTestData {
                 bw1.setSystemNote(bw1.getNote());
                 commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
                 //does automatic notify upon save
-            }
+            }  */
             /*
                try {
             client.addProblemEntry(
@@ -401,6 +402,7 @@ public class CoreTestData {
             LOGGER.error("loadTestProblem Constants.HL7V3_UNABLE_TO_EAT", e);  //To change body of catch statement use File | Settings | File Templates.
         }
              */
+            /*
             ObsProblem prob=new ObsProblem();
              prob.setBeginDate(new Date());
             prob.setStatus("default_activeStatusTrue");
@@ -410,7 +412,7 @@ public class CoreTestData {
             prob.setSystemNote(prob.getNote());
             commonDao.crudSaveResource(prob, user.getOwnerUri(), "CoreTestData createTestUserData");
             LOGGER.debug("Created test data for  fullname " + fullname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
-
+              */
 
         } catch (Exception e) {
             LOGGER.error("Error creating user test data", e);

@@ -50,7 +50,14 @@
 					<p:spacer width="20"/>
 					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
 					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"/>
-				</div>	
+
+                    <h:panelGroup rendered="#{loginBean.loggedIn eq true}" >
+                        <h:form>
+                            <p:commandLink value="Logout"  style="font-weight: bold;"
+                                           actionListener="#{loginBean.logout}"/>
+                        </h:form>
+                    </h:panelGroup>
+                </div>
 			</p:layoutUnit>
 			<p:layoutUnit position="bottom" 
 				height="50" 
@@ -111,7 +118,7 @@
                                              required="true" />
 
                                     <h:outputLabel value="Login with" />
-                                    <h:selectOneRadio layout="pageDirection" value="local.provider.1">
+                                    <h:selectOneRadio layout="pageDirection" value="#{loginBean.loginType}">
                                         <f:selectItem itemLabel="Local login name (phrtest, nurse)"
                                                 itemValue="local.provider.1"/>
                                         <f:selectItem itemLabel="iCARDEA login name"

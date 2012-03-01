@@ -202,7 +202,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
         if (role && role.contains(PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX)) {
             //remove prefix:, but TODO make ref to i18 and replace with '_'
-            role = role.replace(':' + PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX, '')
+            role = role.replace(PhrsConstants.AUTHORIZE_ROLE_CONSENT_MGR_PREFIX+":", '')
         } else {
             role = ''
         }
@@ -422,7 +422,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             WebUtil.addFacesMessageSeverityError('Login Status', 'Login failed for User ID: ' + username)
         }
         LOGGER.debug('processLogin END user: ' + username + ' loginType: ' + loginType)
-        WebUtil.addFacesMessageSeverityInfo('Login Status', 'Login successful for User ID: ' + username)
+        //WebUtil.addFacesMessageSeverityInfo('Login Status', 'Login successful for User ID: ' + username)
     }
 
 }

@@ -45,15 +45,15 @@
 			<!-- under the test mode, we set the loggedIn to true in the loginBean and automatically
 			the 'phrtest' user is assigned as default -->
 			<h:panelGroup rendered="#{loginBean.loggedIn eq true}" >
-                <!--loginBean-->
-                <h:form>
-                    <p:commandLink value="Logout"
-                                   actionListener="#{loginBean.logout}"/>
-                </h:form>
-               <h:outputLabel value="#{loginBean.greetname}"/>
+                <!--<h:form>
+                    <p:commandLink value="Logout"    style="font-weight:bold"
+                                   actionListener=" # {loginBean.logout}"/>
+                </h:form> -->
+
+               <h:outputLabel value="#{loginBean.greetname}" />
  			    <h:panelGroup rendered="#{loginBean.roleShow eq true}">
-					  <h:outputLabel value="Role: #{loginBean.role}" />				 
-				 </h:panelGroup>
+					  <br/> (<h:outputLabel value="#{loginBean.role}" style="font-style: italic;" />)
+				</h:panelGroup>
 
 			 </h:panelGroup>				
 	</p:panel>
