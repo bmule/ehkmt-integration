@@ -35,7 +35,7 @@ import java.util.List;
  * @since 1.0-SNAPSHOT
  */
 
-final class MedicationParser implements Parser<REPCMT004000UV01CareProvisionEvent> {
+final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformation5> {
 
     //Parser<REPCMT004000UV01PertinentInformation5>
     /**
@@ -62,7 +62,7 @@ final class MedicationParser implements Parser<REPCMT004000UV01CareProvisionEven
      * @return
      */
     //see also TaskUtil and MedicationSignPCC10
-    @Override
+   
     public boolean canParse(REPCMT004000UV01CareProvisionEvent toParse) {
         boolean hasPertinentInfo = false;
         boolean hasPatientId = false;
@@ -218,7 +218,6 @@ final class MedicationParser implements Parser<REPCMT004000UV01CareProvisionEven
 
     }
 
-    @Override
     public void parse(REPCMT004000UV01CareProvisionEvent toParse) throws ParserException {
         LOGGER.debug("Tries to parse {}", toParse);
         GenericTriplestore triplestore = null;
@@ -385,4 +384,20 @@ final class MedicationParser implements Parser<REPCMT004000UV01CareProvisionEven
 //    </careProvisionEvent>
 //</subject2>
 
+
+    @Override
+    public boolean canParse(REPCMT004000UV01PertinentInformation5 toParse) {
+
+        final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB =
+                toParse.getSubstanceAdministration();
+        final boolean hasSubstanceAdministration = substanceAdministration_JAXB != null;
+        return hasSubstanceAdministration;
+    }
+
+    @Override
+    public void parse(REPCMT004000UV01PertinentInformation5 toParse) throws ParserException {
+        LOGGER.debug("Tries to parse {}", toParse);
+    }
+    
+    
 }
