@@ -35,7 +35,7 @@
 
     <!--PHRS Code System code system-->
     <!--TODO : Think about an unique code here-->
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Phrs">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS">
         <icadyCodeSystem:codeSystemCode>2.16.840.1.113883.X.10.10.10</icadyCodeSystem:codeSystemCode>
         <icadyCodeSystem:codeSystemName>PHRSCodeSystem</icadyCodeSystem:codeSystemName>
     </rdf:Description>
@@ -2407,7 +2407,7 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    
+       
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
         <skos:prefLabel>oral</skos:prefLabel>
         <icadyCode:code>
