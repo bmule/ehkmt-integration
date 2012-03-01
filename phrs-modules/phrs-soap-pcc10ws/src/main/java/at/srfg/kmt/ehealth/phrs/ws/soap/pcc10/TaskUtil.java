@@ -61,7 +61,9 @@ public class TaskUtil {
         final II newId = new II();
         newId.setRoot(Constants.ICARDEA_DOMAIN_PIX_OID);
         newId.setExtension(extentionPatientId);
-        patient.getId().add(newId);
+        final List<II> ids = patient.getId();
+        ids.clear();
+        ids.add(newId);
     }
 
     /**
