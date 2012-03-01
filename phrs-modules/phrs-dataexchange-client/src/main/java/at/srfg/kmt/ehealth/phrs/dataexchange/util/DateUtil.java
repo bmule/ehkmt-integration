@@ -33,7 +33,8 @@ public final class DateUtil {
     /**
      * The formatter use th convert (java.util.)Date to String.
      */
-    private static final DateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyyMMddHm");
+    private static final DateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");//updated
+    // private static final DateFormat OUTPUT_FORMAT = new SimpleDateFormat("yyyyMMddHHmm");FIXXME
     /**
      * A list that contains all the supported (date) formats.
      */
@@ -41,8 +42,8 @@ public final class DateUtil {
 
     static {
         FORMATS = new ArrayList<DateFormat>();
-        FORMATS.add(new SimpleDateFormat("yyyyMMddHms"));
         FORMATS.add(OUTPUT_FORMAT);
+        FORMATS.add(new SimpleDateFormat("yyyyMMddHms"));
         FORMATS.add(new SimpleDateFormat("yyyyMMdd"));
         FORMATS.add(new SimpleDateFormat("yyyyMM"));
         FORMATS.add(new SimpleDateFormat("yyyy"));
