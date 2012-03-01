@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package at.srfg.kmt.ehealth.phrs.dataexchange.util;
 
 import java.util.Date;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
