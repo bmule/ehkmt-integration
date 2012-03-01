@@ -50,13 +50,13 @@
 					<p:spacer width="20"/>
 					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
 					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"/>
-
-                    <h:panelGroup rendered="#{loginBean.loggedIn eq true}" >
+         <!--
+                    <p:outputPanel rendered="#{loginBean.loggedIn eq true}" >
                         <h:form>
                             <p:commandLink value="Logout"  style="font-weight: bold;"
-                                           actionListener="#{loginBean.logout}"/>
+                                           actionListener=" {loginBean.logout}"/>
                         </h:form>
-                    </h:panelGroup>
+                    </p:outputPanel>  -->
                 </div>
 			</p:layoutUnit>
 			<p:layoutUnit position="bottom" 

@@ -32,28 +32,17 @@
 		-->
 	<p:panel id="loginpanel" closable="false" style="width:100%">
 
-        <!-- put on home page <p:messages id="msgs" showDetail="true" autoUpdate="true"/>-->
-
-				<!--<h:form>
-					<h:outputLink  value="   {request.contextPath}  {'/login'}"
-					rendered="  {loginBean.loggedIn eq false}">Login</h:outputLink>
-				</h:form>
-                <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>
-                 <br/>* OpenId or local login ID (phrtest,nurse. Demo: prefix Id with phr)
-                -->
- 
 			<!-- under the test mode, we set the loggedIn to true in the loginBean and automatically
 			the 'phrtest' user is assigned as default -->
 			<h:panelGroup rendered="#{loginBean.loggedIn eq true}" >
-                <!--<h:form>
+                <h:form>
                     <p:commandLink value="Logout"    style="font-weight:bold"
                                    actionListener=" # {loginBean.logout}"/>
-                </h:form> -->
-
-               <h:outputLabel value="#{loginBean.greetname}" />
- 			    <h:panelGroup rendered="#{loginBean.roleShow eq true}">
-					  <br/> (<h:outputLabel value="#{loginBean.role}" style="font-style: italic;" />)
+                </h:form>
+			    <h:panelGroup rendered="#{loginBean.roleShow eq true}">
+					  (<h:outputLabel value="#{loginBean.role}" style="font-style: italic; font-size: 10px" />)
 				</h:panelGroup>
+                <br/> <h:outputLabel value="#{loginBean.greetname}" />
 
 			 </h:panelGroup>				
 	</p:panel>
