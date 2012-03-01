@@ -36,8 +36,8 @@ import org.slf4j.LoggerFactory;
  * </pre> <b>Note : </b> the first argument (for the main method) is the
  * end-point, this is the URI where the PCC10 request will send. <b>Note : </b>
  * the second argument (for the main method) is the response-end-point, this is
- * the URI where the PCC10 response will send. <br/> This class is not design to
- * be extended.
+ * the URI where the PCC10 response will send. <br/>
+ * This class is not design to be extended.
  *
  * @author mihai
  * @version 1.0-SNAPSHOT
