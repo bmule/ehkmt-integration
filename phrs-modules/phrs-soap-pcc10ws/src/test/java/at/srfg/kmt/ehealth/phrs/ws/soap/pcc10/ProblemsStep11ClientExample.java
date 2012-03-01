@@ -8,6 +8,8 @@ import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.xml.bind.JAXBException;
@@ -54,17 +56,17 @@ public class ProblemsStep11ClientExample {
                 Constants.STATUS_COMPELETE,
                 "201008200000",
                 "",
-                "Free text note.",
+                "Free text note. "+new Date(),
                 Constants.HL7V3_SICK_TO_STOMACH);
 
         client.addProblemEntry(
                 owner,
-                Constants.HL7V3_COMPILANT,
+                Constants.HL7V3_SYMPTOM,
                 Constants.STATUS_COMPELETE,
                 "201008200000",
                 "",
-                "Free text note.",
-                Constants.HL7V3_UNABLE_TO_EAT);
+                "Free text note. "+new Date(),
+                Constants.HL7V3_SHORTHENS_OF_BREATH);
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
@@ -74,16 +76,17 @@ public class ProblemsStep11ClientExample {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "problems-step11");
 
+        System.out.println("END ProblemsStep11ClientExample");
 
 
         // TAKE CARE !!!!!!
         // This lines wipe out everything after the client example ends its 
         // main method.
         ((GenericTriplestoreLifecycle) triplestore).shutdown();
-        ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+        //((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
 
     }
 }

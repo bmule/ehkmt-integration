@@ -54,7 +54,8 @@ public class ProblemClientFeverSymptomExample {
                 "201006010000",
                 "201006010000",
                 "Free text note for the problem.",
-                Constants.HL7V3_FEVER);
+                //Constants.HL7V3_FEVER
+                "http://www.icardea.at/phrs/instances/BleedingGums");
 
         final Iterable<String> uris = client.getProblemEntriesURIForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
@@ -64,7 +65,7 @@ public class ProblemClientFeverSymptomExample {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "fever-symptopm");
 
 

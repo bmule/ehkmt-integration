@@ -131,6 +131,7 @@ final class MedicationTask implements PCCTask {
                 enableSecurity();
 
             }
+            
             final MCCIIN000002UV01 ack = SendPcc10Message.sendMessage(request, responseURI);
             LOGGER.info("Acknowledge (response) is : {}.", ack);
 
@@ -189,7 +190,7 @@ final class MedicationTask implements PCCTask {
         LOGGER.debug("The total amount of Medication Entries for user {} is {}",
                 owner, medicationCount);
         if (medicationCount == 0) {
-            LOGGER.warn("No Medication  for this user {}, the HL7 V3 message will be empty.", owner);
+            LOGGER.warn("There are no Medications for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
         }
 
         // TAKE CARE !!!!!!
@@ -201,7 +202,7 @@ final class MedicationTask implements PCCTask {
             LOGGER.warn(exception.getMessage(), exception);
         }
 
-        final QUPCIN043200UV01 pcc10Message = MedicationSignPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pcc10Message = MedicationSignPCC10.getPCC10Message(owner,beans);
         return pcc10Message;
     }
 

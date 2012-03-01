@@ -7,7 +7,6 @@
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
-
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
@@ -27,7 +26,6 @@ import org.hl7.v3.QUPCIN043200UV01;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Builds and sends a <a
  * href="http://wiki.ihe.net/index.php?title=PCC-10">PCC10</a> that contains
@@ -45,7 +43,6 @@ final class VitalSignTask implements PCCTask {
      * The care provision code for this PCC task.
      */
     public static final String CARE_PROVISION_CODE = "COBSCAT";
-
     /**
      * The Logger instance. All log messages from this class are routed through
      * this member. The Logger name space is
@@ -111,7 +108,7 @@ final class VitalSignTask implements PCCTask {
 
         try {
             final String owner = (String) properties.get("patientId");
-            final QUPCIN043200UV01 request = buildMessage(owner,responseURI);
+            final QUPCIN043200UV01 request = buildMessage(owner, responseURI);
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -170,11 +167,17 @@ final class VitalSignTask implements PCCTask {
         final Set<DynaBean> beans = new HashSet<DynaBean>();
 
         for (String uri : uris) {
-            final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
-            final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
-            if (!wasDistpached) {
-                beans.add(dynaBean);
-                client.setDispathedTo(uri, wsAddress);
+            System.out.println("vital bef dynabean uri=" + uri);
+            try {
+                final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
+                final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+                if (!wasDistpached) {
+                    beans.add(dynaBean);
+                    client.setDispathedTo(uri, wsAddress);
+                }
+            } catch (Exception exception) {
+                System.out.println("vital bef dynabean bad uri=" + uri);
+                LOGGER.warn("bad URI=" + uri + " " + exception.getMessage(), exception);
             }
         }
 
@@ -182,19 +185,19 @@ final class VitalSignTask implements PCCTask {
         LOGGER.debug("The total amount of Vital Sign Entries for user {} is {}",
                 owner, vitalSignCount);
         if (vitalSignCount == 0) {
-            LOGGER.warn("No Vital signs for this user {}, the HL7 V3 message will be empty.", owner);
+            LOGGER.warn("There are no NEW Vital signs for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
         }
 
         // TAKE CARE !!!!!!
         // This lines wipe out the triple store repository files.
         try {
             ((GenericTriplestoreLifecycle) triplestore).shutdown();
-           // ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
+            // ((GenericTriplestoreLifecycle) triplestore).cleanEnvironment();
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
 
-        final QUPCIN043200UV01 pcc10Message = VitalSignPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pcc10Message = VitalSignPCC10.getPCC10Message(owner, beans);
         return pcc10Message;
     }
 

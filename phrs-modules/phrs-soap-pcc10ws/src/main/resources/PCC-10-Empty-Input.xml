@@ -47,7 +47,7 @@
                     <careProvisionEvent>
                         <recordTarget>
                             <patient>
-                                <id root='1' extension='149202063490'/>
+                                <id root='1' extension='_PATIENT_ID_'/>
                                 <addr></addr>
                                 <telecom value='1' use='1'/>
                                 <statusCode code='active'/>

@@ -100,7 +100,7 @@ public class VitalSignClientExample {
             beans.add(dynaBean);
         }
         
-        final QUPCIN043200UV01 pCC10Message = VitalSignPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pCC10Message = VitalSignPCC10.getPCC10Message(owner,beans);
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "vital-sign");
 
 

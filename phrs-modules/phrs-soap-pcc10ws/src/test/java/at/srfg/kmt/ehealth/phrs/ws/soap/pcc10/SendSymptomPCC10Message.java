@@ -130,7 +130,7 @@ public final class SendSymptomPCC10Message {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         return pcc10Message;
     }
 }

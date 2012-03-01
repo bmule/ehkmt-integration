@@ -97,6 +97,12 @@ public class MedicationsStep8ClientExample {
 				Constants.HL7V3_ORAL_ADMINISTRATION, "1", Constants.TABLET,
 				"Magnosolv(Magnesium)", "C0024467");
 
+        client.addMedicationSign(owner, "Free text note for the medication 8.",
+                Constants.STATUS_COMPELETE, "199910101010", "201010101010",
+                client.buildNullFrequency(),
+                Constants.HL7V3_ORAL_ADMINISTRATION, "1", Constants.TABLET,
+                "BOB Magnosolv(No CODE)");
+
 		final Iterable<String> uris = client.getMedicationURIsForUser(owner);
 		final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
 		final Set<DynaBean> beans = new HashSet<DynaBean>();
@@ -106,7 +112,7 @@ public class MedicationsStep8ClientExample {
 		}
 
 		final QUPCIN043200UV01 pCC10Message = MedicationSignPCC10
-				.getPCC10Message(beans);
+				.getPCC10Message(owner,beans);
 		QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "medications-step8");
 
 		// TAKE CARE !!!!!!

@@ -178,7 +178,7 @@ final class ProblemEntryTask implements PCCTask {
         LOGGER.debug("The total amount of Problem Entries for user {} is {}",
                 owner, problemCount);
         if (problemCount == 0) {
-            LOGGER.warn("No Problem Entries for this user {}, the HL7 V3 message will be empty.", owner);
+            LOGGER.warn("There are no Problem Entries for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
         }
 
 
@@ -191,7 +191,7 @@ final class ProblemEntryTask implements PCCTask {
             LOGGER.warn(exception.getMessage(), exception);
         }
 
-        final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         return pcc10Message;
     }
 
@@ -200,12 +200,12 @@ final class ProblemEntryTask implements PCCTask {
         try {
             distpachedTo = (String) dynaBean.get(Constants.DISTPATCH_TO);
         } catch (IllegalArgumentException exception) {
-            LOGGER.debug("This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
+            LOGGER.debug("wasDistpachedTo This bean {} was not distpached.", DynaBeanUtil.toString(dynaBean));
             return false;
         }
 
         final boolean wasDispathed = wsAddress.equals(distpachedTo);
-        LOGGER.debug("This bean {} was already distpached to {}.",
+        LOGGER.debug("wasDistpachedTo This bean {} was already distpached to {}.",
                 DynaBeanUtil.toString(dynaBean), wsAddress);
         return wasDispathed;
     }

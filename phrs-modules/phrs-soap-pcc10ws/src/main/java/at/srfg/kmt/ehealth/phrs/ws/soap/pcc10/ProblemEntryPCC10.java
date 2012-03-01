@@ -9,6 +9,7 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import static at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.QUPCAR004030UVUtil.buildQUPCIN043200UV01;
 import java.util.*;
@@ -62,7 +63,7 @@ final class ProblemEntryPCC10 {
      * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Problem
      * Entry</a> for the given set of dyna-beans.
      */
-    static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
+    static QUPCIN043200UV01 getPCC10Message(String patientId,Set<DynaBean> beans) throws TripleException {
 
         if (beans == null) {
             final NullPointerException exception =
@@ -100,6 +101,13 @@ final class ProblemEntryPCC10 {
 
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
+        
+        //FIXXME Insert patient ID into query template          
+        //FIXXME OWNER BOB
+        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
+      
+   
+        
         for (DynaBean bean : beans) {
 
 
@@ -191,9 +199,13 @@ final class ProblemEntryPCC10 {
         code.setCode(codeValue);
         code.setDisplayName(codePrefLabel);
 
+        String toString = DynaBeanUtil.toString(codeBean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean buildCode. codeBean ", toString);
+
         final DynaBean codeSystemBean =
                 (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
-
+        toString = DynaBeanUtil.toString(codeSystemBean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean buildCode. codeSystemBean ", toString);
         final String codeSystemCode =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         code.setCodeSystem(codeSystemCode);
@@ -212,13 +224,30 @@ final class ProblemEntryPCC10 {
         final DynaBean codeBean = (DynaBean) bean.get(Constants.CODE);
         final String codeValue = (String) codeBean.get(Constants.CODE_VALUE);
         statusCode.setCode(codeValue);
-
-        final DynaBean codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
-
+        
+       System.out.println("CODE_SYSTEM near prefLabel="+prefLabel);
+        DynaBean codeSystemBean = null;
+        try {
+            codeSystemBean = (DynaBean) codeBean.get(Constants.CODE_SYSTEM);
+        } catch (Exception e) {
+            System.out.println("CODE_SYSTEM near prefLabel="+prefLabel);
+            
+             LOGGER.debug("buildStatus  Constants.CODE_SYSTEMerror codesystemcode :"+Constants.CODE_SYSTEM+"  codeBean="+DynaBeanUtil.toString(codeBean));
+             LOGGER.debug("buildStatus Constants.CODE_SYSTEM error parent code  codeBean="+DynaBeanUtil.toString(codeBean));
+             LOGGER.debug("buildStatus Constants.CODE_SYSTEM error parent code  bean="+DynaBeanUtil.toString(bean));
+        }
+        try {
         final String codeSystemCode =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_CODE);
         statusCode.setCode(codeSystemCode);
-
+        } catch (Exception e) {
+            System.out.println("CODE_SYSTEM_CODE near prefLabel="+prefLabel+"+ codesystemcode+"+Constants.CODE_SYSTEM_CODE);
+            
+             LOGGER.debug("buildStatus  Constants.CODE_SYSTEM_CODE error codesystemcode :"+Constants.CODE_SYSTEM_CODE+" codeBean="+DynaBeanUtil.toString(codeBean));
+             LOGGER.debug("buildStatus Constants.CODE_SYSTEM_CODE error parent code  codeBean="+DynaBeanUtil.toString(codeBean));
+             LOGGER.debug("buildStatus Constants.CODE_SYSTEM_CODE error parent code  bean="+DynaBeanUtil.toString(bean));
+            
+        }
         final String codeSystemName =
                 (String) codeSystemBean.get(Constants.CODE_SYSTEM_NAME);
         statusCode.setCodeSystem(codeSystemName);

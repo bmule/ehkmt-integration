@@ -83,7 +83,7 @@ public class ProblemsStep10ClientExample {
             beans.add(dynaBean);
         }
 
-        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(beans);
+        final QUPCIN043200UV01 pCC10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, "problems-step10");
 
 

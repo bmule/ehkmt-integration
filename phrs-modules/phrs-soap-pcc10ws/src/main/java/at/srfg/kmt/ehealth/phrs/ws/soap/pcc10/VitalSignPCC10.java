@@ -71,7 +71,7 @@ final class VitalSignPCC10 {
      * <a href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2">Vital Signs Observation</a>
      * for the given set of dyna-beans.
      */
-    static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) {
+    static QUPCIN043200UV01 getPCC10Message(String patientId,Set<DynaBean> beans) {
         
         if (beans == null) {
             final NullPointerException exception = 
@@ -105,6 +105,12 @@ final class VitalSignPCC10 {
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
+        
+        
+        //FIXXME Insert patient ID into query template          
+        //FIXXME OWNER BOB
+        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
+      
 
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();

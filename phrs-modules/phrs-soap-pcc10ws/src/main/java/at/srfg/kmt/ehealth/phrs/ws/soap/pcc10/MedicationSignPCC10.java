@@ -72,7 +72,7 @@ final class MedicationSignPCC10 {
      * href="http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.5">Medications</a>
      * for the given set of dyna-beans.
      */
-    static QUPCIN043200UV01 getPCC10Message(Set<DynaBean> beans) throws TripleException {
+    static QUPCIN043200UV01 getPCC10Message(String patientId,Set<DynaBean> beans) throws TripleException {
 
         if (beans == null) {
             final NullPointerException exception =
@@ -84,6 +84,7 @@ final class MedicationSignPCC10 {
         final QUPCIN043200UV01 query;
         try {
             query = buildQUPCIN043200UV01("PCC-10-Empty-Input.xml");
+            
         } catch (JAXBException jaxException) {
             final RuntimeException exception = new RuntimeException(jaxException);
             LOGGER.error(exception.getMessage(), exception);
@@ -102,14 +103,24 @@ final class MedicationSignPCC10 {
         final MFMIMT700712UV01QueryAck queryAck = controlActProcess.getQueryAck();
         II queryId = buildQueryId();
         queryAck.setQueryId(queryId);
+        
+        
+        
 
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
-
+        
+        //FIXXME Insert patient ID into query template          
+        //FIXXME OWNER
+        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
+            
+ 
         final List<REPCMT004000UV01PertinentInformation5> pertinentInformations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
+
+        
 
         for (DynaBean medBean : beans) {
             final String beanToString = DynaBeanUtil.toString(medBean);
@@ -123,7 +134,9 @@ final class MedicationSignPCC10 {
                 LOGGER.error(exception.getMessage(), exception);
                 throw exception;
             }
+            
 
+            
             final String rootId =
                     (String) medBean.get(Constants.HL7V3_TEMPLATE_ID_ROOT);
             final String note = (String) medBean.get(Constants.SKOS_NOTE);
@@ -136,7 +149,7 @@ final class MedicationSignPCC10 {
             // final String drugName = (String) medBean.get(Constants.HL7V3_DRUG_NAME);
             final DynaBean manufacturedProduct =
                     (DynaBean) medBean.get("http://www.icardea.at/phrs/hl7V3#manufacturedProduct");
-
+//FIXXME OWNER get owner from 
             final REPCMT004000UV01PertinentInformation5 pertinentInformation =
                     buildPertinentInformation(rootId,
                     note,
@@ -251,16 +264,22 @@ final class MedicationSignPCC10 {
         final DynaBean manufacturedLabeledDrug =
                 (DynaBean) bean.get("http://www.icardea.at/phrs/hl7V3#manufacturedLabeledDrug");
 
+        String toString = DynaBeanUtil.toString(bean);
+        LOGGER.debug("Tries to build manufacturedLabeledDrug [{}] Dynamic Bean buildPOCDMT000040Consumable .", toString);
+
         final DynaBean code;
         try {
             code = (DynaBean) manufacturedLabeledDrug.get(Constants.HL7V3_CODE);
 
         } catch (IllegalArgumentException exception) {
             // this means I don't have code name
-            LOGGER.debug(exception.getMessage(), exception);
+            //When using MedicationClient to create message, a medication can be created without a drug code and only a drug name
+            LOGGER.debug(" Constants.HL7V3_CODE missing from manufacturedLabeledDrug, trying HL7V3_DRUG_NAME next " +exception.getMessage(), exception);
+
             final String drougName =
                     (String) bean.get(Constants.HL7V3_DRUG_NAME);
             return buildPOCDMT000040Consumable(drougName);
+
         }
 
         final String labeledDrugName = (String) code.get(Constants.SKOS_PREFLABEL);
@@ -309,11 +328,15 @@ final class MedicationSignPCC10 {
     }
 
     private static CE buildCode(DynaBean bean) {
-        final String toString = DynaBeanUtil.toString(bean);
-        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CE instance.", toString);
+        String toString = DynaBeanUtil.toString(bean);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CE instance. buildCode DynaBean bean codeSystem parent", toString);
 
         final DynaBean codeSystem =
                 (DynaBean) bean.get(Constants.CODE_SYSTEM);
+
+        toString = DynaBeanUtil.toString(codeSystem);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CE instance. codeSystem bean ", toString);
+
         final String codeSystemName =
                 (String) codeSystem.get(Constants.CODE_SYSTEM_NAME);
         final String codeSystemCode =
@@ -582,7 +605,7 @@ final class MedicationSignPCC10 {
     }
 
     private static CE buildRouteCode(DynaBean bean) {
-        final String toString = DynaBeanUtil.toString(bean);
+        String toString = DynaBeanUtil.toString(bean);
         LOGGER.debug("Tries to build a Route Code for {}", toString);
         final String prefLabel =
                 (String) bean.get("http://www.w3.org/2004/02/skos/core#prefLabel");
@@ -590,6 +613,10 @@ final class MedicationSignPCC10 {
         final String codeValue = (String) code.get(Constants.CODE_VALUE);
 
         final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
+
+        toString = DynaBeanUtil.toString(codeSystem);
+        LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CE instance. codeSystem bean ", toString);
+        
         final String codeSystemName = (String) codeSystem.get(Constants.CODE_SYSTEM_NAME);
         final String codeSystemCode = (String) codeSystem.get(Constants.CODE_SYSTEM_CODE);
 
