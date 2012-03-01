@@ -84,7 +84,7 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
     }
 
     @Override
-    public void parse(REPCMT004000UV01PertinentInformation5 toParse) throws ParserException {
+    public void parse(REPCMT004000UV01PertinentInformation5 toParse, String userId) throws ParserException {
         LOGGER.debug("Tries to parse {}", toParse);
 
         final JAXBElement<POCDMT000040Observation> observation_JAXB =
