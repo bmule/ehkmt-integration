@@ -3,7 +3,6 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestoreLifecycle;
@@ -24,7 +23,7 @@ import org.hl7.v3.QUPCIN043200UV01;
  * target/log.out)<br/> 
  * To run this class from maven environment use :
  * <pre>
- * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationRepoDumpExample -Dexec.classpathScope=test -Dexec.args="191"<br/>
+ * mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc10.MedicationRepoDumpExample -Dexec.classpathScope=test -Dexec.args="191"<br/>
  * </pre>
  * Take care this command does not compile the classes. <br/>
  * <b>Nota Bene : </b> this class will remove/clean the triplestore related 
@@ -74,7 +73,7 @@ public class MedicationRepoDumpExample {
         }
         
         final QUPCIN043200UV01 pCC10Message = MedicationSignPCC10.getPCC10Message(owner,beans);
-        final String fileName = "repo-dump-medication" + owner;
+        final String fileName = "repo-dump-medication-" + owner;
         QUPCAR004030UVUtil.toWriteInTemp(pCC10Message, fileName);
 
 
