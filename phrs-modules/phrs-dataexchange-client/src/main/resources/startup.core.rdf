@@ -2420,6 +2420,18 @@
         </icadyCode:code>
     </rdf:Description>
     
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InjectionAdministration">
+        <skos:prefLabel>Injection, intraarterial</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationInjectionCode">
+                <icadyCode:codeValue>IAINJ</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>
         <rdfs:label xml:lang="en">HL7 V3 Vital Sign</rdfs:label>
