@@ -367,6 +367,10 @@ public class Constants {
      */
     public static final String HL7V3_ORAL_ADMINISTRATION =
             ICARDEA_NS + "/instances/OralAdministration";
+    public static final String HL7V3_INJECTION_ADMINISTRATION =
+            ICARDEA_NS + "/instances/InjectionAdministration";
+    
+
     public static final String RDFS_TYPE =
             "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
     public static final String RDFS_RANGE =
@@ -522,6 +526,7 @@ public class Constants {
     public static final String PROTOCOL_ID_UNIT_TEST = "191";//"AAA14920263490BBB";
     public static final String PROTOCOL_ID_PIX_TEST_PATIENT = "191";
     public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";
+    public static final String EHR_OWNER = "EHR";
     
     
 
