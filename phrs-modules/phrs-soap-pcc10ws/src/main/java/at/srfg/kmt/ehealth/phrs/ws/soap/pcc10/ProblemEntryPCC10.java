@@ -102,11 +102,7 @@ final class ProblemEntryPCC10 {
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
         
-        //FIXXME Insert patient ID into query template          
-        //FIXXME OWNER BOB
-        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
-      
-   
+        TaskUtil.createPatientIdNode(careProvisionEvent, patientId);            
         
         for (DynaBean bean : beans) {
 

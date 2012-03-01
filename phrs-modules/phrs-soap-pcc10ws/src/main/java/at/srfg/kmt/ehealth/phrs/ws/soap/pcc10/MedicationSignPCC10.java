@@ -105,22 +105,16 @@ final class MedicationSignPCC10 {
         queryAck.setQueryId(queryId);
         
         
-        
 
         final QUPCIN043200UV01MFMIMT700712UV01Subject5 subject2 =
                 controlActProcess.getSubject().get(0).getRegistrationEvent().getSubject2();
         final REPCMT004000UV01CareProvisionEvent careProvisionEvent =
                 subject2.getCareProvisionEvent();
-        
-        //FIXXME Insert patient ID into query template          
-        //FIXXME OWNER
-        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
-            
+
+        TaskUtil.createPatientIdNode(careProvisionEvent, patientId);
  
         final List<REPCMT004000UV01PertinentInformation5> pertinentInformations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();
-
-        
 
         for (DynaBean medBean : beans) {
             final String beanToString = DynaBeanUtil.toString(medBean);

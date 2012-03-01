@@ -107,10 +107,7 @@ final class VitalSignPCC10 {
                 subject2.getCareProvisionEvent();
         
         
-        //FIXXME Insert patient ID into query template          
-        //FIXXME OWNER BOB
-        TaskUtil.createPatientIdNode(careProvisionEvent, TaskUtil.getdefaultRoot(), patientId, true);//clear
-      
+        TaskUtil.createPatientIdNode(careProvisionEvent, patientId);      
 
         final List<REPCMT004000UV01PertinentInformation5> informations =
                 new ArrayList<REPCMT004000UV01PertinentInformation5>();

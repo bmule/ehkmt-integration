@@ -4,11 +4,15 @@
  */
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
+import at.srfg.kmt.ehealth.phrs.Constants;
 import java.util.ArrayList;
 import java.util.List;
+import javax.xml.bind.JAXBElement;
+import org.hl7.v3.COCTMT050000UVPatient;
 
 import org.hl7.v3.II;
 import org.hl7.v3.REPCMT004000UV01CareProvisionEvent;
+import org.hl7.v3.REPCMT004000UV01RecordTarget;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,30 +37,31 @@ public class TaskUtil {
      * @return
      */
     public static void createPatientIdNode(REPCMT004000UV01CareProvisionEvent careProvisionEvent, String domainRoot, String extentionPatientId, boolean clear) {
-        II personIdNode = new II();
-        try {
-            //REPCMT004000UV01CareProvisionEvent
-            List<II> ids = careProvisionEvent.getRecordTarget().getValue().getPatient().getValue().getPatientPerson().getValue().getId();
-            if (ids != null) {
-                //there is already in the template an existing demo id
-                try {
-                    ids.clear();   //don't know..FIXXME
-                } catch (Exception e) {
-                    LOGGER.error(" id clear ", e);
+        final JAXBElement<REPCMT004000UV01RecordTarget> recordTarget_JAXB = 
+                careProvisionEvent.getRecordTarget();
+        final REPCMT004000UV01RecordTarget recordTarget = recordTarget_JAXB.getValue();
+        
+        final JAXBElement<COCTMT050000UVPatient> patient_JAXB = recordTarget.getPatient();
+        final COCTMT050000UVPatient patient = patient_JAXB.getValue();
+        
+        final II newId = new II();
+        newId.setRoot(domainRoot);
+        newId.setExtension(extentionPatientId);
+        patient.getId().add(newId);
+    }
 
-                }
-                personIdNode.setExtension(extentionPatientId);
-                personIdNode.setRoot(domainRoot);//or "1" Constants.ICARDEA_DOMAIN_PIX_OID
-                ids.add(personIdNode);
-            } else {
-                LOGGER.error(" createPatientIdNode List<II> ids NULL");
-            }
-
-        } catch (Exception e) {
-            LOGGER.error(" createPatientIdNode ", e);
-
-        }
-
+    public static void createPatientIdNode(REPCMT004000UV01CareProvisionEvent careProvisionEvent, String extentionPatientId) {
+        final JAXBElement<REPCMT004000UV01RecordTarget> recordTarget_JAXB = 
+                careProvisionEvent.getRecordTarget();
+        final REPCMT004000UV01RecordTarget recordTarget = recordTarget_JAXB.getValue();
+        
+        final JAXBElement<COCTMT050000UVPatient> patient_JAXB = recordTarget.getPatient();
+        final COCTMT050000UVPatient patient = patient_JAXB.getValue();
+        
+        final II newId = new II();
+        newId.setRoot(Constants.ICARDEA_DOMAIN_PIX_OID);
+        newId.setExtension(extentionPatientId);
+        patient.getId().add(newId);
     }
 
     /**
