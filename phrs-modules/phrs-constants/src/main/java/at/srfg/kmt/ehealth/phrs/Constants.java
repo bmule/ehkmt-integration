@@ -357,6 +357,10 @@ public class Constants {
     public static final String HL7V3_BRUSING = ICARDEA_NS + "/instances/BruisingSymptom";
     public static final String HL7V3_TEMPORRALY_LOSS_OF_SPEECH =
             ICARDEA_NS + "/instances/TemporarayLossOfSpeech";
+    
+    public static final String HL7V3_BLEEDINGS_GUMS =
+            ICARDEA_NS + "/instances/BleedingGums";
+
     /**
      * Used to describe oral administration of treatment in the HL3 V3
      * acception. This is a resource.
@@ -518,6 +522,9 @@ public class Constants {
     public static final String PROTOCOL_ID_UNIT_TEST = "191";//"AAA14920263490BBB";
     public static final String PROTOCOL_ID_PIX_TEST_PATIENT = "191";
     public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";
+    
+    
+
 
     /**
      * Used to load the default values for the constants - if this is required.
