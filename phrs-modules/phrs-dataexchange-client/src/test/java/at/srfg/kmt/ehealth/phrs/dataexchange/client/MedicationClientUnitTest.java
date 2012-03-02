@@ -9,17 +9,20 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import org.apache.commons.beanutils.DynaBean;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Used to prove the functionality for the
@@ -50,6 +53,8 @@ public class MedicationClientUnitTest {
     private GenericTriplestore triplestore;
 
     private MedicationClient medicationClient;
+    
+    private DynaBeanClient dynaBeanClient;
 
     public MedicationClientUnitTest() {
     }
@@ -67,6 +72,7 @@ public class MedicationClientUnitTest {
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
         medicationClient = new MedicationClient(triplestore);
+        dynaBeanClient = new DynaBeanClient(triplestore);
     }
 
     /**
@@ -199,7 +205,7 @@ public class MedicationClientUnitTest {
         final String medicationURI = iterator.next();
         final Iterable<String> dosageURIs =
                 triplestore.getForSubjectAndPredicate(medicationURI, Constants.HL7V3_DOSAGE);
-        
+
         proveDosage(dosageURIs.iterator().next(), newDossageValue, newDosageUnit);
     }
 
@@ -269,5 +275,39 @@ public class MedicationClientUnitTest {
 
         assertEquals(0, counter);
 
+    }
+
+    @Test
+    public void testMedicationWithAdminInjection() throws TripleException, IllegalAccessException, InstantiationException {
+        
+        final String resourceURI =
+                medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                Constants.HL7V3_INJECTION_ADMINISTRATION,
+                "1",
+                Constants.PILL,
+                "MyDrug",
+                "MyDrugCode");
+        assertNotNull(resourceURI);
+        
+        final Iterable<String> medications =
+                medicationClient.getMedicationURIsForUser(USER);
+                int counter = 0;
+        for (String uris : medications) {
+            counter++;
+        }
+
+        assertEquals(1, counter);
+        final DynaBean medicationBean = 
+                dynaBeanClient.getDynaBean(resourceURI);
+        // I don't have time to make a detiled test here
+        final DynaBean adminRoute = 
+                (DynaBean) medicationBean.get(Constants.HL7V3_ADMIN_ROUTE);
+        assertNotNull(adminRoute);
     }
 }
