@@ -80,7 +80,7 @@ final class ProblemEntryTask implements PCCTask {
 
         if (responseURI == null
                 || careProvisionCode == null
-                || (patientId == null && patientNames == null)) {
+                || patientId == null) {
             LOGGER.error("This properties map [{}] does not contain enought information. This properties map can not be consumed.",
                     properties);
             return false;

@@ -91,7 +91,7 @@ final class MedicationTask implements PCCTask {
 
         if (responseURI == null
                 || careProvisionCode == null
-                || (patientId == null && patientNames == null)) {
+                || patientId == null ) {
             LOGGER.error("This properties map [{}] does not contain enought informations.",
                     properties);
             return false;
