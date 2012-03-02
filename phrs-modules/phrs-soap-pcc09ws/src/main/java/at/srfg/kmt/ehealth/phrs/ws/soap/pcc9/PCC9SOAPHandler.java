@@ -389,8 +389,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
 
         if (responseEndpointURI != null
                 && careProvisionCode != null
-                && patientId != null
-                && patientNames != null) {
+                && patientId != null) {
             final Map<String, String> properties = new HashMap<String, String>();
             properties.put("patientId", patientId);
             properties.put("patientNames", patientNames);
@@ -398,6 +397,11 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
             properties.put("responseEndpointURI", responseEndpointURI);
             //notify("localhost", 5578, properties);
             persistRequest(responseEndpointURI, patientId, careProvisionCode);
+        } else {
+            final String msg = 
+                    String.format("This set of argumetns : patientId = %s, patientNames = %s, careProvisionCode = %s, responseEndpointURI =%s can not be porcess. This request is not registered.", patientId, patientNames, careProvisionCode, responseEndpointURI);
+            LOGGER.error(msg);
+            LOGGER.error("This request is not registered.");
         }
     }
 
