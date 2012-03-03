@@ -27,6 +27,7 @@ import javax.xml.ws.handler.soap.SOAPHandler;
 import javax.xml.ws.handler.soap.SOAPMessageContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -225,40 +226,46 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      * <code>paramter</code> argument is null.
      */
     private String getPatientName(Element paramter) {
-        if (paramter == null) {
-            final NullPointerException exception =
-                    new NullPointerException("The parameter argument can not be null");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
 
-        // TODO : use XPATH !
-        final NodeList names =
-                paramter.getElementsByTagName(PATIENTNAME_TAG_NAME);
-        if (names.getLength() == 0) {
-            return null;
-        }
-        if (names.getLength() != 1) {
-            final IllegalStateException exception =
-                    new IllegalStateException("Wrong amount patientName element. Only one patientName element expected.");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-        final Element careProvisionCode = (Element) names.item(0);
+        String result=null;
+        try {
+            if (paramter == null) {
+                final NullPointerException exception =
+                        new NullPointerException("The parameter argument can not be null");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
 
-        final NodeList values =
-                careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
-        if (values.getLength() == 0) {
-            return null;
+            // TODO : use XPATH !
+            final NodeList names =
+                    paramter.getElementsByTagName(PATIENTNAME_TAG_NAME);
+            if (names.getLength() == 0) {
+                return null;
+            }
+            if (names.getLength() != 1) {
+                final IllegalStateException exception =
+                        new IllegalStateException("Wrong amount patientName element. Only one patientName element expected.");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+            final Element careProvisionCode = (Element) names.item(0);
+
+            final NodeList values =
+                    careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
+            if (values.getLength() == 0) {
+                return null;
+            }
+            if (values.getLength() != 1) {
+                final IllegalStateException exception =
+                        new IllegalStateException("Wrong amount values element. Only one values element expected.");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+            final Element value = (Element) values.item(0);
+            result = value.getTextContent();
+        } catch (Exception e) {
+            LOGGER.error("Error processing Patient name, missing or other");
         }
-        if (values.getLength() != 1) {
-            final IllegalStateException exception =
-                    new IllegalStateException("Wrong amount values element. Only one values element expected.");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-        final Element value = (Element) values.item(0);
-        final String result = value.getTextContent();
         return result;
     }
 
@@ -329,7 +336,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     private void process(SOAPHeader header) {
 
         if (header == null) {
-            LOGGER.debug("SOPA Header is null nothing to process");
+            LOGGER.debug("SOAP Header is null nothing to process");
             return;
         }
 
@@ -378,37 +385,53 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
      * information will be extracted, it can not be null.
      */
     private void processParamarer(Element paramter) {
-        final String careProvisionCode = getCareProvisionCode(paramter);
-        LOGGER.debug("Care Provision Code found : {} ", careProvisionCode);
 
-        final String patientId = getPatientId(paramter);
-        LOGGER.debug("Patient ID Found : {} ", patientId);
 
-        final String patientNames = getPatientName(paramter);
-        LOGGER.debug("Patient Name Found : {} ", patientNames);
+        LOGGER.debug("START processParamarer");
 
-        if (responseEndpointURI != null
-                && careProvisionCode != null
-                && patientId != null) {
-//            final Map<String, String> properties = new HashMap<String, String>();
-//            properties.put("patientId", patientId);
-//            properties.put("patientNames", patientNames);
-//            properties.put("careProvisionCode", careProvisionCode);
-//            properties.put("responseEndpointURI", responseEndpointURI);
-//            notify("localhost", 5578, properties);
-            persistRequest(responseEndpointURI, patientId, careProvisionCode);
-        } else {
-            final String msg = 
+        try {   //if these throw an exception, we never see it in the logs. The goal is to finally test the parameters for null
+            final String careProvisionCode = getCareProvisionCode(paramter);
+            LOGGER.debug("Care Provision Code found : {} ", careProvisionCode);
+
+            final String patientId = getPatientId(paramter);
+            LOGGER.debug("Patient ID Found : {} ", patientId);
+
+            //The getPatientName method now catches its exceptions for logging purposes, but an exception should not invalidate the PCC-09 subscriptoin.
+            final String patientNames = getPatientName(paramter);
+            LOGGER.debug("Patient Name Found : {} ", patientNames);
+
+            if (responseEndpointURI != null
+                    && careProvisionCode != null
+                    && patientId != null) {
+    //            final Map<String, String> properties = new HashMap<String, String>();
+    //            properties.put("patientId", patientId);
+    //            properties.put("patientNames", patientNames);
+    //            properties.put("careProvisionCode", careProvisionCode);
+    //            properties.put("responseEndpointURI", responseEndpointURI);
+    //            notify("localhost", 5578, properties);
+                persistRequest(responseEndpointURI, patientId, careProvisionCode);
+            } else {
+                final String msg =
                     String.format("This set of argumetns : patientId = %s, patientNames = %s, careProvisionCode = %s, responseEndpointURI =%s can not be porcess. This request is not registered.", patientId, patientNames, careProvisionCode, responseEndpointURI);
-            LOGGER.error(msg);
-            LOGGER.error("This request is not registered.");
+
+                LOGGER.error(msg);
+                LOGGER.error("This request is not registered.");
+            }
+        } catch (Exception e) {
+            LOGGER.error("Missing parameter element, or processing patient ID element, or Careprovision element. This request is not registered. "+e);
         }
+        LOGGER.debug("END processParamarer");
     }
 
     private void persistRequest(String uri, String id, String code) {
+        LOGGER.debug("START Preparing to persist the PHRSRequest "+" id="+id+" code="+code+" uri="+uri);
         try {
             requestClient.addPHRSRequest(uri, id, code);
+            LOGGER.debug("END Preparing to persist the PHRSRequest "+" id="+id+" code="+code+" uri="+uri);
         } catch (TripleException ex) {
+
+            LOGGER.error(ex.getMessage(), ex);
+        } catch (Exception ex) {
             LOGGER.error(ex.getMessage(), ex);
         }
     }
