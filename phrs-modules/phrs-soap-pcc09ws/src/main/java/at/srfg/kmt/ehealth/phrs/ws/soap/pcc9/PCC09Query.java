@@ -56,7 +56,7 @@ public class PCC09Query {
             keystorePassword = config.getProperty("password", "icardea").trim();
 
         } catch (Exception exception) {
-            LOGGER.warn("NO pcc09 AUDIT MESSAGES CAN BE SENT!");
+            LOGGER.warn("NO pcc09 MESSAGES CAN BE SENT!");
             LOGGER.warn(exception.getMessage(), exception);
         }
     }
