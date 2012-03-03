@@ -250,6 +250,154 @@ public class CoreTestData {
     }
 
     /**
+     * runs once
+     * @param number
+     */
+    public static void createTestUsersForMonitoring() {
+        CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
+        if(commonDao.getPhrUser("phr01", false) !=null) {
+            PhrFederatedUser  u1= createTestUserForMonitoring("pid1","phr01","Marie","Arcand",null,null);
+
+        }
+        if(commonDao.getPhrUser("phr01", false) !=null) {
+            PhrFederatedUser  u2= createTestUserForMonitoring("pid2","phr02","Ann","Kaine",null,null);
+
+        }
+        if(commonDao.getPhrUser("phr01", false) !=null) {
+            PhrFederatedUser  u4= createTestUserForMonitoring("pid4","phr03","Thomas","Kane",null,null);
+
+        }
+        if(commonDao.getPhrUser("phr01", false) !=null) {
+            PhrFederatedUser  u3= createTestUserForMonitoring("pid3","phr04","Dudley","Clougher",null,null);
+
+        }
+
+    }
+
+    public static PhrFederatedUser createTestUserForMonitoring(String protocolId,String loginId, String firstname, String lastname, String pixQueryIdType, String pixQueryIdUser) {
+
+
+        PhrFederatedUser user = null;
+        try {
+            CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
+
+            //String loginUserIdOwnerUri = PhrFederatedUser.makeOwnerUri();
+            user = commonDao.getPhrUser(loginId, true);
+
+            user.setOwnerUri(loginId);
+            user.setCreatorUri(user.getOwnerUri());
+            user.setUserId(loginId);
+            user.setIdentifier(loginId);//init to local identifier, but could later assign to an OpenId.
+
+            user.setCanLocalLogin(true);
+
+            user.setNickname(firstname);
+            user.setCanLocalLogin(true);
+
+            user.setProtocolIdUser(protocolId);//Constants.ICARDEA_DOMAIN_PIX_OID);
+            user.setProtocolIdPix(protocolId);//Constants.ICARDEA_DOMAIN_PIX_OID);
+
+            user.setPixQueryIdUser(pixQueryIdUser);
+            user.setPixQueryIdType(pixQueryIdType);
+
+            //user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
+
+            commonDao.crudSaveResource(user, user.getOwnerUri(), "createTestUserForMonitoring");
+
+            //register PID.
+            //commonDao.getPhrsStoreClient().getInteropClients().registerProtocolId(user.getOwnerUri(), protocolId, null);
+
+
+            ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
+            if (info == null) {
+                info = new ProfileContactInfo();
+                info.setOwnerUri(user.getOwnerUri());
+                info.setCreatorUri(user.getOwnerUri());
+                info.setType(info.getClass().getCanonicalName());
+
+            }
+            info.setFirstName(firstname);
+            info.setLastName(lastname);
+
+
+            commonDao.crudSaveResource(info, user.getOwnerUri(), "createTestUserForMonitoring");
+
+
+            ObsVitalsBloodPressure bp1 = new ObsVitalsBloodPressure();
+            bp1.setSystolic(110);
+            bp1.setDiastolic(55);
+            bp1.setHeartRate(60);
+            bp1.setBeginDate(new Date());
+            bp1.setEndDate(new Date());
+            bp1.setNote("note " + makeSimpleId());
+            bp1.setSystemNote(bp1.getNote());
+            commonDao.crudSaveResource(bp1, user.getOwnerUri(), "createTestUserForMonitoring");
+            //does automatic notify upon save
+
+
+            ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
+            bw1.setBodyWeight(71d);
+            bw1.setBodyHeight(163d);
+            bw1.setBeginDate(new Date());
+            bw1.setEndDate(new Date());
+            bw1.setNote("note " + makeSimpleId());
+            bw1.setSystemNote(bw1.getNote());
+            commonDao.crudSaveResource(bw1, user.getOwnerUri(), "createTestUserForMonitoring");
+
+            //    "http://www.icardea.at/phrs/instances/BleedingGums");
+
+
+            ObsProblem prob = new ObsProblem();
+            prob.setBeginDate(new Date());
+            prob.setStatus("default_activeStatusTrue");
+            prob.setCode(Constants.HL7V3_FEVER);
+
+            prob.setNote("note " + makeSimpleId());
+            prob.setNote(prob.getSystemNote());
+            commonDao.crudSaveResource(prob, user.getOwnerUri(), "createTestUserForMonitoring");
+
+
+            //                Constants.STATUS_COMPELETE,
+//                Constants.HL7V3_ORAL_ADMINISTRATION,
+//                "20", Constants.MILLIGRAM,
+//                "Ebetrexat(Methotrexate)"
+//                        "C0025677"
+
+            MedicationTreatment res = new MedicationTreatment();
+
+            res.setBeginDate(new Date());
+            //res.setEndDate(new Date());
+            res.setLabel("Ebetrexat(Methotrexate)");
+            res.setProductCode( "C0025677");
+
+            res.setStatus(Constants.STATUS_RUNNING);
+            res.setReasonCode("http://www.icardea.at/phrs/instances/Cholesterol");
+
+            //res.setReasonCode(value);
+            //res.setPrescribedByName("");
+            MedicationTreatmentMatrix mtm = new MedicationTreatmentMatrix();
+            mtm.setAdminRoute(Constants.HL7V3_ORAL_ADMINISTRATION);
+            mtm.setDosage(2d);//double
+
+            mtm.setDosageQuantity("100");
+            mtm.setDosageUnits(Constants.MILLIGRAM);
+
+            mtm.setDosageInterval("http://www.icardea.at/phrs/instances/EveryHour");
+            mtm.setDosageTimeOfDay("http://www.icardea.at/phrs/instances/InTheMorning");
+
+            res.setTreatmentMatrix(mtm);
+
+            commonDao.crudSaveResource(res, user.getOwnerUri(), "createTestUserForMonitoring");
+            LOGGER.debug("createTestUserForMonitoring for  fullname " +firstname+" "+ lastname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
+
+
+        } catch (Exception e) {
+            LOGGER.error("Error creating user test data", e);
+        }
+        return user;
+    }
+
+    /**
      * @param protocolId
      * @return
      */
@@ -303,6 +451,7 @@ public class CoreTestData {
 //     test.user.1.name=Suzie Mayr
 //     test.user.1.firstname=Suzie
 //     test.user.1.lastname=Mayr
+
         String loginUserIdOwnerUri = ConfigurationService.getInstance().getProperty("test.user.1.login.id", PhrsConstants.AUTHORIZE_USER_PREFIX_TEST);
         LOGGER.debug("Creating test data for test user = " + loginUserIdOwnerUri);
         PhrFederatedUser user = null;
@@ -375,19 +524,19 @@ public class CoreTestData {
                 commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
                 //does automatic notify upon save
             }
-             /*
+            /*
 
-            if (addObservations) {
-                ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
-                bw1.setBodyWeight(75d);
-                bw1.setBodyHeight(173d);
-                bw1.setBeginDate(new Date());
-                bw1.setEndDate(new Date());
-                bw1.setNote("note " + makeSimpleId());
-                bw1.setSystemNote(bw1.getNote());
-                commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
-                //does automatic notify upon save
-            }  */
+          if (addObservations) {
+              ObsVitalsBodyWeight bw1 = new ObsVitalsBodyWeight();
+              bw1.setBodyWeight(75d);
+              bw1.setBodyHeight(173d);
+              bw1.setBeginDate(new Date());
+              bw1.setEndDate(new Date());
+              bw1.setNote("note " + makeSimpleId());
+              bw1.setSystemNote(bw1.getNote());
+              commonDao.crudSaveResource(bw1, user.getOwnerUri(), "CoreTestData createTestUserData");
+              //does automatic notify upon save
+          }  */
             /*
                try {
             client.addProblemEntry(
@@ -420,14 +569,15 @@ public class CoreTestData {
         return user;
     }
 
+
     /**
      * String protocolId = ConfigurationService.getInstance().getProperty("test.user.1.pid", "191");
      */
     public static void loadTestProblemsMedications(boolean notify) {
-        loadTestProblemsMedications(ConfigurationService.getInstance().getProperty("test.user.1.pid", "191"),notify);
+        loadTestProblemsMedications(ConfigurationService.getInstance().getProperty("test.user.1.pid", "191"), notify);
     }
 
-    public static void loadTestProblemsMedications(String protocolId,boolean notify) {
+    public static void loadTestProblemsMedications(String protocolId, boolean notify) {
         InteropClients interopClients = PhrsStoreClient.getInstance().getInteropClients();
         ProblemEntryClient client = interopClients.getProblemEntryClient();
         MedicationClient medClient = interopClients.getMedicationClient();
@@ -473,19 +623,19 @@ public class CoreTestData {
         } catch (TripleException e) {
             LOGGER.error("loadTestProblem addMedicationSign  ", e);
         }
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDCCAT, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
         }
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDLIST, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
         }
     }
 
-    public static void loadTestProblem(String protocolId,boolean notify) {
+    public static void loadTestProblem(String protocolId, boolean notify) {
         InteropClients interopClients = PhrsStoreClient.getInstance().getInteropClients();
         ProblemEntryClient client = interopClients.getProblemEntryClient();
 
@@ -498,7 +648,7 @@ public class CoreTestData {
                     Constants.STATUS_COMPELETE,
                     "201008200000",
                     "",
-                    "loaded by core test data Free text note. "+new Date(),
+                    "loaded by core test data Free text note. " + new Date(),
                     Constants.HL7V3_SICK_TO_STOMACH);
         } catch (TripleException e) {
             LOGGER.error("loadTestProblem Constants.HL7V3_SICK_TO_STOMACH", e);  //To change body of catch statement use File | Settings | File Templates.
@@ -518,7 +668,7 @@ public class CoreTestData {
         }
 
 
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDCCAT, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
@@ -526,7 +676,7 @@ public class CoreTestData {
 
     }
 
-    public static void loadTestMedicationWithDrugCode(String protocolId,boolean notify) {
+    public static void loadTestMedicationWithDrugCode(String protocolId, boolean notify) {
         InteropClients interopClients = PhrsStoreClient.getInstance().getInteropClients();
 
         MedicationClient medClient = interopClients.getMedicationClient();
@@ -543,19 +693,19 @@ public class CoreTestData {
             LOGGER.error("loadTestProblem addMedicationSign  ", e);
         }
 
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDCCAT, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
         }
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDLIST, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
         }
     }
 
-    public static void loadTestMedicationNoDrugCode(String protocolId,boolean notify) {
+    public static void loadTestMedicationNoDrugCode(String protocolId, boolean notify) {
         InteropClients interopClients = PhrsStoreClient.getInstance().getInteropClients();
 
         MedicationClient medClient = interopClients.getMedicationClient();
@@ -572,12 +722,12 @@ public class CoreTestData {
             LOGGER.error("loadTestProblem addMedicationSign  ", e);
         }
 
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDCCAT, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);
         }
-        try{
+        try {
             interopClients.notifyInteropMessageSubscribersByProtocolId(InteropProcessor.CARE_PROVISION_CODE_MEDLIST, protocolId);  //"MEDLIST"
         } catch (Exception e) {
             LOGGER.error("loadTestProblem notifyInteropMessageSubscribersByProtocolId  ", e);

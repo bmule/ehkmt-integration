@@ -238,10 +238,14 @@ public class InteropAccessService implements Serializable {
      * There can multiple messages per PHR portal object e.g. Systolic and Diastolic messages. Upon updates, the values can be updated
      *  Theses can be stored interop message table.  Useful if these are to be deleted
      */
+
+    //TODO we do not try to update an existing message, that code can be removed.
+
     public Map sendMessages(def resource, String resourceType, String action, Map attrs) {
         Map messageIdMap = [:]
         LOGGER.debug('sendMessages START resourceType= '+resourceType+' action='+action);
-        if (resource && resource instanceof BasePhrsModel) {
+        //also check on transitive field isNewImport. When there are many to process, this is a bottleneck for notification
+        if (resource && resource instanceof BasePhrsModel && ! resource.isNewImport()) {
 
             try {
 
@@ -653,6 +657,15 @@ public class InteropAccessService implements Serializable {
 
             }
 
+        } else {
+
+            if( resource && (resource instanceof BasePhrsModel)){
+                LOGGER.debug('Interop message Did not process, resource is new import? '+resource.isNewImport() );
+            } else {
+                LOGGER.debug('Interop message Did not process, resource is null or not BaseModel' );
+            }
+            
+ 
         }
         return messageIdMap
     }

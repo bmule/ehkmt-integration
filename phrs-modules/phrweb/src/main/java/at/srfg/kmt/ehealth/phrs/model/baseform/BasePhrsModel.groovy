@@ -31,6 +31,8 @@ public class BasePhrsModel implements Serializable, Cloneable {
     //resource is newly imported, but not yet saved
     @Transient
     boolean newImport = false
+    //allow export to interop. Set by user or if this data is a "single" notification upon creation, but not edits.
+    boolean allowExport = true
     //temp fields for UI forms needed, these cause trouble as hidden fields
     /**
      * UI fix

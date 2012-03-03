@@ -2,47 +2,50 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:p="http://primefaces.prime.com.tr/ui"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
 <h:head>
-	<title></title>
+    <title></title>
 </h:head>
 <!-- keep this separate, it can be included in the two home files
  -->
 <h:body>
-	<ui:composition>
-		<!--<p>
-			Your PHR Identifier is:
-			<h:outputText value=" {loginBean.phrId}"
-				style="font-size:12pt;font-weight:bold;"></h:outputText>
-			Please give this to your Nurse. It can be copied and pasted into a
-			email message or other text document and given to the nurse.
-		</p>
-		<p>
-			Your nurse will give you an identifier called a <b>Protocol ID</b>
-			that should be inserted into your contact information.
-		</p>
-		<p>Please keep your contact information up-to-date, this can be
-			helpful for for informing Healthcare professionals of your contact
-			information</p>
-		-->
+    <ui:composition>
+
+        <h:panelGroup rendered="#{loginBean.systemStatus eq true}">
+            There was a system failure. Access to the system or data is not possible.
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
+
+            <h:panelGroup rendered="#{loginBean.medicalRole eq true}">
+                Please use the side menu to access the patient reports.
+            </h:panelGroup>
+
+            <h:panelGroup rendered="#{loginBean.medicalRole eq false}">
+
                 <p>Your CIED serial number of your implant is important for registering your data in the iCARDEA system. Please
-                update this information by selecting the menu option <b>Import Health Data</b> or click on the following link 
-                
-                <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
-						value="Import Health Data" style="font-size:12pt;text-decoration:underline;" /></a>
+                    update this information by selecting the menu option
+                    <b>Import Health Data</b> or click on the following link
+
+                    <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
+                            value="Import Health Data" style="font-size:12pt;text-decoration:underline;"/></a>
                 </p>
+
                 <p>
-			<h:panelGroup>
-				Click here to Update your <a
-					href="#{request.contextPath}/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user"><h:outputText
-						value="Contact Information" style="font-size:12pt;text-decoration:underline;" />
-				</a>
-			</h:panelGroup>
-		</p>
-	</ui:composition>
+                    <h:panelGroup>
+                        Click here to Update your <a
+                            href="#{request.contextPath}/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user"><h:outputText
+                            value="Contact Information" style="font-size:12pt;text-decoration:underline;"/>
+                    </a>
+                    </h:panelGroup>
+
+                </p>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:composition>
 </h:body>
 </html>

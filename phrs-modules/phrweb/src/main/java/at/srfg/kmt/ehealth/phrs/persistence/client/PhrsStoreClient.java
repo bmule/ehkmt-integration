@@ -33,6 +33,7 @@ public  class PhrsStoreClient implements Serializable {
     //private static PhrsStoreClient m_instance = null;
     private static PhrsStoreClient m_instance;
 
+
 //    static {
 //        try {
 //            m_instance = new PhrsStoreClient();
@@ -195,21 +196,19 @@ public  class PhrsStoreClient implements Serializable {
             morphia.mapPackage("at.srfg.kmt.ehealth.phrs.usermgt");
 
             if (mongo == null) {
+
                 throw new Exception();
             }
             if (datastore == null) {
+
                 throw new Exception();
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
-            LOGGER.error("initPhrsStore MongoDB failed . is MongoDB started?",
-                    e);
-            System.err.println("Exiting initPhrsStore MongoDB failed. Is MongoDB started? host="
-                    + mongoHost + " mongoPort=" + mongoPort);
-            System.err.println("Please Start MongoDB and restart Tomcat if needed");
 
-            // System.exit(0);
+            LOGGER.error("initPhrsStore MongoDB failed . is MongoDB started? mongohost=" + mongoHost + " mongoPort=" + mongoPort,
+                    e);
+
         }
     }
 
@@ -257,33 +256,18 @@ public  class PhrsStoreClient implements Serializable {
     /**
      * Initialize interop store and clients for interoperability
      */
+
+
     private void initClients() {
         
         try {
             GenericTriplestore tripleStore=getTripleStore();
-//            if (tripleStore == null) {
-//                final TriplestoreConnectionFactory connectionFactory = TriplestoreConnectionFactory.getInstance();
-//                tripleStore = connectionFactory.getTriplestore();            
-//            }           
             phrsRepositoryClient = new PhrsRepositoryClient();
             interopClients = new InteropClients();
             interopService = new InteropAccessService();
             interopProcessor = new InteropProcessor();
-            //test here  for exception
 
 
-
- 
-            //final TriplestoreConnectionFactory connectionFactory = TriplestoreConnectionFactory.getInstance();
-            //tripleStore = connectionFactory.getTriplestore();
-            
-            //only init the static class now
-            //GenericTriplestore tripleStore=getTripleStore();
-            
-
-            
-           
-            
         } catch (GenericRepositoryException e) {
 
             LOGGER.error("initInteropStore GenericRepositoryException NULL", e);
@@ -546,5 +530,23 @@ public  class PhrsStoreClient implements Serializable {
         } catch (Exception e) {
             LOGGER.error(" setUpdateDate subjectUri=" + subjectUri, e);
         }
+    }
+
+    public  boolean getSystemStatus() {
+        boolean systemStatusInterop=false;
+        boolean systemStatus=false;
+
+        try{
+            if(mongo != null){
+                systemStatusInterop=true;
+            }
+            //will this cause exception if unavailable or do we try something
+            if(this.getGenericTriplestore()!=null) {
+                systemStatusInterop=true;
+            }
+        } catch (Exception e) {
+            LOGGER.error(" getSystemStatus or mongoDB not available ", e);
+        }
+        return systemStatus && systemStatusInterop;
     }
 }

@@ -298,7 +298,7 @@ public class PhrsConstants implements Serializable {
 
 
     /**
-     * phrid prefix is "phrid"
+     *
      */
     public final static String USER_HEALTH_PROFILE_PREFIX = "phrid";
     public final static String PORTAL_NAME_DEMO = "demo1";

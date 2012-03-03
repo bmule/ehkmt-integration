@@ -1106,4 +1106,19 @@ public class UserSessionService {
 
         return verified;
     }
+    public static boolean sessionUserHasMedicalRole(){
+        String role= UserSessionService.getSessionAttributeRole();
+        if(role==null) return false;
+        return ConfigurationService.getInstance().isMedicalCareRole(role);
+    }
+
+    public static boolean getSystemStatus(){
+        boolean status=false;
+        try {
+            status=PhrsStoreClient.getInstance().getSystemStatus();
+        } catch (Exception e) {
+            LOGGER.error("getSystemStatus exception, system really failed");
+        }
+        return status;
+    }
 }

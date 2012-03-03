@@ -114,8 +114,8 @@ public class AuthorizationService implements Serializable {
      * @param action
      * @return
      */
-	public boolean permitAccessOnPhrId(String targetUser, String resourceCode,
-			String action) {
+	public boolean grantAccessByPhrId(String targetUser, String resourceCode,
+                                      String action) {
 		String subjectRole = UserSessionService.getSessionAttributeRole();
 
 		return this.permitAccess(targetUser, true, resourceCode, action,
@@ -134,7 +134,7 @@ public class AuthorizationService implements Serializable {
      *            PhrsConstants.AUTHORIZE_ACTION_CODE_READ , WRITE, UPDATE
      * @return
      */
-    public boolean permitAccessOnPhrId(String targetUser, String resourceCode,
+    public boolean grantAccessOnResource(String targetUser, String resourceCode,
                                        String action,String roleCode) {
         // subjectRole  is roleCode
 
@@ -142,8 +142,8 @@ public class AuthorizationService implements Serializable {
                 roleCode);
     }
 
-	public boolean permitAccessOnProtocolId(String targetUser,
-			String resourceCode, String action) {
+	public boolean grantAccessByProtocolId(String targetUser,
+                                           String resourceCode, String action) {
 		String subjectRole = UserSessionService.getSessionAttributeRole();
 
 		return this.permitAccess(targetUser, false, resourceCode, action,

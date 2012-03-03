@@ -124,6 +124,9 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         LOGGER.debug('getLoggedIn')
         isLoggedIn()
     }
+    public boolean getSystemStatus(){
+        UserSessionService.get
+    }
     public boolean isLoggedIn() {
         boolean result = UserSessionService.loggedIn();
 
@@ -218,8 +221,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     }
 
     public boolean getMedicalRole() {
-
-        return ConfigurationService.getInstance().isMedicalCareRole(UserSessionService.getSessionAttributeRole())
+        return UserSessionService.sessionUserHasMedicalRole()
     }
 
     public String userAuthenticatedName() {

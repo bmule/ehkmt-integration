@@ -135,22 +135,22 @@ class FaceBaseBean implements Serializable{
 	* @param action
 	* @return
 	*/
-   public boolean permitUserOnPhrId(String targetUser, String resourceCode, String action){
+   public boolean grantAccessByPhrId(String targetUser, String resourceCode, String action){
 	   boolean result=false
-	   
+
 	   //String currentOwnerUri = getCurrentUserOwnerUri()
 	   if(permit){
-		   result = permit.permitAccessOnPhrId( targetUser,  resourceCode, action)
+		   result = permit.grantAccessByPhrId( targetUser,  resourceCode, action)
 	   }
 	   return result
    }
-   
-   public boolean permitUserOnProtocolId(String targetUser, String resourceCode, String action){
+
+   public boolean grantAccessByProtocolId(String targetUserProtocolId, String resourceCode, String action){
 	   boolean result=false
 	   
 	   //String currentOwnerUri = getCurrentUserOwnerUri()
 	   if(permit){
-		   result = permit.permitAccessOnProtocolId( targetUser,  resourceCode, action)
+		   result = permit.grantAccessByProtocolId( targetUserProtocolId,  resourceCode, action)
 	   }
 	   return result
    }

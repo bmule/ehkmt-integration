@@ -90,34 +90,34 @@ public class AuthorizationServiceTest {
     }
 
     /**
-     * Test of permitAccessOnPhrId method, of class AuthorizationService.
+     * Test of grantAccessByPhrId method, of class AuthorizationService.
      */
     @Test
     public void testPermitAccessOnPhrId() {
-        System.out.println("permitAccessOnPhrId");
+        System.out.println("grantAccessByPhrId");
         String targetUser = "";
         String resourceCode = "";
         String action = "";
         AuthorizationService instance = new AuthorizationService();
         boolean expResult = false;
-        boolean result = instance.permitAccessOnPhrId(targetUser, resourceCode, action);
+        boolean result = instance.grantAccessByPhrId(targetUser, resourceCode, action);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("Test fails.");
     }
 
     /**
-     * Test of permitAccessOnProtocolId method, of class AuthorizationService.
+     * Test of grantAccessByProtocolId method, of class AuthorizationService.
      */
     @Test
     public void testPermitAccessOnProtocolId() {
-        System.out.println("permitAccessOnProtocolId");
+        System.out.println("grantAccessByProtocolId");
         String targetUser = "";
         String resourceCode = "";
         String action = "";
         AuthorizationService instance = new AuthorizationService();
         boolean expResult = false;
-        boolean result = instance.permitAccessOnProtocolId(targetUser, resourceCode, action);
+        boolean result = instance.grantAccessByProtocolId(targetUser, resourceCode, action);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("Test fails.");
