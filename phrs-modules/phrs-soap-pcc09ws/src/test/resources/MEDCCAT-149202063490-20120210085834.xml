@@ -52,7 +52,7 @@
 					<value code="MEDCCAT"/>
 				</careProvisionCode>
 				<patientId>
-					<value root="1.2.826.0.1.3680043.2.44.248240.1" extension="149202063490"/>
+					<value root="1.2.826.0.1.3680043.2.44.248240.1" extension="HARDCODED_149202063490_TELL_ME"/>
 				</patientId>
 				<patientName>
 					<value>

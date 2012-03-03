@@ -336,13 +336,13 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     private void process(SOAPHeader header) {
 
         if (header == null) {
-            LOGGER.debug("SOAP Header is null nothing to process");
+            LOGGER.debug("SOAP Header  is null nothing to process");
             return;
         }
 
         final Iterator childElements = header.examineAllHeaderElements();
         if (!childElements.hasNext()) {
-            LOGGER.debug("No SOAP Header to process");
+            LOGGER.debug("No SOAP Header elements  to process");
             return;
         }
 
@@ -409,6 +409,7 @@ public final class PCC9SOAPHandler implements SOAPHandler<SOAPMessageContext> {
     //            properties.put("careProvisionCode", careProvisionCode);
     //            properties.put("responseEndpointURI", responseEndpointURI);
     //            notify("localhost", 5578, properties);
+
                 persistRequest(responseEndpointURI, patientId, careProvisionCode);
             } else {
                 final String msg =
