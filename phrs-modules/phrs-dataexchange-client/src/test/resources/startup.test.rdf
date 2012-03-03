@@ -35,7 +35,7 @@
 
     <!--PHRS Code System code system-->
     <!--TODO : Think about an unique code here-->
-    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Phrs">
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/PhrsCS">
         <icadyCodeSystem:codeSystemCode>2.16.840.1.113883.X.10.10.10</icadyCodeSystem:codeSystemCode>
         <icadyCodeSystem:codeSystemName>PHRSCodeSystem</icadyCodeSystem:codeSystemName>
     </rdf:Description>
@@ -1630,6 +1630,54 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Anxiety">
+        <skos:prefLabel>Anxiety</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AnxietyULMSCode">
+                <icadyCode:codeValue>C0003467</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWell">
+        <skos:prefLabel>Feeling Well</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/FeelingWellULMSCode">
+                <icadyCode:codeValue>C2127116</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomach">
+        <skos:prefLabel>Sick to Stomach</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/SicktoStomachULMSCode">
+                <icadyCode:codeValue>C0848290</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEat">
+        <skos:prefLabel>Unable to Eat</skos:prefLabel>
+        <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/UnableToEatULMSCode">
+                <icadyCode:codeValue>C0566306</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OnOccasion">
         <skos:prefLabel>on occasion</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/HowOften_Frequency</skos:related>
@@ -2112,7 +2160,7 @@
         <skos:related>http://www.icardea.at/phrs/instances/PhysicalActivities</skos:related>
         <icadyCode:code>
             <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/WalkingULMSCode">
-                <icadyCode:codeValue>F-02070</icadyCode:codeValue>
+                <icadyCode:codeValue>C0080331</icadyCode:codeValue>
                 <icadyCode:codeSystem>
                     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/Ulms"/>
                 </icadyCode:codeSystem>
@@ -2359,7 +2407,7 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
-    
+       
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/OralAdministration">
         <skos:prefLabel>oral</skos:prefLabel>
         <icadyCode:code>
@@ -2372,6 +2420,17 @@
         </icadyCode:code>
     </rdf:Description>
     
+    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/InjectionAdministration">
+        <skos:prefLabel>Injection, intraarterial</skos:prefLabel>
+        <icadyCode:code>
+            <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/hl7RouteOfAdministrationInjectionCode">
+                <icadyCode:codeValue>IAINJ</icadyCode:codeValue>
+                <icadyCode:codeSystem>
+                    <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/codeSystem/HL7RouteOfAdministration"/>
+                </icadyCode:codeSystem>
+            </rdf:Description>
+        </icadyCode:code>
+    </rdf:Description>
     
     <rdfs:Class rdf:about="http://www.icardea.at/phrs/types/1.0/VitalSign">
         <rdfs:isDefinedBy rdf:resource="http://www.icardea.at/phrs/types/1.0/"/>

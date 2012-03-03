@@ -9,17 +9,22 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import com.sun.corba.se.impl.orbutil.closure.Constant;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import junit.framework.Assert;
+import org.apache.commons.beanutils.DynaBean;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  * Used to prove the functionality for the
@@ -50,6 +55,8 @@ public class MedicationClientUnitTest {
     private GenericTriplestore triplestore;
 
     private MedicationClient medicationClient;
+    
+    private DynaBeanClient dynaBeanClient;
 
     public MedicationClientUnitTest() {
     }
@@ -67,6 +74,7 @@ public class MedicationClientUnitTest {
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
         medicationClient = new MedicationClient(triplestore);
+        dynaBeanClient = new DynaBeanClient(triplestore);
     }
 
     /**
@@ -199,7 +207,7 @@ public class MedicationClientUnitTest {
         final String medicationURI = iterator.next();
         final Iterable<String> dosageURIs =
                 triplestore.getForSubjectAndPredicate(medicationURI, Constants.HL7V3_DOSAGE);
-        
+
         proveDosage(dosageURIs.iterator().next(), newDossageValue, newDosageUnit);
     }
 
@@ -269,5 +277,74 @@ public class MedicationClientUnitTest {
 
         assertEquals(0, counter);
 
+    }
+
+    /**
+     * Adds a medication with the injection and prove if the information was
+     * properly stored. <br/>
+     * This test mainly proves the <code>HL7V3_INJECTION_ADMINISTRATION</code>
+     * availability.
+     * 
+     * @throws TripleException if this exception raises then this test fails also.
+     * @throws IllegalAccessException  if this exception raises then this test fails also.
+     * @throws InstantiationException  if this exception raises then this test fails also.
+     * @see Constants#HL7V3_INJECTION_ADMINISTRATION
+     */
+    @Test
+    public void testMedicationWithAdminInjection() throws TripleException, IllegalAccessException, InstantiationException {
+        
+        final String resourceURI =
+                medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                Constants.HL7V3_INJECTION_ADMINISTRATION,
+                "1",
+                Constants.PILL,
+                "MyDrug",
+                "MyDrugCode");
+        assertNotNull(resourceURI);
+        
+        final Iterable<String> medications =
+                medicationClient.getMedicationURIsForUser(USER);
+                int counter = 0;
+        for (String uris : medications) {
+            counter++;
+        }
+        // I expect only one medication
+        assertEquals(1, counter);
+        final DynaBean medicationBean = 
+                dynaBeanClient.getDynaBean(resourceURI);
+
+        // Here I prove all the  properties for the Injection  (admin route)
+        final DynaBean adminRoute = 
+                (DynaBean) medicationBean.get(Constants.HL7V3_ADMIN_ROUTE);
+        assertNotNull(adminRoute);
+        
+        // here I prove the Injection  (admin route) pref label
+        final String prefLabel = (String) adminRoute.get(Constants.SKOS_PREFLABEL);
+        assertEquals("Injection, intraarterial", prefLabel);
+        
+        
+        // here I extract the code
+        final DynaBean code = (DynaBean) adminRoute.get(Constants.CODE);
+        
+        // here I prove the code vvalue
+        final String codeValue = (String) code.get(Constants.CODE_VALUE);
+        assertEquals("IAINJ", codeValue);
+        
+        // here I extract the code system for the upper tested code
+        final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
+
+        // here I prove the code system name
+        final String codeSystemName = (String) codeSystem.get(Constants.CODE_SYSTEM_NAME);
+        Assert.assertEquals("HL7 RouteOfAdministration Vocabulary", codeSystemName);
+
+        // here I prove the code system code
+        final String codesystemValue = (String) codeSystem.get(Constants.CODE_SYSTEM_CODE);
+        Assert.assertEquals("2.16.840.1.113883.5.112", codesystemValue);
     }
 }
