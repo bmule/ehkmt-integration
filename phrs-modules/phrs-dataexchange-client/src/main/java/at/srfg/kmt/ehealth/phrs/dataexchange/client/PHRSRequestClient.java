@@ -10,6 +10,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.StoreValidator;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
@@ -85,6 +86,12 @@ public final class PHRSRequestClient {
 
     public String addPHRSRequest(String replyAddress, String id,
             String careProcisionCode) throws TripleException {
+
+        //check for null
+        StoreValidator.validateNotNull("replyAddress", replyAddress);
+        StoreValidator.validateNotNull("patient id",id);
+        StoreValidator.validateNotNull("careProcisionCode",careProcisionCode);
+
         final String subject =
                 triplestore.persist(Constants.RDFS_TYPE,
                 Constants.PHRS_REQUEST_CLASS,

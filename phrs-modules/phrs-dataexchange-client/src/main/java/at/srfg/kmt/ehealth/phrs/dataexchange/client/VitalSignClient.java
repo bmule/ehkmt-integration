@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.StoreValidator;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
@@ -127,6 +128,18 @@ public final class VitalSignClient {
     public String addVitalSign(String user, String codeURI, String note,
             String date, String statusURI,
             String value, String unitURI) throws TripleException {
+        //check for null or Resource
+        StoreValidator.validateResource("statusURI", statusURI, triplestore);
+        StoreValidator.validateResource("codeURI",codeURI,triplestore);
+        StoreValidator.validateResource("unitURI",unitURI,triplestore);
+
+        //If null date, we default date. StoreValidator.validateNotNull("date",date);
+        StoreValidator.validateNotNull("value",value);
+
+        //Acceptable defaults
+        final String startDateStr = date == null
+                ? DateUtil.getFormatedDate(new Date())
+                : date;
 
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
@@ -184,12 +197,14 @@ public final class VitalSignClient {
 
         triplestore.persist(subject,
                 Constants.SKOS_NOTE,
-                note,
+                note == null ? "" : note,
                 LITERAL);
+
+
 
         triplestore.persist(subject,
                 Constants.EFFECTIVE_TIME,
-                date,
+                startDateStr,
                 LITERAL);
 
         triplestore.persist(subject,

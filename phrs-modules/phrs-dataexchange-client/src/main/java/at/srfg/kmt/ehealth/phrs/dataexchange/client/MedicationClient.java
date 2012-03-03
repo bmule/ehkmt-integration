@@ -10,6 +10,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.StoreValidator;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
@@ -105,19 +106,37 @@ public final class MedicationClient {
         LOGGER.debug("New medication  was added, the new added URI is : {}", result);
         return result;
     }
+	
 
+	
     public String addMedicationSign(String user, String note, String statusURI,
             String startDate, String endDate, String frequencyURI,
             String adminRouteURI, String dosageValue, String dosageUnit,
             String drugName,
             String drugCode) throws TripleException {
+        //check for null or Resource . No check on existence of URI
+        StoreValidator.validateResource("statusURI",statusURI,triplestore);
+        StoreValidator.validateResource("frequencyURI",frequencyURI,triplestore);
+        StoreValidator.validateResource("adminRouteURI",adminRouteURI,triplestore);
+        StoreValidator.validateResource("dosageUnit",dosageUnit,triplestore);
 
+        //acceptable defaults
+        final String startDateStr = startDate == null
+                ? DateUtil.getFormatedDate(new Date())
+                : startDate;
+
+        //No end date on active medications!
+        final String endDateStr = endDate == null
+                ? ""
+                : endDate;
+			
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
 
         // this can help to find a medication, there are alos other way 
         // to do this (e.g. using the know templateRootID, for more )
         // information about this please consult the documentation)
+
         triplestore.persist(subject,
                 Constants.RDFS_TYPE,
                 Constants.PHRS_MEDICATION_CLASS,
@@ -148,7 +167,7 @@ public final class MedicationClient {
 
         triplestore.persist(subject,
                 Constants.SKOS_NOTE,
-                note,
+                note == null ? "" : note,
                 LITERAL);
 
         triplestore.persist(subject,
@@ -157,18 +176,13 @@ public final class MedicationClient {
                 RESOURCE);
 
 
-        final String startDateStr = startDate == null
-                ? DateUtil.getFormatedDate(new Date())
-                : startDate;
+
         triplestore.persist(subject,
                 Constants.HL7V3_DATE_START,
                 startDateStr,
                 LITERAL);
-        //DateUtil.getFormatedDate(new Date())
-        //No end date on active medications!
-        final String endDateStr = endDate == null
-                ? ""
-                : endDate;
+
+
         triplestore.persist(subject,
                 Constants.HL7V3_DATE_END,
                 endDateStr,

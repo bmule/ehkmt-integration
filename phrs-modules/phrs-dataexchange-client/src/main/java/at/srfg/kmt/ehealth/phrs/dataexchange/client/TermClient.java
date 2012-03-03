@@ -9,6 +9,8 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
 
 import static at.srfg.kmt.ehealth.phrs.Constants.SKOS_RELATED;
+
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.StoreValidator;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.Triple;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -34,6 +36,9 @@ public final class TermClient {
     }
 
     public Iterable<Triple> getTermsRelatedWith(String resourceURI) throws TripleException {
+        //check for null
+        StoreValidator.validateNotNull("getTermsRelatedWith resourceURI is null",resourceURI);
+
         final Iterable<String> resources = 
                 triplestore.getForPredicateAndValue(SKOS_RELATED, resourceURI, RESOURCE);
         

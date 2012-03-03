@@ -11,6 +11,7 @@ package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.StoreValidator;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.LITERAL;
 import static at.srfg.kmt.ehealth.phrs.persistence.api.ValueType.RESOURCE;
@@ -124,6 +125,24 @@ public final class ProblemEntryClient {
             String endDate,
             String note,
             String valueCode) throws TripleException {
+        //check for null or Resource
+        StoreValidator.validateResource("statusURI", statusURI, triplestore);
+        StoreValidator.validateResource("estabilishCode",estabilishCode,triplestore);
+        //check for null
+        StoreValidator.validateNotNull("valueCode",valueCode);
+
+        //Acceptable defaults
+        final String startDateStr = startDate == null
+                ? DateUtil.getFormatedDate(new Date())
+                : startDate;
+
+        //When Problem is ongoing, the problem does not have an END date
+        final String endDateStr = endDate == null
+                ? ""
+                : endDate;
+
+        //endDate can be null or blank
+
 
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
@@ -175,19 +194,12 @@ public final class ProblemEntryClient {
                 statusURI,
                 RESOURCE);
 
-        final String startDateStr = startDate == null
-                ? DateUtil.getFormatedDate(new Date())
-                : startDate;
+
         triplestore.persist(subject,
                 HL7V3_START_DATE,
                 startDateStr,
                 LITERAL);
 
-        //DateUtil.getFormatedDate(new Date())
-        //Problem ongoing, problem not ended
-        final String endDateStr = endDate == null
-                ? ""
-                : endDate;
         triplestore.persist(subject,
                 HL7V3_END_DATE,
                 endDateStr,
@@ -195,7 +207,7 @@ public final class ProblemEntryClient {
 
         triplestore.persist(subject,
                 SKOS_NOTE,
-                note,
+                note == null ? "" : note,
                 LITERAL);
 
         triplestore.persist(subject,
