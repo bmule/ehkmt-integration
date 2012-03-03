@@ -3,8 +3,8 @@
 
 clear
 
-mvn compile
-mvn test-compile
+# mvn compile
+# mvn test-compile
 
 mvn exec:java -Dexec.mainClass=at.srfg.kmt.ehealth.phrs.ws.soap.pcc9.SendComplexPcc09MessageExample \
  -Dexec.classpathScope=test  \
