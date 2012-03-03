@@ -165,6 +165,7 @@ public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
             return;
         }
 
+
         final String patientId = Util.getPatientId(body);
         if (patientId == null) {
             LOGGER.debug("PCC09EHRHandler No Patient Id Code to process, no ATNA message will be send.");
@@ -172,19 +173,23 @@ public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
         }
 
         try {
+            //only interested in MEDLIST
+            if("MEDLIST".equalsIgnoreCase(code)){
+                LOGGER.debug("Tries to send PCC09 message for patientId= " + patientId + " careprovision code=" + code);
+                PCC09Query client = new PCC09Query();
+                MCCIIN000002UV01 ack = client.sendPcc09Message(patientId, code);
 
-            LOGGER.debug("Tries to send PCC09 message for patientId= " + patientId + " careprovision code=" + code);
-            PCC09Query client = new PCC09Query();
-            MCCIIN000002UV01 ack = client.sendPcc09Message(patientId, code);
+                if (ack != null) {
+                    LOGGER.debug("Ackknowledgement received for patientId= " + patientId + " careprovision code=" + code);
 
-            if (ack != null) {
-                LOGGER.debug("Ackknowledgement received for patientId= " + patientId + " careprovision code=" + code);
-                //audit.send_udp(message.getBytes());
-            } else {
-                LOGGER.warn("FAIL Null response to PCC09 message ");
+                } else {
+                    LOGGER.warn("FAIL Null response to PCC09 message ");
+                }
+            }  else {
+                LOGGER.debug(" Not MEDLIST, no sending of PCC09 for code=" + code);
             }
         } catch (Exception exception) {
-            LOGGER.warn("PCC09EHRHandler "+exception.getMessage(), exception);
+            LOGGER.warn("PCC09EHRHandler "+patientId+" careprovision code="+code+exception.getMessage(), exception);
         }
     }
 }
