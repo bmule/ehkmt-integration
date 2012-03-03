@@ -88,10 +88,10 @@ public final class SendComplexPcc09MessageExample {
         final String responseURI = args[1];
         final String careProvisionCode = args[2];
         final String patientID = args[3];
-        final String patientName = args[4];
-        final String patientSurname = args[5];
+        final String patientName = null;//args[4];
+        final String patientSurname = null;//args[5];
         final String patientAdministrativeGender = args[6];
-
+        System.out.println("overwrting patient name and surname to null");
 
 //        final String careProvisionCode = "COBSCAT";
         final String careProvisionReason = "iCardea Barcelona Meeting test";
