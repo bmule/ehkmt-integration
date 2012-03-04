@@ -37,6 +37,7 @@ public class InteropTermTransformer implements Serializable {
      * @param input
      * @param phrsClass
      * @return
+     * Active or running
      */
     public static String transformStandardStatusToLocal(String input, String phrsClass) {
         String out = input
@@ -47,29 +48,39 @@ public class InteropTermTransformer implements Serializable {
             switch (input) {
 
             //The UI does not offer all possibilities, when sending a new message to the interop, translate the original status appropriately
-                case Constants.STATUS_COMPELETE:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_true'
+
+                case Constants.STATUS_ACTIVE:
+                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_true'
                     break
                 case Constants.STATUS_RUNNING:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_true'
+                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_true'
                     break
-                case Constants.STATUS_INCOMPELETE:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_false_completed'
-                    break
-                case Constants.STATUS_SUSPENDED:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_false_completed'
-                    break
-                case Constants.STATUS_INTERRUPTED:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_false_completed'
-                    break
-                case Constants.STATUS_ABORTED:
-                    if (phrsClass == Constants.PHRS_MEDICATION_CLASS) out = 'medicationSummary_medicationStatus_false_completed'
-                    break
+
+//                case Constants.STATUS_COMPELETE:
+//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
+//                    break
+//                case Constants.STATUS_INCOMPELETE:
+//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
+//                    break
+//                case Constants.STATUS_SUSPENDED:
+//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
+//                    break
+//                case Constants.STATUS_INTERRUPTED:
+//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
+//                    break
+//                case Constants.STATUS_ABORTED:
+//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
+//                    break
                 default:
+
                     out = null
                     break
             }
         }
+        if( ! out) {
+            if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out =  'medicationSummary_medicationStatus_false_completed'
+        }
+
         return out
     }
     /**

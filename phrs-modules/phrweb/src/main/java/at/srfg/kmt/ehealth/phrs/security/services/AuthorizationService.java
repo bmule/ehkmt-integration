@@ -121,6 +121,12 @@ public class AuthorizationService implements Serializable {
 		return this.permitAccess(targetUser, true, resourceCode, action,
 				subjectRole);
 	}
+    public boolean grantAccessByPhrIdAndRole(String targetUser, String resourceCode,
+                                      String action,String subjectRole) {
+
+        return this.permitAccess(targetUser, true, resourceCode, action,
+                subjectRole);
+    }
     /**
 
      *

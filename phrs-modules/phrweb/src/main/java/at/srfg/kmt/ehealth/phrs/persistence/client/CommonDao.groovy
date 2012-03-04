@@ -11,6 +11,7 @@ import at.srfg.kmt.ehealth.phrs.security.services.login.RegistrationModel
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
 
 /**
  *
@@ -188,7 +189,7 @@ public class CommonDao {
             } else {
 
                 Map query = ['userId': userId] //do not search on identifier, that is for sso or openIDs
-                user = (PhrFederatedUser) getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri)
+                user = (PhrFederatedUser) getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)// theOwnerUri should be null because of the querymap
 
                 if (create && !user) {
                     user = new PhrFederatedUser(userId, null);
@@ -340,6 +341,39 @@ public class CommonDao {
         }
         return null
     }
+    public List getResourcesVitalBodyWeight(String ownerUri){
+        if (ownerUri) {
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight.class)
+        }
+        return null
+    }
+
+    public List getResourcesMedication(String ownerUri){
+
+        return getResourcesVitalBodyWeight(ownerUri)
+    }
+
+    public List getResourcesVitalBloodPressure(String ownerUri){
+        if (ownerUri) {
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure.class)
+        }
+        return null
+    }
+
+    public List getResourcesProblem(String ownerUri){
+        if (ownerUri) {
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.ObsProblem.class)
+        }
+        return null
+    }
+
+    public List getResourcesADL(String ownerUri){
+        if (ownerUri) {
+            return getPhrsRepositoryClient().crudReadResources(ownerUri, at.srfg.kmt.ehealth.phrs.model.baseform.ProfileActivityDailyLiving.class)
+        }
+        return null
+    }
+
     /**
      *
      * @param ownerUri
@@ -470,12 +504,14 @@ public class CommonDao {
      * @param filterProtocolNamespace
      * @return
      */
+    //YYYYY
     public String getOwnerUriByIdentifierProtocolId(String filterProtocolId, String filterProtocolNamespace) {
         String ownerUri = null;
         if (filterProtocolId) {
             Map query = ['protocolIdPix': filterProtocolId]
             //,'identifierType':PhrsConstants.PROFILE_USER_IDENTIFIER_PROTOCOL_ID
             //'namespace',filterProtocolNamespace
+            //ownerUri null because of querymap
             PhrFederatedUser info = (PhrFederatedUser) getResourceByExampleToSingle(PhrFederatedUser.class, query, false, null)
 
             if (info) {
@@ -547,6 +583,24 @@ public class CommonDao {
 
     }
 
+    public boolean hasMedication(String ownerUri, String  medName, String productCode) {
+       
+        //not blank or null
+        if(ownerUri && productCode){
+            try{
+                Map query = ['productCode': productCode]
+
+                def obj= getResourceByExampleToSingle(MedicationTreatment.class,query,false,ownerUri)
+
+                if(obj!=null) return true;
+            } catch(Exception e) {
+                LOGGER.error("check hasMedication ",e)
+            }
+        } else {
+            LOGGER.error("check hasMedication null parameter "+ownerUri+" productCode="+productCode)
+        }
+        return false;
+    }
 
 }
  

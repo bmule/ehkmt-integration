@@ -2,151 +2,260 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:p="http://primefaces.prime.com.tr/ui"
-	template="/templates/template_ui.xhtml">
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="/templates/template_ui.xhtml">
 
-	<ui:define name="head">
-
-		<script type="text/javascript">
-			//          
-			function onEditComplete(xhr, status, args) {
-				if (args.validationFailed) {
-
-				} else {
-					widDialogMonitorinfo.hide();
-				}
-			}
-			//
-		</script>
-
-		<style type="text/css">
-.table.innertable td {
-	border: 0;
-}
-</style>
-		<ui:insert name="head"></ui:insert>
-	</ui:define>
-	<!-- 
-	currentUserId;
-	currentUserOwnerUri;
-	currentUserRole;
-
-	ownerUri;
-	protocolId;
-	name;
-
-	resourceType;// resourcecode
-	not needed at this level
-	allowedViewRow 
-	allowedViewContent
-	consentViewContent 
-	request param
-	
-	?resourcecode=#{theItem.resourceType}&amp;phrid=#{theItem.ownerUri}
-	protocolid
-	target="_blank"
-	resourcecode phrid
-either new page or 	
-
- -->
-
-	<ui:define name="content">
-
-		<h:form prependId="false">
-			<p:messages />
-			<p:growl id="msgs" showDetail="true" />
-
-			<p:fieldset legend="Monitoring Personal Health Information">
+<ui:define name="head">
 
 
-				<p:dataTable widgetVar="widItemTableMonitorinfo" id="idItemTableMonitorinfo"
-					var="theItem" value="#{monitorinfoBean.modelMain}">
+    <style type="text/css">
+        .table.innertable td {
+            border: 0;
+        }
+    </style>
+    <ui:insert name="head"></ui:insert>
+</ui:define>
+<!--
+   currentUserId;
+   currentUserOwnerUri;
+   currentUserRole;
+
+   ownerUri;
+   protocolId;
+   name;
+
+   resourceType;// resourcecode
+   not needed at this level
+   allowedViewRow
+   allowedViewContent
+   consentViewContent
+   request param
+
+   ?resourcecode=#{theItem.resourceType}&amp;phrid=#{theItem.ownerUri}
+   protocolid
+   target="_blank"
+   resourcecode phrid
+either new page or
+
+selectedOwnerUri
+selectedLocalResourceType
+selectedTest
+
+modelFormUserList
+modelFormLocalResources
+
+-->
+odelResourceType
+<ui:define name="content">
+
+<p:fieldset legend="Monitor Personal Health Information">
+
+<h:form>
+    <p:toolbar>
+        <p:toolbarGroup align="left">
+            <h:panelGroup>
+                <!--update="idPanelObp" -->
+
+                <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
+                    <h:selectOneMenu id="field_2_input"
+                                     required="true"
+                                     layout="pageDirection"
+                                     value="#{monmgtBean.selectedOwnerUri}">
+
+                        <f:selectItem itemLabel="Please select a User" noSelectionOption="true"
+                                      itemValue=""/>
+                        <f:selectItems
+                                value="#{monmgtBean.selectedOwnerUri}"
+                                var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
+                    </h:selectOneMenu>
 
 
-					<!--  
-						<p:column headerText="Sort" sortBy="   {theItem.sortOrder}">
-							<h:outputLabel value="  {theItem.name}" />
-						</p:column>	
-					-->
-					<p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}">
+                    <p:message for="field_2_input" display="text"/>
+                </h:panelGroup>
 
-                        <p:outputPanel layout="block">
+                <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+                    <h:inputHidden value="#{monmgtBean.selectedOwnerUri}"/>
+                </h:panelGroup>
 
-							<!-- ok, success view  monitorinfoBean
-							rendered=" {theItem.allowedViewContent eq true
-							-->
-							<p:commandButton actionListener="#{monitorinfoBean.downLoadReport}"
-								image="ui-icon ui-icon-disk"
-								title="#{labels['default.button.view.label']}">
-
-                                <f:setPropertyActionListener value="#{theItem}"
-                                                             target="#{monitorinfoBean.selected}" />
-							</p:commandButton>
-
-                        </p:outputPanel>
-					</p:column>
-					
-					<p:column headerText="User Name" sortBy="#{theItem.name}">
-						<h:outputLabel value="#{theItem.name}" />
-					</p:column>
-
-					<p:column headerText="Information Type"
-						sortBy="#{theItem.resourceType}">
-						<h:outputLabel value="#{theItem.resourceType}">
-							<f:converter converterId="labelLookup" />
-						</h:outputLabel>
-
-						<p:outputPanel layout="block"
-							rendered="#{theItem.allowedViewContent eq true}">						
-								Access allowed
-						</p:outputPanel>
-						<p:outputPanel layout="block"
-							rendered="#{theItem.allowedViewContent eq false}">						
-								Access denied
-						</p:outputPanel>
-			
-					</p:column>
-                                                
-					<p:column headerText="Message">
-						<h:outputLabel value="#{theItem.message}" />
-					</p:column>
-
-					<p:column headerText="PHR Identifier" sortBy="#{theItem.ownerUri}"
-						style="width:200px;word-wrap:break-word;">
-							<h:outputLabel value="#{theItem.ownerUri}" />
-					</p:column>
-					<p:column headerText="Protocol Identifier" sortBy="#{theItem.protocolId}"
-						style="width:200px;word-wrap:break-word;">
-							<h:outputLabel value="#{theItem.protocolId}" />
-					</p:column>
-                    <!-- test -->
-                    <p:column headerText="Test">
-                        <p:outputPanel layout="block">
-                            <!--
-                                      rendered=" {theItem.allowedViewContent eq true
-                            -->
-                            <p:commandButton actionListener="#{monitorinfoBean.downLoadTestingReport}"
-                                             image="ui-icon ui-icon-disk"
-                                             title="#{labels['default.button.view.label']}">
-
-                                <f:setPropertyActionListener value="#{theItem}"
-                                                             target="#{monitorinfoBean.selected}" />
-
-                            </p:commandButton>
-
-                        </p:outputPanel>
-                    </p:column>
-                                                
+                <h:panelGroup>
+                    <h:selectOneRadio id="field_3_input"
+                                      required="true"
+                                      layout="pageDirection"
+                                      value="#{monmgtBean.selectedLocalResourceType}">
+                        <f:selectItem itemLabel="Please Select Information type" noSelectionOption="true"
+                                      itemValue=""/>
+                        <f:selectItems
+                                value="#{monmgtBean.modelFormLocalResources}"
+                                var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
+                    </h:selectOneRadio>
 
 
+                    <p:message for="field_3_input" display="text"/>
+                </h:panelGroup>
 
-				</p:dataTable>
-			</p:fieldset>
+                <p:commandButton value="Find"
+                                 title="Find"
+                                 image="ui-icon-plus"
+                                 actionListener="#{monmgtBean.findResourcesByUserAndType}"
+                                 ajax="false"/>
+            </h:panelGroup>
+            <!-- <p:spacer width="2px"/> -->
 
-		</h:form>
-	</ui:define>
+        </p:toolbarGroup>
+    </p:toolbar>
+</h:form>
+
+<p:messages/>
+<p:growl id="msgs" showDetail="true"/>
+
+(<h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/> )
+
+<h:form prependId="false">
+
+    <p:dataTable widgetVar="widItemTableMonitormgt" id="idItemTableMonitormgt"
+                 var="theItem" value="#{monmgtBean.modelMain}">
+
+
+        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
+            <p:columnGroup type="header">
+
+                <p:row>
+                    <p:column headerText="#{labels['labels.menu.options.label']}"/>
+                    <p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.beginDate}"/>
+                    <p:column headerText="#{labels['obsBloodPressureA01.label']}" sortBy="#{theItem.systolic}"/>
+                    <p:column headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}"
+                              sortBy="#{theItem.heartRate}"/>
+                    <p:column headerText="#{labels['default.comments.label']}"/>
+                </p:row>
+            </p:columnGroup>
+
+            <p:column>
+                <h:outputLabel value="#{theItem.beginDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:outputLabel>
+            </p:column>
+
+
+            <p:column style="text-align:center;">
+                <h:outputLabel value="#{theItem.systolic}"/>/<h:outputLabel value="#{theItem.diastolic}"/><h:outputLabel
+                    value=" mmHg"/>
+            </p:column>
+
+            <p:column style="text-align:center;">
+                <h:outputLabel value="#{theItem.heartRate}"/> <h:outputLabel value=" bpm"/>
+            </p:column>
+
+            <p:column>
+                <h:outputText value="#{theItem.note}"/>
+            </p:column>
+
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
+
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'MED'}">
+
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'ADL'}">
+
+
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'PROBLEM'}">
+
+
+        </h:panelGroup>
+    </p:dataTable>
+    <!--
+    <p:dataTable widgetVar="widItemTableMonitormgt" id="idItemTableMonitormgt"
+                 var="theItem" value="#{monmgtBean.modelMain}">
+
+
+
+
+
+             <p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}">
+
+                 <p:outputPanel layout="block">
+
+
+                     <p:commandButton actionListener="#{monmgtBean.downLoadReport}"
+                         image="ui-icon ui-icon-disk"
+                         title="#{labels['default.button.view.label']}">
+
+                         <f:setPropertyActionListener value="#{theItem}"
+                                                      target="#{monmgtBean.selected}" />
+                     </p:commandButton>
+
+                 </p:outputPanel>
+             </p:column>
+
+        <p:column headerText="User Name" sortBy="#{theItem.name}">
+            <h:outputLabel value="#{theItem.name}"/>
+        </p:column>
+
+        <p:column headerText="Information Type"
+                  sortBy="#{theItem.resourceType}">
+            <h:outputLabel value="#{theItem.resourceType}">
+                <f:converter converterId="labelLookup"/>
+            </h:outputLabel>
+
+            <p:outputPanel layout="block"
+                           rendered="#{theItem.allowedViewContent eq true}">
+                Access allowed
+            </p:outputPanel>
+            <p:outputPanel layout="block"
+                           rendered="#{theItem.allowedViewContent eq false}">
+                Access denied
+            </p:outputPanel>
+
+        </p:column>
+
+        <p:column headerText="Message">
+            <h:outputLabel value="#{theItem.message}"/>
+        </p:column>
+
+        <p:column headerText="PHR Identifier" sortBy="#{theItem.ownerUri}"
+                  style="width:200px;word-wrap:break-word;">
+            <h:outputLabel value="#{theItem.ownerUri}"/>
+        </p:column>
+        <p:column headerText="Protocol Identifier" sortBy="#{theItem.protocolId}"
+                  style="width:200px;word-wrap:break-word;">
+            <h:outputLabel value="#{theItem.protocolId}"/>
+        </p:column>
+
+
+        <p:column headerText="Test">
+            <p:outputPanel layout="block">
+
+                <p:commandButton actionListener="#{monmgtBean.downLoadTestingReport}"
+                                 image="ui-icon ui-icon-disk"
+                                 title="#{labels['default.button.view.label']}">
+
+                    <f:setPropertyActionListener value="#{theItem}"
+                                                 target="#{monmgtBean.selected}" />
+
+                </p:commandButton>
+
+            </p:outputPanel>
+        </p:column>
+
+
+
+    </p:dataTable>
+    -->
+
+</h:form>
+</p:fieldset>
+</ui:define>
 
 </ui:composition>

@@ -82,6 +82,9 @@ public class MonitorInteropBean implements Serializable {
 
     }
 
+    /**
+     * Show Messages available for import
+     */
     private void initModelMain() {
         LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
         List transformedMsgs = interopProcessor.importNewMessages(

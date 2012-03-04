@@ -1,0 +1,421 @@
+package at.srfg.kmt.ehealth.phrs.jsf.managedbean;
+
+import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.jsf.utils.WebUtil;
+import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
+import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
+import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue;
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
+import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+// View scope complains about Audit client not serializable
+@ManagedBean(name = "monmgtBean")
+@RequestScoped
+public class MonitorInfoMgtBean implements Serializable {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(MonitorInfoMgtBean.class);
+    public final static String ROLEGROUP_MEDICAL = "ROLEGROUP_MEDICAL";
+    protected UserService userService;
+    protected InteropProcessor interopProcessor;
+    protected AuthorizationService authorizationService;
+
+    protected MonitorPhrItem selected = null;
+    protected String selectedLocalResourceType;
+    private String selectedOwnerUri;
+    private String selectedTest;
+
+    //results list
+    protected List modelMain;
+    protected List<ModelLabelValue> modelFormUserList;
+    protected List<ModelLabelValue> modelFormLocalResources;
+    private boolean testMode = false;
+    private String showFormType = "";
+
+
+    private ReportToolTransformer toolTransformer;
+    //the current user logged in wants to requrie
+    private String requestorOwnerUri;
+    private String ownerUri;
+    private boolean hasMedicalRole = false;
+
+
+    // for dialogs or forms to control view or edit mode of fields
+    public String modify = AuthorizationService.MODIFY_YES;
+
+
+    public MonitorInfoMgtBean() {
+        userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+        requestorOwnerUri = userService.getOwnerUri();
+
+        ownerUri = userService.getOwnerUri();
+
+        hasMedicalRole = UserSessionService.sessionUserHasMedicalRole();
+        
+        if (hasMedicalRole) {
+            showFormType = ROLEGROUP_MEDICAL;
+        }   else {
+            showFormType="";
+            
+
+        }
+
+        modelMain = new ArrayList();
+        //requestorOwnerUri=UserSessionService.getSessionAttributePhrId();
+        initTools();
+
+        initFormModel();
+
+    }
+
+    public MonitorInfoMgtBean(String requestorOwnerUri) {
+        userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+        this.requestorOwnerUri = requestorOwnerUri;
+        initTools();
+
+        initFormModel();
+
+    }
+
+    private void initTools() {
+
+
+        interopProcessor = PhrsStoreClient.getInstance().getInteropProcessor();
+        authorizationService = new AuthorizationService();
+        toolTransformer = new ReportToolTransformer();
+
+
+    }
+
+    public ModelLabelValue createUserLabelValue(PhrFederatedUser ph) {
+
+        ModelLabelValue lv = new ModelLabelValue();
+
+        lv.setId(ph.getOwnerUri());
+        String greetname = userService.getUserGreetName(ph.getOwnerUri());
+        greetname = greetname == null ? "Patient ID: "+ph.getProtocolId() : greetname;
+        lv.setLabel(greetname == null ? "PHR ID: "+ph.getIdentifier() : greetname);
+
+        return lv;
+    }
+
+    //UI action Need params: selected...
+    public void findResourcesByUserAndType() {
+        //do query
+        //load Model main
+        boolean granted = grantPermissionByLocalResourceType(selectedOwnerUri, selectedLocalResourceType);
+
+        if( UserSessionService.sessionUserHasMedicalRole()){
+            showFormType=ROLEGROUP_MEDICAL;
+        } else {
+            selectedOwnerUri=ownerUri;
+            showFormType="";
+        }
+
+        initModelResults();
+    }
+
+
+    public void initModelResults() {
+        //selectedOwnerUri, selectedLocalResourceType, selectedTest
+        modelMain=new ArrayList();
+
+        boolean ok = true;
+        if (selectedOwnerUri == null) {
+            ok = false;
+            LOGGER.debug("selectedOwnerUri = NULL");
+        }
+        if (selectedLocalResourceType == null) {
+            ok = false;
+            LOGGER.debug("selectedLocalResourceType = NULL");
+        }
+        //be sure, issue with viewscope
+        ownerUri=userService.getOwnerUri();
+        testMode = selectedTest != null && ("true".equalsIgnoreCase(selectedTest));
+
+        if(ok){
+            boolean granted= false;
+            if(ownerUri!=null && selectedOwnerUri!=null && selectedOwnerUri.equals(ownerUri)){
+                granted=true;
+                showFormType="";
+
+            } else {
+                granted= grantPermissionByLocalResourceType(selectedOwnerUri,selectedLocalResourceType);
+            }
+            LOGGER.debug("selectedOwnerUri= "+selectedOwnerUri+" granted="+granted+" to access ownerUri "+ownerUri+ " resourceType="+selectedLocalResourceType+" selectedTest =" + selectedTest + "  testMode=" + testMode);
+           loadModelMainByUserAndResourceType(selectedOwnerUri,selectedLocalResourceType);
+
+        } else {
+
+        }       
+
+    }
+    private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType){
+       if(targetOwnerUri!=null && localResourceType!=null){
+
+           if("BW".equals(localResourceType)) {
+
+           } else  if("BW".equals(localResourceType)) {
+               modelMain = userService.getResourcesVitalBodyWeight(targetOwnerUri);
+           } else  if("BP".equals(localResourceType)) {
+               modelMain = userService.getResourcesVitalBloodPressure(targetOwnerUri);
+           } else  if("MED".equals(localResourceType)) {
+               modelMain = userService.getResourcesMedication(targetOwnerUri);
+           } else  if("PROBLEM".equals(localResourceType)) {
+               modelMain = userService.getResourcesProblem(targetOwnerUri);
+           } else  if("ADL".equals(localResourceType)) {
+               modelMain = userService.getResourcesADL(targetOwnerUri);
+           }
+       }
+         if(modelMain==null)  modelMain = new ArrayList();
+       
+    }
+
+
+    private String transformUIResourceType(String localResourceType) {
+        if (localResourceType == null) return null;
+
+        // BP  BW   MED   ADL   PROBLEM
+        String result = null;
+        if ("BP".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH;
+        } else if ("BW".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH;
+        } else if ("MED".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_MEDICATION;
+        } else if ("ADL".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION;
+        } else if ("PROB".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_CONDITION;
+        }
+        return result;
+    }
+
+    public boolean grantPermissionByLocalResourceType(String targetOwnerUri, String localResourceType) {
+        boolean granted = false;
+        String subjectRole = UserSessionService.getSessionAttributeRole();
+        String resourceCode = transformUIResourceType(localResourceType);
+
+        if (resourceCode != null && subjectRole != null && targetOwnerUri != null) {
+            LOGGER.debug("PREPARE grantAccessByPhrIdAndRole by requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+
+            granted = authorizationService.grantAccessByPhrIdAndRole(targetOwnerUri, resourceCode, "READ", subjectRole);
+        } else {
+            LOGGER.debug("FAIL grantAccessByPhrIdAndRole NULL parameter found:  requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+
+        }
+        //TODO move
+        showGrantOutcomeMessage(granted);
+
+        return granted;
+    }
+
+    private void showGrantOutcomeMessage(boolean granted) {
+
+        if (granted) {
+            WebUtil.addFacesMessageSeverityInfo("Status", "Access granted, you are allowed access this material");
+        } else {
+            WebUtil.addFacesMessageSeverityWarn("Status", "Access denied ");
+        }
+    }
+
+
+    private void initFormModel() {
+
+        LOGGER.debug("START initFormModel ");
+
+        try {
+            List<PhrFederatedUser> phrUsers = userService.getResources(null, PhrFederatedUser.class);
+
+            modelFormUserList = new ArrayList<ModelLabelValue>();
+
+
+            if (requestorOwnerUri != null) {
+
+                if (UserSessionService.sessionUserHasMedicalRole()) {
+                    PhrFederatedUser ph = userService.getPhrUser(requestorOwnerUri);
+                    if (ph != null) {
+                        ModelLabelValue lv = createUserLabelValue(ph);
+                        modelFormUserList.add(lv);
+                    } else {
+                        LOGGER.error("requestorOwnerUri non medical, is null, no user owner in session");
+                    }
+
+                } else {
+
+                    for (PhrFederatedUser ph : phrUsers) {
+                        //skip any reports for medical user
+                        if (UserSessionService.sessionUserHasMedicalRole()) {
+                            if (ph.getOwnerUri().equals(requestorOwnerUri)) {
+                                continue;
+                            }
+                        }
+                        if (ph.getOwnerUri() != null) {
+                            ModelLabelValue lv = createUserLabelValue(ph);
+                            modelFormUserList.add(lv);
+                        }
+                    }
+                }
+            } else {
+                LOGGER.error("requestorOwnerUri is null, no user owner in session");
+            }
+
+            modelFormLocalResources = new ArrayList<ModelLabelValue>();
+            // BP  BW   MED   ADL   PROBLEM
+            modelFormLocalResources.add(new ModelLabelValue("BP", "History Blood Pressure"));
+            modelFormLocalResources.add(new ModelLabelValue("BW", "History Body Weight"));
+            modelFormLocalResources.add(new ModelLabelValue("MED", "Medications"));
+            //modelFormLocalResources.add(new ModelLabelValue("ADL", "Activities of Daily Living"));
+            modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
+
+        } catch (Exception e) {
+            LOGGER.error("initFormModel");
+        }
+
+
+        // this.internalModelList= buildView(list,this.permit, UserSessionService.getSessionAttributePhrId());
+
+
+        LOGGER.debug("END initFormModel");
+
+
+    }
+
+
+    public String getSelectedResourceType() {
+        return selectedLocalResourceType;
+    }
+
+    public void setSelectedResourceType(String selectedLocalResourceType) {
+        this.selectedLocalResourceType = selectedLocalResourceType;
+    }
+
+    public MonitorPhrItem getSelected() {
+        return selected;
+    }
+
+    public void setSelected(MonitorPhrItem selected) {
+        this.selected = selected;
+    }
+
+
+//    public String getStatusMessagePid() {
+//        return statusMessage;
+//    }
+//
+//    public void setStatusMessage(String statusMessage) {
+//        this.statusMessage = statusMessage;
+//    }
+//public void addStatusMessagePID(String msg) {
+//    statusMessage = statusMessage == null ? "" : statusMessage;
+//}
+
+    public String getModify() {
+        return modify;
+    }
+
+
+    public AuthorizationService getAuthorizationService() {
+        return authorizationService;
+    }
+
+
+    public void commandTest() {
+
+        LOGGER.debug("commandTest()");
+        WebUtil.addFacesMessageSeverityInfo("commandTest", "commandTest()");
+
+    }
+
+    public List getModelMain() {
+        return modelMain;
+    }
+
+    public void setModelMain(List model) {
+        modelMain = model;
+    }
+
+    public List<ModelLabelValue> getModelFormUserList() {
+        return modelFormUserList;
+    }
+
+    public void setModelFormUserList(List model) {
+        modelFormUserList = model;
+    }
+
+    public List<ModelLabelValue> getModelFormLocalResources() {
+        return modelFormLocalResources;
+    }
+
+    public void setModelFormLocalResources(List<ModelLabelValue> modelFormLocalResources) {
+        this.modelFormLocalResources = modelFormLocalResources;
+    }
+
+    public String getSelectedOwnerUri() {
+        return selectedOwnerUri;
+    }
+
+    public void setSelectedOwnerUri(String selectedOwnerUri) {
+        this.selectedOwnerUri = selectedOwnerUri;
+    }
+
+    public String getSelectedLocalResourceType() {
+        return selectedLocalResourceType;
+    }
+
+    public void setSelectedLocalResourceType(String selectedLocalResourceType) {
+        this.selectedLocalResourceType = selectedLocalResourceType;
+    }
+
+    public String getSelectedTest() {
+        return selectedTest;
+    }
+
+    public void setSelectedTest(String selectedTest) {
+        this.selectedTest = selectedTest;
+    }
+
+
+    public String getShowFormType() {
+        return showFormType;
+    }
+
+    public void setShowFormType(String showFormType) {
+        this.showFormType = showFormType;
+    }
+
+    public String getRequestorOwnerUri() {
+        return requestorOwnerUri;
+    }
+
+    public void setRequestorOwnerUri(String requestorOwnerUri) {
+        this.requestorOwnerUri = requestorOwnerUri;
+    }
+
+    public String getOwnerUri() {
+        return ownerUri;
+    }
+
+
+    public boolean getHasMedicalRole() {
+        return hasMedicalRole;
+    }
+
+    public boolean isHasMedicalRole() {
+        return hasMedicalRole;
+    }
+
+
+}

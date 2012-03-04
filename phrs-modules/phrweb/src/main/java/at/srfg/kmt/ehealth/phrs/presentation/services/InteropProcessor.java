@@ -611,11 +611,24 @@ public class InteropProcessor {
         return out;
     }
 
-    public List<String> importNewMessages(String ownerUri, String phrsClass) {
+    /**
+     *
+     * @param ownerUri
+     * @param phrsClass
+     * @return
+     */
+    public List importNewMessages(String ownerUri, String phrsClass) {
         return importNewMessages(ownerUri, phrsClass, true, null);
     }
 
-    public List<String> importNewMessages(String ownerUri, String phrsClass, boolean importMessage) {
+    /**
+     *
+     * @param ownerUri
+     * @param phrsClass
+     * @param importMessage
+     * @return
+     */
+    public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage) {
         return importNewMessages(ownerUri, phrsClass, importMessage, null);
     }
 
@@ -775,7 +788,16 @@ public class InteropProcessor {
                 if (protocolId != null) {
                     protocolId = protocolId.trim();
                 }
+                //do no import additional messages about same drug code
+                Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
+                String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
+                String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
 
+                boolean hasDrug= productCode != null && ! productCode.isEmpty() && getCommonDao().hasMedication(phrOwnerUri,medName,productCode);
+                if( hasDrug){
+                    LOGGER.debug("duplicate Drug detected. New message or other error. productCode="+productCode+" drugName"+medName+" phrOwnerUri="+phrOwnerUri);
+                     return theObject;
+                }
                 // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
                 // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
                 // Constants.HL7V3_DRUG_NAME Constants.HL7V3_CODE
@@ -805,11 +827,12 @@ public class InteropProcessor {
 
                 med.setExternalReference(messageResourceUri);
 
+                 //check drug code earlier
+//                Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
+//                String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
+//                String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
 
-                Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
-                String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
                 med.setTitle(medName);
-                String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
                 med.setProductCode(productCode);
 
                 med.getTreatmentMatrix().setAdminRoute(DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_ADMIN_ROUTE, Constants.HL7V3_ORAL_ADMINISTRATION));

@@ -166,8 +166,12 @@ public class MonitorInfoBean extends FaceBaseBean {
         if (getUserService()) {
             LOGGER.debug("loadModelMain to buildView");
             List<PhrFederatedUser>  list= userService.getResources(null, PhrFederatedUser.class);
-
-            this.internalModelList= buildView(list,this.permit,UserSessionService.getSessionAttributePhrId());
+            String requestorOwnerUri= UserSessionService.getSessionAttributePhrId()
+            if(requestorOwnerUri) {
+                this.internalModelList= buildView(list,this.permit,requestorOwnerUri);
+            }  else {
+                LOGGER.error("requestorOwnerUri is null, no user owner in session");
+            }
 
             //getUserService().getResources(getDomainClazz());
         }
