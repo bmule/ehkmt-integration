@@ -46,7 +46,7 @@ public class MonitorInfoBean extends FaceBaseBean {
      */
     public void createModelTestUsers(){
         //ConfigurationService.getInstance().
-        CoreTestData.createTestUsersForMonitoring();
+       CoreTestData.createTestUsersForMonitoring();
     }
     /**
      * Build the list view of reports available to this authenticated user

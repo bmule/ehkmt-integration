@@ -174,8 +174,9 @@ public class ConsentMgrService implements Serializable {
                 flag = true;
 
             } else if (isConsentMgrRole(subjectCode)) {
-
+                //FIXXME
                 sslSetup();
+
                 String userIdentifier = targetUser;
                 //try this identifier, usually the phrId
                 String result = callGetDecision(userIdentifier, ISSUERNAME,

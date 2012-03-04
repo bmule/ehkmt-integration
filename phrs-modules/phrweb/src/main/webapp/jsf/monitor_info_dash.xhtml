@@ -96,7 +96,7 @@ odelResourceType
                     <p:message for="field_3_input" display="text"/>
                 </h:panelGroup>
 
-                <p:commandButton value="Find"
+                <p:commandButton value="Find Patient Info"
                                  title="Find"
                                  image="ui-icon-plus"
                                  actionListener="#{monmgtBean.findResourcesByUserAndType}"
@@ -111,13 +111,14 @@ odelResourceType
 <p:messages/>
 <p:growl id="msgs" showDetail="true"/>
 
-(<h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/> )
+User: <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
+(<h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>)
+<br/>
 
 <h:form prependId="false">
 
     <p:dataTable widgetVar="widItemTableMonitormgt" id="idItemTableMonitormgt"
                  var="theItem" value="#{monmgtBean.modelMain}">
-
 
         <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
             <p:columnGroup type="header">
@@ -137,7 +138,6 @@ odelResourceType
                     <f:convertDateTime pattern="yyyy-MM-dd"/>
                 </h:outputLabel>
             </p:column>
-
 
             <p:column style="text-align:center;">
                 <h:outputLabel value="#{theItem.systolic}"/>/<h:outputLabel value="#{theItem.diastolic}"/><h:outputLabel

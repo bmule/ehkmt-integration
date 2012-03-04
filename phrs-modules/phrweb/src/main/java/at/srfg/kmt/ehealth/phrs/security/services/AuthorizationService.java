@@ -156,6 +156,12 @@ public class AuthorizationService implements Serializable {
 				subjectRole);
 	}
 
+    public boolean grantAccessByProtocolIdAndRole(String targetUser,
+                                           String resourceCode, String action,String subjectRole) {
+        //false this is protocolId
+        return this.permitAccess(targetUser, false, resourceCode, action,
+                subjectRole);
+    }
 	/**
 	 * 
 	 * @param targetUser

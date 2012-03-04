@@ -12,6 +12,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,33 +45,50 @@ public class MonitorInfoMgtBean implements Serializable {
     private boolean testMode = false;
     private String showFormType = "";
 
-
-    private ReportToolTransformer toolTransformer;
     //the current user logged in wants to requrie
     private String requestorOwnerUri;
     private String ownerUri;
     private boolean hasMedicalRole = false;
 
+    private String selectedOwnerGreetName;
 
     // for dialogs or forms to control view or edit mode of fields
-    public String modify = AuthorizationService.MODIFY_YES;
+    private String modify = AuthorizationService.MODIFY_YES;
+
+    private boolean testMedicalRole=false;
 
 
     public MonitorInfoMgtBean() {
         userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
         requestorOwnerUri = userService.getOwnerUri();
 
+        
+        
         ownerUri = userService.getOwnerUri();
 
+
         hasMedicalRole = UserSessionService.sessionUserHasMedicalRole();
-        
+
+        if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
+            testMedicalRole=true;
+            hasMedicalRole=true;
+            UserSessionService.putSessionAttributeString(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
+                    PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
+            LOGGER.debug("phrtest* found, setting role to doctor");
+        }
+
         if (hasMedicalRole) {
             showFormType = ROLEGROUP_MEDICAL;
-        }   else {
-            showFormType="";
-            
+        } else {
+            showFormType = "";
+
 
         }
+
+    // consent.mode.roletest
+//isAllHealthinfoAccessibleByRole  isHealthInfoAccessibleByRole
+
+        CoreTestData.createTestUsersForMonitoring();
 
         modelMain = new ArrayList();
         //requestorOwnerUri=UserSessionService.getSessionAttributePhrId();
@@ -91,11 +109,8 @@ public class MonitorInfoMgtBean implements Serializable {
 
     private void initTools() {
 
-
         interopProcessor = PhrsStoreClient.getInstance().getInteropProcessor();
         authorizationService = new AuthorizationService();
-        toolTransformer = new ReportToolTransformer();
-
 
     }
 
@@ -105,82 +120,85 @@ public class MonitorInfoMgtBean implements Serializable {
 
         lv.setId(ph.getOwnerUri());
         String greetname = userService.getUserGreetName(ph.getOwnerUri());
-        greetname = greetname == null ? "Patient ID: "+ph.getProtocolId() : greetname;
-        lv.setLabel(greetname == null ? "PHR ID: "+ph.getIdentifier() : greetname);
+        greetname = greetname == null ? ph.getProtocolId() : greetname;
+        lv.setLabel(greetname == null ? ph.getIdentifier() : greetname);
 
         return lv;
     }
 
     //UI action Need params: selected...
     public void findResourcesByUserAndType() {
-        //do query
-        //load Model main
-        boolean granted = grantPermissionByLocalResourceType(selectedOwnerUri, selectedLocalResourceType);
-
-        if( UserSessionService.sessionUserHasMedicalRole()){
-            showFormType=ROLEGROUP_MEDICAL;
-        } else {
-            selectedOwnerUri=ownerUri;
-            showFormType="";
-        }
-
+        System.out.println("findResourcesByUserAndType");
         initModelResults();
     }
 
 
     public void initModelResults() {
-        //selectedOwnerUri, selectedLocalResourceType, selectedTest
-        modelMain=new ArrayList();
 
-        boolean ok = true;
-        if (selectedOwnerUri == null) {
-            ok = false;
-            LOGGER.debug("selectedOwnerUri = NULL");
+        if (UserSessionService.sessionUserHasMedicalRole()) {
+            showFormType = ROLEGROUP_MEDICAL;
+        } else {
+            selectedOwnerUri = ownerUri;
+            showFormType = "";
         }
-        if (selectedLocalResourceType == null) {
-            ok = false;
-            LOGGER.debug("selectedLocalResourceType = NULL");
+        //use phrtest* to simulate role
+        if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
+            testMedicalRole=true;
         }
+        //selectedOwnerUri, selectedLocalResourceType, selectedTest
+        modelMain = new ArrayList();
+
         //be sure, issue with viewscope
-        ownerUri=userService.getOwnerUri();
+        ownerUri = userService.getOwnerUri();
         testMode = selectedTest != null && ("true".equalsIgnoreCase(selectedTest));
 
-        if(ok){
-            boolean granted= false;
-            if(ownerUri!=null && selectedOwnerUri!=null && selectedOwnerUri.equals(ownerUri)){
-                granted=true;
-                showFormType="";
+        if (selectedOwnerUri != null && selectedLocalResourceType != null) {
+
+            boolean granted = false;
+            if (ownerUri != null && selectedOwnerUri != null && selectedOwnerUri.equals(ownerUri)) {
+                granted = true;
+                showFormType = "";
 
             } else {
-                granted= grantPermissionByLocalResourceType(selectedOwnerUri,selectedLocalResourceType);
+                granted = grantPermissionForLocalResourceType(selectedOwnerUri, ownerUri, selectedLocalResourceType, true);
+                if (!granted) {
+                    //for testing
+                    granted = grantPermissionForLocalResourceType("191", ownerUri, selectedLocalResourceType, false);
+                }
             }
-            LOGGER.debug("selectedOwnerUri= "+selectedOwnerUri+" granted="+granted+" to access ownerUri "+ownerUri+ " resourceType="+selectedLocalResourceType+" selectedTest =" + selectedTest + "  testMode=" + testMode);
-           loadModelMainByUserAndResourceType(selectedOwnerUri,selectedLocalResourceType);
+            LOGGER.debug("selectedOwnerUri= " + selectedOwnerUri + " granted=" + granted + " to access ownerUri " + ownerUri + " resourceType=" + selectedLocalResourceType + " selectedTest =" + selectedTest + "  testMode=" + testMode);
 
+            loadModelMainByUserAndResourceType(selectedOwnerUri, selectedLocalResourceType);
+
+            showGrantOutcomeMessage(granted);
+            selectedOwnerGreetName = userService.getUserGreetName(selectedOwnerUri);
         } else {
+            LOGGER.debug("Cant make query missing parameter selectedOwnerUri= " + selectedOwnerUri + " resourceType=" + selectedLocalResourceType + " selectedTest =" + selectedTest + "  testMode=" + testMode);
 
-        }       
+        }
+
 
     }
-    private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType){
-       if(targetOwnerUri!=null && localResourceType!=null){
 
-           if("BW".equals(localResourceType)) {
+    private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType) {
+        if (targetOwnerUri != null && localResourceType != null) {
 
-           } else  if("BW".equals(localResourceType)) {
-               modelMain = userService.getResourcesVitalBodyWeight(targetOwnerUri);
-           } else  if("BP".equals(localResourceType)) {
-               modelMain = userService.getResourcesVitalBloodPressure(targetOwnerUri);
-           } else  if("MED".equals(localResourceType)) {
-               modelMain = userService.getResourcesMedication(targetOwnerUri);
-           } else  if("PROBLEM".equals(localResourceType)) {
-               modelMain = userService.getResourcesProblem(targetOwnerUri);
-           } else  if("ADL".equals(localResourceType)) {
-               modelMain = userService.getResourcesADL(targetOwnerUri);
-           }
-       }
-         if(modelMain==null)  modelMain = new ArrayList();
-       
+            if ("BW".equals(localResourceType)) {
+
+            } else if ("BW".equals(localResourceType)) {
+                modelMain = userService.getResourcesVitalBodyWeight(targetOwnerUri);
+            } else if ("BP".equals(localResourceType)) {
+                modelMain = userService.getResourcesVitalBloodPressure(targetOwnerUri);
+            } else if ("MED".equals(localResourceType)) {
+                modelMain = userService.getResourcesMedication(targetOwnerUri);
+            } else if ("PROBLEM".equals(localResourceType)) {
+                modelMain = userService.getResourcesProblem(targetOwnerUri);
+            } else if ("ADL".equals(localResourceType)) {
+                modelMain = userService.getResourcesADL(targetOwnerUri);
+            }
+        }
+        if (modelMain == null) modelMain = new ArrayList();
+
     }
 
 
@@ -203,21 +221,29 @@ public class MonitorInfoMgtBean implements Serializable {
         return result;
     }
 
-    public boolean grantPermissionByLocalResourceType(String targetOwnerUri, String localResourceType) {
+    public boolean grantPermissionForLocalResourceType(String targetOwnerUri, String requestorOwnerUri, String localResourceType, boolean phrId) {
         boolean granted = false;
-        String subjectRole = UserSessionService.getSessionAttributeRole();
-        String resourceCode = transformUIResourceType(localResourceType);
 
-        if (resourceCode != null && subjectRole != null && targetOwnerUri != null) {
-            LOGGER.debug("PREPARE grantAccessByPhrIdAndRole by requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+        if (targetOwnerUri != null && requestorOwnerUri != null && targetOwnerUri.equals(requestorOwnerUri)) {
+            granted = true;
 
-            granted = authorizationService.grantAccessByPhrIdAndRole(targetOwnerUri, resourceCode, "READ", subjectRole);
         } else {
-            LOGGER.debug("FAIL grantAccessByPhrIdAndRole NULL parameter found:  requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+            String subjectRole = UserSessionService.getSessionAttributeRole();
+            String resourceCode = transformUIResourceType(localResourceType);
 
+            if (resourceCode != null && subjectRole != null && targetOwnerUri != null) {
+                LOGGER.debug("PREPARE grantAccessByPhrIdAndRole by requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+                if (phrId) {
+                    granted = authorizationService.grantAccessByPhrIdAndRole(targetOwnerUri, resourceCode, "READ", subjectRole);
+                } else {
+                    granted = authorizationService.grantAccessByProtocolId(targetOwnerUri, resourceCode, "READ");
+                }
+
+            } else {
+                LOGGER.debug("FAIL grantAccessByPhrIdAndRole NULL parameter found:  requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+
+            }
         }
-        //TODO move
-        showGrantOutcomeMessage(granted);
 
         return granted;
     }
@@ -417,5 +443,7 @@ public class MonitorInfoMgtBean implements Serializable {
         return hasMedicalRole;
     }
 
-
+    public String getSelectedOwnerGreetName() {
+        return selectedOwnerGreetName;
+    }
 }
