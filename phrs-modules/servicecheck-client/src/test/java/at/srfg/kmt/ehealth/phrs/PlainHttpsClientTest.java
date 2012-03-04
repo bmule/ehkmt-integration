@@ -4,7 +4,6 @@
  */
 package at.srfg.kmt.ehealth.phrs;
 
-import com.sun.net.httpserver.HttpsServer;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.Level;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.junit.BeforeClass;
@@ -32,6 +30,7 @@ public class PlainHttpsClientTest {
     static File tsFile;
     static String tsPassword;
     static PropertiesConfiguration icardeaConfig;
+    static PropertiesConfiguration phrsConfig;
     static Set<URL> testURLs = new HashSet<URL>();
 
     @BeforeClass
@@ -54,9 +53,22 @@ public class PlainHttpsClientTest {
                     LOGGER.info("--> {} ignored", key);
                 }
             }
+
+            phrsConfig = new PropertiesConfiguration(new File("../phrweb/src/main/resources/phrs.properties"));
+            LOGGER.info("Config input" + phrsConfig);
+            String pixUrlStr = "https://" + phrsConfig.getString("pix.host") + ":" + phrsConfig.getString("pix.port");
+            try {
+                testURLs.add(new URL(pixUrlStr));
+                LOGGER.info("-> pix.host/pix.port added to test ({})", pixUrlStr);
+            } catch (MalformedURLException ex) {
+                LOGGER.info("--> pix.host/pix.port ignored");
+            }
+
+
         } catch (ConfigurationException e) {
             LOGGER.error("ConfigurationService error", e);
         }
+
 
         tsPassword = "icardea";
         tsFile = new File(".." + File.separator
