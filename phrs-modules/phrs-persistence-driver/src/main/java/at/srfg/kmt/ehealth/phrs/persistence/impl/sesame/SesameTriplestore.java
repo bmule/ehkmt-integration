@@ -731,6 +731,14 @@ public class SesameTriplestore
 
     @Override
     public TupleQueryResult getForQuery(String query) throws GenericRepositoryException, GenericQueryException {
+        
+        if (query == null || query.isEmpty()) {
+            final NullPointerException exception = 
+                    new NullPointerException("The query argument can not be null or empty string.");
+           LOGGER.error(exception.getMessage(), exception); 
+        }
+        
+        LOGGER.debug("Tries to executes the following query {}", query);
 
         try {
             final TupleQuery tupleQuery =
