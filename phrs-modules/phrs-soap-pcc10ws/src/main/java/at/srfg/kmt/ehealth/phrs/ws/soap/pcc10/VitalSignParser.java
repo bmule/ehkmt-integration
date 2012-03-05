@@ -9,9 +9,13 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
+import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
+import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
+import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
+import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
+import java.util.*;
 import javax.xml.bind.JAXBElement;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
@@ -36,11 +40,25 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
             LoggerFactory.getLogger(VitalSignParser.class);
 
     /**
+     * The connection to the triple store.
+     */
+    private final GenericTriplestore triplestore;
+
+    /**
+     * The client used to store the vital sign related information.
+     */
+    private final VitalSignClient client;
+
+    /**
      * Builds
      * <code>VitalSignParser</code> instance.
      */
     public VitalSignParser() {
-        // UNIMPLEMENTED
+        final TriplestoreConnectionFactory connectionFactory =
+                TriplestoreConnectionFactory.getInstance();
+        triplestore = connectionFactory.getTriplestore();
+        client = new VitalSignClient(triplestore);
+        client.setCreator(Constants.EHR_OWNER);
     }
 
     @Override
@@ -135,6 +153,43 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         System.out.println("codeSystemName -->" + codeSystemName);
 
         return null;
+    }
+
+    private String buildCodeSystemURI(String codeSystemName, String codeSystemCode) 
+            throws TripleException {
+        final Map<String, String> queryMap = new HashMap<String, String>();
+        // like this I indetify the type
+        queryMap.put(Constants.CODE_SYSTEM_CODE, codeSystemCode);
+
+        final Iterable<String> uris =
+                triplestore.getForPredicatesAndValues(queryMap);
+        final Iterator<String> iterator = uris.iterator();
+        if (!iterator.hasNext()) {
+            
+            final String newCodeSystemURI =
+                    triplestore.persist(Constants.CODE_SYSTEM_CODE, 
+                                        codeSystemCode, 
+                                        ValueType.LITERAL);
+
+            final String name = codeSystemName == null 
+                    ? "NO CODESYSTEM NAME" 
+                    : codeSystemName;
+
+            triplestore.persist(newCodeSystemURI,
+                    Constants.CODE_SYSTEM_NAME,
+                    codeSystemName,
+                    ValueType.LITERAL);
+            
+            final String msg = 
+                    String.format("New code system created. Code System code = %s, code system name %s and code system URI = %s", codeSystemCode, codeSystemName, newCodeSystemURI);
+            LOGGER.debug(msg);
+        }
+
+        // TODO : this iterator must contain only one element.
+        // build a check here !
+        final String result = iterator.next();
+        return result;
+
     }
 
     @Override
