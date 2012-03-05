@@ -266,7 +266,8 @@ public class VitalSignClientUnitTest {
 
     /**
      * Adds a vital sign using a non-URI value for the statusURI and this raises
-     * a <code>IllegalArgumentException</code>.
+     * a
+     * <code>IllegalArgumentException</code>.
      *
      * @throws TripleException if this exception occurs this test fails.
      * @throws IllegalArgumentException this test test this exception.
@@ -285,8 +286,8 @@ public class VitalSignClientUnitTest {
     }
 
     /**
-     * Adds a vital sign using a non-URI value for the codeURI and this raises
-     * a <code>IllegalArgumentException</code>.
+     * Adds a vital sign using a non-URI value for the codeURI and this raises a
+     * <code>IllegalArgumentException</code>.
      *
      * @throws TripleException if this exception occurs this test fails.
      * @throws IllegalArgumentException this test test this exception.
@@ -305,8 +306,8 @@ public class VitalSignClientUnitTest {
     }
 
     /**
-     * Adds a vital sign using a non-URI value for the unutURI and this raises
-     * a <code>IllegalArgumentException</code>.
+     * Adds a vital sign using a non-URI value for the unutURI and this raises a
+     * <code>IllegalArgumentException</code>.
      *
      * @throws TripleException if this exception occurs this test fails.
      * @throws IllegalArgumentException this test test this exception.
@@ -323,10 +324,10 @@ public class VitalSignClientUnitTest {
                 "100",
                 "XXX_unit");
     }
-    
+
     /**
-     * Adds a vital sign using a null value for the value and this raises
-     * a <code>NullPointerException</code>.
+     * Adds a vital sign using a null value for the value and this raises a
+     * <code>NullPointerException</code>.
      *
      * @throws TripleException if this exception occurs this test fails.
      * @throws NullPointerException this test test this exception.
