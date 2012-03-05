@@ -28,7 +28,7 @@ public class PlainHttpsClient {
     public static boolean connect(String serverURL) {
      
         try {
-            return connect(new URL(serverURL));
+            return httpsConnect(new URL(serverURL));
         } catch (MalformedURLException ex) {
             LOGGER.error("URL {} not valid", serverURL);
             LOGGER.error("...FAIL");
@@ -38,7 +38,7 @@ public class PlainHttpsClient {
         }
 
     }
-    public static boolean connect(URL serverURL) {
+    public static boolean httpsConnect(URL serverURL) {
             try {
 
             HttpsURLConnection conn = (HttpsURLConnection) serverURL.openConnection();

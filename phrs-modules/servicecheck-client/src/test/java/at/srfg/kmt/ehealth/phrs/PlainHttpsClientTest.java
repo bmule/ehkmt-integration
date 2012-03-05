@@ -91,7 +91,7 @@ public class PlainHttpsClientTest {
     }
 
     /**
-     * Test of connect method, of class PlainHttpsClient.
+     * Test of httpsConnect method, of class PlainHttpsClient.
      */
     @Test
     public void testTrustStore() {
@@ -143,7 +143,7 @@ public class PlainHttpsClientTest {
     }
 
     /**
-     * Test of socket connect method, of class PlainHttpsClient.
+     * Test of socket httpsConnect method, of class PlainHttpsClient.
      */
     @Test
     public void testSocketConnect() throws Exception {
@@ -163,7 +163,7 @@ public class PlainHttpsClientTest {
     }
 
     /**
-     * Test of connect method, of class PlainHttpsClient.
+     * Test of httpsConnect method, of class PlainHttpsClient.
      */
     @Test
     public void testHttpsConnect() throws Exception {
@@ -172,7 +172,7 @@ public class PlainHttpsClientTest {
         for (URL serverURL : testURLs) {
             if (serverURL.getProtocol().equals("https")) {
                 LOGGER.info("testing {}", serverURL);
-                allOK = PlainHttpsClient.connect(serverURL);
+                allOK = PlainHttpsClient.httpsConnect(serverURL);
             } else {
                 LOGGER.info("skipped testing {}", serverURL);
             }
@@ -182,11 +182,13 @@ public class PlainHttpsClientTest {
     }
 
     /**
-     * Test of connect method, of class PlainHttpsClient.
+     * Test of httpsConnect method, of class PlainHttpsClient.
      */
     @Test
     public void testSendUDP() throws Exception {
-        LOGGER.info("checking udp port reachabilty: {}:{}", "localhost", 44444);
-        assert PlainHttpsClient.sendUDP("localhost", 44444);
+        int eifPort = Integer.valueOf(icardeaConfig.getProperty("eif.port").toString());
+        String eifServer = icardeaConfig.getProperty("eif.host").toString();
+        LOGGER.info("testing to send to {}:{}", eifServer, eifPort);
+        assert PlainHttpsClient.sendUDP(eifServer, eifPort);
     }
 }
