@@ -86,7 +86,21 @@ public final class MedicationClient {
         schemeClient = new SchemeClient(triplestore);
         creator = MedicationClient.class.getName();
     }
-
+    /**
+     * 
+     * @param user
+     * @param note
+     * @param statusURI the URI for the status
+     * @param startDate
+     * @param endDate
+     * @param frequencyURI
+     * @param adminRouteURI
+     * @param dosageValue
+     * @param dosageUnit
+     * @param drugName
+     * @return
+     * @throws TripleException 
+     */
     public String addMedicationSign(String user, String note, String statusURI,
             String startDate, String endDate, String frequencyURI,
             String adminRouteURI, String dosageValue, String dosageUnit,
@@ -106,19 +120,62 @@ public final class MedicationClient {
         LOGGER.debug("New medication  was added, the new added URI is : {}", result);
         return result;
     }
-	
 
-	
+    /**
+     * 
+     * @param user
+     * @param note
+     * @param statusURI
+     * @param startDate
+     * @param endDate
+     * @param frequencyURI
+     * @param adminRouteURI
+     * @param dosageValue
+     * @param dosageUnit
+     * @param drugName
+     * @param drugCode
+     * @return
+     * @throws TripleException 
+     */
     public String addMedicationSign(String user, String note, String statusURI,
             String startDate, String endDate, String frequencyURI,
             String adminRouteURI, String dosageValue, String dosageUnit,
             String drugName,
             String drugCode) throws TripleException {
-        //check for null or Resource . No check on existence of URI
-        StoreValidator.validateResource("statusURI",statusURI,triplestore);
-        StoreValidator.validateResource("frequencyURI",frequencyURI,triplestore);
-        StoreValidator.validateResource("adminRouteURI",adminRouteURI,triplestore);
-        StoreValidator.validateResource("dosageUnit",dosageUnit,triplestore);
+
+        // check for null or Resource . No check on existence of URI
+        // StoreValidator.validateResource("statusURI",statusURI,triplestore);
+        if (!StoreValidator.isValidReourceValue(statusURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("statusURI", statusURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        //StoreValidator.validateResource("frequencyURI", frequencyURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(frequencyURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("frequencyURI", frequencyURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        //StoreValidator.validateResource("adminRouteURI", adminRouteURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(adminRouteURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("adminRouteURI", adminRouteURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        //StoreValidator.validateResource("dosageUnit", dosageUnit, triplestore);
+        if (!StoreValidator.isValidReourceValue(dosageUnit)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("dosageUnit", dosageUnit);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
 
         //acceptable defaults
         final String startDateStr = startDate == null
@@ -129,7 +186,7 @@ public final class MedicationClient {
         final String endDateStr = endDate == null
                 ? ""
                 : endDate;
-			
+
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
 
