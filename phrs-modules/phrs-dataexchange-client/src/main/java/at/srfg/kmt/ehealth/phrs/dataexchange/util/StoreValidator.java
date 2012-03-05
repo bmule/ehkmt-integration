@@ -53,7 +53,7 @@ public final class StoreValidator {
      * values.
      */
     public static IllegalArgumentException buildWrongReourceValueException(String property, String value) {
-        final String msg = String.format("Wrong value [%s] for the property [%s]. The value must be a valid URL", value, property);
+        final String msg = String.format("The property [%s] value [%s] is not valid. The value must be a valid URL", value, property);
         return new IllegalArgumentException(msg);
     }
 
