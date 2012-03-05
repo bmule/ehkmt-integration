@@ -112,7 +112,7 @@ public class Constants {
      */
     public static final String GRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Gram";
     
-        /**
+    /**
      * This is an instance URI.
      */
     public static final String BPS = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#BPS";
