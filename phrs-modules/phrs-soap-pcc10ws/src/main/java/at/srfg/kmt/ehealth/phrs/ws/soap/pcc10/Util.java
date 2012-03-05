@@ -8,6 +8,9 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
+import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.ClientException;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.TermClient;
 import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
@@ -15,9 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import org.hl7.v3.CD;
-import org.hl7.v3.II;
-import org.hl7.v3.PN;
+import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Element;
@@ -34,8 +35,8 @@ import org.w3c.dom.NodeList;
  * @since 0.1
  */
 final class Util {
-    
-        /**
+
+    /**
      * The XML Tag Name for the Care Provision Code XML Element.
      */
     private static final String CARE_PROVISION_CODE_TAG_NAME = "careProvisionCode";
@@ -377,5 +378,55 @@ final class Util {
         final Element value = (Element) values.item(0);
         final String result = value.getTextContent();
         return result;
+    }
+
+    static String getStatusURI(CS statusCode) {
+        final String displayName = statusCode.getDisplayName();
+        if ("Complete".equalsIgnoreCase(displayName)) {
+            return Constants.STATUS_COMPELETE;
+        }
+
+        if ("active".equalsIgnoreCase(displayName)) {
+            return Constants.STATUS_ACTIVE;
+        }
+
+        return Constants.STATUS_ACTIVE;
+    }
+
+    static String getUnitURI(PQ pq) {
+        final String dosageUnit = Constants.PILL;
+        final String unit = pq.getUnit();
+
+        if ("pill".equals(unit)) {
+            return Constants.PILL;
+        }
+
+        if ("mg".equals(unit)) {
+            return Constants.MILLIGRAM;
+        }
+
+        // TODO : there are more units int the constants but I don't think that
+        // I need them all.
+        return Constants.MILLIGRAM;
+    }
+
+    static String buildCodeURI(TermClient termClient, CD cd) throws ClientException {
+        final String code = cd.getCode();
+        final String displayName = cd.getDisplayName();
+        final String codeSystem = cd.getCodeSystem();
+        final String codeSystemName = cd.getCodeSystemName();
+        final String codeMsg =
+                String.format("Code [%s, displayName=%s, codeSystem=%s, codeSystemName=%s]", code, displayName, codeSystem, codeSystemName);
+        LOGGER.debug("Search term " + code);
+
+        final String termURI =
+                termClient.getTermURI(code, codeSystem);
+
+        if (termURI == null) {
+            LOGGER.warn("No term with code " + codeMsg);
+        }
+
+        return termURI;
+
     }
 }
