@@ -446,6 +446,7 @@ public class CoreTestData {
             bp1.setEndDate(new Date());
             bp1.setNote("note " + makeSimpleId());
             bp1.setSystemNote(bp1.getNote());
+            bp1.setNewImport(true);
             commonDao.crudSaveResource(bp1, user.getOwnerUri(), "createTestUserForMonitoring");
             //does automatic notify upon save
 
@@ -457,6 +458,7 @@ public class CoreTestData {
             bw1.setEndDate(new Date());
             bw1.setNote("note " + makeSimpleId());
             bw1.setSystemNote(bw1.getNote());
+            bw1.setNewImport(true);
             commonDao.crudSaveResource(bw1, user.getOwnerUri(), "createTestUserForMonitoring");
 
             //    "http://www.icardea.at/phrs/instances/BleedingGums");
@@ -469,6 +471,7 @@ public class CoreTestData {
 
             prob.setNote("note " + makeSimpleId());
             prob.setNote(prob.getSystemNote());
+            prob.setNewImport(true);
             commonDao.crudSaveResource(prob, user.getOwnerUri(), "createTestUserForMonitoring");
 
 
@@ -501,8 +504,9 @@ public class CoreTestData {
             mtm.setDosageTimeOfDay("http://www.icardea.at/phrs/instances/InTheMorning");
 
             res.setTreatmentMatrix(mtm);
-
+            res.setNewImport(true);
             commonDao.crudSaveResource(res, user.getOwnerUri(), "createTestUserForMonitoring");
+
             LOGGER.debug("createTestUserForMonitoring for  fullname " +firstname+" "+ lastname + " ownerUri " + user.getOwnerUri() + " protocolId " + protocolId);
 
 
@@ -636,6 +640,7 @@ public class CoreTestData {
                 bp1.setEndDate(new Date());
                 bp1.setNote("note " + makeSimpleId());
                 bp1.setSystemNote(bp1.getNote());
+                bp1.setNewImport(true);
                 commonDao.crudSaveResource(bp1, user.getOwnerUri(), "CoreTestData createTestUserData");
                 //does automatic notify upon save
             }
