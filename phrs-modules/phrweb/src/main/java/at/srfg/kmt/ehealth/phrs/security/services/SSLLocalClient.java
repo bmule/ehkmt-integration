@@ -49,7 +49,7 @@ final class SSLLocalClient {
 
         ConfigurationService config = ConfigurationService.getInstance();
 
-        String keystoreFilePath = config.getProperty("javax.net.ssl.trustStore","srfg-phrs-web-keystore.ks");
+        String keystoreFilePath = config.getProperty("javax.net.ssl.trustStore","srfg-phrs-core-keystore.ks");
 
         String keystoreFilePassword = config.getProperty("javax.net.ssl.trustStorePassword","icardea");
 

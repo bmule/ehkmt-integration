@@ -551,7 +551,7 @@ public class CoreTestData {
     public static PhrFederatedUser createTestUserData() {
         PhrFederatedUser user = null;
         try {
-            user = createTestUserData(true);
+            user = createTestUserData(false);//dont save objects, it notifies
         } catch (Exception e) {
             LOGGER.error("Error creating user test user data", e);
         }
