@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
+
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import static org.junit.Assert.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericRepositoryException;
@@ -25,6 +26,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  *
  * @version 0.1
@@ -34,24 +36,30 @@ import org.slf4j.LoggerFactory;
 public class ProbmemClientUnitTest {
 
     public static final String NOTE = "Free text note for the problem.";
+
     public static final String START_DATE = "201006010000";
+
     public static final String END_DATE = "201007010000";
+
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>ProbmemClientUnitTest</code>.
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>ProbmemClientUnitTest</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(ProbmemClientUnitTest.class);
+
     private static final String USER = ProbmemClientUnitTest.class.getName();
+
     private GenericTriplestore triplestore;
+
     private ProblemEntryClient problemClient;
 
     /**
      * Runs before any test from this suite and prepare the environment for the
      * next running test.
-     * 
-     * @throws GenericRepositoryException if this occurs then the test 
+     *
+     * @throws GenericRepositoryException if this occurs then the test
      * environment may be wrong set.
      */
     @Before
@@ -63,10 +71,10 @@ public class ProbmemClientUnitTest {
     }
 
     /**
-     * Runs all after any test from this suite and cleans the environment in 
+     * Runs all after any test from this suite and cleans the environment in
      * order that the next test will get a 'clean' environment.
-     * 
-     * @throws GenericRepositoryException 
+     *
+     * @throws GenericRepositoryException
      */
     @After
     public void shutdownSuite() throws GenericRepositoryException {
@@ -76,12 +84,14 @@ public class ProbmemClientUnitTest {
     }
 
     /**
-     * Adds a problem entry  for an owner and tests if all the properties for the 
+     * Adds a problem entry for an owner and tests if all the properties for the
      * vial sign was properly set.
-     * 
-     * @throws TripleException by any triplestore related exeception. 
-     * If this exception occurs then this test fails.
-     * @see ProblemEntryClient#addProblemEntry(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String) 
+     *
+     * @throws TripleException by any triplestore related exeception. If this
+     * exception occurs then this test fails.
+     * @see ProblemEntryClient#addProblemEntry(java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String, java.lang.String,
+     * java.lang.String, java.lang.String)
      */
     @Test
     public void testAddProblemEntryForOwner() throws TripleException {
@@ -169,12 +179,13 @@ public class ProbmemClientUnitTest {
     }
 
     /**
-     * Updates a properties for a given problem entry and prove is this operation 
-     * was successfully.
-     * 
-     * @throws TripleException by any triplestore related exeception. 
-     * If this exception occurs then this test fails.
-     * @see ProblemEntryClient#updateProblemEntry(java.lang.String, java.lang.String, java.lang.String) 
+     * Updates a properties for a given problem entry and prove is this
+     * operation was successfully.
+     *
+     * @throws TripleException by any triplestore related exeception. If this
+     * exception occurs then this test fails.
+     * @see ProblemEntryClient#updateProblemEntry(java.lang.String,
+     * java.lang.String, java.lang.String)
      */
     @Test
     public void testUpdateProblemEnrtyForOwner() throws TripleException {
@@ -374,8 +385,96 @@ public class ProbmemClientUnitTest {
         assertNotNull(resourceURI);
     }
 
-    @Test
-    public void testAddProblemEntry_Risk() throws TripleException {
-        // I am not sure about this
+    /**
+     * Adds a problem entry using a non-URI value for the statusURI and this
+     * raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddProblemEntryWithWrongStatus() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // statusURI is not a valid URL
+
+        problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_CONDITION,
+                "XXX_STATUS",
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+    }
+
+    /**
+     * Adds a problem entry using a non-URI value for the establish URI and this
+     * raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddProblemEntryWithEstabilishCode() throws TripleException {
+
+        // the next statement will reiase a IllegalArgumentException because the 
+        // estabiishURI is not a valid URL
+
+        problemClient.addProblemEntry(
+                OWNER,
+                "XXX_ESTABILISH",
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                HL7V3_FEVER);
+    }
+
+    /**
+     * Adds a problem entry using a non-URI value for the codeValueURI and this
+     * raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddProblemEntryWithWrongValue() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // valueCodeURI is not a valid URL
+
+        problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_CONDITION,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                "VALUE_CODE_XXXX");
+    }
+
+    /**
+     * Adds a problem entry using a null value for the codeValueURI and this
+     * raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddProblemEntryWithNullValue() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // valueCodeURI is not a valid URL (is null)
+
+        problemClient.addProblemEntry(
+                OWNER,
+                HL7V3_CONDITION,
+                STATUS_COMPELETE,
+                START_DATE,
+                END_DATE,
+                NOTE,
+                null);
     }
 }
