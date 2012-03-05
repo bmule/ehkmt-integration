@@ -681,7 +681,7 @@ public class SesameTriplestore
     public Iterable<String> getForPredicatesAndValues(Map<String, String> predicatesValues)
             throws TripleException {
         final String query = buildMultivalueNodeQuery(predicatesValues);
-        LOGGER.debug("Excute qurey : " + query);
+        LOGGER.debug("Excute query : " + query);
 
         try {
             final TupleQuery tupleQuery =
@@ -912,7 +912,7 @@ public class SesameTriplestore
             Map<String, String> predicatesValuesFalse) throws TripleException {
         
         final String query = buildMultivalueNodeQuery(predicatesValuesTrue, predicatesValuesFalse);
-        LOGGER.debug("Excute qurey : " + query);
+        LOGGER.debug("Excute query : " + query);
 
         try {
             final TupleQuery tupleQuery =
