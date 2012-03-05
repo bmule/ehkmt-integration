@@ -9,7 +9,9 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
 import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.ClientException;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
+import at.srfg.kmt.ehealth.phrs.dataexchange.client.TermClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
@@ -50,6 +52,11 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
     private final VitalSignClient client;
 
     /**
+     * The client used to access the all the iCardea terms.
+     */
+    private TermClient termClient;
+
+    /**
      * Builds
      * <code>VitalSignParser</code> instance.
      */
@@ -58,6 +65,7 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
                 TriplestoreConnectionFactory.getInstance();
         triplestore = connectionFactory.getTriplestore();
         client = new VitalSignClient(triplestore);
+        termClient = new TermClient(triplestore);
         client.setCreator(Constants.EHR_OWNER);
     }
 
@@ -111,14 +119,23 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         final POCDMT000040Observation observation = observation_JAXB.getValue();
 
 
-
         LOGGER.debug("Tries to parse this Vital Sign {}", observation);
         final CD code = observation.getCode();
-        buildCodeURI(code);
+        final String codeURI;
+        try {
+            codeURI = Util.buildCodeURI(termClient, code);
+        } catch (ClientException exception) {
+            LOGGER.error("The code information can not be processed, parse fails.");
+            LOGGER.error(exception.getMessage(), exception);
+            return;
+        }
+
+        final CS statusCode = observation.getStatusCode();
+        final String statusURI = Util.getStatusURI(statusCode);
 
         final IVLTS effectiveTime = observation.getEffectiveTime();
         final String effectiveTimeValue = effectiveTime.getValue();
-        System.out.println("effectiveTime -->" + effectiveTimeValue);
+//        System.out.println("effectiveTime -->" + effectiveTimeValue);
 
         final List<ANY> value = observation.getValue();
         if (value.size() != 1) {
@@ -135,61 +152,24 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         }
 
         final String quantityValue = quantity.getValue();
-        final String quantityUnit = quantity.getUnit();
-        System.out.println("quantityValue -->" + quantityValue);
-        System.out.println("quantityUnit -->" + quantityUnit);
+        final String quantityUnitStr = quantity.getUnit();
+        final String unitURI = Util.getUnitURI(quantity);
+        final String vitalSignMsg = String.format(" Vital sign[ owner=%s, code=%s, effectiveTime=%s, statusURI=%s, quantityValue=%s, unitURI=%s]", userId, codeURI, effectiveTimeValue, statusURI, quantityValue, unitURI);
+        try {
+            LOGGER.debug("Tries to persist " + vitalSignMsg);
+            client.addVitalSign(userId,
+                    codeURI,
+                    "importerd from EHR",
+                    effectiveTimeValue,
+                    statusURI,
+                    quantityValue,
+                    unitURI);
+            LOGGER.debug(vitalSignMsg + " was persisted.");
 
-    }
-
-    private String buildCodeURI(CD cd) {
-        final String code = cd.getCode();
-        final String displayName = cd.getDisplayName();
-        final String codeSystem = cd.getCodeSystem();
-        final String codeSystemName = cd.getCodeSystemName();
-
-        System.out.println("code -->" + code);
-        System.out.println("displayName -->" + displayName);
-        System.out.println("codeSystem -->" + codeSystem);
-        System.out.println("codeSystemName -->" + codeSystemName);
-
-        return null;
-    }
-
-    private String buildCodeSystemURI(String codeSystemName, String codeSystemCode) 
-            throws TripleException {
-        final Map<String, String> queryMap = new HashMap<String, String>();
-        // like this I indetify the type
-        queryMap.put(Constants.CODE_SYSTEM_CODE, codeSystemCode);
-
-        final Iterable<String> uris =
-                triplestore.getForPredicatesAndValues(queryMap);
-        final Iterator<String> iterator = uris.iterator();
-        if (!iterator.hasNext()) {
-            
-            final String newCodeSystemURI =
-                    triplestore.persist(Constants.CODE_SYSTEM_CODE, 
-                                        codeSystemCode, 
-                                        ValueType.LITERAL);
-
-            final String name = codeSystemName == null 
-                    ? "NO CODESYSTEM NAME" 
-                    : codeSystemName;
-
-            triplestore.persist(newCodeSystemURI,
-                    Constants.CODE_SYSTEM_NAME,
-                    codeSystemName,
-                    ValueType.LITERAL);
-            
-            final String msg = 
-                    String.format("New code system created. Code System code = %s, code system name %s and code system URI = %s", codeSystemCode, codeSystemName, newCodeSystemURI);
-            LOGGER.debug(msg);
+        } catch (TripleException tripleException) {
+            LOGGER.error("The vital sign graph can not be created.");
+            LOGGER.error(tripleException.getMessage(), tripleException);
         }
-
-        // TODO : this iterator must contain only one element.
-        // build a check here !
-        final String result = iterator.next();
-        return result;
-
     }
 
     @Override

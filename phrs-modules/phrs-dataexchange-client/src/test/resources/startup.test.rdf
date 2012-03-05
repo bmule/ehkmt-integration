@@ -91,7 +91,7 @@
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Gram">
         <skos:prefLabel>gram</skos:prefLabel>
-        <skos:notation>kg</skos:notation>
+        <skos:notation>g</skos:notation>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/MeasureSystem#Tablet">

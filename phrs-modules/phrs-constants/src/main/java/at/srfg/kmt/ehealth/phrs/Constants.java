@@ -111,7 +111,16 @@ public class Constants {
      * This is an instance URI.
      */
     public static final String GRAM = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#Gram";
+    
+    /**
+     * This is an instance URI.
+     */
+    public static final String BPS = ICARDEA_INSTANCES_MESURE_SYSTEM_NS + "#BPS";
+
+    
     public static final String ICARDEA_HL7V3_NS = ICARDEA_NS + "/hl7V3";
+    
+    
     /**
      * The Root template Id property.
      */
