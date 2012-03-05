@@ -528,6 +528,11 @@ public class Constants {
     public static final String OWNER_URI_PIX_TEST_PATIENT = "phr/test/testuser2";
     public static final String EHR_OWNER = "EHR";
     
+    /**
+     * The unique code for the UMLS code system.
+     */
+    public static final String UMLS_CODESYSTEM_CODE = "2.16.840.1.113883.6.86";
+    
     
 
 
