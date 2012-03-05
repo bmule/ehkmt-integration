@@ -169,7 +169,8 @@ public class MedicationClientUnitTest {
      * Adds a medication using a non-URI value for the frequency and this raises
      * a <code>IllegalArgumentException</code>.
      * 
-     * @throws TripleException this test proves this excpetion.
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAddMedicationForOwnerWithWrongFrequency() throws TripleException {
@@ -194,7 +195,8 @@ public class MedicationClientUnitTest {
      * Adds a medication using a non-URI value for the statusURI and this raises
      * a <code>IllegalArgumentException</code>.
      * 
-     * @throws TripleException this test proves this excpetion.
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAddMedicationForOwnerWithWrongStatus() throws TripleException {
@@ -219,7 +221,8 @@ public class MedicationClientUnitTest {
      * Adds a medication using a non-URI value for the adminRouteURI and this raises
      * a <code>IllegalArgumentException</code>.
      * 
-     * @throws TripleException this test proves this excpetion.
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAddMedicationForOwnerWithWrongAdminRoute() throws TripleException {
@@ -244,7 +247,8 @@ public class MedicationClientUnitTest {
      * Adds a medication using a non-URI value for the dousageUnitURI and this raises
      * a <code>IllegalArgumentException</code>.
      * 
-     * @throws TripleException this test proves this excpetion.
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testAddMedicationForOwnerWithWrongDosage() throws TripleException {
