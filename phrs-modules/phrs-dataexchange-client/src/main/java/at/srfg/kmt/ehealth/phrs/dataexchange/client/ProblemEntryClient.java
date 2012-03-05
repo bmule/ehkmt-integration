@@ -126,10 +126,29 @@ public final class ProblemEntryClient {
             String note,
             String valueCode) throws TripleException {
         //check for null or Resource
-        StoreValidator.validateResource("statusURI", statusURI, triplestore);
-        StoreValidator.validateResource("estabilishCode",estabilishCode,triplestore);
-        //check for null
-        StoreValidator.validateNotNull("valueCode",valueCode);
+        //StoreValidator.validateResource("statusURI", statusURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(statusURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("statusURI", statusURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+        //StoreValidator.validateResource("estabilishCode", estabilishCode, triplestore);
+        if (!StoreValidator.isValidReourceValue(estabilishCode)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("estabilishCode", estabilishCode);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        
+        if (!StoreValidator.isValidReourceValue(valueCode)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("valueCode", valueCode);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        
 
         //Acceptable defaults
         final String startDateStr = startDate == null
@@ -137,16 +156,13 @@ public final class ProblemEntryClient {
                 : startDate;
 
         //When Problem is ongoing, the problem does not have an END date
+        //endDate can be null or blank
         final String endDateStr = endDate == null
                 ? ""
                 : endDate;
 
-        //endDate can be null or blank
-
-
         final String subject =
                 triplestore.persist(Constants.OWNER, user, LITERAL);
-
 
         // generic informarion (beside the 'OWNER' they are not really relevant 
         // for the HL7 V3 message)

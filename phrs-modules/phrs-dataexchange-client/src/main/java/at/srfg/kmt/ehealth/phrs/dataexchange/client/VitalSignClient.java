@@ -128,13 +128,39 @@ public final class VitalSignClient {
     public String addVitalSign(String user, String codeURI, String note,
             String date, String statusURI,
             String value, String unitURI) throws TripleException {
-        //check for null or Resource
-        StoreValidator.validateResource("statusURI", statusURI, triplestore);
-        StoreValidator.validateResource("codeURI",codeURI,triplestore);
-        StoreValidator.validateResource("unitURI",unitURI,triplestore);
 
-        //If null date, we default date. StoreValidator.validateNotNull("date",date);
-        StoreValidator.validateNotNull("value",value);
+//        StoreValidator.validateResource("statusURI", statusURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(statusURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("statusURI", statusURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+//        StoreValidator.validateResource("codeURI", codeURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(codeURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("codeURI", codeURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
+//        StoreValidator.validateResource("unitURI", unitURI, triplestore);
+        if (!StoreValidator.isValidReourceValue(unitURI)) {
+            final IllegalArgumentException exception =
+                    StoreValidator.buildWrongReourceValueException("unitURI", unitURI);
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+        
+//        StoreValidator.validateNotNull("value", value);
+        if (value == null) {
+            final NullPointerException exception =
+                    new NullPointerException("The value argument can not be null.");
+            LOGGER.error(exception.getMessage(), exception);
+            throw exception;
+        }
+
 
         //Acceptable defaults
         final String startDateStr = date == null

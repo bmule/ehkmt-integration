@@ -7,6 +7,7 @@
  */
 package at.srfg.kmt.ehealth.phrs.dataexchange.client;
 
+
 import at.srfg.kmt.ehealth.phrs.Constants;
 import static at.srfg.kmt.ehealth.phrs.Constants.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.*;
@@ -20,6 +21,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  *
  * @version 0.1
@@ -29,21 +31,24 @@ import org.slf4j.LoggerFactory;
 public class VitalSignClientUnitTest {
 
     /**
-     * The Logger instance. All log messages from this class
-     * are routed through this member. The Logger name space
-     * is <code>TermClientUnitTest</code>.
+     * The Logger instance. All log messages from this class are routed through
+     * this member. The Logger name space is
+     * <code>TermClientUnitTest</code>.
      */
     private static final Logger LOGGER =
             LoggerFactory.getLogger(VitalSignClientUnitTest.class);
+
     private static final String USER = VitalSignClientUnitTest.class.getName();
+
     private GenericTriplestore triplestore;
+
     private VitalSignClient vitalSignClient;
 
     /**
      * Runs before any test from this suite and prepare the environment for the
      * next running test.
-     * 
-     * @throws GenericRepositoryException if this occurs then the test 
+     *
+     * @throws GenericRepositoryException if this occurs then the test
      * environment may be wrong set.
      */
     @Before
@@ -55,10 +60,10 @@ public class VitalSignClientUnitTest {
     }
 
     /**
-     * Runs all after any test from this suite and cleans the environment in 
+     * Runs all after any test from this suite and cleans the environment in
      * order that the next test will get a 'clean' environment.
-     * 
-     * @throws GenericRepositoryException 
+     *
+     * @throws GenericRepositoryException
      */
     @After
     public void shutdownSuite() throws GenericRepositoryException {
@@ -68,12 +73,13 @@ public class VitalSignClientUnitTest {
     }
 
     /**
-     * Adds a vital signs for an owner and tests if all the properties for the 
+     * Adds a vital signs for an owner and tests if all the properties for the
      * vial sign was properly set.
-     * 
-     * @throws TripleException by any triplestore related exeception. 
-     * If this exception occurs then this test fails.
-     * @see VitalSignClient#addVitalSign(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String) 
+     *
+     * @throws TripleException by any triplestore related exeception. If this
+     * exception occurs then this test fails.
+     * @see VitalSignClient#addVitalSign(java.lang.String, java.lang.String,
+     * java.lang.String, java.lang.String, java.lang.String, java.lang.String)
      */
     @Test
     public void testAddVitalSignForOwner() throws TripleException {
@@ -90,7 +96,7 @@ public class VitalSignClientUnitTest {
         int count = 0;
         Set<String> rootIds = new HashSet<String>();
         for (Triple vitalSign : vitalSigns) {
-            
+
             final String predicate = vitalSign.getPredicate();
             final String value = vitalSign.getValue();
             if (predicate.equals(OWNER)) {
@@ -157,12 +163,13 @@ public class VitalSignClientUnitTest {
     }
 
     /**
-     * Updates a properties for a given vital signs and prove is this operation 
+     * Updates a properties for a given vital signs and prove is this operation
      * was successfully.
-     * 
-     * @throws TripleException by any triplestore related exeception. 
-     * If this exception occurs then this test fails.
-     * @see VitalSignClient#updateVitalSign(java.lang.String, java.lang.String, java.lang.String) 
+     *
+     * @throws TripleException by any triplestore related exeception. If this
+     * exception occurs then this test fails.
+     * @see VitalSignClient#updateVitalSign(java.lang.String, java.lang.String,
+     * java.lang.String)
      */
     @Test
     public void testUpdateVitalSignForOwner() throws TripleException {
@@ -246,14 +253,95 @@ public class VitalSignClientUnitTest {
                 Constants.STATUS_COMPELETE,
                 "100", MM_HG);
         assertNotNull(resourceURI);
-        
+
         vitalSignClient.deleteVitalSign(resourceURI);
-         int counter = 0;
+        int counter = 0;
         final Iterable<Triple> vitalSigns = vitalSignClient.getVitalSignsTriples();
         for (Triple vitalSign : vitalSigns) {
             counter++;
         }
-       
+
         assertEquals(0, counter);
+    }
+
+    /**
+     * Adds a vital sign using a non-URI value for the statusURI and this raises
+     * a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddVitalSignWithWrongStatus() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // statusURI is not a valid URL
+        vitalSignClient.addVitalSign(USER,
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                "XXX_STATUS",
+                "100",
+                MM_HG);
+    }
+
+    /**
+     * Adds a vital sign using a non-URI value for the codeURI and this raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddVitalSignWithWrongCode() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // codeURI is not a valid URL
+        vitalSignClient.addVitalSign(USER,
+                "XXX_CODE",
+                "Free text note for systolic.",
+                "201006010000",
+                Constants.STATUS_COMPELETE,
+                "100",
+                MM_HG);
+    }
+
+    /**
+     * Adds a vital sign using a non-URI value for the unutURI and this raises a
+     * <code>IllegalArgumentException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddVitalSignWithWrongUnit() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // unit uri is not a valid URL
+        vitalSignClient.addVitalSign(USER,
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                Constants.STATUS_COMPELETE,
+                "100",
+                "XXX_unit");
+    }
+
+    /**
+     * Adds a vital sign using a null value for the value and this raises a
+     * <code>NullPointerException</code>.
+     *
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws NullPointerException this test test this exception.
+     */
+    @Test(expected = NullPointerException.class)
+    public void testAddVitalSignWithNullValue() throws TripleException {
+        // the next statement will reiase a IllegalArgumentException because the 
+        // unit uri is not a valid URL
+        vitalSignClient.addVitalSign(USER,
+                ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
+                "Free text note for systolic.",
+                "201006010000",
+                Constants.STATUS_COMPELETE,
+                null,
+                MM_HG);
     }
 }

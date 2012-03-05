@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.Date;
 import java.util.Map;
+import java.util.ResourceBundle;
 import javax.net.SocketFactory;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
@@ -329,8 +330,11 @@ public class PixService implements Serializable {
 //                    String tmp = parts[1];
 //                    port = Integer.parseInt(tmp);
 //                }
-//
+//              salk.server
 //            }
+
+           // ResourceBundle properties = ResourceBundle.getBundle("icardea");
+           // pix_host = properties.getString("salk.server");
 
 
             pix_host = ConfigurationService.getInstance().getProperty("pix.host").trim();

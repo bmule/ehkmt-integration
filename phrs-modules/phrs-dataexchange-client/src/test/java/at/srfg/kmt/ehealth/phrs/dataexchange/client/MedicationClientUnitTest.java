@@ -55,7 +55,7 @@ public class MedicationClientUnitTest {
     private GenericTriplestore triplestore;
 
     private MedicationClient medicationClient;
-    
+
     private DynaBeanClient dynaBeanClient;
 
     public MedicationClientUnitTest() {
@@ -104,10 +104,10 @@ public class MedicationClientUnitTest {
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
-                "MyFreqency",
+                medicationClient.buildNullFrequency(),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                "pillURI",
+                Constants.TABLET,
                 "MyDrug",
                 "MyDrugCode");
         assertNotNull(resourceURI);
@@ -166,6 +166,110 @@ public class MedicationClientUnitTest {
     }
 
     /**
+     * Adds a medication using a non-URI value for the frequency and this raises
+     * a <code>IllegalArgumentException</code>.
+     * 
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMedicationForOwnerWithWrongFrequency() throws TripleException {
+
+        // the next statement will reiase a IllegalArgumentException because the 
+        // frequency is not a valid URL
+        medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                "XXXXFrequency",
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                "1",
+                Constants.PILL,
+                "MyDrug",
+                "MyDrugCode");
+    }
+
+    /**
+     * Adds a medication using a non-URI value for the statusURI and this raises
+     * a <code>IllegalArgumentException</code>.
+     * 
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMedicationForOwnerWithWrongStatus() throws TripleException {
+
+        // the next statement will reiase a IllegalArgumentException because the 
+        // status is not a valid URL
+        medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                "XXXStatus",
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                Constants.HL7V3_ORAL_ADMINISTRATION,
+                "1",
+                Constants.PILL,
+                "MyDrug",
+                "MyDrugCode");
+    }
+
+    /**
+     * Adds a medication using a non-URI value for the adminRouteURI and this raises
+     * a <code>IllegalArgumentException</code>.
+     * 
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMedicationForOwnerWithWrongAdminRoute() throws TripleException {
+
+        // the next statement will reiase a IllegalArgumentException because the 
+        // adminRouteURI is not a valid URL
+        medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                "XXX_ADMIN_ROUTE",
+                "1",
+                Constants.PILL,
+                "MyDrug",
+                "MyDrugCode");
+    }
+
+    /**
+     * Adds a medication using a non-URI value for the dousageUnitURI and this raises
+     * a <code>IllegalArgumentException</code>.
+     * 
+     * @throws TripleException if this exception occurs this test fails.
+     * @throws IllegalArgumentException this test test this exception.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testAddMedicationForOwnerWithWrongDosage() throws TripleException {
+
+        // the next statement will reiase a IllegalArgumentException because the 
+        // dousageUnitURI is not a valid URL
+        medicationClient.addMedicationSign(
+                USER,
+                NOTE,
+                Constants.STATUS_COMPELETE,
+                "201006010000",
+                "201006010000",
+                medicationClient.buildNullFrequency(),
+                "XXX_ADMIN_ROUTE",
+                "1",
+                "XXXX_Pill",
+                "MyDrug",
+                "MyDrugCode");
+    }
+
+    /**
      * Registers a medication and after this it updates the dosage for the
      * registered medication.
      *
@@ -180,7 +284,7 @@ public class MedicationClientUnitTest {
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
-                "MyFreqency",
+                medicationClient.buildNullFrequency(),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
                 Constants.PILL,
@@ -260,10 +364,10 @@ public class MedicationClientUnitTest {
                 Constants.STATUS_COMPELETE,
                 "201006010000",
                 "201006010000",
-                "MyFreqency",
+                medicationClient.buildNullFrequency(),
                 Constants.HL7V3_ORAL_ADMINISTRATION,
                 "1",
-                "pillURI",
+                Constants.PILL,
                 "MyDrug",
                 "MyDrugCode");
         assertNotNull(resourceURI);
@@ -281,18 +385,20 @@ public class MedicationClientUnitTest {
 
     /**
      * Adds a medication with the injection and prove if the information was
-     * properly stored. <br/>
-     * This test mainly proves the <code>HL7V3_INJECTION_ADMINISTRATION</code>
-     * availability.
-     * 
-     * @throws TripleException if this exception raises then this test fails also.
-     * @throws IllegalAccessException  if this exception raises then this test fails also.
-     * @throws InstantiationException  if this exception raises then this test fails also.
+     * properly stored. <br/> This test mainly proves the
+     * <code>HL7V3_INJECTION_ADMINISTRATION</code> availability.
+     *
+     * @throws TripleException if this exception raises then this test fails
+     * also.
+     * @throws IllegalAccessException if this exception raises then this test
+     * fails also.
+     * @throws InstantiationException if this exception raises then this test
+     * fails also.
      * @see Constants#HL7V3_INJECTION_ADMINISTRATION
      */
     @Test
     public void testMedicationWithAdminInjection() throws TripleException, IllegalAccessException, InstantiationException {
-        
+
         final String resourceURI =
                 medicationClient.addMedicationSign(
                 USER,
@@ -307,35 +413,35 @@ public class MedicationClientUnitTest {
                 "MyDrug",
                 "MyDrugCode");
         assertNotNull(resourceURI);
-        
+
         final Iterable<String> medications =
                 medicationClient.getMedicationURIsForUser(USER);
-                int counter = 0;
+        int counter = 0;
         for (String uris : medications) {
             counter++;
         }
         // I expect only one medication
         assertEquals(1, counter);
-        final DynaBean medicationBean = 
+        final DynaBean medicationBean =
                 dynaBeanClient.getDynaBean(resourceURI);
 
         // Here I prove all the  properties for the Injection  (admin route)
-        final DynaBean adminRoute = 
+        final DynaBean adminRoute =
                 (DynaBean) medicationBean.get(Constants.HL7V3_ADMIN_ROUTE);
         assertNotNull(adminRoute);
-        
+
         // here I prove the Injection  (admin route) pref label
         final String prefLabel = (String) adminRoute.get(Constants.SKOS_PREFLABEL);
         assertEquals("Injection, intraarterial", prefLabel);
-        
-        
+
+
         // here I extract the code
         final DynaBean code = (DynaBean) adminRoute.get(Constants.CODE);
-        
+
         // here I prove the code vvalue
         final String codeValue = (String) code.get(Constants.CODE_VALUE);
         assertEquals("IAINJ", codeValue);
-        
+
         // here I extract the code system for the upper tested code
         final DynaBean codeSystem = (DynaBean) code.get(Constants.CODE_SYSTEM);
 
