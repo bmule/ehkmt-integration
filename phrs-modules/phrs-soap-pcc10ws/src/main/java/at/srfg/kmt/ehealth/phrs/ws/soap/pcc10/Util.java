@@ -397,12 +397,56 @@ final class Util {
         final String dosageUnit = Constants.PILL;
         final String unit = pq.getUnit();
 
-        if ("pill".equals(unit)) {
-            return Constants.PILL;
+        if ("pill".equals(unit) || "tablet".equalsIgnoreCase(unit)) {
+            return Constants.PILL;  
         }
 
         if ("mg".equals(unit)) {
             return Constants.MILLIGRAM;
+        }
+
+        if ("Milimeter Hg".equalsIgnoreCase(unit) || "mm[Hg]".equalsIgnoreCase(unit)) {
+            return Constants.MM_HG;
+        }
+
+        if ("Milimeter Hg".equalsIgnoreCase(unit) || "mm[Hg]".equalsIgnoreCase(unit)) {
+            return Constants.MM_HG;
+        }
+
+        if ("Beat per secons".equalsIgnoreCase(unit) || "bps".equalsIgnoreCase(unit)) {
+            return Constants.BPS;
+        }
+
+        if ("Beat per secons".equalsIgnoreCase(unit) || "bps".equalsIgnoreCase(unit)) {
+            return Constants.BPS;
+        }
+
+        if ("centimeter".equalsIgnoreCase(unit) || "cm".equalsIgnoreCase(unit)) {
+            return Constants.CENTIMETER;
+        }
+
+        if ("centimeter".equalsIgnoreCase(unit) || "cm".equalsIgnoreCase(unit)) {
+            return Constants.CENTIMETER;
+        }
+
+        if ("meter".equalsIgnoreCase(unit) || "m".equalsIgnoreCase(unit)) {
+            return Constants.METER;
+        }
+
+        if ("kilogram".equalsIgnoreCase(unit) || "kg".equalsIgnoreCase(unit)) {
+            return Constants.KILOGRAM;
+        }
+
+        if ("gram".equalsIgnoreCase(unit) || "g".equalsIgnoreCase(unit)) {
+            return Constants.GRAM;
+        }
+
+        if ("drops".equalsIgnoreCase(unit)) {
+            return Constants.DROPS;
+        }
+
+        if ("drops".equalsIgnoreCase(unit)) {
+            return Constants.DROPS;
         }
 
         // TODO : there are more units int the constants but I don't think that
