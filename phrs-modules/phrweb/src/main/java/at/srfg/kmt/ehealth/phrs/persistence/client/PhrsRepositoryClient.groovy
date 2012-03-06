@@ -241,7 +241,29 @@ public class PhrsRepositoryClient implements Serializable {
         if (query) return query.get()
         else return null
     }
+    public List crudReadAllResourcesByClass(def clazz) {
+        //
+        List list = null
 
+        if (clazz) {
+
+            try {
+                Datastore store = getPhrsDatastore()
+                //list = store.find(clazz).order('-createDate').asList()
+                Query q = store.createQuery(clazz).order("-createDate");
+                list = q.asList()
+               /// list = store.find(clazz).asList()
+                   //.order('-createDate')
+            } catch (Exception e) {
+
+                LOGGER.error(' ownerUri=' + ' ' + clazz, e)
+            }
+
+        }
+
+        if (!list) list = []
+        return list
+    }
     public List crudReadResources(String healthProfileId, def clazz) {
         //
         List list = null

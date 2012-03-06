@@ -99,12 +99,10 @@ public class UserService extends CommonDao implements Serializable {
     }
 
     public List getResources(String theOwnerUri, Class entityClazz) {
-        //load the primary model from storage
 
         List temp = phrsRepositoryClient.crudReadResources(theOwnerUri, entityClazz)
-        if (!temp) temp = []//new BindingListModelList([],true)
+        if (!temp) temp = []
         return temp
-        //to be clear, not needed by groovy
     }
     /**
      * Uses the session phrId as ownerUri

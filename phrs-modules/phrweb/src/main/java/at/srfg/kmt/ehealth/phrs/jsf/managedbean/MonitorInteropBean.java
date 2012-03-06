@@ -339,7 +339,7 @@ public class MonitorInteropBean implements Serializable {
             } else {
                 if(ConfigurationService.isAppModeTest()) {
                     CoreTestData.addTestMedicationsPhr(getOwnerUri());
-                    LOGGER.debug("addTestMedicationsPhr");
+                    LOGGER.debug("addTestMedicationsPhr owner="+getOwnerUri());
                 } else {
                     LOGGER.debug("import no records found");
                     WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");

@@ -55,27 +55,16 @@ public class MonitorInfoMgtBean implements Serializable {
     // for dialogs or forms to control view or edit mode of fields
     private String modify = AuthorizationService.MODIFY_YES;
 
-    private boolean testMedicalRole=false;
+    //private boolean testMedicalRole=false;
 
 
     public MonitorInfoMgtBean() {
         userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
         requestorOwnerUri = userService.getOwnerUri();
 
-        
-        
         ownerUri = userService.getOwnerUri();
 
-
         hasMedicalRole = UserSessionService.sessionUserHasMedicalRole();
-
-        if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
-            testMedicalRole=true;
-            hasMedicalRole=true;
-            UserSessionService.putSessionAttributeString(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
-                    PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR);
-            LOGGER.debug("phrtest* found, setting role to doctor");
-        }
 
         if (hasMedicalRole) {
             showFormType = ROLEGROUP_MEDICAL;
@@ -85,7 +74,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
         }
 
-    // consent.mode.roletest
+        // consent.mode.roletest
 //isAllHealthinfoAccessibleByRole  isHealthInfoAccessibleByRole
 
         CoreTestData.createTestUsersForMonitoring();
@@ -129,7 +118,7 @@ public class MonitorInfoMgtBean implements Serializable {
     //UI action Need params: selected...
     public void findResourcesByUserAndType() {
         System.out.println("findResourcesByUserAndType");
-        LOGGER.debug("findResourcesByUserAndType selectedOwnerUri="+selectedOwnerUri+" selectedLocalResourceType="+selectedLocalResourceType);
+        LOGGER.debug("findResourcesByUserAndType selectedOwnerUri=" + selectedOwnerUri + " selectedLocalResourceType=" + selectedLocalResourceType);
         initModelResults();
     }
 
@@ -144,20 +133,20 @@ public class MonitorInfoMgtBean implements Serializable {
             showFormType = "";
         }
         //use phrtest* to simulate role
-        if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
-            testMedicalRole=true;
-        }
+        //if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
+        //    testMedicalRole=true;
+        //}
         //selectedOwnerUri, selectedLocalResourceType, selectedTest
         modelMain = new ArrayList();
 
         //be sure, issue with viewscope
 
         testMode = selectedTest != null && ("true".equalsIgnoreCase(selectedTest));
-        LOGGER.debug("initModelResults selectedOwnerUri"+selectedOwnerUri+" ownerUri="+ ownerUri+" selectedLocalResourceType="+selectedLocalResourceType);
+        LOGGER.debug("initModelResults selectedOwnerUri" + selectedOwnerUri + " ownerUri=" + ownerUri + " selectedLocalResourceType=" + selectedLocalResourceType);
         if (selectedOwnerUri != null && selectedLocalResourceType != null) {
 
             boolean granted = false;
-            if (ownerUri != null  && selectedOwnerUri.equals(ownerUri)) {
+            if (ownerUri != null && selectedOwnerUri.equals(ownerUri)) {
                 LOGGER.debug("selectedOwnerUri= ownerUri");
                 granted = true;
                 showFormType = "";
@@ -175,7 +164,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
             loadModelMainByUserAndResourceType(selectedOwnerUri, selectedLocalResourceType);
 
-            if(ownerUri !=null && ! ownerUri.equals(selectedOwnerUri)){
+            if (ownerUri != null && !ownerUri.equals(selectedOwnerUri)) {
                 showGrantOutcomeMessage(granted);
             }
 
@@ -189,32 +178,32 @@ public class MonitorInfoMgtBean implements Serializable {
 
     private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType) {
         if (targetOwnerUri != null && localResourceType != null) {
-           int count=-1;
+            int count = -1;
 
-           if ("BW".equals(localResourceType)) {
+            if ("BW".equals(localResourceType)) {
                 modelMain = userService.getResourcesVitalBodyWeight(targetOwnerUri);
-               count = modelMain == null ? -1 : modelMain.size() ;
-               LOGGER.debug("getResourcesVitalBodyWeight count="+count);
+                count = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("getResourcesVitalBodyWeight count=" + count);
 
             } else if ("BP".equals(localResourceType)) {
                 modelMain = userService.getResourcesVitalBloodPressure(targetOwnerUri);
-               count = modelMain == null ? -1 : modelMain.size() ;
-               LOGGER.debug("getResourcesVitalBloodPressure count="+count);
+                count = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("getResourcesVitalBloodPressure count=" + count);
 
             } else if ("MED".equals(localResourceType)) {
                 modelMain = userService.getResourcesMedication(targetOwnerUri);
-               count = modelMain == null ? -1 : modelMain.size() ;
-               LOGGER.debug("getResourcesMedication count="+count);
+                count = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("getResourcesMedication count=" + count);
 
             } else if ("PROBLEM".equals(localResourceType)) {
                 modelMain = userService.getResourcesProblem(targetOwnerUri);
-               count = modelMain == null ? -1 : modelMain.size() ;
-               LOGGER.debug("getResourcesProblem count="+count);
+                count = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("getResourcesProblem count=" + count);
 
             } else if ("ADL".equals(localResourceType)) {
                 modelMain = userService.getResourcesADL(targetOwnerUri);
-               count = modelMain == null ? -1 : modelMain.size() ;
-               LOGGER.debug("getResourcesADL count="+count);
+                count = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("getResourcesADL count=" + count);
             }
         }
         if (modelMain == null) modelMain = new ArrayList();
@@ -245,6 +234,7 @@ public class MonitorInfoMgtBean implements Serializable {
         boolean granted = false;
 
         if (targetOwnerUri != null && requestorOwnerUri != null && targetOwnerUri.equals(requestorOwnerUri)) {
+
             granted = true;
 
         } else {
@@ -283,15 +273,18 @@ public class MonitorInfoMgtBean implements Serializable {
         LOGGER.debug("START initFormModel ");
 
         try {
-            List<PhrFederatedUser> phrUsers = userService.getResources(null, PhrFederatedUser.class);
+
 
             modelFormUserList = new ArrayList<ModelLabelValue>();
 
+            // if(if (UserSessionService.isSessionUser(requestorOwnerUri)) {
 
+            //create pull down menu of users, but not for non-medical now...
             if (requestorOwnerUri != null) {
 
-                if (UserSessionService.sessionUserHasMedicalRole()) {
+                if (!UserSessionService.sessionUserHasMedicalRole()) {
                     PhrFederatedUser ph = userService.getPhrUser(requestorOwnerUri);
+                    LOGGER.debug("create model for pull down menu for only single user, this is not display on form");
                     if (ph != null) {
                         ModelLabelValue lv = createUserLabelValue(ph);
                         modelFormUserList.add(lv);
@@ -300,18 +293,23 @@ public class MonitorInfoMgtBean implements Serializable {
                     }
 
                 } else {
-
-                    for (PhrFederatedUser ph : phrUsers) {
-                        //skip any reports for medical user
-                        if (UserSessionService.sessionUserHasMedicalRole()) {
-                            if (ph.getOwnerUri().equals(requestorOwnerUri)) {
-                                continue;
+                    List<PhrFederatedUser> phrUsers = userService.getPhrUsersAll();//getResources(null, (Object)PhrFederatedUser.class);
+                    if (phrUsers != null) {
+                        LOGGER.debug("create pull down menu for medical user " + phrUsers.size());
+                        for (PhrFederatedUser ph : phrUsers) {
+                            //skip any reports for medical user
+                            if (UserSessionService.sessionUserHasMedicalRole()) {
+                                if (ph.getOwnerUri().equals(requestorOwnerUri)) {
+                                    continue;
+                                }
+                            }
+                            if (ph.getOwnerUri() != null) {
+                                ModelLabelValue lv = createUserLabelValue(ph);
+                                modelFormUserList.add(lv);
                             }
                         }
-                        if (ph.getOwnerUri() != null) {
-                            ModelLabelValue lv = createUserLabelValue(ph);
-                            modelFormUserList.add(lv);
-                        }
+                    } else {
+                        LOGGER.debug("create pull down menu for medical user, query results phrUsers are null  ");
                     }
                 }
             } else {

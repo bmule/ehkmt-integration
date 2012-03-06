@@ -119,17 +119,12 @@ modelFormLocalResources
 <p>
     Health information for:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
 </p>
-
+<!--
 <p>
     <h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>
 </p>
-<!--
-<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
-    test 1
-</h:panelGroup>
-<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType == 'BW'}">
-    test 2
-</h:panelGroup>
+
+
 -->
 
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
@@ -245,7 +240,7 @@ modelFormLocalResources
 
             <p:column headerText="#{labels['default.medicationDosage.label']}" style="width:150px;">
                 <h:outputLabel value="#{theItem.treatmentMatrix.dosage}"/>
-                <p:spacer width="1"/>
+                <p:spacer width="2"/>
                 <h:outputLabel value="#{theItem.treatmentMatrix.dosageUnits}">
                     <f:converter converterId="labelLookup"/>
                 </h:outputLabel>

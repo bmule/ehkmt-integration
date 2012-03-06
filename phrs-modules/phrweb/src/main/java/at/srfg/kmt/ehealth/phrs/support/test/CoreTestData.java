@@ -268,6 +268,8 @@ public class CoreTestData {
         Date dateEnd = DateUtil.getFormatedDate(dateEndStr);
         Date dateBegin = DateUtil.getFormatedDate(datebeginStr);
 
+        med.setBeginDate(dateBegin);
+        med.setEndDate(dateEnd);
 
         String localStatus = InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS);
 
@@ -291,6 +293,8 @@ public class CoreTestData {
 
         String tod = "http://www.icardea.at/phrs/instances/NotSpecified";
         med.getTreatmentMatrix().setDosageTimeOfDay(tod);
+        
+
 
         med.setNewImport(true);
         return med;
@@ -302,7 +306,8 @@ public class CoreTestData {
         m.setName(label);
         return m;
     }
-    public static List<MonitorInfoItem> createMedicationMonitorInfoItems(String owner){
+
+    public   static List<MonitorInfoItem> createMedicationMonitorInfoItems(String owner){
         List<MonitorInfoItem> list =new ArrayList<MonitorInfoItem>();
         if (owner != null) {
 
@@ -366,7 +371,7 @@ public class CoreTestData {
         }  
         return list;
     }
-    public static int addTestMedicationsPhr(String owner) {
+    public static synchronized  int addTestMedicationsPhr(String owner) {
         int countAdded = 8;//update this if added more manually...needed by tests
 
         if (owner != null) {
@@ -381,6 +386,7 @@ public class CoreTestData {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
                                     "200812010000", "201106101010", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
+                    
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 

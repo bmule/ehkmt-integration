@@ -39,10 +39,10 @@
                     <p:commandLink value="Logout" style="font-weight:bold"
                                    actionListener="#{loginBean.commandLogout}"/>
                 </h:form>
-                <h:panelGroup>
-                    <h:outputLabel value="#{loginBean.role}" style="font-style: italic; font-size: 10px"/>
-                </h:panelGroup>
-                <br/> <h:outputLabel value="#{loginBean.greetname}"/>
+
+              <h:outputLabel value="#{loginBean.greetname}"/>
+                &nbsp;
+               <h:outputLabel value="#{loginBean.role}" style="font-style: italic; font-size: 10px"/>
 
             </h:panelGroup>
         </p:panel>
@@ -51,7 +51,7 @@
         <p:panel rendered="#{loginBean.loggedIn eq true}">
             <h:form id="tvreeform">
                 <p:growl id="messages" showDetail="true"/>
-                <!-- dynamic="true" -->
+
                 <p:tree id="treeSingle" value="#{menuBean.root}" var="ref"
                         cache="false" dynamic="true"
                         nodeSelectListener="#{menuBean.onNodeSelect}"

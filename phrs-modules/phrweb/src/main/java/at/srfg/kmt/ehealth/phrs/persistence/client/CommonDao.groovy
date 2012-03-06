@@ -108,8 +108,28 @@ public class CommonDao {
         return value
     }
 
+    public List getResourcesByOwnerAndResource(String theOwnerUri, Class entityClazz) {
+
+        List temp = phrsRepositoryClient.crudReadResources(theOwnerUri, entityClazz)
+        if (!temp) temp = []
+        return temp
+
+    }
+
+
     public ProfileContactInfo getProfileContactInfo(String theOwnerUri) {
         return (ProfileContactInfo) getResourceSingle(ProfileContactInfo.class, false, theOwnerUri)
+    }
+
+    public List<PhrFederatedUser> getPhrUsersAll(){
+         return getResourcesByClass(PhrFederatedUser.class)
+    }
+
+    public List getResourcesByClass(Class entityClazz) {
+
+        List temp = phrsRepositoryClient.crudReadAllResourcesByClass( entityClazz)
+        if (!temp) temp = []
+        return temp
     }
     /**
      *
@@ -197,7 +217,8 @@ public class CommonDao {
                     user.setUserId(userId);
                     user.setCanLocalLogin(true)
                     user.setIdentifier(userId);//init to local identifier, but could later assign to an OpenId.
-                    user.setRole(PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
+                    user.setRole(userId.contains("doc") ? PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR: PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_USER_LOCAL_LOGIN);
+
                     //remove
                     if (userId.equals(testUser)) {//if(userId.equals(PhrsConstants.AUTHORIZE_USER_PREFIX_TEST)){
                         //phrtest user

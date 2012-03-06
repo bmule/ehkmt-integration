@@ -81,11 +81,7 @@
 				    <ui:include src="/sections/menunavigator.xhtml" />
                 </p:outputPanel>
 			</p:layoutUnit>
-			<!--<p:layoutUnit position="right" header="RIGHT" width="200">
-				<h:outputText value="Right Content" />
-			</p:layoutUnit> -->
 			
-			 <!-- restrict access to center content area rendered=" {loginBean.loggedIn eq false}"-->
 			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq false}">
 				<div id="content" class="ui-widget"  style="width:100%;" >
 				     

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
@@ -42,39 +42,30 @@
     -->
 
     <ui:define name="content">
-        <p:fieldset legend="Import Health Data"> 
+        <p:fieldset legend="Import Health Data">
             <p>
-            There might be Electronic Health Records available from your hospital.
+                There might be Electronic Health Records available from your hospital.
             </p>
+
             <p>
-            Please Provide either your CIED Implant identifier or your patient identifier. 
-            Your Patient ID will be validated so that you might send and receive data from the hospital.
-            The status of your identifier will be indicated below.
+                Please Provide either your CIED Implant identifier or your patient identifier.
+                Your Patient ID will be validated so that you might send and receive data from the hospital.
+                The status of your identifier will be indicated below.
             </p>
             <br/>
-            
-            <p:messages/>
+
+            <!--<p:messages/>   -->
             <p:growl id="msgs" showDetail="true"/>
 
             <h:form>
-                <h:panelGrid columns="3" border="1" style="border-style:thin solid;border-color:grey;">
-       
-                    <h:outputLabel value="Status of your CIED and Patient Identifiers"/>
+
+                <h:panelGrid columns="2" border="0" style="border-style:thin solid;border-color:grey;">
+                    <f:facet name="header">
+                        <h:outputLabel value="If necessary, please update your CIED Implant Identifier"/>
+                    </f:facet>
+
                     <h:outputLabel value="ID Type"/>
-                    <h:outputLabel value="Code"/>
-
-                    <h:panelGroup>                      
-                        <p:commandButton  ajax="false"
-                                          value="Update"
-                                          rendered="#{interopBean.allowCommandIdentify}"
-                                          title="Submit"
-                                          image="ui-icon-arrowrefresh-1-w"
-                                          actionListener="#{interopBean.commandProcessIdentifier}"
-                                          />
-                        <h:outputLabel value="#{interopBean.statusMessagePid}"/>
-                    </h:panelGroup> 
-
-                    <h:panelGroup>                
+                    <h:panelGroup>
                         <h:selectOneMenu value="#{interopBean.pixQueryIdType}"
                                          id="field_pixQueryIdType_input"
                                          rendered="#{interopBean.modify eq 'yes'}"
@@ -91,42 +82,55 @@
                         <p:message for="field_pixQueryIdType_input" display="text"/>
                     </h:panelGroup>
 
-
-                    <h:panelGroup> 
+                    <h:outputLabel value="Identifier /Serial No."/>
+                    <h:panelGroup>
                         <p:inputText value="#{interopBean.pixQueryIdUser}"
                                      id="field_pixQueryIdUser_input"
-                                     required="true" 
+                                     required="true"
                                      requiredMessage="#{labels['default_required_field']}"/>
 
-                        <p:message for="field_pixQueryIdUser_input" display="text"/>                           
+                        <p:message for="field_pixQueryIdUser_input" display="text"/>
                     </h:panelGroup>
 
-
+                    <h:outputLabel value=""/>
+                    <h:panelGroup>
+                        <p:commandButton ajax="false"
+                                         value="Update"
+                                         rendered="#{interopBean.allowCommandIdentify}"
+                                         title="Submit"
+                                         image="ui-icon-arrowrefresh-1-w"
+                                         actionListener="#{interopBean.commandProcessIdentifier}"
+                                />
+                        <h:outputLabel value="#{interopBean.statusMessagePid}"/>
+                    </h:panelGroup>
 
 
                 </h:panelGrid>
             </h:form>
 
+            <p>&nbsp;</p>
+
+            <p>&nbsp;</p>
             <p:toolbar>
                 <p:toolbarGroup align="left">
                     <h:form>
 
 
-                        <p:commandButton  ajax="false"
-                                          value="Import Data"
-                                          image="ui-icon-disk"
-                                          actionListener="#{interopBean.commandImportMessages}"
-                                          />
+                        <p:commandButton ajax="false"
+                                         value="Import Data"
+                                         image="ui-icon-disk"
+                                         actionListener="#{interopBean.commandImportMessages}"
+                                />
                         Import the following health records from the Hospital
-                    </h:form>       
+                    </h:form>
                 </p:toolbarGroup>
             </p:toolbar>
 
             <!-- ajax="false" removed prepend-->
             <h:form>
                 <p:dataTable widgetVar="widItemTableMphr" id="idItemTableMphr"
+                             paginator="true" rows="6"
                              var="theItem" value="#{interopBean.modelMain}">
-
 
 
                     <p:column headerText="Type"
@@ -167,10 +171,12 @@
 
                 </p:dataTable>
             </h:form>
+
             <p>
-                Click here to go to your  
-                <u> 
-                    <h:outputLink  value="#{request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText value="Medications List" style="font-size:10pt;"/></h:outputLink>
+                Click here to go to your
+                <u>
+                    <h:outputLink value="#{request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText
+                            value="Medications List" style="font-size:10pt;"/></h:outputLink>
                 </u>
             </p>
         </p:fieldset>
