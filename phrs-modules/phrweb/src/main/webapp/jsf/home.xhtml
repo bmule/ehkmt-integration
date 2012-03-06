@@ -15,11 +15,16 @@
 	<ui:define name="content">
         <p:messages showDetail="true" autoUpdate="true"/>
 		<p:fieldset toggleable="false" legend="Home">
+            <!--message says Please choose an option from the side menu....-->
 			<h:outputText value="#{labels['message_home']}" />
-			
-			<h:panelGroup rendered="#{loginBean.loggedIn eq true}">
+	<!--
+						<h:panelGroup rendered="#{loginBean.loggedIn eq true}">
 				<ui:include src="./home_content.xhtml" />
 			</h:panelGroup>
+			-->
+
+				<ui:include src="./home_content.xhtml" />
+
 			
 			<!--  
 			<p:panel collapsed="true"  closable="false" toggleable="true" header="Table of Contents"  style="width:100%">

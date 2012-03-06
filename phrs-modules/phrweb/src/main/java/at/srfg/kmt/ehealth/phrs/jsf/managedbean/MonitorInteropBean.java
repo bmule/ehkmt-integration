@@ -6,6 +6,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
@@ -14,6 +15,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+
+import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 // View scope complains about Audit client not serializable
@@ -87,10 +90,21 @@ public class MonitorInteropBean implements Serializable {
      */
     private void initModelMain() {
         LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
+
         List transformedMsgs = interopProcessor.importNewMessages(
                 getOwnerUri(),
                 Constants.PHRS_MEDICATION_CLASS,
                 false); //false, do not import new Messages, only report
+        int count=transformedMsgs == null ? -1 :transformedMsgs.size();
+        if(transformedMsgs != null && ! transformedMsgs.isEmpty()){
+            //ok
+            LOGGER.debug("transformedMsgs. OK found interop meds found count="+count);
+        } else {
+
+            LOGGER.debug("transformedMsgs. No interop meds found, create test data count=");
+            transformedMsgs=CoreTestData.createMedicationMonitorInfoItems(getOwnerUri());
+
+        }
         LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri());
 
 
@@ -320,10 +334,18 @@ public class MonitorInteropBean implements Serializable {
                 //reset model main, in request scope
                 //if reshow....setModelMain(transformedMsgs);
                 WebUtil.addFacesMessageSeverityInfo("Import Status", "Successfully imported " + count + " Medication records. Please check your Medications list");
+                LOGGER.debug("import OK, records found="+count);
 
             } else {
+                if(ConfigurationService.isAppModeTest()) {
+                    CoreTestData.addTestMedicationsPhr(getOwnerUri());
+                    LOGGER.debug("addTestMedicationsPhr");
+                } else {
+                    LOGGER.debug("import no records found");
+                    WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
+                }
 
-                WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
+                //WebUtil.addFacesMessageSeverityWarn("Import Status", "There are no Medication records to import");
             }
         } catch (Exception e) {
             LOGGER.error("Error with commandImportMessages", e);

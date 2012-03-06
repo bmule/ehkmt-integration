@@ -15,17 +15,18 @@
 <h:body>
     <ui:composition>
 
+        <!--
+     systemStatus=<h:outputLabel value="#{loginBean.systemStatus}"/>
+        -->
         <h:panelGroup rendered="#{loginBean.systemStatus eq true}">
-            There was a system failure. Access to the system or data is not possible.
-        </h:panelGroup>
-
-        <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq true}">
-                Please use the side menu to access the patient reports.
+                Please use the side menu to access patient reports.
             </h:panelGroup>
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq false}">
+
+                <h:outputText value="#{labels['message_home']}"/>
 
                 <p>Your CIED serial number of your implant is important for registering your data in the iCARDEA system. Please
                     update this information by selecting the menu option
@@ -46,6 +47,12 @@
                 </p>
             </h:panelGroup>
         </h:panelGroup>
+        <!-- system failure notice to user, e.g. a database was not started etc -->
+        <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
+            There was a system failure, undfortuately access to the system or data is not possible.
+        </h:panelGroup>
+
+
     </ui:composition>
 </h:body>
 </html>

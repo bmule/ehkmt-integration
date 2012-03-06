@@ -182,8 +182,12 @@ public class UserSessionService {
                 if (role != null && !role.isEmpty()) {
                     sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
                             role);
-                    //phrUser.getRole());
+
                 }
+
+                //FIXXME PID Consent editor test
+                updateSessionProtocolIdTest(phrUser);
+
                 //sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE, model.getRole());
                 try {
                     String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
@@ -251,7 +255,10 @@ public class UserSessionService {
                     phrUser.getRole());
 
             String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
-            
+
+            //FIXXME PID Consent editor test
+            updateSessionProtocolIdTest(phrUser);
+
             if (greetName != null) {
                 putSessionAttributeString(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
             }
@@ -260,6 +267,23 @@ public class UserSessionService {
             throw new Exception("UserId null or blank");
         }
         return phrUser;
+    }
+    public static String SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR="protocolid";
+
+    public static void updateSessionProtocolId(String pid){
+        putSessionAttributeString(SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR, pid);
+    }
+    public static void updateSessionProtocolIdTest(PhrFederatedUser phrUser){
+        if(phrUser!=null){
+            String protocolId=phrUser.getProtocolId(); //getCommonDao().getProtocolId(phrUser.getOwnerUri());
+            if(protocolId !=null && ! protocolId.isEmpty()){
+                //
+            }  else {
+                protocolId="191";
+            }
+            LOGGER.debug("updateSessionProtocolIdTest PID="+protocolId+" phruser.identifier="+phrUser.getIdentifier()+" owner="+phrUser.getOwnerUri());
+            updateSessionProtocolId(protocolId);
+        }
     }
     /**
     * @deprecated
@@ -1116,6 +1140,7 @@ public class UserSessionService {
         boolean status=false;
         try {
             status=PhrsStoreClient.getInstance().getSystemStatus();
+            LOGGER.debug("getSystemStatus ="+status);
         } catch (Exception e) {
             LOGGER.error("getSystemStatus exception, system really failed");
         }

@@ -350,7 +350,7 @@ public class CommonDao {
 
     public List getResourcesMedication(String ownerUri){
 
-        return getResourcesVitalBodyWeight(ownerUri)
+        return crudReadMedicationResources(ownerUri)
     }
 
     public List getResourcesVitalBloodPressure(String ownerUri){

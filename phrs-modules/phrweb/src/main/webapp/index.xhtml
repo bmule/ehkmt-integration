@@ -15,11 +15,13 @@
 	<ui:define name="content">
         <p:messages  showDetail="true" autoUpdate="true"/>
 		<p:fieldset toggleable="false" legend="Home">
-			<h:outputText value="#{labels['message_home']}" />
+            <ui:include src="./jsf/home_content.xhtml" />
+
+            <!-- no, there is a system failure message in this content
 			<h:panelGroup rendered="#{loginBean.loggedIn eq true}">
 				<ui:include src="./jsf/home_content.xhtml" />
 			</h:panelGroup>
-			
+			-->
 
 		</p:fieldset>
 	</ui:define>

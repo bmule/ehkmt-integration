@@ -48,79 +48,94 @@ modelFormUserList
 modelFormLocalResources
 
 -->
-odelResourceType
+
 <ui:define name="content">
 
 <p:fieldset legend="Monitor Personal Health Information">
-
+<!--update="idPanelObp" -->
 <h:form>
-    <p:toolbar>
-        <p:toolbarGroup align="left">
-            <h:panelGroup>
-                <!--update="idPanelObp" -->
+    <p:growl id="msgs" showDetail="true"/>
+    <!--<p:toolbar>
+        <p:toolbarGroup align="left">   -->
+    <h:panelGroup>
 
-                <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
-                    <h:selectOneMenu id="field_2_input"
-                                     required="true"
-                                     layout="pageDirection"
-                                     value="#{monmgtBean.selectedOwnerUri}">
+        <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
+            <h:outputLabel value="Patient:"/>
+            <h:selectOneMenu id="field_2_input"
+                             required="true" requiredMessage="Please select a user"
+                             layout="pageDirection"
+                             value="#{monmgtBean.selectedOwnerUri}">
 
-                        <f:selectItem itemLabel="Please select a User" noSelectionOption="true"
-                                      itemValue=""/>
-                        <f:selectItems
-                                value="#{monmgtBean.selectedOwnerUri}"
-                                var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
-                    </h:selectOneMenu>
+                <f:selectItem itemLabel="Please select a User" noSelectionOption="true"
+                              itemValue=""/>
+                <f:selectItems
+                        value="#{monmgtBean.selectedOwnerUri}"
+                        var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
+            </h:selectOneMenu>
+            <p:message for="field_2_input" display="text"/>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+            <h:inputHidden value="#{monmgtBean.selectedOwnerUri}"/>
+        </h:panelGroup>
+
+        <h:panelGroup>
+            <h:outputLabel value="Display information about:"/>
+            <h:selectOneRadio id="field_3_input"
+                              required="true" requiredMessage="Please choose"
+                              layout="pageDirection"
+                              value="#{monmgtBean.selectedLocalResourceType}">
+                <!--f:selectItem itemLabel="Please Select Information type" noSelectionOption="true"
+                itemValue=""/-->
+                <f:selectItems
+                        value="#{monmgtBean.modelFormLocalResources}"
+                        var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
+            </h:selectOneRadio>
 
 
-                    <p:message for="field_2_input" display="text"/>
-                </h:panelGroup>
-
-                <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
-                    <h:inputHidden value="#{monmgtBean.selectedOwnerUri}"/>
-                </h:panelGroup>
-
-                <h:panelGroup>
-                    <h:selectOneRadio id="field_3_input"
-                                      required="true"
-                                      layout="pageDirection"
-                                      value="#{monmgtBean.selectedLocalResourceType}">
-                        <f:selectItem itemLabel="Please Select Information type" noSelectionOption="true"
-                                      itemValue=""/>
-                        <f:selectItems
-                                value="#{monmgtBean.modelFormLocalResources}"
-                                var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
-                    </h:selectOneRadio>
+            <p:message for="field_3_input" display="text"/>
+        </h:panelGroup>
 
 
-                    <p:message for="field_3_input" display="text"/>
-                </h:panelGroup>
+        <p:commandButton value="Find Patient Info" rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}"
+                         title="Find"
+                         image="ui-icon ui-icon-search"
+                         actionListener="#{monmgtBean.findResourcesByUserAndType}"
+                         ajax="false"/>
 
-                <p:commandButton value="Find Patient Info"
-                                 title="Find"
-                                 image="ui-icon-plus"
-                                 actionListener="#{monmgtBean.findResourcesByUserAndType}"
-                                 ajax="false"/>
-            </h:panelGroup>
-            <!-- <p:spacer width="2px"/> -->
-
-        </p:toolbarGroup>
-    </p:toolbar>
+        <p:commandButton value="List Health Info" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"
+                         title="Find"
+                         image="ui-icon ui-icon-search"
+                         actionListener="#{monmgtBean.findResourcesByUserAndType}"
+                         ajax="false"/>
+    </h:panelGroup>
+    <!-- <p:spacer width="2px"/> -->
+    <!--
+       </p:toolbarGroup>
+   </p:toolbar> <p:messages/>-->
 </h:form>
 
-<p:messages/>
-<p:growl id="msgs" showDetail="true"/>
 
-User: <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
-(<h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>)
-<br/>
+<p>
+    Health information for:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
+</p>
 
-<h:form prependId="false">
+<p>
+    <h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>
+</p>
+<!--
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
+    test 1
+</h:panelGroup>
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType == 'BW'}">
+    test 2
+</h:panelGroup>
+-->
 
-    <p:dataTable widgetVar="widItemTableMonitormgt" id="idItemTableMonitormgt"
-                 var="theItem" value="#{monmgtBean.modelMain}">
-
-        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
+    <h:form prependId="false">
+        <p:dataTable widgetVar="widItemTableMonitorBP" id="idItemTableMonitorBP"
+                     var="theItem" value="#{monmgtBean.modelMain}">
             <p:columnGroup type="header">
 
                 <p:row>
@@ -148,113 +163,181 @@ User: <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
                 <h:outputLabel value="#{theItem.heartRate}"/> <h:outputLabel value=" bpm"/>
             </p:column>
 
+
             <p:column>
+                <h:outputText value="#{theItem.note}" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"/>
+            </p:column>
+
+        </p:dataTable>
+    </h:form>
+</h:panelGroup>
+  <!-- {labels['short.dateStart.label']}-->
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
+    <h:form prependId="false">
+        <p:dataTable widgetVar="widItemTableMonitorBW" id="idItemTableMonitorBW"
+                     var="theItem" value="#{monmgtBean.modelMain}">
+
+            <p:column headerText="Date" sortBy="#{theItem.beginDate}">
+                <h:outputLabel value="#{theItem.beginDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}">
+                <h:outputLabel value="#{theItem.bodyWeight}"/> kg
+            </p:column>
+            <p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}">
+                <h:outputLabel value="#{theItem.bmi}"/>
+            </p:column>
+            <p:column
+                    headerText="#{labels['obsBodyWeightBMW01.height.label']}">
+                <h:outputLabel value="#{theItem.bodyHeight}"/> cm
+            </p:column>
+
+            <p:column>
+                <h:outputText value="#{theItem.note}" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+</h:panelGroup>
+
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'MED'}">
+    <h:form prependId="false">
+        <p:dataTable widgetVar="widItemTableMonitorMED" id="idItemTableMonitorMED"
+                     var="theItem" value="#{monmgtBean.modelMain}">
+
+            <p:column headerText="#{labels['medicationSummary.medicationNameText.label']}">
+
+                <h:outputLabel value="#{theItem.label}"/>
+                <p:outputPanel rendered="#{theItem.code != null}">
+                    <h:outputLabel value="#{theItem.code}" style="font-style:italic;"/>
+                </p:outputPanel>
+
+                <p:outputPanel rendered="#{theItem.originStatus eq 'PHRS_INTEROP.IMPORT'}">
+                    <!--<h:graphicImage title="#{labels['imported_medical_data']}" alt="#{labels['imported_medical_data']}" id="image1"
+                                   value="/images/imported.png" />	-->
+
+                    <h:outputLabel value="#{labels['imported_medical_data']}" style="font-style:italic;color:red;"/>
+                    <!--   do lookup for nice label e.g. originLabel or  use jstl 2.2
+                <h:outputLabel value=" {theItem.origin}" style="font-style:italic;" />-->
+                </p:outputPanel>
+
+            </p:column>
+            <p:column headerText="Start Date">
+                <h:outputText value="#{theItem.beginDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:outputText>
+            </p:column>
+
+            <p:column headerText="Status" style="width:120px;">
+                <h:outputText value="#{theItem.status}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputText>
+
+            </p:column>
+
+            <p:column headerText="End Date">
+                <h:outputText value="#{theItem.endDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:outputText>
+            </p:column>
+
+
+            <p:column headerText="#{labels['default.medicationDosage.label']}" style="width:150px;">
+                <h:outputLabel value="#{theItem.treatmentMatrix.dosage}"/>
+                <p:spacer width="1"/>
+                <h:outputLabel value="#{theItem.treatmentMatrix.dosageUnits}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+                <br/>
+                <h:outputLabel value="#{theItem.treatmentMatrix.dosageInterval}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+                <br/>
+                <h:outputLabel value="#{theItem.treatmentMatrix.dosageTimeOfDay}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="Reason">
+                <h:outputLabel value="#{theItem.reasonCode}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="Prescribed by">
+
+                <h:outputText value="#{theItem.prescribedByName}"/>
+            </p:column>
+
+            <p:column headerText="#{labels['default.comments.label']}"
+                      rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
                 <h:outputText value="#{theItem.note}"/>
             </p:column>
 
 
-        </h:panelGroup>
+        </p:dataTable>
+    </h:form>
+</h:panelGroup>
 
-        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
-
-
-        </h:panelGroup>
-
-        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'MED'}">
-
-
-        </h:panelGroup>
-
-        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'ADL'}">
-
-
-        </h:panelGroup>
-
-        <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'PROBLEM'}">
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'ADL'}">
+    <h:form prependId="false">
+        <p:dataTable widgetVar="widItemTableMonitorADL" id="idItemTableMonitorADL"
+                     var="theItem" value="#{monmgtBean.modelMain}">
+            <p:column headerText="#{labels['activityOfDailyLivingItem.activityCode.label']}">
+                <h:outputLabel value="#{theItem.code}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
 
 
-        </h:panelGroup>
-    </p:dataTable>
-    <!--
-    <p:dataTable widgetVar="widItemTableMonitormgt" id="idItemTableMonitormgt"
-                 var="theItem" value="#{monmgtBean.modelMain}">
+            <p:column styleClass="innertable" headerText="#{labels['activityOfDailyLivingItem.valueActivity.label']}">
+                <h:outputLabel value="#{theItem.status}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="#{labels['default.comments.label']}"
+                      rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+                <h:outputText value="#{theItem.note}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</h:panelGroup>
+
+<h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'PROBLEM'}">
+    <h:form prependId="false">
+        <p:dataTable widgetVar="widItemTableMonitorPROBLEM" id="idItemTableMonitorPROBLEM"
+                     var="theItem" value="#{monmgtBean.modelMain}">
+            <p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}">
+                <h:outputLabel value="#{theItem.code}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="#{labels['default_status_problem']}" sortBy="#{theItem.status}">
+                <h:outputLabel value="#{theItem.status}">
+                    <f:converter converterId="labelLookup"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}">
+                <h:outputLabel value="#{theItem.displayDate}">
+                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                </h:outputLabel>
+            </p:column>
+
+            <p:column headerText="#{labels['default.comments.label']}"
+                      rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+                <h:outputText value="#{theItem.note}"/>
+            </p:column>
+        </p:dataTable>
+    </h:form>
+
+</h:panelGroup>
 
 
-
-
-
-             <p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}">
-
-                 <p:outputPanel layout="block">
-
-
-                     <p:commandButton actionListener="#{monmgtBean.downLoadReport}"
-                         image="ui-icon ui-icon-disk"
-                         title="#{labels['default.button.view.label']}">
-
-                         <f:setPropertyActionListener value="#{theItem}"
-                                                      target="#{monmgtBean.selected}" />
-                     </p:commandButton>
-
-                 </p:outputPanel>
-             </p:column>
-
-        <p:column headerText="User Name" sortBy="#{theItem.name}">
-            <h:outputLabel value="#{theItem.name}"/>
-        </p:column>
-
-        <p:column headerText="Information Type"
-                  sortBy="#{theItem.resourceType}">
-            <h:outputLabel value="#{theItem.resourceType}">
-                <f:converter converterId="labelLookup"/>
-            </h:outputLabel>
-
-            <p:outputPanel layout="block"
-                           rendered="#{theItem.allowedViewContent eq true}">
-                Access allowed
-            </p:outputPanel>
-            <p:outputPanel layout="block"
-                           rendered="#{theItem.allowedViewContent eq false}">
-                Access denied
-            </p:outputPanel>
-
-        </p:column>
-
-        <p:column headerText="Message">
-            <h:outputLabel value="#{theItem.message}"/>
-        </p:column>
-
-        <p:column headerText="PHR Identifier" sortBy="#{theItem.ownerUri}"
-                  style="width:200px;word-wrap:break-word;">
-            <h:outputLabel value="#{theItem.ownerUri}"/>
-        </p:column>
-        <p:column headerText="Protocol Identifier" sortBy="#{theItem.protocolId}"
-                  style="width:200px;word-wrap:break-word;">
-            <h:outputLabel value="#{theItem.protocolId}"/>
-        </p:column>
-
-
-        <p:column headerText="Test">
-            <p:outputPanel layout="block">
-
-                <p:commandButton actionListener="#{monmgtBean.downLoadTestingReport}"
-                                 image="ui-icon ui-icon-disk"
-                                 title="#{labels['default.button.view.label']}">
-
-                    <f:setPropertyActionListener value="#{theItem}"
-                                                 target="#{monmgtBean.selected}" />
-
-                </p:commandButton>
-
-            </p:outputPanel>
-        </p:column>
-
-
-
-    </p:dataTable>
-    -->
-
-</h:form>
 </p:fieldset>
 </ui:define>
 

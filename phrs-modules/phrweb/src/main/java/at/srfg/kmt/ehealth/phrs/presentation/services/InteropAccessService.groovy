@@ -352,6 +352,8 @@ public class InteropAccessService implements Serializable {
 //Constants.STATUS_COMPELETE
 //Constants.STATUS_ACTIVE
                     case ProfileActivityDailyLiving.class.getCanonicalName():
+
+                        status =  Constants.STATUS_COMPELETE
                         careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
 
                         categoryCode =  Constants.HL7V3_FINDING
@@ -393,7 +395,7 @@ public class InteropAccessService implements Serializable {
 
                     case ActionPlanEvent.class.getCanonicalName():
                         careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_MEDCCAT
-
+                        status =  Constants.STATUS_COMPELETE
                         //send message only for the sports identifier resource.code= action.categories.activity.sport
                         if (valueCode == InteropTermTransformer.CODE_WATCH_SPORT) {
                             categoryCode = PhrsConstants.HL7V3_CODE_CATEGORY_PHYS_ACTIVITY //TODO logger, should be category, but always HL7V3_SYMPTOM for this object type
@@ -492,7 +494,7 @@ public class InteropAccessService implements Serializable {
                         break
 
                     case ObsVitalsBloodPressure.class.getCanonicalName():
-
+                        status =  Constants.STATUS_COMPELETE
                         careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_COBSCAT
                         ObsVitalsBloodPressure domain = (ObsVitalsBloodPressure) resource
                         //not using category code, instead we split form into a few pieces
@@ -557,7 +559,7 @@ public class InteropAccessService implements Serializable {
                         break
 
                     case ObsVitalsBodyWeight.class.getCanonicalName():
-
+                        status =  Constants.STATUS_COMPELETE
                         careProvisionCode= InteropProcessor.CARE_PROVISION_CODE_COBSCAT
 
                         ObsVitalsBodyWeight domain = (ObsVitalsBodyWeight) resource

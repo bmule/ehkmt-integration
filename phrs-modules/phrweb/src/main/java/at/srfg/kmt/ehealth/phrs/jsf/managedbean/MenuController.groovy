@@ -19,6 +19,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants
 import at.srfg.kmt.ehealth.phrs.jsf.support.DocumentReference
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
+import at.srfg.kmt.ehealth.phrs.jsf.utils.WebUtil
 
 /**
  * This controller is SessionScoped and supports either the basic tree or table based tree. The Table based tree cannot yet support expanding 
@@ -33,7 +34,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 @ManagedBean(name="menuBean")
 @SessionScoped
 public class MenuController extends FaceCommon{
-    private static final Logger logger = LoggerFactory.getLogger(MenuController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class.getName());
 
 	//PhrsConstants.SESSION_MENU_CURRENT_NODE or this bean if SessionScoped
 
@@ -84,14 +85,15 @@ public class MenuController extends FaceCommon{
 		root.setExpanded(true) //address any UI bug
 
         if( ! UserSessionService.getSystemStatus()) { //storage problem
-            home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
-
+            home = new DefaultTreeNode(new DocumentReference("Error","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
+            WebUtil.addFacesMessageSeverityWarn("Status","System failed to start")
+            LOGGER.debug("system failed to start msg to user")
         } else if( ! UserSessionService.loggedIn()){
-
-            home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
+            LOGGER.debug("user not logged in")
+            //home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
 
         } else if(UserSessionService.sessionUserHasMedicalRole()){
-            //
+           LOGGER.debug("Show medical role sidebar - user has medical role")
             home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
             //consultation reports
             sectionMonitoring   = new DefaultTreeNode(new DocumentReference("Monitoring","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)

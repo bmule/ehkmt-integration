@@ -28,7 +28,7 @@
 		<link type="text/css" rel="stylesheet"
 			href="#{request.contextPath}/css/extend.css" />
 			
-		<script type="text/javascript" src="#{request.contextPath}/js/prime_extend.js"/>
+		<script type="text/javascript" src="#{request.contextPath}/js/prime_extend.js"></script>
 
 		<ui:insert name="head"></ui:insert>
 	</h:head>
@@ -54,7 +54,7 @@
                     <p:outputPanel rendered="#{loginBean.loggedIn eq true}" >
                         <h:form>
                             <p:commandLink value="Logout"  style="font-weight: bold;"
-                                           actionListener=" {loginBean.logout}"/>
+                                           actionListener=" {loginBean.doLogout}"/>
                         </h:form>
                     </p:outputPanel>  -->
                 </div>
@@ -83,8 +83,9 @@
 				collapsible="true" gutter="false" 
 				scrollable="false" 
 				resizable="true">
-				<ui:include src="/sections/menunavigator.xhtml" />
-
+                <p:outputPanel  rendered="#{loginBean.loggedIn eq true}">
+				    <ui:include src="/sections/menunavigator.xhtml" />
+                </p:outputPanel>
 			</p:layoutUnit>
 			<!--<p:layoutUnit position="right" header="RIGHT" width="200">
 				<h:outputText value="Right Content" />
