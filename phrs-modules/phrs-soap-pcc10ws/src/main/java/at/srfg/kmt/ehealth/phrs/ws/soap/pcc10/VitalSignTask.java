@@ -167,7 +167,7 @@ final class VitalSignTask implements PCCTask {
         final Set<DynaBean> beans = new HashSet<DynaBean>();
 
         for (String uri : uris) {
-            System.out.println("vital bef dynabean uri=" + uri);
+            //System.out.println("vital bef dynabean uri=" + uri);
             try {
                 final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
                 final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);

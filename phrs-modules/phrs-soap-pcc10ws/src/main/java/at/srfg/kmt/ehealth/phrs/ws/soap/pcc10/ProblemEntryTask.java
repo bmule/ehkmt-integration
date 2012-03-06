@@ -178,7 +178,7 @@ final class ProblemEntryTask implements PCCTask {
         LOGGER.debug("The total amount of Problem Entries for user {} is {}",
                 owner, problemCount);
         if (problemCount == 0) {
-            LOGGER.warn("There are no Problem Entries for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
+            LOGGER.warn("There are no New Problem Entries, all were sent for this user or no pcc09 messages for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
         }
 
 
