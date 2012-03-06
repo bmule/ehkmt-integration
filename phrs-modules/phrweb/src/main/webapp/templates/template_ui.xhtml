@@ -50,13 +50,7 @@
 					<p:spacer width="20"/>
 					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
 					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"/>
-         <!--
-                    <p:outputPanel rendered="#{loginBean.loggedIn eq true}" >
-                        <h:form>
-                            <p:commandLink value="Logout"  style="font-weight: bold;"
-                                           actionListener=" {loginBean.doLogout}"/>
-                        </h:form>
-                    </p:outputPanel>  -->
+
                 </div>
 			</p:layoutUnit>
 			<p:layoutUnit position="bottom" 
@@ -101,17 +95,7 @@
                     <h:panelGroup>
                             <h:form>
                                 <h:panelGrid columns="2">
-                                   <!--
-                                     <br/>loginBean.loginStatus=<h:outputLabel value="#{loginBean.loginStatus}"/>
-                                    <br/>loginBean.loggedIn=<h:outputLabel value="#{loginBean.loggedIn}"/>
-                                    <h:outputLabel value="Login with "/>
-                                    <h:selectOneMenu value="#{loginBean.loginType}"
-                                                     required="true"
-                                                     requiredMessage="Please choose one option, a local or iCARDEA login name">
-                                        <f:selectItem label="... Please Choose ..." noSelectionOption="true" itemValue=""/>
-                                        <f:selectItem itemLabel="Local login name (phrtest, nurse)"     itemValue="local.provider.1"/>
-                                        <f:selectItem itemLabel="iCARDEA login name"   itemValue="openid.provider.1"/>
-                                    </h:selectOneMenu> -->
+
 
                                     <h:outputLabel value="User ID "/>
                                     <p:inputText value="#{loginBean.username}" style="width:200px"
