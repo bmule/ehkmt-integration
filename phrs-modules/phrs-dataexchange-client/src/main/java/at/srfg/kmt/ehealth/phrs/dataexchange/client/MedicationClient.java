@@ -142,6 +142,15 @@ public final class MedicationClient {
             String adminRouteURI, String dosageValue, String dosageUnit,
             String drugName,
             String drugCode) throws TripleException {
+        
+        
+        final String medicationMsg = String.format("Medicaion [user=%s, "
+                + "note=%s, statusURI=%s, startDate=%s, endDate=%s, "
+                + "frequencyURI=%s, adminRouteURI=%s, dosageValue=%s, "
+                + "dosageUnit=%s, drugName=%s, drugCode=%s]", user, note, 
+                statusURI, startDate, endDate, frequencyURI, adminRouteURI, 
+                dosageValue, dosageUnit, drugName, drugCode);
+        LOGGER.debug("Tires to store " + medicationMsg);
 
         // check for null or Resource . No check on existence of URI
         // StoreValidator.validateResource("statusURI",statusURI,triplestore);
@@ -267,6 +276,8 @@ public final class MedicationClient {
                 "http://www.icardea.at/phrs/hl7V3#manufacturedProduct",
                 buildManufacturedProduct,
                 RESOURCE);
+        
+        LOGGER.debug("successfully store " + medicationMsg);
 
         return subject;
     }
