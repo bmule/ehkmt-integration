@@ -63,9 +63,17 @@ public class LoadRdfPostConstruct implements Runnable {
         }
         
         try {
+            final boolean isOpen = connection.isOpen();
+            if (!isOpen) {
+                LOGGER.error("The file {} can not be loaded because the connection is closed.", fileName);
+                return;
+            }
+            
             connection.add(resourceAsStream, Constants.ICARDEA_NS, RDFFormat.RDFXML);
             connection.commit();
         } catch (Exception ex) {
+            
+            LOGGER.error("The file {} can not be loaded.", fileName);
             LOGGER.error(ex.getMessage(), ex);
         }
     }

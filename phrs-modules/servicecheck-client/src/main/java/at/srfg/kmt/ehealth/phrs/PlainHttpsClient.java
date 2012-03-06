@@ -46,10 +46,13 @@ public class PlainHttpsClient {
 
             conn.connect();
 
-            for (Certificate cert : conn.getLocalCertificates()) {
-                LOGGER.info("Found local certificate: {}", cert.toString());
-            }
+            final Certificate[] serverCerts = conn.getServerCertificates();
+            LOGGER.info("{} Server Certificate(s) received", serverCerts.length);
 
+            for (Certificate cert : serverCerts) {
+                LOGGER.info("certificate type: {}", cert.getType());
+                LOGGER.trace("certificate: {}", cert.toString());
+            }
 
             // Create streams to securely send and receive data to the server
             InputStream in2 = conn.getInputStream();
@@ -61,15 +64,16 @@ public class PlainHttpsClient {
             in2.close();
             out.close();
             LOGGER.info("...OK");
+            conn.disconnect();
             return true;
 
         } catch (UnknownHostException ex) {
-            LOGGER.error("Host {} unknown", serverURL);
+            LOGGER.error("Host {} unknown", serverURL.getHost());
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getLocalizedMessage());
             return false;
         } catch (ConnectException ex) {
-            LOGGER.error("TCP connection faild to {}", serverURL);
+            LOGGER.error("TCP connection faild to {}:{}", serverURL.getHost(), serverURL.getPort());
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getLocalizedMessage());
             return false;
@@ -99,7 +103,7 @@ public class PlainHttpsClient {
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getStackTrace());
             return false;
-        }catch (IOException ex) {
+        } catch (IOException ex) {
             LOGGER.error("IOException {} ", ex.getMessage());
             LOGGER.error("...FAIL");
             LOGGER.trace("{}", ex.getStackTrace());
