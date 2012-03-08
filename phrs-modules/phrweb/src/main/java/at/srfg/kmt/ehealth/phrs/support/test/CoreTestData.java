@@ -20,7 +20,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropTermTransformer;
-import at.srfg.kmt.ehealth.phrs.presentation.utils.DynaUtil;
+
 import org.apache.commons.beanutils.DynaBean;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -265,14 +265,23 @@ public class CoreTestData {
 
 
         MedicationTreatment med = new MedicationTreatment();
-        Date dateEnd = DateUtil.getFormatedDate(dateEndStr);
-        Date dateBegin = DateUtil.getFormatedDate(datebeginStr);
+
+        Date dateEnd = null;
+        Date dateBegin = null;
+        //throws unreported exceptions
+        try {
+            dateEnd = DateUtil.getFormatedDate(dateEndStr);
+            dateBegin = DateUtil.getFormatedDate(datebeginStr);
+        } catch (Exception e) {
+           //
+        }
 
         med.setBeginDate(dateBegin);
         med.setEndDate(dateEnd);
 
         String localStatus = InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS);
-
+        //LOGGER.debug("createMedication localStatus="+localStatus+" stdStatus="+stdStatus);
+        //System.out.println("createMedication localStatus="+localStatus+" stdStatus="+stdStatus);
         med.setStatus(localStatus);
         med.setStatusStandard(stdStatus);
         med.setOwnerUri(ownerUri);
@@ -301,73 +310,73 @@ public class CoreTestData {
 
 
     }
-    public static MonitorInfoItem  createMonitorInfoItem(String label, String code){
-        MonitorInfoItem m=new MonitorInfoItem();
-        m.setName(label);
+    public static MonitorPhrItem  createMonitorInfoItem(String label, String code){
+        MonitorPhrItem m=new MonitorPhrItem();
+        m.setLabel(label);
         return m;
     }
 
-    public   static List<MonitorInfoItem> createMedicationMonitorInfoItems(String owner){
-        List<MonitorInfoItem> list =new ArrayList<MonitorInfoItem>();
+    public   static List<MonitorPhrItem> createMedicationMonitorPhrItems(String owner){
+        List<MonitorPhrItem> list =new ArrayList<MonitorPhrItem>();
         if (owner != null) {
 
             try {
 
-                LOGGER.debug("START createMedicationMonitorInfoItems for owner= " + owner);
+                LOGGER.debug("START createMedicationMonitorPhrItems for owner= " + owner);
                 CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
 
                 if (!commonDao.hasMedication(owner, "", "C0032952")) {
 
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Prednisone", "C0032952");
-
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Prednisone", "C0032952");
+                      mii.setSummary(".");
                     list.add(mii);
                     
                 } else {
-                    LOGGER.debug("createMedicationMonitorInfoItems - not test data loaded, data already was loaded as phr resources, found a drug code ");
+                    LOGGER.debug("createMedicationMonitorPhrItems - not test data loaded, data already was loaded as phr resources, found a drug code ");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0081876")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Pantoprazole (Pantoloc)", "C0081876");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Pantoprazole (Pantoloc)", "C0081876");
                     list.add(mii);
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0110591")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Concor", "C0110591");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Concor", "C0110591");
                     list.add(mii);               }
 
                 if (!commonDao.hasMedication(owner, "", "C0012010")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Psychopax (Diazepam)", "C0012010");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Psychopax (Diazepam)", "C0012010");
                     list.add(mii);
                 }
 
 
 
                 if (!commonDao.hasMedication(owner, "", "C0591288")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Convulex", "C0591288");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Convulex", "C0591288");
                     list.add(mii);
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0025677")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Ebetrexat(Methotrexate)", "C0025677");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Ebetrexat(Methotrexate)", "C0025677");
                     list.add(mii);
                 }
                 if (!commonDao.hasMedication(owner, "", "C0016410")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Folsan(Folic Acid)", "C0016410");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Folsan(Folic Acid)", "C0016410");
                     list.add(mii);
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0024467")) {
-                    MonitorInfoItem mii = CoreTestData.createMonitorInfoItem("Magnosolv(Magnesium)", "C0024467");
+                    MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Magnosolv(Magnesium)", "C0024467");
                     list.add(mii);
                 }
-                LOGGER.debug("END createMedicationMonitorInfoItems  preparing test data for owner= " + owner);
+                LOGGER.debug("END createMedicationMonitorPhrItems  preparing test data for owner= " + owner+" count="+list.size());
 
             } catch (Exception e) {
-                LOGGER.debug("ERROR createMedicationMonitorInfoItems  preparing test data for owner= " + owner, e);
-                e.printStackTrace();
+                LOGGER.debug("ERROR createMedicationMonitorPhrItems  preparing test data for owner= " + owner, e);
+
             }
         } else {
-            LOGGER.error("Error creating createMedicationMonitorInfoItems, ownerUri=null");
+            LOGGER.error("Error creating createMedicationMonitorPhrItems, ownerUri=null");
         }  
         return list;
     }

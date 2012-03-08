@@ -98,18 +98,19 @@ public class MonitorInteropBean implements Serializable {
         int count=transformedMsgs == null ? -1 :transformedMsgs.size();
         if(transformedMsgs != null && ! transformedMsgs.isEmpty()){
             //ok
-            LOGGER.debug("transformedMsgs. OK found interop meds found count="+count);
+            LOGGER.debug("transformedMsgs. OK found INTEROP MEDS found count="+count);
+            modelMain = toolTransformer.tranformResource(transformedMsgs);
         } else {
 
-            LOGGER.debug("transformedMsgs. No interop meds found, create test data count=");
-            transformedMsgs=CoreTestData.createMedicationMonitorInfoItems(getOwnerUri());
+            LOGGER.debug("transformedMsgs. No interop meds found, create test data");
+            modelMain=CoreTestData.createMedicationMonitorPhrItems(getOwnerUri());
 
+            int count2=modelMain == null ? -1 :modelMain.size();
+            LOGGER.debug("transformedMsgs from test data, modelMain count="+count2);
         }
         LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri());
 
 
-        //these are unchecked objects
-        modelMain = toolTransformer.tranformResource(transformedMsgs);
     }
 
     public String getOwnerUri() {
@@ -367,7 +368,7 @@ public class MonitorInteropBean implements Serializable {
                 + " pixPid" + getPidPix());
         //
         boolean outcome = updateIdentifiers();
-        this.setStatusMessagePid("Your patient identifier is ok " + getPidPix() + " " + this.getProtocolId());
+        this.setStatusMessagePid(" Your patient identifier is ok " + getPidPix());
     }
 
     public boolean updateIdentifiers() {

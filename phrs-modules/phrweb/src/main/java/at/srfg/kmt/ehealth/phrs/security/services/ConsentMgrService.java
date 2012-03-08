@@ -158,15 +158,19 @@ public class ConsentMgrService implements Serializable {
      * @param action (READ,WRITE...)
      * @return
      */
-    public boolean isPermitted(String targetUser, String subjectCode,
-            String resourceCode, String action) {
-        return this.isPermitted(targetUser, subjectCode, "", resourceCode, action);
-    }
 
-    public boolean isPermitted(String targetUser, String subjectCode,
-            String idType, String resourceCode, String action) {
+
+
+    public boolean isPermittedByPID(String targetUserPID, String subjectCode,
+            String resourceCode, String action) {
+
         boolean flag = false;
 
+        LOGGER.debug("isPermitted INPUT "
+                + " targetUserPID= " + targetUserPID
+                + " subjectCode=" + subjectCode
+                + " resourceCode=" + resourceCode
+                + " action=" + action );
         try {
             //This is the local setting
             if (isAccessibleByThisRole(subjectCode)) {
@@ -177,73 +181,38 @@ public class ConsentMgrService implements Serializable {
                 //FIXXME
                 sslSetup();
 
-                String userIdentifier = targetUser;
-                //try this identifier, usually the phrId
-                String result = callGetDecision(userIdentifier, ISSUERNAME,
+
+                String result = callGetDecision(targetUserPID, ISSUERNAME,
                         subjectCode, resourceCode, action);
                 // try on protocol ID
                 flag = isPermitted(result);
 
-                //usually the phrId is passed
-//                if (!idType.equals(PhrsConstants.PROTOCOL_ID_NAME)) {
-//                    // try on phrId
-//                    userIdentifier = getProtocolId(targetUser);
-//                    if (!flag && userIdentifier != null && !userIdentifier.isEmpty()) {
-//                        result = callGetDecision(userIdentifier, ISSUERNAME,
-//                                subjectCode, resourceCode, action);
-//                        flag = isPermitted(result);
-//                    } else {
-//                    }
-//                }
-                if (result != null) {
-                    LOGGER.debug("result " + " targetUser phrId" + targetUser
-                            + "idType = " + idType + " user id="
-                            + userIdentifier + " subjectCode=" + subjectCode
-                            + " resourceCode=" + resourceCode + " resourceCode"
+                LOGGER.debug("callGetDecision result " + "  targetUserPID " + targetUserPID
+                            + " subjectCode=" + subjectCode
+                            + " resourceCode=" + resourceCode
                             + "action=" + action + " decision allow?=" + flag);
-                } else {
-                    LOGGER.debug("result " + " targetUser phrId" + targetUser
-                            + "idType = " + idType + " user id="
-                            + userIdentifier + " subjectCode=" + subjectCode
-                            + " resourceCode=" + resourceCode + " resourceCode"
-                            + "action=" + action + " result=NULL");
 
-                }
 
             }
         } catch (Exception e) {
 
-            LOGGER.debug("error result " + " targetUser phrId" + targetUser
-                    + " idType=" + idType + " subjectCode=" + subjectCode
-                    + " resourceCode=" + resourceCode + " resourceCode"
-                    + "action=" + action + " decision allow?=" + flag);
+
 
             e.printStackTrace();
         }
-        this.sendAuditMessage(targetUser, subjectCode, idType, resourceCode, action);
+        this.sendAuditMessage(targetUserPID, subjectCode, resourceCode, action);
 
-        LOGGER.debug("permission result " + " targetUser phrId" + targetUser
-                + " idType=" + idType + " subjectCode=" + subjectCode
-                + " resourceCode=" + resourceCode + " resourceCode"
-                + "action=" + action + " decision allow?=" + flag + " isAccessibleByThisRole=" + isAccessibleByThisRole(subjectCode));
+
         return flag;
     }
 
     public void sendAuditMessage(String targetUser, String subjectRoleCode,
-            String idType, String resourceCode, String action) {
-        //final String patientId, final String resource, final String requestorRole
+            String resourceCode, String action) {
+
         auditService.sendAuditMessageGrant(targetUser, ISSUERNAME, subjectRoleCode);
     }
 
-    boolean hasUserByPhrId(String phrId) {
-        boolean flag = false;
-        return flag;
-    }
 
-    boolean hasUserByProtocolId(String phrId) {
-        boolean flag = false;
-        return flag;
-    }
 
     /**
      * Test for "Permit" in
@@ -257,7 +226,7 @@ public class ConsentMgrService implements Serializable {
         // <xacml-context:Decision>Deny</xacml-context:Decision>
 
         if (xacmlAuthzDecisionStatement != null) {
-            return (xacmlAuthzDecisionStatement.indexOf("Permit") != -1);
+            return (xacmlAuthzDecisionStatement.contains("Permit"));
         }
         return false;
     }
@@ -290,7 +259,7 @@ public class ConsentMgrService implements Serializable {
 
             try {
                 stub = getConsentServiceStub();
-
+                LOGGER.debug(" callGetDecision");
                 GetDecision request = new GetDecision();
                 request.setPatientID(patientId);
 
@@ -299,16 +268,16 @@ public class ConsentMgrService implements Serializable {
 
                 //remove xml statement at beginning
                 requestString = requestString.substring(39);
-                LOGGER.debug(" requestString =", requestString.substring(39));
+                LOGGER.debug(" callGetDecision requestString =", requestString.substring(39));
 
                 request.setRequestString(requestString);
                 //stub.getDecision(request);
                 GetDecisionResponse response = stub.getDecision(request);
                 String resultString = response.getGetDecisionReturn();
                 //System.out.println("callGetDecision result" + resultString);
-                LOGGER.debug(" callGetDecision patientId=" + patientId
-                        + "issuerName " + issuerName + " subjectCode" + subjectCode
-                        + "resourceCode " + resourceCode + " action" + action
+                LOGGER.debug(" callGetDecision patientId= " + patientId
+                        + " issuerName " + issuerName + " subjectCode " + subjectCode
+                        + " resourceCode " + resourceCode + " action " + action
                         + " decision= " + resultString);
                 return resultString;
 
@@ -325,8 +294,8 @@ public class ConsentMgrService implements Serializable {
             }
         } else {
             LOGGER.debug("callGetDecision received a NULL argument: patientId=" + patientId
-                    + "issuerName " + issuerName + " subjectCode" + subjectCode
-                    + "resourceCode " + resourceCode + " action" + action);
+                    + " issuerName " + issuerName + " subjectCode" + subjectCode
+                    + " resourceCode " + resourceCode + " action" + action);
         }
         return "<?xml version=\"1.0\" encoding=\"UTF-16\"?><xacml-saml:XACMLAuthzDecisionStatement xmlns:xacml-saml=\"urn:oasis:names:tc:xacml:2.0:profile:saml2.0:v2:schema:assertion\"><xacml-context:Response xmlns:xacml-context=\"urn:oasis:names:tc:xacml:2.0:context:schema:os\"><xacml-context:Result><xacml-context:Decision>Deny Deny</xacml-context:Decision></xacml-context:Result></xacml-context:Response></xacml-saml:XACMLAuthzDecisionStatement>";
     }

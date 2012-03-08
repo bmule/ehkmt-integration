@@ -55,30 +55,19 @@ public class InteropTermTransformer implements Serializable {
                 case Constants.STATUS_RUNNING:
                     if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_true'
                     break
-
-//                case Constants.STATUS_COMPELETE:
-//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
-//                    break
-//                case Constants.STATUS_INCOMPELETE:
-//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
-//                    break
-//                case Constants.STATUS_SUSPENDED:
-//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
-//                    break
-//                case Constants.STATUS_INTERRUPTED:
-//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
-//                    break
-//                case Constants.STATUS_ABORTED:
-//                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false_completed'
-//                    break
+                case Constants.STATUS_INCOMPELETE:
+                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_true'
+                    break
                 default:
-
-                    out = null
+                    //STATUS_SUSPENDED STATUS_INTERRUPTED STATUS_ABORTED
+                    if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false'
+                    else  out = null
                     break
             }
         }
         if( ! out) {
-            if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out =  'medicationSummary_medicationStatus_false_completed'
+            if (Constants.PHRS_MEDICATION_CLASS == phrsClass) out = 'medicationSummary_medicationStatus_false'
+            // wrong:'medicationSummary_medicationStatus_false_completed'
         }
 
         return out
@@ -129,6 +118,8 @@ public class InteropTermTransformer implements Serializable {
                 case [
                         PhrsConstants.STATUS_RUNNING
                         ,
+                        PhrsConstants.STATUS_INCOMPLETE
+                        ,
                         'medicationSummary_medicationStatus_true'
                         ,
                         'default_activeStatusTrue'
@@ -141,7 +132,7 @@ public class InteropTermTransformer implements Serializable {
                         ,
                         'action_isActiveStatusTrue'
                 ]:
-                    out = PhrsConstants.STATUS_RUNNING
+                    out = Constants.STATUS_ACTIVE;//PhrsConstants.STATUS_RUNNING
                     break
                 case [
                         PhrsConstants.STATUS_COMPLETE
@@ -157,10 +148,9 @@ public class InteropTermTransformer implements Serializable {
                     out = PhrsConstants.STATUS_COMPLETE
                     break
 
-                case [
-                        PhrsConstants.STATUS_INCOMPLETE
-                        ,
-                        'medicationSummary_medicationStatus_false_completed'
+                    //PhrsConstants.STATUS_INCOMPLETE
+                    // medicationSummary_medicationStatus_false_completed is deprecated, UI will break
+                case [  'medicationSummary_medicationStatus_false_completed'
                         ,
                         'medicationSummary_medicationStatus_false'
                         ,

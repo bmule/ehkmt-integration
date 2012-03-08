@@ -50,16 +50,9 @@ either new page or
 
 			<p:fieldset legend="Monitoring Personal Health Information">
 
-
 				<p:dataTable widgetVar="widItemTableMonitorinfo" id="idItemTableMonitorinfo"
 					var="theItem" value="#{monitorinfoBean.modelMain}">
 
-
-					<!--  
-						<p:column headerText="Sort" sortBy="   {theItem.sortOrder}">
-							<h:outputLabel value="  {theItem.name}" />
-						</p:column>	
-					-->
 					<p:column style="width:50px" headerText="View or Sort" sortBy="#{theItem.sortOrder}">
 
                         <p:outputPanel layout="block">

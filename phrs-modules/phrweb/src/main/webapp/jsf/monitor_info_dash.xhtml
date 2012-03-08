@@ -18,63 +18,16 @@
     </style>
     <ui:insert name="head"></ui:insert>
 </ui:define>
-<!--
-   currentUserId;
-   currentUserOwnerUri;
-   currentUserRole;
 
-   ownerUri;
-   protocolId;
-   name;
-
-   resourceType;// resourcecode
-   not needed at this level
-   allowedViewRow
-   allowedViewContent
-   consentViewContent
-   request param
-
-   ?resourcecode=#{theItem.resourceType}&amp;phrid=#{theItem.ownerUri}
-   protocolid
-   target="_blank"
-   resourcecode phrid
-either new page or
-
-selectedOwnerUri
-selectedLocalResourceType
-selectedTest
-
-modelFormUserList
-modelFormLocalResources
-
--->
 
 <ui:define name="content">
 
 <p:fieldset legend="Monitor Personal Health Information">
-<!--update="idPanelObp" -->
+
 <h:form>
-    <p:growl id="msgs" showDetail="true"/>
-    <!--<p:toolbar>
-        <p:toolbarGroup align="left">   -->
-    <h:panelGroup>
 
-        <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
-            <h:outputLabel value="Patient:"/>
-            <h:selectOneMenu id="field_2_input"
-                             required="true" requiredMessage="Please select a user"
-                             layout="pageDirection"
-                             value="#{monmgtBean.selectedOwnerUri}">
-
-                <f:selectItem itemLabel="Please select a User" noSelectionOption="true"
-                              itemValue=""/>
-                <f:selectItems
-                        value="#{monmgtBean.selectedOwnerUri}"
-                        var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
-            </h:selectOneMenu>
-            <p:message for="field_2_input" display="text"/>
-        </h:panelGroup>
-
+    <h:panelGroup style="width:300px">
+        <p:growl id="msgs" showDetail="true"/>
         <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
             <h:inputHidden value="#{monmgtBean.selectedOwnerUri}"/>
         </h:panelGroup>
@@ -82,7 +35,7 @@ modelFormLocalResources
         <h:panelGroup>
             <h:outputLabel value="Display information about:"/>
             <h:selectOneRadio id="field_3_input"
-                              required="true" requiredMessage="Please choose"
+                              required="true" requiredMessage="What kind of Information?"
                               layout="pageDirection"
                               value="#{monmgtBean.selectedLocalResourceType}">
                 <!--f:selectItem itemLabel="Please Select Information type" noSelectionOption="true"
@@ -92,39 +45,49 @@ modelFormLocalResources
                         var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
             </h:selectOneRadio>
 
-
-            <p:message for="field_3_input" display="text"/>
         </h:panelGroup>
 
+        <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
+            <h:selectOneMenu id="field_2_input"
+                             required="true" requiredMessage="Please select a Patient"
+                             layout="pageDirection"
+                             value="#{monmgtBean.selectedOwnerUri}" style="font-size: 12pt;">
 
-        <p:commandButton value="Find Patient Info" rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}"
-                         title="Find"
-                         image="ui-icon ui-icon-search"
-                         actionListener="#{monmgtBean.findResourcesByUserAndType}"
-                         ajax="false"/>
+                <f:selectItem itemLabel="Please select a Patient" noSelectionOption="true"
+                              itemValue=""/>
+                <f:selectItems
+                        value="#{monmgtBean.modelFormUserList}"
+                        var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}"/>
+            </h:selectOneMenu>
 
-        <p:commandButton value="List Health Info" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"
-                         title="Find"
-                         image="ui-icon ui-icon-search"
-                         actionListener="#{monmgtBean.findResourcesByUserAndType}"
-                         ajax="false"/>
+
+            <p:commandButton value="Display"
+                             title="Display"
+                             image="ui-icon ui-icon-search"
+                             actionListener="#{monmgtBean.findResourcesByUserAndType}"
+                             ajax="false"/>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+            <p:commandButton value="Display" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"
+                             title="Display"
+                             image="ui-icon ui-icon-search"
+                             actionListener="#{monmgtBean.findResourcesByUserAndType}"
+                             ajax="false"/>
+        </h:panelGroup>
     </h:panelGroup>
-    <!-- <p:spacer width="2px"/> -->
-    <!--
-       </p:toolbarGroup>
-   </p:toolbar> <p:messages/>-->
 </h:form>
 
 
-<p>
+<p><p:spacer width="2"/></p>
+<p:outputPanel rendered="#{monmgtBean.selectedOwnerGreetName ne null}">
     Health information for:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
-</p>
+</p:outputPanel>
+
 <!--
 <p>
     <h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>
 </p>
-
-
 -->
 
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
@@ -166,7 +129,7 @@ modelFormLocalResources
         </p:dataTable>
     </h:form>
 </h:panelGroup>
-  <!-- {labels['short.dateStart.label']}-->
+
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
     <h:form prependId="false">
         <p:dataTable widgetVar="widItemTableMonitorBW" id="idItemTableMonitorBW"
@@ -208,14 +171,12 @@ modelFormLocalResources
                     <h:outputLabel value="#{theItem.code}" style="font-style:italic;"/>
                 </p:outputPanel>
 
-                <p:outputPanel rendered="#{theItem.originStatus eq 'PHRS_INTEROP.IMPORT'}">
                     <!--<h:graphicImage title="#{labels['imported_medical_data']}" alt="#{labels['imported_medical_data']}" id="image1"
-                                   value="/images/imported.png" />	-->
-
-                    <h:outputLabel value="#{labels['imported_medical_data']}" style="font-style:italic;color:red;"/>
-                    <!--   do lookup for nice label e.g. originLabel or  use jstl 2.2
-                <h:outputLabel value=" {theItem.origin}" style="font-style:italic;" />-->
-                </p:outputPanel>
+                                   value="/images/imported.png" />style="font-style:italic;color:red;"	-->
+                <!--
+                <p:outputPanel rendered="#{theItem.originStatus eq 'PHRS_INTEROP.IMPORT'}"> <p:spacer width="1"/>
+                    <h:outputLabel value="#{labels['imported_medical_data']}" />
+                </p:outputPanel>-->
 
             </p:column>
             <p:column headerText="Start Date">

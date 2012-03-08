@@ -1,6 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import java.io.Serializable;
@@ -9,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 
- * Used directly the UserService and managed beans supporting the User
- * Interfaces.
- * 
- * Allow - used by the UI - perhaps authorization specific or a default for the
- * resource type
+ * Authorization adapter for known Consent Manager
+ * Handles conversion of identifiers needed between components and handles decision when no proper identifier available.
+ * For the primary consent manager, one might  use either protocolIds or phrIds, however, we provide the selected prototcolid as a
+ * session attribute for the consent manager to use. Alternatively, one could expose the phrId.
+ * A local identifier (phrId or ownerId) is used to find a "ProtocolId". If that is not found, then the phrId will be used.
+ *
  */
 @SuppressWarnings("serial")
 public class AuthorizationService implements Serializable {
@@ -100,7 +102,10 @@ public class AuthorizationService implements Serializable {
 		return consentMgrService.auditGrantRequest(patientId, idType,
 				requesterRole, resourceCode);
 	}
-
+    public String getProtocolId(String ownerUri) {
+        CommonDao dao = PhrsStoreClient.getInstance().getCommonDao();
+        return dao.getProtocolId(ownerUri);
+    }
     /**
      *
      * Given the role of user, is their action permitted upon a resource owned
@@ -114,54 +119,43 @@ public class AuthorizationService implements Serializable {
      * @param action
      * @return
      */
-	public boolean grantAccessByPhrId(String targetUser, String resourceCode,
-                                      String action) {
+	public boolean grantAccessByPhrIdOnSessionUserRole(String targetUserPhrId, String resourceCode,
+                                                       String action) {
 		String subjectRole = UserSessionService.getSessionAttributeRole();
 
-		return this.permitAccess(targetUser, true, resourceCode, action,
-				subjectRole);
-	}
-    public boolean grantAccessByPhrIdAndRole(String targetUser, String resourceCode,
-                                      String action,String subjectRole) {
+        String targetUserPID = getProtocolId(targetUserPhrId);
+        if(targetUserPID == null) targetUserPID= targetUserPhrId;
 
-        return this.permitAccess(targetUser, true, resourceCode, action,
+        return permitAccessByPID(targetUserPID, resourceCode, action,
                 subjectRole);
-    }
-    /**
+	}
 
+    /**
      *
      * @param targetUser
-     * @param roleCode
-     *            PhrsConstants.AUTHORIZE_ROLE_PHRS_SUBJECT_CODE_* or the PHR
-     *            local role
      * @param resourceCode
-     *            PhrsConstants.AUTHORIZE_RESOURCE_CODE_*
      * @param action
-     *            PhrsConstants.AUTHORIZE_ACTION_CODE_READ , WRITE, UPDATE
+     * @param subjectRole
      * @return
      */
-    public boolean grantAccessOnResource(String targetUser, String resourceCode,
-                                       String action,String roleCode) {
-        // subjectRole  is roleCode
+    public boolean grantAccessByPhrIdAndRole(String targetUserPhrId, String resourceCode,
+                                      String action,String subjectRole) {
+        String targetUserPID = getProtocolId(targetUserPhrId);
+        if(targetUserPID == null) targetUserPID= targetUserPhrId;
 
-        return this.permitAccess(targetUser, true, resourceCode, action,
-                roleCode);
+        return permitAccessByPID(targetUserPID, resourceCode, action,
+                subjectRole);
     }
+
 
 	public boolean grantAccessByProtocolId(String targetUser,
                                            String resourceCode, String action) {
 		String subjectRole = UserSessionService.getSessionAttributeRole();
 
-		return this.permitAccess(targetUser, false, resourceCode, action,
-				subjectRole);
+		return this.permitAccessByPID(targetUser, resourceCode, action,
+                subjectRole);
 	}
 
-    public boolean grantAccessByProtocolIdAndRole(String targetUser,
-                                           String resourceCode, String action,String subjectRole) {
-        //false this is protocolId
-        return this.permitAccess(targetUser, false, resourceCode, action,
-                subjectRole);
-    }
 	/**
 	 * 
 	 * @param targetUser
@@ -174,8 +168,8 @@ public class AuthorizationService implements Serializable {
 	 *            local role
 	 * @return
 	 */
-	public boolean permitAccess(String targetUser, boolean isPhrId,
-			String resourceCode, String action, String subjectRole) {
+	public boolean permitAccessByPID(String targetUser,
+                                     String resourceCode, String action, String subjectRole) {
 
 		if (isResourceOwnedBySessionUser(targetUser)) {
 			return true;
@@ -184,16 +178,9 @@ public class AuthorizationService implements Serializable {
 		boolean result = false;
 
 		if (consentMgrService != null) {
-			// patientId, issuerName, subjectCode, resourceCode, action
-			// targetUser ownerUri
-			// subjectCode is role
-			// resourceCode
-			// action
-
 			if (isConsentMgrRole(subjectRole)) {
 
-				consentMgrService.isPermitted(targetUser, isPhrId ? "phrid"
-						: PhrsConstants.PROTOCOL_ID_NAME, subjectRole,
+				consentMgrService.isPermittedByPID(targetUser, subjectRole,
 						resourceCode, action);
 
 			} else {
@@ -205,9 +192,13 @@ public class AuthorizationService implements Serializable {
 
 	}
 
+    /**
+     *
+     * @param targetUser
+     * @return
+     */
 	public boolean isResourceOwnedBySessionUser(String targetUser) {
 		return UserSessionService.isSessionUser(targetUser);
-		//String sessionUser = this.getOwnerUri();
 
 	}
 

@@ -140,7 +140,7 @@ class FaceBaseBean implements Serializable{
 
 	   //String currentOwnerUri = getCurrentUserOwnerUri()
 	   if(permit){
-		   result = permit.grantAccessByPhrId( targetUser,  resourceCode, action)
+		   result = permit.grantAccessByPhrIdOnSessionUserRole( targetUser,  resourceCode, action)
 	   }
 	   return result
    }

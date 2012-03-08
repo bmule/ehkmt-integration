@@ -20,38 +20,15 @@
 
 <h:body>
     <ui:composition>
-        <!-- invoke Login servlet -->
-        <!--
-    <p:commandButton value=" {labels['default.button.create.label']}"
-        title=" {labels['default.button.create.label']}"
-        process="idFormPcon"
-        update="msgs idFormPcon idItemTablePcon"
-        actionListener=" {loginBean.store}"
-        image="ui-icon ui-icon-check" />
-
-          -->
-        <p:panel id="loginpanel" closable="false" style="width:100%" rendered="#{loginBean.loggedIn eq true}">
-
-            <!-- under the test mode, we set the loggedIn to true in the loginBean and automatically
-               the 'phrtest' user is assigned as default -->
-            <h:panelGroup>
-                <h:form>
-                    <p:commandLink value="Logout" style="font-weight:bold"
-                                   actionListener="#{loginBean.commandLogout}"/>
-                </h:form>
-
-              <h:outputLabel value="#{loginBean.greetname}"/>
-                &nbsp;
-               <h:outputLabel value="#{loginBean.role}" style="font-style: italic; font-size: 10px"/>
-
-            </h:panelGroup>
-        </p:panel>
-
 
         <p:panel rendered="#{loginBean.loggedIn eq true}">
+            <p>
+            User:<p:spacer width="2"/> <h:outputLabel value="#{loginBean.greetname}"/>
+            </p>
             <h:form id="tvreeform">
                 <p:growl id="messages" showDetail="true"/>
-
+                <p:commandLink value="Logout" style="font-weight:bold"
+                               actionListener="#{loginBean.commandLogout}"/>
                 <p:tree id="treeSingle" value="#{menuBean.root}" var="ref"
                         cache="false" dynamic="true"
                         nodeSelectListener="#{menuBean.onNodeSelect}"
@@ -65,75 +42,18 @@
             </h:form>
         </p:panel>
         <!--
-        <p:panel id="testPanel" closable="false" style="width:100%" rendered="#{loginBean.loggedIn eq true}">
-            <h:form>
-                <h:outputLink value="#{request.contextPath}#{'/jsf/vt.xhtml'}">.</h:outputLink>
-            </h:form>
-        </p:panel> -->
-
         <p:toolbar>
-            <!--
-             <p:toolbarGroup align="left" rendered="#{loginBean.testMode}">
+            <p:toolbarGroup align="left" rendered=" {loginBean.testMode}">
                 <h:form>
                     <p:commandButton value="Test Load Meds"
                                  immediate="true"
                                  image="ui-icon-plus"
-                                 actionListener="#{loginBean.loadInterop}"/>
+                                 actionListener=" {loginBean.loadInterop}"/>
                 </h:form>
-                <h:form>
-                    <p:commandButton value="Test Load Vitals"
-                                 immediate="true" onclick=""
-                                 image="ui-icon-plus"
-                                 actionListener="#{loginBean.loadTestData}"/>
-                </h:form>
+
             </p:toolbarGroup>
-            -->
+       </p:toolbar>  -->
 
-        </p:toolbar>
-        <!-- <h:outputText value=" {loginBean.shortname}"  />-->
-        <!-- <br/><h:outputText value=" {loginBean.ownerUri}"  />  -->
-        <!-- rendered=" {loginBean.loggedIn eq true}" -->
-        <!--
-      <p:panel style="width:100%" >
-
-      <h:form>
-          <p:treeTable  value=" {menuBean.root}" var="ref" style="width:100%;" 	>
-
-              <p:column  style="width:100%;" selectionMode="single" >
-
-                  <h:panelGroup rendered=" {ref.type == 'noderoot'}" >
-                      <h:outputText value=" {ref.label}" style="font-size:14pt;"/>
-                  </h:panelGroup>
-
-                  <h:panelGroup rendered=" {ref.type == 'nodeheaderlink'}">
-                      <h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value="  {ref.label}" style="font-size:12pt;"/>
-                      </h:outputLink>
-                  </h:panelGroup>
-
-                  <h:panelGroup rendered=" {ref.type == 'nodeheader'}">
-                      <h:outputText value=" {ref.label}" style="font-size:12pt;"/>
-                  </h:panelGroup>
-
-                  <h:panelGroup rendered=" {ref.type == 'node'}">
-                      <h:outputText value=" {ref.label}" style="font-size:10pt;"/>
-                  </h:panelGroup>
-
-                  <h:panelGroup rendered=" {ref.type eq 'link'}" >
-
-                      <h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>
-                      </h:outputLink>
-                  </h:panelGroup>
-
-                  <h:panelGroup rendered=" {ref.type eq 'nodelink'}">
-                      <h:outputLink value=" {request.contextPath} {ref.fileName}" style="font-size:10pt;"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>
-                      </h:outputLink>
-                  </h:panelGroup>
-
-              </p:column>
-          </p:treeTable>
-  </h:form>
-      </p:panel>
-        -->
     </ui:composition>
 </h:body>
 

@@ -84,7 +84,7 @@ public class MonitorInfoBean extends FaceBaseBean {
             for (String resourceType: resourceCodes) {
                 LOGGER.debug('buildView resourceType='+resourceType+' nickname:'+ ph.getNickname());
                 try {
-                    boolean permitViewContent = authorizationService.grantAccessByPhrId(ph.getOwnerUri(), resourceType, action)
+                    boolean permitViewContent = authorizationService.grantAccessByPhrIdOnSessionUserRole(ph.getOwnerUri(), resourceType, action)
                     LOGGER.debug('buildView permitViewContent resourceType='+resourceType+' permitViewContent:'+permitViewContent);
                     boolean permitViewRow = false
                     //check permit for current user, on phrUser with resource type
@@ -327,7 +327,7 @@ public class MonitorInfoBean extends FaceBaseBean {
 
 
                 if (isPhrId) {
-                    isContentViewPermitted = authorizationService.grantAccessByPhrId(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
+                    isContentViewPermitted = authorizationService.grantAccessByPhrIdOnSessionUserRole(targetUserId, resourceType, PhrsConstants.AUTHORIZE_ACTION_CODE_READ)
 
                     LOGGER.debug(" isContentViewPermitted request phrId=" + targetUserId + " on resourceType=" + resourceType + " permitted?")
                 } else {

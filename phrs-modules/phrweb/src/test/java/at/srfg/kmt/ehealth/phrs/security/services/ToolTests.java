@@ -4,6 +4,8 @@
  */
 package at.srfg.kmt.ehealth.phrs.security.services;
 
+import at.srfg.kmt.ehealth.phrs.Constants;
+import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.TimeUtils;
@@ -68,6 +70,15 @@ public class ToolTests {
         return dateStr;
     }
     @Test
+    public void testCoreTestMed(){
+        MedicationTreatment med = CoreTestData
+                .createMedication("testowner", Constants.STATUS_ACTIVE,
+                        "200812010000", "201106101010", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
+        assertTrue(Constants.STATUS_ACTIVE.equals(med.getStatusStandard()));
+        assertTrue("medicationSummary_medicationStatus_true".equals(med.getStatus()));
+        //medicationSummary_medicationStatus_true
+    }
+    @Test
     public void testTime(){
         long x=new Date().getTime();
         System.out.println("x="+x);
@@ -80,7 +91,7 @@ public class ToolTests {
 
         assertFalse("4. false",TimeUtils.isBeginLess(new Date(),new Date()));
 
-        assertTrue("5. false",TimeUtils.isBeginLess(new Date(1428713915937l),new Date(1328713915937l)));
+        assertFalse("5. false",TimeUtils.isBeginLess(new Date(1428713915937l),new Date(1328713915937l)));
 
         assertTrue("6. true",TimeUtils.isBeginLess(new Date(1328713915937l),new Date(1428713915937l)));
 

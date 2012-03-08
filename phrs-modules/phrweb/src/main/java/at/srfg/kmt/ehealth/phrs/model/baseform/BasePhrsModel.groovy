@@ -17,6 +17,7 @@ import com.google.code.morphia.annotations.Entity
 import com.google.code.morphia.annotations.Id
 import com.google.code.morphia.annotations.Indexed
 import com.google.code.morphia.annotations.Transient
+import at.srfg.kmt.ehealth.phrs.Constants
 
 @groovy.transform.EqualsAndHashCode
 @Entity
@@ -247,7 +248,7 @@ public class BasePhrsModel implements Serializable, Cloneable {
         String tempStatus = getStatusCorrection(status)
         if (tempStatus) {
             switch (tempStatus) {
-                case PhrsConstants.STATUS_RUNNING:
+                case [PhrsConstants.STATUS_RUNNING,Constants.STATUS_ACTIVE]:
                     return beginDate
                     break
                 case PhrsConstants.STATUS_COMPLETE:
@@ -259,7 +260,7 @@ public class BasePhrsModel implements Serializable, Cloneable {
                     break
             }
         }
-        return null
+        return endDate //if exist
     }
 
     /**
@@ -272,7 +273,7 @@ public class BasePhrsModel implements Serializable, Cloneable {
         if (tempStatus) {
             switch (tempStatus) {
 
-                case PhrsConstants.STATUS_RUNNING:
+                case [PhrsConstants.STATUS_RUNNING,Constants.STATUS_ACTIVE]:
                     beginDate = displayDate
                     break
                 case PhrsConstants.STATUS_COMPLETE:
@@ -288,14 +289,14 @@ public class BasePhrsModel implements Serializable, Cloneable {
     /**
      * Fix potential problems later
      * @param date
-     */
+
     public void setEndDate(Date date) {
         if (endDate && beginDate) {
             if (beginDate.getTime() > endDate.getTime()) {
                 endDate = beginDate
             }
         }
-    }
+    }*/
 
     /**
      * Time is eventually merged with the begin and endDates.

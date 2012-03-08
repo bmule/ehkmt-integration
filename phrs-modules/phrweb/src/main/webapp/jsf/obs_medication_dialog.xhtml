@@ -16,24 +16,21 @@
 	<ui:composition>
 
 <!-- 
-#{labels['medicationSummary.medicationNameText.label']}	
-#{labels['medicationSummary.medicationStatus.main.label']}	
-#{labels['default.medicationDosage.label']}	
-#{labels['medicationSummary.medicationQuantity.label']}	
-#{labels['medicationSummary.medicationQuantityUnit.label']}
-#{labels['medicationSummary.medicationFrequencyInterval.label']}	
-#{labels['treatmentMatrix.dosageInterval']}	
-#{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}	
-#{labels['treatmentMatrix.dosageTimeOfDay']}
+ {labels['medicationSummary.medicationNameText.label']}
+ {labels['medicationSummary.medicationStatus.main.label']}
+ {labels['default.medicationDosage.label']}
+{labels['medicationSummary.medicationQuantity.label']}
+{labels['medicationSummary.medicationQuantityUnit.label']}
+{labels['medicationSummary.medicationFrequencyInterval.label']}
+{labels['treatmentMatrix.dosageInterval']}
+{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}
+{labels['treatmentMatrix.dosageTimeOfDay']}
 	
-#{labels['medicationSummary.prescribedByPersonName.label']}	
-#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}	
+{labels['medicationSummary.prescribedByPersonName.label']}
+{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}
 
-#{labels['default.comments.label']}
+{labels['default.comments.label']}
 
-#{labels['']}	
-#{labels['']}	
-#{labels['']}
 	 -->
 		<p:dialog closable="false"  widgetVar="widDialogOmed" 
 			id="idDialogOmed" 
@@ -45,8 +42,8 @@
 			<p:outputPanel id="idPanelOmed" layout="block">
 				<h:form id="idFormOmed">
 		<!--  -->
-                                        <h:inputHidden value="#{odlmed.selected.treatmentMatrix.dosageQuantity}" />
-                                        <h:inputHidden value="#{odlmed.selected.productCode}" />
+                    <h:inputHidden value="#{odlmed.selected.treatmentMatrix.dosageQuantity}" />
+                    <h:inputHidden value="#{odlmed.selected.productCode}" />
 					<h:inputHidden value="#{odlmed.selected.statusStandard}" />
 					
 					<h:inputHidden value="#{odlmed.selected.resourceUri}" />

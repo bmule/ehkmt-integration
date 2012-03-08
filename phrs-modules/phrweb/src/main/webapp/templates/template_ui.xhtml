@@ -49,10 +49,28 @@
 				<div style="display: inline-block">
 					<p:spacer width="20"/>
 					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
-					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"/>
 
+					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"
+                                  rendered="#{loginBean.medicalRole ne true}"    />
+
+                    <h:outputText value="PHR | #{loginBean.role}" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"
+                                  rendered="#{loginBean.medicalRole eq true}"    />
+
+                    <ui:insert name="status">
+                        <p:ajaxStatus
+                                style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;">
+                            <f:facet name="start">
+                                <p:graphicImage value="/images/loading.gif" />
+                            </f:facet>
+
+                            <f:facet name="complete">
+                                <h:outputText value="" />
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </ui:insert>
                 </div>
 			</p:layoutUnit>
+          <!-- Might interfere with center panel data table output??
 			<p:layoutUnit position="bottom" 
 				height="50" 
 				fullPage="true" rendered="#{param['sidebar'] == null}"
@@ -70,14 +88,15 @@
 						</p:ajaxStatus>
 					</ui:insert>
 			</p:layoutUnit>
-			<!--  side bar includes login/logout and request authenticated user to access menu -->
+            -->
+			<!--  side bar includes login/logout and request authenticated user to access menu rendered=" {param['sidebar'] == null}"-->
 			<p:layoutUnit position="left"  
-				width="250"  
-				rendered="#{param['sidebar'] == null}"
-				collapsible="true" gutter="false" 
-				scrollable="false" 
-				resizable="true">
-                <p:outputPanel  rendered="#{loginBean.loggedIn eq true}">
+				width="250"
+				collapsible="false" gutter="false"
+				scrollable="false"
+				resizable="true" style="border:none;">
+
+                <p:outputPanel  rendered="#{loginBean.loggedIn eq true}" layout="block">
 				    <ui:include src="/sections/menunavigator.xhtml" />
                 </p:outputPanel>
 			</p:layoutUnit>
@@ -92,24 +111,21 @@
                             <h:form>
                                 <h:panelGrid columns="2">
 
-
-                                    <h:outputLabel value="User ID "/>
+                                    <h:outputLabel value="User ID " style="font-size: 12pt;"/>
                                     <p:inputText value="#{loginBean.username}" style="width:200px"
                                              id="login_username"
                                              required="true" />
 
-                                    <h:outputLabel value="Login with" />
-                                    <h:selectOneRadio layout="pageDirection" value="#{loginBean.loginType}">
-                                        <f:selectItem itemLabel="Local login name (phrtest, nurse)"
+                                    <h:outputLabel value="Login with" style="font-size: 12pt;"/>
+                                    <h:selectOneRadio layout="pageDirection" value="#{loginBean.loginType}" style="font-size: 12pt;">
+                                        <f:selectItem itemLabel="Local login name with prefix 'phr'"
                                                 itemValue="local.provider.1"/>
                                         <f:selectItem itemLabel="iCARDEA login name"
                                                 itemValue="openid.provider.1"/>
                                     </h:selectOneRadio>
 
-
-
                                     <h:outputLabel value=" "/>
-                                    <p:commandButton value="Login"  title="Login"   ajax="false"
+                                    <p:commandButton value="Login"  title="Login"   ajax="false"  style="font-size: 12pt;"
                                              actionListener="#{loginBean.processLogin}"/>
                                 </h:panelGrid>
                             </h:form>
@@ -133,27 +149,7 @@
 		</h:panelGrid>-->
 	</h:body>
 </f:view>
-<!-- 	
-		
-		<div id="wrapper">
-			<p:panel visible="false" >
-				sidebar=<h:outputText value=" {param['sidebar']}" />
-			</p:panel>
-	
-			<div id="page">
 
-				<div id="content" class="ui-widget">
-					<div class="postxx">
-						<ui:insert name="content">...</ui:insert>
-					</div>
-				</div>
-
-
-			</div>
-		</div>
-
-
- -->
 
 
 

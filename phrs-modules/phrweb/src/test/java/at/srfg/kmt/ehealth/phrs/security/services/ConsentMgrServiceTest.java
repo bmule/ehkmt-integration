@@ -298,16 +298,15 @@ public class ConsentMgrServiceTest {
         System.out.println("isPermitted");
         String targetUser = PROTOCOL_ID; // PHR_ID
         String subjectCode = ROLE_CODE_DOC;
-        String idType = PhrsConstants.PROTOCOL_ID_NAME;
+
         String resourceCode = RESOURCE_CODE_CONDITION;
         String action = ACTION_ID_READ;
         ConsentMgrService instance = new ConsentMgrService();
 
         boolean expResult = false;
-        boolean result = instance.isPermitted(
+        boolean result = instance.isPermittedByPID(
                 targetUser, 
-                subjectCode, 
-                idType, 
+                subjectCode,
                 resourceCode, 
                 action);
 
@@ -362,10 +361,10 @@ public class ConsentMgrServiceTest {
     public void testIsPermittedDoctorRead191() {
         ConsentMgrService cms = new ConsentMgrService();
        // boolean permit = cms.grantRequest("191", "ROLECODE:DOCTOR", "RESOURCECODE:CONDITION");
-        //cms.grantRequest("191", "doctor", "condition");
+       //cms.grantRequest("191", "doctor", "condition");
         
         System.out.println("callGetDecision");
-        String idType=PhrsConstants.PROTOCOL_ID_NAME;
+
         String patientId = "191";//PROTOCOL_ID;// or 
         String issuerName = ISSUER_NAME;
         String subjectCode = "ROLECODE:DOCTOR";//ROLE_CODE_DOC; ROLECODE:DOCTOR
@@ -376,10 +375,9 @@ public class ConsentMgrServiceTest {
 
         
         //String expResult = "";
-        boolean permitted= cms.isPermitted(
+        boolean permitted= cms.isPermittedByPID(
                 patientId, 
-                subjectCode, 
-                idType,               
+                subjectCode,
                 resourceCode, 
                 action);
         //String result = cms.callGetDecision(patientId, issuerName, subjectCode, resourceCode, action);
@@ -401,7 +399,6 @@ public class ConsentMgrServiceTest {
         //cms.grantRequest("191", "doctor", "condition");
 
         System.out.println("callGetDecision");
-        String idType=PhrsConstants.PROTOCOL_ID_NAME;
         String patientId = "191";//PROTOCOL_ID;// or
         String issuerName = ISSUER_NAME;
         String subjectCode = "ROLECODE:NURSE";//ROLE_CODE_DOC; ROLECODE:DOCTOR
@@ -410,12 +407,9 @@ public class ConsentMgrServiceTest {
         String resourceCode = "RESOURCECODE:IMMUNIZATION";//BASICHEALTH RESOURCECODE:CONDITION RESOURCE_CODE_CONDITION;
         String action = "READ";//ACTION_ID_READ;
 
-
-        //String expResult = "";
-        boolean permitted= cms.isPermitted(
+        boolean permitted= cms.isPermittedByPID(
                 patientId,
                 subjectCode,
-                idType,
                 resourceCode,
                 action);
         //String result = cms.callGetDecision(patientId, issuerName, subjectCode, resourceCode, action);

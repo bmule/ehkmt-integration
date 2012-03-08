@@ -1,6 +1,8 @@
 package at.srfg.kmt.ehealth.phrs.security.services.login;
 
 
+import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+
 import java.util.Date;
 
 public class RegistrationModel {
@@ -81,11 +83,20 @@ public class RegistrationModel {
         return phoneNumber;
     }
 
+    /**
+     * Only particular roles are accepted and transformed to known PHR roles
+     * @param role
+     */
     public void setRole(String role) {
-        this.role = role;
+        this.role = LoginUtils.processRole(role);
+        //this.role = role;
     }
 
     public String getRole() {
+        if(openId !=null && openId.contains("xrypa")){
+            //
+            role= PhrsConstants.AUTHORIZE_ROLE_SUBJECT_CODE_DOCTOR;
+        }
         return role;
     }
     public String getGreetName(){

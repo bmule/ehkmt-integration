@@ -302,7 +302,7 @@ public class InteropProcessor {
         String owner = res.getOwnerUri();
 
         String protocolId = getProtocolId(owner);
-        LOGGER.debug("sendMedicationMessage  START owner= "+owner+" protocolId="+protocolId);
+        LOGGER.debug("sendMedicationMessage  START owner= "+owner+" protocolId="+protocolId+" beginDate="+res.getBeginDate()+" endDate="+res.getEndDate());
 
         if (protocolId != null && !protocolId.isEmpty()) {
             // ok
@@ -1063,6 +1063,7 @@ public class InteropProcessor {
         Date theDate = null;
         try {
             if (dateMessage != null) {
+                //throws nullexception on blank or null
                 theDate = DateUtil.getFormatedDate(dateMessage);
             }
             if (theDate != null) {

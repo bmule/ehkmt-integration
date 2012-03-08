@@ -90,17 +90,17 @@ public class AuthorizationServiceTest {
     }
 
     /**
-     * Test of grantAccessByPhrId method, of class AuthorizationService.
+     * Test of grantAccessByPhrIdOnSessionUserRole method, of class AuthorizationService.
      */
     @Test
     public void testPermitAccessOnPhrId() {
-        System.out.println("grantAccessByPhrId");
+        System.out.println("grantAccessByPhrIdOnSessionUserRole");
         String targetUser = "";
         String resourceCode = "";
         String action = "";
         AuthorizationService instance = new AuthorizationService();
         boolean expResult = false;
-        boolean result = instance.grantAccessByPhrId(targetUser, resourceCode, action);
+        boolean result = instance.grantAccessByPhrIdOnSessionUserRole(targetUser, resourceCode, action);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("Test fails.");
@@ -124,19 +124,19 @@ public class AuthorizationServiceTest {
     }
 
     /**
-     * Test of permitAccess method, of class AuthorizationService.
+     * Test of permitAccessByPID method, of class AuthorizationService.
      */
     @Test
     public void testPermitAccess() {
-        System.out.println("permitAccess");
-        String targetUser = "";
-        boolean isPhrId = false;
+        System.out.println("permitAccessByPID");
+        String targetUserPID = "191";
+
         String resourceCode = "";
         String action = "";
         String subjectRole = "";
         AuthorizationService instance = new AuthorizationService();
         boolean expResult = false;
-        boolean result = instance.permitAccess(targetUser, isPhrId, resourceCode, action, subjectRole);
+        boolean result = instance.permitAccessByPID(targetUserPID, resourceCode, action, subjectRole);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("Test fails.");

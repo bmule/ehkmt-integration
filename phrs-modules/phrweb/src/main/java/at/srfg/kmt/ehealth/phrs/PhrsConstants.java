@@ -178,8 +178,8 @@ public class PhrsConstants implements Serializable {
     public static final String DATE_STATUS_BEGIN = "date.status.begin";
     public static final String DATE_STATUS_END = "date.status.end";
     public static final String STATUS_COMPLETE = Constants.STATUS_COMPELETE;
-    public static final String STATUS_INCOMPLETE = Constants.STATUS_INCOMPELETE;
-    public static final String STATUS_RUNNING = Constants.STATUS_RUNNING;
+    public static final String STATUS_INCOMPLETE = Constants.STATUS_INCOMPELETE; //Constants.STATUS_ACTIVE;
+    public static final String STATUS_RUNNING = Constants.STATUS_ACTIVE;// Constants.STATUS_RUNNING;
 
     public static final String TAG_ROLES_MEDICAL_PROFESSIONAL = "TAG_ROLES_MEDICAL_PROFESSIONAL";
     public static final String TAG_ROLES_NON_MEDICAL_USER = "TAG_ROLES_NON_MEDICAL_USER";

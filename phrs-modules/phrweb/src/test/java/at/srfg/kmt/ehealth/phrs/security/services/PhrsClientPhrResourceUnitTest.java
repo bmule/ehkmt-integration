@@ -1508,7 +1508,7 @@ public class PhrsClientPhrResourceUnitTest {
             }
         } catch (Exception e) {
 
-            LOGGER.error("transforming date", e);
+            LOGGER.error("transforming date dateMessage="+dateMessage, e);
         }
         return theDate;
     }

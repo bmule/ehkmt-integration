@@ -55,8 +55,6 @@ public class MonitorInfoMgtBean implements Serializable {
     // for dialogs or forms to control view or edit mode of fields
     private String modify = AuthorizationService.MODIFY_YES;
 
-    //private boolean testMedicalRole=false;
-
 
     public MonitorInfoMgtBean() {
         userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
@@ -117,7 +115,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
     //UI action Need params: selected...
     public void findResourcesByUserAndType() {
-        System.out.println("findResourcesByUserAndType");
+
         LOGGER.debug("findResourcesByUserAndType selectedOwnerUri=" + selectedOwnerUri + " selectedLocalResourceType=" + selectedLocalResourceType);
         initModelResults();
     }
@@ -132,17 +130,14 @@ public class MonitorInfoMgtBean implements Serializable {
             selectedOwnerUri = ownerUri;
             showFormType = "";
         }
-        //use phrtest* to simulate role
-        //if(ownerUri!=null && ! ownerUri.equals("phrtest") && ownerUri.contains("phrtest")) {
-        //    testMedicalRole=true;
-        //}
-        //selectedOwnerUri, selectedLocalResourceType, selectedTest
+
         modelMain = new ArrayList();
 
-        //be sure, issue with viewscope
 
         testMode = selectedTest != null && ("true".equalsIgnoreCase(selectedTest));
+
         LOGGER.debug("initModelResults selectedOwnerUri" + selectedOwnerUri + " ownerUri=" + ownerUri + " selectedLocalResourceType=" + selectedLocalResourceType);
+
         if (selectedOwnerUri != null && selectedLocalResourceType != null) {
 
             boolean granted = false;
@@ -150,12 +145,13 @@ public class MonitorInfoMgtBean implements Serializable {
                 LOGGER.debug("selectedOwnerUri= ownerUri");
                 granted = true;
                 showFormType = "";
-                //selectedOwnerGreetName = userService.getUserGreetName(selectedOwnerUri);
+
 
             } else {
                 granted = grantPermissionForLocalResourceType(selectedOwnerUri, ownerUri, selectedLocalResourceType, true);
-                if (!granted) {
-                    //for testing
+                if (! granted) {
+                    LOGGER.debug("Granted false, try test patient 191. Initially choose ownerUri="+ownerUri);
+                    //for testing, try this patient 191
                     granted = grantPermissionForLocalResourceType("191", ownerUri, selectedLocalResourceType, false);
                 }
                 selectedOwnerGreetName = userService.getUserGreetName(selectedOwnerUri);
@@ -242,7 +238,7 @@ public class MonitorInfoMgtBean implements Serializable {
             String resourceCode = transformUIResourceType(localResourceType);
 
             if (resourceCode != null && subjectRole != null && targetOwnerUri != null) {
-                LOGGER.debug("PREPARE grantAccessByPhrIdAndRole by requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+                LOGGER.debug("PREPARE grantAccessByPhrIdAndRole by requestorUri="+requestorOwnerUri + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
                 if (phrId) {
                     granted = authorizationService.grantAccessByPhrIdAndRole(targetOwnerUri, resourceCode, "READ", subjectRole);
                 } else {
@@ -250,7 +246,7 @@ public class MonitorInfoMgtBean implements Serializable {
                 }
 
             } else {
-                LOGGER.debug("FAIL grantAccessByPhrIdAndRole NULL parameter found:  requestorUri=" + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
+                LOGGER.debug("FAIL grantAccessByPhrIdAndRole NULL parameter found:  requestorUri="+requestorOwnerUri + " role=" + subjectRole + " on " + resourceCode + " targetUser=" + targetOwnerUri);
 
             }
         }
@@ -259,7 +255,7 @@ public class MonitorInfoMgtBean implements Serializable {
     }
 
     private void showGrantOutcomeMessage(boolean granted) {
-
+        LOGGER.debug("showGrantOutcomeMessage "+granted);
         if (granted) {
             WebUtil.addFacesMessageSeverityInfo("Status", "Access granted, you are allowed access this material");
         } else {
@@ -291,21 +287,25 @@ public class MonitorInfoMgtBean implements Serializable {
                     } else {
                         LOGGER.error("requestorOwnerUri non medical, is null, no user owner in session");
                     }
-
+                  //getPhrUsersAll
                 } else {
                     List<PhrFederatedUser> phrUsers = userService.getPhrUsersAll();//getResources(null, (Object)PhrFederatedUser.class);
                     if (phrUsers != null) {
-                        LOGGER.debug("create pull down menu for medical user " + phrUsers.size());
                         for (PhrFederatedUser ph : phrUsers) {
                             //skip any reports for medical user
-                            if (UserSessionService.sessionUserHasMedicalRole()) {
-                                if (ph.getOwnerUri().equals(requestorOwnerUri)) {
-                                    continue;
-                                }
-                            }
                             if (ph.getOwnerUri() != null) {
+                                if (UserSessionService.sessionUserHasMedicalRole()) {
+                                    if (ph.getOwnerUri().equals(requestorOwnerUri)) {
+                                        //LOGGER.debug("skip report for requestorOwnerUri = "+requestorOwnerUri);
+                                        continue;
+                                    }
+                                }
+
                                 ModelLabelValue lv = createUserLabelValue(ph);
                                 modelFormUserList.add(lv);
+                            } else {
+                                LOGGER.debug("PhrUser ownerUri NULL resourceUri "+ph.getResourceUri());
+
                             }
                         }
                     } else {
@@ -315,6 +315,7 @@ public class MonitorInfoMgtBean implements Serializable {
             } else {
                 LOGGER.error("requestorOwnerUri is null, no user owner in session");
             }
+
             //create UI selection list
             modelFormLocalResources = new ArrayList<ModelLabelValue>();
             // BP  BW   MED   ADL   PROBLEM
@@ -323,7 +324,10 @@ public class MonitorInfoMgtBean implements Serializable {
             modelFormLocalResources.add(new ModelLabelValue("MED", "Medications"));
             modelFormLocalResources.add(new ModelLabelValue("ADL", "Activities of Daily Living"));
             modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
-
+            //default
+            if(selectedLocalResourceType ==null){
+                selectedLocalResourceType="BP";
+            }
         } catch (Exception e) {
             LOGGER.error("initFormModel");
         }
@@ -332,7 +336,7 @@ public class MonitorInfoMgtBean implements Serializable {
         // this.internalModelList= buildView(list,this.permit, UserSessionService.getSessionAttributePhrId());
 
 
-        LOGGER.debug("END initFormModel");
+        LOGGER.debug("END initFormModel modelFormUserList size="+modelFormUserList.size());
 
 
     }
