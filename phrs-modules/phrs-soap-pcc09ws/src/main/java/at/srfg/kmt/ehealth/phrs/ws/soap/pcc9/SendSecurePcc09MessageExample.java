@@ -10,6 +10,8 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc9;
 
 import java.net.MalformedURLException;
 import javax.xml.bind.JAXBException;
+
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCIN043100UV01;
 import org.slf4j.Logger;
@@ -90,14 +92,16 @@ public final class SendSecurePcc09MessageExample {
         final String careProvisionReason = "iCardea Barcelona Meeting test";
         //String careRecordTimePeriodBegin = "201101010000";
         final String careRecordTimePeriodBegin =
-                QueryFactoryUnitTest.getLastMonthDate();
+                DateUtil.getLastMonthDate();
+        //QueryFactoryUnitTest.getLastMonthDate();
         //String careRecordTimePeriodEnd =   "201101011000";
-        final String careRecordTimePeriodEnd = QueryFactoryUnitTest.getNowDate();
+        final String careRecordTimePeriodEnd = DateUtil.getNowDate();
+                //QueryFactoryUnitTest.getNowDate();
         final String clinicalStatementTimePeriodBegin =
-                QueryFactoryUnitTest.getLastMonthDate();
+                DateUtil.getLastMonthDate();
         //String clinicalStatementTimePeriodBegin = "201001010000";
         final String clinicalStatementTimePeriodEnd =
-                QueryFactoryUnitTest.getNowDate();
+                DateUtil.getNowDate();
         //String clinicalStatementTimePeriodEnd = "201005011000";
         final String includeCarePlanAttachment = "true";
         final String maximumHistoryStatements = "30";

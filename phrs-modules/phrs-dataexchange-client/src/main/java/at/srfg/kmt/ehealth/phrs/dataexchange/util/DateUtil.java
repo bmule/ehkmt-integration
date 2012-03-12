@@ -38,6 +38,10 @@ public final class DateUtil {
     /**
      * A list that contains all the supported (date) formats.
      */
+    //From PCC09 QueryFactorUnitTest
+    public final static DateFormat DATE_FORMAT_PCC09 =
+            new SimpleDateFormat("yyyyMMddHHmmss");
+
     private static final List<DateFormat> FORMATS;
 
     static {
@@ -48,6 +52,7 @@ public final class DateUtil {
         FORMATS.add(new SimpleDateFormat("yyyyMM"));
         FORMATS.add(new SimpleDateFormat("yyyy"));
         FORMATS.add(new SimpleDateFormat("yyyy-MM-dd"));
+        FORMATS.add(new SimpleDateFormat("yyyyMMddHHmmss"));
     }
 
     /**
@@ -111,5 +116,38 @@ public final class DateUtil {
         }
 
         return OUTPUT_FORMAT.format(date);
+    }
+
+    /**
+     * Builds a
+     * <code>java.util.Date</code> instance located 31 days in the past and
+     * returns it like String formated with the pattern : "yyyyMMddHHmmss".
+     *
+     * @return a
+     * <code>java.util.Date</code> instance located 31 days in the past and
+     * returns it like String formated with the pattern : "yyyyMMddHHmmss".
+     */
+    public static String getLastMonthDate() {
+        final Date date = new Date();
+        // one day has 86400 seconds
+        final long oneMonth = 1000 * 86400 * 31;
+        final long now = date.getTime();
+        final long lastMonth = now + oneMonth;
+
+        return DATE_FORMAT_PCC09.format(lastMonth);
+    }
+
+    /**
+     * Builds a
+     * <code>java.util.Date</code> that caries the current date and returns it
+     * like String formated with the pattern : "yyyyMMddHHmmss".
+     *
+     * @return a
+     * <code>java.util.Date</code> that caries the current date and returns it
+     * like String formated with the pattern : "yyyyMMddHHmmss".
+     */
+    public static String getNowDate() {
+        final Date date = new Date();
+        return DATE_FORMAT_PCC09.format(date);
     }
 }
