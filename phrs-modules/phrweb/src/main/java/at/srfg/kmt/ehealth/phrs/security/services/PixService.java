@@ -18,27 +18,22 @@ import ca.uhn.hl7v2.model.v25.segment.QPD;
 import ca.uhn.hl7v2.parser.DefaultXMLParser;
 import ca.uhn.hl7v2.parser.PipeParser;
 import gr.forth.ics.icardea.pid.HL7Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static gr.forth.ics.icardea.pid.PatientIndexConstants.*;
-
+import javax.net.SocketFactory;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.Date;
 import java.util.Map;
 import java.util.ResourceBundle;
-import javax.net.SocketFactory;
-import javax.net.ssl.SSLSocket;
-import javax.net.ssl.SSLSocketFactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static gr.forth.ics.icardea.pid.PatientIndexConstants.*;
 
-/**
- * From ConfigurationService get the endpoint
- * <p/>
- * Includes code snippets from FORTH TODO refactor based on latest example code
- */
+
 @SuppressWarnings("serial")
 public class PixService implements Serializable {
 
@@ -64,7 +59,7 @@ public class PixService implements Serializable {
     private ConfigurationService config;
     private AuditAtnaService aas;
     private String domainDefault = IDENTIFIER_NAMESPACE_PROTOCOL_ID_ICARDEA;
-    private int sslConfigSetting = 2;
+
     private int pix_port = 2575;
     private String pix_host = "localhost";
     private boolean pix_tls = true;
@@ -73,19 +68,18 @@ public class PixService implements Serializable {
     public final static String PIX_QUERY_TYPE_DEFAULT = "cied:model:Maximo";
 
     public PixService() {
-        //get from ConfigurationService
-        sslConfigSetting = 2;
-        initSSl();
+
+        //initSSl();
         init();
 
     }
 
-    public PixService(int sslConfigSetting) {
-        this.sslConfigSetting = sslConfigSetting;
-        initSSl();
-        init();
-
-    }
+//    public PixService(int sslConfigSetting) {
+//        this.sslConfigSetting = sslConfigSetting;
+//        //initSSl();
+//        init();
+//
+//    }
 
     public String getPatientProtocolIdByCIED(String cied) {
         String pid = null;
@@ -148,8 +142,16 @@ public class PixService implements Serializable {
                 + "QPD|IHE PIX Query|ListenerQry|" + id + "^^^" + namespace + "|\r"
                 + "RCP|I\r";
 
-        String response = sendMessage(socket_msg);
-        String pid = PixService.parsePid(response, id, namespace);
+
+        String pid = null;
+        try {
+            String response = sendMessage(socket_msg);
+
+            pid = PixService.parsePid(response, id, namespace);
+        } catch (Exception e) {
+            LOGGER.error("Error sending message", e);
+        }
+
         LOGGER.debug("PixService.parsePid =  " + pid + " from id=" + id + " namespace=" + namespace);
         return pid;
     }
@@ -166,7 +168,7 @@ public class PixService implements Serializable {
      * id and namespace
      *
      * @param response
-     * @param id - that was queried only for reporting
+     * @param id        - that was queried only for reporting
      * @param namespace - that was queried
      * @return
      */
@@ -255,6 +257,7 @@ public class PixService implements Serializable {
 //ORBIS&www.salk.at&DNS
 //Use as namespace of ID that we pass: e.g. the CIED implant serial number CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID
 //No connection hub needed  see gr.forth.ics.icardea.listener.CDAConverter EHR listener
+
     /**
      * Send message PIX querx
      *
@@ -265,25 +268,45 @@ public class PixService implements Serializable {
         // msg=(char)11+msg+(char)28+(char)13;
         Connection connection = null;
         try {
-            LOGGER.debug("sendMessage PIX Query>" + msg);
+            LOGGER.debug("sendMessage PIX TLS=" + pix_tls + " host " + pix_host + " port " + pix_port + " pix query" + msg);
             //ConfigurationService
 
-            //pix_tls
 
             if (pix_tls) {
+
+
+                final String home = ResourceBundle.getBundle("icardea").getString("icardea.home");
+                final String trustStore = home + ConfigurationService.getInstance().getProperty("javax.net.ssl.trustStore");
+                final String keyStore = home + ConfigurationService.getInstance().getProperty("javax.net.ssl.keyStore");
+
+                final String passTrust = ConfigurationService.getInstance().getProperty("javax.net.ssl.trustStorePassword");
+                final String passKey = ConfigurationService.getInstance().getProperty("javax.net.ssl.keyStorePassword");
+
+                LOGGER.debug("sendMessage SSL trustStore {} pass {} keystore {} pass {}", new Object[]{trustStore, passTrust, keyStore, passKey});
+
+                System.setProperty("javax.net.ssl.keyStore", keyStore);
+                System.setProperty("javax.net.ssl.keyStorePassword", passKey);
+
+                System.setProperty("javax.net.ssl.trustStore", trustStore);
+
+                System.setProperty("javax.net.ssl.trustStorePassword", passTrust);
+
                 SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
                 //SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket(Config.GetSetting("PIX_ip"), Integer.parseInt(Config.GetSetting("PIX_port")));
 
                 SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket(pix_host, pix_port);
                 sslsocket.startHandshake();
                 connection = new Connection(new PipeParser(), new MinLowerLayerProtocol(), sslsocket);
-            } else {
-                SocketFactory socketfactory = (SocketFactory) SocketFactory.getDefault();
 
-                Socket socket = (Socket) socketfactory.createSocket(pix_host, pix_port);
-                //socket.startHandshake();
+            } else {
+
+                SocketFactory socketfactory = SocketFactory.getDefault();
+
+                Socket socket = socketfactory.createSocket(pix_host, pix_port);
+
                 connection = new Connection(new PipeParser(), new MinLowerLayerProtocol(), socket);
             }
+
             if (connection != null) {
                 QBP_Q21 hl7Msg = new QBP_Q21();
                 hl7Msg.parse(msg);
@@ -300,7 +323,12 @@ public class PixService implements Serializable {
 
         } finally {
             if (connection != null) {
-                connection.close();
+
+                try {
+                    connection.close();
+                } catch (Exception e) {
+                    LOGGER.error("Error closing connection", e);
+                }
             }
         }
         return "";
@@ -311,41 +339,27 @@ public class PixService implements Serializable {
         return aas;
     }
 
-    protected void initSSl() {
-
-        SSLLocalClient.sslSetup(sslConfigSetting);
-        //must setup secure sockets also
-    }
+//    protected void initSSl() {
+//
+//        SSLLocalClient.sslSetup(sslConfigSetting);
+//    }
 
     private void init() {
         // parse endpoint into host and port
+
+
+        pix_host = ConfigurationService.getInstance().getProperty("pix.host", "localhost").trim();
+        String port = ConfigurationService.getInstance().getProperty("pix.port", "2575").trim();
+        String tls = ConfigurationService.getInstance().getProperty("pix.tls", "true").trim();
+
+        pix_tls = Boolean.parseBoolean(tls);
+
         try {
-//            config = ConfigurationService.getInstance();
-//            String endpoint = config.getEndPoint(ConfigurationService.ENDPOINT_TYPE_PIX);
-//            String[] parts = endpoint.split(":");
-//
-//            if (parts != null && parts.length > 0) {
-//                host = parts[0];
-//                if (parts.length > 1) {
-//                    String tmp = parts[1];
-//                    port = Integer.parseInt(tmp);
-//                }
-//              salk.server
-//            }
-
-           // ResourceBundle properties = ResourceBundle.getBundle("icardea");
-           // pix_host = properties.getString("salk.server");
-
-
-            pix_host = ConfigurationService.getInstance().getProperty("pix.host").trim();
-            String port = ConfigurationService.getInstance().getProperty("pix.port").trim();
-            String tls = ConfigurationService.getInstance().getProperty("pix.tls").trim();
-
-            pix_tls = Boolean.parseBoolean(tls);
             pix_port = Integer.parseInt(port);
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            pix_port = 2575;
         } catch (Exception e) {
 
             e.printStackTrace();
@@ -610,7 +624,7 @@ public class PixService implements Serializable {
 //        return resultMap;
 //    }
     public PID getPatientMessage(String fam_name, String giv_name, String sex,
-            String dob) {
+                                 String dob) {
 
         PID pid = null;
         try {
@@ -630,7 +644,7 @@ public class PixService implements Serializable {
 
     // a.getMSH().getSendingApplication().parse("testclient^icardea");
     protected Message pdq(String fam_name, String giv_name, String sex,
-            String dob) throws HL7Exception, LLPException, IOException,
+                          String dob) throws HL7Exception, LLPException, IOException,
             Exception {
 
         QBP_Q21 a = new QBP_Q21();
@@ -680,6 +694,7 @@ public class PixService implements Serializable {
         // response
         return this.sendAndRecvPixMessage(a);
     }
+
     private boolean useMessageDispatcher = true;
 
     public boolean isUseMessageDispatcher() {
@@ -731,11 +746,11 @@ public class PixService implements Serializable {
     /**
      * @param ownerUri
      * @param pixQueryIdUser "cied" pixQueryIdType -->Serial number or "pid"
-     * pixQueryIdType --> protocolId
+     *                       pixQueryIdType --> protocolId
      * @param pixQueryIdType cied or pid
-     * @param requeryPix requery even if there is a current PIX protocol ID
+     * @param requeryPix     requery even if there is a current PIX protocol ID
      * @return The protocolId if successful. Either from PIX or a test
-     * protocolId enter via the UI
+     *         protocolId enter via the UI
      */
     public String updateIdentifierFromUser(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType, boolean requeryPix) {
 
@@ -760,13 +775,13 @@ public class PixService implements Serializable {
             if (pfu != null) {
                 boolean changedInput = false;//should requery
                 //compare just serial number
-                if (pfu.getPixQueryIdUser() != null && !pixQueryIdUser.equals(pfu.getPixQueryIdUser())) {
-                    //saveResource=true;
+                if (!pixQueryIdUser.equals(pfu.getPixQueryIdUser())) {
+
                     pfu.setPixQueryIdUser(pixQueryIdUser);
                     changedInput = true;
                 }
-                if (pfu.getPixQueryIdType() != null && !pixQueryIdType.equals(pfu.getPixQueryIdType())) {
-                    //saveResource=true;
+                if (!pixQueryIdType.equals(pfu.getPixQueryIdType())) {
+
                     pfu.setPixQueryIdType(pixQueryIdType);
                     changedInput = true;
                 }
@@ -779,13 +794,14 @@ public class PixService implements Serializable {
                     //null, unless the UI pixQueryIdType  is "pid", not "cied"
 
                     pfu.setProtocolIdUser(pixQueryIdUser);
-
-                    String protocolIdUser = pixQueryIdUser;
+                    theProtocolId = pixQueryIdUser;
+                    //String protocolIdUser = pixQueryIdUser;
                     LOGGER.debug("updateIdentifiers LOCAL PID for  protocolIdUser ownerUri=" + ownerUri
-                            + " info.getProtocolIdUser()= " + protocolIdUser + " info.getPixQueryIdUser()=" + pixQueryIdUser);
+                            + " info.getProtocolIdUser() = theProtocolId= " + theProtocolId + " info.getPixQueryIdUser()=" + pixQueryIdUser);
                     //deprecated commonDao.registerProtocolId(ownerUri, protocolIdUser, null);
-
-                    theProtocolId = pfu.getProtocolId(); //protocolIdUser;
+                    //tries to get the Pix version despite what the this UI did....??
+                    //theProtocolId = pfu.getProtocolId(); //protocolIdUser;
+                    commonDao.crudSaveResource(pfu, pfu.getOwnerUri(), pfu.getCreatorUri());
 
                 } else {
 
@@ -809,25 +825,23 @@ public class PixService implements Serializable {
                                 + " pixQueryIdType= " + pixQueryIdType
                                 + " type= " + type);
                     } else {
-                        if (type.startsWith("cied:")) {
-                            type = type.replaceFirst("cied:", type);
-                        }
-                        //  else if(type.startsWith(PIX_QUERY_TYPE_PREFIX_CIED)) 
+
+
+                        //if (type.startsWith("cied:")) {
+                        //    type = type.replaceFirst("cied:", type);
+                        //}
+
                         //CIED type contains model info, but remove cied part
-                        String pixQueryString = PixService.makePixIdentifier(pixQueryIdType, pixQueryIdUser);
+                        //String pixQueryString = PixService.makePixIdentifier(pixQueryIdType, pixQueryIdUser);
 
-                        LOGGER.debug("updateIdentifiers CIED for  protocolIdUser ownerUri=" + ownerUri
-                                + " pixQueryIdType= " + pixQueryIdType
-                                + " type= " + type + " pixQueryString= " + pixQueryString);
-
-                        //Is there a Pix prototcol ID already saved?
+                        //LOGGER.debug("updateIdentifiers CIED for  protocolIdUser ownerUri=" + ownerUri
+                        //        + " pixQueryIdType= " + pixQueryIdType
+                        //        + " type= " + type + " pixQueryString= " + pixQueryString);
 
                         try {
 
-                            LOGGER.debug("updateIdentifiers Pix pixQueryString " + pixQueryString);
-
-                            //do query
-                            String pixProtocolId = getPatientProtocolIdByCIED(pixQueryString);
+                            String pixProtocolId = performPixQuery(pixQueryIdType,pixQueryIdUser);
+                            //getPatientProtocolIdByCIED(pixQueryString);
 
                             if (pixProtocolId != null && !pixProtocolId.isEmpty()) {
                                 pfu.setProtocolIdPix(pixProtocolId);
@@ -836,8 +850,9 @@ public class PixService implements Serializable {
                                         + " info.pixProtocolId()= " + pixProtocolId + " info.getPixQueryIdUser()=" + pixQueryIdUser);
 
                                 //deprecated commonDao.registerProtocolId(ownerUri, pixProtocolId, null);//do first, if error we do not write pfu
-                                //commonDao.crudSaveResource(pfu, pfu.getOwnerUri(), pfu.getCreatorUri());
                                 theProtocolId = pixProtocolId;
+                                //save only if found....
+                                commonDao.crudSaveResource(pfu, pfu.getOwnerUri(), pfu.getCreatorUri());
                             }
 
 
@@ -848,7 +863,7 @@ public class PixService implements Serializable {
 
                 }
                 //saving at least the input form data, even if okPixQuery=false or PID type
-                commonDao.crudSaveResource(pfu, pfu.getOwnerUri(), pfu.getCreatorUri());
+                //commonDao.crudSaveResource(pfu, pfu.getOwnerUri(), pfu.getCreatorUri());
 
             }
 
@@ -862,10 +877,9 @@ public class PixService implements Serializable {
      * Assemble an identifier derived from the UI and model
      *
      * @param pixQueryIdType prefix indicates the identifier type to query and
-     * formatting of the model info e.g. cied:model:Maximo
+     *                       formatting of the model info e.g. cied:model:Maximo
      * @param pixQueryIdUser
      * @return
-     *
      */
     //TODO makePixIdentifier make templates for type prefixes
     public static String makePixIdentifier(String pixQueryIdType, String pixQueryIdUser) {
@@ -895,5 +909,21 @@ public class PixService implements Serializable {
                 + " pixQueryIdType= " + pixQueryIdType
                 + " type= " + type + " pixQueryString= " + sb);
         return sb.toString();
+    }
+
+    public String performPixQuery(String pixQueryIdType, String pixQueryIdUser) {
+        String pixQueryString = PixService.makePixIdentifier(pixQueryIdType, pixQueryIdUser);
+        String pixProtocolId = null;
+        LOGGER.debug("performPixQuery CIED "
+                + " pixQueryIdType= " + pixQueryIdType + " pixQueryString= " + pixQueryString);
+
+        try {
+            //do query
+            pixProtocolId = getPatientProtocolIdByCIED(pixQueryString);
+
+        } catch (Exception e) {
+            LOGGER.error("Pix exception ", e);
+        }
+        return pixProtocolId;
     }
 }

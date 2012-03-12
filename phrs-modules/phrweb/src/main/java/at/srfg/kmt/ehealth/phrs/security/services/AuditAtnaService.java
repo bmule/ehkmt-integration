@@ -3,52 +3,28 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dispatch.api.Dispatcher;
 import at.srfg.kmt.ehealth.phrs.dispatch.impl.SingleDistpatcher;
-
-import java.io.Serializable;
-
-import java.net.UnknownHostException;
-import java.util.ResourceBundle;
-
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tr.com.srdc.icardea.atnalog.client.Audit;
-import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 
-/*
-* TODO create new thread for each send*
-*/
-//buildNullFrequency()
+import java.io.Serializable;
+import java.net.UnknownHostException;
+
+
 @SuppressWarnings("serial")
 public class AuditAtnaService implements Serializable {
 
     public final static String AUDIT_SYSTEM_SOURCE_PHRS = "phrs";
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuditAtnaService.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuditAtnaService.class);
     private boolean atnalog = false;
     private boolean secure = false;
     private Audit audit = null;
     private String host = "127.0.0.1";
     private int port = 2861;
     private boolean useMessageDispatcher=false;
-    //private int portSecure = 8443;
-    private int sslConfigSetting = 2;
-
-    private void setupSSL(int sslConfigSetting) {
-
-        SSLLocalClient.sslSetup(sslConfigSetting);
-    }
 
     public AuditAtnaService() {
-
-        init();
-    }
-
-    /**
-     * If configured for SSL, the which setting? Default is 2
-     *
-     * @param sslConfigSetting
-     */
-    public AuditAtnaService(int sslConfigSetting) {
-        this.sslConfigSetting = sslConfigSetting;
 
         init();
     }
@@ -90,8 +66,7 @@ public class AuditAtnaService implements Serializable {
             atnalog = Boolean.parseBoolean(config.getProperty("atna.log", "true"));
 
             secure = Boolean.parseBoolean(config.getProperty("atna.tls", "false"));
-           
-//port not in this configuration file
+
             //atna.tls is true, but ignore...
             if (atnalog) {
                 port = Integer.parseInt(config.getProperty("atna.log.port", "2861"));
@@ -102,12 +77,11 @@ public class AuditAtnaService implements Serializable {
                     //setupSSL(sslConfigSetting);
                 }
 
-              
                 host = config.getProperty("atna.log.server","127.0.0.1");
 
-
                 // String xml = Audit.createMessage("GRM", patientId, resource,
-                // requesterRole);//TODO: Grant Request Message
+                // requesterRole);
+                //TODO: Grant Request Message
 
                 audit = new Audit(host, port);
 
@@ -120,14 +94,14 @@ public class AuditAtnaService implements Serializable {
         } catch (UnknownHostException e) {
             LOGGER.error("", e);
             secure = false;
-            e.printStackTrace();
+
         } catch (Exception e) {
             secure = false;
             LOGGER.error("", e);
-            e.printStackTrace();
+
         }
-        System.out.println("do atna?=" + atnalog + " secure? " + secure + " host=" + host + " port=" + port);
-        LOGGER.debug("do atna?=" + atnalog + " secure? " + secure + " host=" + host + " port=" + port);
+
+        LOGGER.debug("send atna?=" + atnalog + " host=" + host + " port=" + port);
 
     }
 
@@ -234,7 +208,6 @@ public class AuditAtnaService implements Serializable {
             }
         } catch (Exception e) {
             LOGGER.error("patientId= " + patientId, e);
-            e.printStackTrace();
         }
         LOGGER.debug("end doAuditMessageGrant");
         return success;
@@ -291,7 +264,6 @@ public class AuditAtnaService implements Serializable {
             }
         } catch (Exception e) {
             LOGGER.error("patientId= " + patientId, e);
-            e.printStackTrace();
         }
         return success;
     }

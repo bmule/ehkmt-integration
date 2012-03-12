@@ -501,8 +501,8 @@ public class ConfigurationService implements Serializable {
         //from UserSessionService.getSessionAttributeRole();
         if (isAccessControlLocalForHealthInfo()) {
 
-            boolean flag = isHealthInfoAccessibleByRole()
-            if (flag && role != null) {
+            //boolean flag = isHealthInfoAccessibleByRole()
+            //if (flag && role != null) {
                 //role=role.toLowerCase();
                 switch (role) {
                     case [
@@ -514,7 +514,7 @@ public class ConfigurationService implements Serializable {
                         break
                 }
 
-            }
+            //}
         }
         return false;
 

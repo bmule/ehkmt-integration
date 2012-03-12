@@ -42,20 +42,11 @@
 			<!-- show validation messages for create form contents -->
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents -->
-			<!-- 
 
-render="#{allcontacts.contactType eq  'healthcare_user'}"
-render="#{allcontacts.contactType eq  'healthcare_provider'}"
- -->
 
 			<p:fieldset
 				legend="#{allcontacts.contactType eq  'healthcare_user' ? labels['contactInfo.personal.label'] : labels['contactInfo.medical.label']}">
-				<!-- 
 
-			<label value="${labels.contactInfo.medical.label}"  	if="${formElementRole.visible}"/>
-			<label value="${labels.contactInfo.personal.label}"     if="@{composer.contactType == 'healthcare_user'}"/>
- 			render="#{allcontacts.contactType eq  'healthcare_provider'}"
- -->
 				<p:toolbar>
 					<p:toolbarGroup align="left">
 						<p:commandButton value="create" immediate="true"
@@ -106,25 +97,7 @@ render="#{allcontacts.contactType eq  'healthcare_provider'}"
 						<!--  <h:outputLabel value="#{theItem.middleName}" />-->
 					</p:column>
 					
-					<!-- PIX identifier -->
-					  
-					<p:column headerText="CIED ID" sortBy="#{theItem.pixQueryIdType}"
-						render="#{theItem.contactType eq  'healthcare_user'}">
-						<!--<b>Protocol ID:</b><br/>
-						<h:outputLabel value="#{theItem.pixIdentifier.status}" >				
-							<f:converter converterId="labelLookup" />
-						</h:outputLabel>
-						<br/>   pixQueryIdType pixQueryIdUser  -->
-						<h:outputLabel value="#{theItem.pixQueryIdType}"/> - <h:outputLabel value="#{theItem.pixQueryIdUser}"/>
-					</p:column>
-					
-					<!-- prints identifier_cied_number -->
-					<!-- identifier_cied_number
-					<p:column headerText="CIED Identifier" sortBy="#{theItem.ciedIdentifier.identifier}"
-						render="#{theItem.contactType eq  'healthcare_user'}">
-						<h:outputLabel value="#{theItem.ciedIdentifier.identifier}"/>
-					</p:column>
-						 -->				
+
 					<p:column headerText="Role" sortBy="#{theItem.healthcareRole}">
 						<h:outputLabel value="#{theItem.healthcareRole}">				
 							<f:converter converterId="labelLookup" />
@@ -149,7 +122,7 @@ render="#{allcontacts.contactType eq  'healthcare_provider'}"
 						<!-- email_obj -->
 					</p:column>
 
-					<!-- internetChatId_obj internetSystemFederatedId_obj-->
+
 					
 					<p:column headerText="Internet Services">
 						<h:panelGrid columns="3" style="border:none;">						
@@ -192,18 +165,6 @@ render="#{allcontacts.contactType eq  'healthcare_provider'}"
 
 		<ui:include src="./profile_allcontacts_dialog.xhtml" />
 
-		<!--<p:dialog widgetVar="widDialogAcontacts" id="idDialogAcontacts"
-			modal="true"	appendToBody="true"
-			header="Action Details" width="600" showEffect="clip"
-			hideEffect="clip">
-
-			<p:outputPanel id="idPanelAcontacts" layout="block">
-				<h:form id="idFormAcontacts">
-				
-				test
-				</h:form>
-			</p:outputPanel>
-		</p:dialog>-->
 
 
 	</ui:define>

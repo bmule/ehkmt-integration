@@ -106,31 +106,25 @@ render="#{procon.contactType eq  'healthcare_provider'}"
 						<!--  <h:outputLabel value="#{theItem.middleName}" />-->
 					</p:column>
 					
-					<!-- PIX identifier -->
+					<!-- PIX identifier
 					  
-					<p:column headerText="CIED ID" sortBy="#{theItem.pixQueryIdType}"
-						render="#{theItem.contactType eq  'healthcare_user'}">
-						<!--<b>Protocol ID:</b><br/>
-						<h:outputLabel value="#{theItem.pixIdentifier.status}" >				
+					<p:column headerText="CIED ID" sortBy="XX{theItem.pixQueryIdType}"
+						render="XX{theItem.contactType eq  'healthcare_user'}">
+                        <h:outputLabel value="XX{theItem.pixQueryIdType}"/> - <h:outputLabel value="XX{theItem.pixQueryIdUser}"/>
+                    </p:column>
+
+                     <b>Protocol ID:</b><br/>
+						<h:outputLabel value="XX{theItem.pixIdentifier.status}" >
 							<f:converter converterId="labelLookup" />
 						</h:outputLabel>
-						<br/>   pixQueryIdType pixQueryIdUser  -->
-						<h:outputLabel value="#{theItem.pixQueryIdType}"/> - <h:outputLabel value="#{theItem.pixQueryIdUser}"/>
-					</p:column>
-					
-					<!-- prints identifier_cied_number -->
-					<!-- identifier_cied_number
-					<p:column headerText="CIED Identifier" sortBy="#{theItem.ciedIdentifier.identifier}"
-						render="#{theItem.contactType eq  'healthcare_user'}">
+						<br/>   pixQueryIdType pixQueryIdUser
+
+					identifier_cied_number
+					<p:column headerText="CIED Identifier" sortBy="X{theItem.ciedIdentifier.identifier}"
+						render="XX{theItem.contactType eq  'healthcare_user'}">
 						<h:outputLabel value="#{theItem.ciedIdentifier.identifier}"/>
 					</p:column>
 						 -->				
-					<p:column headerText="Role" sortBy="#{theItem.healthcareRole}"
-						render="#{theItem.contactType eq  'healthcare_provider'}">
-						<h:outputLabel value="#{theItem.healthcareRole}">				
-							<f:converter converterId="labelLookup" />
-						</h:outputLabel>
-					</p:column>
 
 					<p:column headerText="Telephone">
 						<h:outputLabel value="#{theItem.primaryTelephone}" />

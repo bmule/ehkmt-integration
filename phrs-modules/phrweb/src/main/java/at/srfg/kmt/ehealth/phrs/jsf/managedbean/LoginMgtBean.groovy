@@ -291,7 +291,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext()
                     .redirect(uri);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error('redirect on URI '+uri,e)
         }
     }
     /**

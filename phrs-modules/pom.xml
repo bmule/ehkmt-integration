@@ -7,7 +7,8 @@
     CONDITIONS OF ANY KIND, either express or implied. See the License for
     the specific language governing permissions and limitations under the
     License.
-  --><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -28,14 +29,54 @@
         <url>git@github.com:bmule/ehkmt-integration.git</url>
     </scm>
 
+    <!-- issue with mvn clean test; mvn site-deploy  -->
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.12</version>
+
+            </plugin>
+        </plugins>
+    </reporting>
     <!--
     Mihai : I add the utf-8 line and I consider that the UTF-8 must be the ecncoding used.
     -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <!--
+    <pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.12</version>
+            </plugin>
+            ...
+        </plugins>
+    </pluginManagement>
+    -->
     <build>
+        <!-- default is 2.4.3 but we want to add  aggregate=true to create report in root -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-report-plugin</artifactId>
+                    <version>2.12</version>
+                    <configuration>
+                        <showSuccess>true</showSuccess>
+                        <aggregate>true</aggregate>
+                        <goal>report</goal>
+                        <detail>true</detail>
+                        <alwaysGenerateSurefireReport>false</alwaysGenerateSurefireReport>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
 
             <plugin>
@@ -57,10 +98,154 @@
                     <nohelp>true</nohelp>
                 </configuration>
             </plugin>
-            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>2.12</version>
+            </plugin>
+
         </plugins>
     </build>
-    
+    <profiles>
+        <profile>
+            <id>Sesame Installation</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>installSesame</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <configuration>
+                                    <tasks>
+                                        <unzip src="${icardea.home}/tools_resources/sesame-tools263.zip"
+                                               dest="${icardea.home}/tools/sesame" overwrite="false"/>
+                                        <copy file="${icardea.home}/tools/sesame/openrdf-sesame.war" todir="${tomcat.home}/webapps/" overwrite="false"/>
+                                        <copy file="${icardea.home}/tools/sesame/openrdf-workbench.war" todir="${tomcat.home}/webapps/" overwrite="false"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>Sesame Removal</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>removeSesame</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <tasks>
+                                        <delete dir="${icardea.home}/tools/sesame"/>
+                                        <delete file="${tomcat.home}/webapps/openrdf-sesame.war"/>
+                                        <delete file="${tomcat.home}/webapps/openrdf-workbench.war"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>Sesame TripleStore Removal</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>removeSesameAduna</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <tasks>
+                                        <delete dir="${aduna.parentdir}/Aduna"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>Tomcat Webapps Removal</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>cleanTomcatWebapps</name>
+                    <value>true</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>clean</phase>
+                                <configuration>
+                                    <tasks>
+                                        <delete dir="${tomcat.home}/webapps/phrweb"/>
+                                        <delete dir="${tomcat.home}/webapps/openrdf-sesame"/>
+                                        <delete dir="${tomcat.home}/webapps/openrdf-workbench"/>
+                                        <delete dir="${tomcat.home}/work/phrweb"/>
+                                        <delete dir="${tomcat.home}/work/openrdf-sesame"/>
+                                        <delete dir="${tomcat.home}/work/openrdf-workbench"/>
+                                        <delete file="${tomcat.home}/conf/Catalina/localhost/phrweb.xml"/>
+                                        <delete file="${tomcat.home}/bin/log_phr_app.txt"/>
+                                        <delete file="${tomcat.home}/bin/log_phr_root.txt"/>
+                                        <delete file="${tomcat.home}/bin/log_phr_libs.txt"/>
+                                        <delete file="${icardea.home}/bin/log_phr_app.txt"/>
+                                        <delete file="${icardea.home}/bin/log_phr_root.txt"/>
+                                        <delete file="${icardea.home}/bin/log_phr_libs.txt"/>
+                                    </tasks>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

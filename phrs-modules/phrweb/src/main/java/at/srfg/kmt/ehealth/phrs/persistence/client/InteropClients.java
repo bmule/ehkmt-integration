@@ -153,23 +153,11 @@ public class InteropClients {
         try {
             dyna = getDynaBeanClient().getDynaBean(referenceId);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            LOGGER.error("", e);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-            LOGGER.error("", e);
-        } catch (TripleException e) {
-            e.printStackTrace();
             LOGGER.error("", e);
         } catch (Exception e) {
-            e.printStackTrace();
             LOGGER.error("", e);
         }
-        if (dyna != null) {
-            System.out.println("DynaBeanUtil.toString(dyna)"
-                    + DynaBeanUtil.toString(dyna));
-        } else {
-        }
+
         return dyna;
     }
 
@@ -198,13 +186,8 @@ public class InteropClients {
 
                     }
                 }
-
-            } catch (TripleException e) {
-                e.printStackTrace();
-                LOGGER.error("", e);
             } catch (Exception e) {
-                e.printStackTrace();
-                LOGGER.error("", e);
+                LOGGER.error(e.getMessage(), e);
             }
 
         }

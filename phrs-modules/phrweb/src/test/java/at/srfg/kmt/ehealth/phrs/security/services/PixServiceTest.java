@@ -50,7 +50,25 @@ public class PixServiceTest {
         assertEquals("Expect PID=191 for ", expResult, result);
 
     }
+    @Test
+    public void testPerformPixQuery() {
+        System.out.println("testPerformPixQuery(pixQueryIdType,pixQueryIdUser)");
 
+        PixService instance = new PixService();
+        String expResult = "191";
+
+
+        String pixQueryIdType = "cied:model:Maximo";
+        String pixQueryIdUser = "PZC123456S";
+
+        //String expResult = PixService.TEST_CIED;//"model:Maximo/serial:12345";
+        //String cied = PixService.makePixIdentifier(pixQueryIdType, pixQueryIdUser);
+
+        String result = instance.performPixQuery(pixQueryIdType,pixQueryIdUser);
+        System.out.println("testPerformPixQuery + makePixIdentifier. PID=" + result+ " on "+pixQueryIdType+" pixQueryIdUser="+pixQueryIdUser);
+        assertEquals("Expect PID=191 for ", expResult, result);
+
+    }
     @Test
     public void testPIXQueryGetPatientProtocolIdByCIEDConstant() {
         System.out.println("testPIXQueryGetPatientProtocolIdByCIEDConstant");

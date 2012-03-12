@@ -50,7 +50,7 @@ public final class ConstantMapper {
 	public static final String ID_CONSTANT_MAPPER = "ConstantsMap";
 
 	// other constants follow, e. g. for the example below:
-	public static final String TAB_DETAILS = "tabDetails";
+	//public static final String TAB_DETAILS = "tabDetails";
 
 	/** "Cache" holding all public static fields by it's field name */
 	private static Map nameToValueMap = createNameToValueMap();
@@ -63,8 +63,8 @@ public final class ConstantMapper {
 	 *         of this class
 	 */
 	private static Map createNameToValueMap() {
-		// System.out.println("ConstantMapper createNameToValueMap START");
-		// LOGGER.info("ConstantMapper createNameToValueMap START");
+
+		LOGGER.info("ConstantMapper createNameToValueMap START");
 		Map result = new HashMap();
 		try {
 
@@ -75,28 +75,14 @@ public final class ConstantMapper {
 				String name = field.getName();
 				try {
 					result.put(name, field.get(null));
+                    //result.put(name, field.get(null));
 				} catch (Exception e) {
-					System.err
-							.println("Initialization of Constants class failed!");
-					e.printStackTrace(System.err);
+                    LOGGER.error("Initialization of Constants class failed!",e);
 				}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			// System.out.println("ConstantMapper createNameToValueMap START");
 			LOGGER.error("ConstantMapper createNameToValueMap", e);
 		}
-		/*
-		 * if(result != null){
-		 * //System.out.println("ConstantMapper createNameToValueMap END, results="
-		 * +result.size());
-		 * LOGGER.info("ConstantMapper createNameToValueMap END results="
-		 * +result.size()); } else { System.out.println(
-		 * "ConstantMapper createNameToValueMap END, results= NULL this is an error"
-		 * ); LOGGER.info(
-		 * "ConstantMapper createNameToValueMap END,  results= NULL this is an error"
-		 * ); }
-		 */
 
 		return result;
 	}

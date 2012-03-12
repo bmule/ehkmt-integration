@@ -1,7 +1,5 @@
 package at.srfg.kmt.ehealth.phrs.presentation.utils
 
-import java.io.Serializable
-import java.util.Date
 
 import org.joda.time.DateTime
 import org.joda.time.format.DateTimeFormat
@@ -10,9 +8,11 @@ import org.joda.time.format.DateTimeFormatter
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 class HealthyUtils implements Serializable{
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(HealthyUtils.class);
 	public static final String DATE_PATTERN_LABEL_YEAR_MONTH_DAY ='yyyy-MM-dd'
         public static final String DATE_PATTERN_LABEL_YEAR_MONTH_DAY_TIME="yyyy-MM-dd HH:mm";
 	/**
@@ -85,6 +85,7 @@ class HealthyUtils implements Serializable{
 			bmi = bmi > 0 ? bmi.round(1) : bmi
 		} catch (Exception e) {
 			e.printStackTrace();
+            LOGGER.debug("",e)
 		}
 
 		return bmi;

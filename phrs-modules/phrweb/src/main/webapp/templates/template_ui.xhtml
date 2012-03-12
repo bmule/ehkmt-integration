@@ -68,7 +68,9 @@
                             </f:facet>
                         </p:ajaxStatus>
                     </ui:insert>
+                    <p:growl id="messagesIdle" showDetail="true" sticky="true" />
                 </div>
+
 			</p:layoutUnit>
           <!-- Might interfere with center panel data table output??
 			<p:layoutUnit position="bottom" 
@@ -95,8 +97,18 @@
 				collapsible="false" gutter="false"
 				scrollable="false"
 				resizable="true" style="border:none;">
-
+                <!--1hr 3600000 session web.xm timeout, invalidate session before that
+          45 min 1620000
+          1.45 5220000 Milliseconds  test 3min 15000-->
+                <!-- timeout before web.xml timeout
+                <h:form>
+                    <p:idleMonitor timeout="15000" update="messagesIdle"
+                               idleListener="#{idleMonitorController.activeListener}"/>
+                    </h:form>
+                 -->
                 <p:outputPanel  rendered="#{loginBean.loggedIn eq true}" layout="block">
+
+
 				    <ui:include src="/sections/menunavigator.xhtml" />
                 </p:outputPanel>
 			</p:layoutUnit>

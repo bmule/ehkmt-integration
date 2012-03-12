@@ -9,76 +9,15 @@ import javax.faces.convert.ConverterException;
 
 import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue;
 import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-/*
- http://magicmonster.com/kb/prg/java/jsf/select_one_menu_converter.html
- 
- 
- public class StockBean {
-   ...
-    public ExchangeConverter getExchangeConverter() {
-        return exchangeConverter;
-    }
-   ...
-}
- */
-/*
-        public class PhoneConverter implements Converter {
-                
-                public Object getAsObject(FacesContext context, UIComponent component, String value){
-                        if(StringUtils.isEmpty(value)){
-                            return null;
-                        }
-                        
-                        PhoneNumber phone = new PhoneNumber();
-                        
-                        String [] phoneComps = StringUtils.split(value," ,()-");
-                        
-                        String countryCode = phoneComps[0];
-                        
-                        phone.setCountryCode(countryCode);
-                        
-                        if(countryCode.equals("1")){
-                            String areaCode = phoneComps[1];
-                            String prefix = phoneComps[2];
-                            String number = phoneComps[3];
-                            phone.setAreaCode(areaCode);
-                            phone.setPrefix(prefix);
-                            phone.setNumber(number);
-                        }
-                        else {
-                            phone.setNumber(value);
-                        }
-                        
-                        return phone;
-               }
-               
-  	public LabelLookupConverter(){
-		
-	}
-    // returns a Country object http://magicmonster.com/kb/prg/java/jsf/converter.html
-    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String code) {
-        Country country = new Country();
-        
-        country.setCode(code);
-     
-       
-        return country;
-    }
- 
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-        if (o instanceof Country) {
-            Country c = (Country) o;
-            return c.getCode();
-        }
-        return "";
-    }             
-          
- */
+
 
 // @ FacesConverter( value="labelLookup" )
 public class LabelLookupConverter implements Converter {
+    private static final Logger LOGGER = LoggerFactory.getLogger(LabelLookupConverter.class);
 /**
  * from UI to data store...
  */
@@ -139,14 +78,67 @@ public class LabelLookupConverter implements Converter {
 					return sb.toString();
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.debug(e.getMessage(),e);
 			}
 		}
 		if(arg2 != null) return arg2.toString();
 		return "?";
 	}
-	
 
+
+/*   Example from web
+       public class PhoneNumberConverter implements Converter {
+
+               public Object getAsObject(FacesContext context, UIComponent component, String value){
+                       if(StringUtils.isEmpty(value)){
+                           return null;
+                       }
+
+                       PhoneNumber phone = new PhoneNumber();
+
+                       String [] phoneComps = StringUtils.split(value," ,()-");
+
+                       String countryCode = phoneComps[0];
+
+                       phone.setCountryCode(countryCode);
+
+                       if(countryCode.equals("1")){
+                           String areaCode = phoneComps[1];
+                           String prefix = phoneComps[2];
+                           String number = phoneComps[3];
+                           phone.setAreaCode(areaCode);
+                           phone.setPrefix(prefix);
+                           phone.setNumber(number);
+                       }
+                       else {
+                           phone.setNumber(value);
+                       }
+
+                       return phone;
+              }
+
+     public LabelLookupConverter(){
+
+   }
+   // returns a Country object http://magicmonster.com/kb/prg/java/jsf/converter.html
+   public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String code) {
+       Country country = new Country();
+
+       country.setCode(code);
+
+
+       return country;
+   }
+
+   public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
+       if (o instanceof Country) {
+           Country c = (Country) o;
+           return c.getCode();
+       }
+       return "";
+   }
+
+*/
     
     
 }

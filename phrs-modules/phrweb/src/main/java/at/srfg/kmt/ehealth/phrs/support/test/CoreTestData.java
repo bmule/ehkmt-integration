@@ -394,22 +394,24 @@ public class CoreTestData {
 
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "200812010000", "201106101010", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
-                    
+                                    "200812010000", "", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
+                    // "200812010000", "201106101010", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0081876")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "200812010000", "201106101010", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
+                                    "200812010000", "", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
+                    //                "200812010000", "201106101010", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0110591")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "199910101010", "201106101010", "5", Constants.MILLIGRAM, "Concor", "C0110591");
+                                    "199910101010", "", "5", Constants.MILLIGRAM, "Concor", "C0110591");
+                                    //"199910101010", "201106101010", "5", Constants.MILLIGRAM, "Concor", "C0110591");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
@@ -417,22 +419,23 @@ public class CoreTestData {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
                                     "199910101010", "201010101010", "1", Constants.DROPS, "Psychopax (Diazepam)", "C0012010");
-
+                     //"199910101010", "201010101010", "1", Constants.DROPS, "Psychopax (Diazepam)", "C0012010");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0591288")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "198010101010", "20110601010", "300", Constants.MILLIGRAM, "Convulex", "C0591288");
-
+                                    "198010101010", "", "300", Constants.MILLIGRAM, "Convulex", "C0591288");
+                    // "198010101010", "20110601010", "300", Constants.MILLIGRAM, "Convulex", "C0591288");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0025677")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "20090101010", "201106101010", "20", Constants.MILLIGRAM, "Ebetrexat(Methotrexate)", "C0025677");
+                                    "20090101010", "", "20", Constants.MILLIGRAM, "Ebetrexat(Methotrexate)", "C0025677");
+                     //                                    "20090101010", "201106101010", "20", Constants.MILLIGRAM, "Ebetrexat(Methotrexate)", "C0025677");
 
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
@@ -440,14 +443,17 @@ public class CoreTestData {
                 if (!commonDao.hasMedication(owner, "", "C0016410")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "20090101010", "201106101010", "10", Constants.MILLIGRAM, "Folsan(Folic Acid)", "C0016410");
+                                    "20090101010", "", "10", Constants.MILLIGRAM, "Folsan(Folic Acid)", "C0016410");
+                     //                                    "20090101010", "201106101010", "10", Constants.MILLIGRAM, "Folsan(Folic Acid)", "C0016410");
 
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
+
                 if (!commonDao.hasMedication(owner, "", "C0024467")) {
                     MedicationTreatment med = CoreTestData
                             .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "199910101010", "201010101010", "1", Constants.TABLET, "Magnosolv(Magnesium)", "C0024467");
+                                    "199910101010", "", "1", Constants.TABLET, "Magnosolv(Magnesium)", "C0024467");
+                     //                                    "199910101010", "201010101010", "1", Constants.TABLET, "Magnosolv(Magnesium)", "C0024467");
 
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
@@ -533,7 +539,7 @@ public class CoreTestData {
                 info = new ProfileContactInfo();
                 info.setOwnerUri(user.getOwnerUri());
                 info.setCreatorUri(user.getOwnerUri());
-                info.setType(info.getClass().getCanonicalName());
+                info.setType(ProfileContactInfo.class.getCanonicalName());
 
             }
             info.setFirstName(firstname);
@@ -702,8 +708,9 @@ public class CoreTestData {
 
             user.setCanLocalLogin(true);
 
+            //user.setNickname(fullname);
+            user.setNickname("?");
 
-            user.setNickname(fullname);
             user.setCanLocalLogin(true);
 
             user.setProtocolIdUser(protocolId);//Constants.ICARDEA_DOMAIN_PIX_OID);
@@ -725,12 +732,14 @@ public class CoreTestData {
                 info = new ProfileContactInfo();
                 info.setOwnerUri(user.getOwnerUri());
                 info.setCreatorUri(user.getOwnerUri());
-                info.setType(info.getClass().getCanonicalName());
+                info.setType(ProfileContactInfo.class.getCanonicalName());
 
             }
-            info.setFirstName(firstname);
-            info.setLastName(lastname);
-
+            //info.setFirstName(firstname);
+            //info.setLastName(lastname);
+            //Don't add name, let person fill in info
+            info.setFirstName("?");
+            info.setLastName("");
 
             commonDao.crudSaveResource(info, user.getOwnerUri(), "CoreTestData createTestUserData");
 

@@ -223,8 +223,16 @@ public class MenuController extends FaceCommon {
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
     }
-
+    /**
+     * UI invokes this when
+     * Ajax event must be checked for time out....
+     * @param event
+     */
     public void onNodeSelect(NodeSelectEvent event) {
+        if(!UserSessionService.loggedIn()){
+           LOGGER.debug('Session time out , user not logged in redirect')
+           // redirectTimeOut();
+        }
         TreeNode selectedNode
         selectedNode = event.getTreeNode();
 

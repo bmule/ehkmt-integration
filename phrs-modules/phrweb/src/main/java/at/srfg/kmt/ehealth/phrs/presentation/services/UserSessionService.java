@@ -55,8 +55,23 @@ public class UserSessionService {
                     + ConfigurationService.isAppModeSingleUserTest());
         } else {
             // TODO config page
-            redirect(getConfigurationService().getProperty(
-                    "forwardRedirectLoginPage"));
+
+            String redirect=getConfigurationService().getProperty(
+                    "forwardRedirectLoginPage","/index.html");
+            LOGGER.debug("redirectAndLogin "+redirect);
+            redirect(redirect);
+        }
+    }
+
+    /**
+     * invalidate and redirect
+     */
+    public static void invalidateSessionAndRedirectToLogin(){
+        try{
+            invalidateSession();
+            redirectAndLogin();
+        }catch (Exception e){
+           LOGGER.error("invalidateSessionAndRedirectToLogin");
         }
     }
 
