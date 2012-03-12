@@ -236,25 +236,10 @@ public class ConsentMgrServiceTest {
 
     }
 
-    @Test
-    public void testisHealthInfoAccessibleRoleWithCode() {
-        System.out.println("testisHealthInfoAccessibleRoleWithCode");
-        boolean flag = false;
-        String value = ConfigurationService.getInstance().getProperty("isAllHealthinfoAccessibleByRole");
-        System.out.println("testisHealthInfoAccessibleRoleWithCode prop=" + value);
-        if (value != null) {
-            value = value.trim();
-        }
 
-        if (value != null && value.equalsIgnoreCase("true")) {
-            flag = true;
-        }
-        assertEquals(true, flag);
-
-    }
 
     @Test
-    public void testisHealthInfoAccessibleByThisRole() {
+    public void testisHealthInfoAccessibleByRoleCodeDoctor() {
         System.out.println("isConsentMgrRole");
         String subjectCode = ROLE_CODE_DOC;
         boolean expResult = true;
@@ -263,14 +248,7 @@ public class ConsentMgrServiceTest {
 
     }
 
-    @Test
-    public void testisHealthInfoAccessibleRole() {
-        System.out.println("isConsentMgrRole");
-        String subjectCode = ROLE_CODE_DOC;
-        boolean expResult = true;
-        boolean result = ConfigurationService.getInstance().isHealthInfoAccessibleByRole();
-        assertEquals(expResult, result);
-    }
+
 
     //String SUBJECT_MEDICATIONS="";
     /**
