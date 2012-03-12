@@ -179,7 +179,20 @@
 	<listener>
 		<listener-class>at.srfg.kmt.ehealth.phrs.DefaultLoader</listener-class>
 	</listener>
-	<!-- listener: This listener is extremely important for catching the onAuthenticate 
+
+    <filter>
+        <filter-name>PhrSessionTimeoutFilter</filter-name>
+        <filter-class>at.srfg.kmt.ehealth.phrs.PhrSessionTimeoutFilter</filter-class>
+    </filter>
+    <!--timeout.jsp includes a link to index.xhtml-->
+    <filter-mapping>
+        <filter-name>PhrSessionTimeoutFilter</filter-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </filter-mapping>
+	<!--
+	        <url-pattern>/sections/*.xhtml</url-pattern>
+        <url-pattern>/templates/*.xhtml</url-pattern>
+	listener: This listener is extremely important for catching the onAuthenticate
 		event, then processing the PhrUser from the authenticated OpenUserId object -->
 	<!-- <listener> <listener-class>at.srfg.kmt.ehealth.phrs.usermgt.openid.dyu.OpenIdContextListener</listener-class> 
 		</listener> -->
@@ -189,6 +202,6 @@
 	<!-- After this, the JSF view exception might occur. Catching that exception 
 		automatically is an open issue -->
 	<session-config>
-		<session-timeout>60</session-timeout>
+		<session-timeout>120</session-timeout>
 	</session-config>
 </web-app>
