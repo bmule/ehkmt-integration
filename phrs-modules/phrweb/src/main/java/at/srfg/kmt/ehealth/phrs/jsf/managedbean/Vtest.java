@@ -5,21 +5,22 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.security.services.PixService;
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
+
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
  * A means to test UI components and integration with PixService,
  * Interoperability clients, and ConsentManager
  */
 @ManagedBean(name = "vtestBean")
 @RequestScoped
-public class Vtest extends MonitorInteropBean implements Serializable {
-
+public class Vtest extends PatientIdentityBean implements Serializable {
+    //MonitorInteropBean
     private final static Logger LOGGER = LoggerFactory.getLogger(Vtest.class);
 
 
@@ -49,12 +50,12 @@ public class Vtest extends MonitorInteropBean implements Serializable {
      */
 
     public void loadInterop() {
-        LOGGER.error("VT web form got: loadInterop ownerUri "+getOwnerUri());
+        LOGGER.error("VT web form got: loadInterop ownerUri " + getOwnerUri());
         try {
             CoreTestData test = new CoreTestData();
             test.addTestMedications_2_forPortalTestForOwnerUri(getOwnerUri());
         } catch (Exception e) {
-            LOGGER.error("VT loadInterop failed"+getOwnerUri(), e);
+            LOGGER.error("VT loadInterop failed" + getOwnerUri(), e);
         }
     }
 
@@ -75,18 +76,19 @@ public class Vtest extends MonitorInteropBean implements Serializable {
         LOGGER.error("VT web form got: loadTestProblemNotify test user ");
         try {
 
-            CoreTestData.loadTestProblem(getOwnerUri(),true);
+            CoreTestData.loadTestProblem(getOwnerUri(), true);
         } catch (Exception e) {
-            LOGGER.error("VT loadTestProblemNotify failed test user"+getOwnerUri(), e);
+            LOGGER.error("VT loadTestProblemNotify failed test user" + getOwnerUri(), e);
         }
     }
+
     public void loadTestMedicationNoDrugCodeNotify() {
         LOGGER.error("VT web form got: loadTestMedicationNoDrugCodeNotify test user ");
         try {
 
-            CoreTestData.loadTestMedicationNoDrugCode(getOwnerUri(),true);
+            CoreTestData.loadTestMedicationNoDrugCode(getOwnerUri(), true);
         } catch (Exception e) {
-            LOGGER.error("VT loadTestMedicationNoDrugCodeNotify failed test user"+getOwnerUri(), e);
+            LOGGER.error("VT loadTestMedicationNoDrugCodeNotify failed test user" + getOwnerUri(), e);
         }
     }
 
@@ -94,18 +96,19 @@ public class Vtest extends MonitorInteropBean implements Serializable {
         LOGGER.error("VT web form got: loadTestMedicationWithDrugCodeNotify test user ");
         try {
 
-            CoreTestData.loadTestMedicationWithDrugCode(getOwnerUri(),true);
+            CoreTestData.loadTestMedicationWithDrugCode(getOwnerUri(), true);
         } catch (Exception e) {
-            LOGGER.error("VT loadTestMedicationWithDrugCodeNotify failed test user"+getOwnerUri(), e);
+            LOGGER.error("VT loadTestMedicationWithDrugCodeNotify failed test user" + getOwnerUri(), e);
         }
     }
+
     public void loadTestProblemsMedicationsNotify() {
         LOGGER.error("VT web form got: loadTestProblemsMedicationsNotify test user ");
         try {
 
-            CoreTestData.loadTestProblemsMedications(getOwnerUri(),true);
+            CoreTestData.loadTestProblemsMedications(getOwnerUri(), true);
         } catch (Exception e) {
-            LOGGER.error("VT loadTestProblemsMedicationsNotify failed test user"+getOwnerUri(), e);
+            LOGGER.error("VT loadTestProblemsMedicationsNotify failed test user" + getOwnerUri(), e);
         }
     }
 
@@ -140,20 +143,20 @@ public class Vtest extends MonitorInteropBean implements Serializable {
                 //String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
 
                 String ciedIdentifier = PixService.makePixIdentifier(getPixQueryIdType(), getPixQueryIdUser());
-                LOGGER.debug("VT TEST ciedIdentifier="+ciedIdentifier+" pixQueryIdUser="+getPixQueryIdUser()+" pixQueryIdType= "+getPixQueryIdType());
+                LOGGER.debug("VT TEST ciedIdentifier=" + ciedIdentifier + " pixQueryIdUser=" + getPixQueryIdUser() + " pixQueryIdType= " + getPixQueryIdType());
 
                 String returnPid = pixService.getPatientProtocolIdByCIED(ciedIdentifier);
 
                 if (returnPid != null) {
-                    addStatusMessagePID("Patient ID found, ID is: " + returnPid +" for ciedIdentifier ="+ciedIdentifier+ " for owner=" + getOwnerUri());
+                    addStatusMessagePID("Patient ID found, ID is: " + returnPid + " for ciedIdentifier =" + ciedIdentifier + " for owner=" + getOwnerUri());
                 } else {
-                    addStatusMessagePID("Patient ID NOT FOUND for owner=" + getOwnerUri()+" for ciedIdentifier ="+ciedIdentifier);
+                    addStatusMessagePID("Patient ID NOT FOUND for owner=" + getOwnerUri() + " for ciedIdentifier =" + ciedIdentifier);
                 }
 
                 //updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
                 LOGGER.error("VT updateIdentifiers (not saved, only query). returnPid value found from getPatientProtocolIdByCIED: returnPid= " + returnPid
-                        + " ciedIdentifier=" + ciedIdentifier+" returnPid="+returnPid
-                        + " ownerUri="+getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
+                        + " ciedIdentifier=" + ciedIdentifier + " returnPid=" + returnPid
+                        + " ownerUri=" + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
 
                 if (returnPid != null && !returnPid.isEmpty()) {
                     outcome = true;

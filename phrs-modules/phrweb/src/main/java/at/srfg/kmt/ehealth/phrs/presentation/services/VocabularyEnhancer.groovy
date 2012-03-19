@@ -55,7 +55,7 @@ public class  VocabularyEnhancer implements Serializable {
 	 * @param language
 	 * @return
 	 */
-	static  List<ModelLabelValue> specialSortedLabelValues(String uri, String language) {
+	public static  List<ModelLabelValue> specialSortedLabelValues(String uri, String language) {
 
 		List list = alternativeVocabValues(uri)
 		List<ModelLabelValue> lvs = null
@@ -70,7 +70,7 @@ public class  VocabularyEnhancer implements Serializable {
 		return lvs
 	}
 
-	static  List<String> alternativeVocabValues(String uri) {
+	public static  List<String> alternativeVocabValues(String uri) {
 		List list = null
 
 		switch ( uri ) {
@@ -499,5 +499,67 @@ public class  VocabularyEnhancer implements Serializable {
 		}
 		return new ArrayList<ModelLabelValue>()
 	}
+    /**
+     * A means to using URIs to I18 file by removing problematic characters
+     *
+     * @param uri
+     * @return
+     * removes protocol and replaces '/' with underscore and '#' with two dashes '--'
+     */
+   public static String flattenUri(String uri){
+       String result=uri
+       if(result){
+           try{
+                if(result.startsWith("http://")) {
+                    result = result.replace("http://", "");
+                } else if(result.startsWith("https://")) {
+                    result = result.replace("https://", "");
+                }
+                result = result.replaceAll("/","_")
+                result = result.replaceAll("#","--")
+           } catch(Exception e){
+               LOGGER.error("flattenUri error parseing "+uri,e)
+           }
+       }
 
+       return result
+   }
+
+   public static String determineLabelCode(String theCode){
+       String labelCode
+
+       switch (theCode ){
+
+           case Constants.PHRS_MEDICATION_CLASS :
+               labelCode='resource_type_medication'
+               break
+
+           case Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE :
+               labelCode='resource_type_blood_pressure_systolic'
+               break
+
+           case Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE :
+               labelCode='resource_type_blood_pressure_diastolic'
+               break
+
+           case Constants.ICARDEA_INSTANCE_BODY_WEIGHT :
+               labelCode='resource_type_body_weight'
+               break
+
+           case Constants.ICARDEA_INSTANCE_BODY_HEIGHT :
+               labelCode='resource_type_body_height'
+               break
+
+           case Constants.ICARDEA_INSTANCE_BODY_MASS_INDEX :
+               labelCode='resource_type_body_bmi'
+               break
+
+           case Constants.ICARDEA_INSTANCE_HEART_RATE :
+               labelCode='resource_type_heart_rate'
+               break
+
+       }
+
+       return labelCode
+   }
 }

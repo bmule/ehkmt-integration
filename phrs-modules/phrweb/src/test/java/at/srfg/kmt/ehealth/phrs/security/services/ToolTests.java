@@ -7,14 +7,18 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
+import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.TimeUtils;
 import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData;
+
 import java.util.Date;
+
 import org.joda.time.DateTime;
 import org.junit.AfterClass;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -33,16 +37,18 @@ public class ToolTests {
     @AfterClass
     public static void tearDownClass() throws Exception {
     }
+
     @Test
-    public  void testConfigService(){
+    public void testConfigService() {
         //consent.service.endpoint
-        ConfigurationService cs=ConfigurationService.getInstance();
+        ConfigurationService cs = ConfigurationService.getInstance();
         assertNotNull("testConfigService NULL", cs);
-        String value= ConfigurationService.getInstance().getProperty("consent.service.endpoint");
+        String value = ConfigurationService.getInstance().getProperty("consent.service.endpoint");
         assertNotNull(value);
-        System.out.println("value="+value);
+        System.out.println("value=" + value);
 
     }
+
     @Test
     //@Ignore
     public void testDateFormat_1() {
@@ -53,7 +59,7 @@ public class ToolTests {
         assertNotNull(dateStr);
 
     }
-    
+
     @Test
     public void testDateFormat() {
 
@@ -61,16 +67,17 @@ public class ToolTests {
         System.out.println("testDateFormat dateStr=" + dateStr);
         assertNotNull(dateStr);
     }
-    
-    public String getDateFormat(){
-                String pattern = "yyyy-MM-dd HH:mm";
+
+    public String getDateFormat() {
+        String pattern = "yyyy-MM-dd HH:mm";
         String dateStr = CoreTestData.formatTimeDate(new DateTime(), pattern);
 
-       
+
         return dateStr;
     }
+
     @Test
-    public void testCoreTestMed(){
+    public void testCoreTestMed() {
         MedicationTreatment med = CoreTestData
                 .createMedication("testowner", Constants.STATUS_ACTIVE,
                         "200812010000", "201106101010", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
@@ -78,22 +85,42 @@ public class ToolTests {
         assertTrue("medicationSummary_medicationStatus_true".equals(med.getStatus()));
         //medicationSummary_medicationStatus_true
     }
+
     @Test
-    public void testTime(){
-        long x=new Date().getTime();
-        System.out.println("x="+x);
+    public void testTime() {
+        long x = new Date().getTime();
+        System.out.println("x=" + x);
         Date y = new Date(1328713915937l);
-        assertEquals("1. equal",0,TimeUtils.compare(new Date(), new Date()));
+        assertEquals("1. equal", 0, TimeUtils.compare(new Date(), new Date()));
 
-        assertEquals("2. 1",1,TimeUtils.compare(new Date(1428713915937l),new Date(1328713915937l)));
+        assertEquals("2. 1", 1, TimeUtils.compare(new Date(1428713915937l), new Date(1328713915937l)));
 
-        assertEquals("3. -1 ", -1,TimeUtils.compare(new Date(1328713915937l),new Date(1428713915937l)));
+        assertEquals("3. -1 ", -1, TimeUtils.compare(new Date(1328713915937l), new Date(1428713915937l)));
 
-        assertFalse("4. false",TimeUtils.isBeginLess(new Date(),new Date()));
+        assertFalse("4. false", TimeUtils.isBeginLess(new Date(), new Date()));
 
-        assertFalse("5. false",TimeUtils.isBeginLess(new Date(1428713915937l),new Date(1328713915937l)));
+        assertFalse("5. false", TimeUtils.isBeginLess(new Date(1428713915937l), new Date(1328713915937l)));
 
-        assertTrue("6. true",TimeUtils.isBeginLess(new Date(1328713915937l),new Date(1428713915937l)));
+        assertTrue("6. true", TimeUtils.isBeginLess(new Date(1328713915937l), new Date(1428713915937l)));
 
+    }
+
+    @Test
+    public void testVocabEnhancer_URIFlattener() {
+        String uri = "http://xxxx/yyy/zzz//aaa#123";
+        
+        String result=uri;
+        if(result.startsWith("http://")) result = result.replace("http://", "");
+        else if(result.startsWith("https://")) result = result.replace("https://", "");
+ 
+        result = result.replaceAll("/","_");
+        result = result.replaceAll("#","--");
+        
+        System.out.println("1 input="+uri+" result="+result);     
+        assertEquals("xxxx_yyy_zzz__aaa_._123", result);
+        
+        String flattened = VocabularyEnhancer.flattenUri(uri);
+        System.out.println("2 input="+uri+" result="+flattened);
+        assertEquals("xxxx_yyy_zzz__aaa_._123", flattened);
     }
 }

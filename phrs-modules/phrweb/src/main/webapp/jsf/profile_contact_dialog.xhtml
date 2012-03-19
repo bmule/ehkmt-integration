@@ -52,6 +52,7 @@
             contactTypeMedical=<h:outputLabel value="#{procon.contactTypeMedical}"/>
             <br/>-->
 <h:form id="idFormPcon">
+
 <h:inputHidden value="#{procon.selected.resourceUri}"/>
 <h:inputHidden value="#{procon.selected.tempCreateDate}"/>
 <h:inputHidden value="#{procon.selected.tempId}"/>
@@ -97,7 +98,7 @@ These do not exist, cause errors
         <p:commandButton value="#{labels['default.button.create.label']}"
                          title="#{labels['default.button.create.label']}"
                          process="idFormPcon"
-                         update="msgs idFormPcon idItemTablePcon"
+                         update="msgs idFormPcon idViewPcon"
                          oncomplete="onEditComplete(xhr,status,args)"
                          actionListener="#{procon.store}" image="ui-icon ui-icon-check"/>
 

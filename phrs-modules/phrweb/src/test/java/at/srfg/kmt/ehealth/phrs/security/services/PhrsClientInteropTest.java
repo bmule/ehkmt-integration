@@ -43,9 +43,15 @@ public class PhrsClientInteropTest {
     public PhrsClientInteropTest() {
     }
 
+    /**
+     * This might only work with the triple store....
+     * should change the phrweb test generic-triplestore.xml to point
+     * to right store not memory store???
+     * @throws Exception
+     */
     @BeforeClass
     public static void setUpClass() throws Exception {
-        System.out.println("FIRST, EXECUTE a PCC-9 request send-cobscat-pcc9.bash, medlist etc");
+        System.out.println("setUpClass FIRST, EXECUTE a PCC-9 request send-cobscat-pcc9.bash, medlist etc");
         phrsClient = PhrsStoreClient.getInstance();
         triplestore = phrsClient.getGenericTriplestore();
         CommonDao commonDao = phrsClient.getCommonDao();

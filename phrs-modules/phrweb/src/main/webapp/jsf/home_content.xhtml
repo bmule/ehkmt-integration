@@ -10,14 +10,12 @@
 <h:head>
     <title></title>
 </h:head>
-<!-- keep this separate, it can be included in the two home files
+<!--
+ keep this separate, it can be included in the two home files
  -->
 <h:body>
     <ui:composition>
 
-        <!--
-     systemStatus=<h:outputLabel value="#{loginBean.systemStatus}"/>
-        -->
         <h:panelGroup rendered="#{loginBean.systemStatus eq true}">
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq true}">
@@ -28,30 +26,18 @@
 
                 <h:outputText value="#{labels['message_home']}"/>
 
-                <p>Your CIED serial number of your implant is important for registering your data in the iCARDEA system. Please
-                    update this information by selecting the menu option
-                    <b>Import Health Data</b> or click on the following link
+                <!--cied form -->
+                <ui:include src="./pid_cied_form.xhtml"/>
 
-                    <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
-                            value="Import Health Data" style="font-size:12pt;text-decoration:underline;"/></a>
-                </p>
-
-                <p>
-                    <h:panelGroup>
-                        Click here to Update your <a
-                            href="#{request.contextPath}/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user"><h:outputText
-                            value="Contact Information" style="font-size:12pt;text-decoration:underline;"/>
-                    </a>
-                    </h:panelGroup>
-
-                </p>
+                Please keep your contact information up-to-date.
+                <!-- contact info view and form dialog-->
+                <ui:include src="./profile_contact_view.xhtml"/>
             </h:panelGroup>
         </h:panelGroup>
         <!-- system failure notice to user, e.g. a database was not started etc -->
         <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
             There was a system failure, undfortuately access to the system or data is not possible.
         </h:panelGroup>
-
 
     </ui:composition>
 </h:body>

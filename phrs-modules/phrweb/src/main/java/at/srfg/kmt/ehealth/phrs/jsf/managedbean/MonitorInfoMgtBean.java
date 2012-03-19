@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.jsf.utils.WebUtil;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
@@ -37,6 +38,7 @@ public class MonitorInfoMgtBean implements Serializable {
     protected String selectedLocalResourceType;
     private String selectedOwnerUri;
     private String selectedTest;
+    public ProfileContactInfo contactInfo;
 
     //results list
     protected List modelMain;
@@ -141,6 +143,7 @@ public class MonitorInfoMgtBean implements Serializable {
         if (selectedOwnerUri != null && selectedLocalResourceType != null) {
 
             boolean granted = false;
+
             if (ownerUri != null && selectedOwnerUri.equals(ownerUri)) {
                 LOGGER.debug("selectedOwnerUri= ownerUri");
                 granted = true;
@@ -157,9 +160,9 @@ public class MonitorInfoMgtBean implements Serializable {
                 selectedOwnerGreetName = userService.getUserGreetName(selectedOwnerUri);
             }
             LOGGER.debug("selectedOwnerUri= " + selectedOwnerUri + " granted=" + granted + " to access ownerUri " + ownerUri + " resourceType=" + selectedLocalResourceType + " selectedTest =" + selectedTest + "  testMode=" + testMode);
-
-            loadModelMainByUserAndResourceType(selectedOwnerUri, selectedLocalResourceType);
-
+            if(granted){
+                loadModelMainByUserAndResourceType(selectedOwnerUri, selectedLocalResourceType);
+            }
             if (ownerUri != null && !ownerUri.equals(selectedOwnerUri)) {
                 showGrantOutcomeMessage(granted);
             }
@@ -171,6 +174,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
 
     }
+
 
     private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType) {
         if (targetOwnerUri != null && localResourceType != null) {
@@ -200,6 +204,11 @@ public class MonitorInfoMgtBean implements Serializable {
                 modelMain = userService.getResourcesADL(targetOwnerUri);
                 count = modelMain == null ? -1 : modelMain.size();
                 LOGGER.debug("getResourcesADL count=" + count);
+            } else if ("PDQ".equals(localResourceType)) {
+                //no list model
+                modelMain = null;
+                contactInfo= userService.getProfileContactInfo(selectedOwnerUri);
+                LOGGER.debug("contact info" );
             }
         }
         if (modelMain == null) modelMain = new ArrayList();
@@ -215,6 +224,8 @@ public class MonitorInfoMgtBean implements Serializable {
         if ("BP".equals(localResourceType)) {
             result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH;
         } else if ("BW".equals(localResourceType)) {
+            result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH;
+        } else if ("PDQ".equals(localResourceType)) {
             result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_BASIC_HEALTH;
         } else if ("MED".equals(localResourceType)) {
             result = PhrsConstants.AUTHORIZE_RESOURCE_CODE_MEDICATION;
@@ -319,6 +330,8 @@ public class MonitorInfoMgtBean implements Serializable {
             //create UI selection list
             modelFormLocalResources = new ArrayList<ModelLabelValue>();
             // BP  BW   MED   ADL   PROBLEM
+            modelFormLocalResources.add(new ModelLabelValue("PDQ", "Contact Information"));
+
             modelFormLocalResources.add(new ModelLabelValue("BP", "History Blood Pressure"));
             modelFormLocalResources.add(new ModelLabelValue("BW", "History Body Weight"));
             modelFormLocalResources.add(new ModelLabelValue("MED", "Medications"));
@@ -326,7 +339,7 @@ public class MonitorInfoMgtBean implements Serializable {
             modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
             //default
             if(selectedLocalResourceType ==null){
-                selectedLocalResourceType="BP";
+                selectedLocalResourceType="PDQ";
             }
         } catch (Exception e) {
             LOGGER.error("initFormModel");
@@ -467,5 +480,13 @@ public class MonitorInfoMgtBean implements Serializable {
 
     public String getSelectedOwnerGreetName() {
         return selectedOwnerGreetName;
+    }
+
+    public ProfileContactInfo getContactInfo() {
+        return contactInfo;
+    }
+
+    public void setContactInfo(ProfileContactInfo contactInfo) {
+        this.contactInfo = contactInfo;
     }
 }

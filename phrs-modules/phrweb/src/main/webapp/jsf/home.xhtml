@@ -26,38 +26,7 @@
 				<ui:include src="./home_content.xhtml" />
 
 			
-			<!--  
-			<p:panel collapsed="true"  closable="false" toggleable="true" header="Table of Contents"  style="width:100%">
-				<p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;font-size:12pt;">
-					
-				<p:column  style="width:100%;">
-				 	
-					<h:panelGroup rendered="#{ref.type == 'noderoot'}">
-						<h:outputText value="#{ref.label}" style="font-size:14pt;"/>
-					</h:panelGroup>	
-							
-					<h:panelGroup rendered="#{ref.type == 'nodeheaderlink'}">
-						<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
-						<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/></a>
-					</h:panelGroup>
-					
-					<h:panelGroup rendered="#{ref.type == 'nodeheader'}">
-						<h:outputText value="#{ref.label}" style="font-size:12pt;"/>
-					</h:panelGroup>
-								
-					<h:panelGroup rendered="#{ref.type == 'node'}">
-						<h:outputText value="#{ref.label}" style="font-size:10pt;"/>
-					</h:panelGroup>				
-					<h:panelGroup rendered="#{ref.type eq 'link'}" >
-						<a href="#{request.contextPath}#{ref.url}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
-					</h:panelGroup>
-					<h:panelGroup rendered="#{ref.type eq 'nodelink'}">
-						<a href="#{request.contextPath}#{ref.url}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/></a>
-					</h:panelGroup>			
-				</p:column>			
-			</p:treeTable>	
-		</p:panel>
-		-->
+
 		</p:fieldset>
 	</ui:define>
 </ui:composition>

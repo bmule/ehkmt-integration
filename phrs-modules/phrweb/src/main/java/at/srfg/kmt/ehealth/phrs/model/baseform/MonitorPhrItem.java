@@ -3,10 +3,8 @@ package at.srfg.kmt.ehealth.phrs.model.baseform;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportTool;
 
 /**
- * 
  * Used for reports to assemble content
  * Model and functions to organize data
- * 
  */
 public class MonitorPhrItem {
 
@@ -20,6 +18,8 @@ public class MonitorPhrItem {
     private String actionOutcome;
 
     private String label;
+    //I18 code can correspond to resourceType or finer
+    private String descriptionLabelCode;
     /**
      * Constants.PHRS_MEDICATION_CLASS, etc
      */
@@ -29,8 +29,8 @@ public class MonitorPhrItem {
 
     private ReportTool reportTool;
 
-    public MonitorPhrItem(){
-       reportTool = new ReportTool();
+    public MonitorPhrItem() {
+        reportTool = new ReportTool();
 
     }
 
@@ -116,5 +116,13 @@ public class MonitorPhrItem {
 
     public void setActionOutcome(String actionOutcome) {
         this.actionOutcome = actionOutcome;
+    }
+
+    public String getDescriptionLabelCode() {
+        return descriptionLabelCode;
+    }
+
+    public void setDescriptionLabelCode(String descriptionLabelCode) {
+        this.descriptionLabelCode = descriptionLabelCode;
     }
 }

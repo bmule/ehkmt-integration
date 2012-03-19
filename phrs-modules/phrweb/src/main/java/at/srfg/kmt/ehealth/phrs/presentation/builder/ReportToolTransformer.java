@@ -1,9 +1,12 @@
 package at.srfg.kmt.ehealth.phrs.presentation.builder;
 
 
+import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
+import at.srfg.kmt.ehealth.phrs.model.baseform.ObsRecord;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue;
+import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,15 +25,15 @@ public class ReportToolTransformer {
     public List<MonitorPhrItem> tranformResource(List phrResources) {
         List<MonitorPhrItem> list = new ArrayList<MonitorPhrItem>();
 
-        if (phrResources != null && ! phrResources.isEmpty()) {
+        if (phrResources != null && !phrResources.isEmpty()) {
 
             for (Object obj : phrResources) {
-                
-                MonitorPhrItem item=null;
-                if(obj instanceof MedicationTreatment) {
-                     item = toMonitorPhrItem((MedicationTreatment)obj);
+
+                MonitorPhrItem item = null;
+                if (obj instanceof MedicationTreatment) {
+                    item = toMonitorPhrItem((MedicationTreatment) obj);
                 }
-               if(item!=null) list.add(item);
+                if (item != null) list.add(item);
 
             }
 
@@ -44,12 +47,17 @@ public class ReportToolTransformer {
 
     /**
      * Medication transformation
+     *
      * @param resource
      * @return
      */
-    public  MonitorPhrItem  toMonitorPhrItem(MedicationTreatment resource){
+    public MonitorPhrItem toMonitorPhrItem(MedicationTreatment resource) {
 
         MonitorPhrItem item = new MonitorPhrItem();
+        item.setResourceType(Constants.PHRS_MEDICATION_CLASS);
+        //I18 code to lookup on UI
+        item.setDescriptionLabelCode(VocabularyEnhancer.determineLabelCode(item.getResourceType()));
+
         item.setOwnerUri(resource.getOwnerUri());
         item.setPID(resource.getPID());
 
@@ -60,7 +68,7 @@ public class ReportToolTransformer {
         List<ModelLabelValue> props = new ArrayList<ModelLabelValue>();
         props.add(new ModelLabelValue("drugCode", resource.getProductCode()));
         //props.add(new ModelLabelValue("drugCode", resource.getProductCode()));
-        
+
         if (resource.getTreatmentMatrix() != null) {
             if (resource.getTreatmentMatrix().getDosage() != null)
                 props.add(new ModelLabelValue("dosage", resource.getTreatmentMatrix().getDosage().toString()));
@@ -79,6 +87,31 @@ public class ReportToolTransformer {
         }
 
         item.setSummary(reportTool.formatTextToString(props, "default"));
+
+        return item;
+    }
+
+    public static String determineLabelCode(String code) {
+        String labelCode = null;
+
+        return labelCode;
+    }
+
+    //item.setDescriptionLabelCode("phr_medication");
+    public MonitorPhrItem toMonitorPhrItem(ObsRecord resource) {
+
+        MonitorPhrItem item = new MonitorPhrItem();
+
+        item.setDescriptionLabelCode(
+                VocabularyEnhancer.determineLabelCode(resource.getCode()));
+
+        item.setOwnerUri(resource.getOwnerUri());
+        item.setPID(resource.getPID());
+
+        item.setLabel(resource.getLabel());
+        item.setStatus(resource.getStatus());
+        item.setStatusStandard(resource.getStatusStandard());
+
 
         return item;
     }

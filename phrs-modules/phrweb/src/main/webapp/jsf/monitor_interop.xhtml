@@ -44,69 +44,9 @@
     <ui:define name="content">
         <p:fieldset legend="Import Health Data">
             <p>
-                There might be Electronic Health Records available from your hospital.
+                If there are Electronic Health Records available from your hospital, then they will
+                be reported below.
             </p>
-
-            <p>
-                Please Provide either your CIED Implant identifier or your patient identifier.
-                Your Patient ID will be validated so that you might send and receive data from the hospital.
-                The status of your identifier will be indicated below.
-            </p>
-            <br/>
-
-            <!--<p:messages/>   -->
-            <p:growl id="msgs" showDetail="true"/>
-
-            <h:form>
-
-                <h:panelGrid columns="2" border="0" style="border-style:thin solid;border-color:grey;">
-                    <f:facet name="header">
-                        <h:outputLabel value="If necessary, please update your CIED Implant Identifier"/>
-                    </f:facet>
-
-                    <h:outputLabel value="ID Type"/>
-                    <h:panelGroup>
-                        <h:selectOneMenu value="#{interopBean.pixQueryIdType}"
-                                         id="field_pixQueryIdType_input"
-                                         rendered="#{interopBean.modify eq 'yes'}"
-                                         required="true">
-
-                            <f:selectItem itemLabel="Please Select Identifier type..." noSelectionOption="true"
-                                          itemValue=""/>
-                            <f:selectItem itemLabel="Implant model:Maximo"
-                                          itemValue="cied:model:Maximo"/>
-                            <f:selectItem itemLabel="Patient ID"
-                                          itemValue="pid"/>
-                        </h:selectOneMenu>
-
-                        <p:message for="field_pixQueryIdType_input" display="text"/>
-                    </h:panelGroup>
-
-                    <h:outputLabel value="Identifier /Serial No."/>
-                    <h:panelGroup>
-                        <p:inputText value="#{interopBean.pixQueryIdUser}"
-                                     id="field_pixQueryIdUser_input"
-                                     required="true"
-                                     requiredMessage="#{labels['default_required_field']}"/>
-
-                        <p:message for="field_pixQueryIdUser_input" display="text"/>
-                    </h:panelGroup>
-
-                    <h:outputLabel value=""/>
-                    <h:panelGroup>
-                        <p:commandButton ajax="false"
-                                         value="Update"
-                                         rendered="#{interopBean.allowCommandIdentify}"
-                                         title="Submit"
-                                         image="ui-icon-arrowrefresh-1-w"
-                                         actionListener="#{interopBean.commandProcessIdentifier}"
-                                />
-                        <h:outputLabel value="#{interopBean.statusMessagePid}"/>
-                    </h:panelGroup>
-
-
-                </h:panelGrid>
-            </h:form>
 
             <p><p:spacer width="2"/></p>
 
@@ -114,8 +54,6 @@
             <p:toolbar>
                 <p:toolbarGroup align="left">
                     <h:form>
-
-
                         <p:commandButton ajax="false"
                                          value="Import Health Records"
                                          image="ui-icon-disk"
@@ -134,12 +72,12 @@
 
                     <p:column headerText="Type"
                               sortBy="#{theItem.resourceType}">
-                        Medication <h:outputLabel value="#{theItem.resourceType}"/>
-                        <!--
-                          <h:outputLabel value=" {theItem.resourceType}">
+                        <!--Medication <h:outputLabel value="#{theItem.resourceType}"/>
+                         resourceType  -->
+                        <h:outputLabel value="#{theItem.descriptionLabelCode}">
                             <f:converter converterId="labelLookup"/>
                         </h:outputLabel>
-                        -->
+
                     </p:column>
 
                     <p:column headerText="Description" sortBy="#{theItem.label}">
@@ -151,20 +89,17 @@
 
                         <h:outputText value="#{theItem.summary}"/>
                     </p:column>
-                    -->
-                    <!--
+                      <p:column headerText="User Name" sortBy="#{theItem.label}">
+                       <h:outputLabel value=" {theItem.label}" />
+                       <h:outputLabel value=" {theItem.code}"/>
+                       <h:outputLabel value=" {theItem.summary}"/>
 
-                            <p:column headerText="User Name" sortBy="#{theItem.label}">
-                           <h:outputLabel value=" {theItem.label}" />
-                           <h:outputLabel value=" {theItem.code}"/>
-                           <h:outputLabel value=" {theItem.summary}"/>
+                       <h:outputLabel value=" {theItem.status}"/>
+                       <h:outputLabel value=" {theItem.statusStandard}"/>
 
-                           <h:outputLabel value=" {theItem.status}"/>
-                           <h:outputLabel value=" {theItem.statusStandard}"/>
-
-                           <h:outputLabel value=" {theItem.PID}"/>
-                           <h:outputLabel value=" {theItem.ownerUri}"/>
-                       </p:column>
+                       <h:outputLabel value=" {theItem.PID}"/>
+                       <h:outputLabel value=" {theItem.ownerUri}"/>
+                   </p:column>
                     -->
 
 
@@ -177,6 +112,7 @@
                     <h:outputLink value="#{request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText
                             value="Medications List" style="font-size:10pt;"/></h:outputLink>
                 </u>
+
             </p>
         </p:fieldset>
 

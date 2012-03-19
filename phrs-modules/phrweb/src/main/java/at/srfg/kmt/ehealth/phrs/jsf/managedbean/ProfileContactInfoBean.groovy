@@ -16,7 +16,6 @@ public class ProfileContactInfoBean extends FaceBaseBean {
     private final static Logger LOGGER = LoggerFactory.getLogger(ProfileContactInfoBean.class);
 
 
-
     String contactType
     boolean pixUpdateInteropActorRegistry = true
     boolean pixRevalidatePixId = true
@@ -52,10 +51,8 @@ public class ProfileContactInfoBean extends FaceBaseBean {
                 internalModelList = []
                 //add single record
                 // ProfileUserContactInfo contactInfo = userService.getResourceSingle(ProfileUserContactInfo, true) //create if needed
-                ProfileContactInfo contactInfo = (ProfileContactInfo) userService.getResourceSingle(ProfileContactInfo, true) //create if needed
-                //only one, "selected"  can be referenced by the jsf page without using the list modelMain
-                selected = contactInfo
-                getModelMain().add(contactInfo)
+                selected = (ProfileContactInfo) userService.getResourceSingle(ProfileContactInfo, true) //create if needed
+
             }
         } catch (Exception e) {
             LOGGER.error('ProfileContactInfoBean loadModelMain Exception ' + e)

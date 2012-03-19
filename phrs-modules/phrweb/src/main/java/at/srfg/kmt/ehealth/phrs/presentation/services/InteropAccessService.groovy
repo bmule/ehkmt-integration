@@ -320,7 +320,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (!interopRef) {
+//                        if (!interopRef) {
 
                             messageId = getInteropClients().getProblemEntryClient()
                                     .addProblemEntry(
@@ -335,13 +335,13 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-
-                        }
+//                        } else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+//
+//                        }
                         //notify subscribers about changes
                         notifySubscribers = true
 
@@ -366,7 +366,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (!interopRef) {
+//                        if (!interopRef) {
                             // TODO more specific detail code part of finding
                             messageId = getInteropClients().getProblemEntryClient()
                                     .addProblemEntry(
@@ -381,13 +381,13 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-
-                        }
+//                        } else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+//
+//                        }
                         //notify subscribers about changes
                         notifySubscribers = true
 
@@ -408,7 +408,7 @@ public class InteropAccessService implements Serializable {
                                     + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                     + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                            if (!interopRef) {
+//                            if (!interopRef) {
                                 messageId = getInteropClients().getProblemEntryClient()
                                         .addProblemEntry(
                                         protocolId,//owner,
@@ -423,12 +423,12 @@ public class InteropAccessService implements Serializable {
                                     messageIdMap.put(categoryCode, messageId)
                                 }
 
-                            } else {
-                                //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-                            }
+//                            } else {
+//                                //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+//                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                                iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+//                            }
                         }
                         //notify subscribers about changes
                         notifySubscribers = true
@@ -469,7 +469,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (!interopRef) {
+ //                       if (!interopRef) {
                             messageId = getInteropClients().getProblemEntryClient()
                                     .addProblemEntry(
                                     protocolId,//owner,
@@ -483,12 +483,12 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
-                        }
+//                        } else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, dateStringEnd);
+//                        }
                         //notify subscribers about changes
                         notifySubscribers = true
                         break
@@ -509,7 +509,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (!interopRef) {
+//                      if (!interopRef) {
                             messageId = getInteropClients().getVitalSignClient().addVitalSign(
                                     protocolId,//owner,
                                     Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE,
@@ -522,20 +522,20 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
-                        }
+//                        } else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
+//                        }
 
                         categoryCode = Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
                         value = domain.getDiastolic() ? domain.getDiastolic().toString() : '0'
 
                         //No need to update, write again
-                        String interopRef_2 = null
-                        interopRef_2 = null //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
+//                        String interopRef_2 = null
+//                         //findMessageWithReference(owner, theParentId, Constants.PHRS_VITAL_SIGN_CLASS, categoryCode)
 
-                        if (!interopRef_2) {
+//                        if (!interopRef_2) {
                             messageId = getInteropClients().getVitalSignClient().addVitalSign(
                                     protocolId,//owner,
                                     categoryCode,
@@ -548,12 +548,12 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE, value);
-
-                        }
+//                        } else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef_2, HL7V3_VALUE, value);
+//
+//                        }
                         //notify subscribers about changes
                         notifySubscribers = true
                         break
@@ -574,7 +574,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (!interopRef) {
+                       // if (!interopRef) {
                             messageId = getInteropClients().getVitalSignClient().addVitalSign(
                                     protocolId,//owner,
                                     categoryCode,
@@ -585,14 +585,15 @@ public class InteropAccessService implements Serializable {
                                     Constants.KILOGRAM);
 
                             if (messageId) messageIdMap.put(categoryCode, messageId)
-                        } else {
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, value);
-
-                        }
+                       // }
+//                        else {
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_STATUS, status);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_END_DATE, value);
+//
+//                        }
 
                         categoryCode = Constants.ICARDEA_INSTANCE_BODY_HEIGHT
                         value = domain.getBodyHeight() ? domain.getBodyHeight().toString() : '0'
@@ -605,7 +606,7 @@ public class InteropAccessService implements Serializable {
                                 + ' resourceType ' + resourceType + ' owner ' + owner + ' protocolId ' + protocolId + ' refnote '
                                 + ' status ' + status + ' dateStart ' + dateStringStart + ' dateEnd ' + dateStringEnd);
 
-                        if (interopRef) {
+                        //if (interopRef) {
                             messageId = getInteropClients().getVitalSignClient()
                                     .addVitalSign(
                                     protocolId,//owner,
@@ -619,13 +620,14 @@ public class InteropAccessService implements Serializable {
                             if (messageId) {
                                 messageIdMap.put(categoryCode, messageId)
                             }
-                        } else {
-                            //update
-                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
-                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
-
-                        }
+                        //}
+//                        else {
+//                            //update
+//                            //iprocess.updateInteropStatement(resourceUri,interopResourceId,predicate,newValue);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_START_DATE, dateStringStart);
+//                            iprocess.updateInteropStatement(theParentId, interopRef, HL7V3_VALUE, value);
+//
+//                        }
                         //notify subscribers about changes
                         notifySubscribers = true
                         break

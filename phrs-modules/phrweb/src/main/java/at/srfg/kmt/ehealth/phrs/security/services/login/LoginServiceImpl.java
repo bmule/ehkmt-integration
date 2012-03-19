@@ -15,6 +15,7 @@ import java.util.ResourceBundle;
 
 //import flex.messaging.FlexContext;
 //import flex.messaging.FlexSession;
+
 /**
  * Consolidates business logic from the UI code for Registration activities.
  * <p/>
@@ -34,8 +35,16 @@ public class LoginServiceImpl implements LoginService {
         return createRedirect(username, RegistrationService.getReturnToUrl());
     }
 
+    /**
+     *
+     * @param username     shortName
+     * @param returnUrl
+     * @return
+     */
+
     public String createRedirect(String username, String returnUrl) {
-        LOGGER.debug("LoginServiceImpl createRedirect(username,loginType) special openId usage for " + username+" returnUrl "+returnUrl);
+
+        LOGGER.debug("LoginServiceImpl createRedirect(username,loginType) special openId usage for " + username + " returnUrl " + returnUrl);
         ResourceBundle properties = ResourceBundle.getBundle("icardea");
         String salkServer = properties.getString("salk.server");
 
@@ -66,24 +75,28 @@ public class LoginServiceImpl implements LoginService {
         LOGGER.debug("LoginServiceImpl authRequest.getDestinationUrl(true) redirectUrl:" + redirectUrl);
         return redirectUrl;
     }
+    //openid.provider.any
 
     /**
-     *
+     * Specialize for system openid provider
      * @param loginId
-     * @param openIdProviderId   - the key from the UI e.g. openid.provider.1
+     * @param openIdProviderId - the key from the UI e.g. openid.provider.1
      * @return
      */
-    public String createRedirectForLoginType(String loginId,  String openIdProviderId) throws Exception {
+    //TODO if username contains '@' check if yahoo or google and add url, otherwise if no http then try default server if fail, try alt server
+    //TODO handle short names and emails
+    public String createRedirectForLoginType(String loginId, String openIdProviderId) throws Exception {
         String redirectUrl = null;
         String username = loginId;
         try {
 
 
             String server = ConfigurationService.getInstance().getProperty(openIdProviderId);
+
             if (server == null) {
                 server = ConfigurationService.getInstance().getProperty("openid.provider.1", "https://icardea-server.lksdom21.lks.local/idp/");
             }
-            String returnUrl  = ConfigurationService.getInstance().getProperty("openid.returnurl.default", "http://icardea-server.lksdom21.lks.local:6060/phrweb/openid");
+            String returnUrl = ConfigurationService.getInstance().getProperty("openid.returnurl.default", "http://icardea-server.lksdom21.lks.local:6060/phrweb/openid");
 
 
             //FIXXME phrs use profiles
@@ -103,6 +116,8 @@ public class LoginServiceImpl implements LoginService {
                     username = server + "/u=" + username; //only valid for SALK server
                 }
             }
+
+
             LOGGER.debug("LoginServiceImpl " + "##############AT Discovery for: " + username);
             DiscoveryInformation discovery = RegistrationService.performDiscoveryOnUserSuppliedIdentifier(username);
             if (discovery == null) {
@@ -114,19 +129,66 @@ public class LoginServiceImpl implements LoginService {
                 returnUrl = LoginUtils.getOpenIdReturnToUrl();
             }
 
-          
+
             LOGGER.debug("LoginServiceImpl  before authRequest ##############AT return url:" + returnUrl);
             AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
-            
+
             if (authRequest == null) {
                 LOGGER.error("AuthRequest FAILED (null). Username=" + username);
                 throw new Exception("AuthRequest FAILED,(null). Username= " + username);
             }
             LOGGER.debug("LoginServiceImpl authRequest created redirectUrl:" + returnUrl);
             redirectUrl = authRequest.getDestinationUrl(true);
-            
+
         } catch (Exception e) {
-            LOGGER.error("OpenId error createRedirect username="+username, e);
+            LOGGER.error("OpenId error createRedirect username=" + username, e);
+        }
+
+        return redirectUrl;
+    }
+
+    /**
+     *  Support full open ID
+     * @param openId
+     * @return
+     * @throws Exception
+     */
+    public String createRedirectForOpenID(String openId) throws Exception {
+        String redirectUrl = null;
+
+        String username = openId;
+        try {
+            String returnUrl = ConfigurationService.getInstance().getProperty("openid.returnurl.default", "http://icardea-server.lksdom21.lks.local:6060/phrweb/openid");
+
+            returnUrl = returnUrl.trim();
+            //TODO use profile for openID provider see key   openid.provider.1.profile
+
+            // boolean specialUsage = new Boolean(ResourceBundle.getBundle("icardea").getString("salk.usage")).booleanValue();
+            LOGGER.debug("createRedirectForOpenID special openId  " + " " + username + " returnUrl=" + returnUrl);
+
+            LOGGER.debug("LoginServiceImpl createRedirectForOpenID " + "##############AT Discovery for: " + username);
+            DiscoveryInformation discovery = RegistrationService.performDiscoveryOnUserSuppliedIdentifier(username);
+            if (discovery == null) {
+                LOGGER.error("Discovery FAILED (null). Username=" + username);
+                throw new Exception("Discovery FAILED (null), username=" + username);
+            }
+            //String url = RegistrationService.getReturnToUrl();
+            if (returnUrl == null) {
+                returnUrl = LoginUtils.getOpenIdReturnToUrl();
+            }
+
+            LOGGER.debug("LoginServiceImpl createRedirectForOpenID before authRequest ##############AT return url:" + returnUrl);
+            AuthRequest authRequest = RegistrationService.createOpenIdAuthRequest(discovery, returnUrl);
+
+            if (authRequest == null) {
+                LOGGER.error("AuthRequest FAILED (null). Username=" + username);
+                throw new Exception("AuthRequest FAILED,(null). Username= " + username);
+            }
+            LOGGER.debug("LoginServiceImpl createRedirectForOpenID authRequest created redirectUrl:" + returnUrl);
+            redirectUrl = authRequest.getDestinationUrl(true);
+
+        } catch (Exception e) {
+            LOGGER.error("OpenId createRedirectForOpenID error createRedirect username=" + username, e);
         }
 
         return redirectUrl;
@@ -157,8 +219,8 @@ public class LoginServiceImpl implements LoginService {
 
     /**
      * @deprecated Logout handled by JSF LoginBean This would actually fail in
-     * the servlet with JSF context unless we have the request or JSF context
-     * can be used Must set attribute of new session with is_verified false
+     *             the servlet with JSF context unless we have the request or JSF context
+     *             can be used Must set attribute of new session with is_verified false
      */
     public void doLogout() {
 //		FlexSession mySession= FlexContext.getFlexSession();

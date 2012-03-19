@@ -223,6 +223,7 @@ public class MonitorInfoBean extends FaceBaseBean {
     public void downLoadTestingReport() {
          this.getDownLoadReport()
     }
+
     public StreamedContent getDownLoadTestingReport() {
         StreamedContent streamedContent = null
         LOGGER.debug('getDownLoadTestingReport accessed')
@@ -422,5 +423,6 @@ reportFile = new DefaultStreamedContent(stream, "application/pdf",
 "downloaded_file.pdf");
 
 }*/
+
 
 }

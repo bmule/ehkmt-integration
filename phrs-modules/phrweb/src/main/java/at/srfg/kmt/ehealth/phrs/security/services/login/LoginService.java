@@ -5,7 +5,7 @@ package at.srfg.kmt.ehealth.phrs.security.services.login;
 public interface LoginService {
 
 
-	String createRedirect(String username);
+    public String createRedirect(String username);
 
     /**
      *
@@ -13,7 +13,7 @@ public interface LoginService {
      * @param redirectUrl
      * @return
      */
-    String createRedirect(String username, String redirectUrl);
+    public String createRedirect(String username, String redirectUrl);
     //username is a short name! and the openId provider id build the full open ID Uri
 
     /**
@@ -23,11 +23,12 @@ public interface LoginService {
      * @return
      */
     //TODO  Detect an email based OpenId or a normal openID.  openIdProviderId only if passed a real OpenID
-    String createRedirectForLoginType(String username,String openIdProviderId) throws Exception;
+    public String createRedirectForLoginType(String username,String openIdProviderId) throws Exception;
+    public String createRedirectForOpenID(String openId) throws Exception;;
     //not used
-	RegistrationModel handleValidation();
+    public RegistrationModel handleValidation();
 
-	void doLogout();
-	String getCurrentIP();
+    public void doLogout();
+    public String getCurrentIP();
 	
 }

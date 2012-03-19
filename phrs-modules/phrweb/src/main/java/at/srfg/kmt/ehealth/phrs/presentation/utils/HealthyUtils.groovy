@@ -84,7 +84,6 @@ class HealthyUtils implements Serializable{
 			bmi= weight / (theHeight * theHeight);
 			bmi = bmi > 0 ? bmi.round(1) : bmi
 		} catch (Exception e) {
-			e.printStackTrace();
             LOGGER.debug("",e)
 		}
 

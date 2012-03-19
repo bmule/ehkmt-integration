@@ -30,7 +30,7 @@
 			
 		<script type="text/javascript" src="#{request.contextPath}/js/prime_extend.js"></script>
 
-		<ui:insert name="head"></ui:insert>
+		<ui:insert name="head"/>
 	</h:head>
 
 	<h:body>
@@ -40,17 +40,18 @@
 					<label value="PHR"  style="vertical-align:top;color:#0C7A9A;margin-right:10px;font-size:15px;font-weight:bold" />
 					
 				</div>
-
+       rendered="#{param['sidebar'] == null}"
  -->
-		<p:layout fullPage="true">
-			<p:layoutUnit position="top"  
-				rendered="#{param['sidebar'] == null}"
-				height="25">
-				<div style="display: inline-block">
-					<p:spacer width="20"/>
-					<h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
 
-					<h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"
+		<p:layout fullPage="true">
+
+            <p:layoutUnit position="top"
+                height="25">
+                <div style="display: inline-block">
+                    <p:spacer width="20"/>
+                    <h:graphicImage value="/img/iCardeaLogosm.png" width="100"/>
+
+                    <h:outputText value="PHR" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"
                                   rendered="#{loginBean.medicalRole ne true}"    />
 
                     <h:outputText value="PHR | #{loginBean.role}" style="color:#0C7A9A;vertical-align:top;margin-right:10px;font-size:15px;font-weight:bold"
@@ -68,91 +69,91 @@
                             </f:facet>
                         </p:ajaxStatus>
                     </ui:insert>
-                    <p:growl id="messagesIdle" showDetail="true" sticky="true" />
                 </div>
 
-			</p:layoutUnit>
-          <!-- Might interfere with center panel data table output??
-			<p:layoutUnit position="bottom" 
-				height="50" 
-				fullPage="true" rendered="#{param['sidebar'] == null}"
-				footer="true">
-					<ui:insert name="status">
-						<p:ajaxStatus
-							style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;">
-							<f:facet name="start">
-								<p:graphicImage value="/images/loading.gif" />
-							</f:facet>
-			
-							<f:facet name="complete">
-								<h:outputText value="" />
-							</f:facet>
-						</p:ajaxStatus>
-					</ui:insert>
-			</p:layoutUnit>
+            </p:layoutUnit>
+
+            <p:layoutUnit position="left"
+                          width="250"
+                          collapsible="false" gutter="false"
+                          scrollable="false"
+                          resizable="true" style="border:none;">
+
+                <p:outputPanel  rendered="#{loginBean.loggedIn eq true}" layout="block">
+                    <ui:include src="/sections/menunavigator.xhtml" />
+                </p:outputPanel>
+
+
+            </p:layoutUnit>
+
+            <!--
+            <ui:insert name="status">
+                <p:ajaxStatus
+                        style="width:32px;height:32px;display:block;position:fixed;right:0;top:0;">
+                    <f:facet name="start">
+                        <p:graphicImage value="/images/loading.gif" />
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value="" />
+                    </f:facet>
+                </p:ajaxStatus>
+            </ui:insert>
             -->
 			<!--  side bar includes login/logout and request authenticated user to access menu rendered=" {param['sidebar'] == null}"-->
-			<p:layoutUnit position="left"  
-				width="250"
-				collapsible="false" gutter="false"
-				scrollable="false"
-				resizable="true" style="border:none;">
-                <!--1hr 3600000 session web.xm timeout, invalidate session before that
-          45 min 1620000
-          1.45 5220000 Milliseconds  test 3min 15000-->
-                <!-- timeout before web.xml timeout
-                <h:form>
-                    <p:idleMonitor timeout="15000" update="messagesIdle"
-                               idleListener="#{idleMonitorController.activeListener}"/>
-                    </h:form>
-                 -->
-                <p:outputPanel  rendered="#{loginBean.loggedIn eq true}" layout="block">
 
 
-				    <ui:include src="/sections/menunavigator.xhtml" />
-                </p:outputPanel>
-			</p:layoutUnit>
-			
 			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq false}">
-				<div id="content" class="ui-widget"  style="width:100%;" >
-				     
-					<h:outputLabel  value="#{labels['authenticate_login_please']}"
+				<div id="contentLogin" class="ui-widget"  style="width:100%;" >
+                    <!-- gives error msg on empty ui insert <p:growl id="messagesLogin" showDetail="true"/>   -->
+                    <p:growl id="messagesLogin" showDetail="true"/>
+                    <h:outputLabel  value="#{labels['authenticate_login_please']}"
 							styleClass="form-dialog-label" />
 
                     <h:panelGroup>
                             <h:form>
+
                                 <h:panelGrid columns="2">
 
                                     <h:outputLabel value="User ID " style="font-size: 12pt;"/>
                                     <p:inputText value="#{loginBean.username}" style="width:200px"
                                              id="login_username"
+                                             requiredMessage="User ID is required"
                                              required="true" />
 
                                     <h:outputLabel value="Login with" style="font-size: 12pt;"/>
-                                    <h:selectOneRadio layout="pageDirection" value="#{loginBean.loginType}" style="font-size: 12pt;">
+                                    <h:selectOneRadio layout="pageDirection"
+                                                      value="#{loginBean.loginType}"
+                                                      style="font-size: 12pt;"
+                                                      requiredMessage="Login with?"
+                                                      required="true"
+                                            >
                                         <f:selectItem itemLabel="Local login name with prefix 'phr'"
                                                 itemValue="local.provider.1"/>
-                                        <f:selectItem itemLabel="iCARDEA login name"
+                                        <f:selectItem itemLabel="iCARDEA OpenID login name"
                                                 itemValue="openid.provider.1"/>
+                                        <f:selectItem itemLabel="Other Open ID"
+                                                itemValue="openid.provider.any"/>
                                     </h:selectOneRadio>
 
                                     <h:outputLabel value=" "/>
                                     <p:commandButton value="Login"  title="Login"   ajax="false"  style="font-size: 12pt;"
                                              actionListener="#{loginBean.processLogin}"/>
+
                                 </h:panelGrid>
                             </h:form>
                     </h:panelGroup>
 
 				</div>
 			</p:layoutUnit>	
-			
-			<!-- restrict access to center content area -->	
-			<p:layoutUnit position="center" rendered="#{loginBean.loggedIn eq true}" >
-				<div id="content" class="ui-widget"  style="width:100%;" >				
-					<ui:insert name="content">...</ui:insert>
+
+			<!-- restrict access to center content area-->
+			<p:layoutUnit position="center"  rendered="#{loginBean.loggedIn eq true}">
+				<div id="content" class="ui-widget"  style="width:100%;" >
+					    <ui:insert name="content"/>
 				</div>
 			</p:layoutUnit>
-		</p:layout>
+        </p:layout>
 		<!-- no sidebar or layout 
 		<h:panelGrid rendered=" {param['sidebar']} == 'no'">
 			<div id="content" class="ui-widget">

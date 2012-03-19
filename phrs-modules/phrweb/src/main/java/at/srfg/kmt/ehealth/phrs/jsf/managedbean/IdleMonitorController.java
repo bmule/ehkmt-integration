@@ -6,7 +6,10 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.IdleEvent;
-
+/*
+Not in use, this could support ajax calls, but it does not work as it should.
+ however the PhrTimeoutListener works....
+ */
 @ManagedBean(name = "idleMonitorController")
 //@ View Scoped
 @RequestScoped

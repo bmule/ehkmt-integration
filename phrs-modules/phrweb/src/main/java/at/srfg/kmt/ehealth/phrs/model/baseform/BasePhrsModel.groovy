@@ -34,6 +34,9 @@ public class BasePhrsModel implements Serializable, Cloneable {
     boolean newImport = false
     //allow export to interop. Set by user or if this data is a "single" notification upon creation, but not edits.
     boolean allowExport = true
+
+    //Use  tranaction  e.g. form  to bind values together
+    String transactionId
     //temp fields for UI forms needed, these cause trouble as hidden fields
     /**
      * UI fix
@@ -149,7 +152,6 @@ public class BasePhrsModel implements Serializable, Cloneable {
     //@Indexed
     String note
 
-
     String systemNote
 
 
@@ -229,9 +231,10 @@ public class BasePhrsModel implements Serializable, Cloneable {
         String tempStatus = getStatusCorrection(theStatus)
         if (tempStatus) {
             switch (tempStatus) {
-                case PhrsConstants.STATUS_RUNNING:
+                case [PhrsConstants.STATUS_RUNNING, Constants.STATUS_ACTIVE]:
                     return PhrsConstants.DATE_STATUS_BEGIN //="date.status.begin"
-                    break
+                break
+
                 case PhrsConstants.STATUS_COMPLETE:
                     return PhrsConstants.DATE_STATUS_END
                     break

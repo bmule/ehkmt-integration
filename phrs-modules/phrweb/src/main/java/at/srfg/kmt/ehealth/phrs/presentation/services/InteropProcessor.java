@@ -5,8 +5,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
-import at.srfg.kmt.ehealth.phrs.model.baseform.BasePhrsModel;
-import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
+import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.InteropClients;
@@ -31,9 +30,9 @@ public class InteropProcessor {
     public static final String CARE_PROVISION_CODE_MEDCCAT = "MEDCCAT";
     public static final String CARE_PROVISION_CODE_COBSCAT = "COBSCAT";
 
-    public final static String UNKNOWN_DRUG_CODE="";//unknown  is normally blank TODO find actual code for unknown or undefined?
-    public final static String DEFAULT_DATE_STRING="";
-    public final static String DEFAULT_DRUG_LABEL="UNKNOWN";
+    public final static String UNKNOWN_DRUG_CODE = "";//unknown  is normally blank TODO find actual code for unknown or undefined?
+    public final static String DEFAULT_DATE_STRING = "";
+    public final static String DEFAULT_DRUG_LABEL = "UNKNOWN";
     private boolean printDynabean = false;
 
 
@@ -302,7 +301,7 @@ public class InteropProcessor {
         String owner = res.getOwnerUri();
 
         String protocolId = getProtocolId(owner);
-        LOGGER.debug("sendMedicationMessage  START owner= "+owner+" protocolId="+protocolId+" beginDate="+res.getBeginDate()+" endDate="+res.getEndDate());
+        LOGGER.debug("sendMedicationMessage  START owner= " + owner + " protocolId=" + protocolId + " beginDate=" + res.getBeginDate() + " endDate=" + res.getEndDate());
 
         if (protocolId != null && !protocolId.isEmpty()) {
             // ok
@@ -356,10 +355,10 @@ public class InteropProcessor {
             MedicationClient medicationclient = getInteropClients().getMedicationClient();
             String productCode = domain.getProductCode();
             //assign default
-            if(productCode!=null && !productCode.isEmpty()) {
+            if (productCode != null && !productCode.isEmpty()) {
                 //
-            }  else {
-                productCode= InteropProcessor.UNKNOWN_DRUG_CODE;
+            } else {
+                productCode = InteropProcessor.UNKNOWN_DRUG_CODE;
             }
             String interopRef = null;
             //create new message each time rather than update.
@@ -375,7 +374,7 @@ public class InteropProcessor {
 
                 LOGGER.debug("Interop referenceNote " + referenceNote);
 
-                if (productCode != null ) {
+                if (productCode != null) {
 
                     messageId = medicationclient.addMedicationSign(
                             protocolId,//FIXID owner,
@@ -449,9 +448,9 @@ public class InteropProcessor {
             }
             //Notify all,this is a shotgun notification for all care provision codes
             //Issue, if the protocolId is not yet defined, then we try to notify
-            LOGGER.debug("Sending interop message, Prepare to notify for owner=" + owner+" CareProvisionCode"+ CARE_PROVISION_CODE_MEDLIST);
+            LOGGER.debug("Sending interop message, Prepare to notify for owner=" + owner + " CareProvisionCode" + CARE_PROVISION_CODE_MEDLIST);
 
-            getInteropClients().notifyInteropMessageSubscribersByProtocolId(CARE_PROVISION_CODE_MEDLIST,protocolId);
+            getInteropClients().notifyInteropMessageSubscribersByProtocolId(CARE_PROVISION_CODE_MEDLIST, protocolId);
             //          getInteropClients().notifyInteropMessageSubscribersByProtocolId(protocolId, resourceType);
 
         } catch (RuntimeException e) {
@@ -589,6 +588,11 @@ public class InteropProcessor {
         return out;
     }
 
+    /**
+     * @param date
+     * @param defaultDate
+     * @return
+     */
     public String transformDate(Date date, Date defaultDate) {
         Date theDate = date;
         if (theDate == null) {
@@ -603,6 +607,11 @@ public class InteropProcessor {
         return null;
     }
 
+    /**
+     * @param adminRoute
+     * @param doseUnits
+     * @return
+     */
     public String tranformMedicationAdminRoute(String adminRoute, String doseUnits) {
         String out = adminRoute;
         out = Constants.HL7V3_ORAL_ADMINISTRATION;
@@ -612,7 +621,6 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param ownerUri
      * @param phrsClass
      * @return
@@ -622,7 +630,6 @@ public class InteropProcessor {
     }
 
     /**
-     *
      * @param ownerUri
      * @param phrsClass
      * @param importMessage
@@ -638,8 +645,8 @@ public class InteropProcessor {
      * @param ownerUri
      * @param phrsClass
      * @param importMessage
-     * @param interopMessageIds    pass a non null list to collect interopMessageIds
-     * @return  transformed PHR resources
+     * @param interopMessageIds pass a non null list to collect interopMessageIds
+     * @return transformed PHR resources
      */
     public List importNewMessages(String ownerUri, String phrsClass, boolean importMessage, List<String> interopMessageIds) {
 
@@ -654,7 +661,10 @@ public class InteropProcessor {
 
                 //import the message, and also save it back to the Interop Service to tag it and make other listeners aware of it.
                 if (results != null) {
-                    //int resSize = results.size();
+                    //transactionId can be used to group records that were processed together, the beginDate or create date should be used
+                    //to determine a finer degreee of relationship. We are uncertain if the dates alone will help to group records imported.
+
+                    String transactionId = UUID.randomUUID().toString();
 
                     for (DynaBean dynaBean : results) {
                         String messageUri = null;
@@ -666,30 +676,54 @@ public class InteropProcessor {
                             //http://www.icardea.at/phrs#owner
                             //protocol ID, not phrs ownerUri
                             String protocolId = DynaUtil.getStringProperty(dynaBean, Constants.OWNER);
-                            LOGGER.debug(" importNewMessages for protocolId interop ownerUri= " + ownerUri+" protocolId "+protocolId);
+                            LOGGER.debug(" importNewMessages for protocolId interop ownerUri= " + ownerUri + " protocolId " + protocolId);
                             //String creator = DynaUtil.getStringProperty(dynaBean, Constants.CREATOR);
 
-                            Object repositoryObject = transformInteropMessage(ownerUri, phrsClass, dynaBean, messageUri);
+                            Object repositoryObject = transformInteropMessage(ownerUri, phrsClass, dynaBean, messageUri, transactionId);
 
                             if (repositoryObject != null) {
 
                                 transformedResources.add(repositoryObject);
 
                                 //collecting if caller needs it
-                                if (interopMessageIds != null && dynaBean.getDynaClass()!=null && dynaBean.getDynaClass().getName() != null) {
+                                if (interopMessageIds != null && dynaBean.getDynaClass() != null && dynaBean.getDynaClass().getName() != null) {
                                     interopMessageIds.add(dynaBean.getDynaClass().getName());     //add only the URI
                                 }
                             }
-                           //Import and mark the interop resource
+                            //Import and mark the interop resource
                             if (importMessage && repositoryObject != null) {
                                 //save transformed resource to local store
-
-                                getCommonDao().crudSaveResource(repositoryObject, ownerUri, "interopservice");
-                                //saved, now has resourceUri
                                 String resourceUri = null;
-                                if (repositoryObject instanceof BasePhrsModel) {
-                                    resourceUri = ((BasePhrsModel) repositoryObject).getResourceUri();
+
+                                //Handle vitals. These do not map nicely to the web forms
+                                if (repositoryObject instanceof ObsRecord) {
+                                    //Save it but create a form object also
+                                    getCommonDao().crudSaveResource(repositoryObject, ownerUri, "interopservice");
+
+                                    ObsRecord obsRecord = (ObsRecord) repositoryObject;
+                                    String code = obsRecord.getCode();
+                                    //for these we can create new objects immedicately, not not for Blood pressure
+                                    if (Constants.ICARDEA_INSTANCE_BODY_WEIGHT.equals(code)
+                                            || Constants.ICARDEA_INSTANCE_BODY_HEIGHT.equals(code)) {
+                                        //obsRecord must be saved first
+                                        repositoryObject = this.transformObsRecordToPhrFormObject(obsRecord);
+                                        //set initially, //saving creates resourceUri
+                                        resourceUri = obsRecord.getResourceUri();
+                                    }
                                 }
+                                //Possibly there is a ObsRecord but no second transformation to Phr form object
+                                if (repositoryObject == null) {
+                                    LOGGER.error("repositoryObject NULL after secondary transformation");
+                                } else {
+                                    getCommonDao().crudSaveResource(repositoryObject, ownerUri, "interopservice");
+                                    //saving creates resourceUri
+                                    if (repositoryObject instanceof BasePhrsModel) {
+                                        resourceUri = ((BasePhrsModel) repositoryObject).getResourceUri();
+                                    }
+                                }
+                                //saved, now has resourceUri
+
+
 //                                else if (repositoryObject instanceof BasePhrsMetadata) {
 //                                resourceUri = ((BasePhrsMetadata) repositoryObject).getResourceUri();
 //
@@ -721,8 +755,7 @@ public class InteropProcessor {
             }
         }
 
-
-        return  transformedResources;
+        return transformedResources;
 
     }
 
@@ -757,15 +790,237 @@ public class InteropProcessor {
      *         This is a transient property that is detected later when persisting the
      *         imported resource for the first time
      */
-    public Object transformInteropMessage(String givenOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
+    public Object transformInteropMessage(String phrOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri, String transactionId) {
+
         Object theObject = null;
-        //Import medications
+
         if (Constants.PHRS_MEDICATION_CLASS.equals(phrsClass)) {
-            theObject = transformInteropMedicationMessage(givenOwnerUri, phrsClass, dynabean, messageResourceUri);
+            theObject = transformInteropMedicationMessage(phrOwnerUri, phrsClass, dynabean, messageResourceUri);
+
+        } else if (Constants.PHRS_VITAL_SIGN_CLASS.equals(phrsClass)) {
+            //bw, bp, bh,etc
+            String code = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE);
+
+            if (code != null) {
+
+                // ObsRecord
+
+                theObject = transformInteropMessageToObsRecord(
+                        phrOwnerUri,
+                        phrsClass,
+                        dynabean,
+                        code,
+                        messageResourceUri,
+                        transactionId);
+
+
+            } else {
+                LOGGER.debug("No code found");
+            }
         }
         return theObject;
     }
 
+    /**
+     * @param value
+     * @param defaultValue
+     * @return
+     */
+    public static Double toDouble(String value, Double defaultValue) {
+        Double theValue = null;
+        try {
+            if (value != null && !value.isEmpty()) {
+                theValue = Double.valueOf(value);
+            }
+        } catch (NumberFormatException e) {
+            LOGGER.error("NumberFormatException converting = " + value);  //To change body of catch statement use File | Settings | File Templates.
+        }
+        if (theValue == null) theValue = defaultValue;
+
+        return theValue;
+    }
+
+    /**
+     * @param phrOwnerUri
+     * @param phrsClass
+     * @param dynabean
+     * @param code
+     * @param messageResourceUri
+     * @param transactionId
+     * @return
+     */
+    public ObsRecord transformInteropMessageToObsRecord(
+            String phrOwnerUri,
+            String phrsClass,
+            DynaBean dynabean,
+            String code,
+            String messageResourceUri,
+            String transactionId) {
+
+        ObsRecord resource = null;
+
+        if (code.equals(Constants.ICARDEA_INSTANCE_BODY_WEIGHT)
+                || code.equals(Constants.ICARDEA_INSTANCE_BODY_HEIGHT)
+                || code.equals(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE)
+                || code.equals(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE)) {
+
+            resource = new ObsRecord();
+            resource.setCode(code);
+
+            if (phrsClass == null) phrsClass = Constants.PHRS_VITAL_SIGN_CLASS;
+            resource.setType(phrsClass);
+
+            String value = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_VALUE);
+            resource.setValue(value);
+
+            String units = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_UNIT);
+            resource.setUnits(units);
+
+            String effectiveDateStr = DynaUtil.getStringProperty(dynabean, Constants.EFFECTIVE_TIME);// Constants.HL7V3_DATE_START);
+            Date effectiveDate = transformDateFromMessage(effectiveDateStr, new Date());    //HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
+
+            resource.setBeginDate(effectiveDate);
+            resource.setEndDate(effectiveDate);
+
+            if (transactionId != null && !transactionId.isEmpty()) resource.setTransactionId(transactionId);
+
+        } else {
+            LOGGER.debug("Ignoring code= " + code);
+        }
+        //metadata
+        if (resource != null) {
+
+            String protocolId = DynaUtil.getStringProperty(dynabean, Constants.OWNER, null);
+            if (protocolId != null) {
+                protocolId = protocolId.trim();
+            }
+
+            //resource.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE));//FIXXME
+
+            resource.setNewImport(true);
+
+            resource.setOwnerUri(phrOwnerUri);
+            resource.setPID(protocolId);//which PID
+
+            resource.setCreatorUri(DynaUtil.getStringProperty(dynabean, Constants.CREATOR, "EHR"));//FIXXME
+
+            String stdStatus = DynaUtil.getValueResourceUri(dynabean, Constants.HL7V3_STATUS, null);
+
+            resource.setStatusStandard(stdStatus);
+
+            resource.setStatus(InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS));
+            resource.setOrigin(DynaUtil.getStringProperty(dynabean, Constants.ORIGIN, PhrsConstants.INTEROP_ORIGIN_DEFAULT_EHR));
+
+            resource.setOriginStatus(PhrsConstants.INTEROP_ORIGIN_STATUS_IMPORTED);
+
+            resource.setExternalReference(messageResourceUri);
+
+            resource.setCreateDate(new Date());
+            resource.setModifyDate(resource.getCreateDate());
+            resource.setType(MedicationTreatment.class.toString());
+        }
+
+
+        return resource;
+
+    }
+
+    /**
+     * These should be saved first. If there is a dependency on other ObsRecords,
+     * then the dependency is found and inserted such as with blood pressure
+     * The transationId should be used or the beginDate
+     * parentId is this obsResource
+     *
+     * @param resource
+     * @return The form object relevant to the code
+     */
+    public Object transformObsRecordToPhrFormObject(ObsRecord obsRecord) {
+
+        Object theObject = null;
+        if (obsRecord != null && obsRecord.getCode() != null) {
+
+            String code = obsRecord.getCode();
+            LOGGER.debug("transformObsRecordToPhrFormObject found " + code);
+            if (Constants.ICARDEA_INSTANCE_BODY_WEIGHT.equals(code)) {
+                ObsVitalsBodyWeight resource = new ObsVitalsBodyWeight();
+                Double value = toDouble(obsRecord.getValue(), 0d);
+                resource.setBodyWeight(value);
+                resource.setMeasurementUnit(obsRecord.getUnits());
+                theObject = resource;
+
+            } else if (Constants.ICARDEA_INSTANCE_BODY_HEIGHT.equals(code)) {
+
+                ObsVitalsBodyHeight resource = new ObsVitalsBodyHeight();
+                Double value = toDouble(obsRecord.getValue(), 0d);
+
+                resource.setBodyHeight(value);
+                resource.setMeasurementUnit(obsRecord.getUnits());
+
+                theObject = resource;
+
+            } else if (Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE.equals(code)) {
+
+            } else if (Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE.equals(code)) {
+
+            }
+
+        }
+        //set metadata
+        if (theObject != null) {
+
+            BasePhrsModel base = (BasePhrsModel) theObject;
+            base.setNewImport(true);
+            base.setCode(obsRecord.getCode());
+            base.setOwnerUri(obsRecord.getOwnerUri());
+            base.setPID(obsRecord.getPID());//which PID
+
+            base.setParentId(obsRecord.getResourceUri());
+            base.setBeginDate(obsRecord.getBeginDate());
+            base.setEndDate(obsRecord.getEndDate());
+            base.setTransactionId(obsRecord.getTransactionId());
+
+            base.setCreatorUri(obsRecord.getCreatorUri());//FIXXME
+
+            base.setStatusStandard(obsRecord.getStatusStandard());
+
+            base.setStatus(obsRecord.getStatus());
+            base.setOrigin(obsRecord.getOrigin());
+
+            base.setOriginStatus(obsRecord.getOriginStatus());
+
+            base.setExternalReference(obsRecord.getExternalReference());
+
+            base.setCreateDate(obsRecord.getCreateDate());
+            base.setModifyDate(obsRecord.getModifyDate());
+            base.setType(obsRecord.getType());
+        }
+        return theObject;
+    }
+
+
+//    Constants.PHRS_VITAL_SIGN_CLASS
+//    Constants.CREATE_DATE
+//
+//
+//    //Constants.EFFECTIVE_TIME string
+//    String effectiveTime=null;
+//    //Constants.HL7V3_CODE
+//    String categoryCode = null;
+//
+//    //Constants.HL7V3_UNIT
+//    String units=null;
+//
+//    categoryCode = Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE
+//            units=Constants.MM_HG;
+//
+//    categoryCode = Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE
+//            units=Constants.MM_HG
+//
+//    categoryCode = Constants.ICARDEA_INSTANCE_BODY_WEIGHT
+//            units=Constants.KILOGRAM
+//
+//    categoryCode = Constants.ICARDEA_INSTANCE_BODY_HEIGHT
+//            units=Constants.CENTIMETER
 
     /**
      * @param givenOwnerUri
@@ -774,11 +1029,10 @@ public class InteropProcessor {
      * @param messageResourceUri
      * @return
      */
-    public Object transformInteropMedicationMessage(String phrOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
-        Object theObject = null;
+    public MedicationTreatment transformInteropMedicationMessage(String phrOwnerUri, String phrsClass, DynaBean dynabean, String messageResourceUri) {
+        MedicationTreatment theObject = null;
         if (dynabean != null && phrsClass != null) {
             try {
-
 
                 LOGGER.debug("phrsClass=" + phrsClass + " bean properties =");
 
@@ -793,10 +1047,10 @@ public class InteropProcessor {
                 String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
                 String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
 
-                boolean hasDrug= productCode != null && ! productCode.isEmpty() && getCommonDao().hasMedication(phrOwnerUri,medName,productCode);
-                if( hasDrug){
-                    LOGGER.debug("duplicate Drug detected. New message or other error. productCode="+productCode+" drugName"+medName+" phrOwnerUri="+phrOwnerUri);
-                     return theObject;
+                boolean hasDrug = productCode != null && !productCode.isEmpty() && getCommonDao().hasMedication(phrOwnerUri, medName, productCode);
+                if (hasDrug) {
+                    LOGGER.debug("duplicate Drug detected. New message or other error. productCode=" + productCode + " drugName" + medName + " phrOwnerUri=" + phrOwnerUri);
+                    return theObject;
                 }
                 // Constants.HL7V3_DATE_START  Constants.HL7V3_DATE_END
                 // Constants.HL7V3_STATUS Constants.HL7V3_FREQUENCY Constants.HL7V3_ADMIN_ROUTE Constants.HL7V3_DOSAGE
@@ -817,7 +1071,9 @@ public class InteropProcessor {
                 //med.status = "medicationSummary_medicationStatus_true"
                 //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)
 
-                med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(stdStatus, Constants.PHRS_MEDICATION_CLASS));
+                String defaultStatus = Constants.STATUS_COMPELETE;
+                //User must indicate complience, reset to complete.
+                med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(defaultStatus, Constants.PHRS_MEDICATION_CLASS));
                 //there is no code here, but it is likely a dynabean
                 //deprecated med.setCode(DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE, null));
                 //check the origin of this message....
@@ -827,7 +1083,7 @@ public class InteropProcessor {
 
                 med.setExternalReference(messageResourceUri);
 
-                 //check drug code earlier
+                //check drug code earlier
 //                Map<String, String> attrMedName = getMedicationNameAttributes(dynabean);
 //                String medName = getMapValue(attrMedName, Constants.HL7V3_DRUG_NAME, "Drug");
 //                String productCode = getMapValue(attrMedName, Constants.HL7V3_VALUE, null);
@@ -1070,11 +1326,11 @@ public class InteropProcessor {
                 theDate = defaultDate != null ? defaultDate : new Date();
             }
         } catch (Exception e) {
-            LOGGER.error("transforming date exception on date string="+dateMessage, e);
+            LOGGER.error("transforming date exception on date string=" + dateMessage, e);
         }
-        if( theDate==null) {
-            if(defaultDate != null) theDate = defaultDate;
-            else  theDate = new Date();
+        if (theDate == null) {
+            if (defaultDate != null) theDate = defaultDate;
+            else theDate = new Date();
         }
         return theDate;
     }
