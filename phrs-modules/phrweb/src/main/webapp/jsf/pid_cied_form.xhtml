@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+        <!-- use include statement to include this file somewhere <ui:include src="./xxxxx.xhtml" />
+javascript will be included into head...at top, not bottom... -->
+
+        <h:outputScript  target="head" >
+
+        </h:outputScript>
+        <p:fieldset legend="CIED or Patient Identifier">
+                Your CIED Implant identifier or your patient identifier can be used for communicating information
+                to or from the hospital.
+                The status of your patient identifier will be indicated below. If your identifier is valid, you might
+                click on: <p:spacer width="2"/> <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
+                    value="Import Health Data" style="font-size:12pt;text-decoration:underline;"/></a>
+
+            <!--
+            <p:growl id="msgsCied" showDetail="true"/>
+            -->
+            <h:form>
+                <h:panelGrid columns="2" border="0" style="border-style:solid;border-color:grey;">
+          <!--          <f:facet name="header">
+                        <h:outputLabel value="If necessary, please update your CIED Implant Identifier"/>
+                    </f:facet>  -->
+                    <h:outputLabel value="ID Type"/>
+                    <h:panelGroup>
+                        <h:selectOneMenu value="#{pidBean.pixQueryIdType}"
+                                         id="field_pixQueryIdType_input"
+                                         rendered="#{pidBean.modify eq 'yes'}"
+                                         required="true">
+
+                            <f:selectItem itemLabel="Please Select Identifier type..." noSelectionOption="true"
+                                          itemValue=""/>
+                            <f:selectItem itemLabel="Implant model:Maximo"
+                                          itemValue="cied:model:Maximo"/>
+                            <f:selectItem itemLabel="Patient ID"
+                                          itemValue="pid"/>
+                        </h:selectOneMenu>
+
+                        <p:message for="field_pixQueryIdType_input" display="text"/>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="Identifier /Serial No."/>
+                    <h:panelGroup>
+                        <p:inputText value="#{pidBean.pixQueryIdUser}"
+                                     id="field_pixQueryIdUser_input"
+                                     required="true"
+                                     requiredMessage="#{labels['default_required_field']}"/>
+
+                        <p:message for="field_pixQueryIdUser_input" display="text"/>
+                    </h:panelGroup>
+
+                    <h:outputLabel value="Please update, if necessary"/>
+                    <h:panelGroup>
+                        <p:commandButton ajax="false"
+                                         value="Update"
+                                         rendered="#{pidBean.allowCommandIdentify}"
+                                         title="Submit"
+                                         image="ui-icon-arrowrefresh-1-w"
+                                         actionListener="#{pidBean.commandProcessIdentifier}"
+                                />
+                        <h:outputLabel value="#{pidBean.statusMessagePid}"/>
+                    </h:panelGroup>
+
+
+                </h:panelGrid>
+            </h:form>
+        </p:fieldset>
+    </ui:composition>
+</h:body>
+</html>

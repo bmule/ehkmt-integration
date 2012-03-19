@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+    <title></title>
+</h:head>
+
+<h:body>
+    <ui:composition>
+
+        <h:outputScript  target="head" >
+            <script type="text/javascript">
+                //<![CDATA[
+                function onEditComplete(xhr, status, args) {
+                    if (window.console && window.console.firebug) {
+                        console.log("onEditComplete outputScript");
+                    }
+                    if (args.validationFailed) {
+
+                    } else {
+                        widDialogPcon.hide();
+                    }
+                }
+                //]]>
+            </script>
+        </h:outputScript>
+        <p:fieldset legend="#{labels['contactInfo.personal.label']}">
+
+            <h:panelGrid columns="2" id="idViewPcon">
+                <f:facet name="header">
+
+                    <h:form>
+                        <p:commandButton update="idPanelPcon" value="Edit"
+                                         oncomplete="widDialogPcon.show()"
+                                         image="ui-icon ui-icon-pencil"
+                                         title="#{labels['default.button.edit.label']}">
+                            <f:setPropertyActionListener value="#{procon.selected}"
+                                                         target="#{procon.selected}"/>
+                            <f:setPropertyActionListener value="yes"
+                                                         target="#{procon.modify}"/>
+                        </p:commandButton>
+                    </h:form>
+
+                </f:facet>
+                <h:outputLabel value="Family Name"/>
+                <h:outputLabel value="#{procon.selected.lastName}"/>
+
+                <h:outputLabel value="First Name"/>
+                <h:outputLabel value="#{procon.selected.firstName}"/>
+
+                <h:outputLabel value="Telephone"/>
+                <h:outputLabel value="#{procon.selected.primaryTelephone}"/>
+
+                <h:outputLabel value="Street Address"/>
+                <h:outputLabel value="#{procon.selected.addressText}"/>
+
+                <h:outputLabel value="Postal Code"/>
+                <h:outputLabel value="#{procon.selected.postalCode}"/>
+
+                <h:outputLabel value="City"/>
+                <h:outputLabel value="#{procon.selected.city}"/>
+
+                <h:outputLabel value="Country"/>
+                <h:outputLabel value="#{procon.selected.country}"/>
+
+                <h:outputLabel value="Email"/>
+                <h:outputLabel value="#{procon.selected.email}"/>
+
+                <h:outputLabel value="Internet Services"/>
+                <h:panelGroup>
+                    <h:outputLabel value="Chat"/>
+                    <p:spacer width="2"/>
+                    <h:outputLabel value="#{procon.selected.internetChatProvider}"/>
+                    <p:spacer width="2"/>
+                    <h:outputLabel value="#{procon.selected.internetChatId}"/>
+                </h:panelGroup>
+
+                <h:outputLabel value="#{labels['default.comments.label']}"/>
+                <h:outputText value="#{procon.selected.note}"/>
+
+
+
+            </h:panelGrid>
+
+        </p:fieldset>
+
+        <!-- form dialog -->
+        <!--  add dialog here and wrap with the form -->
+
+        <ui:include src="./profile_contact_dialog.xhtml"/>
+    </ui:composition>
+</h:body>
+</html>
