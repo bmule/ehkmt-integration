@@ -87,10 +87,20 @@ public final class PHRSRequestClient {
     public String addPHRSRequest(String replyAddress, String id,
             String careProcisionCode) throws TripleException {
 
+        LOGGER.debug("addPHRSRequest");
         //check for null
         StoreValidator.validateNotNull("replyAddress", replyAddress);
         StoreValidator.validateNotNull("patient id",id);
         StoreValidator.validateNotNull("careProcisionCode",careProcisionCode);
+
+        final String[] toLog = {replyAddress, id, careProcisionCode};
+
+        String existingUri=getExistingRequest(replyAddress,id,careProcisionCode);
+        //Query for existing request... otherwise duplicates cause extra messages, no need to persist unless we note create date
+        if(existingUri !=null){
+            LOGGER.debug("addPHRSRequest found existing PHR request, do not add again for reply adress={}, id={}, care provision code={}",toLog);
+           return existingUri;
+        }
 
         final String subject =
                 triplestore.persist(Constants.RDFS_TYPE,
@@ -117,7 +127,7 @@ public final class PHRSRequestClient {
                 id,
                 LITERAL);
 
-        final String[] toLog = {replyAddress, id, careProcisionCode};
+
         LOGGER.debug("New PHR request sored for reply adress={}, id={}, care provision code={}", toLog);
         return subject;
     }
@@ -147,7 +157,26 @@ public final class PHRSRequestClient {
 
         return result;
     }
+    
+    public String getExistingRequest(String replyAddress, String id,
+                          String careProcisionCode)  {
 
+       Iterable<String> requests=null;
+        String uri=null;
+        try {
+            requests = getAllPHRSRequests(replyAddress,id,careProcisionCode);
+            if(requests != null){
+                for(String req:requests){
+                    uri=req;
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            //
+        }
+        return uri;
+
+    }
     public Iterable<String> getAllPHRSRequests(String replyAddress, String id,
             String careProcisionCode) throws TripleException {
         final Map<String, String> queryMap = new HashMap<String, String>();
