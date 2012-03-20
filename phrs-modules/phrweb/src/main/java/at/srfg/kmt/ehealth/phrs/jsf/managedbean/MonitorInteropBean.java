@@ -106,10 +106,10 @@ public class MonitorInteropBean implements Serializable {
                 //getOwnerUri(),
                 //Constants.PHRS_MEDICATION_CLASS,
                 //false); //false, do not import new Messages, only report
-        
+
         int count = transformedMsgs == null ? -1 : transformedMsgs.size();
 
-        if (transformedMsgs != null && !transformedMsgs.isEmpty()) {
+        if (count > 0) {
             //ok
             LOGGER.debug("transformedMsgs. OK found INTEROP MEDS found count=" + count);
             modelMain = toolTransformer.tranformResource(transformedMsgs);
@@ -121,7 +121,7 @@ public class MonitorInteropBean implements Serializable {
             int count2 = modelMain == null ? -1 : modelMain.size();
             LOGGER.debug("transformedMsgs from test data, modelMain count=" + count2);
         }
-        LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri());
+        LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri()+ " original message count="+count);
 
     }
 
@@ -211,10 +211,7 @@ public class MonitorInteropBean implements Serializable {
         try {
 
             LOGGER.debug("Start MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
-//            List transformedMsgs = interopProcessor.importNewMessages(
-//                    getOwnerUri(),
-//                    Constants.PHRS_MEDICATION_CLASS,
-//                    true); //true: import the records
+
 
             List transformedMsgs = importSelectedTypes(IMPORT_TYPES,true); //true save imported data
 

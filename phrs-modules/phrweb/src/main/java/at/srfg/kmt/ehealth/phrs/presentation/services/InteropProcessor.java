@@ -5,6 +5,7 @@ import at.srfg.kmt.ehealth.phrs.PhrsConstants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.DynaBeanClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.util.DateUtil;
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
 import at.srfg.kmt.ehealth.phrs.model.baseform.*;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
@@ -799,24 +800,41 @@ public class InteropProcessor {
 
         } else if (Constants.PHRS_VITAL_SIGN_CLASS.equals(phrsClass)) {
             //bw, bp, bh,etc
-            String code = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE);
+           // String code = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE);
+            String codeUri=null;
+            DynaBean startBean = DynaUtil.getDynaBeanProperty(dynabean, Constants.HL7V3_CODE);
 
-            if (code != null) {
-                LOGGER.debug("transformInteropMessage code found code="+code);
+            if(startBean != null){
+                final String toString = DynaUtil.toString(startBean) ;
+                LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CD instance.", toString);
+                codeUri= startBean.getDynaClass().getName();
+                LOGGER.debug("codeUri = ", codeUri);
+                /*
+                //final String codePrefLabel = (String) DynaUtil.getStringProperty.get(dynabean,Constants.SKOS_PREFLABEL);
+
+                final DynaBean codeBean = DynaUtil.getDynaBeanProperty(startBean, Constants.CODE);
+                final String codeValue =  (String) DynaUtil.getStringProperty(codeBean,Constants.CODE_VALUE);
+                */
+            }
+
+            if (codeUri != null) {
+
+                LOGGER.debug("transformInteropMessage code found code="+codeUri);
                 // ObsRecord
 
                 theObject = transformInteropMessageToObsRecord(
                         phrOwnerUri,
                         phrsClass,
                         dynabean,
-                        code,
+                        codeUri,
                         messageResourceUri,
                         transactionId);
-
 
             } else {
                 LOGGER.debug("transformInteropMessage No code found");
             }
+        } else {
+            LOGGER.debug("transformInteropMessage ignoring class "+phrsClass);
         }
         return theObject;
     }
@@ -860,9 +878,10 @@ public class InteropProcessor {
         ObsRecord resource = null;
         LOGGER.debug("transformInteropMessageToObsRecord code found code="+code);
         if (code.equals(Constants.ICARDEA_INSTANCE_BODY_WEIGHT)
-                || code.equals(Constants.ICARDEA_INSTANCE_BODY_HEIGHT)
-                || code.equals(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE)
-                || code.equals(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE)) {
+                //|| code.equals(Constants.ICARDEA_INSTANCE_BODY_HEIGHT)
+                //|| code.equals(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE)
+                //|| code.equals(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE)
+                ) {
             LOGGER.debug("transformInteropMessageToObsRecord create object code="+code);
             resource = new ObsRecord();
             resource.setCode(code);
@@ -942,7 +961,8 @@ public class InteropProcessor {
         if (obsRecord != null && obsRecord.getCode() != null) {
 
             String code = obsRecord.getCode();
-            LOGGER.debug("transformObsRecordToPhrFormObject found " + code);
+            LOGGER.debug("transformObsRecordToPhrFormObject found code {} obsRecord {}",  code,obsRecord);
+
             if (Constants.ICARDEA_INSTANCE_BODY_WEIGHT.equals(code)) {
                 ObsVitalsBodyWeight resource = new ObsVitalsBodyWeight();
                 Double value = toDouble(obsRecord.getValue(), 0d);
@@ -952,15 +972,16 @@ public class InteropProcessor {
 
             } else if (Constants.ICARDEA_INSTANCE_BODY_HEIGHT.equals(code)) {
 
-                ObsVitalsBodyHeight resource = new ObsVitalsBodyHeight();
-                Double value = toDouble(obsRecord.getValue(), 0d);
-
-                resource.setBodyHeight(value);
-                resource.setMeasurementUnit(obsRecord.getUnits());
-
-                theObject = resource;
+//                ObsVitalsBodyHeight resource = new ObsVitalsBodyHeight();
+//                Double value = toDouble(obsRecord.getValue(), 0d);
+//
+//                resource.setBodyHeight(value);
+//                resource.setMeasurementUnit(obsRecord.getUnits());
+//
+//                theObject = resource;
 
             } else if (Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE.equals(code)) {
+
 
             } else if (Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE.equals(code)) {
 

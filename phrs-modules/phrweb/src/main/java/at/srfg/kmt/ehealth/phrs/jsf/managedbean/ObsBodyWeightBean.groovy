@@ -140,7 +140,7 @@ public class ObsBodyWeightBean extends FaceBaseBean  {
 				selected.bmi= val
 			}
 		} catch (Exception e){
-			println('storeModifyFirst Exception '+e)
+			LOGGER.debug('storeModifyFirst Exception '+e)
 		}
 	}
 }

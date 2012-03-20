@@ -343,7 +343,7 @@ public class MonitorInfoMgtBean implements Serializable {
             modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
             //default
             if(selectedLocalResourceType ==null){
-                selectedLocalResourceType="BW";//"PDQ";
+                selectedLocalResourceType="BP";//"PDQ";
             }
         } catch (Exception e) {
             LOGGER.error("initFormModel");

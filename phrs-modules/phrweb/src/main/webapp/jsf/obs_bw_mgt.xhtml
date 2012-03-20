@@ -116,23 +116,27 @@ prependId="false"
 							</h:outputLabel>
 						</p:column>-->
 						<!-- short.date.label=Date-->
-						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}">
+						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}"
+                                  style="width:120px;">
 							<h:outputLabel value="#{theItem.beginDate}">
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</h:outputLabel>
 						</p:column>
 
-						<p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}">
+						<p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}"
+                                  style="width:150px;">
 							<h:outputLabel value="#{theItem.bodyWeight}" /> kg
 						</p:column>
-						<p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}" > 
+						<p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}"
+                                  style="width:150px;">
 							<h:outputLabel value="#{theItem.bmi}" />
 						</p:column>
+                        <!--
 						<p:column
 							headerText="#{labels['obsBodyWeightBMW01.height.label']}">
 							<h:outputLabel value="#{theItem.bodyHeight}" /> cm
 						</p:column>
-
+                         -->
 						<p:column headerText="#{labels['default.comments.label']}">
 							<h:outputText value="#{theItem.note}" />
 						</p:column>

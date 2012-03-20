@@ -69,11 +69,14 @@ prependId="false"
 		</p:row>-->
 		<p:row>
 			<p:column headerText="#{labels['labels.menu.options.label']}" />
-			<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.beginDate}"/>
-			<p:column headerText="#{labels['obsBloodPressureA01.label']}" sortBy="#{theItem.systolic}"/>
+			<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.beginDate}"
+                      style="width:190px;"/>
+			<p:column headerText="#{labels['obsBloodPressureA01.label']}" sortBy="#{theItem.systolic}"
+                      style="width:240px;"/>
 			<!--<p:column   headerText="#{labels['obsBloodPressureA01.bpSystolic.label']} / #{labels['obsBloodPressureA01.bpDiastolic.label']}" />
 			 p:column headerText="#{labels['obsBloodPressureA01.bpDiastolic.label']}" /> -->
-			<p:column headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}" sortBy="#{theItem.heartRate}"/>
+			<p:column headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}" sortBy="#{theItem.heartRate}"
+                      style="width:190px;"/>
 			<p:column headerText="#{labels['default.comments.label']}" />
 		</p:row>
 	</p:columnGroup>
@@ -104,7 +107,7 @@ prependId="false"
 						</p:column>
 
 						<!-- short.date.label=Date-->
-						<p:column ><!-- headerText="#{labels['short.date.label']}" -->
+						<p:column style="width:120px;"><!-- headerText="#{labels['short.date.label']}" -->
 							<h:outputLabel value="#{theItem.beginDate}">
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</h:outputLabel>

@@ -535,6 +535,7 @@ public class CoreTestData {
 
 
             ProfileContactInfo info = commonDao.getProfileContactInfo(user.getOwnerUri());
+            //dont write over existing
             if (info == null) {
                 info = new ProfileContactInfo();
                 info.setOwnerUri(user.getOwnerUri());
@@ -544,7 +545,6 @@ public class CoreTestData {
             }
             info.setFirstName(firstname);
             info.setLastName(lastname);
-
 
             commonDao.crudSaveResource(info, user.getOwnerUri(), "createTestUserForMonitoring");
 
@@ -733,13 +733,9 @@ public class CoreTestData {
                 info.setOwnerUri(user.getOwnerUri());
                 info.setCreatorUri(user.getOwnerUri());
                 info.setType(ProfileContactInfo.class.getCanonicalName());
-
+                info.setFirstName("");
+                info.setLastName("");
             }
-            //info.setFirstName(firstname);
-            //info.setLastName(lastname);
-            //Don't add name, let person fill in info
-            info.setFirstName("?");
-            info.setLastName("");
 
             commonDao.crudSaveResource(info, user.getOwnerUri(), "CoreTestData createTestUserData");
 

@@ -127,7 +127,7 @@ rendered="XX{infotype eq 'history'}"
 				</p:column>
 				
 <!-- INTEROP_ORIGIN_STATUS_IMPORTED -->
-				<p:column headerText="#{labels['medicationSummary.medicationNameText.label']}">			
+				<p:column headerText="#{labels['medicationSummary.medicationNameText.label']}" style="width:200px;">
 			
 					<h:outputLabel value="#{theItem.label}"/>
 					<p:outputPanel rendered="#{theItem.code != null}">
@@ -145,7 +145,7 @@ rendered="XX{infotype eq 'history'}"
 					</p:outputPanel>					
 					
 				</p:column>
-				<p:column headerText="Start Date" >
+				<p:column headerText="Start Date" style="width:110px;">
 					<h:outputText  value="#{theItem.beginDate}"><!-- beginDate-->
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
@@ -160,7 +160,7 @@ rendered="XX{infotype eq 'history'}"
 				</p:column>
 				
 
-				<p:column headerText="End Date" >
+				<p:column headerText="End Date" style="width:110px;">
 					<h:outputText  value="#{theItem.endDate}"><!-- endDate-->
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
@@ -190,13 +190,13 @@ rendered="XX{infotype eq 'history'}"
 				</p:column>
 				<!-- <p:column headerText=" {labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}">
 				 -->
-				<p:column headerText="Reason">
+				<p:column headerText="Reason" style="width:125px;">
 					<h:outputLabel value="#{theItem.reasonCode}">
 						<f:converter converterId="labelLookup" />
 					</h:outputLabel>
 				</p:column>		
 				<!-- <p:column headerText=" {labels['medicationSummary.prescribedByPersonName.label']}"> -->		
-				<p:column headerText="Prescribed by">
+				<p:column headerText="Prescribed by" style="width:150px;">
 				
 					<h:outputText value="#{theItem.prescribedByName}" />
 				</p:column>

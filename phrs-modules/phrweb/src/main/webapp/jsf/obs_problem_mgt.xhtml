@@ -93,19 +93,22 @@ prependId="false"
 	 -->												
 					
 									
-							<p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}">
+							<p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}"
+                                      style="width:210px;">
 								<h:outputLabel value="#{theItem.code}" >
 									<f:converter converterId="labelLookup" />
 								</h:outputLabel>
 							</p:column>					
 					
-						<p:column headerText="#{labels['default_status_problem']}" sortBy="#{theItem.status}">
+						<p:column headerText="#{labels['default_status_problem']}" sortBy="#{theItem.status}"
+                                  style="width:240px;">
 							<h:outputLabel value="#{theItem.status}" >
 								<f:converter converterId="labelLookup" />
 							</h:outputLabel>
 						</p:column>	
 						
-						<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}">
+						<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}"
+                                  style="width:120px;">
 							<h:outputLabel value="#{theItem.displayDate}">
 								<f:convertDateTime pattern="yyyy-MM-dd" />
 							</h:outputLabel>
