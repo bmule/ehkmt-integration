@@ -32,6 +32,8 @@ public class ReportToolTransformer {
                 MonitorPhrItem item = null;
                 if (obj instanceof MedicationTreatment) {
                     item = toMonitorPhrItem((MedicationTreatment) obj);
+                } else if(obj instanceof ObsRecord){
+                   item= toMonitorPhrItem((ObsRecord) obj);
                 }
                 if (item != null) list.add(item);
 
@@ -52,6 +54,7 @@ public class ReportToolTransformer {
      * @return
      */
     public MonitorPhrItem toMonitorPhrItem(MedicationTreatment resource) {
+        if(resource == null) return null;
 
         MonitorPhrItem item = new MonitorPhrItem();
         item.setResourceType(Constants.PHRS_MEDICATION_CLASS);
@@ -99,7 +102,7 @@ public class ReportToolTransformer {
 
     //item.setDescriptionLabelCode("phr_medication");
     public MonitorPhrItem toMonitorPhrItem(ObsRecord resource) {
-
+        if(resource == null) return null;
         MonitorPhrItem item = new MonitorPhrItem();
 
         item.setDescriptionLabelCode(

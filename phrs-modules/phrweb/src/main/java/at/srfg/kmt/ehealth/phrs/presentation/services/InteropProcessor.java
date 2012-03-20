@@ -802,7 +802,7 @@ public class InteropProcessor {
             String code = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_CODE);
 
             if (code != null) {
-
+                LOGGER.debug("transformInteropMessage code found code="+code);
                 // ObsRecord
 
                 theObject = transformInteropMessageToObsRecord(
@@ -815,7 +815,7 @@ public class InteropProcessor {
 
 
             } else {
-                LOGGER.debug("No code found");
+                LOGGER.debug("transformInteropMessage No code found");
             }
         }
         return theObject;
@@ -858,12 +858,12 @@ public class InteropProcessor {
             String transactionId) {
 
         ObsRecord resource = null;
-
+        LOGGER.debug("transformInteropMessageToObsRecord code found code="+code);
         if (code.equals(Constants.ICARDEA_INSTANCE_BODY_WEIGHT)
                 || code.equals(Constants.ICARDEA_INSTANCE_BODY_HEIGHT)
                 || code.equals(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE)
                 || code.equals(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE)) {
-
+            LOGGER.debug("transformInteropMessageToObsRecord create object code="+code);
             resource = new ObsRecord();
             resource.setCode(code);
 
@@ -885,7 +885,7 @@ public class InteropProcessor {
             if (transactionId != null && !transactionId.isEmpty()) resource.setTransactionId(transactionId);
 
         } else {
-            LOGGER.debug("Ignoring code= " + code);
+            LOGGER.debug("transformInteropMessageToObsRecord Ignoring code= " + code);
         }
         //metadata
         if (resource != null) {
@@ -918,6 +918,8 @@ public class InteropProcessor {
             resource.setCreateDate(new Date());
             resource.setModifyDate(resource.getCreateDate());
             resource.setType(MedicationTreatment.class.toString());
+
+            LOGGER.debug("transformInteropMessageToObsRecord resource {} ",resource);
         }
 
 
@@ -1326,7 +1328,7 @@ public class InteropProcessor {
                 theDate = defaultDate != null ? defaultDate : new Date();
             }
         } catch (Exception e) {
-            LOGGER.error("transforming date exception on date string=" + dateMessage, e);
+            LOGGER.error("transforming date exception on date string=" + dateMessage);
         }
         if (theDate == null) {
             if (defaultDate != null) theDate = defaultDate;
