@@ -8,12 +8,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="/templates/template_ui.xhtml">
 
-	<ui:define name="head">
-		<ui:insert name="head"></ui:insert>
-	</ui:define>
+    <ui:define name="head">
+        <ui:insert name="head"/>
+    </ui:define>
     <!-- Will provide same view as /jsf/home.xhtml but it is outside the /jsf folder if we need more protection -->
 	<ui:define name="content">
-        <p:messages  showDetail="true" autoUpdate="true"/>
+
 		<p:fieldset toggleable="false" legend="Home">
             <ui:include src="./jsf/home_content.xhtml" />
 

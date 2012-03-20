@@ -175,6 +175,10 @@ public class MonitorInfoMgtBean implements Serializable {
 
     }
 
+    public boolean isPrintable(){
+        if(modelMain != null && ! modelMain.isEmpty())  return true;
+        else return false;
+    }
 
     private void loadModelMainByUserAndResourceType(String targetOwnerUri, String localResourceType) {
         if (targetOwnerUri != null && localResourceType != null) {
@@ -339,18 +343,15 @@ public class MonitorInfoMgtBean implements Serializable {
             modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
             //default
             if(selectedLocalResourceType ==null){
-                selectedLocalResourceType="PDQ";
+                selectedLocalResourceType="BW";//"PDQ";
             }
         } catch (Exception e) {
             LOGGER.error("initFormModel");
         }
-
-
         // this.internalModelList= buildView(list,this.permit, UserSessionService.getSessionAttributePhrId());
 
 
         LOGGER.debug("END initFormModel modelFormUserList size="+modelFormUserList.size());
-
 
     }
 

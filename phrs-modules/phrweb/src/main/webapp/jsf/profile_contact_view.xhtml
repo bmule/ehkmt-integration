@@ -31,23 +31,24 @@
             </script>
         </h:outputScript>
         <p:fieldset legend="#{labels['contactInfo.personal.label']}">
-
+             <!--idContactView will get updated by dialog form-->
             <h:panelGrid columns="2" id="idViewPcon">
-                <f:facet name="header">
 
-                    <h:form>
-                        <p:commandButton update="idPanelPcon" value="Edit"
-                                         oncomplete="widDialogPcon.show()"
-                                         image="ui-icon ui-icon-pencil"
-                                         title="#{labels['default.button.edit.label']}">
-                            <f:setPropertyActionListener value="#{procon.selected}"
-                                                         target="#{procon.selected}"/>
-                            <f:setPropertyActionListener value="yes"
-                                                         target="#{procon.modify}"/>
-                        </p:commandButton>
-                    </h:form>
 
-                </f:facet>
+                <h:outputLabel value="Please change, if necessary"/>
+                <h:form>
+                    <p:commandButton update="idPanelPcon" value="Edit"
+                                     oncomplete="widDialogPcon.show()"
+                                     image="ui-icon ui-icon-pencil"
+                                     title="#{labels['default.button.edit.label']}">
+                        <f:setPropertyActionListener value="#{procon.selected}"
+                                                     target="#{procon.selected}"/>
+                        <f:setPropertyActionListener value="yes"
+                                                     target="#{procon.modify}"/>
+                    </p:commandButton>
+                </h:form>
+
+
                 <h:outputLabel value="Family Name"/>
                 <h:outputLabel value="#{procon.selected.lastName}"/>
 

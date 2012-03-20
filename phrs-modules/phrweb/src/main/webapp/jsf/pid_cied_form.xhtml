@@ -26,14 +26,10 @@ javascript will be included into head...at top, not bottom... -->
                 click on: <p:spacer width="2"/> <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
                     value="Import Health Data" style="font-size:12pt;text-decoration:underline;"/></a>
 
-            <!--
-            <p:growl id="msgsCied" showDetail="true"/>
-            -->
+            <br/>
             <h:form>
                 <h:panelGrid columns="2" border="0" style="border-style:solid;border-color:grey;">
-          <!--          <f:facet name="header">
-                        <h:outputLabel value="If necessary, please update your CIED Implant Identifier"/>
-                    </f:facet>  -->
+
                     <h:outputLabel value="ID Type"/>
                     <h:panelGroup>
                         <h:selectOneMenu value="#{pidBean.pixQueryIdType}"
@@ -62,7 +58,7 @@ javascript will be included into head...at top, not bottom... -->
                         <p:message for="field_pixQueryIdUser_input" display="text"/>
                     </h:panelGroup>
 
-                    <h:outputLabel value="Please update, if necessary"/>
+                    <h:outputLabel value="Please change, if necessary"/>
                     <h:panelGroup>
                         <p:commandButton ajax="false"
                                          value="Update"

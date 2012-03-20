@@ -6,7 +6,6 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.prime.com.tr/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-
 <h:head>
     <title></title>
 </h:head>
@@ -23,14 +22,14 @@
             </h:panelGroup>
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq false}">
-
+                 <!--
                 <h:outputText value="#{labels['message_home']}"/>
-
+                <br/> -->
                 <!--cied form -->
                 <ui:include src="./pid_cied_form.xhtml"/>
-
+                <!--
                 Please keep your contact information up-to-date.
-                <!-- contact info view and form dialog-->
+                 contact info view and form dialog-->
                 <ui:include src="./profile_contact_view.xhtml"/>
             </h:panelGroup>
         </h:panelGroup>

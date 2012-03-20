@@ -42,35 +42,47 @@
     -->
 
     <ui:define name="content">
-        <p:fieldset legend="Import Health Data">
+        <p:fieldset legend="Available Electronic Health Records">
             <p>
                 If there are Electronic Health Records available from your hospital, then they will
-                be reported below.
+                be reported below. Click the IMPORT button to import the information listed. You might then manage this information.
+                If you import medications, please update each medication to indicate whether you are still taking the medication. You can following the link below to
+                your medications list or select the medications option from the sidebar.
+                Click on the following link to view and edit your medications:
+                <u>
+                    <h:outputLink value="#{request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText
+                    value="Medications List" style="font-size:10pt;"/></h:outputLink>
+                </u>
+             </p>
+            <p>
+            <h:form>
+            <p:commandButton ajax="false"
+                             value="Import"
+                             image="ui-icon-disk"
+                             actionListener="#{interopBean.commandImportMessages}"
+                    />
+            </h:form>
             </p>
-
-            <p><p:spacer width="2"/></p>
-
-            <p><p:spacer width="2"/></p>
+            <!--
             <p:toolbar>
                 <p:toolbarGroup align="left">
                     <h:form>
                         <p:commandButton ajax="false"
-                                         value="Import Health Records"
+                                         value="Import"
                                          image="ui-icon-disk"
                                          actionListener="#{interopBean.commandImportMessages}"
                                 />
                     </h:form>
                 </p:toolbarGroup>
-            </p:toolbar>
+            </p:toolbar>   -->
 
             <!-- ajax="false" removed prepend-->
             <h:form>
                 <p:dataTable widgetVar="widItemTableMphr" id="idItemTableMphr"
-                             paginator="true" rows="6"
+                             paginator="true" rows="10"
                              var="theItem" value="#{interopBean.modelMain}">
 
-
-                    <p:column headerText="Type"
+                    <p:column headerText="Type"  style="width:220px;"
                               sortBy="#{theItem.resourceType}">
                         <!--Medication <h:outputLabel value="#{theItem.resourceType}"/>
                          resourceType  -->
@@ -80,7 +92,7 @@
 
                     </p:column>
 
-                    <p:column headerText="Description" sortBy="#{theItem.label}">
+                    <p:column headerText="Description" sortBy="#{theItem.label}" style="width:350px;">
                         <h:outputLabel value="#{theItem.label}"/>
                     </p:column>
                     <!--
@@ -106,14 +118,6 @@
                 </p:dataTable>
             </h:form>
 
-            <p>
-                Click here to go to your
-                <u>
-                    <h:outputLink value="#{request.contextPath}/jsf/obs_medication_mgt.xhtml"><h:outputText
-                            value="Medications List" style="font-size:10pt;"/></h:outputLink>
-                </u>
-
-            </p>
         </p:fieldset>
 
 

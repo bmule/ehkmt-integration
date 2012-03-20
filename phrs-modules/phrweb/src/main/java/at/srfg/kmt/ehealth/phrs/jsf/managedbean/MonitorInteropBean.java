@@ -10,10 +10,12 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
-import at.srfg.kmt.ehealth.phrs.security.services.PixService;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
@@ -35,7 +37,8 @@ public class MonitorInteropBean implements Serializable {
     protected List<MonitorPhrItem> modelMain;
     private String ownerUri;
     private PhrFederatedUser phrUser;
-
+    private Set<String> IMPORT_TYPES;
+    
     private ReportToolTransformer toolTransformer;
 
 
@@ -64,6 +67,10 @@ public class MonitorInteropBean implements Serializable {
     }
 
     private void initTools() {
+        IMPORT_TYPES = new HashSet<String>();
+
+        IMPORT_TYPES.add(Constants.PHRS_MEDICATION_CLASS);
+        IMPORT_TYPES.add(Constants.PHRS_VITAL_SIGN_CLASS);
 
         interopProcessor = PhrsStoreClient.getInstance().getInteropProcessor();
         authorizationService = new AuthorizationService();
@@ -72,17 +79,34 @@ public class MonitorInteropBean implements Serializable {
         phrUser = userService.getPhrUser(ownerUri);
 
     }
-
+    
+    private List importSelectedTypes(Set<String> importTypes,boolean saveImports){
+        List transformedMsgs = new ArrayList();
+        
+        for(String phrClass:importTypes){        
+            List temp = interopProcessor.importNewMessages(
+                    getOwnerUri(),
+                    phrClass,
+                    saveImports);
+            if(temp!=null && !temp.isEmpty()){
+                transformedMsgs.addAll(temp);
+            }
+        }
+        return transformedMsgs;
+    }
     /**
      * Show Messages available for import
      */
+
     private void initModelMain() {
         LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
 
-        List transformedMsgs = interopProcessor.importNewMessages(
-                getOwnerUri(),
-                Constants.PHRS_MEDICATION_CLASS,
-                false); //false, do not import new Messages, only report
+        List transformedMsgs = importSelectedTypes(IMPORT_TYPES,false);
+                //interopProcessor.importNewMessages(
+                //getOwnerUri(),
+                //Constants.PHRS_MEDICATION_CLASS,
+                //false); //false, do not import new Messages, only report
+        
         int count = transformedMsgs == null ? -1 : transformedMsgs.size();
 
         if (transformedMsgs != null && !transformedMsgs.isEmpty()) {
@@ -187,17 +211,19 @@ public class MonitorInteropBean implements Serializable {
         try {
 
             LOGGER.debug("Start MonitorPhrItem form action: commandImportMessages for ownerUri=" + getOwnerUri());
-            List transformedMsgs = interopProcessor.importNewMessages(
-                    getOwnerUri(),
-                    Constants.PHRS_MEDICATION_CLASS,
-                    true); //true: import the records
+//            List transformedMsgs = interopProcessor.importNewMessages(
+//                    getOwnerUri(),
+//                    Constants.PHRS_MEDICATION_CLASS,
+//                    true); //true: import the records
+
+            List transformedMsgs = importSelectedTypes(IMPORT_TYPES,true); //true save imported data
+
             int count = 0;
             if (transformedMsgs != null && !transformedMsgs.isEmpty()) {
                 count = transformedMsgs.size();
             }
 
             if (count > 0) {
-
                 //reset model main, in request scope
                 //if reshow....setModelMain(transformedMsgs);
                 WebUtil.addFacesMessageSeverityInfo("Import Status", "Successfully imported " + count + " Medication records. Please check your Medications list");
