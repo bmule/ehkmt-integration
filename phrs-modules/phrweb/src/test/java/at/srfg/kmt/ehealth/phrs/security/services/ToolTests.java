@@ -6,6 +6,8 @@ package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment;
+import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
+import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer;
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils;
@@ -117,10 +119,28 @@ public class ToolTests {
         result = result.replaceAll("#","--");
         
         System.out.println("1 input="+uri+" result="+result);     
-        assertEquals("xxxx_yyy_zzz__aaa_._123", result);
+        assertEquals("xxxx_yyy_zzz__aaa--123", result);
         
         String flattened = VocabularyEnhancer.flattenUri(uri);
         System.out.println("2 input="+uri+" result="+flattened);
-        assertEquals("xxxx_yyy_zzz__aaa_._123", flattened);
+        assertEquals("xxxx_yyy_zzz__aaa--123", flattened);
     }
+    
+//        @Test
+//        public void testHasMedication() {
+//            System.out.println("testHasMedication");
+//            PhrsStoreClient phrsClient;
+//            //PhrsRepositoryClient repos = client.getPhrsRepositoryClient();
+//            phrsClient = PhrsStoreClient.getInstance();
+//            CommonDao commonDao = phrsClient.getCommonDao();
+//            assertNotNull("commonDao is null ",commonDao);
+//            String owner="phr555";
+//            boolean hasMed = commonDao.hasMedication(owner, "", "C0032952");
+//            assertFalse("Expect no medication code for user phr555",hasMed);
+//            
+//            hasMed = commonDao.hasMedication("phrtest", "", "C0032952");
+//            assertTrue("Expect  medication code for user phrtest",hasMed);
+//            hasMed = commonDao.hasMedication("user123", "", "C0032952");
+//            assertTrue("Expect  medication code for user user123",hasMed);
+//    }
 }

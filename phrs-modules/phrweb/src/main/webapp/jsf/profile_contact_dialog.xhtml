@@ -15,11 +15,11 @@
 
 <ui:composition>
 
-
+   <!---->
 <p:dialog closable="false" header="#{labels['contactInfo.label']}"
-          widgetVar="widDialogPcon"
+          widgetVar="widDialogPcon"   appendToBody="true"
           id="idDialogPcon"
-          modal="true" appendToBody="true"
+          modal="true"
           width="600"
           showEffect="clip"
           hideEffect="clip">
@@ -79,6 +79,7 @@ These do not exist, cause errors
                          title="#{labels['default.button.create.label']}"
                          process="idFormPcon"
                          update="msgs idFormPcon idViewPcon"
+                         ajax="false"
                          oncomplete="onEditComplete(xhr,status,args)"
                          actionListener="#{procon.store}" image="ui-icon ui-icon-check"/>
 
@@ -159,6 +160,7 @@ These do not exist, cause errors
     <h:outputLabel for="field_2"
                    value="Street Address"
                    styleClass="form-dialog-label"/>
+
     <p:outputPanel id="field_2" layout="block">
         <h:outputText value="#{procon.selected.addressText}"
                       rendered="#{procon.modify eq 'no'}"/>
@@ -186,7 +188,7 @@ These do not exist, cause errors
         <p:outputPanel id="field_3" layout="block">
             <h:outputLabel value="#{procon.selected.postalCode}"
                            rendered="#{procon.modify eq 'no'}"/>
-            <p:inputText value="#{procon.selected.postalCode}"
+            <p:inputText value="#{procon.selected.postalCode}" style="width:75px;"
                          id="field_3_input"
                          rendered="#{procon.modify eq 'yes'}"/>
         </p:outputPanel>

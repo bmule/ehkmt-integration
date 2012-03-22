@@ -72,7 +72,8 @@ public class PhrsClientPhrResourceUnitTest {
     public static final String DRUG_2_CODE = "C0110591";
     private boolean printDynabean = false;
     private static boolean cleanEnv=false;
-     
+    
+
     @BeforeClass
     public static void setUpClass() throws Exception {
                 //phrsClient = PhrsStoreClient.getInstance(true); problem with lock and triplestore connection and static init

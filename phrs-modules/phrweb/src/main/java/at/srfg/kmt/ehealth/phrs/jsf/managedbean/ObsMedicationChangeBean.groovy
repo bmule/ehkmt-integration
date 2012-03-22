@@ -31,30 +31,14 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
         } catch (Exception e){
             LOGGER.error('ObsMedicationChangeBean loadModelMain Exception '+e)
         }
-        /*
-        try{
-        initChartModel()
-        } catch (Exception e){
-        println('ObsActivityBean initChartModel Exception '+e)
-        }*/
+
 
     }
-    //		 modelMain= getLoadAllHistory()
 
-    //problem with coding of status...could get interop code PhrsConstants.STATUS_COMPLETE etc
+
     @Override
     public void loadModelMain(){
-        /*
-         * Import new interop messages as new domain objects
-         */
-        //FIXXME IMPORT Remove if desired. Import UI should handle
-//        try {
-//            LOGGER.error('ObsMedicationChangeBean START loadModelMain  import InteropMessages')
-//            importInteropMessages(Constants.PHRS_MEDICATION_CLASS)
-//            LOGGER.error('ObsMedicationChangeBean END loadModelMain import InteropMessages')
-//        } catch (Exception e){
-//            LOGGER.error('Medication building list importInteropMessages',e)
-//        }
+
         /**
          * load model
          */
@@ -67,7 +51,7 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
                 internalModelList = filterResultsByStatus('medicationSummary_medicationStatus_false',true,internalModelList)
             //medicationSummary_medicationStatus_false
             break
-            //
+
             //let history default to ALL records inactive and active
             //case 'history':
             //internalModelList=crudReadHistory()
@@ -105,33 +89,12 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
     public String findTypeParam(){
 
         String temp =  findRequestParam('view')
-        switch(temp){
-            case 'inactive':
-
-            break
-
-            case 'active':
-
-            break
-
-            case 'history':
-
-            break
-            case 'all':
-
-            break
-            
-            case 'loadtest':
-
-            break           
-            default:
-            temp = 'active'
-            break
-
+        if( ! temp){
+            temp = 'all'
         }
+
         return temp
     }
-
 
     @Override
     public void setPermittedActions(){

@@ -271,11 +271,14 @@ public class CoreTestData {
         //throws unreported exceptions
         try {
             dateEnd = DateUtil.getFormatedDate(dateEndStr);
-            dateBegin = DateUtil.getFormatedDate(datebeginStr);
         } catch (Exception e) {
            //
         }
-
+        try {
+            dateBegin = DateUtil.getFormatedDate(datebeginStr);
+        } catch (Exception e) {
+            //
+        }
         med.setBeginDate(dateBegin);
         med.setEndDate(dateEnd);
 
@@ -312,6 +315,7 @@ public class CoreTestData {
     }
     public static MonitorPhrItem  createMonitorInfoItem(String label, String code){
         MonitorPhrItem m=new MonitorPhrItem();
+        m.setResourceType(Constants.PHRS_MEDICATION_CLASS);
         m.setLabel(label);
         return m;
     }
@@ -325,6 +329,7 @@ public class CoreTestData {
                 LOGGER.debug("START createMedicationMonitorPhrItems for owner= " + owner);
                 CommonDao commonDao = PhrsStoreClient.getInstance().getCommonDao();
 
+                //Check one and log it
                 if (!commonDao.hasMedication(owner, "", "C0032952")) {
 
                     MonitorPhrItem mii = CoreTestData.createMonitorInfoItem("Prednisone", "C0032952");
@@ -332,7 +337,7 @@ public class CoreTestData {
                     list.add(mii);
                     
                 } else {
-                    LOGGER.debug("createMedicationMonitorPhrItems - not test data loaded, data already was loaded as phr resources, found a drug code ");
+                    LOGGER.debug("createMedicationMonitorPhrItems - not test data loaded, data already was loaded as phr resources, found a drug code C0032952");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0081876")) {
@@ -393,7 +398,7 @@ public class CoreTestData {
                 if (!commonDao.hasMedication(owner, "", "C0032952")) {
 
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "200812010000", "", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
                     // "200812010000", "201106101010", "25", Constants.MILLIGRAM, "Prednisone", "C0032952");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
@@ -401,7 +406,7 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0081876")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "200812010000", "", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
                     //                "200812010000", "201106101010", "40", Constants.MILLIGRAM, "Pantoprazole (Pantoloc)", "C0081876");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
@@ -409,7 +414,7 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0110591")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "199910101010", "", "5", Constants.MILLIGRAM, "Concor", "C0110591");
                                     //"199910101010", "201106101010", "5", Constants.MILLIGRAM, "Concor", "C0110591");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
@@ -417,15 +422,15 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0012010")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
-                                    "199910101010", "201010101010", "1", Constants.DROPS, "Psychopax (Diazepam)", "C0012010");
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
+                                    "199910101010", "", "1", Constants.DROPS, "Psychopax (Diazepam)", "C0012010");
                      //"199910101010", "201010101010", "1", Constants.DROPS, "Psychopax (Diazepam)", "C0012010");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
                 }
 
                 if (!commonDao.hasMedication(owner, "", "C0591288")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "198010101010", "", "300", Constants.MILLIGRAM, "Convulex", "C0591288");
                     // "198010101010", "20110601010", "300", Constants.MILLIGRAM, "Convulex", "C0591288");
                     commonDao.crudSaveResource(med, owner, "addTestMedicationsPhr");
@@ -433,7 +438,7 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0025677")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "20090101010", "", "20", Constants.MILLIGRAM, "Ebetrexat(Methotrexate)", "C0025677");
                      //                                    "20090101010", "201106101010", "20", Constants.MILLIGRAM, "Ebetrexat(Methotrexate)", "C0025677");
 
@@ -442,7 +447,7 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0016410")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "20090101010", "", "10", Constants.MILLIGRAM, "Folsan(Folic Acid)", "C0016410");
                      //                                    "20090101010", "201106101010", "10", Constants.MILLIGRAM, "Folsan(Folic Acid)", "C0016410");
 
@@ -451,7 +456,7 @@ public class CoreTestData {
 
                 if (!commonDao.hasMedication(owner, "", "C0024467")) {
                     MedicationTreatment med = CoreTestData
-                            .createMedication(owner, Constants.STATUS_ACTIVE,
+                            .createMedication(owner, Constants.STATUS_COMPELETE,
                                     "199910101010", "", "1", Constants.TABLET, "Magnosolv(Magnesium)", "C0024467");
                      //                                    "199910101010", "201010101010", "1", Constants.TABLET, "Magnosolv(Magnesium)", "C0024467");
 

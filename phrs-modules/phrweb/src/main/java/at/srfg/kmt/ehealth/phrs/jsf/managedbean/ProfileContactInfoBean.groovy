@@ -8,6 +8,7 @@ import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 
 @ManagedBean(name = "procon")
 @RequestScoped
@@ -96,18 +97,28 @@ public class ProfileContactInfoBean extends FaceBaseBean {
         setModify(AuthorizationService.MODIFY_YES)
 
     }
+
     //@Override
-    //public void storeModifyFirst(){
+    //public void store(){
+    //    super.store()
+        //the selected is assigned null, don't use
+        //make page refresh!
 
-    //    if(selected){
-    //ProfileContactInfo theInfo= (ProfileContactInfo)selected
-    //LOGGER.debug(" ProfileContactInfo "+theInfo.getFirstName()+" "+theInfo.getCity()+" ")
-    //   }
-    // else {
-    //   LOGGER.debug(" selected ProfileContactInfo is null")
-    //}
-    //}
-
+   // }
+    //Update greet name
+    @Override
+    public void storeModifyFirst(){
+        super.storeModifyFirst()
+        //update session greetname
+        if(selected){
+            ProfileContactInfo theInfo= (ProfileContactInfo)selected
+            String greetName= theInfo.getFirstName();
+            if( ! greetName) greetName = theInfo.getLastName();
+            if(greetName) {
+                UserSessionService.updateSessionGreetName(greetName);
+            }
+        }
+    }
     /**
      * Called for a new form, local changes. Also for testing
      * Under risks, there are no new risks that a user can add, we provide all known risks and the user should update

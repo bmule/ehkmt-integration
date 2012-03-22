@@ -30,8 +30,9 @@
         </h:outputScript>
         <p:fieldset legend="#{labels['contactInfo.personal.label']}">
              <!--idContactView will get updated by dialog form-->
-            <h:panelGrid columns="2" id="idViewPcon">
 
+             <p:outputPanel id="idViewPcon" layout="block">
+                <h:panelGrid columns="2" id="idViewPconOuter">
 
                 <h:outputLabel value="Please change, if necessary"/>
                 <h:form>
@@ -45,48 +46,46 @@
                                                      target="#{procon.modify}"/>
                     </p:commandButton>
                 </h:form>
+                <!-- form so that the dialog can update it by ajax-->
 
+                    <h:outputLabel value="Family Name"/>
+                    <h:outputLabel value="#{procon.selected.lastName}"/>
 
-                <h:outputLabel value="Family Name"/>
-                <h:outputLabel value="#{procon.selected.lastName}"/>
+                    <h:outputLabel value="First Name"/>
+                    <h:outputLabel value="#{procon.selected.firstName}"/>
 
-                <h:outputLabel value="First Name"/>
-                <h:outputLabel value="#{procon.selected.firstName}"/>
+                    <h:outputLabel value="Telephone"/>
+                    <h:outputLabel value="#{procon.selected.primaryTelephone}"/>
 
-                <h:outputLabel value="Telephone"/>
-                <h:outputLabel value="#{procon.selected.primaryTelephone}"/>
+                    <h:outputLabel value="Street Address"/>
+                    <h:outputLabel value="#{procon.selected.addressText}"/>
 
-                <h:outputLabel value="Street Address"/>
-                <h:outputLabel value="#{procon.selected.addressText}"/>
+                    <h:outputLabel value="Postal Code"/>
+                    <h:outputLabel value="#{procon.selected.postalCode}"/>
 
-                <h:outputLabel value="Postal Code"/>
-                <h:outputLabel value="#{procon.selected.postalCode}"/>
+                    <h:outputLabel value="City"/>
+                    <h:outputLabel value="#{procon.selected.city}"/>
 
-                <h:outputLabel value="City"/>
-                <h:outputLabel value="#{procon.selected.city}"/>
+                    <h:outputLabel value="Country"/>
+                    <h:outputLabel value="#{procon.selected.country}"/>
 
-                <h:outputLabel value="Country"/>
-                <h:outputLabel value="#{procon.selected.country}"/>
+                    <h:outputLabel value="Email"/>
+                    <h:outputLabel value="#{procon.selected.email}"/>
 
-                <h:outputLabel value="Email"/>
-                <h:outputLabel value="#{procon.selected.email}"/>
+                    <h:outputLabel value="Internet Services"/>
+                    <h:panelGroup>
+                        <h:outputLabel value="Chat" style="font-weight: bold;"/>
+                        <p:spacer width="3"/>
+                        <h:outputLabel value="#{procon.selected.internetChatProvider}"/>
+                        <p:spacer width="2"/>
+                        <h:outputLabel value="#{procon.selected.internetChatId}"/>
+                    </h:panelGroup>
 
-                <h:outputLabel value="Internet Services"/>
-                <h:panelGroup>
-                    <h:outputLabel value="Chat"/>
-                    <p:spacer width="2"/>
-                    <h:outputLabel value="#{procon.selected.internetChatProvider}"/>
-                    <p:spacer width="2"/>
-                    <h:outputLabel value="#{procon.selected.internetChatId}"/>
-                </h:panelGroup>
+                    <h:outputLabel value="#{labels['default.comments.label']}"/>
+                    <h:outputText value="#{procon.selected.note}"/>
 
-                <h:outputLabel value="#{labels['default.comments.label']}"/>
-                <h:outputText value="#{procon.selected.note}"/>
-
-
-
-            </h:panelGrid>
-
+                </h:panelGrid>
+            </p:outputPanel>
         </p:fieldset>
 
         <!-- form dialog -->

@@ -86,21 +86,29 @@ public class CommonDao {
         String value = null
         if (ownerUri) {
             try {
-                PhrFederatedUser puser = getPhrUser(ownerUri)
-                if (puser) {
-                    value = puser.getNickname()
-                    if (!value) value = puser.getFullname()
-                }
-                if (!value) {
-                    ProfileContactInfo contact = getProfileContactInfo(ownerUri)
-                    if (contact) {
-                        value = contact.getFirstName()
-                        if (!value) value = contact.getLastName()
+                //first choice is what the user provided
+                ProfileContactInfo contact = getProfileContactInfo(ownerUri)
+                if (contact) {
+                    value = contact.getFirstName()
+                    if (! value) value = contact.getLastName()
+                    if(value && value.size() > 1){
+                       //
+                    } else {
+                        value=null
                     }
                 }
-                if (!value && puser) {
-                    value = puser.getIdentifier()
+                //what did we get from login or OpenId?
+                if (! value) {
+                    PhrFederatedUser puser = getPhrUser(ownerUri)
+                    if (puser) {
+                        value = puser.getNickname()
+                        if (!value) value = puser.getFullname()
+                    }
+                    if (! value && puser) {
+                        value = puser.getIdentifier()
+                    }
                 }
+
             } catch (Exception e) {
                 LOGGER.error('greet name ownerUri=' + ownerUri, e)
             }
@@ -616,7 +624,7 @@ public class CommonDao {
 
                 def obj= getResourceByExampleToSingle(MedicationTreatment.class,query,false,ownerUri)
 
-                if(obj!=null) return true;
+                if(obj != null) return true;
             } catch(Exception e) {
                 LOGGER.error("check hasMedication ",e)
             }

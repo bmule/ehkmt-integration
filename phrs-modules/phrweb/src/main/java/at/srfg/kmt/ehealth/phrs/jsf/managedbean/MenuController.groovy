@@ -34,13 +34,13 @@ public class MenuController extends FaceCommon {
 
     //PhrsConstants.SESSION_MENU_CURRENT_NODE or this bean if SessionScoped
 
-
     String defaultNodeType = 'default'
     TreeNode root, home, sectionPatientInformation, sectionGroupInfoPeople, sectionPrivacy
     TreeNode dashboard, dashBoardMonitorPhrImports
-    TreeNode sectionObservations, sectionMeds, sectionActionPlan, sectionProfile, sectionMonitoring, sectionContacts, sectionMedicalDocs
+    TreeNode sectionMeds, sectionActionPlan, sectionProfile, sectionMonitoring, sectionContacts, sectionMedicalDocs
     TreeNode sectionEdu, sectionCommunity
     TreeNode test
+    //sectionObservations,
 
     String iconLinkType = 'default'//'document'
     String iconChartType = 'default'
@@ -108,7 +108,7 @@ public class MenuController extends FaceCommon {
 
             sectionPatientInformation = new DefaultTreeNode(new DocumentReference("Patient Information", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
-            sectionObservations = new DefaultTreeNode(new DocumentReference("Health Observations", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
+            //sectionObservations = new DefaultTreeNode(new DocumentReference("Health Observations", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
 
             //sectionMeds = new DefaultTreeNode(new DocumentReference("Medications","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionObservations), sectionObservations)
 
@@ -134,7 +134,10 @@ public class MenuController extends FaceCommon {
                     '/jsf/obs_problem_mgt.xhtml': 'Problems',
                     '/jsf/obs_medication_mgt.xhtml': 'Medications'
             ]
-            addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionObservations, codedLabel)
+            //simpler, remove extra
+            addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPatientInformation, codedLabel)
+
+           // addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionObservations, codedLabel)
 
             Map monitoringMap = [
                     '/jsf/monitor_info_dash.xhtml': 'Health Reports',
@@ -185,19 +188,12 @@ public class MenuController extends FaceCommon {
             addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
 
         }
-        //add test options
-//		if(ConfigurationService.isAppModeTest()){
-//			test   = new DefaultTreeNode(new DocumentReference("____","/jsf/test1.xhtml",
-//				PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)
-//			//option load,etc
-//		}
-
 
     }
 
-    public TreeNode getSectionOdls() {
-        return sectionObservations
-    }
+   // public TreeNode getSectionOdls() {
+   //     return sectionObservations
+   // }
     /**
      * Add items to a tree node
      * @param map
@@ -276,13 +272,13 @@ public class MenuController extends FaceCommon {
     }
 
     public TreeNode getSelectedNode() {
-        //println('getSelectedNode'+__selectedNode)
+
         if (__selectedNode) __selectedNode.setExpanded(true)
         return __selectedNode
     }
 
     public void setSelectedNode(TreeNode selectedNode) {
-        //println('setSelectedNode'+selectedNode)
+
         __selectedNode = selectedNode
     }
 
@@ -293,7 +289,7 @@ public class MenuController extends FaceCommon {
      * @return
      */
     public TreeNode findNode(String requestNodeId, TreeNode node) {
-        TreeNode found
+        TreeNode found=null
 
         if (node && requestNodeId) {
             def data = node.getData();

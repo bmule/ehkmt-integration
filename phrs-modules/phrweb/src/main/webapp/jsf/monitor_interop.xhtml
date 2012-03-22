@@ -54,15 +54,24 @@
                     value="Medications List" style="font-size:10pt;"/></h:outputLink>
                 </u>
              </p>
-            <p>
-            <h:form>
-            <p:commandButton ajax="false"
-                             value="Import"
-                             image="ui-icon-disk"
-                             actionListener="#{interopBean.commandImportMessages}"
-                    />
-            </h:form>
-            </p>
+
+
+            <p:outputPanel layout="block" rendered="#{interopBean.allowCommandImport eq false}" >
+                <p>
+                    Importing data is not possible without valid CIED information or a patient identifier, please return to the home page to update your CIED info.
+                </p>
+            </p:outputPanel>
+
+            <p:outputPanel layout="block" rendered="#{interopBean.allowCommandImport eq true}" >
+
+                <h:form>
+                    <p:commandButton ajax="false"
+                                 value="Import"
+                                 image="ui-icon-disk"
+                                 actionListener="#{interopBean.commandImportMessages}"
+                        />
+                </h:form>
+
             <!--
             <p:toolbar>
                 <p:toolbarGroup align="left">
@@ -74,27 +83,35 @@
                                 />
                     </h:form>
                 </p:toolbarGroup>
-            </p:toolbar>   -->
+                </p:toolbar>   -->
 
-            <!-- ajax="false" removed prepend-->
-            <h:form>
-                <p:dataTable widgetVar="widItemTableMphr" id="idItemTableMphr"
+                <!-- ajax="false" removed prepend-->
+                <h:form>
+                    <p:dataTable widgetVar="widItemTableMphr" id="idItemTableMphr"
                              paginator="true" rows="10"
                              var="theItem" value="#{interopBean.modelMain}">
 
-                    <p:column headerText="Type"  style="width:220px;"
+                        <p:column headerText="Type"  style="width:170px;"
                               sortBy="#{theItem.resourceType}">
                         <!--Medication <h:outputLabel value="#{theItem.resourceType}"/>
-                         resourceType  -->
+                         resourceType
+                           http://www.icardea.at/phrs/types/1.0/Medication
+                            <h:outputLabel value="XX{theItem.descriptionLabelCode}"
+                                       rendered="XX{theItem.resourceType ne 'http://www.icardea.at/phrs/types/1.0/Medication'}">
+                           -->
                         <h:outputLabel value="#{theItem.descriptionLabelCode}">
                             <f:converter converterId="labelLookup"/>
                         </h:outputLabel>
+                                <!-- TODO fix VocabularyEnhancer
+                            <h:outputLabel value="#{theItem.descriptionLabelCode}"
+                                           rendered="#{theItem.resourceType eq 'http://www.icardea.at/phrs/types/1.0/Medication'}">
+                                Medication
+                            </h:outputLabel>  -->
+                        </p:column>
 
-                    </p:column>
-
-                    <p:column headerText="Description" sortBy="#{theItem.label}" style="width:350px;">
-                        <h:outputLabel value="#{theItem.label}"/>
-                    </p:column>
+                        <p:column headerText="Description" sortBy="#{theItem.label}" style="width:300px;">
+                            <h:outputLabel value="#{theItem.label}"/>
+                        </p:column>
                     <!--
                     <p:column headerText="Summary" sortBy="#{theItem.protocolId}"
                               style="width:200px;word-wrap:break-word;">
@@ -115,9 +132,9 @@
                     -->
 
 
-                </p:dataTable>
-            </h:form>
-
+                    </p:dataTable>
+                </h:form>
+             </p:outputPanel>
         </p:fieldset>
 
 

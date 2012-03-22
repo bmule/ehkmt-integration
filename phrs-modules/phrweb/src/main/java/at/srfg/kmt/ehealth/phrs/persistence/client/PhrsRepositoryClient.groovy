@@ -202,7 +202,8 @@ public class PhrsRepositoryClient implements Serializable {
         try {
             query = store.createQuery(clazz)
             if (healthProfileId) {
-                query.field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equals(healthProfileId)
+                // do not use ".equals(healthProfileId)"
+                query.field(PhrsConstants.PROPERTY_HEALTH_PROFILE_IDENTIFIER).equal(healthProfileId)
             }
 
             if (map) {
@@ -226,7 +227,7 @@ public class PhrsRepositoryClient implements Serializable {
     }
 
     public List crudReadResourceByExample(String healthProfileId, Class clazz, Map map) {
-        Datastore store = getPhrsDatastore()
+        //Datastore store = getPhrsDatastore()
 
         Query query = buildMorphiaQuery(healthProfileId, clazz, map)
         if (query) return query.asList()
@@ -234,7 +235,7 @@ public class PhrsRepositoryClient implements Serializable {
     }
 
     public def crudReadResourceByExampleToSingle(String healthProfileId, Class clazz, Map map) {
-        Datastore store = getPhrsDatastore()
+        //Datastore store = getPhrsDatastore()
 
         Query query = buildMorphiaQuery(healthProfileId, clazz, map)
 

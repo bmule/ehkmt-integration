@@ -98,11 +98,12 @@ public class PatientIdentityBean implements Serializable {
     }
 
     public String getPixQueryIdUser() {
+        return pixQueryIdUser;
 
-        if (phrUser != null) {
-            return phrUser.getPixQueryIdUser() != null ? phrUser.getPixQueryIdUser() : null;
-        }
-        return null;
+        //else if (phrUser != null) {
+        //    return phrUser.getPixQueryIdUser() != null ? phrUser.getPixQueryIdUser() : null;
+        //}
+
     }
 
     public void setPixQueryIdUser(String pixQueryIdUser) {
@@ -113,17 +114,19 @@ public class PatientIdentityBean implements Serializable {
      * @return when unassigned, PixService.PIX_QUERY_TYPE_DEFAULT
      */
     public String getPixQueryIdType() {
-        if (phrUser != null) {
-            return phrUser.getPixQueryIdType() != null ? phrUser.getPixQueryIdType() : PixService.PIX_QUERY_TYPE_DEFAULT;
-        }
-        return PixService.PIX_QUERY_TYPE_DEFAULT;
+        String temp= pixQueryIdType != null ? pixQueryIdType : PixService.PIX_QUERY_TYPE_DEFAULT;
+        return temp;
+        //if (phrUser != null) {
+        ///    return phrUser.getPixQueryIdType() != null ? phrUser.getPixQueryIdType() : PixService.PIX_QUERY_TYPE_DEFAULT;
+        //}
+        //return PixService.PIX_QUERY_TYPE_DEFAULT;
     }
 
     public void setPixQueryIdType(String pixQueryIdType) {
         this.pixQueryIdType = pixQueryIdType;
     }
 
-    public String getPidPix() {
+    public String findUserPixPid() {
         if (phrUser != null && phrUser.getProtocolIdPix() != null && !phrUser.getProtocolIdPix().isEmpty()) {
             return phrUser.getProtocolIdPix();
         }
@@ -249,6 +252,7 @@ public class PatientIdentityBean implements Serializable {
      * get the latest stored resource and check
      */
     public void determineStatusPID() {
+        ownerUri=userService.getOwnerUri();
         phrUser = userService.getPhrUser(ownerUri);
         determineStatusPID(phrUser);
     }
@@ -261,7 +265,6 @@ public class PatientIdentityBean implements Serializable {
     }
 
 
-
     /**
      * getTransformedNewMessages
      */
@@ -271,12 +274,16 @@ public class PatientIdentityBean implements Serializable {
                 + " pixQueryType" + this.getPixQueryIdType()
                 + " pixQueryIdUser" + this.getPixQueryIdUser()
                 + " phrUser pid=" + this.getProtocolId()
-                + " pixPid" + getPidPix());
+                + " pixPid" + findUserPixPid());
         //
         boolean outcome = updateIdentifiers();
-        this.setStatusMessagePid(" Your patient identifier is ok " + getPidPix());
-    }
+        String msg= outcome ? "Your patient identifier was found: "+ findUserPixPid() :"Your patient identifier was not found" ;
+        // " Your patient identifier " + outcome  ? "was not found using this identifier":"was found: "+findUserPixPid());
+        this.setStatusMessagePid(msg);
 
+    }
+    //PixQueryIdUser is null
+    /*
     public boolean updateIdentifiers() {
         boolean outcome = false;
         try {
@@ -290,8 +297,10 @@ public class PatientIdentityBean implements Serializable {
                 // getPixQueryDeviceModel
                 PixService pixService = new PixService();
                 //perform PIX query and update user account
-                String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
-                LOGGER.error("updateIdentifiers returnPid value found from updateProtocolIdFromUserProvidedCiedId: returnPid= "+returnPid
+                ownerUri=userService.getOwnerUri();
+               // phrUser = userService.getPhrUser(ownerUri);
+                String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(ownerUri, getPixQueryIdUser(), getPixQueryIdType());
+                LOGGER.debug("updateIdentifiers returnPid value found from updateProtocolIdFromUserProvidedCiedId returnPid= "+returnPid
                         + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
                 
                 if (returnPid != null && !returnPid.isEmpty()) {
@@ -306,6 +315,80 @@ public class PatientIdentityBean implements Serializable {
             }
         } catch (Exception e) {
             LOGGER.error("Error updateIdentifiers  updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
+                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
+        }
+        return outcome;
+    }  */
+    public boolean updateIdentifiers() {
+        boolean outcome = false;
+        try {
+
+            LOGGER.debug("PatientIdentityBean COPY from VT  updateIdentifiers(disabled) Start. do query.   "
+                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
+
+            if (getOwnerUri() != null && !getOwnerUri().isEmpty()
+                    && getPixQueryIdType() != null && ! getPixQueryIdType().isEmpty()
+                    && getPixQueryIdUser() != null && ! getPixQueryIdUser().isEmpty()) {
+
+                ownerUri=userService.getOwnerUri();
+                phrUser = userService.getPhrUser(ownerUri);
+
+                PixService pixService = new PixService();
+                String returnPid = null;
+                String ciedIdentifier =null;
+                //perform PIX query and update user account
+                //String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
+                if(getPixQueryIdType().startsWith("pid")){
+                    //assign this
+                    returnPid= getPixQueryIdUser();
+                    ciedIdentifier=getPixQueryIdType()+":"+returnPid;
+                } else {
+                    //perform PIX query
+                    ciedIdentifier = PixService.makePixIdentifier(getPixQueryIdType(), getPixQueryIdUser());
+                    LOGGER.debug("PatientIdentityBean VT  ciedIdentifier=" + ciedIdentifier + " pixQueryIdUser=" + getPixQueryIdUser() + " pixQueryIdType= " + getPixQueryIdType());
+                    returnPid = pixService.getPatientProtocolIdByCIED(ciedIdentifier);
+                    //phrUser.setProtocolIdPix(returnPid);
+                }
+
+                
+                if (returnPid != null && !returnPid.isEmpty()) {
+                    outcome = true;
+                }
+                if (outcome) {
+             
+                    if(phrUser!=null){
+                        phrUser.setProtocolIdPix(returnPid);
+                        phrUser.setPixQueryIdType(getPixQueryIdType());
+                        phrUser.setPixQueryIdUser(getPixQueryIdUser());
+                        userService.crudSaveResource(phrUser,phrUser.getOwnerUri(),phrUser.getOwnerUri());
+
+                        LOGGER.debug("Saved  PHR user with pid="+phrUser.getProtocolIdPix()+" PixQueryIdUser "+phrUser.getPixQueryIdUser()+" PixQueryIdUser "+phrUser.getPixQueryIdUser());
+                    } else {
+                        LOGGER.error("Error  PHR user is NULL, but pixQuery returned  pid="+returnPid);
+
+                    }
+                    addStatusMessagePID("Patient ID found, ID is: " + returnPid + " for ciedIdentifier =" + ciedIdentifier + " for owner=" + getOwnerUri());
+                } else {
+                     
+                    addStatusMessagePID("Patient ID NOT FOUND for owner=" + getOwnerUri() + " for ciedIdentifier =" + ciedIdentifier);
+                }
+
+                //updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
+                LOGGER.debug("PatientIdentityBean VT updateIdentifiers  returnPid status from getPatientProtocolIdByCIED found and saved="+ outcome+ " returnPid= " + returnPid
+                        + " ciedIdentifier=" + ciedIdentifier + " returnPid=" + returnPid
+                        + " ownerUri=" + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
+
+ 
+                determineStatusPID(phrUser);
+
+                //determine status and refresh new user account
+                //determineStatusPID();
+            } else {
+                LOGGER.error("PatientIdentityBean VT  updateIdentifiers Null value found: updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
+                        + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
+            }
+        } catch (Exception e) {
+            LOGGER.error("PatientIdentityBean VT  Error updateIdentifiers  updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
                     + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
         }
         return outcome;

@@ -59,7 +59,8 @@ public class ReportToolTransformer {
         MonitorPhrItem item = new MonitorPhrItem();
         item.setResourceType(Constants.PHRS_MEDICATION_CLASS);
         //I18 code to lookup on UI
-        item.setDescriptionLabelCode(VocabularyEnhancer.determineLabelCode(item.getResourceType()));
+        //String labelCode=VocabularyEnhancer.determineLabelCode(item.getResourceType());
+        item.setDescriptionLabelCode("resource_type_medication");
 
         item.setOwnerUri(resource.getOwnerUri());
         item.setPID(resource.getPID());

@@ -70,8 +70,6 @@
 
             </p:breadCrumb>
                 <!--
-                     <p:menuitem value="Load Test Data" url="/jsf/obs_medication_mgt.xhtml?view=loadtest"
-                        immediate="true"/>
                     debug<p:menuitem value="History" url="/jsf/obs_medication_mgt.xhtml?view=history"
                         immediate="true"/> -->
 
@@ -85,16 +83,10 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 
-	<!-- 
 
-rendered="XX{infotype eq 'active' or infotype eq null}"
-
-rendered="XX{infotype eq 'inactive'}"
-rendered="XX{infotype eq 'history'}"
-	 -->
 			<p:dataTable id="idItemTableOmed"
 				widgetVar="widItemTableOmed" var="theItem"
-				value="#{odlmed.modelMain}" paginator="true" rows="20">
+				value="#{odlmed.modelMain}" paginator="true" rows="7">
 
 				<p:column style="width:40px" headerText="Option">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">

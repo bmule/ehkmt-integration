@@ -26,7 +26,9 @@ javascript will be included into head...at top, not bottom... -->
                 click on: <p:spacer width="2"/> <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
                     value="Import Health Data" style="font-size:12pt;text-decoration:underline;"/></a>
 
-            <br/>
+            <p>
+            For demonstration purposes, please use serial number PZC123456S
+            </p>
             <h:form>
                 <h:panelGrid columns="2" border="0" style="border-style:solid;border-color:grey;">
 
@@ -67,6 +69,7 @@ javascript will be included into head...at top, not bottom... -->
                                          image="ui-icon-arrowrefresh-1-w"
                                          actionListener="#{pidBean.commandProcessIdentifier}"
                                 />
+                        <p:spacer width="1"/>
                         <h:outputLabel value="#{pidBean.statusMessagePid}"/>
                     </h:panelGroup>
 

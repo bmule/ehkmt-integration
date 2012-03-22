@@ -211,6 +211,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
     public String getGreetname() {
         String greetName = UserSessionService.getSessionUserGreetName();
+       
         greetName = greetName ? greetName : userAuthenticatedName()
         greetName = greetName ? greetName : username
         return greetName

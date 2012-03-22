@@ -185,4 +185,5 @@ public class Vtest extends PatientIdentityBean implements Serializable {
     @Override
     public void determineStatusPID(PhrFederatedUser phrUser) {
     }
+
 }

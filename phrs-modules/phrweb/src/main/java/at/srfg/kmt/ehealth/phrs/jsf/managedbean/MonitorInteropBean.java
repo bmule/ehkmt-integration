@@ -78,8 +78,22 @@ public class MonitorInteropBean implements Serializable {
 
         phrUser = userService.getPhrUser(ownerUri);
 
+        if(findUserPixPid() == null) {
+            this.allowCommandImport=false;
+            LOGGER.debug("MonitorInteropBean - No PID available allowCommandImport=false");
+            //WebUtil.addFacesMessageSeverityInfo("Patient Identifier Status","Importing data is not possible, please return to the home page to update your CIED info");
+        } else {
+            this.allowCommandImport=true;
+            LOGGER.debug("MonitorInteropBean - PID available allowCommandImport=true");
+        }
+
     }
-    
+    public String findUserPixPid() {
+        if (phrUser != null && phrUser.getProtocolIdPix() != null && ! phrUser.getProtocolIdPix().isEmpty()) {
+            return phrUser.getProtocolIdPix();
+        }
+        return null;
+    }
     private List importSelectedTypes(Set<String> importTypes,boolean saveImports){
         List transformedMsgs = new ArrayList();
         
@@ -99,30 +113,33 @@ public class MonitorInteropBean implements Serializable {
      */
 
     private void initModelMain() {
-        LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
+        if(allowCommandImport){
+            LOGGER.debug("START initModelMain for ownerUri=" + getOwnerUri());
 
-        List transformedMsgs = importSelectedTypes(IMPORT_TYPES,false);
-                //interopProcessor.importNewMessages(
-                //getOwnerUri(),
-                //Constants.PHRS_MEDICATION_CLASS,
-                //false); //false, do not import new Messages, only report
+            List transformedMsgs = importSelectedTypes(IMPORT_TYPES,false);
+                    //interopProcessor.importNewMessages(
+                    //getOwnerUri(),
+                    //Constants.PHRS_MEDICATION_CLASS,
+                    //false); //false, do not import new Messages, only report
 
-        int count = transformedMsgs == null ? -1 : transformedMsgs.size();
+            int count = transformedMsgs == null ? -1 : transformedMsgs.size();
 
-        if (count > 0) {
-            //ok
-            LOGGER.debug("transformedMsgs. OK found INTEROP MEDS found count=" + count);
-            modelMain = toolTransformer.tranformResource(transformedMsgs);
+            if (count > 0) {
+                //ok
+                LOGGER.debug("transformedMsgs. OK found INTEROP MEDS found count=" + count);
+                modelMain = toolTransformer.tranformResource(transformedMsgs);
+            } else {
+
+                LOGGER.debug("transformedMsgs. No interop meds found, create test data");
+                modelMain = CoreTestData.createMedicationMonitorPhrItems(getOwnerUri());
+
+                int count2 = modelMain == null ? -1 : modelMain.size();
+                LOGGER.debug("transformedMsgs from test data, modelMain count=" + count2);
+            }
+            LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri()+ " original message count="+count);
         } else {
-
-            LOGGER.debug("transformedMsgs. No interop meds found, create test data");
-            modelMain = CoreTestData.createMedicationMonitorPhrItems(getOwnerUri());
-
-            int count2 = modelMain == null ? -1 : modelMain.size();
-            LOGGER.debug("transformedMsgs from test data, modelMain count=" + count2);
+            LOGGER.debug("START/END allowCommandImport=false No initModelMain for ownerUri=" + getOwnerUri());
         }
-        LOGGER.debug("END initModelMain for ownerUri=" + getOwnerUri()+ " original message count="+count);
-
     }
 
     public String getOwnerUri() {
@@ -172,7 +189,7 @@ public class MonitorInteropBean implements Serializable {
     public boolean getAllowCommandIdentify() {
         return allowCommandIdentify;
     }
-
+    //needed by UI  "is"
     public boolean isAllowCommandIdentify() {
         return allowCommandIdentify;
     }
@@ -184,7 +201,7 @@ public class MonitorInteropBean implements Serializable {
     public boolean getAllowCommandImport() {
         return allowCommandImport;
     }
-
+    //needed by UI  "is"
     public boolean isAllowCommandImport() {
         return allowCommandImport;
     }

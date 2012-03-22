@@ -529,9 +529,10 @@ public class  VocabularyEnhancer implements Serializable {
        String labelCode
 
        switch (theCode ){
-
+                 //determineLabelCode
            case Constants.PHRS_MEDICATION_CLASS :
                labelCode='resource_type_medication'
+
                break
 
            case Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE :

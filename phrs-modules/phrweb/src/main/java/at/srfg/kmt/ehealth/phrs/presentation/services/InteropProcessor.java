@@ -1094,6 +1094,7 @@ public class InteropProcessor {
                 //med.status = "medicationSummary_medicationStatus_true"
                 //InteropAccessService.getDynaBeanPropertyValue(bean, Constants.HL7V3_STATUS, null)
 
+
                 String defaultStatus = Constants.STATUS_COMPELETE;
                 //User must indicate complience, reset to complete.
                 med.setStatus(InteropTermTransformer.transformStandardStatusToLocal(defaultStatus, Constants.PHRS_MEDICATION_CLASS));
