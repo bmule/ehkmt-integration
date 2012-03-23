@@ -59,7 +59,7 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
         client = new MedicationClient(triplestore);
         client.setCreator(Constants.EHR_OWNER);
     }
-
+    //TODO why doesnt this check for templateId extension?
     @Override
     public boolean canParse(REPCMT004000UV01PertinentInformation5 toParse) {
         final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB =
@@ -73,6 +73,8 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     public void parse(REPCMT004000UV01PertinentInformation5 toParse, String userId)
             throws ParserException {
         LOGGER.debug("Medication parser Tries to parse {}", toParse);
+        LOGGER.warn("PCC-10 Medication received for parsing, wait for store message");
+
         final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB = toParse.getSubstanceAdministration();
         final POCDMT000040SubstanceAdministration substanceAdministration =
                 substanceAdministration_JAXB.getValue();
@@ -136,7 +138,9 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
             LOGGER.error(parserException.getMessage(), parserException);
             throw parserException;
         }
-
+        //warn shows on console
+        LOGGER.warn("PCC-10 Medication stored");
+        LOGGER.debug("PCC-10 Medication stored");
     }
 
     private String getStatusURI(CS statusCode) {

@@ -99,19 +99,38 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
             return false;
         }
 
-        final Set<String> requiredExtensions = new HashSet<String>();
-        requiredExtensions.add(Constants.VITAL_SIGNS_OBSERVATIONS);
-        //These are no longer required, we only set one  VITAL_SIGNS_OBSERVATIONS extension!!
-        // requiredExtensions.add(Constants.SIMPLE_OBSERVATIONS);
-        // requiredExtensions.add(Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
+
+        boolean valid=false;
 
         for (II instanceId : templateIds) {
             final String extension = instanceId.getExtension();
-            if (!requiredExtensions.contains(extension)) {
-                LOGGER.warn("This template id extension {} is not specific for a vital sign. The vital sign specific extension are {}.", extension, requiredExtensions);
-                return false;
+            //match this one
+            if (Constants.VITAL_SIGNS_OBSERVATIONS.equals(extension)) {
+                valid=true;
             }
         }
+
+        if( ! valid)  {
+            LOGGER.warn("The template id extensions is not for a vital sign for {}.", Constants.VITAL_SIGNS_OBSERVATIONS);
+            return false;
+        } else {
+            LOGGER.warn("PCC-10 Vital Sign received");
+
+        }
+ //       final Set<String> requiredExtensions = new HashSet<String>();
+ //       requiredExtensions.add(Constants.VITAL_SIGNS_OBSERVATIONS);
+
+        //These are no longer required, we only set one  VITAL_SIGNS_OBSERVATIONS extension!!
+        // requiredExtensions.add(Constants.SIMPLE_OBSERVATIONS);
+        // requiredExtensions.add(Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
+//        for (II instanceId : templateIds) {
+//            final String extension = instanceId.getExtension();
+//            if (!requiredExtensions.contains(extension)) {
+//                LOGGER.warn("This template id extension {} is not specific for a vital sign. The vital sign specific extension are {}.", extension, requiredExtensions);
+//                return false;
+//            }
+//        }
+
 
         return true;
     }
@@ -193,6 +212,7 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
             LOGGER.error("The vital sign graph can not be created.");
             LOGGER.error(tripleException.getMessage(), tripleException);
         }
+        LOGGER.warn("PCC-10 Vital Signs stored");
     }
 
     @Override
