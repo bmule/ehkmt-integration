@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.BindingProvider;
 import javax.xml.ws.Service;
+
 import org.hl7.v3.MCCIIN000002UV01;
 import org.hl7.v3.QUPCAR004030UVPortType;
 import org.hl7.v3.QUPCIN043200UV01;
@@ -27,7 +28,6 @@ import org.slf4j.LoggerFactory;
  * <b>Note : </b> this message sends <a
  * href="http://www.w3.org/TR/soap12-part0/">SOAP 1.2</a> based messages. <br/>
  * This class can not be extended.
- *
  *
  * @author Mihai
  * @version 1.0-SNAPSHOT
@@ -55,20 +55,36 @@ final class SendPcc10Message {
      * acknowledge (the response for the request). The message send contains in
      * its SOAP header the response URI.
      *
-     * @param query the PCC10 request. It can not be null.
-     * @param endpointURI the URI where the PCC10 end point runs. It can not be
-     * null.
+     * @param query               the PCC10 request. It can not be null.
+     * @param endpointURI         the URI where the PCC10 end point runs. It can not be
+     *                            null.
      * @param responseEndpointURI the URI where the response to the PCC10
-     * request will be send. It can not be null.
+     *                            request will be send. It can not be null.
      * @return the acknowledge (the response for the request)for the given
-     * request.
+     *         request.
      * @throws MalformedURLException if the specified PCC10 end point URI is
-     * malformed.
+     *                               malformed.
      */
     static MCCIIN000002UV01 sendMessage(QUPCIN043200UV01 query,
-            String endpointURI)
+                                        String endpointURI)
             throws MalformedURLException {
+    //SSL must be setup enabled if needed from the MedicationTask, etc
+    //TODO change the enabling security methods in MediationTask, VitalSign Task, etc
+     // to use a common solution with this override to trust all certificates
+    //the sendSecureMessage is not used by MedicationTask, etc...but message receiver did not care on salk machine or?
 
+        try {
+            // trust all certificates
+            com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+
+                public boolean verify(String hostName, String a) {
+                    return true;
+                }
+            };
+            com.sun.net.ssl.internal.www.protocol.https.HttpsURLConnectionOldImpl.setDefaultHostnameVerifier(myHv);
+        } catch (Exception e) {
+            LOGGER.error(" trust all certificates");
+        }
         if (query == null) {
             final NullPointerException exception =
                     new NullPointerException("The query argument can not be null.");
@@ -92,29 +108,31 @@ final class SendPcc10Message {
 
         return ack;
     }
-    
-        /**
+
+    /**
+     * This is never used...
+     *
      * Sends secure (SSL) a given PCC10 request to a given PCC10 end point and
      * returns the acknowledge (the response for the request). The message send
      * contains in its SOAP header the response URI.
      *
-     * @param query the PCC9 request. It can not be null.
-     * @param endpointURI the URI where the PCC10 end point runs. It can not be
-     * null.
-     * @param responseEndpointURI the URI where the response to the PCC9 request
-     * will be send. It can not be null.
-     * @param keystoreFilePath the path for the SSL certificate file, it can not
-     * be null.
+     * @param query                the PCC9 request. It can not be null.
+     * @param endpointURI          the URI where the PCC10 end point runs. It can not be
+     *                             null.
+     * @param responseEndpointURI  the URI where the response to the PCC9 request
+     *                             will be send. It can not be null.
+     * @param keystoreFilePath     the path for the SSL certificate file, it can not
+     *                             be null.
      * @param keystoreFilePassword the password for the SSL certificate file, it
-     * can not be null.
+     *                             can not be null.
      * @return the acknowledge (the response for the request)for the given
-     * request.
+     *         request.
      * @throws MalformedURLException if the specified PCC10 end point URI is
-     * malformed.
+     *                               malformed.
      */
     static MCCIIN000002UV01 sendSecureMessage(QUPCIN043200UV01 query,
-            String endpointURI, String keystoreFilePath,
-            String keystoreFilePassword) throws MalformedURLException  {
+                                              String endpointURI, String keystoreFilePath,
+                                              String keystoreFilePassword) throws MalformedURLException {
 
         if (keystoreFilePath == null) {
             final NullPointerException exception =
@@ -129,7 +147,18 @@ final class SendPcc10Message {
             LOGGER.error(exception.getMessage(), exception);
             throw exception;
         }
-
+        com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+            public boolean verify(String hostName, String a) {
+                return true;
+            }
+        };
+        com.sun.net.ssl.internal.www.protocol.https.HttpsURLConnectionOldImpl.setDefaultHostnameVerifier(myHv);
+        // or this...	
+        //	com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+        //		public boolean verify(String hostName, String a) {
+        //			return true;
+        //		}
+        //	};
 
         SSLClient.sslSetup(keystoreFilePath, keystoreFilePassword);
 
@@ -156,11 +185,11 @@ final class SendPcc10Message {
         final Service serviceFactory = Service.create(url, qName);
 
         for (final Iterator<QName> ports = serviceFactory.getPorts();
-                ports.hasNext();) {
+             ports.hasNext(); ) {
             final QName next = ports.next();
             LOGGER.debug("Available port :{} ", next);
         }
-        
+
         // I do this just to be sure that the port SOAP 1.2 is used.
         // Otherwise the SOAP 1.1 may occur.
         // I am not sure why this problem occur because the specification says :
@@ -185,16 +214,16 @@ final class SendPcc10Message {
      * Registers a given URI like end point for a given SOAP based service proxy
      * defined via a port type.
      *
-     * @param portType the involved SOAP based service (port type). It can not
-     * be null otherwise and exception will raise.
+     * @param portType    the involved SOAP based service (port type). It can not
+     *                    be null otherwise and exception will raise.
      * @param endpointURI the URI for the SOAP based service (port type).It can
-     * not be null otherwise and exception will raise.
+     *                    not be null otherwise and exception will raise.
      * @throws NullPointerException if the
-     * <code>portType</code> or
-     * <code>endpointURI</code> arguments are null.
+     *                              <code>portType</code> or
+     *                              <code>endpointURI</code> arguments are null.
      */
     private static void setEndPointURI(QUPCAR004030UVPortType portType,
-            String endpointURI) {
+                                       String endpointURI) {
 
         if (portType == null) {
             final NullPointerException exception =

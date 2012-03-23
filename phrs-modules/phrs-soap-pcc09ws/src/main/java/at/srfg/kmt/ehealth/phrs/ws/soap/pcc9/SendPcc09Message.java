@@ -72,7 +72,7 @@ final class SendPcc09Message {
      * malformed.
      */
     static MCCIIN000002UV01 sendMessage(QUPCIN043100UV01 query,
-            String endpointURI, String responseEndpointURI)
+                                        String endpointURI, String responseEndpointURI)
             throws MalformedURLException {
 
         if (query == null) {
@@ -100,7 +100,7 @@ final class SendPcc09Message {
         // here I obtain the service.
 //        final QUPCAR004040UVPortType portType = ((Service)service).getQUPCAR004040UVPort();
         setWSAddressHandler(portType, responseEndpointURI);
-        
+
         setDebugHandler(portType);
 
 
@@ -134,9 +134,23 @@ final class SendPcc09Message {
      * malformed.
      */
     static MCCIIN000002UV01 sendSecureMessage(QUPCIN043100UV01 query,
-            String endpointURI, String responseEndpointURI, String keystoreFilePath,
-            String keystoreFilePassword) throws MalformedURLException {
+                                              String endpointURI, String responseEndpointURI, String keystoreFilePath,
+                                              String keystoreFilePassword) throws MalformedURLException {
+        //trust all certificates
+        //TODO setup ssl differently for common use
+        com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+            public boolean verify(String hostName, String a) {
+                return true;
+            }
+        };
+        com.sun.net.ssl.internal.www.protocol.https.HttpsURLConnectionOldImpl.setDefaultHostnameVerifier(myHv);
 
+        // or this...
+        //	com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+        //		public boolean verify(String hostName, String a) {
+        //			return true;
+        //		}
+        //	};
         if (keystoreFilePath == null) {
             final NullPointerException exception =
                     new NullPointerException("The certPath argument can not be null.");
@@ -174,7 +188,7 @@ final class SendPcc09Message {
         final Service serviceFactory = Service.create(url, qName);
 
         for (final Iterator<QName> ports = serviceFactory.getPorts();
-                ports.hasNext();) {
+             ports.hasNext();) {
             final QName next = ports.next();
             LOGGER.debug("Available port :{} ", next);
 
@@ -211,7 +225,7 @@ final class SendPcc09Message {
      * <code>endpointURI</code> arguments are null.
      */
     private static void setEndPointURI(QUPCAR004040UVPortType portType,
-            String endpointURI) {
+                                       String endpointURI) {
 
         if (portType == null) {
             final NullPointerException exception =
@@ -267,7 +281,7 @@ final class SendPcc09Message {
      * <code>endpointURI</code> is a malformed.
      */
     private static void setWSAddressHandler(QUPCAR004040UVPortType portType,
-            String endpointURI)
+                                            String endpointURI)
             throws MalformedURLException {
         final BindingProvider bindingProvider = (BindingProvider) portType;
         final Binding binding = bindingProvider.getBinding();
