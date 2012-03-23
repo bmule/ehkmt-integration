@@ -10,18 +10,19 @@ package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 import at.srfg.kmt.ehealth.phrs.Constants;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.ClientException;
-import at.srfg.kmt.ehealth.phrs.dataexchange.client.MedicationClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.TermClient;
 import at.srfg.kmt.ehealth.phrs.dataexchange.client.VitalSignClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
-import at.srfg.kmt.ehealth.phrs.persistence.api.ValueType;
 import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
-import java.util.*;
-import javax.xml.bind.JAXBElement;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.xml.bind.JAXBElement;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -91,14 +92,19 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
 
     private boolean isVitalSing(POCDMT000040Observation observation) {
         final List<II> templateIds = observation.getTemplateId();
-        if (templateIds.size() != 3) {
+
+        //removed != 3, expect one or more
+        if (templateIds.size() == 0) {
+            LOGGER.error("No template extensions found, observation.getTemplateId() size = 0");
             return false;
         }
 
         final Set<String> requiredExtensions = new HashSet<String>();
-        requiredExtensions.add(Constants.SIMPLE_OBSERVATIONS);
         requiredExtensions.add(Constants.VITAL_SIGNS_OBSERVATIONS);
-        requiredExtensions.add(Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
+        //These are no longer required, we only set one  VITAL_SIGNS_OBSERVATIONS extension!!
+        // requiredExtensions.add(Constants.SIMPLE_OBSERVATIONS);
+        // requiredExtensions.add(Constants.ASTM_HL7CONTINUALITY_OF_CARE_DOCUMENT);
+
         for (II instanceId : templateIds) {
             final String extension = instanceId.getExtension();
             if (!requiredExtensions.contains(extension)) {
@@ -119,13 +125,13 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         final POCDMT000040Observation observation = observation_JAXB.getValue();
 
 
-        LOGGER.debug("Tries to parse this Vital Sign {}", observation);
+        LOGGER.debug("VitalSignParser Tries to parse this Vital Sign {}", observation);
         final CD code = observation.getCode();
         final String codeURI;
         try {
             codeURI = Util.buildCodeURI(termClient, code);
         } catch (ClientException exception) {
-            LOGGER.error("The code information can not be processed, parse fails.");
+            LOGGER.error("The  observation.getCode() code information can not be processed, parse fails.");
             LOGGER.error(exception.getMessage(), exception);
             return;
         }
@@ -134,12 +140,26 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         final String statusURI = Util.getStatusURI(statusCode);
 
         final IVLTS effectiveTime = observation.getEffectiveTime();
-        final String effectiveTimeValue = effectiveTime.getValue();
+        final String effectiveTimeValue;
+
+        if(effectiveTime == null){
+            effectiveTimeValue = "";
+        }  else {
+            effectiveTimeValue = effectiveTime.getValue();
+        }
+
 //        System.out.println("effectiveTime -->" + effectiveTimeValue);
 
         final List<ANY> value = observation.getValue();
-        if (value.size() != 1) {
-            LOGGER.warn("To many values for the vital sign value, only one expected");
+
+        //not necessary to validate, we just want one
+//        if (value.size() != 1) {
+//            LOGGER.warn("To many values for the vital sign value, only one expected");
+//            return;
+//        }
+
+        if (value.size() == 0) {
+            LOGGER.warn("No values found for the vital sign value, only one expected");
             return;
         }
 
@@ -147,12 +167,15 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
         try {
             quantity = (PQ) value.iterator().next();
         } catch (ClassCastException exception) {
-            LOGGER.warn("The value list for this vital sign contains wrong types, only PQ allowed.");
+            LOGGER.warn("The value list for this vital sign quantity contains wrong types, only PQ allowed.");
+            return;
+        } catch (Exception exception) {
+            LOGGER.warn("PQ exception to get vital sign quantity.");
             return;
         }
 
         final String quantityValue = quantity.getValue();
-        final String quantityUnitStr = quantity.getUnit();
+
         final String unitURI = Util.getUnitURI(quantity);
         final String vitalSignMsg = String.format(" Vital sign[ owner=%s, code=%s, effectiveTime=%s, statusURI=%s, quantityValue=%s, unitURI=%s]", userId, codeURI, effectiveTimeValue, statusURI, quantityValue, unitURI);
         try {

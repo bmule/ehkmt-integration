@@ -72,7 +72,7 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     @Override
     public void parse(REPCMT004000UV01PertinentInformation5 toParse, String userId)
             throws ParserException {
-        LOGGER.debug("Tries to parse {}", toParse);
+        LOGGER.debug("Medication parser Tries to parse {}", toParse);
         final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB = toParse.getSubstanceAdministration();
         final POCDMT000040SubstanceAdministration substanceAdministration =
                 substanceAdministration_JAXB.getValue();
@@ -82,6 +82,10 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
         final CS statusCode = substanceAdministration.getStatusCode();
         final CE routeCode = substanceAdministration.getRouteCode();
         final IVLPQ doseQuantity = substanceAdministration.getDoseQuantity();
+
+        final String dosageUnit =getUnitURI(doseQuantity);
+
+        
         final POCDMT000040Consumable consumable = substanceAdministration.getConsumable();
         final POCDMT000040ManufacturedProduct manufacturedProduct = consumable.getManufacturedProduct();
         final POCDMT000040LabeledDrug manufacturedLabeledDrug = manufacturedProduct.getManufacturedLabeledDrug();
@@ -105,8 +109,10 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
         // I presume that the t1 is low and t2 is high 
         
         final String adminRouteURI = getAdminRouteURI(routeCode);
+        
         final String dosageValue = doseQuantity.getValue();
-        final String dosageUnit = Constants.PILL;
+        //TODO  dosageUnit     ivlpq
+        //final String dosageUnit = Constants.PILL;
         
         final String drugCode = code.getCode();
         final String drugName = getDrugName(code);
@@ -134,8 +140,20 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     }
 
     private String getStatusURI(CS statusCode) {
+        //default
+        if(statusCode == null){
+            LOGGER.error("statusCode element null, return STATUS_ACTIVE");
+            return Constants.STATUS_ACTIVE;
+        }
+
         final String displayName = statusCode.getDisplayName();
-        if ("Complete".equalsIgnoreCase(displayName)) {
+
+        if(displayName == null ) {
+            LOGGER.error("statusCode.getDisplayName()  null, return STATUS_ACTIVE");
+            return Constants.STATUS_ACTIVE;
+        }
+
+        if ("complete".equalsIgnoreCase(displayName)) {
             return Constants.STATUS_COMPELETE;
         }
 
@@ -147,40 +165,72 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     }
 
     private String getAdminRouteURI(CE routeCode) {
-        final String code = routeCode.getCode();
-        if ("PO".equalsIgnoreCase(code)) {
+        //resolve nullpointer exception on live dataa
+        if(routeCode == null){
+            LOGGER.error("routeCode null, use default");
             return Constants.HL7V3_ORAL_ADMINISTRATION;
         }
-        
-        if ("PO".equalsIgnoreCase(code)) {
-            return Constants.HL7V3_INJECTION_ADMINISTRATION;
+
+        try {
+            final String code = routeCode.getCode();
+
+            if ("PO".equalsIgnoreCase(code)) {
+                return Constants.HL7V3_ORAL_ADMINISTRATION;
+            }
+
+            if ("PO".equalsIgnoreCase(code)) {
+                return Constants.HL7V3_INJECTION_ADMINISTRATION;
+            }
+        } catch (Exception e) {
+            LOGGER.error("routeCode error, use default");
         }
+
 
         return Constants.HL7V3_ORAL_ADMINISTRATION;
     }
     
     private String getUnitURI(IVLPQ ivlpq) {
-        final String dosageUnit = Constants.PILL;
+
+        if(ivlpq == null){
+            LOGGER.error("getUnitURI ivlpq null, use pill ");
+            return Constants.PILL;
+        }
+
         final String unit = ivlpq.getUnit();
+
+        if(unit==null) {
+            LOGGER.error("getUnitURI ivlpq.getUnit() null, use pill ");
+            return Constants.PILL;
+        }
+
         
-        if ("pill".equals(unit)) {
+        if ("pill".equalsIgnoreCase(unit)) {
             return Constants.PILL;
         }
         
-        if ("mg".equals(unit)) {
+        if ("mg".equalsIgnoreCase(unit)) {
             return Constants.MILLIGRAM;
         }
 
         // TODO : there are more units int the constants but I don't think that
-        // I need them all.
         return Constants.PILL;
     }
     
     private String getDrugName(CE ce) {
+        if(ce == null){
+            LOGGER.error("getDrugName ce null: label=missing drug name");
+            return "missing drug name ? ";
+
+        }
         final ED originalText = ce.getOriginalText();
+        if (originalText == null) {
+            LOGGER.error("getDrugName ED originalText null: label=unknown. ");
+            return "unknown.";
+        }
         final TEL reference = originalText.getReference();
         if (reference == null) {
-            return "";
+            LOGGER.error("getDrugName TEL reference null: label=unknown ");
+            return "unknown";
         }
         
         return reference.getValue();
