@@ -87,9 +87,9 @@ public final class SendSecurePcc09MessageExample {
         final String patientName = args[6];
         final String patientSurname = args[7];
         final String patientAdministrativeGender = args[8];
-
+        LOGGER.info("Preparing PCC9 query to EHR for careProvisionCode "+careProvisionCode+" patientID ", patientID+" patientName "+patientName+" patientSurname"+patientSurname);
 //        final String careProvisionCode = "MEDLIST";
-        final String careProvisionReason = "iCardea Barcelona Meeting test";
+        final String careProvisionReason = "iCardea PHR";
         //String careRecordTimePeriodBegin = "201101010000";
         final String careRecordTimePeriodBegin =
                 DateUtil.getLastMonthDate();
