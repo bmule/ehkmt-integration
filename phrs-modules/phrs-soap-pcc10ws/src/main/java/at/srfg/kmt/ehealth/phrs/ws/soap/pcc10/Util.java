@@ -21,6 +21,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -344,43 +345,57 @@ final class Util {
      */
     static String getPatientName(Element paramter) {
         if (paramter == null) {
-            final NullPointerException exception =
-                    new NullPointerException("The parameter argument can not be null");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-
-        // TODO : use XPATH !
-        final NodeList names =
-                paramter.getElementsByTagName(PATIENTNAME_TAG_NAME);
-        if (names.getLength() == 0) {
+            LOGGER.error("patient name element  null, return null");
             return null;
+            //final NullPointerException exception =
+            //        new NullPointerException("The parameter argument can not be null");
+            //LOGGER.error(exception.getMessage(), "");
+            //throw exception;
         }
-        if (names.getLength() != 1) {
-            final IllegalStateException exception =
-                    new IllegalStateException("Wrong amount patientName element. Only one patientName element expected.");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-        final Element careProvisionCode = (Element) names.item(0);
+        String result=null;
 
-        final NodeList values =
-                careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
-        if (values.getLength() == 0) {
-            return null;
+        try {
+            // TODO : use XPATH !
+            final NodeList names =
+                    paramter.getElementsByTagName(PATIENTNAME_TAG_NAME);
+            if (names.getLength() == 0) {
+                return null;
+            }
+            if (names.getLength() != 1) {
+                final IllegalStateException exception =
+                        new IllegalStateException("Wrong amount patientName element. Only one patientName element expected.");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+            final Element careProvisionCode = (Element) names.item(0);
+
+            final NodeList values =
+                    careProvisionCode.getElementsByTagName(VALUE_TAG_NAME);
+            if (values.getLength() == 0) {
+                return null;
+            }
+            if (values.getLength() != 1) {
+                final IllegalStateException exception =
+                        new IllegalStateException("Wrong amount values element. Only one values element expected.");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+            final Element value = (Element) values.item(0);
+            result = value.getTextContent();
+        } catch (Exception e) {
+            LOGGER.error("Exception getting patient name, return blank");
+
         }
-        if (values.getLength() != 1) {
-            final IllegalStateException exception =
-                    new IllegalStateException("Wrong amount values element. Only one values element expected.");
-            LOGGER.error(exception.getMessage(), exception);
-            throw exception;
-        }
-        final Element value = (Element) values.item(0);
-        final String result = value.getTextContent();
         return result;
     }
 
     static String getStatusURI(CS statusCode) {
+
+        if(statusCode == null){
+            LOGGER.error("statusCode element null, return completed");
+            return Constants.STATUS_COMPELETE;
+        }
+
         final String displayName = statusCode.getDisplayName();
         if ("Complete".equalsIgnoreCase(displayName)) {
             return Constants.STATUS_COMPELETE;
@@ -394,8 +409,18 @@ final class Util {
     }
 
     static String getUnitURI(PQ pq) {
-        final String dosageUnit = Constants.PILL;
+
+        if(pq==null){
+            LOGGER.error("pq null, use Milligram");
+            return Constants.MILLIGRAM;
+        }
+
         final String unit = pq.getUnit();
+
+        if(unit==null){
+            LOGGER.error("pq.getUnit null, use Milligram");
+            return Constants.MILLIGRAM;
+        }
 
         if ("pill".equals(unit) || "tablet".equalsIgnoreCase(unit)) {
             return Constants.PILL;  
