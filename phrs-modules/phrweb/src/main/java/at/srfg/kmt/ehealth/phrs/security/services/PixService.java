@@ -39,8 +39,7 @@ public class PixService implements Serializable {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(PixService.class);
     public final static String TEST_CIED = "model:Maximo/serial:PZC123456S";
-    // public final static String IDENTIFIER_TYPE_PROTOCOL_ID = "PROTOCOL";
-    // public final static String IDENTIFIER_TYPE_CIED = "CIED";
+
     public static final String ICARDEA_PIX_CIED_FULL_NAMESPACE = "CIED&bbe3a050-079a-11e0-81e0-0800200c9a66&UUID";
     public static final String ICARDEA_PIX_PID_FULL_NAMESPACE = "icardea.pix&1.2.826.0.1.3680043.2.44.248240.1&ISO";
     //not needed?
@@ -48,14 +47,9 @@ public class PixService implements Serializable {
     public final static String IDENTIFIER_NAMESPACE_PHR_ID = "PHR";
     public final static String ICARDEA_PIX_OID = "1.2.826.0.1.3680043.2.44.248240.1";
     public final static String IDENTIFIER_NAMESPACE_UNIVERSAL_ICARDEA = ICARDEA_PIX_OID;
-    // String endPoint = "localhost:8080";
-    // Striport = 2575;ng host = "localhost";
-    // int
+
     public final static String APPLICATION_NAME = "PHR"; // config.ini
-    // namespace=PHR
-    // testclient^icardea
-    // private static PatientIndex pid = null;
-    // private static ConnectionHub connectionHub = null;
+
     private ConfigurationService config;
     private AuditAtnaService aas;
     private String domainDefault = IDENTIFIER_NAMESPACE_PROTOCOL_ID_ICARDEA;
@@ -74,12 +68,6 @@ public class PixService implements Serializable {
 
     }
 
-//    public PixService(int sslConfigSetting) {
-//        this.sslConfigSetting = sslConfigSetting;
-//        //initSSl();
-//        init();
-//
-//    }
 
     public String getPatientProtocolIdByCIED(String cied) {
         String pid = null;
@@ -291,6 +279,22 @@ public class PixService implements Serializable {
 
                 System.setProperty("javax.net.ssl.trustStorePassword", passTrust);
 
+
+                // trust all certificates (problem using IP address and certificates from another machine)
+                //	   javax.net.ssl.HostnameVerifier myHv = new javax.net.ssl.HostnameVerifier(){
+                //	   	public boolean verify(String hostName,javax.net.ssl.SSLSession session){
+                //	   		return true;
+                //	   	}
+                //	   }
+                //	   javax.net.ssl.HttpsURLConnection.setDefaultHostnameVerifier(myHv);
+
+                // or this...
+                //	com.sun.net.ssl.HostnameVerifier myHv = new com.sun.net.ssl.HostnameVerifier() {
+                //		public boolean verify(String hostName, String a) {
+                //			return true;
+                //		}
+                //	};
+
                 SSLSocketFactory sslsocketfactory = (SSLSocketFactory) SSLSocketFactory.getDefault();
                 //SSLSocket sslsocket = (SSLSocket) sslsocketfactory.createSocket(Config.GetSetting("PIX_ip"), Integer.parseInt(Config.GetSetting("PIX_port")));
 
@@ -339,10 +343,6 @@ public class PixService implements Serializable {
         return aas;
     }
 
-//    protected void initSSl() {
-//
-//        SSLLocalClient.sslSetup(sslConfigSetting);
-//    }
 
     private void init() {
         // parse endpoint into host and port
@@ -743,7 +743,7 @@ public class PixService implements Serializable {
         return this.updateIdentifierFromUser(ownerUri, pixQueryIdUser, pixQueryIdType, false);
     }
 
-    /**
+    /*
      * @param ownerUri
      * @param pixQueryIdUser "cied" pixQueryIdType -->Serial number or "pid"
      *                       pixQueryIdType --> protocolId
@@ -752,6 +752,7 @@ public class PixService implements Serializable {
      * @return The protocolId if successful. Either from PIX or a test
      *         protocolId enter via the UI
      */
+
     public String updateIdentifierFromUser(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType, boolean requeryPix) {
 
         String theProtocolId = null;
