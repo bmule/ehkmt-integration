@@ -70,12 +70,15 @@ final class ProblemEntryParser implements Parser<REPCMT004000UV01PertinentInform
         }
 
         final Set<String> requiredExtensions = new HashSet<String>();
-        requiredExtensions.add(Constants.PROBLEM_OBSERVATION);
-        requiredExtensions.add(Constants.PROBLEM_ENTRY);
+        requiredExtensions.add(Constants.PROBLEM_OBSERVATION);  //2.16.840.1.113883.10.20.1.28
+        requiredExtensions.add(Constants.PROBLEM_ENTRY);  //1.3.6.1.4.1.19376.1.5.3.1.4.5
         for (II instanceId : templateIds) {
-            final String extension = instanceId.getExtension();
-            if (!requiredExtensions.contains(extension)) {
-                LOGGER.warn("This template id extension {} is not specific for a problem entry. The problem entry specific extension are {}.", extension, requiredExtensions);
+             String root = instanceId.getRoot();
+             if(root==null) {
+                  root = instanceId.getExtension();
+             }
+            if (!requiredExtensions.contains(root)) {
+                LOGGER.warn("This template id extension {} is not specific for a problem entry. The problem entry specific extension are {}.", root, requiredExtensions);
                 return false;
             }
         }

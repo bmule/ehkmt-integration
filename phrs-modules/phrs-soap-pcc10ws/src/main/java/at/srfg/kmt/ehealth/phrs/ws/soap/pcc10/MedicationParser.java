@@ -149,19 +149,24 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
             LOGGER.error("statusCode element null, return STATUS_ACTIVE");
             return Constants.STATUS_ACTIVE;
         }
+        //This appears in pcc 10
+        String code = statusCode.getCode();
+        if(code != null && !code.isEmpty()) {
+            //
+        } else {
+            code = statusCode.getDisplayName();
+        }
 
-        final String displayName = statusCode.getDisplayName();
-
-        if(displayName == null ) {
+        if(code == null ) {
             LOGGER.error("statusCode.getDisplayName()  null, return STATUS_ACTIVE");
             return Constants.STATUS_ACTIVE;
         }
 
-        if ("complete".equalsIgnoreCase(displayName)) {
+        if ("complete".equalsIgnoreCase(code)) {
             return Constants.STATUS_COMPELETE;
         }
 
-        if ("active".equalsIgnoreCase(displayName)) {
+        if ("active".equalsIgnoreCase(code)) {
             return Constants.STATUS_ACTIVE;
         }
 
@@ -226,13 +231,22 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
             return "missing drug name ? ";
 
         }
+        String displayName= ce.getDisplayName();
+        if(displayName != null){
+            return displayName;
+        }
+        
         final ED originalText = ce.getOriginalText();
         if (originalText == null) {
             LOGGER.error("getDrugName ED originalText null: label=unknown. ");
             return "unknown.";
         }
+        //This is null
         final TEL reference = originalText.getReference();
-        if (reference == null) {
+        if(reference==null){
+            String tmp =originalText.toString();
+            if(tmp!=null) return tmp;
+
             LOGGER.error("getDrugName TEL reference null: label=unknown ");
             return "unknown";
         }

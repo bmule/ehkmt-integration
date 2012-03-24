@@ -395,13 +395,20 @@ final class Util {
             LOGGER.error("statusCode element null, return completed");
             return Constants.STATUS_COMPELETE;
         }
+        //This appears in pcc 10
+        String code = statusCode.getCode();
 
-        final String displayName = statusCode.getDisplayName();
-        if ("Complete".equalsIgnoreCase(displayName)) {
+        if(code != null && !code.isEmpty()) {
+            //
+        } else {
+            code = statusCode.getDisplayName();
+        }
+
+        if ("Complete".equalsIgnoreCase(code)) {
             return Constants.STATUS_COMPELETE;
         }
 
-        if ("active".equalsIgnoreCase(displayName)) {
+        if ("active".equalsIgnoreCase(code)) {
             return Constants.STATUS_ACTIVE;
         }
 
@@ -409,7 +416,7 @@ final class Util {
     }
 
     static String getUnitURI(PQ pq) {
-
+        /// TODO in_us,in_uk  http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
         if(pq==null){
             LOGGER.error("pq null, use Milligram");
             return Constants.MILLIGRAM;

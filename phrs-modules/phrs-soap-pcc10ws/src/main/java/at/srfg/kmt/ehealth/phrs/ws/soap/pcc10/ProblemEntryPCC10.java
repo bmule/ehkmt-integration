@@ -178,7 +178,10 @@ final class ProblemEntryPCC10 {
         final List<II> iis = new ArrayList<II>(rootIds.size());
         for (String rootId : rootIds) {
             final II ii1 = new II();
+            //Not spec
             ii1.setExtension(rootId);
+            //This is a correction  http://wiki.ihe.net/index.php?title=1.3.6.1.4.1.19376.1.5.3.1.4.13.2
+            ii1.setRoot(rootId);
             iis.add(ii1);
         }
 
