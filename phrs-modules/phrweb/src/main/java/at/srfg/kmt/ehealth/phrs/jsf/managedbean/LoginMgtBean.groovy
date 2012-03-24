@@ -433,7 +433,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             } else {
 
                 WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. No provider endpoint was discovered ');
-                // <p:growl id='loginMsgs' showDetail='true' />
+
                 LOGGER.debug('processOpenIdLogin Open ID login failed. No provider endpoint was discovered: '
                         + ' providerEndpointDiscovered: ' + providerEndpointDiscovered
                         + ' username: ' + username + ' loginType' + loginType)
@@ -474,6 +474,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                             'Please choose one account type, local or Open ID =' + username);
                 }
             }
+
 
         } catch (Exception e) {
             LOGGER.error('processLogin failed processLogin local login ', e);

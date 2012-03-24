@@ -6,6 +6,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.persistence.client.CommonDao;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.security.services.login.RegistrationModel;
+
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashMap;
@@ -14,16 +15,17 @@ import java.util.Map;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class UserSessionService {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(UserSessionService.class);
-    public static String SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR="protocolid";
+    public static String SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR = "protocolid";
     // The configuration.xml will have these
 
-//    public static final String forwardRedirectIsAuthenticatedToPage = "/jsf/home.xhtml";
+    //    public static final String forwardRedirectIsAuthenticatedToPage = "/jsf/home.xhtml";
 //    public static final String formwardRedirectFilteredDirectory = "/jsf/";
 //    public static final String forwardRedirectLoginPage = "/WEB-INF/views/jsp/login.jsp";
     // public static final String forwardRedirectLoginPageAlternate =
@@ -57,9 +59,9 @@ public class UserSessionService {
         } else {
             // TODO config page
 
-            String redirect=getConfigurationService().getProperty(
-                    "forwardRedirectLoginPage","/index.html");
-            LOGGER.debug("redirectAndLogin "+redirect);
+            String redirect = getConfigurationService().getProperty(
+                    "forwardRedirectLoginPage", "/index.html");
+            LOGGER.debug("redirectAndLogin " + redirect);
             redirect(redirect);
         }
     }
@@ -67,12 +69,12 @@ public class UserSessionService {
     /**
      * invalidate and redirect
      */
-    public static void invalidateSessionAndRedirectToLogin(){
-        try{
+    public static void invalidateSessionAndRedirectToLogin() {
+        try {
             invalidateSession();
             redirectAndLogin();
-        }catch (Exception e){
-           LOGGER.error("invalidateSessionAndRedirectToLogin");
+        } catch (Exception e) {
+            LOGGER.error("invalidateSessionAndRedirectToLogin");
         }
     }
 
@@ -104,7 +106,8 @@ public class UserSessionService {
     }
 
     /**
-     * Handle PhrFederatedUser by OpenId
+     * Handle PhrFederatedUser by OpenId without using FacesContext to set session attributes
+     * The openid servlet does not have the faces context and it invokes this method
      *
      * @param localId
      * @param model
@@ -112,6 +115,7 @@ public class UserSessionService {
      * @return
      * @throws Exception
      */
+    //TODO move this method to an openId class away from FacesContext
     public static PhrFederatedUser managePhrUserSessionByOpenIdUserLoginScenario(
             String localId, RegistrationModel model, HttpServletRequest req) throws Exception {
 
@@ -201,9 +205,23 @@ public class UserSessionService {
 
                 }
 
-                //FIXXME PID Consent editor test
-                updateSessionProtocolIdTest(phrUser);
-
+                //Do not use Faces context related methods to update session protocolId
+                if(phrUser.getProtocolId()!= null && !phrUser.getProtocolId().isEmpty()) {
+                    sess.setAttribute(
+                            SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR,
+                            phrUser.getProtocolId());
+                }
+                //for testing when PIX server is down
+                if(UserSessionService.isSpecialUser(phrUser.getIdentifier())){
+                    if("191".equals(phrUser.getProtocolId())){
+                        LOGGER.debug("openId special user protocolId already set to 191");
+                    }  else {
+                        sess.setAttribute(
+                                SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR,
+                                "191");
+                        LOGGER.debug("openId special user setting protocolId 191");
+                    }
+                }
 
                 //sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE, model.getRole());
                 try {
@@ -218,28 +236,32 @@ public class UserSessionService {
         }
         return phrUser;
     }
+
     /**
      * Demo only no password
+     *
      * @param localId
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(String localId) throws Exception {
-        return managePhrUserSessionLocalLoginScenario(localId,null,null);
+        return managePhrUserSessionLocalLoginScenario(localId, null, null);
     }
+
     /**
      * Manage local login
+     *
      * @param localId
      * @param password
      * @return
      * @throws Exception
      */
-    public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(String localId,String password, Map<String,String> attrs) throws Exception {
+    public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(String localId, String password, Map<String, String> attrs) throws Exception {
 
         PhrFederatedUser phrUser = null;
         if (localId != null && !localId.isEmpty()) {
             String theUserId = localId;
-     
+
 
             theUserId = theUserId.trim();
 
@@ -287,35 +309,60 @@ public class UserSessionService {
     }
 
 
-
-    public static void updateSessionProtocolId(String pid){
+    public static void updateSessionProtocolId(String pid) {
         //protocolid
-        putSessionAttributeString(SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR, pid);
+        UserSessionService.putSessionAttributeString(SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR, pid);
     }
-    public static void updateSessionProtocolIdTest(PhrFederatedUser phrUser){
-        //Make this for all users during testing
-        updateSessionProtocolId("191");
-        phrUser.setProtocolIdPix("191");
-        LOGGER.debug("updateSessionProtocolIdTest PID=191"+" phruser.identifier="+phrUser.getIdentifier()+" owner="+phrUser.getOwnerUri());
 
-//        if(phrUser!=null){
-//            String protocolId=phrUser.getProtocolId(); //getCommonDao().getProtocolId(phrUser.getOwnerUri());
-//            if(protocolId !=null && ! protocolId.isEmpty()){
-//                //
-//            }  else {
-//                protocolId="191";
-//            }
-//            LOGGER.debug("updateSessionProtocolIdTest PID="+protocolId+" phruser.identifier="+phrUser.getIdentifier()+" owner="+phrUser.getOwnerUri());
-//            updateSessionProtocolId(protocolId);
-//        }
+    public static String getSessionAttributeProtocolId() {
+        //protocolid
+        return UserSessionService.getSessionAttributeString(SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR);
     }
+
+    public static boolean isSpecialUser(String identifier) {
+        if(identifier != null){
+            if (identifier.contains("suzie")
+                    || identifier.contains("phrsm")
+                    ) {
+                LOGGER.debug("isSpecialUser: true");
+                return true;
+            }
+        }
+        LOGGER.debug("isSpecialUser: false");
+        return false;
+    }
+
     /**
-    * @deprecated
-    * @param localId
-    * @param req
-    * @return
-    * @throws Exception 
-    */
+     * Apply test PID in session for particular users
+     * Usually ok, but when the PIX server is down or not available on a test machine
+     * Use for facescontext not for servlet or openId servlet
+     * @param phrUser
+     */
+    public static void updateSessionProtocolIdTest(PhrFederatedUser phrUser) {
+        //Make this for all users during testing
+        String sessionPid = UserSessionService.getSessionAttributeProtocolId();
+
+        if ("191".equals(sessionPid)) {
+            LOGGER.debug("updateSessionProtocolIdTest PID already 191, no session update");
+
+        } else if (isSpecialUser(phrUser.getIdentifier())) {
+
+                LOGGER.debug("setting protocolid 191 in session");
+                //Is it 191? Keep it at 191 just in case
+                updateSessionProtocolId("191");
+                LOGGER.debug("updateSessionProtocolIdTest PID=191" + " phruser.identifier=" + phrUser.getIdentifier() + " owner=" + phrUser.getOwnerUri());
+
+                phrUser.setProtocolIdPix("191");
+        }
+    }
+
+    /**
+     * @param localId
+     * @param req
+     * @return
+     * @throws Exception
+     * @deprecated
+     */
     public static PhrFederatedUser managePhrUserSessionLocalLoginScenario(
             String localId, HttpServletRequest req) throws Exception {
 
@@ -400,7 +447,7 @@ public class UserSessionService {
      * Automatic user setup for local login without password for:
      * <p/>
      * 1. prefix: phruser* 2. prefix: phrtest
-     *
+     * <p/>
      * <p/>
      * or Actual user names: 3. ellen role nurse 4. phruser role nurse 5.
      * phruser1 role doctor
@@ -467,6 +514,24 @@ public class UserSessionService {
             }
         }
         return extracted;
+    }
+
+    /**
+     * Write session map into the log file
+     */
+    public static void logSessionMap() {
+        try {
+            FacesContext facesContext = UserSessionService.getFacesContext();
+            if (facesContext != null) {
+
+                Map map = facesContext.getExternalContext().getSessionMap();
+                LOGGER.debug("logSessionMap Session map {} ", map);
+            }
+        } catch (Exception e) {
+            LOGGER.error("logSessionMap ", e);
+
+        }
+
     }
 
     public static void sessionInit(boolean create, Map<String, String> newSessionAttrs) {
@@ -643,17 +708,15 @@ public class UserSessionService {
     }
 
     /**
-     *
      * @param greetName
      */
-    public static void updateSessionGreetName(String greetName){
-        if(greetName!=null && !greetName.isEmpty())   {
+    public static void updateSessionGreetName(String greetName) {
+        if (greetName != null && !greetName.isEmpty()) {
             UserSessionService.putSessionAttributeString(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
         }
     }
 
     /**
-     *
      * @return
      */
     public static String getSessionUserGreetName() {
@@ -971,7 +1034,7 @@ public class UserSessionService {
     }
 
     public static boolean hasSessionAttribute(HttpServletRequest request,
-            String attrName) {
+                                              String attrName) {
         boolean flag = false;
         if (request != null && attrName != null) {
             // request
@@ -1012,12 +1075,21 @@ public class UserSessionService {
         if (attrName != null && value != null) {
             try {
                 //create session if necessary
-                FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+                FacesContext facesContext = UserSessionService.getFacesContext();
+                if (facesContext == null) {
+                    LOGGER.debug("putSessionAttributeString FacesContest == null, use HTTP Session method");
+                } else {
+                    facesContext.getExternalContext().getSession(true);
+                    try {
+                        facesContext.getExternalContext().getSessionMap().put(attrName, value);
+                    } catch (Exception e) {
+                        LOGGER.error(" getSessionMap null?? or " + attrName + " value=" + value, e);
+                    }
+                }
 
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(attrName, value);
 
             } catch (Exception e) {
-                LOGGER.error("", e);
+                LOGGER.error(" attrName =" + attrName + " value=" + value, e);
             }
         }
     }
@@ -1111,7 +1183,6 @@ public class UserSessionService {
     }
 
     /**
-     *
      * @param relativePath
      * @return
      */
@@ -1150,8 +1221,7 @@ public class UserSessionService {
      * Status of the Open ID login
      *
      * @return is_verified = true, false, or null if not set by OpenId
-     * LoginServlet or registration service
-     *
+     *         LoginServlet or registration service
      */
     public static Boolean getSessionAttributeOpenIdIsVerified() {
         Boolean verified = null;
@@ -1170,17 +1240,18 @@ public class UserSessionService {
 
         return verified;
     }
-    public static boolean sessionUserHasMedicalRole(){
-        String role= UserSessionService.getSessionAttributeRole();
-        if(role==null) return false;
+
+    public static boolean sessionUserHasMedicalRole() {
+        String role = UserSessionService.getSessionAttributeRole();
+        if (role == null) return false;
         return ConfigurationService.getInstance().isMedicalCareRole(role);
     }
 
-    public static boolean getSystemStatus(){
-        boolean status=false;
+    public static boolean getSystemStatus() {
+        boolean status = false;
         try {
-            status=PhrsStoreClient.getInstance().getSystemStatus();
-            LOGGER.debug("getSystemStatus ="+status);
+            status = PhrsStoreClient.getInstance().getSystemStatus();
+            LOGGER.debug("getSystemStatus =" + status);
         } catch (Exception e) {
             LOGGER.error("getSystemStatus exception, system really failed");
         }

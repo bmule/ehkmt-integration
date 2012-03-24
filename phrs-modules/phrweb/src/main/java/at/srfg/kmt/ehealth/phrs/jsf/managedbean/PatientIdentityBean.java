@@ -6,6 +6,7 @@ import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.UserService;
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService;
 import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService;
 import at.srfg.kmt.ehealth.phrs.security.services.PixService;
 import org.slf4j.Logger;
@@ -282,43 +283,7 @@ public class PatientIdentityBean implements Serializable {
         this.setStatusMessagePid(msg);
 
     }
-    //PixQueryIdUser is null
-    /*
-    public boolean updateIdentifiers() {
-        boolean outcome = false;
-        try {
 
-            LOGGER.debug("updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
-                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
-
-            if (getOwnerUri() != null && !getOwnerUri().isEmpty()
-                    && getPixQueryIdType() != null && !getPixQueryIdType().isEmpty()
-                    && getPixQueryIdUser() != null && !getPixQueryIdUser().isEmpty()) {
-                // getPixQueryDeviceModel
-                PixService pixService = new PixService();
-                //perform PIX query and update user account
-                ownerUri=userService.getOwnerUri();
-               // phrUser = userService.getPhrUser(ownerUri);
-                String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(ownerUri, getPixQueryIdUser(), getPixQueryIdType());
-                LOGGER.debug("updateIdentifiers returnPid value found from updateProtocolIdFromUserProvidedCiedId returnPid= "+returnPid
-                        + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
-                
-                if (returnPid != null && !returnPid.isEmpty()) {
-                    outcome = true;
-                }
-
-                //determine status and refresh new user account
-                determineStatusPID();
-            } else {
-                LOGGER.error("updateIdentifiers Null value found: updateIdentifiers from updateProtocolIdFromUserProvidedCiedId "
-                        + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
-            }
-        } catch (Exception e) {
-            LOGGER.error("Error updateIdentifiers  updateIdentifiers Start updateProtocolIdFromUserProvidedCiedId "
-                    + getOwnerUri() + " PixQueryIdType " + getPixQueryIdType() + " PixQueryIdUser" + getPixQueryIdUser());
-        }
-        return outcome;
-    }  */
     public boolean updateIdentifiers() {
         boolean outcome = false;
         try {
@@ -338,26 +303,50 @@ public class PatientIdentityBean implements Serializable {
                 String ciedIdentifier =null;
                 //perform PIX query and update user account
                 //String returnPid = pixService.updateProtocolIdFromUserProvidedCiedId(getOwnerUri(), getPixQueryIdUser(), getPixQueryIdType());
+
+                //To find the PID (protocolId), the UI provides "type of query" and the identifier to query
+                //a prefix pid: or cied: indicates the query namespace. The type is from a CIED models.
+                //Direct entry of Protocolid (pid)
                 if(getPixQueryIdType().startsWith("pid")){
-                    //assign this
+                    //assign returnPid directly from UI
                     returnPid= getPixQueryIdUser();
                     ciedIdentifier=getPixQueryIdType()+":"+returnPid;
                 } else {
-                    //perform PIX query
+                    //The PIX query requires a specific format, see the PIX query for that
+                    //Query for PID using CIED implant identifier. Perform PIX query on CIED : 2 parts model (getPixQueryIdType) and serial (getPixQueryIdUser).
                     ciedIdentifier = PixService.makePixIdentifier(getPixQueryIdType(), getPixQueryIdUser());
                     LOGGER.debug("PatientIdentityBean VT  ciedIdentifier=" + ciedIdentifier + " pixQueryIdUser=" + getPixQueryIdUser() + " pixQueryIdType= " + getPixQueryIdType());
                     returnPid = pixService.getPatientProtocolIdByCIED(ciedIdentifier);
+
                     //phrUser.setProtocolIdPix(returnPid);
                 }
-
+                if(phrUser!=null && UserSessionService.isSpecialUser(phrUser.getIdentifier())){
+                    if(returnPid != null && "191".equals(returnPid)){
+                        LOGGER.debug("PIX returned 191 successfully");
+                    }  else {
+                        LOGGER.debug("PIX RESET for special user, PIX returned returnPid= "+returnPid);
+                        returnPid="191";
+                    }
+                }
                 
-                if (returnPid != null && !returnPid.isEmpty()) {
+                if (returnPid != null && ! returnPid.isEmpty()) {
                     outcome = true;
+
+                    try {
+                        //update the session protocolId for the consent mananger!
+                        UserSessionService.updateSessionProtocolId(returnPid);
+                        LOGGER.debug("Updated session ProtocolId for consentmgr"+returnPid);
+                        UserSessionService.logSessionMap();
+                    } catch (Exception e) {
+                        LOGGER.error("error updating session ProtocolId="+returnPid);
+                    }
                 }
                 if (outcome) {
              
-                    if(phrUser!=null){
+                    if(phrUser != null){
                         phrUser.setProtocolIdPix(returnPid);
+                        //This might reset the returnPid in case PIX server is done
+
                         phrUser.setPixQueryIdType(getPixQueryIdType());
                         phrUser.setPixQueryIdUser(getPixQueryIdUser());
                         userService.crudSaveResource(phrUser,phrUser.getOwnerUri(),phrUser.getOwnerUri());
@@ -367,6 +356,7 @@ public class PatientIdentityBean implements Serializable {
                         LOGGER.error("Error  PHR user is NULL, but pixQuery returned  pid="+returnPid);
 
                     }
+
                     addStatusMessagePID("Patient ID found, ID is: " + returnPid + " for ciedIdentifier =" + ciedIdentifier + " for owner=" + getOwnerUri());
                 } else {
                      

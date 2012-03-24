@@ -203,30 +203,62 @@ public class RegistrationService {
                 //ret.setClaimedId();
                 try {
                     Object roleObj = fetchResp.getAttributeValues("label");
+
                     String role = LoginUtils.processRole(roleObj);
-                    if(role !=null) ret.setRole(role);
+
+                    if(role != null){
+                        ret.setRole(role);
+                        LOGGER.debug("RegistrationService SREG using role{} from SREG roles {} ",role,roleObj);
+
+                    } else {
+                        if(roleObj==null){
+                            LOGGER.debug("RegistrationService SREG role roleObj NULL ");
+                        } else {
+                            LOGGER.debug("RegistrationService SREG found roles, but no doctor or nurse roleObj {} ",roleObj);
+                        }
+
+                    }
+
                 } catch (Exception e) {
                     LOGGER.error("error processing AX Role from fetchResp ", e);
                 }
 
                 try {
                     String value =  fetchResp.getAttributeValue("firstname");
-                    if(value!=null) ret.setFirstName(value);
+                    if(value!=null) {
+                        ret.setFirstName(value);
+                        LOGGER.debug("RegistrationService SREG firstname "+value);
+                    }
 
                     value =   fetchResp.getAttributeValue("lastname");
-                    if(value!=null)  ret.setLastName(value);
+                    if(value!=null)  {
+                        ret.setLastName(value);
+                        LOGGER.debug("RegistrationService SREG lastname "+value);
+                    }
 
                     value =        fetchResp.getAttributeValue("dob");
-                    if(value!=null)       ret.setDateOfBirth(value);
+                    if(value!=null)   {
+                        ret.setDateOfBirth(value);
+                        LOGGER.debug("RegistrationService SREG dob "+value);
+                    }
 
                     value =      fetchResp.getAttributeValue("email");
-                    if(value!=null)     ret.setEmailAddress(value);
+                    if(value!=null)    {
+                        ret.setEmailAddress(value);
+                        LOGGER.debug("RegistrationService SREG email "+value);
+                    }
 
                     value =   fetchResp.getAttributeValue("fullname");
-                    if(value!=null)  ret.setEmailAddress(value);
+                    if(value!=null)  {
+                        ret.setEmailAddress(value);
+                        LOGGER.debug("RegistrationService SREG fullname "+value);
+                    }
 
                     value =   fetchResp.getAttributeValue("nickname");
-                    if(value!=null)  ret.setNickname(value);
+                    if(value!=null) {
+                        ret.setNickname(value);
+                        LOGGER.debug("RegistrationService SREG nickname "+value);
+                    }
 
                } catch (Exception e) {
                     LOGGER.error("error processing AX params ", e);
@@ -246,22 +278,26 @@ public class RegistrationService {
                     String value = sRegResponse.getAttributeValue("dob");
                     if (value != null) {
                         ret.setDateOfBirth(value);
+                        LOGGER.debug("RegistrationService AUX dob "+value);
                     }
 
                     value = sRegResponse.getAttributeValue("email");
                     if (value != null) {
                         ret.setEmailAddress(value);
+                        LOGGER.debug("RegistrationService AUX email "+value);
                     }
 
                     value = sRegResponse.getAttributeValue("fullname");
                     if (value != null) {
                         ret.setFullName(value);
+                        LOGGER.debug("RegistrationService AUX fullname "+value);
                     }
 
                     value = sRegResponse.getAttributeValue("nickname");
                     //overwrite Ax nickname is ok...likely won't happen
                     if (value != null) {
                         ret.setNickname(value);
+                        LOGGER.debug("RegistrationService AUX nickname "+value);
                     }
                 }
             }

@@ -704,16 +704,12 @@ public class PixService implements Serializable {
     public void setUseMessageDispatcher(boolean useMessageDispatcher) {
         this.useMessageDispatcher = useMessageDispatcher;
     }
-
+  /*
     public String updateProtocolIdFromUserProvidedCiedId(final String ownerUri, final String pixQueryIdUser, String pixQueryIdType) {
         return updateProtocolIdFromUserProvidedId(ownerUri, pixQueryIdUser, pixQueryIdType);
     }
 
-    /**
-     * @param ownerUri
-     * @param pixQueryIdUser
-     * @param idType
-     */
+
     public String updateProtocolIdFromUserProvidedId(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType) {
 
         //if (!useMessageDispatcher) {
@@ -734,24 +730,12 @@ public class PixService implements Serializable {
 //        }
     }
 
-    /**
-     * @param ownerUri
-     * @param pixQueryIdUser
-     * @return pixProtocolId
-     */
+
     public String updateIdentifierFromUser(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType) {
         return this.updateIdentifierFromUser(ownerUri, pixQueryIdUser, pixQueryIdType, false);
     }
 
-    /*
-     * @param ownerUri
-     * @param pixQueryIdUser "cied" pixQueryIdType -->Serial number or "pid"
-     *                       pixQueryIdType --> protocolId
-     * @param pixQueryIdType cied or pid
-     * @param requeryPix     requery even if there is a current PIX protocol ID
-     * @return The protocolId if successful. Either from PIX or a test
-     *         protocolId enter via the UI
-     */
+
 
     public String updateIdentifierFromUser(final String ownerUri, final String pixQueryIdUser, final String pixQueryIdType, boolean requeryPix) {
 
@@ -873,7 +857,7 @@ public class PixService implements Serializable {
 
         return theProtocolId;
     }
-
+      */
     /**
      * Assemble an identifier derived from the UI and model
      *

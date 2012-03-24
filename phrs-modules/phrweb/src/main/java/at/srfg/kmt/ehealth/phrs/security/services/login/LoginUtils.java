@@ -54,8 +54,6 @@ public class LoginUtils {
                     //
                     List roles = (List) roleObj;
                     if (roles.size() > 0) {
-
-
                         try {
                             for (Object item : roles) {
                                 if (item != null && item instanceof String) {
@@ -84,6 +82,8 @@ public class LoginUtils {
 
                     }
                 }
+            }  else {
+                LOGGER.debug("OpenID  roleObj = null");
             }
         } catch (Exception e) {
             LOGGER.error("error processing Role ", e);
