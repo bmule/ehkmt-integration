@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedBean
 
 import at.srfg.kmt.ehealth.phrs.jsf.utils.SiteReferencesTool
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
+import at.srfg.kmt.ehealth.phrs.presentation.services.UserSessionService
 /**
  * 
  * The 'pages' is the SiteReferencesTool that extends Map
@@ -39,10 +40,31 @@ class PortalReferences {
 		 */
 		pages = new SiteReferencesTool()
 	}
+
     public String getConsentUI(){
-        String value = ConfigurationService.getInstance().getConsentUIEndpoint();
-        if(!value) value='#'
-        return value;
+
+        String endPoint= getConsentUI(ConfigurationService.getInstance().getConsentUIEndpoint(),getProtocolId());
+
+        if( ! endPoint){
+            endPoint='#'
+        }
+
+        return endPoint;
+    }
+
+    public String getConsentUI(String baseEndPoint, String pid){
+
+        String endPoint = baseEndPoint
+
+        if(endPoint){
+            if(pid) endPoint = endPoint + '?protocolid=' + pid
+        }
+
+        return endPoint;
+    }
+
+    public String getProtocolId(){
+         return UserSessionService.getSessionAttributeProtocolId();
     }
 
 }

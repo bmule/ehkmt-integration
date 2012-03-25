@@ -1,6 +1,7 @@
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants;
+import at.srfg.kmt.ehealth.phrs.jsf.managedbean.PortalReferences;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService;
 import at.srfg.kmt.ehealth.phrs.services.ConsentManagerImplServiceStub;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.UUID;
 import org.apache.axis2.AxisFault;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.*;
 
 public class ConsentMgrServiceTest {
@@ -456,6 +459,22 @@ public class ConsentMgrServiceTest {
         for (String res : result) {
           System.out.println("res code= " + res);
         }
+
+    }
+    @Test
+    public void testConsentGuiLink(){
+        PortalReferences portalReferences = new PortalReferences();
+        String baseEndpoint=ConfigurationService.getInstance().getConsentUIEndpoint();
+
+        String ref_1= portalReferences.getConsentUI();
+        System.out.println("portal ref 1 = "+ref_1);
+        assertEquals(baseEndpoint,ref_1);
+
+        String ref_2= portalReferences.getConsentUI(baseEndpoint,"123");
+
+        System.out.println("portal ref 2 = "+ref_2);
+        assertEquals(baseEndpoint+"?protocolid=123",ref_2);
+        
 
     }
     /**
