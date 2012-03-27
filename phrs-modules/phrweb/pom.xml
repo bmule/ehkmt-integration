@@ -131,7 +131,7 @@
             <version>1.1.7</version>
             <scope>compile</scope>
         </dependency>-->
-
+<!-- org.apache.httpcomponents:httpclient:jar:4.0 -->
         <dependency>
             <groupId>org.openid4java</groupId>
             <artifactId>openid4java-consumer</artifactId>
@@ -315,11 +315,27 @@
             <scope>compile</scope>
         </dependency> 
         
+        <!-- Do not use 4.1.2, it gives odd error on openid
+ http://forum.springsource.org/showthread.php?114685-Samples-OpenId-Google-Login-Hostname-in-Certificate-didn-t-match
+https://issues.apache.org/jira/browse/HTTPCLIENT-1118  4.1.2
+https://issues.apache.org/jira/browse/HTTPCLIENT-1051  4.0, 4.1 ??   
+        4.1.1
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.1.2</version>
+            <version>4.1.3</version>
         </dependency>
+        -->
+       
+        <!--used by care planner -->
+        <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.1.1</version>
+                
+        </dependency>
+
+       
         
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
