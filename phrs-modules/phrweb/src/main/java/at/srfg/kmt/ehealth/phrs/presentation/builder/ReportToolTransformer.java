@@ -10,6 +10,7 @@ import at.srfg.kmt.ehealth.phrs.presentation.services.VocabularyEnhancer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ReportToolTransformer {
     private ReportTool reportTool;
@@ -23,28 +24,78 @@ public class ReportToolTransformer {
      * @return
      */
     public List<MonitorPhrItem> tranformResource(List phrResources) {
+            return tranformResource(phrResources,false);
+    }
+
+    public List<MonitorPhrItem> tranformResource(List phrResources, boolean filterOnTitle) {
         List<MonitorPhrItem> list = new ArrayList<MonitorPhrItem>();
 
-        if (phrResources != null && !phrResources.isEmpty()) {
+        if (phrResources != null && ! phrResources.isEmpty()) {
 
             for (Object obj : phrResources) {
 
                 MonitorPhrItem item = null;
                 if (obj instanceof MedicationTreatment) {
                     item = toMonitorPhrItem((MedicationTreatment) obj);
+                    
                 } else if(obj instanceof ObsRecord){
                    item= toMonitorPhrItem((ObsRecord) obj);
+               
                 }
-                if (item != null) list.add(item);
+
+                if (item != null){
+                    if(filterOnTitle){
+                         if( ! hasDuplicateTitle(list,item)) {
+                             list.add(item);
+                         }
+                    } else {
+                        list.add(item);
+                    }
+                }
 
             }
 
 
         }
-        //  MonitorPhrItem item= new MonitorPhrItem();
-
 
         return list;
+    }
+
+    /**
+     * Show only unique titles
+     * @param list
+     * @param monitorPhrItem
+     * @return
+     */
+    public boolean hasDuplicateTitle( List<MonitorPhrItem> list,MonitorPhrItem monitorPhrItem){
+        if(list != null && monitorPhrItem != null){
+            String theLabel = monitorPhrItem.getLabel();
+            //Check label otherwise, show just one type, usually Vital signs
+            if(theLabel != null && ! theLabel.isEmpty()){
+               //
+            } else {
+                 theLabel = monitorPhrItem.getDescriptionLabelCode();
+            }
+            
+            if(theLabel != null){
+                 for(MonitorPhrItem item:list){
+                     String label = item.getLabel();
+                     if(label != null && ! label.isEmpty()){
+                        //
+                     } else {
+                         label = item.getDescriptionLabelCode();
+                     }
+                     if(theLabel.equals(label)) {
+                        return true;
+                     }
+                 }
+            }else {
+                
+            }
+        }
+        
+        return false;
+        
     }
 
     /**
@@ -119,4 +170,30 @@ public class ReportToolTransformer {
 
         return item;
     }
+//    public String makeDescriptiveLabel(ObsRecord resource){
+//        String label=resource.getLabel();
+//        
+//        if(resource !=null){
+//           if(label != null && !label.isEmpty()){
+//              // 
+//           } else {
+//             
+//             if(resource.getAttrs()!=null){
+//              Map<String,String> attrs= resource.getAttrs();  
+//              StringBuffer sb= new StringBuffer();
+//              for(String prop:attrs.keySet()){
+//                  if(prop!=null){
+//                      String val= attrs.get(prop);
+//                      if(sb.length() > 0){
+//                          sb.append("/");
+//                      }
+//                      if(val != null) sb.append(val);
+//                      
+//                  }
+//                  
+//             }
+//           }
+//        } 
+//        return label;
+//    }
 }

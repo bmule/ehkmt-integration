@@ -12,6 +12,8 @@ import at.srfg.kmt.ehealth.phrs.support.test.CoreTestData
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.model.baseform.MedicationTreatment
+import at.srfg.kmt.ehealth.phrs.Constants
+import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
 
 /**
  *
@@ -614,7 +616,13 @@ public class CommonDao {
         return map;
 
     }
-
+    /**
+     *   Determines if medication already exists, especially for  imported data from EHR
+     * @param ownerUri
+     * @param medName
+     * @param productCode
+     * @return
+     */
     public boolean hasMedication(String ownerUri, String  medName, String productCode) {
        
         //not blank or null
@@ -632,6 +640,34 @@ public class CommonDao {
             LOGGER.error("check hasMedication null parameter "+ownerUri+" productCode="+productCode)
         }
         return false;
+    }
+    /**
+     * Determines if Vital sign already imported for this effective time
+     *
+     * @param ownerUri
+     * @param hl7Code
+     * @param effectiveTime
+     * @return
+     */
+    public boolean hasVitalSignImported(String ownerUri,String hl7Code,Date effectiveTime){
+        boolean flag=false;
+
+        if( ownerUri && hl7Code && effectiveTime){
+
+            if( hl7Code.equals(Constants.ICARDEA_INSTANCE_BODY_WEIGHT)){
+                try{
+                    Map query = ['beginDate': effectiveTime]
+
+                    def obj= getResourceByExampleToSingle(ObsVitalsBodyWeight.class,query,false,ownerUri)
+                    //TODO can check if origin is EHR.... however effective time is very specific to time!
+                    if(obj != null) return true;
+                } catch(Exception e) {
+                    LOGGER.error("check hasVitalSignImported ",e)
+                }
+            }
+
+        }
+        return flag;
     }
 
 }

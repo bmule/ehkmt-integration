@@ -666,6 +666,8 @@ public class InteropProcessor {
                     //to determine a finer degreee of relationship. We are uncertain if the dates alone will help to group records imported.
 
                     String transactionId = UUID.randomUUID().toString();
+                    //keep track of what
+
 
                     for (DynaBean dynaBean : results) {
                         String messageUri = null;
@@ -809,6 +811,7 @@ public class InteropProcessor {
                 LOGGER.debug("Tries to transform this [{}] Dynamic Bean in to a HL7 V3 CD instance.", toString);
                 codeUri= startBean.getDynaClass().getName();
                 LOGGER.debug("codeUri = ", codeUri);
+
                 /*
                 //final String codePrefLabel = (String) DynaUtil.getStringProperty.get(dynabean,Constants.SKOS_PREFLABEL);
 
@@ -867,6 +870,7 @@ public class InteropProcessor {
      * @param transactionId
      * @return
      */
+
     public ObsRecord transformInteropMessageToObsRecord(
             String phrOwnerUri,
             String phrsClass,
@@ -877,11 +881,31 @@ public class InteropProcessor {
 
         ObsRecord resource = null;
         LOGGER.debug("transformInteropMessageToObsRecord code found code="+code);
+        String effectiveDateStr =null;
+        Date effectiveDate=null;
+        Date queryDate=null;
+
+        //need to check for duplicates from EHR and local phr. Vital sign (type) for user (phrOwnerUri) on effectiveTime
+        try {
+            effectiveDateStr = DynaUtil.getStringProperty(dynabean, Constants.EFFECTIVE_TIME);// Constants.HL7V3_DATE_START);
+            queryDate =transformDateFromMessage(effectiveDateStr, null);
+
+           boolean hasVitalSign= getCommonDao().hasVitalSignImported(phrOwnerUri, code, queryDate);
+            if(hasVitalSign){
+                //ignore this vital sign
+                return null;
+            }
+            
+        } catch (Exception e) {
+            LOGGER.error("error extracting effectiveTime");
+        }
+
         if (code.equals(Constants.ICARDEA_INSTANCE_BODY_WEIGHT)
                 //|| code.equals(Constants.ICARDEA_INSTANCE_BODY_HEIGHT)
                 //|| code.equals(Constants.ICARDEA_INSTANCE_SYSTOLIC_BLOOD_PRESSURE)
                 //|| code.equals(Constants.ICARDEA_INSTANCE_DIASTOLIC_BLOOD_PRERSSURE)
                 ) {
+            
             LOGGER.debug("transformInteropMessageToObsRecord create object code="+code);
             resource = new ObsRecord();
             resource.setCode(code);
@@ -895,9 +919,9 @@ public class InteropProcessor {
             String units = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_UNIT);
             resource.setUnits(units);
 
-            String effectiveDateStr = DynaUtil.getStringProperty(dynabean, Constants.EFFECTIVE_TIME);// Constants.HL7V3_DATE_START);
-            Date effectiveDate = transformDateFromMessage(effectiveDateStr, new Date());    //HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
-
+            //String effectiveDateStr = DynaUtil.getStringProperty(dynabean, Constants.EFFECTIVE_TIME);// Constants.HL7V3_DATE_START);
+            //Date effectiveDate = transformDateFromMessage(effectiveDateStr, new Date());    //HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
+            effectiveDate = transformDateFromMessage(effectiveDateStr, new Date());
             resource.setBeginDate(effectiveDate);
             resource.setEndDate(effectiveDate);
 
@@ -1145,19 +1169,23 @@ public class InteropProcessor {
                 //dates. always need a start date
                 String dateBegin = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_START);
                 //set new date if not found
+               
                 Date beginDate = transformDateFromMessage(dateBegin, new Date());    //HealthyUtils.formatDate( dateBegin, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)
-
+               
                 String dateEnd = DynaUtil.getStringProperty(dynabean, Constants.HL7V3_DATE_END, null);
                 Date endDate = transformDateFromMessage(dateEnd, (Date) null);        //HealthyUtils.formatDate( dateEnd, (String)null, DATE_PATTERN_INTEROP_DATE_TIME)//transformDate(dateEnd)
-
+                
                 med.setBeginDate(beginDate);
                 med.setEndDate(endDate);
+                LOGGER.debug("Dates: dateBegin Interop: "+dateBegin+ " local beginDate "+beginDate+" dateEnd Interop "+dateEnd+" local endDate "+endDate
+                        +" med Begin: "+med.getBeginDate()+" med End: "+med.getEndDate());
 
 
                 med.setCreateDate(new Date());
                 med.setModifyDate(med.getCreateDate());
                 med.setType(MedicationTreatment.class.toString());
 
+                med.setReasonCode("http://www.icardea.at/phrs/instances/NoSpecialTreatment");
                 theObject = med;
 
                 if (med != null) {
@@ -1346,7 +1374,7 @@ public class InteropProcessor {
                 //throws nullexception on blank or null
                 theDate = DateUtil.getFormatedDate(dateMessage);
             }
-            if (theDate != null) {
+            if (theDate == null) {
                 theDate = defaultDate != null ? defaultDate : new Date();
             }
         } catch (Exception e) {

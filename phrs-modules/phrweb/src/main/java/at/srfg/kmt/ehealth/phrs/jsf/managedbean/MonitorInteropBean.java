@@ -94,6 +94,7 @@ public class MonitorInteropBean implements Serializable {
         }
         return null;
     }
+
     private List importSelectedTypes(Set<String> importTypes,boolean saveImports){
         List transformedMsgs = new ArrayList();
         
@@ -102,6 +103,7 @@ public class MonitorInteropBean implements Serializable {
                     getOwnerUri(),
                     phrClass,
                     saveImports);
+
             if(temp!=null && !temp.isEmpty()){
                 transformedMsgs.addAll(temp);
             }
@@ -127,7 +129,9 @@ public class MonitorInteropBean implements Serializable {
             if (count > 0) {
                 //ok
                 LOGGER.debug("transformedMsgs. OK found INTEROP MEDS found count=" + count);
-                modelMain = toolTransformer.tranformResource(transformedMsgs);
+
+
+                modelMain = toolTransformer.tranformResource(transformedMsgs,true);
             } else {
 
                 LOGGER.debug("transformedMsgs. No interop meds found, create test data");

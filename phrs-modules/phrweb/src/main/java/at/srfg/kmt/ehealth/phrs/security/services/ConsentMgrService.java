@@ -173,32 +173,34 @@ public class ConsentMgrService implements Serializable {
                 + " action=" + action );
         try {
             //This is the local setting
-            if (isAccessibleByThisRole(subjectCode)) {
-
-                flag = true;
-
-            } else if (isConsentMgrRole(subjectCode)) {
+//            if (isAccessibleByThisRole(subjectCode)) {
+//
+//                flag = true;
+//
+//            } else
+            if (isConsentMgrRole(subjectCode)) {
+                LOGGER.debug("isPermitted callGetDecision setup ssl");
                 //FIXXME
                 sslSetup();
 
-
+                LOGGER.debug("isPermitted callGetDecision ");
                 String result = callGetDecision(targetUserPID, ISSUERNAME,
                         subjectCode, resourceCode, action);
                 // try on protocol ID
                 flag = isPermitted(result);
 
-                LOGGER.debug("callGetDecision result " + "  targetUserPID " + targetUserPID
+                LOGGER.debug("isPermitted callGetDecision result " + "  targetUserPID " + targetUserPID
                             + " subjectCode=" + subjectCode
                             + " resourceCode=" + resourceCode
                             + "action=" + action + " decision allow?=" + flag);
 
 
+            } else {
+                LOGGER.debug("isPermitted input param error, invalid consentMgr role code: "+subjectCode);
             }
         } catch (Exception e) {
 
-
-
-            e.printStackTrace();
+           LOGGER.error("isPermitted Error with ssl or callGetDecision",e);
         }
         this.sendAuditMessage(targetUserPID, subjectCode, resourceCode, action);
 
@@ -244,7 +246,6 @@ public class ConsentMgrService implements Serializable {
         return endpoint;
 
     }
-
 
 
     public String callGetDecision(String patientId, String issuerName,

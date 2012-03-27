@@ -180,7 +180,7 @@ public class AuthorizationService implements Serializable {
 		if (consentMgrService != null) {
 			if (isConsentMgrRole(subjectRole)) {
 
-				consentMgrService.isPermittedByPID(targetUser, subjectRole,
+                result = consentMgrService.isPermittedByPID(targetUser, subjectRole,
 						resourceCode, action);
 
 			} else {

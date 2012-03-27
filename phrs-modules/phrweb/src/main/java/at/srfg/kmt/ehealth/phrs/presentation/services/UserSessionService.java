@@ -199,6 +199,7 @@ public class UserSessionService {
                         phrUser.getOwnerUri());
 
                 String role = model.getRole() != null ? model.getRole() : phrUser.getRole();
+                LOGGER.debug("managePhrUserSessionByOpenIdUserLoginScenario setting session role "+role);
                 if (role != null && !role.isEmpty()) {
                     sess.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
                             role);

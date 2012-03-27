@@ -79,7 +79,24 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
 //                System.out.println("user_fullname: "+model.getFullName());
 //                System.out.println("user_openid: "+ model.getOpenId());
 //
+            if(model == null){
+                LOGGER.debug("Login servlet registration model= null");
+
+            }
+            if(session == null){
+                LOGGER.debug("Login servlet session = null, but tried to set it to new");
+            }
+
             session.setAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED, model.getIs_verified());
+
+            if (model.getRole() != null && ! model.getRole().isEmpty()) {
+                LOGGER.debug("LoginServlet setting session role "+model.getRole()+" for "+model.getOpenId());
+                session.setAttribute(PhrsConstants.SESSION_USER_AUTHORITY_ROLE,
+                        model.getRole());
+
+            }   else {
+                LOGGER.debug("LoginServlet  session role not set Null "+" for "+model.getOpenId());
+            }
 //                session.setAttribute("user_role", model.getRole());
 //                session.setAttribute("user_fullname", model.getFullName());
 //                session.setAttribute("user_email", model.getEmailAddress());
@@ -131,11 +148,21 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 success = false;
             }
         } else {
-            LOGGER.debug("OpenId failed  "
-                    + "is_verified? " + model != null ? model.getIs_verified() : " registration model NULL"
-                    + " openId " + model != null ? model.getOpenId() : "unknown"
-                    + " fullname " + model != null && model.getFullName() != null ? model.getFullName() : "unknown"
-                    + " nickname " + model != null && model.getNickname() != null ? model.getNickname() : "unknown");
+            try {
+                if(model !=null){
+                    LOGGER.debug("OpenId failed  "
+                            + "is_verified? " + model.getIs_verified()
+                            + " openId " + model != null ? model.getOpenId() : "unknown"
+                            + " fullname " +  model.getFullName() != null ? model.getFullName() : "unknown"
+                            + " nickname " +  model.getNickname() != null ? model.getNickname() : "unknown");
+                } else {
+                    LOGGER.debug("OpenId failed  - registration model is null");
+                }
+            } catch (Exception e) {
+
+                LOGGER.debug("OpenId failed  Error writing debug on model ", e);
+
+            }
         }
 
         //resp.sendRedirect(applicationServer + ":"+securePort+"/icardea_careplaneditor/flex-client/iCardea.html"); //only valid for SALK server

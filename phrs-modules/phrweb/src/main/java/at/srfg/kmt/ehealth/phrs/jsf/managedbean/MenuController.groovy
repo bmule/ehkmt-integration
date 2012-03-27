@@ -83,11 +83,12 @@ public class MenuController extends FaceCommon {
             home = new DefaultTreeNode(new DocumentReference("Error", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
             WebUtil.addFacesMessageSeverityWarn("Status", "System failed to start")
 
-        } else if (!UserSessionService.loggedIn()) {
+        } else if ( ! UserSessionService.loggedIn()) {
             //no side bar menu
             //home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
 
         } else if (UserSessionService.sessionUserHasMedicalRole()) {
+            LOGGER.debug("menuController session user has medical role")
             // one level, no tree nesting
             home = new DefaultTreeNode(new DocumentReference("Home", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
             //consultation reports

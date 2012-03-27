@@ -196,9 +196,10 @@ public class PixService implements Serializable {
     public static String parsePid(String response) {
         String pid = null;
 
-        if (response != null) {
+        if (response == null) {
             LOGGER.debug("parsePid response is NULL");
         }
+
 
         if (response != null && response.contains("PID")) {
 

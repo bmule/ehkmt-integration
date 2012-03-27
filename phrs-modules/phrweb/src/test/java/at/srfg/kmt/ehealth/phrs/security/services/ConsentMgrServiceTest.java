@@ -394,7 +394,7 @@ public class ConsentMgrServiceTest {
                 resourceCode,
                 action);
         //String result = cms.callGetDecision(patientId, issuerName, subjectCode, resourceCode, action);
-        assertFalse("nurse Expect patient 191 not permitted" , permitted);
+        assertTrue("nurse Expect patient 191  permitted" , permitted);
         System.out.println("nurse permitted  191= " + permitted);
 
         // TODO review the generated test code and remove the default call to fail.
