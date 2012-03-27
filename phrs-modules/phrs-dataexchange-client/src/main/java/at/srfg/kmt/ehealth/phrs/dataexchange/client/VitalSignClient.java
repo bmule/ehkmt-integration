@@ -51,7 +51,7 @@ public final class VitalSignClient {
      * Holds the name for the creator, the instance responsible to create vital
      * signs instances with this client.
      */
-    private static final String CREATORN_NAME = VitalSignClient.class.getName();
+   // private static final String CREATORN_NAME = VitalSignClient.class.getName();
 
     /**
      * Holds the name for the creator, the instance responsible to create
@@ -191,7 +191,7 @@ public final class VitalSignClient {
         // resource. 
         triplestore.persist(subject,
                 Constants.CREATOR,
-                CREATORN_NAME,
+                creator,//CREATORN_NAME,
                 LITERAL);
 
         // HL7 specific informations.

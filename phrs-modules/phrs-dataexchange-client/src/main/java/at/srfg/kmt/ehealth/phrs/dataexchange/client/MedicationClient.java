@@ -656,4 +656,36 @@ public final class MedicationClient {
                 dispatchToID,
                 LITERAL);
     }
+
+    /*
+     *
+     * @param userId
+     * @param drugCode
+     * @param t1Str
+     * @param t2Str
+     * @return
+
+    public boolean isNewMedicationMessage(String userId,String drugCode,String t1Str,String t2Str){
+        boolean flag=false;
+
+        try {
+            final Map<String, String> queryMap = new HashMap<String, String>();
+            // like this I indetify the type
+            queryMap.put(Constants.RDFS_TYPE, Constants.PHRS_MEDICATION_CLASS);
+            queryMap.put(Constants.OWNER, userId);
+            //queryMap.put(Constants., drugCode); //to complex....
+
+            if(t1Str!=null && !t1Str.isEmpty()) queryMap.put(Constants.OWNER, t1Str);
+            if(t2Str!=null && !t2Str.isEmpty()) queryMap.put(Constants.OWNER, t2Str);
+
+            final Iterable<String> resources =
+                    triplestore.getForPredicatesAndValues(queryMap);
+        } catch (Exception e) {
+            LOGGER.error("isNewMedicationMessage",e);
+        }
+
+        return flag;
+
+    } */
+
 }

@@ -217,12 +217,14 @@ final class VitalSignParser implements Parser<REPCMT004000UV01PertinentInformati
                     quantityValue,
                     unitURI);
             LOGGER.debug(vitalSignMsg + " was persisted.");
-
+            //show on console
+            System.out.println("PCC-10 Vital Signs stored");
         } catch (TripleException tripleException) {
             LOGGER.error("The vital sign graph can not be created.");
             LOGGER.error(tripleException.getMessage(), tripleException);
         }
-        LOGGER.warn("PCC-10 Vital Signs stored");
+
+
     }
 
     @Override

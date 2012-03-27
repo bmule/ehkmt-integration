@@ -179,10 +179,17 @@ final class MedicationTask implements PCCTask {
         final Set<DynaBean> beans = new HashSet<DynaBean>();
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
-            final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
-            if (!wasDistpached) {
-                beans.add(dynaBean);
-                client.setDispathedTo(uri, wsAddress);
+
+            //Do not propagate the  messages received by EHR to subscribers, phr user is source of "changes"
+            final boolean isCreatorEhr= Util.isCreatorEhr(dynaBean);
+            if( ! isCreatorEhr){
+
+                final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+
+                if ( ! wasDistpached ) {
+                    beans.add(dynaBean);
+                    client.setDispathedTo(uri, wsAddress);
+                }
             }
         }
 

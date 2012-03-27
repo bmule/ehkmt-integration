@@ -23,6 +23,8 @@ import org.slf4j.LoggerFactory;
  * Used to transform HL7 Medication messages in PHRS information. This must
  * begin with the CareProvisionEvent to get the II ids and Pertinent Info
  *
+ * It is possible that we receive incomplete messages these are rejected
+ *
  * @author mradules
  * @version 1.0-SNAPSHOT
  * @since 1.0-SNAPSHOT
@@ -75,7 +77,16 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
         LOGGER.debug("Medication parser Tries to parse {}", toParse);
         LOGGER.warn("PCC-10 Medication received for parsing, wait for store message");
 
+        if(toParse==null){
+            LOGGER.error("Emtpy section, NULL : REPCMT004000UV01PertinentInformation5 toParse");
+        }
+
         final JAXBElement<POCDMT000040SubstanceAdministration> substanceAdministration_JAXB = toParse.getSubstanceAdministration();
+
+        if(substanceAdministration_JAXB==null){
+            LOGGER.error("Emtpy section, NULL : POCDMT000040SubstanceAdministration substanceAdministration_JAXB");
+        }
+
         final POCDMT000040SubstanceAdministration substanceAdministration =
                 substanceAdministration_JAXB.getValue();
         final List<SXCMTS> effectiveTime =
@@ -89,9 +100,25 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
 
         
         final POCDMT000040Consumable consumable = substanceAdministration.getConsumable();
+
+        if(consumable==null){
+           LOGGER.error("Emtpy section, NULL : POCDMT000040Consumable");
+        }
         final POCDMT000040ManufacturedProduct manufacturedProduct = consumable.getManufacturedProduct();
+
+        if(manufacturedProduct==null){
+            LOGGER.error("Emtpy section, NULL : POCDMT000040ManufacturedProduct");
+        }
         final POCDMT000040LabeledDrug manufacturedLabeledDrug = manufacturedProduct.getManufacturedLabeledDrug();
+
+        if(manufacturedLabeledDrug==null){
+            LOGGER.error("Emtpy section, NULL : POCDMT000040LabeledDrug");
+        }
         final CE code = manufacturedLabeledDrug.getCode();
+
+        if(code==null){
+            LOGGER.error("Emtpy section, NULL : CE code manufacturedLabeledDrug.getCode ");
+        }
         final ED originalText = code.getOriginalText();
         
         final String statusURI = getStatusURI(statusCode);
@@ -119,6 +146,9 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
         final String drugCode = code.getCode();
         final String drugName = getDrugName(code);
 
+        //boolean isNew = isNewMedicationMessageForUser(userId,drugCode,t1Str,t2Str);
+
+
         try {
             final String frequencyURI = client.buildNullFrequency();
             client.addMedicationSign(userId,
@@ -132,15 +162,16 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
                     dosageUnit,
                     drugName,
                     drugCode);
+            // show on console
+            System.out.println("PCC-10 Medication stored");
+            LOGGER.debug("PCC-10 Medication stored");
 
         } catch (Exception exception) {
             final ParserException parserException = new ParserException(exception);
             LOGGER.error(parserException.getMessage(), parserException);
             throw parserException;
         }
-        //warn shows on console
-        LOGGER.warn("PCC-10 Medication stored");
-        LOGGER.debug("PCC-10 Medication stored");
+
     }
 
     private String getStatusURI(CS statusCode) {
@@ -228,7 +259,7 @@ final class MedicationParser implements Parser<REPCMT004000UV01PertinentInformat
     private String getDrugName(CE ce) {
         if(ce == null){
             LOGGER.error("getDrugName ce null: label=missing drug name");
-            return "missing drug name ? ";
+            return "unknown drug name ? ";
 
         }
         String displayName= ce.getDisplayName();

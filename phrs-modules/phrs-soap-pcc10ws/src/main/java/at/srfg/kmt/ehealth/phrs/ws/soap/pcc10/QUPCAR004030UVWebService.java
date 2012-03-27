@@ -8,6 +8,7 @@
 package at.srfg.kmt.ehealth.phrs.ws.soap.pcc10;
 
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,32 +78,41 @@ public class QUPCAR004030UVWebService implements QUPCAR004030UVPortType {
      */
     @Override
     public MCCIIN000002UV01 qupcAR004030UVQUPCIN043200UV(QUPCIN043200UV01 body) {
-        LOGGER.debug("Query [{}] was received. The query preocess starts.", body);
+        //TODO handle acknowedge Errors for empty body
+        //Set<String> acknowledgeErrors=new HashSet<String>();
+        try {
+            LOGGER.debug("Query [{}] was received. The query preocess starts.", body);
 
-        if (body == null) {
-            final NullPointerException nullException =
-                    new NullPointerException("The body argument can not be null.");
-            LOGGER.error(nullException.getMessage(), nullException);
-            throw nullException;
-            // FIXME : singals the error back to the client.
+            if (body == null) {
+                final NullPointerException nullException =
+                        new NullPointerException("The body argument can not be null.");
+                //LOGGER.error(nullException.getMessage(), nullException);
+                throw nullException;
+                // FIXME : singals the error back to the client.
+            }
+    
+            final String property = System.getProperty("pcc10.process");
+    
+            final boolean processMessage = property == null
+                    ? false
+                    : Boolean.parseBoolean(property.trim());
+            LOGGER.debug("PCC 10 processing is {} ", processMessage ? "enable" : "disabled");
+            if (processMessage) {
+                process(body);
+            }
+        } catch (NullPointerException ne) {
+            LOGGER.error("Exception caught, body null or a body section was null,empty or incomplete message"+ne.getMessage());
+        } catch (Exception exception) {
+            LOGGER.error("Null pointer error caught"+exception.getMessage(), exception);
         }
-
-        final String property = System.getProperty("pcc10.process");
-
-        final boolean processMessage = property == null
-                ? false
-                : Boolean.parseBoolean(property.trim());
-        LOGGER.debug("PCC 10 processing is {} ", processMessage ? "enable" : "disabled");
-        if (processMessage) {
-            process(body);
-        }
-
+        //TODO Make acknowledgement for emtpy message
         try {
             final MCCIIN000002UV01 result = AcknowledgeFactory.build();
             return result;
         } catch (JAXBException exception) {
             LOGGER.error(exception.getMessage(), exception);
         }
+
         return null;
     }
 

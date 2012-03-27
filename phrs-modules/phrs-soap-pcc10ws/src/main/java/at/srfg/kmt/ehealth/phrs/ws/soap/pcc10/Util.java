@@ -18,6 +18,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import at.srfg.kmt.ehealth.phrs.dataexchange.util.DynaBeanUtil;
+import org.apache.commons.beanutils.DynaBean;
 import org.hl7.v3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -504,5 +507,35 @@ final class Util {
 
         return termURI;
 
+    }
+
+    /**
+     * Determine if creator is EHR, used during notification process. PHR should not send messages created when received by EHR
+     * only messages created by user...   This is not the "origin" field. when the phr user saves a resource and sends a messae
+     * the message creator is not the EHR, but the PHR.
+     * @param dynaBean
+     * @return
+     */
+    public static boolean isCreatorEhr(DynaBean dynaBean){
+        boolean flag=false;
+
+        if(dynaBean ==null){
+            LOGGER.error("isCreatorEhr dynabean is NULL");
+        }  else {
+            try {
+                String creator = (String)dynaBean.get(Constants.CREATOR);
+                if(creator != null && ! creator.isEmpty()){
+
+                   if(Constants.EHR_OWNER.equalsIgnoreCase(creator)){
+                       flag = true;
+                   }
+                    LOGGER.debug("isOriginEhr = "+flag+" for creator="+creator);
+                }
+            } catch (Exception e){
+               LOGGER.error("dynaBean creator missing");
+            }
+        }
+        
+        return flag;
     }
 }

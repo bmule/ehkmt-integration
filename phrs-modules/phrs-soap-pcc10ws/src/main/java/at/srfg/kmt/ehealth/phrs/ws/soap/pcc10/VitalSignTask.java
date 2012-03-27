@@ -170,11 +170,23 @@ final class VitalSignTask implements PCCTask {
             //System.out.println("vital bef dynabean uri=" + uri);
             try {
                 final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
-                final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
-                if (!wasDistpached) {
-                    beans.add(dynaBean);
-                    client.setDispathedTo(uri, wsAddress);
+
+                //Do not propagate the  messages received by EHR to subscribers, phr user is source of "changes"
+                final boolean isCreatorEhr= Util.isCreatorEhr(dynaBean);
+                if( ! isCreatorEhr){
+
+                    final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+
+                    if ( ! wasDistpached ) {
+                        beans.add(dynaBean);
+                        client.setDispathedTo(uri, wsAddress);
+                    }
                 }
+//                final boolean wasDistpached = wasDistpachedTo(dynaBean, wsAddress);
+//                if (!wasDistpached) {
+//                    beans.add(dynaBean);
+//                    client.setDispathedTo(uri, wsAddress);
+//                }
             } catch (Exception exception) {
                 System.out.println("vital bef dynabean bad uri=" + uri);
                 LOGGER.warn("bad URI=" + uri + " " + exception.getMessage(), exception);
