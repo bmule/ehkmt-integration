@@ -118,8 +118,16 @@ public class UserSessionService {
     //TODO move this method to an openId class away from FacesContext
     public static PhrFederatedUser managePhrUserSessionByOpenIdUserLoginScenario(
             String localId, RegistrationModel model, HttpServletRequest req) throws Exception {
+        LOGGER.error("managePhrUserSessionByOpenIdUserLoginScenario START "+localId+" phrUser identifier=");
 
+        if(model==null){
+            LOGGER.error("RegistrationModel is null");
+            model = new RegistrationModel();
+            model.setOpenId(localId);
+        }
         PhrFederatedUser phrUser = null;
+
+
         if (req != null) {
             String theUserId = localId;
 
@@ -144,6 +152,7 @@ public class UserSessionService {
             HttpSession sess = req.getSession(true);// create session if needed
 
             if (sess != null) {
+
                 //TODO model.getLocalShortId() update code update Federated User
                 if (model.getLocalShortId() == null && theUserId != null) {
 
@@ -167,21 +176,33 @@ public class UserSessionService {
                     throw new Exception("User is null, error creating phrUser ");
                 }
 
+                if(model != null){
+                    sess.setAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED, model.getIs_verified());
 
-                sess.setAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED, model.getIs_verified());
+                    //these are not really needed???
+                    if(model.getNickname()!=null)
+                        sess.setAttribute("user_nickname", model.getNickname());
+
+                    if(model.getEmailAddress()!=null)
+                        sess.setAttribute("user_email", model.getEmailAddress());
+
+                    if(model.getOpenId()!=null)
+                        sess.setAttribute("user_openid", model.getOpenId());
+
+                    if(model.getFullName()!=null)
+                        sess.setAttribute("user_fullname", model.getFullName());
 
 
-                sess.setAttribute("user_fullname", model.getFullName());
-                sess.setAttribute("user_email", model.getEmailAddress());
-                sess.setAttribute("user_openid", model.getOpenId());
+                } else {
+                    sess.setAttribute(PhrsConstants.OPEN_ID_IS_VERIFIED, "true");
 
-                sess.setAttribute("user_fullname", model.getFullName());
-                sess.setAttribute("user_email", model.getEmailAddress());
-                sess.setAttribute("user_openid", model.getOpenId());
+
+                }
+
 
                 //TODO remove session objects
-                sess.setAttribute(PhrsConstants.SESSION_USER_OPENID_OBJECT,
-                        model);
+                //sess.setAttribute(PhrsConstants.SESSION_USER_OPENID_OBJECT,
+                //        model);
 
 
                 // phrUser = processAuthenticatedUser(openIdUser);
@@ -234,7 +255,11 @@ public class UserSessionService {
                     LOGGER.error("error creating greetname", e1);
                 }
             }
+        }  else {
+            LOGGER.error("request is null");
         }
+        String identifier= phrUser ==null ? "phruser null" : phrUser.getIdentifier();
+        LOGGER.error("managePhrUserSessionByOpenIdUserLoginScenario FINISHED "+localId+" phrUser identifier="+identifier);
         return phrUser;
     }
 
