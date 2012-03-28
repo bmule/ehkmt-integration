@@ -40,20 +40,25 @@ public class ProfileContactInfoBean extends FaceBaseBean {
         if (vocabMap.containsKey('TAG_ROLES_MEDICAL_PROFESSIONAL') && vocabMap.containsKey('TAG_ROLES_NON_MEDICAL_USER')) {
             vocabMap.put('TAG_ROLES_MEDICAL_PROFESSIONAL', this.vocabMap.get('TAG_ROLES_NON_MEDICAL_USER'))
         }
-
+        
         loadModelMain()
 
     }
 
     @Override
     void loadModelMain() {
+       
+        
         try {
             if (userService) {
+                //LOGGER.debug("ProfileContactInfoBean loadModelMain owner="+userService.getOwnerUri());
                 internalModelList = []
                 //add single record
                 // ProfileUserContactInfo contactInfo = userService.getResourceSingle(ProfileUserContactInfo, true) //create if needed
                 selected = (ProfileContactInfo) userService.getResourceSingle(ProfileContactInfo, true) //create if needed
 
+            }  else {
+                LOGGER.debug("ProfileContactInfoBean loadModelMain userService null");
             }
         } catch (Exception e) {
             LOGGER.error('ProfileContactInfoBean loadModelMain Exception ' + e)
@@ -118,6 +123,12 @@ public class ProfileContactInfoBean extends FaceBaseBean {
                 UserSessionService.updateSessionGreetName(greetName);
             }
         }
+    }
+    @Override
+    public void store(){
+        super.store()
+        //issue: store() called by Dialog ajax, but not getting new object (viewmode did not work...
+        loadModelMain()
     }
     /**
      * Called for a new form, local changes. Also for testing
