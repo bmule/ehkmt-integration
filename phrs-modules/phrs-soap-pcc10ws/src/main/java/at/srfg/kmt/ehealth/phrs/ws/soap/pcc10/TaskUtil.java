@@ -64,6 +64,8 @@ public class TaskUtil {
         final List<II> ids = patient.getId();
         ids.clear();
         ids.add(newId);
+        LOGGER.debug("createPatientIdNode check patientID careProvisionEvent {}",careProvisionEvent);
+        LOGGER.debug("createPatientIdNode check patientID careProvisionEvent ids {}",ids);
     }
 
     /**

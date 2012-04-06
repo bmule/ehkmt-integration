@@ -340,13 +340,15 @@ final class MedicationSignPCC10 {
                 (String) codeSystem.get(Constants.CODE_SYSTEM_CODE);
 
         final String prefLabel = (String) bean.get(Constants.SKOS_PREFLABEL);
+
         final String value = (String) bean.get(Constants.HL7V3_VALUE);
 
         final CE result = new CE();
         result.setCodeSystem(codeSystemCode);
         result.setCodeSystemName(codeSystemName);
         result.setCode(value);
-        final ED originalText = buildED(prefLabel);
+        result.setDisplayName(prefLabel); //added display name here because client's expect it here.
+        final ED originalText = buildED(prefLabel); //original text contains name also
         result.setOriginalText(originalText);
 
         return result;

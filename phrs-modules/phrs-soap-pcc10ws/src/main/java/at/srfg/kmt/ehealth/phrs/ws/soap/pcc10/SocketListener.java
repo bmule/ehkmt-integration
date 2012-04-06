@@ -182,32 +182,40 @@ final class SocketListener {
                 }
             } catch (InterruptedException exception) {
                 LOGGER.error(exception.getMessage(), exception);
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
             }
         }
 
         private void consume(Object toConsume) {
-            LOGGER.debug("Tries to consume {}" + toConsume);
-            final boolean isMap = toConsume instanceof Map;
 
-            if (!isMap) {
-                LOGGER.warn("The received toConsume argument is not a java.util.Map, it can not be consummed.");
-                return;
-            }
+            try {
+                LOGGER.debug("Tries to consume {}" + toConsume);
+                final boolean isMap = toConsume instanceof Map;
+
+                if (!isMap) {
+                    LOGGER.warn("The received toConsume argument is not a java.util.Map, it can not be consummed.");
+                    return;
+                }
 
 //            final PCC10Task task = new PCC10Task((Map) toConsume);
 //            task.run();
-            
-            for (PCCTask task : tasks) {
-                if (task.canConsume((Map) toConsume)) {
-                    try {
-                        task.consume((Map) toConsume);
-                    } catch (ConsumeException exception) {
-                        LOGGER.warn("Failure by running task");
-                        LOGGER.warn(exception.getMessage(), exception);
+
+                for (PCCTask task : tasks) {
+                    if (task.canConsume((Map) toConsume)) {
+                        try {
+                            task.consume((Map) toConsume);
+                        } catch (ConsumeException exception) {
+                            LOGGER.warn("Failure by running task");
+                            LOGGER.warn(exception.getMessage(), exception);
+                        }
                     }
                 }
+            } catch (Exception e) {
+                LOGGER.warn(e.getMessage(), e);
             }
         }
+
     }
 
     /**

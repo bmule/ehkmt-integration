@@ -112,6 +112,12 @@ final class ProblemEntryTask implements PCCTask {
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
+            if(request == null){
+                //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+                LOGGER.info("Empty message (none to send), not sending");
+                return;
+            }
+
             if (!responseURI.startsWith("https")) {
                 LOGGER.debug("No SSL");
             } else {
@@ -190,9 +196,7 @@ final class ProblemEntryTask implements PCCTask {
         final int problemCount = beans.size();
         LOGGER.debug("The total amount of Problem Entries for user {} is {}",
                 owner, problemCount);
-        if (problemCount == 0) {
-            LOGGER.warn("There are no New Problem Entries, all were sent for this user or no pcc09 messages for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
-        }
+
 
 
         // TAKE CARE !!!!!!
@@ -204,6 +208,11 @@ final class ProblemEntryTask implements PCCTask {
             LOGGER.warn(exception.getMessage(), exception);
         }
 
+        if (problemCount == 0) {
+            LOGGER.warn("There are no New Problem Entries, all were sent for this user or no pcc09 messages for this user available for dispatch {}, the HL7 V3 message will be empty, not sending.", owner);
+            //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+            return null;
+        }
         final QUPCIN043200UV01 pcc10Message = ProblemEntryPCC10.getPCC10Message(owner,beans);
         return pcc10Message;
     }

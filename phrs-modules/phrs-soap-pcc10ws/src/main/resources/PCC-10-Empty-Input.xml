@@ -47,16 +47,18 @@
                     <careProvisionEvent>
                         <recordTarget>
                             <patient>
-                                <id root='1' extension='_PATIENT_ID_'/>
+                                <!-- this ID is appearing in cp !!-->
+                                <id root='1' extension='_PATIENT_ID_PCC_10_INPUT'/>
                                 <addr></addr>
                                 <telecom value='1' use='1'/>
                                 <statusCode code='active'/>
                                 <patientPerson>
+                                    <!--removed name need to test with cp-->
                                     <name>
-                                        <given>Andreas</given>
-                                        <family>Schmidt</family>
+                                        <given></given>
+                                        <family></family>
                                     </name>
-                                    <administrativeGenderCode code='M' displayName='' codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
+                                    <administrativeGenderCode code='F' displayName='' codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
                                     <birthTime value='19530422153118'/>
                                 </patientPerson>
                             </patient>

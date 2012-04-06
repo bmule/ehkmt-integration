@@ -109,6 +109,13 @@ final class VitalSignTask implements PCCTask {
         try {
             final String owner = (String) properties.get("patientId");
             final QUPCIN043200UV01 request = buildMessage(owner, responseURI);
+
+            if(request == null){
+                //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+                LOGGER.info("Empty message (none to send), not sending");
+                return;
+            }
+
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -196,9 +203,7 @@ final class VitalSignTask implements PCCTask {
         final int vitalSignCount = beans.size();
         LOGGER.debug("The total amount of Vital Sign Entries for user {} is {}",
                 owner, vitalSignCount);
-        if (vitalSignCount == 0) {
-            LOGGER.warn("There are no NEW Vital signs for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
-        }
+
 
         // TAKE CARE !!!!!!
         // This lines wipe out the triple store repository files.
@@ -209,6 +214,11 @@ final class VitalSignTask implements PCCTask {
             LOGGER.warn(exception.getMessage(), exception);
         }
 
+        if (vitalSignCount == 0) {
+            LOGGER.warn("There are no NEW Vital signs for this user available for dispatch {}, the HL7 V3 message will be empty, not sending.", owner);
+            //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+            return null;
+        }
         final QUPCIN043200UV01 pcc10Message = VitalSignPCC10.getPCC10Message(owner, beans);
         return pcc10Message;
     }

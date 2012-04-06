@@ -120,6 +120,13 @@ final class MedicationTask implements PCCTask {
         try {
             final String owner = (String) properties.get("patientId");
             final QUPCIN043200UV01 request = buildMessage(owner, responseURI);
+
+            if(request == null){
+                //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+                LOGGER.info("Empty message (none to send), not sending");
+                return;
+            }
+
             LOGGER.info("Tries to send this {} PCC10 query to the endpoint {}",
                     request, responseURI);
 
@@ -177,6 +184,7 @@ final class MedicationTask implements PCCTask {
         final Iterable<String> uris = client.getMedicationURIsForUser(owner);
         final DynaBeanClient dynaBeanClient = new DynaBeanClient(triplestore);
         final Set<DynaBean> beans = new HashSet<DynaBean>();
+
         for (String uri : uris) {
             final DynaBean dynaBean = dynaBeanClient.getDynaBean(uri);
 
@@ -196,9 +204,7 @@ final class MedicationTask implements PCCTask {
         final int medicationCount = beans.size();
         LOGGER.debug("The total amount of Medication Entries for user {} is {}",
                 owner, medicationCount);
-        if (medicationCount == 0) {
-            LOGGER.warn("There are no Medications for this user available for dispatch {}, the HL7 V3 message will be empty.", owner);
-        }
+
 
         // TAKE CARE !!!!!!
         // This lines wipe out the triple store repository files.
@@ -208,7 +214,11 @@ final class MedicationTask implements PCCTask {
         } catch (Exception exception) {
             LOGGER.warn(exception.getMessage(), exception);
         }
-
+        if (medicationCount == 0) {
+            LOGGER.warn("There are no Medications for this user available for dispatch {}, the HL7 V3 message will be empty, not sending.", owner);
+            //emtpy message otherwise the raw pcc10 template is sent with invalid PID
+            return null;
+        }
         final QUPCIN043200UV01 pcc10Message = MedicationSignPCC10.getPCC10Message(owner,beans);
         return pcc10Message;
     }
