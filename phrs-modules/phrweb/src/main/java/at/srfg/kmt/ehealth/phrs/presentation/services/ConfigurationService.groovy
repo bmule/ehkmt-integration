@@ -41,6 +41,7 @@ public class ConfigurationService implements Serializable {
 
     //private static XMLConfiguration xmlConfig;
     private static PropertiesConfiguration propertiesConfig
+    private static PropertiesConfiguration menuLinksConfig
     private static PropertiesConfiguration icardeaConfig
 
     // Initialization-on-demand holder idiom
@@ -91,22 +92,27 @@ public class ConfigurationService implements Serializable {
         if (icardeaConfig == null) {
             refreshPropertiesIcardeaConfig()
         }
+        if (menuLinksConfig == null) {
+            refreshMenuLinksConfig()
+        }
     }
 
-    //    public synchronized void refreshXMLConfig(){
-    //        try {
-    //            xmlConfig = new XMLConfiguration("phrs.config.xml");
-    //        } catch(ConfigurationException e) {
-    //            LOGGER.error("ConfigurationService error", e);
-    //        }
-    //    }
+    public synchronized void refreshMenuLinksConfig() {
+
+
+        try {
+            menuLinksConfig = new PropertiesConfiguration("phrs-content.properties");
+        } catch (ConfigurationException e) {
+            LOGGER.error("ConfigurationService error MenuLinks phrs-content.properties", e);
+        }
+    }
     public synchronized void refreshPropertiesConfig() {
 
 
         try {
             propertiesConfig = new PropertiesConfiguration("phrs.properties");
         } catch (ConfigurationException e) {
-            LOGGER.error("ConfigurationService error", e);
+            LOGGER.error("ConfigurationService error phrs.properties", e);
         }
     }
     /**
@@ -118,7 +124,7 @@ public class ConfigurationService implements Serializable {
         try {
             icardeaConfig = new PropertiesConfiguration("icardea.properties");
         } catch (ConfigurationException e) {
-            LOGGER.error("ConfigurationService error", e);
+            LOGGER.error("ConfigurationService error icardea.properties" , e);
         }
     }
 
@@ -152,6 +158,16 @@ public class ConfigurationService implements Serializable {
 
     public PropertiesConfiguration getPropertiesConfiguration() {
         return propertiesConfig
+    }
+
+    public String getContentLink(String key){
+        if(menuLinksConfig && key){
+              String value = menuLinksConfig.getProperties(key) ;
+        }  else {
+            if(!key ) LOGGER.error('getContentLink key is null')
+            if(!menuLinksConfig ) LOGGER.error('getContentLink menuLinksConfig is null')
+        }
+        return null
     }
 
     public String getProperty(String prop) {

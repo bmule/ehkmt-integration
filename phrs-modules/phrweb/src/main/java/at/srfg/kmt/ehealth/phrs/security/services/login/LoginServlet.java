@@ -148,6 +148,9 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
                 }
 
                 success = phrUser != null;
+                if(phrUser == null){
+                    LOGGER.debug("LoginServlet after managePhrUserSessionByOpenIdUserLoginScenario phrUser=null, success false");
+                }
 
             } catch (Exception e) {
                 errorMsg = PhrsConstants.DEFAULT_ERROR_MSG_OPEN_ID;
@@ -182,7 +185,7 @@ public class LoginServlet extends javax.servlet.http.HttpServlet {
             //remove any messages
             
         } else {
-
+            LOGGER.debug("Login not successfull, redirect back to login page");
             if (errorMsg == null) {
                 errorMsg = PhrsConstants.DEFAULT_ERROR_MSG_OPEN_ID;
             }
