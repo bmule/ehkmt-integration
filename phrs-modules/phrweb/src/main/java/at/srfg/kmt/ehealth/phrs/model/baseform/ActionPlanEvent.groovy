@@ -1,6 +1,4 @@
 package at.srfg.kmt.ehealth.phrs.model.baseform;
-import java.util.Date
-import java.util.Map
 
 import at.srfg.kmt.ehealth.phrs.PhrsConstants
 
@@ -18,7 +16,6 @@ public class ActionPlanEvent extends BasePhrsModel  {
 
 	//String frequencyCode
 	//String durationCode in base
-
 	//Time durationTime
 
 	@Transient

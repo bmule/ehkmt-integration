@@ -27,7 +27,7 @@ public class ObsActivityBean extends FaceBaseBean  {
 			loadModelMain()
 
 		} catch (Exception e){
-			println('ObsActivityBean loadModelMain Exception '+e)
+            LOGGER.error('ObsActivityBean loadModelMain Exception '+e)
 		}
 
 		
@@ -60,14 +60,5 @@ public class ObsActivityBean extends FaceBaseBean  {
 
 	}
 
-
-	@Override
-	public void storeModifyFirst(){
-		super.storeModifyFirst()
-
-//		if(selected){
-//
-//		}
-	}
 }
 

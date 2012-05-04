@@ -79,16 +79,17 @@ public final class ATNAHandler implements SOAPHandler<SOAPMessageContext> {
                 classLoader.getResourceAsStream(CONFIG_FILE);
         
         if (resourceAsStream == null) {
-            LOGGER.warn("The ATNA configunration file named {} must be placed in the classpath", CONFIG_FILE);
-            LOGGER.warn("NO ATNA AUDIT MESSAGES CAN BE SEND!");
+            LOGGER.error("The ATNA configunration file named {} must be placed in the classpath", CONFIG_FILE);
+            LOGGER.error("NO ATNA AUDIT MESSAGES CAN BE SEND!");
             return;
         }
-        
+
         try {
             final Properties config = new Properties();            
             config.load(resourceAsStream);
             final String host = config.getProperty("atna-server-host").trim();
             final String port = config.getProperty("atna-server-port").trim();
+            //LOGGER.debug("ATNA host="+host+" port="+port);
             audit = new Audit(host, Integer.parseInt(port));
         } catch (Exception exception) {
             LOGGER.warn("NO ATNA AUDIT MESSAGES CAN BE SEND!");

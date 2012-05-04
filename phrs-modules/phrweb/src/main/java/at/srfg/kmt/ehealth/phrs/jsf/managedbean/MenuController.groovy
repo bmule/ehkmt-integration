@@ -16,6 +16,7 @@ import org.primefaces.model.DefaultTreeNode
 import org.primefaces.model.TreeNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
 
 /**
  * This controller is SessionScoped and supports either the basic tree or table based tree. The Table based tree cannot yet support expanding 
@@ -66,7 +67,11 @@ public class MenuController extends FaceCommon {
 
     }
 
-    //menu.activityItem.label contactInfo.personal.label
+
+//menu.profile=all
+//menu.profile=none
+//menu.profile=monitor,consult,login,logout,education,social,privacy
+
     /**
      *
      * @param locale
@@ -79,7 +84,7 @@ public class MenuController extends FaceCommon {
         root = new DefaultTreeNode(new DocumentReference("Main Menu", "root", PhrsConstants.TYPE_ITEM_NODE_ROOT, codedLabel, null).setRoot(true), null)
         root.setExpanded(true) //address any UI bug
 
-        if (!UserSessionService.getSystemStatus()) { //storage problem
+        if ( ! UserSessionService.getSystemStatus()) { //storage problem
             home = new DefaultTreeNode(new DocumentReference("Error", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
             WebUtil.addFacesMessageSeverityWarn("Status", "System failed to start")
 
@@ -100,6 +105,25 @@ public class MenuController extends FaceCommon {
             //addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionMonitoring,codedLabel)
 
         } else {
+            String menuProfile= ConfigurationService.getInstance().getProperty('menu.profile','default');
+            boolean showAll=false;
+            boolean showEdu=true;
+            boolean showSocial=true;
+            boolean showLogout=true;
+            //boolean showLogin=true;
+            boolean showConsult=true;
+            boolean showMonitor=true;
+            boolean showPrivacy=true;
+
+            if( ! menuProfile){
+               showAll=true
+            } else if(menuProfile.contains('default')){
+                showAll=true
+            } else if(menuProfile.contains('none')) {
+                showAll=false
+            }  else {
+
+            }
 
             home = new DefaultTreeNode(new DocumentReference("Home", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
 
@@ -121,13 +145,43 @@ public class MenuController extends FaceCommon {
 
             sectionGroupInfoPeople = new DefaultTreeNode(new DocumentReference("Information & People", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
-            sectionEdu = new DefaultTreeNode(new DocumentReference("Health Topics", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
+            if(true){
+                sectionEdu = new DefaultTreeNode(new DocumentReference("Health Topics", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
+                Map mapEdu = [
+                        '/jsf/iframe_education_info.xhtml': 'Basic Information',
+                        '/jsf/iframe_education_habits.xhtml': 'New Habits',
+                        '/jsf/iframe_education_precautions.xhtml': 'Precautions',
+                        '/jsf/iframe_education_warnings.xhtml': 'Warning Signs',
+                        '/jsf/iframe_education_decisionaids.xhtml': 'Decision Aids',
+                        '/jsf/iframe_education_resources.xhtml': 'Links',
+                        '/jsf/iframe_education_glossary.xhtml': 'Glossary'
 
-            sectionCommunity = new DefaultTreeNode(new DocumentReference("Community", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+                ]
+
+                addMenuItems(mapEdu, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionEdu, codedLabel)
+            }
+
+            if(true){
+                sectionCommunity = new DefaultTreeNode(new DocumentReference("Community", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+                Map mapCommunity = [
+                        '/jsf/iframe_social_community_links.xhtml': 'Community Links',
+                        '/jsf/iframe_social_forums.xhtml': 'Forums',
+                        '/jsf/iframe_social_blogs.xhtml': 'Blogs',
+                        '/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
+                        '/jsf/iframe_social_tags.xhtml': 'Find by Keywords'
+                ]
+                addMenuItems(mapCommunity, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionCommunity, codedLabel)
+            }
 
             sectionContacts = new DefaultTreeNode(new DocumentReference("Contacts", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
 
-            sectionPrivacy = new DefaultTreeNode(new DocumentReference("Privacy & Admin", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+            if(true){
+                sectionPrivacy = new DefaultTreeNode(new DocumentReference("Privacy & Admin", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+                Map privacyMap = [
+                    '/jsf/iframe_privacy_consent_editor.xhtml': 'Consent Editor']
+
+                addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
+            }
 
             Map healthObs = [
                     '/jsf/obs_bp_mgt.xhtml': 'Blood Pressure',
@@ -160,33 +214,6 @@ public class MenuController extends FaceCommon {
 
             addMenuItems(mapContacts, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionContacts, codedLabel)
 
-
-            Map mapEdu = [
-                    '/jsf/iframe_education_info.xhtml': 'Basic Information',
-                    '/jsf/iframe_education_habits.xhtml': 'New Habits',
-                    '/jsf/iframe_education_precautions.xhtml': 'Precautions',
-                    '/jsf/iframe_education_warnings.xhtml': 'Warning Signs',
-                    '/jsf/iframe_education_decisionaids.xhtml': 'Decision Aids',
-                    '/jsf/iframe_education_resources.xhtml': 'Links',
-                    '/jsf/iframe_education_glossary.xhtml': 'Glossary'
-
-            ]
-
-            addMenuItems(mapEdu, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionEdu, codedLabel)
-
-            Map mapCommunity = [
-                    '/jsf/iframe_social_community_links.xhtml': 'Community Links',
-                    '/jsf/iframe_social_forums.xhtml': 'Forums',
-                    '/jsf/iframe_social_blogs.xhtml': 'Blogs',
-                    '/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
-                    '/jsf/iframe_social_tags.xhtml': 'Find by Keywords'
-            ]
-            addMenuItems(mapCommunity, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionCommunity, codedLabel)
-
-            Map privacyMap = [
-                    '/jsf/iframe_privacy_consent_editor.xhtml': 'Consent Editor']
-
-            addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
 
         }
 

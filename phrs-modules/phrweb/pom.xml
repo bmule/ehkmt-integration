@@ -427,7 +427,11 @@ https://issues.apache.org/jira/browse/HTTPCLIENT-1051  4.0, 4.1 ??
             <version>0.99</version>
             <scope>compile</scope>
         </dependency>
-        <!-- morphia extras, needed for compiling -->
+        <!-- morphia extras, needed for compiling
+
+
+          <version>2.1_3</version>
+         -->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib-nodep</artifactId>
@@ -442,6 +446,7 @@ https://issues.apache.org/jira/browse/HTTPCLIENT-1051  4.0, 4.1 ??
             <type>jar</type>
             <optional>true</optional>
         </dependency>
+
         <!-- jsf -->
         <dependency>
             <groupId>org.apache.myfaces.core</groupId>

@@ -24,8 +24,11 @@
         <p:growl id="msgs" showDetail="true"/>
 
         <!--cied form -->
-        <ui:include src="./pid_cied_form.xhtml"/>
+        <h:panelGroup rendered="#{loginBean.syncPatientIndex eq false}">
+            <ui:include src="./pid_cied_form.xhtml"/>
+
         <br/>
+        </h:panelGroup>
         <!-- contact info view and form dialog-->
         <ui:include src="./profile_contact_view.xhtml"/>
 

@@ -58,8 +58,9 @@
                                         <given></given>
                                         <family></family>
                                     </name>
-                                    <administrativeGenderCode code='F' displayName='' codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
-                                    <birthTime value='19530422153118'/>
+                                    <administrativeGenderCode code='' displayName='' codeSystem='2.16.840.1.113883.5.1' codeSystemName='AdministrativeGender'/>
+                                    <birthTime value=''/>
+                                    <!--code='F' <birthTime value='19530422153118'/>-->
                                 </patientPerson>
                             </patient>
                         </recordTarget>

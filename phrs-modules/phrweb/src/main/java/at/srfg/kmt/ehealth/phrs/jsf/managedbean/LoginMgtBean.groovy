@@ -155,6 +155,13 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         LOGGER.debug("isSystemStatus")
         return getSystemStatus()
     }
+    public boolean isSyncPatientIndex(){
+
+        if(UserSessionService.getSessionAttributeProtocolId()) {
+            return true
+        }
+        return false
+    }
 
     public boolean systemStatus() {
         LOGGER.debug("systemStatus")
@@ -432,7 +439,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                 //LOGGER.debug('After redirect(providerEndpointDiscovered)... This never returnsshould not')
             } else {
 
-                WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. No provider endpoint was discovered ');
+                WebUtil.addFacesMessageSeverityError('Login Status', 'Open ID login failed. User not found ');
 
                 LOGGER.debug('processOpenIdLogin Open ID login failed. No provider endpoint was discovered: '
                         + ' providerEndpointDiscovered: ' + providerEndpointDiscovered

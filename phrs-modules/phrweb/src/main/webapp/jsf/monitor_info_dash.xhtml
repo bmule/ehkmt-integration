@@ -153,9 +153,12 @@
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BP'}">
     <h:form>
         <p:panel header="PDF Report" rendered="#{monmgtBean.printable}">
-            <h:commandLink immediate="true">
+            <p:commandButton value="Export as PDF" ajax="false" >
+                <p:dataExporter type="pdf" target="tblBP" fileName="phr_report_blood_pressure_"/>
+            </p:commandButton>
+            <h:commandLink value="Export as PDF">
                 <p:graphicImage value="/images/pdf.png"/>
-                <p:dataExporter type="pdf"  target="tblBP" fileName="phr_report_blood_pressure.pdf"/>
+                <p:dataExporter type="pdf"  target="tblBP" fileName="phr_report_blood_pressure"/>
             </h:commandLink>
         </p:panel>
 
@@ -200,9 +203,9 @@
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
     <h:form>
         <p:panel header="PDF Report"  rendered="#{monmgtBean.printable}">
-            <h:commandLink immediate="true">
+            <h:commandLink value="Export as PDF">
                 <p:graphicImage value="/images/pdf.png"/>
-                <p:dataExporter type="pdf" target="tblBW" fileName="phr_report_body_weight.pdf"/>
+                <p:dataExporter type="pdf" target="tblBW" fileName="phr_report_body_weight"/>
             </h:commandLink>
         </p:panel>
         <p:dataTable widgetVar="widItemTableMonitorBW" id="tblBW"
@@ -236,10 +239,11 @@
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'ADL'}">
     <h:form>
         <p:panel header="PDF Report"  rendered="#{monmgtBean.printable}">
-            <h:commandLink immediate="true">
+            <h:commandLink value="Export as PDF">
                 <p:graphicImage value="/images/pdf.png"/>
-                <p:dataExporter type="pdf" target="tblADL" fileName="phr_report_activites_daily_living.pdf"/>
+                <p:dataExporter type="pdf" target="tblADL" fileName="phr_report_activites_daily_living"/>
             </h:commandLink>
+
         </p:panel>
         <p:dataTable widgetVar="widItemTableMonitorADL" id="tblADL"
                      var="theItem" value="#{monmgtBean.modelMain}">
@@ -267,11 +271,16 @@
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'PROBLEM'}">
     <h:form>
         <p:panel header="PDF Report" rendered="#{monmgtBean.printable}">
-            <h:commandLink immediate="true">
+           <!-- <h:commandLink immediate="true">
                 <p:graphicImage value="/images/pdf.png"/>
-                <p:dataExporter type="pdf" target="tblPROBLEM" fileName="phr_report_problems.pdf"/>
+                <p:dataExporter type="pdf" target="tblPROBLEM" fileName="phr_report_problems"/>
+            </h:commandLink>  -->
+            <h:commandLink  value="Export as PDF">
+                <p:graphicImage value="images/pdf.png" />
+                <p:dataExporter type="pdf" target="tblPROBLEM" fileName="phr_report_problems"/>
             </h:commandLink>
         </p:panel>
+
         <p:dataTable widgetVar="widItemTableMonitorPROBLEM" id="tblPROBLEM"
                      var="theItem" value="#{monmgtBean.modelMain}">
             <p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}">
@@ -311,7 +320,7 @@
         <!--<p:panel header="PDF Report" rendered="#{monmgtBean.printable}">
             <h:commandLink>
                 <p:graphicImage value="/images/pdf.png"/>
-                <p:dataExporter type="pdf" target="tblMED" fileName="phr_report_medications.pdf"/>
+                <p:dataExporter type="pdf" target="tblMED" fileName="phr_report_medications"/>
             </h:commandLink>
         </p:panel> -->
         <p:dataTable widgetVar="widItemTableMonitorMED" id="tblMED"
@@ -385,10 +394,18 @@
             </p:column>
 
         </p:dataTable>
-
+             <h:commandLink  value="Export as PDF">
+                 <p:graphicImage value="images/pdf.png" />
+                 <p:dataExporter type="pdf" target="tblMED" fileName="meds1"/>
+             </h:commandLink>
+        <!--
+        <h:commandLink>
+            <p:graphicImage value="images/pdf.png" />
+            <p:dataExporter type="pdf" target="projects_table" fileName="All Projects"/>
+         </h:commandLink>
             <p:commandButton value="Export as PDF" ajax="false" immediate="true">
                 <p:dataExporter type="pdf" target="tblMED" fileName="meds1"/>
-            </p:commandButton>
+            </p:commandButton>   -->
             <!--<h:commandLink>
                 <p:graphicImage value="/images/pdf.png"/>
                 <p:dataExporter type="pdf" target="tblMED" fileName="meds2"/>

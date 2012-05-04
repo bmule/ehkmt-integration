@@ -1,12 +1,3 @@
-/*
- * Project  :iCardea
- * File     : ActorClientExample.java
- * Encoding : UTF-8
- * Date     : Dec 6, 2011
- * User     : Mihai Radulescu
- */
-
-
 package at.srfg.kmt.ehealth.phrs.security.services;
 
 
@@ -14,7 +5,6 @@ import at.srfg.kmt.ehealth.phrs.dataexchange.client.ActorClient;
 import at.srfg.kmt.ehealth.phrs.persistence.api.GenericTriplestore;
 import at.srfg.kmt.ehealth.phrs.persistence.api.TripleException;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
-import at.srfg.kmt.ehealth.phrs.persistence.impl.TriplestoreConnectionFactory;
 
 /**
  * This runnable class register a relation between a name-space, a PHRS id and

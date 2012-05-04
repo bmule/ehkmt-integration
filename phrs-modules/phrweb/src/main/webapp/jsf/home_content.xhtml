@@ -35,7 +35,9 @@
 
                 </p>
                 <!--cied form -->
-                <ui:include src="./pid_cied_form.xhtml"/>
+                <h:panelGroup rendered="#{loginBean.syncPatientIndex eq false}">
+                 <ui:include src="./pid_cied_form.xhtml"/>
+                </h:panelGroup>
                 <!--
                 Please keep your contact information up-to-date.
                  contact info view and form dialog-->

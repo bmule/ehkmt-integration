@@ -321,12 +321,16 @@ public class UserSessionService {
 
             String greetName = getCommonDao().getUserGreetName(phrUser.getOwnerUri());
 
-            //FIXXME PID Consent editor test
+            String pid=  getCommonDao().getProtocolId( phrUser.getOwnerUri());
+            UserSessionService.putSessionAttributeString(SESSION_ATTR_NAME_PROTOCOL_ID_CONSENT_MGR, pid);
+
+            //FIXXME PID Consent editor test for 191 or special user
             updateSessionProtocolIdTest(phrUser);
 
             if (greetName != null) {
                 putSessionAttributeString(PhrsConstants.SESSION_USER_GREET_NAME, greetName);
             }
+
 
         } else {
             throw new Exception("UserId null or blank");
@@ -347,7 +351,7 @@ public class UserSessionService {
 
     public static boolean isSpecialUser(String identifier) {
         if(identifier != null){
-            if (identifier.contains("suzie")
+            if (identifier.contains("suzie191")
                     || identifier.contains("phrsm")
                     ) {
                 LOGGER.debug("isSpecialUser: true");
@@ -370,15 +374,17 @@ public class UserSessionService {
 
         if ("191".equals(sessionPid)) {
             LOGGER.debug("updateSessionProtocolIdTest PID already 191, no session update");
+            phrUser.setProtocolIdPix("191");
+            getCommonDao().crudSaveResource(phrUser,phrUser.getOwnerUri(),phrUser.getCreatorUri());
 
-        } else if (isSpecialUser(phrUser.getIdentifier())) {
+       } else if (isSpecialUser(phrUser.getIdentifier())) {
+             LOGGER.debug("setting protocolid 191 in session");
+//           Is it 191? Keep it at 191 just in case
+             updateSessionProtocolId("191");
+//           LOGGER.debug("updateSessionProtocolIdTest PID=191" + " phruser.identifier=" + phrUser.getIdentifier() + " owner=" + phrUser.getOwnerUri());
 
-                LOGGER.debug("setting protocolid 191 in session");
-                //Is it 191? Keep it at 191 just in case
-                updateSessionProtocolId("191");
-                LOGGER.debug("updateSessionProtocolIdTest PID=191" + " phruser.identifier=" + phrUser.getIdentifier() + " owner=" + phrUser.getOwnerUri());
-
-                phrUser.setProtocolIdPix("191");
+             phrUser.setProtocolIdPix("191");
+             getCommonDao().crudSaveResource(phrUser,phrUser.getOwnerUri(),phrUser.getCreatorUri());
         }
     }
 

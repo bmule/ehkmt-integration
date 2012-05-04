@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSessionListener;
 
 public class PhrSessionListener implements HttpSessionListener {
     /**
+     * @deprecated
      * When the user session timedout, ({@link #sessionDestroyed(HttpSessionEvent)}) method will be invoked.
      * This method will make necessary cleanups (logging out user, updating db and audit logs, etc...)
      * As a result; after this method, we will be in a clear and stable state. So nothing left to think about

@@ -161,13 +161,15 @@ public class ConfigurationService implements Serializable {
     }
 
     public String getContentLink(String key){
+        String value
         if(menuLinksConfig && key){
-              String value = menuLinksConfig.getProperties(key) ;
+              value = menuLinksConfig.getProperty(key) ;
+            //LOGGER.debug('getContentLink key ='+ key +' value='+value)
         }  else {
             if(!key ) LOGGER.error('getContentLink key is null')
             if(!menuLinksConfig ) LOGGER.error('getContentLink menuLinksConfig is null')
         }
-        return null
+        return value
     }
 
     public String getProperty(String prop) {

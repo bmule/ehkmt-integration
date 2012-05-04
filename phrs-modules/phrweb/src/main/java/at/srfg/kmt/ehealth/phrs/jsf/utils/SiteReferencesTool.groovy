@@ -107,7 +107,7 @@ public class SiteReferencesTool implements Map, Serializable {
 		//privacy_consent_manager iframe_privacy_consent_editor.xhtml
 	}
 
-
+/*
 	//@Override
 	public String xxget(Object key) {
 		String ref = portalUrl
@@ -135,23 +135,23 @@ public class SiteReferencesTool implements Map, Serializable {
 		} catch(Exception e){
 			println("exception "+e)
 		}
-		//println("get ref="+ref)
+
 		return ref
 	}
+	*/
     @Override
     public String get(Object key) {
         //String ref = portalUrl
         //String ref = configGetLocalPage('portalUrl')
-        LOGGER.debug("get key="+key)
+        //LOGGER.debug("get key="+key)
         String ref=null
         try{
             if(key && key instanceof String){
                 //check for site page or could be on same server
                 ref=  configGetSitePage(key)
-                LOGGER.debug("getconfigGetSitePage ref="+ref)
+                //LOGGER.debug("getconfigGetSitePage ref="+ref)
 
-
-                if( !ref && ((String)key) .contains('/')){
+                if( !ref && ((String)key).contains('/')){
                     if(key) ref = key.replace('//', '/')
                 }
             } else {
@@ -159,7 +159,7 @@ public class SiteReferencesTool implements Map, Serializable {
                if( key  && !( key instanceof String)) LOGGER.debug("getconfigGetSitePage key not string="+key)
             }
         } catch(Exception e){
-            LOGGER.debug("getconfigGetSitePage error"+e)
+            LOGGER.debug("getconfigGetSitePage error "+e)
         }
         if( !ref) return '#'
         return ref
@@ -179,12 +179,13 @@ public class SiteReferencesTool implements Map, Serializable {
 	}
 
     protected String configGetLocalPage(String key){
-        LOGGER.debug("configGetLocalPage key="+key+" val="+ConfigurationService.getInstance().getContentLink(key));
-        return ConfigurationService.getInstance().getContentLink(key)
-    }
+        String value= ConfigurationService.getInstance().getContentLink(key)
+        //LOGGER.debug("configGetLocalPage key="+key+" val="+value);
+        return  value    }
     protected String configGetSitePage(String key){
-        LOGGER.debug("configGetSitePage key="+key+" val="+ConfigurationService.getInstance().getContentLink(key));
-        return ConfigurationService.getInstance().getContentLink(key)
+        String value= ConfigurationService.getInstance().getContentLink(key)
+        //LOGGER.debug("configGetSitePage key="+key+" val="+value);
+        return  value
     }
 	/*
 	 private String parseLanguage(String key){

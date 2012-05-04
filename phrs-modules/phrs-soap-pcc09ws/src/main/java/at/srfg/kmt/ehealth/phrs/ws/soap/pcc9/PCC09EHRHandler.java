@@ -26,10 +26,6 @@ import java.util.Set;
 
 /**
  * This SOAP handler creates a new PCC09 message to an EHR
- *
- * @author Mihai
- * @version 0.1
- * @since 0.1
  */
 public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
 
@@ -108,7 +104,8 @@ public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             final SOAPHeader header = message.getSOAPHeader();
             final SOAPBody body = message.getSOAPBody();
-            process(body);
+            String pcc09WsaAddress= Util.getResponseEndPointUri(header);
+            process(body,pcc09WsaAddress);
         } catch (Exception exception) {
             LOGGER.error("PCC09EHRHandler Error during the SAOP  1 message processing.");
             LOGGER.error(exception.getMessage(), exception);
@@ -147,7 +144,8 @@ public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
      *
      * @param body the SOAP message body to be log log.
      */
-    private void process(SOAPBody body) {
+    private void process(SOAPBody body,String pcc09WsaAddress) {
+
         if (body == null) {
             LOGGER.debug("PCC09EHRHandler SOAP Body null nothing to process");
             return;
@@ -173,23 +171,26 @@ public final class PCC09EHRHandler implements SOAPHandler<SOAPMessageContext> {
         }
 
         try {
-            //only interested in MEDLIST
-            if("MEDLIST".equalsIgnoreCase(code)){
-                LOGGER.debug("Tries to send PCC09 message for patientId= " + patientId + " careprovision code=" + code);
+            //only interested in MEDLIST or COBSCAT
+            if("MEDLIST".equalsIgnoreCase(code) || "COBSCAT".equalsIgnoreCase(code)){
+                System.out.println("PCC09EHRHander pcc09WsaAddress="+pcc09WsaAddress+" patientId="+patientId+" code="+code);
+                LOGGER.debug("PCC09EHRHander Tries to send PCC09 message for patientId= " + patientId + " careprovision code=" + code+" pcc09WsaAddress="+pcc09WsaAddress);
                 PCC09Query client = new PCC09Query();
-                MCCIIN000002UV01 ack = client.sendPcc09Message(patientId, code);
+
+                MCCIIN000002UV01 ack = client.sendPcc09Message(patientId, code, pcc09WsaAddress);
 
                 if (ack != null) {
-                    LOGGER.debug("Ackknowledgement received for patientId= " + patientId + " careprovision code=" + code);
+                    LOGGER.debug("PCC09EHRHander Ackknowledgement received for patientId= " + patientId + " careprovision code=" + code);
 
                 } else {
-                    LOGGER.warn("FAIL Null response to PCC09 message ");
+                    LOGGER.warn("PCC09EHRHander FAILED or not sent due to cycling (we sent pcc09 msg to ourselves) Null response to PCC09 message ");
                 }
             }  else {
-                LOGGER.debug(" Not MEDLIST, no sending of PCC09 for code=" + code);
+                LOGGER.debug("PCC09EHRHander Not MEDLIST or COBSCAT, no sending of PCC09 for code=" + code);
             }
         } catch (Exception exception) {
-            LOGGER.warn("PCC09EHRHandler "+patientId+" careprovision code="+code+exception.getMessage(), exception);
+            LOGGER.warn("PCC09EHRHandler "+patientId+" careprovision code="+code+" pcc09WsaAddress="+pcc09WsaAddress+" "+exception.getMessage(), exception);
         }
     }
+
 }

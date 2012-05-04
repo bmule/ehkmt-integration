@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.io.StringWriter;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.SOAPHeader;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -20,6 +21,7 @@ import org.hl7.v3.II;
 import org.hl7.v3.PN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -377,5 +379,58 @@ final class Util {
         final Element value = (Element) values.item(0);
         final String result = value.getTextContent();
         return result;
+    }
+
+    /**
+     * Check   wsa:Address in header
+     * @param header
+     * @param otherUri
+     * @return
+     */
+    public static boolean isReponseEndPointInHeader(SOAPHeader header, String otherUri){
+        if(otherUri == null) {
+            return false;
+        }
+
+        String headerResponseUri=  Util.getResponseEndPointUri(header);
+        if(headerResponseUri == null )   {
+           return false;
+        }
+
+        if(headerResponseUri.equalsIgnoreCase(otherUri)){
+            return true;
+        }
+        return false;
+    }
+    public  static String getResponseEndPointUri(SOAPHeader header){
+        String responseEndpointURI = null;
+        try {
+            if(header==null) {
+                LOGGER.error("header is null");
+                return null;
+            }
+
+            final NodeList nodes = header.getElementsByTagName("wsa:Address");
+            final int length = nodes.getLength();
+            if (length != 1) {
+                final IllegalStateException exception =
+                        new IllegalStateException("The SOAP Header must contain only one WSA Address element.");
+                LOGGER.error(exception.getMessage(), exception);
+                throw exception;
+            }
+
+            final javax.xml.soap.Node wsAdressNode = (javax.xml.soap.Node) nodes.item(0);
+            responseEndpointURI = wsAdressNode.getTextContent();
+
+            LOGGER.debug("getResponseEndPointUri Response end point address is {}", responseEndpointURI);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (DOMException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return    responseEndpointURI;
     }
 }

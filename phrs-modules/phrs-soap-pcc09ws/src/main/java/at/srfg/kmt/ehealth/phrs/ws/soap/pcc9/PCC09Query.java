@@ -22,39 +22,42 @@ public class PCC09Query {
     private String keystoreFile;
     private String keystorePassword;
      /*
-         private final String keystoreFile;
-    private final String keystorePassword;
+      SendPcc09Client
       */
-    public void SendPcc09Client(String endpointURI, String responseEndpointURI, String keystoreFile, String password) {
+    public PCC09Query(String endpointURI, String responseEndpointURI, String keystoreFile, String password) {
         this.endpointURI = endpointURI;
         this.responseEndpointURI = responseEndpointURI;
         this.keystoreFile = keystoreFile;
         this.keystorePassword = password;
-
+        //System.out.println("constructor params endpointURI="+endpointURI+" responseEndpointURI"+responseEndpointURI+" keystoreFile="+keystoreFile+" keystorePassword="+keystorePassword);
+        LOGGER.debug("constructor params endpointURI="+endpointURI+" responseEndpointURI"+responseEndpointURI+" keystoreFile="+keystoreFile+" keystorePassword="+keystorePassword);
     }
 
-    public void SendPcc09Client() {
+    public PCC09Query() {
+
         final ClassLoader classLoader = PCC09Query.class.getClassLoader();
         final InputStream resourceAsStream =
                 classLoader.getResourceAsStream(CONFIG_FILE);
+        LOGGER.debug("PCC09Query constructor default ");
 
         if (resourceAsStream == null) {
-            LOGGER.warn("The PCC09 configunration file named {} must be placed in the classpath", CONFIG_FILE);
-            LOGGER.warn("NO PCC09 MESSAGES CAN BE SENT!");
+            LOGGER.error("The PCC09 configunration file named {} must be placed in the classpath", CONFIG_FILE);
+            LOGGER.error("NO PCC09 MESSAGES CAN BE SENT!");
             return;
         }
-
+        LOGGER.debug("PCC09Query resourceAsStream ok resourceAsStream="+resourceAsStream);
         try {
-            final Properties config = new Properties();
+            Properties config = new Properties();
             config.load(resourceAsStream);
             //https://localhost:8089/testws/pcc9 https://localhost:8989/testws/pcc10
-
+            LOGGER.debug("PCC09Query Properties ok ");
             endpointURI = config.getProperty("endpointURI", "https://icardea-server.lksdom21.lks.local/ehrif/pcc/").trim();
             responseEndpointURI = config.getProperty("responseEndpointURI", "https://icardea-server.lksdom21.lks.local:8989/testws/pcc10").trim();
 
             keystoreFile = config.getProperty("keystore", "srfg-phrs-core-keystore.ks").trim();
             keystorePassword = config.getProperty("password", "icardea").trim();
-
+            System.out.println("constructor default endpointURI="+endpointURI+" responseEndpointURI"+responseEndpointURI+" keystoreFile="+keystoreFile+" keystorePassword="+keystorePassword);
+            LOGGER.debug("constructor default endpointURI="+endpointURI+" responseEndpointURI"+responseEndpointURI+" keystoreFile="+keystoreFile+" keystorePassword="+keystorePassword);
         } catch (Exception exception) {
             LOGGER.warn("NO pcc09 MESSAGES CAN BE SENT!");
             LOGGER.warn(exception.getMessage(), exception);
@@ -77,10 +80,37 @@ public class PCC09Query {
         return keystorePassword;
     }
 
+    /**
+     *
+     * @param patientID
+     * @param careProvisionCode
+     * @return
+     */
     public MCCIIN000002UV01 sendPcc09Message(final String patientID, final String careProvisionCode) {
         return sendPcc09Message(patientID, careProvisionCode, getEndpointURI(), getResponseEndpointURI(), getKeystoreFile(), getKeystorePassword());
     }
 
+    /**
+     *
+     * @param patientID
+     * @param careProvisionCode
+     * @param sourceAddress  - if trigger to send a new PCC09 message was an incoming PCC-09, we must check for cycling - normally only for testing would we see this
+     * @return
+     */
+    public MCCIIN000002UV01 sendPcc09Message(final String patientID, final String careProvisionCode,String pcc09WsaAddress) {
+        if(pcc09WsaAddress != null){
+              if(pcc09WsaAddress.equalsIgnoreCase(getResponseEndpointURI())) {
+                LOGGER.debug("Stop processing PCC09 message, sourceAddress {} ==responseEndpointURI {}"+pcc09WsaAddress,getResponseEndpointURI());
+                return null;
+            }
+           // if(pcc09WsaAddress.equalsIgnoreCase(getEndpointURI())) {
+           //     LOGGER.debug("Stop processing PCC09 message, sourceAddress {} == getEndpointURI {}"+pcc09WsaAddress,getEndpointURI());
+           //     return null;
+           // }
+        }
+
+        return sendPcc09Message(patientID, careProvisionCode, getEndpointURI(), getResponseEndpointURI(), getKeystoreFile(), getKeystorePassword());
+    }
     public MCCIIN000002UV01 sendPcc09Message(final String patientID, final String careProvisionCode,
                                              final String endpointURI, final String responseURI, final String keystore, final String password) {
         //final String careProvisionReason = "";

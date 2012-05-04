@@ -16,13 +16,7 @@ import org.slf4j.LoggerFactory
 public class ActionActivityMgtBean extends FaceBaseBean  {
     private final static Logger LOGGER = LoggerFactory.getLogger(ActionActivityMgtBean.class);
 
-	
-	/**
-	 * Sets the domainClass from the subclass
-	 * Creates a new "selected" emtpy resource
-	 * TODO handle this in PostConstruct but depends on whether we trust this. Some issues with older Tomcats and other containers
-	 * if they run the super class Postconstruct method at all...
-	 */
+
 	public ActionActivityMgtBean() {
 		super();//required!!
 		
@@ -37,7 +31,7 @@ public class ActionActivityMgtBean extends FaceBaseBean  {
 			loadModelMain()
 
 		} catch (Exception e){
-			println('ActionActivityMgtBean loadModelMain Exception '+e)
+            LOGGER.error('ActionActivityMgtBean loadModelMain Exception '+e)
 		}
 				
 		setModify(AuthorizationService.MODIFY_YES)

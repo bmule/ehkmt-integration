@@ -29,29 +29,21 @@ public class ActivityDailyLivingBean extends FaceBaseBean  {
 		initVocabularies(domainClazz,getLanguage())
 		
 		loadModelMain()
-		//println('end ActivityDailyLivingBean constructor')
+
 	}
-	
-	public ProfileActivityDailyLiving setSelectedItem(ProfileActivityDailyLiving res ){
-		//println('set selected codev='+res ? res.code : 'null')
-		selected = res
-		
-	}
-	
+
 
 	public ProfileActivityDailyLiving getSelectedItem(){
-		//println('getSelectedcode property ='+selected ? selected.code : 'null')
+
 		return selected
 	}
 	/**
 	 * Might this be called after the subclass's PostContruct or before ??
 	 */
-	@PostConstruct
-	public void init(){
-		//do here, because we do not trust the super class Postcontruct
-		//initVocabularies(this.getDomainClazz(),this.getLanguage());
-		//System.out.println("Postcontruct  subclass'+this.getClass().toString()+' uidThisView='+uidThisView+' locale='+FacesContext.getCurrentInstance().getViewRoot().getLocale());
-	}
+	//@PostConstruct
+	//public void init(){
+    //do here, because we do not trust the super class Postcontruct
+	//}
 
 	@Override
 	public void loadModelMain(){
@@ -80,14 +72,7 @@ public class ActivityDailyLivingBean extends FaceBaseBean  {
 		super.modifyNewResource();
 			
 	}
-	
-	@Override
-	public void store(ActionEvent event){
-		println('1 ADL store ActionEvent')
-		def  obj= event.getSource()
-		println('2 ADL store ActionEvent')
-		super.store()
-	}
+
 
 
 }

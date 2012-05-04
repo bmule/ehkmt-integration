@@ -25,7 +25,7 @@ public class ProfileRiskfactorBean extends FaceBaseBean  {
 	public ProfileRiskfactorBean() {
 		super();//required!!
 		// setPermittedActions performed by super clas
-		System.out.println(this.getClass().toString()+' contructor');
+		//System.out.println(this.getClass().toString()+' contructor');
 
 		//assign domain class and create selected item
 		domainClazz = ProfileRisk.class

@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>Login</title>
+    <!-- deprecated -->
 <style type="text/css">
     #container {
       padding: 1em;      
@@ -55,8 +56,13 @@ function processForm(theForm){
     } else if( objDropDown.value == "testmachine1"){
         objHidden.value ="http://192.168.1.101:4545/idp/u="+objUser.value;
         alert("Your actual TEST OpenID identifier is: "+objHidden.value);
-    } else objHidden.value = objUser.value; 
-    
+    } else objHidden.value = objUser.value;
+
+   // if( startsWith(objUser,'http',true) && objUser.indexOf("@") == -1){
+   //     objHidden.value ="https://icardea-server.lksdom21.lks.local/idp/u="+objUser.value;
+   // } else {
+   //     objHidden.value = objUser.value;
+   // }
     if(objDropDown.value =='local'){
     	if(objUser.value =='phradmin'){
     		return true;
