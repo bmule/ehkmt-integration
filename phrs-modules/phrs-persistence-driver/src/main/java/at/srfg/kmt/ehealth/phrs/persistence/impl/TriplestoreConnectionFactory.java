@@ -129,7 +129,7 @@ public final class TriplestoreConnectionFactory {
         try {
             final boolean isClosed =
                     ((GenericTriplestoreLifecycle) triplestore).isClosed();
-            LOGGER.debug("The connection is {} ", isClosed ? "closed" : "still open");
+            //LOGGER.debug("The connection is {} ", isClosed ? "closed" : "still open");
 
             if (isClosed) {
                 LOGGER.debug("The connection was closed tries to build a new one.");
