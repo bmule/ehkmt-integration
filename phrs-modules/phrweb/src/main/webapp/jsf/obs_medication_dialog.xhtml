@@ -308,8 +308,18 @@
 									var="lv" itemLabel="#{lv.label}" itemValue="#{lv.id}" />
 							</h:selectOneMenu>							
 						</p:outputPanel>
-						<p:message for="field_reasonCode_input" display="text" />										
+						<p:message for="field_reasonCode_input" display="text" />
+<!--
 
+reason_code_depression=Depression
+reason_code_diuretic=Diuretic
+reason_code_blood_thinner=Blood thinner
+reason_code_heart_failure=Heart failure
+reason_code_irregular_heartbeat=Irregular heartbeat
+reason_code_pain=Pain
+reason_code_prevention=Prevention
+reason_code_other=Other
+-->
 						<h:outputLabel for="field_note_med"
 							value="#{labels['default.comments.label']}"
 							styleClass="form-dialog-label" />

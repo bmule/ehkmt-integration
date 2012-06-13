@@ -127,8 +127,11 @@ public class MenuController extends FaceCommon {
 
             home = new DefaultTreeNode(new DocumentReference("Home", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
 
-            dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference("Import Health Data", "/jsf/monitor_interop.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
-
+            //
+            String menuImport= ConfigurationService.getInstance().getProperty('import.ehr','1');
+            if(menuImport == '1'){
+                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference("Import Health Data", "/jsf/monitor_interop.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+            }
             sectionMonitoring = new DefaultTreeNode(new DocumentReference("Monitoring", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
             sectionPatientInformation = new DefaultTreeNode(new DocumentReference("Patient Information", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
@@ -166,9 +169,9 @@ public class MenuController extends FaceCommon {
                 Map mapCommunity = [
                         '/jsf/iframe_social_community_links.xhtml': 'Community Links',
                         '/jsf/iframe_social_forums.xhtml': 'Forums',
-                        '/jsf/iframe_social_blogs.xhtml': 'Blogs',
-                        '/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
-                        '/jsf/iframe_social_tags.xhtml': 'Find by Keywords'
+                        //'/jsf/iframe_social_blogs.xhtml': 'Blogs',
+                        //'/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
+                        //'/jsf/iframe_social_tags.xhtml': 'Find by Keywords'
                 ]
                 addMenuItems(mapCommunity, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionCommunity, codedLabel)
             }
@@ -200,12 +203,21 @@ public class MenuController extends FaceCommon {
             addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionMonitoring, codedLabel)
 
             //monitor_vitals.xhtml
-            Map profile = [
+            //'/jsf/riskfactor_mgt.xhtml': 'Risk Factors',
+
+            //privacy.level
+            String privacy= ConfigurationService.getInstance().getProperty('privacy.level','1');
+            Map profile
+            if(privacy == '0'){
+                profile = [
+                        '/jsf/profile_padl_mgt.xhtml': 'Activities of Daily Living',
+                        '/jsf/obs_activity_mgt.xhtml': 'Physical Activities']
+            } else {
+                profile = [
                     '/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user': 'My Contact Info',
-                    '/jsf/riskfactor_mgt.xhtml': 'Risk Factors',
                     '/jsf/profile_padl_mgt.xhtml': 'Activities of Daily Living',
                     '/jsf/obs_activity_mgt.xhtml': 'Physical Activities']
-
+            }
             addMenuItems(profile, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionProfile, codedLabel)
 
             //contact info of healthcare persons,other

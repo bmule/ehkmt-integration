@@ -75,6 +75,7 @@ public class  VocabularyEnhancer implements Serializable {
 
 		switch ( uri ) {
 
+
 			case [
 				PhrsConstants.TAG_RISK_TREATMENTS_DIABETES
 			]:
@@ -124,8 +125,17 @@ public class  VocabularyEnhancer implements Serializable {
 					'http://www.icardea.at/phrs/instances/DiabetesMellitus',
 					'http://www.icardea.at/phrs/instances/Cholesterol',
 					'http://www.icardea.at/phrs/instances/Hypertension',
-					'http://www.icardea.at/phrs/instances/NoSpecialTreatment'
+                    'reason_code_depression',
+                    'reason_code_diuretic',
+                    'reason_code_blood_thinner',
+                    'reason_code_heart_failure',
+                    'reason_code_irregular_heartbeat',
+                    'reason_code_pain',
+                    'reason_code_prevention',
+                    'reason_code_other'
 				]
+
+             //   'http://www.icardea.at/phrs/instances/NoSpecialTreatment'
 			//TODO add otherrisk to vocab
 			/*list = ['UMLS:C0011849',   //diabetes
 			 'UMLS:C0008377',//cholesterol
@@ -420,7 +430,8 @@ public class  VocabularyEnhancer implements Serializable {
                                 map.put('TAG_MEDICATION_DOSAGE_DOSAGE_UNITS', 	getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_DOSAGE_UNITS,language))
 				map.put('TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1', getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_FREQUENCY_INTERVAL_1,language))
 				map.put('TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1', 	getTerms(PhrsConstants.TAG_MEDICATION_DOSAGE_TIME_OF_DAY_1,language))
-				map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))
+
+                map.put('TAG_MEDICATION_REASON_WITH_RISK_FACTORS', getTerms(PhrsConstants.TAG_MEDICATION_REASON_WITH_RISK_FACTORS,language))
 
 				break
 

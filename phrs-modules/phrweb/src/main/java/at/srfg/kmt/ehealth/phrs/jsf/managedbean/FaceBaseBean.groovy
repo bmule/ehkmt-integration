@@ -894,5 +894,11 @@ class FaceBaseBean implements Serializable{
 	// ...
 	boolean allowThis=false
 
+    public String getConfigPrivacyLevel(){
+        return ConfigurationService.getInstance().getProperty('privacy.level','1');
+    }
+    public String getConfigImportEhr(){
+        return ConfigurationService.getInstance().getProperty('import.ehr','1');
+    }
 
 }

@@ -145,6 +145,7 @@ public class ObsMedicationChangeBean extends FaceBaseBean  {
     @Override
     public void modifyNewResource(){
         super.modifyNewResource();
+        setSelected(domainClazz.newInstance())
         if(selected){
             selected.beginDate =new Date()
             selected.status='medicationSummary_medicationStatus_true'

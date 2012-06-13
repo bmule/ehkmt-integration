@@ -142,11 +142,12 @@ public class PCC09Query {
                             patientName,
                             patientSurname);
 
-            LOGGER.info("Tries to send a PCC9 query patientId  careProvisionCode to  " + endpointURI + "  " + careProvisionCode + " patientID: " + patientID + " keystore=" + keystore);
 
-            if (endpointURI.startsWith("https")) {
+            if (responseURI.startsWith("https")) {
+                LOGGER.info("Tries to send a Secure PCC9 query to responseURI:" +responseURI+" from endpointURI:" + endpointURI + "  careProvisionCode=" + careProvisionCode + " patientID: " + patientID + " keystore=" + keystore);
                 ack = SendPcc09Message.sendSecureMessage(pcc9Request, endpointURI, responseURI, keystore, password);
             } else {
+                LOGGER.info("Tries to send a Non-Secure PCC9 query to responseURI:" +responseURI+" from endpointURI:" + endpointURI + "  careProvisionCode=" + careProvisionCode + " patientID: " + patientID + " keystore=" + keystore);
                 ack = SendPcc09Message.sendMessage(pcc9Request, endpointURI, responseURI);
             }
             LOGGER.info("Acknowledge (response) is : {}.", ack);

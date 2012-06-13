@@ -33,7 +33,8 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(LoginMgtBean.class);
 
     String username
-    String loginType = 'openid.provider.1' //'local.provider.1'
+    String loginType ='local.provider.1'  // 'openid.provider.1'
+
     String password
 
 

@@ -121,6 +121,8 @@
                                              requiredMessage="User ID is required"
                                              required="true" />
 
+                                    <h:inputHidden  value="#{loginBean.loginType}" />
+                                    <!--
                                     <h:outputLabel value="Login with" style="font-size: 12pt;"/>
                                     <h:selectOneRadio layout="pageDirection"
                                                       value="#{loginBean.loginType}"
@@ -135,7 +137,7 @@
                                         <f:selectItem itemLabel="Local login name with prefix 'phr' e.g. phrsm"
                                                       itemValue="local.provider.1"/>
                                     </h:selectOneRadio>
-
+                                    -->
                                     <h:outputLabel value=" "/>
                                     <p:commandButton value="Login"  title="Login"   ajax="false"  style="font-size: 12pt;"
                                              actionListener="#{loginBean.processLogin}"/>

@@ -19,6 +19,8 @@ javascript will be included into head...at top, not bottom... -->
         <h:outputScript  target="head" >
 
         </h:outputScript>
+<p:outputPanel rendered="#{pidBean.configImportEhr ne '0'}">
+
         <p:fieldset legend="CIED or Patient Identifier">
                 Your CIED Implant identifier (for example: PZC123456S) or your patient identifier can be used for communicating information
                 to or from the hospital.
@@ -78,6 +80,8 @@ javascript will be included into head...at top, not bottom... -->
                 </h:panelGrid>
             </h:form>
         </p:fieldset>
+
+</p:outputPanel>
     </ui:composition>
 </h:body>
 </html>

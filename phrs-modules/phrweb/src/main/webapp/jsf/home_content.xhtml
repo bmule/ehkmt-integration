@@ -21,7 +21,7 @@
                 Please use the side menu to access patient health reports.
             </h:panelGroup>
 
-            <h:panelGroup rendered="#{loginBean.medicalRole eq false}">
+            <h:panelGroup rendered="#{loginBean.medicalRole eq false && loginBean.configImportEhr ne '0'}">
                  <!--
                 <h:outputText value="#{labels['message_home']}"/>
                 <br/> -->

@@ -7,6 +7,7 @@ import javax.faces.bean.ManagedBean
 import javax.faces.bean.RequestScoped
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import at.srfg.kmt.ehealth.phrs.security.services.AuthorizationService
 
 @ManagedBean(name="riskBean")
 @RequestScoped
@@ -41,13 +42,22 @@ public class ProfileRiskfactorBean extends FaceBaseBean  {
 
 	@Override
 	public void store(){
-		//TODO do we allow user to delete a risk or reset to inactive?? The default is PhrsConstants.SELECTION_NO_ANSWER
+
+		//The default is PhrsConstants.SELECTION_NO_ANSWER, but when store, make it active
 		if(selected) {
+
+            ProfileRisk risk = (ProfileRisk)selected
+            LOGGER.debug('risk store not null {}',risk)
+            LOGGER.debug('risk store treatment types{}',risk.treatmentTypes)
+            LOGGER.debug('risk store medicationTypes {}',risk.medicationTypes)
+            LOGGER.debug('risk store properties {}',risk.properties)
 			selected.status='riskfactor_isActiveStatus'
 			//<h:inputHidden id='riskBean.selected.status' value='riskfactor_isActiveStatus'/>
 		}
+
 		super.store()
 	}
+
 	@Override
 	public void loadModelMain(){
 		if(getUserService()){
@@ -61,25 +71,27 @@ public class ProfileRiskfactorBean extends FaceBaseBean  {
 		super.setPermittedActions();
 		this.setAllowCreate(false);
 		this.setAllowDelete(false);
+        setModify(AuthorizationService.MODIFY_YES)
 		//no need for row view button
-		setAllowView(false)//removes view row button
+		setAllowView(true)//removes view row button
+
 
 	}
 
 
-	/**
+	/*
 	 * Called for a new form, local changes. Also for testing
 	 * Under risks, there are no new risks that a user can add, we provide all known risks and the user should update
 	 */
-	@Override
-	public void modifyNewResource(){
-		super.modifyNewResource();
+//	@Override
+//	public void modifyNewResource(){
+//		super.modifyNewResource();
+//
+
+//	}
 
 
-	}
-
-
-
+  /*
 
 	Collection check1
 
@@ -107,6 +119,6 @@ public class ProfileRiskfactorBean extends FaceBaseBean  {
 	
 		return out
 	}
-
+     */
 }
 
