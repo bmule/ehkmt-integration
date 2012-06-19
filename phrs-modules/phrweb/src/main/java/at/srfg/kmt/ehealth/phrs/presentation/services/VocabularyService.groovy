@@ -185,7 +185,14 @@ public class  VocabularyService implements Serializable{
 	 */
 	public static ModelLabelValue getTerm(String termId, String language){
 
-		String label = I18Tool.getInstance().getLabelFromi18Tool(termId,language)
+		String label
+
+        if(termId.startsWith('http')) {
+            label = I18Tool.getInstance().getLabelFromi18Tool( VocabularyEnhancer.transformToI18term(termId),language)
+        }  else {
+            label = I18Tool.getInstance().getLabelFromi18Tool(termId,language)
+        }
+
 		ModelLabelValue lv
 
 		if(label) {

@@ -511,16 +511,53 @@ public class  VocabularyEnhancer implements Serializable {
 		return new ArrayList<ModelLabelValue>()
 	}
     /**
+     * A means to using URIs to I18 file by combining the suffix "term." with part of Subject URI
+     * Currently only one namespace is used
+     *
+     * @param uri  http://..../Cholesterol
+     * @return  term.Cholesterol   in I18 files
+     */
+   public static String transformToI18term(String uri){
+       String result=uri
+
+       if(result){
+           try{
+                if(result.startsWith("http")) {
+                    //result = result.replace("http://", "");
+                    int indWord = result.lastIndexOf('/')
+                    indWord = indWord + 1
+                    if(indWord > 0 &&  result.length() > indWord)  { // >indWord at end of Uri.
+
+                        String substring = result.substring(indWord)
+                        if(substring){
+                            StringBuffer sb= new StringBuffer();
+                            sb.append('term.')
+                            sb.append(substring)
+                            result = sb.toString()
+                        }
+                    }
+                }
+                //result = result.replaceAll("/","_")
+                //result = result.replaceAll("#","--")
+           } catch(Exception e){
+               LOGGER.error("transformToI18term error parseing "+uri,e)
+               result=uri //reset
+           }
+       }
+
+       return result
+   }
+    /**
      * A means to using URIs to I18 file by removing problematic characters
      *
      * @param uri
      * @return
      * removes protocol and replaces '/' with underscore and '#' with two dashes '--'
      */
-   public static String flattenUri(String uri){
-       String result=uri
-       if(result){
-           try{
+    public static String flattenUri(String uri){
+        String result=uri
+        if(result){
+            try{
                 if(result.startsWith("http://")) {
                     result = result.replace("http://", "");
                 } else if(result.startsWith("https://")) {
@@ -528,13 +565,13 @@ public class  VocabularyEnhancer implements Serializable {
                 }
                 result = result.replaceAll("/","_")
                 result = result.replaceAll("#","--")
-           } catch(Exception e){
-               LOGGER.error("flattenUri error parseing "+uri,e)
-           }
-       }
+            } catch(Exception e){
+                LOGGER.error("flattenUri error parseing "+uri,e)
+            }
+        }
 
-       return result
-   }
+        return result
+    }
 
    public static String determineLabelCode(String theCode){
        String labelCode

@@ -13,7 +13,8 @@
 
 <h:body>
     <ui:composition>
-
+        <!-- 	<p:ajax event="select" update=":treeform:messages" listener=" {menuBean.onNodeSelect}" />-->
+       <!--
         <p:panel rendered="#{loginBean.loggedIn eq true}">
             <p>
             User:<p:spacer width="2"/> <h:outputLabel value="#{loginBean.greetname}"/>
@@ -26,27 +27,67 @@
                         cache="false" dynamic="true"
                         nodeSelectListener="#{menuBean.onNodeSelect}"
                         selectionMode="single" selection="#{menuBean.selectedNode}">
-                    <!-- 	<p:ajax event="select" update=":treeform:messages" listener=" {menuBean.onNodeSelect}" />-->
                     <p:treeNode>
                         <h:outputText value="#{ref}"/>
                     </p:treeNode>
                 </p:tree>
 
             </h:form>
+        </p:panel> -->
+        <!-- Use tree table for the shorter list and to avoid bug with p tree. tree table does not sync/expand after new page displayed! -->
+        <p:panel style="width:100%" rendered="#{loginBean.loggedIn eq true}">
+            <p>
+                User:<p:spacer width="2"/> <h:outputLabel value="#{loginBean.greetname}"/>
+            </p>
+            <h:form id="treeform">
+                <p:treeTable  value=" {menuBean.root}" var="ref" style="width:100%;" expanded="true" 	>
+
+                    <p:column  style="width:100%;" selectionMode="single" >
+
+                        <h:panelGroup rendered=" {ref.type == 'noderoot'}" >
+                            <h:outputText value=" {ref.label}" style="font-size:14pt;"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered=" {ref.type == 'nodeheaderlink'}">
+                            <h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value="  {ref.label}" style="font-size:12pt;"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered=" {ref.type == 'nodeheader'}">
+                            <h:outputText value=" {ref.label}" style="font-size:12pt;"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered=" {ref.type == 'node'}">
+                            <h:outputText value=" {ref.label}" style="font-size:10pt;"/>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered=" {ref.type eq 'link'}" >
+
+                            <h:outputLink  value=" {request.contextPath} {ref.fileName}"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                        <h:panelGroup rendered=" {ref.type eq 'nodelink'}">
+                            <h:outputLink value=" {request.contextPath} {ref.fileName}" style="font-size:10pt;"><h:outputText value=" {ref.label}" style="font-size:10pt;"/>
+                            </h:outputLink>
+                        </h:panelGroup>
+
+                    </p:column>
+                </p:treeTable>
+            </h:form>
         </p:panel>
-
         <!--
-        <p:toolbar>
-            <p:toolbarGroup align="left" rendered=" {loginBean.testMode}">
-                <h:form>
-                    <p:commandButton value="Test Load Meds"
-                                 immediate="true"
-                                 image="ui-icon-plus"
-                                 actionListener=" {loginBean.loadInterop}"/>
-                </h:form>
+       <p:toolbar>
+           <p:toolbarGroup align="left" rendered=" {loginBean.testMode}">
+               <h:form>
+                   <p:commandButton value="Test Load Meds"
+                                immediate="true"
+                                image="ui-icon-plus"
+                                actionListener=" {loginBean.loadInterop}"/>
+               </h:form>
 
-            </p:toolbarGroup>
-       </p:toolbar>  -->
+           </p:toolbarGroup>
+      </p:toolbar>  -->
 
     </ui:composition>
 </h:body>

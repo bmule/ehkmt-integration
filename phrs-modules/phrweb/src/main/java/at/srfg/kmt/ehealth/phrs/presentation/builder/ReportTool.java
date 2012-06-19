@@ -65,6 +65,50 @@ public class ReportTool {
     }
 
     /**
+     * Wraps resource bundle
+     * Look up resource bundle, return default label or key name
+     * @param key
+     * @param defaultLabel
+     * @return
+     */
+    public String getLabel(String key,String defaultLabel){
+        String label=null;
+        if(key!=null && !key.isEmpty())   {
+
+            try {
+                label = resourceBundle.getString(key);
+            } catch (Exception e) {
+                label = defaultLabel;
+            }
+
+        }
+        if(label==null)   {
+            if(defaultLabel!=null)    label=defaultLabel;
+            else label=key;
+        }
+        return label;
+    }
+
+    /**
+     * Wraps resource bundle
+     * @param key
+     * @param defaultKeyname    Use key name if label not found
+     * @return
+     */
+    public String getLabel(String key,boolean defaultKeyname){
+        String label=null;
+        if(key!=null && !key.isEmpty())   {
+
+            try {
+                label = resourceBundle.getString(key);
+            } catch (Exception e) {
+            }
+
+        }
+        if(label==null && defaultKeyname) label=key;
+        return label;
+    }
+    /**
      * Using JSF context to determine locale
      * @return
      */
@@ -81,6 +125,7 @@ public class ReportTool {
 
         return resourceBundle;
     }
+
 
     /**
      *

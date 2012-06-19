@@ -133,7 +133,7 @@
 						<p:message for="displayDate_input" display="text" />
 -->
 						<h:outputLabel for="beginDate"
-							value="Begin Date #{labels['tip.date.formating']}"
+							value="#{labels['labels.medicationSummary.observationDateStart.label']} #{labels['tip.date.formating']}"
 							styleClass="form-dialog-label" />	
 												
 						<p:outputPanel id="beginDate" layout="block">
@@ -155,7 +155,7 @@
 						<p:message for="beginDate_input" display="text" />
 <!-- status -->
 						<h:outputLabel for="field_activity_status"
-							value="#{labels['medicationSummary.medicationStatus.main.label']}"
+							value="#{labels['labels.medicationSummary.medicationStatus.main.label']}"
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="field_activity_status" layout="block">
@@ -175,9 +175,9 @@
 							</h:selectOneRadio>
 						</p:outputPanel>
 						<p:message for="field_activity_status" display="text" />
-<!-- end date -->												
+<!-- end date -->
 						<h:outputLabel for="endDate"
-							value="Stop Date #{labels['tip.date.formating']}"
+							value="#{labels['medicationSummary.observationDateEnd.label']} #{labels['tip.date.formating']}"
 							styleClass="form-dialog-label" />						
 						<p:outputPanel id="endDate" layout="block">
 

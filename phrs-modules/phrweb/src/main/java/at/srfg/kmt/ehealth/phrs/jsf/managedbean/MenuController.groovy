@@ -17,6 +17,7 @@ import org.primefaces.model.TreeNode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import at.srfg.kmt.ehealth.phrs.presentation.services.ConfigurationService
+import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportTool
 
 /**
  * This controller is SessionScoped and supports either the basic tree or table based tree. The Table based tree cannot yet support expanding 
@@ -56,9 +57,10 @@ public class MenuController extends FaceCommon {
     TreeNode[] selectedNodes;
 
     TreeNode selectedRequestNode
-
+    private static ReportTool  reportTool;
+    
     public MenuController() {
-
+        reportTool = new ReportTool();
         init(this.getLocale())
 
         //previous if using request or view scope
@@ -79,29 +81,30 @@ public class MenuController extends FaceCommon {
     public void init(Locale locale) {
         //DefaultTreeNode.DEFAULT_TYPE, Folder
 
+
         boolean codedLabel = false
 
-        root = new DefaultTreeNode(new DocumentReference("Main Menu", "root", PhrsConstants.TYPE_ITEM_NODE_ROOT, codedLabel, null).setRoot(true), null)
+        root = new DefaultTreeNode(new DocumentReference('Main Menu', 'root', PhrsConstants.TYPE_ITEM_NODE_ROOT, codedLabel, null).setRoot(true), null)
         root.setExpanded(true) //address any UI bug
 
         if ( ! UserSessionService.getSystemStatus()) { //storage problem
-            home = new DefaultTreeNode(new DocumentReference("Error", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
-            WebUtil.addFacesMessageSeverityWarn("Status", "System failed to start")
+            home = new DefaultTreeNode(new DocumentReference('Error', '/jsf/home.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
+            WebUtil.addFacesMessageSeverityWarn('Status', 'System failed to start')
 
         } else if ( ! UserSessionService.loggedIn()) {
             //no side bar menu
-            //home = new DefaultTreeNode(new DocumentReference("Home","/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
+            //home = new DefaultTreeNode(new DocumentReference('Home','/jsf/home.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK,codedLabel,root), root)//TYPE_ITEM_NODE_HOME
 
         } else if (UserSessionService.sessionUserHasMedicalRole()) {
-            LOGGER.debug("menuController session user has medical role")
+            LOGGER.debug('menuController session user has medical role')
             // one level, no tree nesting
-            home = new DefaultTreeNode(new DocumentReference("Home", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
+            home = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('default.home.label','Home'), '/jsf/home.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
             //consultation reports
             Map monitoringMap = [
                     '/jsf/monitor_info_dash.xhtml': 'Health Reports']
             addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, root, codedLabel)
 
-            //sectionMonitoring   = new DefaultTreeNode(new DocumentReference("Monitoring","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)
+            //sectionMonitoring   = new DefaultTreeNode(new DocumentReference('Monitoring','', PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,root), root)
             //addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionMonitoring,codedLabel)
 
         } else {
@@ -125,72 +128,82 @@ public class MenuController extends FaceCommon {
 
             }
 
-            home = new DefaultTreeNode(new DocumentReference("Home", "/jsf/home.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
+
+            home = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('default.home.label','Home'), '/jsf/home.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
 
             //
             String menuImport= ConfigurationService.getInstance().getProperty('import.ehr','1');
             if(menuImport == '1'){
-                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference("Import Health Data", "/jsf/monitor_interop.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+             
+                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.import_health_data','Import Health Data'), '/jsf/monitor_interop.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+            } else {
+              
+                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.info_comunity_links','Community Links'), '/jsf/iframe_social_community_links.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+
+                //'/jsf/iframe_social_community_links.xhtml': 'Community Links'
             }
-            sectionMonitoring = new DefaultTreeNode(new DocumentReference("Monitoring", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+        
+            sectionMonitoring = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.monitoring','Monitoring'),'', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
-            sectionPatientInformation = new DefaultTreeNode(new DocumentReference("Patient Information", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+            
+            sectionPatientInformation = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.patientinfo','Patient Information'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
-            //sectionObservations = new DefaultTreeNode(new DocumentReference("Health Observations", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
+            //sectionObservations = new DefaultTreeNode(new DocumentReference('Health Observations', '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
 
-            //sectionMeds = new DefaultTreeNode(new DocumentReference("Medications","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionObservations), sectionObservations)
+            //sectionMeds = new DefaultTreeNode(new DocumentReference('Medications','', PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionObservations), sectionObservations)
+            
+            sectionActionPlan = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.actionplan.label','Action Plan'), '/jsf/action_schedule_dash.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, sectionPatientInformation), sectionPatientInformation)
+            
+            sectionProfile = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.profile.label','Profile'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
 
-            sectionActionPlan = new DefaultTreeNode(new DocumentReference("Action Plan", "/jsf/action_schedule_dash.xhtml", PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, sectionPatientInformation), sectionPatientInformation)
-
-            sectionProfile = new DefaultTreeNode(new DocumentReference("Profile", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionPatientInformation), sectionPatientInformation)
-
-            //sectionMedicalDocs  = new DefaultTreeNode(new DocumentReference("Imported Medical Data","", PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionPatientInformation), sectionPatientInformation)
-
-            sectionGroupInfoPeople = new DefaultTreeNode(new DocumentReference("Information & People", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+            //sectionMedicalDocs  = new DefaultTreeNode(new DocumentReference('Imported Medical Data','', PhrsConstants.TYPE_ITEM_NODE_HEADER,codedLabel,sectionPatientInformation), sectionPatientInformation)
+             //Information & People
+            sectionGroupInfoPeople = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.info_and_people','Information & People'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
             if(true){
-                sectionEdu = new DefaultTreeNode(new DocumentReference("Health Topics", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
+                sectionEdu = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.education.health.label','Health Topics'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
+                
                 Map mapEdu = [
-                        '/jsf/iframe_education_info.xhtml': 'Basic Information',
-                        '/jsf/iframe_education_habits.xhtml': 'New Habits',
-                        '/jsf/iframe_education_precautions.xhtml': 'Precautions',
-                        '/jsf/iframe_education_warnings.xhtml': 'Warning Signs',
-                        '/jsf/iframe_education_decisionaids.xhtml': 'Decision Aids',
-                        '/jsf/iframe_education_resources.xhtml': 'Links',
-                        '/jsf/iframe_education_glossary.xhtml': 'Glossary'
+                        '/jsf/iframe_education_info.xhtml': reportTool.getLabel('menu.education.basic.info.label','Basic Information'),
+                        '/jsf/iframe_education_habits.xhtml':  reportTool.getLabel('menu.education.newhabits.label','New Habits'),
+                        '/jsf/iframe_education_precautions.xhtml':  reportTool.getLabel('menu.education.precautions','Precautions'),
+                        '/jsf/iframe_education_warnings.xhtml':  reportTool.getLabel('menu.education.warningsigns','Warning Signs'),
+                        '/jsf/iframe_education_decisionaids.xhtml':  reportTool.getLabel('menu.Decision_Aids','Decision Aids'),
+                        '/jsf/iframe_education_resources.xhtml': reportTool.getLabel('menu.links','Links'),
+                        '/jsf/iframe_education_glossary.xhtml': reportTool.getLabel('menu.glossary','Glossary')
 
                 ]
 
                 addMenuItems(mapEdu, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionEdu, codedLabel)
             }
 
-            if(true){
-                sectionCommunity = new DefaultTreeNode(new DocumentReference("Community", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+            if(menuImport == '1'){
+                sectionCommunity = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.info_comunity','Community'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
                 Map mapCommunity = [
-                        '/jsf/iframe_social_community_links.xhtml': 'Community Links',
-                        '/jsf/iframe_social_forums.xhtml': 'Forums',
+                        '/jsf/iframe_social_community_links.xhtml': reportTool.getLabel('menu.info_comunity_links','Community Links'),
+                        '/jsf/iframe_social_forums.xhtml': reportTool.getLabel('menu.education.patientforums','Forums'),
                         //'/jsf/iframe_social_blogs.xhtml': 'Blogs',
                         //'/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
                         //'/jsf/iframe_social_tags.xhtml': 'Find by Keywords'
                 ]
                 addMenuItems(mapCommunity, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionCommunity, codedLabel)
             }
-
-            sectionContacts = new DefaultTreeNode(new DocumentReference("Contacts", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
+            //contactInfo.contacts.menu.label
+            sectionContacts = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('contactInfo.contacts.menu.label','Contacts'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, sectionGroupInfoPeople), sectionGroupInfoPeople)
 
             if(true){
-                sectionPrivacy = new DefaultTreeNode(new DocumentReference("Privacy & Admin", "", PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Privacy & Admin'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
                 Map privacyMap = [
-                    '/jsf/iframe_privacy_consent_editor.xhtml': 'Consent Editor']
+                    '/jsf/iframe_privacy_consent_editor.xhtml': reportTool.getLabel('menu.privacy','Consent Editor')]
 
                 addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
             }
 
             Map healthObs = [
-                    '/jsf/obs_bp_mgt.xhtml': 'Blood Pressure',
-                    '/jsf/obs_bw_mgt.xhtml': 'Body Weight',
-                    '/jsf/obs_problem_mgt.xhtml': 'Problems',
-                    '/jsf/obs_medication_mgt.xhtml': 'Medications'
+                    '/jsf/obs_bp_mgt.xhtml': reportTool.getLabel('obsBloodPressureA01.label','Blood Pressure'),
+                    '/jsf/obs_bw_mgt.xhtml': reportTool.getLabel('obsBodyWeightBMW01.label','Body Weight'),
+                    '/jsf/obs_problem_mgt.xhtml': reportTool.getLabel('menu.problems.label','Problems'),
+                    '/jsf/obs_medication_mgt.xhtml': reportTool.getLabel('medicationSummary.label','Medications')
             ]
             //simpler, remove extra
             addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPatientInformation, codedLabel)
@@ -198,8 +211,8 @@ public class MenuController extends FaceCommon {
            // addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionObservations, codedLabel)
 
             Map monitoringMap = [
-                    '/jsf/monitor_info_dash.xhtml': 'Health Reports',
-                    '/jsf/monitor_vitals.xhtml': 'Vital Signs']
+                    '/jsf/monitor_info_dash.xhtml': reportTool.getLabel('menu.reports_health','Health Reports'),
+                    '/jsf/monitor_vitals.xhtml': reportTool.getLabel('overviewCurrentVitalSigns.vitalsign.label','Vital Signs')]
             addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionMonitoring, codedLabel)
 
             //monitor_vitals.xhtml
@@ -208,20 +221,24 @@ public class MenuController extends FaceCommon {
             //privacy.level
             String privacy= ConfigurationService.getInstance().getProperty('privacy.level','1');
             Map profile
+
             if(privacy == '0'){
+                //remove personal contact info
+                //activityItem.label
                 profile = [
-                        '/jsf/profile_padl_mgt.xhtml': 'Activities of Daily Living',
-                        '/jsf/obs_activity_mgt.xhtml': 'Physical Activities']
+                        '/jsf/profile_padl_mgt.xhtml': reportTool.getLabel('menu.activitiesofdailyliving.label','Activities of Daily Living'),
+                        '/jsf/obs_activity_mgt.xhtml': reportTool.getLabel('menu.activityItem.label','Physical Activities')]
             } else {
+                //contactInfo.label
                 profile = [
-                    '/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user': 'My Contact Info',
-                    '/jsf/profile_padl_mgt.xhtml': 'Activities of Daily Living',
-                    '/jsf/obs_activity_mgt.xhtml': 'Physical Activities']
+                    '/jsf/profile_contact_mgt.xhtml?typecontact=healthcare_user': reportTool.getLabel('contactInfo.personal.label','My Contact Info'),
+                    '/jsf/profile_padl_mgt.xhtml': reportTool.getLabel('menu.activitiesofdailyliving.label','Activities of Daily Living'),
+                    '/jsf/obs_activity_mgt.xhtml': reportTool.getLabel('menu.activityItem.label','Physical Activities')]
             }
             addMenuItems(profile, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionProfile, codedLabel)
 
             //contact info of healthcare persons,other
-            Map mapContacts = ['/jsf/profile_allcontacts_mgt.xhtml?typecontact=healthcare_provider': 'My Contacts']
+            Map mapContacts = ['/jsf/profile_allcontacts_mgt.xhtml?typecontact=healthcare_provider': reportTool.getLabel('contactInfo.personal.label','My Contacts')]
 
 
             addMenuItems(mapContacts, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionContacts, codedLabel)
@@ -254,7 +271,7 @@ public class MenuController extends FaceCommon {
 
     public void displaySelectedSingle(ActionEvent event) {
         if (selectedNode != null) {
-            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Selected", selectedNode.getData().toString());
+            FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, 'Selected', selectedNode.getData().toString());
 
             FacesContext.getCurrentInstance().addMessage(null, message);
         }

@@ -90,16 +90,19 @@
     <h:outputLabel value="#{monmgtBean.selectedLocalResourceType}"/>
 </p>
 -->
-
+<!--<f:facet  name="header">
+   <h:commandLink>
+       <p:graphicImage value="/images/pdf.png"/>
+       <p:dataExporter type="pdf" target="pdq_1" fileName="phr_contactinfo.pdf"/>
+   </h:commandLink>
+</f:facet> -->
+<!--
+Contact info...wait.
+-->
 <h:panelGroup id="pdq_1" layout="block" rendered="#{monmgtBean.selectedLocalResourceType eq 'PDQ'}">
     <h:form prependId="false">
         <h:panelGrid columns="2" id="idViewPcon">
-            <!--<f:facet  name="header">
-                <h:commandLink>
-                    <p:graphicImage value="/images/pdf.png"/>
-                    <p:dataExporter type="pdf" target="pdq_1" fileName="phr_contactinfo.pdf"/>
-                </h:commandLink>
-            </f:facet> -->
+
             <h:outputLabel value="Family Name"/>
             <h:outputLabel value="#{monmgtBean.contactInfo.lastName}"/>
 

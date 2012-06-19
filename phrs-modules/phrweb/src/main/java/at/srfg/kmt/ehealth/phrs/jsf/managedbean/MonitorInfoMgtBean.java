@@ -334,7 +334,8 @@ public class MonitorInfoMgtBean implements Serializable {
             //create UI selection list
             modelFormLocalResources = new ArrayList<ModelLabelValue>();
             // BP  BW   MED   ADL   PROBLEM
-            modelFormLocalResources.add(new ModelLabelValue("PDQ", "Contact Information"));
+            //hide contact information
+            //modelFormLocalResources.add(new ModelLabelValue("PDQ", "Contact Information"));
 
             modelFormLocalResources.add(new ModelLabelValue("BP", "History Blood Pressure"));
             modelFormLocalResources.add(new ModelLabelValue("BW", "History Body Weight"));

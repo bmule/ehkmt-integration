@@ -18,20 +18,19 @@
         <h:panelGroup rendered="#{loginBean.systemStatus eq true}">
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq true}">
-                Please use the side menu to access patient health reports.
+                <h:outputText value="#{labels['labels.menu.msg.health_reports']}"/>
             </h:panelGroup>
 
-            <h:panelGroup rendered="#{loginBean.medicalRole eq false && loginBean.configImportEhr ne '0'}">
+            <h:panelGroup rendered="#{loginBean.medicalRole eq false and loginBean.configImportEhr ne '0'}">
                  <!--
                 <h:outputText value="#{labels['message_home']}"/>
                 <br/> -->
                 <p>
-                    Please use the <p:spacer width="3"/>
-
+                    <h:outputText value="#{labels['labels.menu.msg.consent']}"/>
+                    <p:spacer width="2"/>
                         <h:outputLink value="#{request.contextPath}/jsf/iframe_privacy_consent_editor.xhtml">
                             <h:outputText
                                 value="Consent Manager" style="font-size:12pt;text-decoration:underline;"/></h:outputLink>
-                    (Privacy &amp; Admin) to allow medical professionals to access your health information.
 
                 </p>
                 <!--cied form -->
@@ -46,7 +45,7 @@
         </h:panelGroup>
         <!-- system failure notice to user, e.g. a database was not started etc -->
         <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
-            There was a system failure, unfortunately access to the system or data is not possible.
+               <h:outputText value="#{labels['labels.menu.msg.system_failure']}"/>
         </h:panelGroup>
 
     </ui:composition>

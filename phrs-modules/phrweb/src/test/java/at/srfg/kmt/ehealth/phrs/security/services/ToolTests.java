@@ -125,6 +125,26 @@ public class ToolTests {
         System.out.println("2 input="+uri+" result="+flattened);
         assertEquals("xxxx_yyy_zzz__aaa--123", flattened);
     }
+    @Test
+    public void testVocabEnhancer_transformToI18term() {
+        String expected ="Cholesterol";
+        String uri = "http://xxxx/yyy/zzz//"+expected;
+        String label= VocabularyEnhancer.transformToI18term(uri);
+        System.out.println("testVocabEnhancer_transformToI18term uri="+uri+" label="+label);
+
+        //nothing but with ending slash
+        uri = "http://xxxx/yyy/zzz//";
+        label= VocabularyEnhancer.transformToI18term(uri);
+        System.out.println("testVocabEnhancer_transformToI18term uri="+uri+" label="+label);
+        assertEquals(uri, label);
+
+        //only one charater
+        uri = "http://xxxx/yyy/z";
+        label= VocabularyEnhancer.transformToI18term(uri);
+        System.out.println("testVocabEnhancer_transformToI18term uri="+uri+" label="+label);
+        assertEquals("z", label);
+    }
+
     
 //        @Test
 //        public void testHasMedication() {
