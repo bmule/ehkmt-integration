@@ -58,9 +58,11 @@ public class MenuController extends FaceCommon {
 
     TreeNode selectedRequestNode
     private static ReportTool  reportTool;
-    
+    String menuType = 'table'
+
     public MenuController() {
         reportTool = new ReportTool();
+        menuType= ConfigurationService.getInstance().getProperty('menu.type','table');
         init(this.getLocale())
 
         //previous if using request or view scope
@@ -133,13 +135,11 @@ public class MenuController extends FaceCommon {
 
             //
             String menuImport= ConfigurationService.getInstance().getProperty('import.ehr','1');
-            if(menuImport == '1'){
-             
-                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.import_health_data','Import Health Data'), '/jsf/monitor_interop.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
-            } else {
-              
+            if(menuImport == '0'){
                 dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.info_comunity_links','Community Links'), '/jsf/iframe_social_community_links.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
 
+            } else {  //
+                dashBoardMonitorPhrImports = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.import_health_data','Import Health Data'), '/jsf/monitor_interop.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
                 //'/jsf/iframe_social_community_links.xhtml': 'Community Links'
             }
         
@@ -181,7 +181,7 @@ public class MenuController extends FaceCommon {
                 sectionCommunity = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.info_comunity','Community'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
                 Map mapCommunity = [
                         '/jsf/iframe_social_community_links.xhtml': reportTool.getLabel('menu.info_comunity_links','Community Links'),
-                        '/jsf/iframe_social_forums.xhtml': reportTool.getLabel('menu.education.patientforums','Forums'),
+                        '/jsf/iframe_social_forums.xhtml': reportTool.getLabel('menu.education.patientforums','Forums')
                         //'/jsf/iframe_social_blogs.xhtml': 'Blogs',
                         //'/jsf/iframe_social_bookmarks.xhtml': 'Community Bookmarks',
                         //'/jsf/iframe_social_tags.xhtml': 'Find by Keywords'

@@ -17,18 +17,12 @@ import org.slf4j.LoggerFactory;
  * Can be used in JSF 
  * SiteReferencesTool that extends Map
  * A UI using JSF etc can lookup a key and get the URL or the key is a URL
- * Here the 'pages' is the SiteReferencesTool
- * #{portalBean.pages.portalBean.pages.glossary}
- * 
- * prefix or without prefix
- * identifier might be a URL (ontology) or i18N file
- * 
- * en|http://xxx/xfdljsdfls/
- * or http:xxx
+
  */
 public class SiteReferencesTool implements Map, Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(ConfigurationService.class);
-	String portalUrl
+
+   // Map<String,String> query
 	/*
 	 educationUrl='http://qviz-dev.salzburgresearch.at/confluence/'
 	 wikiUrl='http://qviz-dev.salzburgresearch.at/confluence/'
@@ -40,6 +34,7 @@ public class SiteReferencesTool implements Map, Serializable {
 	 decisionaids:decisionaids
 	 ]
 	 */
+    /*
 	Map query = [
 		//'home'		:'display/phrcontent/Home',
 		'feeds':'pages/listpages-dirview.action?key=phrcontent',
@@ -75,13 +70,13 @@ public class SiteReferencesTool implements Map, Serializable {
 
 		'warning_signs':'display/phrcontent/Warning+Signs',
 
-		'useful_links':'display/phrcontent/Links',
+		'useful_links':'display/phrcontent/Links',// display/phrcontent/Links
 
 		'other_resources':'display/phrcontent/Other+Resources',
 		'decision_aids':'display/phrcontent/Decision+Aid+for+Telemonitoring'
 
 	]
-
+    */
 	Map queryLocal = [
 		'privacy_consent_manager':'/jsf/iframe_privacy_consent_editor.xhtml'
 	]
@@ -89,78 +84,32 @@ public class SiteReferencesTool implements Map, Serializable {
 	 * By default get language from Faces
 	 */
 	public SiteReferencesTool() {
-		portalUrl ='http://qviz-dev.salzburgresearch.at/confluence/'
+
 		initConfig()
 	}
 
-	/**
-	 * Base portal URL
-	 * @param baseUrl
-	 */
-	public SiteReferencesTool(String baseUrl) {
-		portalUrl=baseUrl
-		initConfig()
-	}
 
 	void initConfig(){
-		//Config file, replace keys where necessary in maps
-		//privacy_consent_manager iframe_privacy_consent_editor.xhtml
 	}
 
-/*
-	//@Override
-	public String xxget(Object key) {
-		String ref = portalUrl
-		try{
-			if(key && key instanceof String){
-				//check for site page or could be on same server
-				String value=  doGetSitePage(key)
-				//check for local app pages
-				value = value ? value : doGetLocalPage(key)
-				
-				if(value){
-//                    if(value.contains('http')){
-//                        ref =  query.get(key)
-//                    }  else {
-//                        ref = ref + query.get(key)
-//                    }
 
-				} else if(((String)key).contains('/')){
-					//remove first
-					//ref = ref + '/' + key
-
-					if(key) ref = key.replace('//', '/')
-				}
-			}
-		} catch(Exception e){
-			println("exception "+e)
-		}
-
-		return ref
-	}
-	*/
     @Override
     public String get(Object key) {
-        //String ref = portalUrl
-        //String ref = configGetLocalPage('portalUrl')
-        //LOGGER.debug("get key="+key)
+
         String ref=null
         try{
             if(key && key instanceof String){
                 //check for site page or could be on same server
-                ref=  configGetSitePage(key)
-                //LOGGER.debug("getconfigGetSitePage ref="+ref)
+                ref = configGetSitePage(key)
 
-                if( !ref && ((String)key).contains('/')){
-                    if(key) ref = key.replace('//', '/')
-                }
             } else {
-               if( !key ) LOGGER.debug("getconfigGetSitePage key null emtpy="+key)
-               if( key  && !( key instanceof String)) LOGGER.debug("getconfigGetSitePage key not string="+key)
+               if( !key ) LOGGER.debug("get(Object key) key null emtpy="+key)
+               if( key  && !( key instanceof String)) LOGGER.debug(" get(Object key) key not string="+key)
             }
         } catch(Exception e){
             LOGGER.debug("getconfigGetSitePage error "+e)
         }
+        LOGGER.debug('**ref='+ref+' key='+key)
         if( !ref) return '#'
         return ref
     }
@@ -172,19 +121,17 @@ public class SiteReferencesTool implements Map, Serializable {
 		return null
 	}
 	protected String doGetSitePage(String key){
-		if(query.containsKey(key)){
-			return query.get(key)
-		}
-		return null
+		return configGetSitePage(key)
 	}
 
     protected String configGetLocalPage(String key){
         String value= ConfigurationService.getInstance().getContentLink(key)
-        //LOGGER.debug("configGetLocalPage key="+key+" val="+value);
+
         return  value    }
+
     protected String configGetSitePage(String key){
         String value= ConfigurationService.getInstance().getContentLink(key)
-        //LOGGER.debug("configGetSitePage key="+key+" val="+value);
+
         return  value
     }
 	/*
@@ -203,35 +150,48 @@ public class SiteReferencesTool implements Map, Serializable {
 
 	@Override
 	public boolean containsKey(Object arg) {
-		if(arg && query.containsKey(arg)) return true
+        //if(arg && query.containsKey(arg)) return true
 		return false;
 	}
-
+    /**
+     * @param arg
+     * @return
+     */
 	@Override
 	public boolean containsValue(Object arg) {
-		if(arg && query.containsValue(arg)) return true
+
+        //if(arg && query.containsValue(arg)) return true
 		return false;
 	}
 
 	@Override
 	public Set entrySet() {
-		return query.entrySet();
+        return null
+		//return query.entrySet();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return query.isEmpty()
+        return false
+		//return query.isEmpty()
 
 	}
 
 	@Override
 	public Set keySet() {
-		return query.keySet();
+        return null
+        //return query.keySet();
 	}
 
 	@Override
 	public Object put(Object key, Object value) {
-		return query.put(key, value);
+        //if(key instanceof  String && value instanceof String)  {
+        //    return query.put(key, value);
+        //}
+		//return query;
+
+        return null
+
 	}
 
 	@Override
@@ -241,17 +201,17 @@ public class SiteReferencesTool implements Map, Serializable {
 
 	@Override
 	public void putAll(Map arg) {
-		query.putAll(arg);
+		//query.putAll(arg);
 	}
 
 	@Override
 	public int size() {
-		return query.size();
+		//return query.size();
 	}
 
 	@Override
 	public Collection values() {
-		return query.values()
+		//return query.values()
 	}
 
 }

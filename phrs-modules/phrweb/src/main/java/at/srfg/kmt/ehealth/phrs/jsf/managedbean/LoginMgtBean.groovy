@@ -37,8 +37,10 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     String loginType ='local.provider.1'  // 'openid.provider.1'
 
     String password
-    private  Set<String> testLoginIds;
+
+    private Set<String> testLoginIds;
     private ReportTool reportTool;
+
     public LoginMgtBean() {
         reportTool=new ReportTool()
         def theSession = FacesContext.getCurrentInstance().getExternalContext().getSession(true)
@@ -51,7 +53,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             makeTestLogin()
         }
 
-        testLoginIds=getTestLoginIds();
+        testLoginIds=LoginMgtBean.getTestLoginIds()
     }
     /**
      * Test login when AppModeTest is true. Default ownerUri and user name
@@ -466,6 +468,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             if (username && loginType) {
                 //ok
                 if (detectedLocalLogin()) {
+
                     if(isValidTestLogin(username)) {
                         processLocalLogin()
                     } else {
@@ -503,7 +506,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
 
 
-    public Set<String> getTestLoginIds(){
+    public static Set<String> getTestLoginIds(){
         Set<String> testLoginIds= new HashSet<String>();
         testLoginIds.add("phrsm");
         testLoginIds.add("phrdoctor");
@@ -577,7 +580,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
     public boolean isValidTestLogin(String id){
 
-        if(id!=null &&!id.isEmpty()){
+        if(id != null && !id.isEmpty()){
             return testLoginIds.contains(id);
         }
         return false;
