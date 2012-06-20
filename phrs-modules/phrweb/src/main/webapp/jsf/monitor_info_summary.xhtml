@@ -30,7 +30,7 @@ Deprecated
 			<p:messages />
 			<p:growl id="msgs" showDetail="true" />
 
-			<p:fieldset legend="Monitoring Personal Health Information">
+			<p:fieldset legend="#{labels['reports.monitor_health_info']}">
 
 				<p:dataTable widgetVar="widItemTableMonitorinfo" id="idItemTableMonitorinfo"
 					var="theItem" value="#{monitorinfoBean.modelMain}">
@@ -57,7 +57,7 @@ Deprecated
 						<h:outputLabel value="#{theItem.name}" />
 					</p:column>
 
-					<p:column headerText="Information Type"
+					<p:column headerText="#{labels['reports.infotype']}"
 						sortBy="#{theItem.resourceType}">
 						<h:outputLabel value="#{theItem.resourceType}">
 							<f:converter converterId="labelLookup" />
@@ -65,11 +65,12 @@ Deprecated
 
 						<p:outputPanel layout="block"
 							rendered="#{theItem.allowedViewContent eq true}">						
-								Access allowed
+								<h:outputLabel value="#{labels['consent.allowed.read']}"/>
 						</p:outputPanel>
+
 						<p:outputPanel layout="block"
-							rendered="#{theItem.allowedViewContent eq false}">						
-								Access denied
+							rendered="#{theItem.allowedViewContent eq false}">
+                            <h:outputLabel value="#{labels['consent.allowed.denined']}"/>
 						</p:outputPanel>
 			
 					</p:column>

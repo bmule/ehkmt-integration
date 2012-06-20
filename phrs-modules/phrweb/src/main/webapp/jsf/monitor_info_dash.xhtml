@@ -22,7 +22,7 @@
 
 <ui:define name="content">
 
-<p:fieldset legend="Monitor Personal Health Information">
+<p:fieldset legend="#{labels['reports.monitor_health_info']}">
 
 <h:form>
 
@@ -34,9 +34,9 @@
         </h:panelGroup>
 
         <h:panelGroup>
-            <h:outputLabel value="Display information about:"/>
+            <h:outputLabel value="#{labels['reports.display_info_about']}:"/>
             <h:selectOneRadio id="field_3_input"
-                              required="true" requiredMessage="What kind of Information?"
+                              required="true" requiredMessage="#{labels['reports.infotype_what_kind']}?"
                               layout="pageDirection"
                               value="#{monmgtBean.selectedLocalResourceType}">
                 <!--f:selectItem itemLabel="Please Select Information type" noSelectionOption="true"
@@ -50,11 +50,11 @@
 
         <h:panelGroup rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
             <h:selectOneMenu id="field_2_input"
-                             required="true" requiredMessage="Please select a Patient"
+                             required="true" requiredMessage="#{labels['reports.select_patient']}"
                              layout="pageDirection"
                              value="#{monmgtBean.selectedOwnerUri}" style="font-size: 12pt;">
 
-                <f:selectItem itemLabel="Please select a Patient" noSelectionOption="true"
+                <f:selectItem itemLabel="#{labels['reports.select_patient']}" noSelectionOption="true"
                               itemValue=""/>
                 <f:selectItems
                         value="#{monmgtBean.modelFormUserList}"
@@ -62,16 +62,16 @@
             </h:selectOneMenu>
 
 
-            <p:commandButton value="Display"
-                             title="Display"
+            <p:commandButton value="#{labels['reports.cmd.display']}"
+                             title="#{labels['reports.cmd.display']}"
                              image="ui-icon ui-icon-search"
                              actionListener="#{monmgtBean.findResourcesByUserAndType}"
                              ajax="false"/>
         </h:panelGroup>
 
         <h:panelGroup rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
-            <p:commandButton value="Display" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"
-                             title="Display"
+            <p:commandButton value="#{labels['reports.cmd.display']}" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"
+                             title="#{labels['reports.cmd.display']}"
                              image="ui-icon ui-icon-search"
                              actionListener="#{monmgtBean.findResourcesByUserAndType}"
                              ajax="false"/>
@@ -82,7 +82,7 @@
 
 <p><p:spacer width="2"/></p>
 <p:outputPanel rendered="#{monmgtBean.selectedOwnerGreetName ne null}">
-    Health information for:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
+     <h:outputLabel value="#{labels['reports.health_info_for']}"/>:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
 </p:outputPanel>
 
 <!--
@@ -99,6 +99,7 @@
 <!--
 Contact info...wait.
 -->
+<!--
 <h:panelGroup id="pdq_1" layout="block" rendered="#{monmgtBean.selectedLocalResourceType eq 'PDQ'}">
     <h:form prependId="false">
         <h:panelGrid columns="2" id="idViewPcon">
@@ -139,7 +140,7 @@ Contact info...wait.
         </h:panelGrid>
     </h:form>
 </h:panelGroup>
-
+ -->
     <!--<h:panelGrid columns="2">
     <p:panel  header="Export Page Data">
         <h:commandLink>

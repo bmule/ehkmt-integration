@@ -13,24 +13,7 @@
 
 <h:body>
 
-	<!-- oncomplete="onEditComplete(xhr,status,args)" -->
-	<!-- 
-actionmgtBean used with table mgt
-actionmgtBean used with schedule calendar
- -->
 
-	<!--  use event and not selected. The event wrapper will map to the selected
-    p :dialog w idgetVar="eventDialog"  header="Action Event Details" showEffect="clip" hideEffect="clip" >
-     action.isActiveStatus.short.label
-     				<listheader label="${labels.action.isActiveStatus.short.label}" 				hflex="1" sort="auto(status)"/>
-				<listheader label="${labels.action.category.label}" 							hflex="2" sort="auto(category)" />						
-				<listheader label="${labels.action.name.label}" 								hflex="4" sort="auto(label)" />
-				<listheader label="${labels.short.dateStart.label}"  							hflex="2" sort="auto(beginDate)"/>
-				<listheader label="${labels.short.dateEnd.label}" 								hflex="2" />
-				<listheader label="${labels.action.duration.label}" 							hflex="2" />
-				<listheader label="${labels.default.comments.label}" 
-				id="eventDetails"	
-     -->
 <ui:composition>
 		
 		<p:dialog id="idDialogActionmgt"  closable="false" appendToBody="true"

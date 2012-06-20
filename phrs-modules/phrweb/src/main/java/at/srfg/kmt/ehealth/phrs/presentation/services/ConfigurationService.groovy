@@ -101,9 +101,9 @@ public class ConfigurationService implements Serializable {
 
 
         try {
-            menuLinksConfig = new PropertiesConfiguration("phrs-content.properties");
+            menuLinksConfig = new PropertiesConfiguration("phrscontent.properties");
         } catch (ConfigurationException e) {
-            LOGGER.error("ConfigurationService error MenuLinks phrs-content.properties", e);
+            LOGGER.error("ConfigurationService error MenuLinks phrscontent.properties", e);
         }
     }
     public synchronized void refreshPropertiesConfig() {
@@ -171,7 +171,32 @@ public class ConfigurationService implements Serializable {
         }
         return value
     }
+    /*
+    public Set<String> getContentLinkValues(){
+        Set<String> set
+        Map temp = getContentLinks()
+        if(temp ){
+            set =  temp.values()
+        }  else {
 
+            if(!menuLinksConfig ) LOGGER.error('getContentLinks menuLinksConfig is null')
+        }
+        return set
+    }
+
+    public Map<String,String> getContentLinks(){
+        Map<String,String> map=[:]
+        if(menuLinksConfig ){
+            map = menuLinksConfig.getProperties()
+            if(map) LOGGER.debug('getContentLinks map size='+ map.keySet().size() )
+            else LOGGER.debug('getContentLinks map null')
+        }  else {
+
+            LOGGER.error('getContentLinks menuLinksConfig is null')
+        }
+        LOGGER.debug('getContentLinks map= '+map.entrySet())
+        return map
+    } */
     public String getProperty(String prop) {
         String value = null;
 
@@ -189,9 +214,6 @@ public class ConfigurationService implements Serializable {
                         break
                     case 'formwardRedirectFilteredDirectory':
                         value = '/jsf/'
-                        break
-                    case 'forwardRedirectIsAuthenticatedToPage':
-                        value = '/jsf/home.xhtml'
                         break
                     case 'forwardRedirectLoginPage':
                         value = '/WEB-INF/views/jsp/login.jsp'

@@ -540,12 +540,12 @@ public  class PhrsStoreClient implements Serializable {
             if(mongo != null){
                 systemStatus=true;
             }
-            LOGGER.debug("systemStatus="+systemStatus);
+            //LOGGER.debug("systemStatus="+systemStatus);
             //will this cause exception if unavailable or do we try something
             if(this.getGenericTriplestore()!=null) {
                 systemStatusInterop=true;
             }
-            LOGGER.debug("systemStatusInterop="+systemStatusInterop);
+            //LOGGER.debug("systemStatusInterop="+systemStatusInterop);
         } catch (Exception e) {
             LOGGER.error(" getSystemStatus or mongoDB not available ", e);
         }

@@ -22,13 +22,13 @@ javascript will be included into head...at top, not bottom... -->
     <p:outputPanel rendered="#{pidBean.configImportEhr ne '0'}">
 
         <p:fieldset legend="CIED or Patient Identifier">
-                <h:outputText value="#{labels['labels.identity.msg.cied_1']}"/>
+                <h:outputText value="#{labels['identity.msg.cied_1']}"/>
 
             <p:spacer width="2"/> <a href="#{request.contextPath}/jsf/monitor_interop.xhtml"><h:outputText
-                    value="#{labels['labels.menu.import_health_data']}" style="font-size:12pt;text-decoration:underline;"/></a>
+                    value="#{labels['menu.import_health_data']}" style="font-size:12pt;text-decoration:underline;"/></a>
            <!--
             <p>
-            For demonstration purposes, please use serial number PZC123456S
+            For demonstration purposes, please use serial number Suzie Mayer PZC123456S or Andreas Schmidt 9925119
             </p>
             -->
             <h:form>
@@ -45,6 +45,8 @@ javascript will be included into head...at top, not bottom... -->
                                           itemValue=""/>
                             <f:selectItem itemLabel="Implant model:Maximo"
                                           itemValue="cied:model:Maximo"/>
+                            <f:selectItem itemLabel="Implant model:CD2215-36"
+                                          itemValue="cied:model:CD2215-36"/>
                             <f:selectItem itemLabel="Patient ID"
                                           itemValue="pid"/>
                         </h:selectOneMenu>
@@ -57,12 +59,12 @@ javascript will be included into head...at top, not bottom... -->
                         <p:inputText value="#{pidBean.pixQueryIdUser}"
                                      id="field_pixQueryIdUser_input"
                                      required="true"
-                                     requiredMessage="#{labels['labels.default_required_field']}"/>
+                                     requiredMessage="#{labels['default_required_field']}"/>
 
                         <p:message for="field_pixQueryIdUser_input" display="text"/>
                     </h:panelGroup>
 
-                    <h:outputLabel value="#{labels['labels.msg.pleasechange_1']}"/>
+                    <h:outputLabel value="#{labels['msg.pleasechange_1']}"/>
                     <h:panelGroup>
                         <p:commandButton ajax="false"
                                          value="Update"

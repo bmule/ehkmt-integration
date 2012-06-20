@@ -113,34 +113,31 @@
 
                         <h:outputLabel value="#{labels['login.msg.naming']}"/>
                         <br/>
-                        Demo <h:outputLabel value="#{labels['labels.username']}"/> : phrsm
+                        Demo <p:spacer width="2"/> <h:outputLabel value="#{labels['username']}"/> : phrsm
                     </p>
                     <h:panelGroup>
 
                             <h:form>
+                                <h:inputHidden  value="#{loginBean.loginType}" />
 
-                                <h:panelGrid columns="2">
+                                <h:panelGrid columns="2" >
 
-                                    <h:outputLabel value="#{labels['labels.username']}" style="font-size: 12pt;"/>
+                                    <h:outputLabel value="#{labels['username']}" style="font-size: 12pt;"/>
                                     <p:inputText value="#{loginBean.username}" style="width:200px"
                                              id="login_username"
                                              requiredMessage="#{labels['msg.invalid.username']}"
                                              required="true" />
 
-                                    <h:outputLabel value="#{labels['labels.password']}" style="font-size: 12pt;"/>
-                                    <p:password  feedback="" minLength="0" value="#{loginBean.password}" id="login_password"/>
+                                    <h:outputLabel value="#{labels['password']}" style="font-size: 12pt;"/>
+                                    <p:password   value="#{loginBean.password}"  style="width:200px"
+                                                  feedback="" minLength="0" id="login_password"/>
 
-                                    <p:inputText value="#{loginBean.password}" style="width:200px"
+                                    <!--
+                                             <p:inputText value="#{loginBean.password}" style="width:200px"
                                                  id="login_password"
-
-                                                  />
-                                    <!--
                                     requiredMessage="#{labels['msg.invalid.password']}"
-                                    required="true"
-                                    -->
+                                    required="true"   />
 
-                                    <h:inputHidden  value="#{loginBean.loginType}" />
-                                    <!--
                                     <h:outputLabel value="Login with" style="font-size: 12pt;"/>
                                     <h:selectOneRadio layout="pageDirection"
                                                       value="#{loginBean.loginType}"
