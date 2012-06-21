@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context antiJARLocking="true" path="/phrweb"
+docBase="D:\srfg\new-phrs\icardea-phrs\phrweb\target\phrweb"/>
+<!-- 
+<Context antiJARLocking="true" path="/phrweb"
+docBase="/..../ehkmt-integration/phrs-modules/phrweb/target/phrweb"/>
+-->

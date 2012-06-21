@@ -22,61 +22,8 @@ import org.slf4j.LoggerFactory;
 public class SiteReferencesTool implements Map, Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(ConfigurationService.class);
 
-   // Map<String,String> query
-	/*
-	 educationUrl='http://qviz-dev.salzburgresearch.at/confluence/'
-	 wikiUrl='http://qviz-dev.salzburgresearch.at/confluence/'
-	 forumUrl='http://qviz-dev.salzburgresearch.at/confluence/'
-	 decisionaids= 'http://qviz-dev.salzburgresearch.at/confluence/'
-	 pages = [education:educationUrl,
-	 wiki:wikiUrl,
-	 forum:forumUrl,
-	 decisionaids:decisionaids
-	 ]
-	 */
-    /*
-	Map query = [
-		//'home'		:'display/phrcontent/Home',
-		'feeds':'pages/listpages-dirview.action?key=phrcontent',
-		'rss'		:'labels/listlabels-heatmap.action?key=phrcontent',
 
-		'home'		:'pages/listpages-dirview.action?key=phrcontent',
-		'pages'		:'pages/listpages-dirview.action?key=phrcontent',
 
-		'wiki'		:'pages/listpages-dirview.action?key=phrcontent',
-		'blog'		:'pages/viewrecentblogposts.action?key=phrcontent',
-
-		'forum'		:'spaces/forums/spaceForums.action?key=phrcontent',
-
-		'community'	   :'pages/recentlyupdated.action?key=phrcontent',
-		'mycommunities':'users/bubbles/user-community-profile.action',
-
-		'tags'		:'labels/listlabels-heatmap.action?key=phrcontent',
-		'mytags'	:'users/viewmylabels.action',
-
-		'bookmarks'	:'spaces/space-bookmarks.action?spaceKey=phrcontent',
-		'mail'		:'spaces/viewmailarchive.action?key=phrcontent',
-
-		//education Patient+Education
-		'cied_patient_education':'display/phrcontent/Patient+Education',
-
-		'glossary':'display/phrcontent/Glossary',
-
-		'basic_information':'display/phrcontent/Basic+Information',
-
-		'new_habits':'display/phrcontent/New+Habits',
-
-		'precautions':'display/phrcontent/Precautions',
-
-		'warning_signs':'display/phrcontent/Warning+Signs',
-
-		'useful_links':'display/phrcontent/Links',// display/phrcontent/Links
-
-		'other_resources':'display/phrcontent/Other+Resources',
-		'decision_aids':'display/phrcontent/Decision+Aid+for+Telemonitoring'
-
-	]
-    */
 	Map queryLocal = [
 		'privacy_consent_manager':'/jsf/iframe_privacy_consent_editor.xhtml'
 	]

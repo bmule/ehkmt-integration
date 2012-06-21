@@ -38,7 +38,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
     String password
 
-    private Set<String> testLoginIds;
+    private  Set<String> testLoginIds;
     private ReportTool reportTool;
 
     public LoginMgtBean() {
@@ -472,7 +472,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                     if(isValidTestLogin(username)) {
                         processLocalLogin()
                     } else {
-                        WebUtil.addFacesMessageSeverityError('Login Status', reportTool.getLabel('login.unknown_username','Unknown User ') + loginType+'???');
+                        WebUtil.addFacesMessageSeverityError('Login Status', reportTool.getLabel('login.unknown_username','Unknown User ') + username);
                         LOGGER.debug('processLogin failed unknown loginType: ' + loginType)
 
                     }
