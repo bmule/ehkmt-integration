@@ -52,7 +52,7 @@
                         </h:panelGroup>
 
                         <h:panelGroup rendered="#{ref.type == 'nodeheaderlink'}">
-                            <h:outputLink  value="#{request.contextPath} #{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/>
+                            <h:outputLink  value="#{request.contextPath}#{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:12pt;"/>
                             </h:outputLink>
                         </h:panelGroup>
 
@@ -66,12 +66,12 @@
 
                         <h:panelGroup rendered="#{ref.type eq 'link'}" >
 
-                            <h:outputLink  value="#{request.contextPath} #{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+                            <h:outputLink  value="#{request.contextPath}#{ref.fileName}"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
                             </h:outputLink>
                         </h:panelGroup>
 
                         <h:panelGroup rendered="#{ref.type eq 'nodelink'}">
-                            <h:outputLink value="#{request.contextPath} #{ref.fileName}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
+                            <h:outputLink value="#{request.contextPath}#{ref.fileName}" style="font-size:10pt;"><h:outputText value="#{ref.label}" style="font-size:10pt;"/>
                             </h:outputLink>
                         </h:panelGroup>
 

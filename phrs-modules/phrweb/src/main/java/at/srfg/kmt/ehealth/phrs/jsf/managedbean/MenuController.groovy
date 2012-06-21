@@ -254,7 +254,7 @@ public class MenuController extends FaceCommon {
             //monitor_vitals.xhtml
             //'/jsf/riskfactor_mgt.xhtml': 'Risk Factors',
             if(menuProfile == '0'){
-                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_LINK, codedLabel, root), root)
+                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
 
             } else{
                 sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Privacy & Admin'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
