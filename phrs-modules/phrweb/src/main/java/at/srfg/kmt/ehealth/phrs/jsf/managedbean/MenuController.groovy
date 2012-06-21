@@ -132,6 +132,17 @@ public class MenuController extends FaceCommon {
 
             home = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('default.home.label','Home'), '/jsf/home.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)//TYPE_ITEM_NODE_HOME
 
+            if(menuProfile == '0'){
+                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+
+            } else{
+                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Privacy & Admin'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+
+                Map privacyMap = [
+                        '/jsf/iframe_privacy_consent_editor.xhtml': reportTool.getLabel('menu.privacy','Consent Editor')]
+
+                addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
+            }
             //
             String menuImport= ConfigurationService.getInstance().getProperty('import.ehr','1');
             if(menuImport == '0'){
@@ -253,17 +264,7 @@ public class MenuController extends FaceCommon {
 
             //monitor_vitals.xhtml
             //'/jsf/riskfactor_mgt.xhtml': 'Risk Factors',
-            if(menuProfile == '0'){
-                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
 
-            } else{
-                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Privacy & Admin'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
-
-                Map privacyMap = [
-                        '/jsf/iframe_privacy_consent_editor.xhtml': reportTool.getLabel('menu.privacy','Consent Editor')]
-
-                addMenuItems(privacyMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionPrivacy, codedLabel)
-            }
         }
 
     }
