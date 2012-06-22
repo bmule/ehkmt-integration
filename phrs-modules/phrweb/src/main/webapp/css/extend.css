@@ -35,3 +35,16 @@
 	font-weight: bold;
 	width: 100px;
 }
+
+.external-link a:link {
+    COLOR: #0000FF;
+}
+.external-link a:visited {
+    COLOR: #800080;
+}
+.external-link a:hover {
+    COLOR: #FF0000;
+}
+.external-link a:active {
+    COLOR: #00FF00;
+}

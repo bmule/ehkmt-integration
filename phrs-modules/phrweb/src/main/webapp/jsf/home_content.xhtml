@@ -18,15 +18,24 @@
         <h:panelGroup rendered="#{loginBean.systemStatus eq true}">
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq true}">
-                <h:outputText value="#{labels['labels.menu.msg.health_reports']}"/>
+                <h:outputText value="#{labels['menu.msg.health_reports']}"/>
             </h:panelGroup>
+           <!--
+            <a href="http://www.defi-forum.de/" target="_blank">Unabhängiges Forum mit Infos für Betroffene einer Defibrillator-Implantation</a>
+
+            <a href="http://www.imedo.de/groups" target="_blank">Online-Gruppen zur Gesundheit mit Hilfe &amp; Forum</a>
+            Online-Gruppen zur Gesundheit mit Hilfe &amp; Forum
+            menu.msg.health_reports
+            description=Beschreibung
+topic=Thema                            
+            -->
 
             <h:panelGroup rendered="#{loginBean.medicalRole eq false and loginBean.configImportEhr ne '0'}">
                  <!--
                 <h:outputText value="#{labels['message_home']}"/>
                 <br/> -->
                 <p>
-                    <h:outputText value="#{labels['labels.menu.msg.consent']}"/>
+                    <h:outputText value="#{labels['menu.msg.consent']}"/>
                     <p:spacer width="2"/>
                         <h:outputLink value="#{request.contextPath}/jsf/iframe_privacy_consent_editor.xhtml">
                             <h:outputText
@@ -43,9 +52,62 @@
                 <ui:include src="./profile_contact_view.xhtml"/>
             </h:panelGroup>
         </h:panelGroup>
-        <!-- system failure notice to user, e.g. a database was not started etc -->
+
+        <h:panelGroup rendered="#{loginBean.medicalRole eq false}" >
+
+            <div class="table-wrap">
+                <table class="confluenceTable"><tbody>
+                <tr>
+                    <!--menu.links <th class="confluenceTh"><h:outputText value="#{labels['topic']}"/><p:spacer width="2"/></th>-->
+           <th class="confluenceTh"><h:outputText value="#{labels['menu.info_comunity_links']}"/></th>
+
+       </tr>
+       <tr>
+          <!-- <td class="confluenceTd"> FORUM <br/>
+               Defibrillator&nbsp;Implantation <br/> </td>   -->
+                    <td class="confluenceTd"> <a href="http://www.defi-forum.de/"  class="external-link" rel="nofollow" target="_blank">Unabhängiges Forum mit Infos für Betroffene einer Defibrillator-Implantation</a> </td>
+
+                </tr>
+                <tr>
+        <!-- <td class="confluenceTd"> FORUM <br/>
+           Gesundheit, Hilfe <br/> </td>     -->
+       <td class="confluenceTd "> <a href="http://www.imedo.de/groups" class="external-link" rel="nofollow" target="_blank">Online-Gruppen zur Gesundheit mit Hilfe &amp; Forum</a>  </td>
+
+   </tr>
+   <tr>
+       <!--<td class="confluenceTd"> FORUM <br/>
+           ICD SUPPORT GROUP <br/> </td>    -->
+       <td class="confluenceTd"> <a href="http://www.thepacemakerforum.com/" class="external-link" rel="nofollow" target="_blank">ICD Support Group</a> </td>
+
+   </tr>
+   <tr>
+       <!--<td class="confluenceTd"> FORUM <br/>
+           Pacemaker &amp; ICD <br/> </td> -->
+       <td class="confluenceTd"> <a href="http://www.implantable.com/" class="external-link" rel="nofollow" target="_blank">Pacemaker &amp; ICD Forum</a> </td>
+
+   </tr>
+   <tr>
+       <!--<td class="confluenceTd"> FORUM <br/>
+           CIED <br/>
+           Pacemaker FORUM <br/> </td>   -->
+       <td class="confluenceTd"> <a href="http://www.pacemakerclub.com/public/jpage/1/p/Home/content.do" class="external-link" rel="nofollow" target="_blank">Pacemaker Forum</a> </td>
+
+   </tr>
+   <tr>
+       <!--<td class="confluenceTd"> CIED </td>   -->
+       <td class="confluenceTd"> <a href="http://www.cardiacathletes.org/FAQRetrieve.aspx?ID=33766" class="external-link " rel="nofollow" target="_blank">Living with your pacemaker (sport)</a> </td>
+
+   </tr>
+   </tbody></table>
+</div>
+
+
+</h:panelGroup>
+
+
+<!-- system failure notice to user, e.g. a database was not started etc -->
         <h:panelGroup rendered="#{loginBean.systemStatus eq false}">
-               <h:outputText value="#{labels['labels.menu.msg.system_failure']}"/>
+               <h:outputText value="#{labels['menu.msg.system_failure']}"/>
         </h:panelGroup>
 
     </ui:composition>
