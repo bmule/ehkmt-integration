@@ -257,7 +257,7 @@ public class MenuController extends FaceCommon {
 
 
             if(menuProfile == '0'){
-                sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
+               //Do not show,doctor does not use sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Consent Editor'), '/jsf/iframe_privacy_consent_editor.xhtml', PhrsConstants.TYPE_ITEM_NODE_HEADER_LINK, codedLabel, root), root)
 
             } else{
                 sectionPrivacy = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.consent_editor','Privacy & Admin'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
