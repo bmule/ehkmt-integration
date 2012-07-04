@@ -43,6 +43,8 @@
         <p:panel style="width:100%" rendered="#{menuBean.menuType eq 'table' and loginBean.loggedIn eq true}">
 
             <h:form id="tableform">
+                <p:commandLink value="Logout" style="font-weight:bold"
+                               actionListener="#{loginBean.commandLogout}"/>
                 <p:treeTable  value="#{menuBean.root}" var="ref" style="width:100%;" expanded="true" 	>
 
                     <p:column  style="width:100%;" selectionMode="single" >
