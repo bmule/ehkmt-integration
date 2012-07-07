@@ -54,22 +54,23 @@
 			<p:fieldset legend="#{labels['action_actions_list_label']}" >
 
 <p:breadCrumb >		
-		<p:menuitem  value="#{labels['action_actions_list_label']}"   immediate="true"  url="#" 
+		<p:menuitem  value="#{labels['list.label']}"   immediate="true"  url="#"
 		styleClass="ui-button-text" />
-		<p:menuitem  value="#{labels['action_actions_list_label']}"   immediate="true"  url="#"  
+		<p:menuitem  value="#{labels['list.label']}"   immediate="true"  url="#"
 			styleClass="ui-button-text"/>
-		<p:menuitem  value="View Calendar"  url="/jsf/action_schedule_calendar.xhtml"  immediate="true"
+		<p:menuitem  value="#{labels['calendar.view.calendar']}"  url="/jsf/action_schedule_calendar.xhtml"  immediate="true"
 			styleClass="ui-button-text" />		 						 
 </p:breadCrumb>			
 			<p:messages />
 			<!-- show validation messages for create form contents -->
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents 		
-			<p:fieldset legend="#{labels['action_actions_list_label']}" > ui-button-text-->
+			<p:fieldset legend="#{labels['action_actions_list_label']}" > ui-button-text
+			-->
 
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" immediate="true"
+					<p:commandButton value="#{labels['default.button.newform.label']}" immediate="true"
 						rendered="#{actionmgtBean.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{actionmgtBean.create}"
@@ -82,10 +83,10 @@
 				value="#{actionmgtBean.modelMain}" paginator="true" rows="20">
 
 				<!--  ui:include src="./action_schedule_row_buttons.xhtml" /-->
-				<p:column style="width:50px" headerText="Options">
+				<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
-						<!-- ok, success view  actionmgtBean 
+						<!-- ok, success view  actionmgtBean
 						<p:commandButton update="idPanelActionmgt"
 							disabled="#{theItem.status eq 'default.no_answer.label'}"
 							oncomplete="widDialogActionmgt.show()"

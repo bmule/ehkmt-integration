@@ -47,7 +47,7 @@
 		<p:fieldset legend="#{labels['default_blank_label']}">
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" rendered="#{OOOBean.allowCreate}"
+					<p:commandButton value="#{labels['default.button.newform.label']}" rendered="#{OOOBean.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{OOOBean.create}"
 						update="idPanelXXX" oncomplete="widDialogAAA.show()" />
@@ -65,7 +65,7 @@
 				widgetVar="widItemTableActionmgt" var="theItem"
 				value="#{OOOBean.modelMain}" paginator="true" rows="20">
 
-				<p:column style="width:50px" headerText="Options">
+				<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
 						<!-- ok, success view  OOOBean -->
@@ -184,7 +184,7 @@
 						<h:selectOneMenu value="#{OOOBean.selected.code}"
 							id="idField_2_input"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:selectItem itemLabel="Please Choose"
+							<f:selectItem itemLabel="#{labels['default.combobox.pleasechoose.label']}"
 								itemValue="default.no_answer.label"/>
 							<f:selectItems value="#{OOOBean.vocabMap.TAG_ZZZZ}" var="lv"
 								itemLabel="#{lv.label}" itemValue="#{lv.id}" />
@@ -331,7 +331,7 @@
 							rendered="#{OOOBean.modify eq 'no'}" styleClass="commentText" />
 						<p:inputTextarea value="#{OOOBean.selected.note}"
 							autoResize="false" cols="30" rows="5"  
-							rendered="#{OOOBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+							rendered="#{OOOBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"  styleClass="commentTextInputArea" />
 	  				</p:outputPanel> 					 
 				</h:panelGrid>
 

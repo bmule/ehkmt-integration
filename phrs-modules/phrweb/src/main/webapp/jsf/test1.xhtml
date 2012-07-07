@@ -26,13 +26,13 @@
 				<p:fieldset legend="#{labels['obsBodyWeightBMW01.label']}">
 					<p:toolbar>
 						<p:toolbarGroup align="left">
-							<p:commandButton update="idPanelObw" value="create"
+							<p:commandButton update="idPanelObw" value="#{labels['default.button.newform.label']}"
 								title="#{labels['default.button.newform.label']}"
 								image="ui-icon-plus" actionListener="#{testbwBean.create}"
 								oncomplete="widDialogObw.show()" />
 							<!--
 							<p:spacer width="2px"></p:spacer>
-							<p:commandButton value="Chart"
+							<p:commandButton value="XX{labels['default.chart.label']}"
 								title="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
 								update="idPanelChart01" oncomplete="widDialogChart01.show()" />  -->
 						</p:toolbarGroup>

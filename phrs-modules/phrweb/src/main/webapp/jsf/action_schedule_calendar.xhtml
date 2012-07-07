@@ -12,14 +12,14 @@ action_actions_list_label=Actions List
  -->
 
 	</ui:define>
-	<!-- action_schedule_mgt_module.xhtml -->
+	<!-- action_schedule_mgt_module.xhtml calendar.view.calendar-->
 	<ui:define name="content">
 	<p:breadCrumb>
-		<p:menuitem  value="View Calendar" immediate="true"  url="/jsf/action_schedule_calendar.xhtml" 
+		<p:menuitem  value="#{labels['calendar.view.calendar']}" immediate="true"  url="/jsf/action_schedule_calendar.xhtml"
 		styleClass="ui-button-text"/>		 				
-		<p:menuitem  value="View Calendar" immediate="true"  url="/jsf/action_schedule_calendar.xhtml" 
+		<p:menuitem  value="#{labels['calendar.view.calendar']}" immediate="true"  url="/jsf/action_schedule_calendar.xhtml"
 		styleClass="ui-button-text"/>	
-		<p:menuitem  value="#{labels['action_actions_list_label']}"     url="/jsf/action_schedule_dash.xhtml" 
+		<p:menuitem  value="#{labels['calendar.view.calendar']}"     url="/jsf/action_schedule_dash.xhtml"
 		 immediate="true" styleClass="ui-button-text"/>		 
 	</p:breadCrumb>
 		

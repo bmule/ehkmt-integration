@@ -45,7 +45,7 @@ prependId="false"
 				<p:fieldset legend="#{labels['obsIssue.label']}">
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" rendered="#{odlprobBean.allowCreate}"
+					<p:commandButton value="#{labels['default.button.newform.label']}" rendered="#{odlprobBean.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{odlprobBean.create}"
 						update="idPanelOprob" oncomplete="widDialogOprob.show()" />														
@@ -56,7 +56,7 @@ prependId="false"
 					<p:dataTable widgetVar="widItemTableOprob" id="idItemTableOprob"
 					 	var="theItem" value="#{odlprobBean.modelMain}">
 					 	
-						<p:column style="width:50px" headerText="Options">
+						<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 		
 								<!-- ok, success view  odlprobBean 
@@ -172,7 +172,7 @@ prependId="false"
 											
 											<h:selectOneMenu value="#{odlprobBean.selected.code}"
 												rendered="#{odlprobBean.modify eq 'yes'}">
-												<f:selectItem itemLabel="Please Choose"
+												<f:selectItem itemLabel="#{labels['default.combobox.pleasechoose.label']}"
 													itemValue="default.no_answer.label"/>
 												<f:selectItems value="#{odlprobBean.vocabMap.TAG_PROBLEM_SYMPTOM}" var="lv"
 													itemLabel="#{lv.label}" itemValue="#{lv.id}" />
@@ -227,7 +227,7 @@ prependId="false"
 											rendered="#{odlprobBean.modify eq 'no'}" styleClass="commentText" />
 										<p:inputTextarea value="#{odlprobBean.selected.note}"
 											autoResize="false" cols="30" rows="5"  
-											rendered="#{odlprobBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+											rendered="#{odlprobBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"  styleClass="commentTextInputArea" />
 					  				</p:outputPanel>
 					  				<p:message for="field_note_prob" display="text" /> 
 					  				  						

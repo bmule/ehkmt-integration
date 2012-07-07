@@ -37,11 +37,11 @@ public class I18Tool {
 	public  String getLabelFromi18Tool(String termId){
 		Locale locale= getLocale();
 		if(locale!=null) return locale.getLanguage();
-		String label = getLabelFromi18Tool(termId,getLocale());
+		String label = getLabelFromi18ToolByLocale(termId,getLocale());
 		return label;
 		
 	}
-	public  String getLabelFromi18Tool(String termId, Locale locale){
+	public  String getLabelFromi18ToolByLocale(String termId, Locale locale){
 		String label=null;
 		//resources folder but under default classes 
 		if(termId != null && termId.length()>1 ){
@@ -83,7 +83,7 @@ public class I18Tool {
 		try{
 			if(language==null) language="en";
 			Locale locale = new Locale(language);
-			label = getLabelFromi18Tool(termId,locale);	
+			label = getLabelFromi18ToolByLocale(termId,locale);
 		} catch(Exception e){
 			//println("ex "+e)
 		}

@@ -58,11 +58,11 @@ identifier
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents -->
 
-			<p:fieldset legend="Physical Activity">
+			<p:fieldset legend="#{labels['activityItem.label']}">
 
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" immediate="true"
+					<p:commandButton value="#{labels['default.button.newform.label']}" immediate="true"
 						rendered="#{proids.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{proids.create}"
@@ -74,7 +74,7 @@ identifier
 				widgetVar="widItemTableProids" var="theItem"
 				value="#{proids.modelMain}" paginator="true" rows="20">
 
-				<p:column style="width:50px" headerText="Options">
+				<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
 						<!-- ok, success view  proids -->
@@ -157,18 +157,7 @@ identifier
 <!-- form dialog -->
 		<!--  add dialog here and wrap with the form -->
 		<ui:include src="./obs_activity_dialog.xhtml" />
-		<!--<p:dialog widgetVar="widDialogProids" id="idDialogProids"
-			modal="true"	appendToBody="true"
-			header="Action Details" width="600" showEffect="clip"
-			hideEffect="clip">
 
-			<p:outputPanel id="idPanelProids" layout="block">
-				<h:form id="idFormProids">
-				
-				test
-				</h:form>
-			</p:outputPanel>
-		</p:dialog>-->
 
 
 </ui:define>

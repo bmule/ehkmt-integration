@@ -59,23 +59,25 @@
 			<p:fieldset legend="#{labels['medicationSummary.label']}">
 			 
 			<p:breadCrumb>
-                <p:menuitem value="All" url="/jsf/obs_medication_mgt.xhtml?view=all"
+                <p:menuitem value="#{labels['medicationSummary.list.all.short.label']}" url="/jsf/obs_medication_mgt.xhtml?view=all"
                             immediate="true"/>
-                <p:menuitem value="All" url="/jsf/obs_medication_mgt.xhtml?view=all"
+                <p:menuitem value="#{labels['medicationSummary.list.all.short.label']}" url="/jsf/obs_medication_mgt.xhtml?view=all"
                             immediate="true"/>
-				<p:menuitem value="Current" 	url="/jsf/obs_medication_mgt.xhtml?view=active" 
+				<p:menuitem value="#{labels['medicationSummary.list.active.short.label']}" 	url="/jsf/obs_medication_mgt.xhtml?view=active"
 					immediate="true"/>
-				<p:menuitem value="Inactive" url="/jsf/obs_medication_mgt.xhtml?view=inactive"
+				<p:menuitem value="#{labels['medicationSummary.list.inactive.short.label']}" url="/jsf/obs_medication_mgt.xhtml?view=inactive"
 					immediate="true"/>
 
             </p:breadCrumb>
                 <!--
+                medicationSummary.list.inactive.short.label=Inaktiv
+medicationSummary.list.completed.short.label=Abgeschlossen
                     debug<p:menuitem value="History" url="/jsf/obs_medication_mgt.xhtml?view=history"
                         immediate="true"/> -->
 
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" immediate="true"
+					<p:commandButton value="#{labels['default.button.newform.label']}" immediate="true"
 						rendered="#{odlmed.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{odlmed.create}"
@@ -88,7 +90,7 @@
 				widgetVar="widItemTableOmed" var="theItem"
 				value="#{odlmed.modelMain}" paginator="true" rows="7">
 
-				<p:column style="width:40px" headerText="Option">
+				<p:column style="width:40px" headerText="#{labels['labels.menu.options.label']}">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
 						<!-- ok, success view  odlmed -->
@@ -137,14 +139,15 @@
 					</p:outputPanel>					
 					
 				</p:column>
-				<p:column headerText="Start Date" style="width:110px;">
+
+				<p:column headerText="#{labels['short.dateStart.label']}" style="width:110px;">
 					<h:outputText  value="#{theItem.beginDate}"><!-- beginDate-->
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
 				</p:column>				
 				
 				<!--  TODO add Status from EHR Medication, use Origin part {labels['medicationSummary.medicationStatus.main.label']} -->
-				<p:column headerText="Status" style="width:120px;">
+				<p:column headerText="#{labels['default_status']}" style="width:120px;">
 					<h:outputText value="#{theItem.status}" >
 						<f:converter converterId="labelLookup" />
 					</h:outputText>
@@ -152,7 +155,7 @@
 				</p:column>
 				
 
-				<p:column headerText="End Date" style="width:110px;">
+				<p:column headerText="#{labels['short.dateEnd.label']}" style="width:110px;">
 					<h:outputText  value="#{theItem.endDate}"><!-- endDate-->
 						<f:convertDateTime pattern="yyyy-MM-dd" />
 					</h:outputText>
@@ -182,13 +185,13 @@
 				</p:column>
 				<!-- <p:column headerText=" {labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}">
 				 -->
-				<p:column headerText="Reason" style="width:125px;">
+				<p:column headerText="#{labels['medicationSummary.medicationReasonComment.short.label']}" style="width:125px;">
 					<h:outputLabel value="#{theItem.reasonCode}">
 						<f:converter converterId="labelLookup" />
 					</h:outputLabel>
 				</p:column>		
 				<!-- <p:column headerText=" {labels['medicationSummary.prescribedByPersonName.label']}"> -->		
-				<p:column headerText="Prescribed by" style="width:150px;">
+				<p:column headerText="#{labels['medicationSummary.prescribedByPersonName.short.label']}" style="width:150px;">
 				
 					<h:outputText value="#{theItem.prescribedByName}" />
 				</p:column>
@@ -208,19 +211,6 @@
 		<!--  add dialog here and wrap with the form -->
 		
 		<ui:include src="./obs_medication_dialog.xhtml" />
-		
-		<!--<p:dialog widgetVar="widDialogOmed" id="idDialogOmed"
-			modal="true"	appendToBody="true"
-			header="Action Details" width="600" showEffect="clip"
-			hideEffect="clip">
-
-			<p:outputPanel id="idPanelOmed" layout="block">
-				<h:form id="idFormOmed">
-				
-				test
-				</h:form>
-			</p:outputPanel>
-		</p:dialog>-->
 
 
 </ui:define>

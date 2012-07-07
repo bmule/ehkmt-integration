@@ -513,35 +513,37 @@ public class  VocabularyEnhancer implements Serializable {
     /**
      * A means to using URIs to I18 file by combining the suffix "term." with part of Subject URI
      * Currently only one namespace is used
-     *
+     *  # converted to '--'
      * @param uri  http://..../Cholesterol
+     *
      * @return  term.Cholesterol   in I18 files
      */
    public static String transformToI18term(String uri){
-       String result=uri
+       String result=uri;
 
        if(result){
            try{
                 if(result.startsWith("http")) {
                     //result = result.replace("http://", "");
-                    int indWord = result.lastIndexOf('/')
-                    indWord = indWord + 1
+                    int indWord = result.lastIndexOf('/');
+                    indWord = indWord + 1;
                     if(indWord > 0 &&  result.length() > indWord)  { // >indWord at end of Uri.
 
-                        String substring = result.substring(indWord)
+                        String substring = result.substring(indWord);
                         if(substring){
                             StringBuffer sb= new StringBuffer();
-                            sb.append('term.')
-                            sb.append(substring)
-                            result = sb.toString()
+                            sb.append('term.');
+                            substring = substring.replaceAll("#","--");
+
+                            sb.append(substring.trim());
+                            result = sb.toString();
                         }
                     }
                 }
                 //result = result.replaceAll("/","_")
-                //result = result.replaceAll("#","--")
            } catch(Exception e){
-               LOGGER.error("transformToI18term error parseing "+uri,e)
-               result=uri //reset
+               LOGGER.error("transformToI18term error parsing "+uri,e);
+               result=uri; //reset
            }
        }
 

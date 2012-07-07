@@ -7,6 +7,7 @@ import at.srfg.kmt.ehealth.phrs.model.baseform.MonitorPhrItem;
 import at.srfg.kmt.ehealth.phrs.model.baseform.PhrFederatedUser;
 import at.srfg.kmt.ehealth.phrs.model.baseform.ProfileContactInfo;
 import at.srfg.kmt.ehealth.phrs.persistence.client.PhrsStoreClient;
+import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportTool;
 import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportToolTransformer;
 import at.srfg.kmt.ehealth.phrs.presentation.services.InteropProcessor;
 import at.srfg.kmt.ehealth.phrs.presentation.services.ModelLabelValue;
@@ -60,6 +61,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
     public MonitorInfoMgtBean() {
         userService = PhrsStoreClient.getInstance().getPhrsRepositoryClient().getUserService();
+        reportTool = new ReportTool();
         requestorOwnerUri = userService.getOwnerUri();
 
         ownerUri = userService.getOwnerUri();
@@ -336,12 +338,13 @@ public class MonitorInfoMgtBean implements Serializable {
             // BP  BW   MED   ADL   PROBLEM
             //hide contact information
             //modelFormLocalResources.add(new ModelLabelValue("PDQ", "Contact Information"));
+            //
 
-            modelFormLocalResources.add(new ModelLabelValue("BP", "History Blood Pressure"));
-            modelFormLocalResources.add(new ModelLabelValue("BW", "History Body Weight"));
-            modelFormLocalResources.add(new ModelLabelValue("MED", "Medications"));
-            modelFormLocalResources.add(new ModelLabelValue("ADL", "Activities of Daily Living"));
-            modelFormLocalResources.add(new ModelLabelValue("PROBLEM", "Problems"));
+            modelFormLocalResources.add(new ModelLabelValue("BP", reportTool.getLabel("obsBloodPressureA01.label","Blood Pressure")));
+            modelFormLocalResources.add(new ModelLabelValue("BW", reportTool.getLabel("obsBodyWeightBMW01.label","Body Weight")));
+            modelFormLocalResources.add(new ModelLabelValue("MED", reportTool.getLabel("medicationSummary.label","Medications")));
+            modelFormLocalResources.add(new ModelLabelValue("ADL", reportTool.getLabel("activityOfDailyLivingItem.activityCode.label","Activities of Daily Living")));
+            modelFormLocalResources.add(new ModelLabelValue("PROBLEM", reportTool.getLabel("obsIssue.label","Problems")));
             //default
             if(selectedLocalResourceType ==null){
                 selectedLocalResourceType="BP";//"PDQ";
@@ -356,7 +359,7 @@ public class MonitorInfoMgtBean implements Serializable {
 
     }
 
-
+    private  ReportTool reportTool;
     public String getSelectedResourceType() {
         return selectedLocalResourceType;
     }

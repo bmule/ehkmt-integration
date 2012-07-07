@@ -70,13 +70,13 @@ prependId="false"
 				<p:fieldset legend="#{labels['obsBodyWeightBMW01.label']}">
 					<p:toolbar>
 						<p:toolbarGroup align="left">
-							<p:commandButton update="idPanelObw" value="create"
+							<p:commandButton update="idPanelObw" value="#{labels['default.button.newform.label']}"
 								rendered="#{odlbwBean.allowCreate}"
 								title="#{labels['default.button.newform.label']}"
 								image="ui-icon-plus" actionListener="#{odlbwBean.create}"
 								oncomplete="widDialogObw.show()" />
 							<p:spacer width="2px"/>
-							<p:commandButton value="Chart"
+							<p:commandButton value="#{labels['default.chart.label']}"
 								title="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
 								update="idPanelChart01" oncomplete="widDialogChart01.show()" />
 						</p:toolbarGroup>
@@ -224,7 +224,7 @@ prependId="false"
 									rendered="#{odlbwBean.modify eq 'no'}" styleClass="commentText" />
 								<p:inputTextarea value="#{odlbwBean.selected.note}"
 									autoResize="false" cols="30" rows="5"  
-									rendered="#{odlbwBean.modify eq 'yes'}" label="Comment"
+									rendered="#{odlbwBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"
 									styleClass="commentTextInputArea" />
 							</p:outputPanel>
 							<p:message for="field_note" display="text" />

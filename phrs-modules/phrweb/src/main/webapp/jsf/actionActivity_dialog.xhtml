@@ -13,11 +13,10 @@
 
 <h:body>
 
-
 <ui:composition>
 		
 		<p:dialog id="idDialogActionmgt"  closable="false" appendToBody="true"
-				widgetVar="widDialogActionmgt"	header="Action Details" 
+				widgetVar="widDialogActionmgt"	header="#{labels['action.actionplan.label']}"
 				width="600" showEffect="clip" hideEffect="clip"	>
 
 			<p:outputPanel id="idPanelActionmgt" layout="block">
@@ -207,7 +206,7 @@
 								styleClass="commentText" />
 							<p:inputTextarea value="#{actionmgtBean.selected.note}"
 								autoResize="false" cols="30" rows="5"  
-								rendered="#{actionmgtBean.modify eq 'yes'}" label="Comment"
+								rendered="#{actionmgtBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"
 								styleClass="commentTextInputArea" />
 						</p:outputPanel>
 						<p:message for="field_note_act_input" display="text" />

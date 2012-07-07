@@ -329,7 +329,7 @@ reason_code_other=Other
 								rendered="#{odlmed.modify eq 'no'}" styleClass="commentText" />
 							<p:inputTextarea value="#{odlmed.selected.note}" id="field_note_med_input"
 								autoResize="false" cols="30" rows="5"  
-								rendered="#{odlmed.modify eq 'yes'}" label="Comment"
+								rendered="#{odlmed.modify eq 'yes'}" label="#{labels['default.comments.label']}"
 								styleClass="commentTextInputArea" />
 						</p:outputPanel>
 						<p:message for="field_note_med_input" display="text" />

@@ -46,14 +46,14 @@ prependId="false"
 				<p:fieldset legend="#{labels['obsBloodPressureA01.label']}">
 					<p:toolbar>
 						<p:toolbarGroup align="left">
-							<p:commandButton update="idPanelObp"  value="create"
+							<p:commandButton update="idPanelObp"  value="#{labels['default.button.newform.label']}"
 								rendered="#{odlbpBean.allowCreate}"
 								title="#{labels['default.button.newform.label']}"
 								image="ui-icon-plus" actionListener="#{odlbpBean.create}"
 								oncomplete="widDialogObp.show()" />
 								
 								<p:spacer width="2px"></p:spacer>
-								<p:commandButton value="Chart" title="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"						 
+								<p:commandButton value="#{labels['default.chart.label']}" title="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
 										update="idPanelChart02" oncomplete="widDialogChart02.show()" />				
 						</p:toolbarGroup>
 					</p:toolbar>
@@ -81,7 +81,7 @@ prependId="false"
 		</p:row>
 	</p:columnGroup>
 	
-						<p:column style="width:50px"><!--  headerText="Options" -->
+						<p:column style="width:50px"><!--  headerText="XX{labels['list.options.label']}" -->
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
 								<!-- ok, success view  odlbpBean 
@@ -312,7 +312,7 @@ prependId="false"
 									rendered="#{odlbpBean.modify eq 'no'}" styleClass="commentText" />
 								<p:inputTextarea value="#{odlbpBean.selected.note}"
 									autoResize="false" cols="30" rows="5"  
-									rendered="#{odlbpBean.modify eq 'yes'}" label="Comment"
+									rendered="#{odlbpBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"
 									styleClass="commentTextInputArea" />
 							</p:outputPanel>
 							<p:message for="field_note_bp" display="text" />

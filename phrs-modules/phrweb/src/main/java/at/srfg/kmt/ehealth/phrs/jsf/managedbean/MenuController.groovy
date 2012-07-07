@@ -142,7 +142,7 @@ public class MenuController extends FaceCommon {
                 //'/jsf/iframe_social_community_links.xhtml': 'Community Links'
             }
         
-            sectionMonitoring = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.monitoring','Monitoring'),'', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
+            sectionMonitoring = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.monitoring','Overview'),'', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
             sectionPatientInformation = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.patientinfo','Patient Information'), '', PhrsConstants.TYPE_ITEM_NODE_HEADER, codedLabel, root), root)
 
@@ -246,10 +246,10 @@ public class MenuController extends FaceCommon {
             }
            // addMenuItems(healthObs, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionObservations, codedLabel)
             sectionActionPlan = new DefaultTreeNode(new DocumentReference(reportTool.getLabel('menu.actionplan.label','Action Plan'), '/jsf/action_schedule_dash.xhtml', PhrsConstants.TYPE_ITEM_LINK, codedLabel, sectionPatientInformation), sectionPatientInformation)
-
+             //default.chart.label     default.tab.charts
             Map monitoringMap = [
-                    '/jsf/monitor_info_dash.xhtml': reportTool.getLabel('menu.reports_health','Health Reports'),
-                    '/jsf/monitor_vitals.xhtml': reportTool.getLabel('overviewCurrentVitalSigns.vitalsign.label','Vital Signs')]
+                    '/jsf/monitor_info_dash.xhtml': reportTool.getLabel('menu.reports_health','Health Info'),
+                    '/jsf/monitor_vitals.xhtml': reportTool.getLabel('default.tab.charts','Charts')]
             addMenuItems(monitoringMap, iconLinkType, PhrsConstants.TYPE_ITEM_LINK, sectionMonitoring, codedLabel)
 
             //monitor_vitals.xhtml

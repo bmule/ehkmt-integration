@@ -14,7 +14,7 @@
 	<ui:define name="content">
 		<!--<h1 class="title ui-widget-header ui-corner-all">Monitor Vital Signs</h1>-->
 	
-			<h2 class="title ui-widget-header ui-corner-all">Monitor Vital Signs</h2>
+			<h2 class="title ui-widget-header ui-corner-all"><h:outputLabel value="#{labels['labels.menu.chart.label']}"/></h2>
 
 			
 				<p:messages />
@@ -28,9 +28,9 @@
 margin:0 auto;
  -->
 <p:tabView style="width:100%;height:600px">
-<p:tab title="Body Weight" >
+<p:tab title="#{labels['obsBodyWeightBMW01.label']}" >
 
-					<!--  <h:outputLabel value="Chart" for="idField_chart"
+					<!--  <h:outputLabel value="XX{labels['default.chart.label']}" for="idField_chart"
 						styleClass="form-dialog-label" />
 					<p:outputPanel layout="block" id="idField_chart">
 						<h:form>
@@ -41,19 +41,19 @@ margin:0 auto;
 					</p:outputPanel>
 					-->
 				<h:panelGrid columns="2" cellpadding="2" style="float:left;" >
-					<h:outputLabel value="Date" for="idField_bw_date"
+					<h:outputLabel value="#{labels['short.date.label']}"
 						styleClass="form-dialog-label" />	
 					<h:outputLabel value="#{codlBean.vitalsMap.bw_date}" style="float:right;"/>
 
 
-					<h:outputLabel for="idField_bw" value="Body Weight"
+					<h:outputLabel for="idField_bw" value="#{labels['obsBodyWeightBMW01.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bw" style="float:right;">
 						<h:outputLabel value="#{codlBean.vitalsMap.bw}" />
 					</p:outputPanel>
 
 
-					<h:outputLabel for="idField_bh" value="Body Height"
+					<h:outputLabel for="idField_bh" value="#{labels['obsBodyWeightBMW01.height.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bh" style="float:right;">
 						<h:outputLabel value="#{codlBean.vitalsMap.bh}" />
@@ -70,23 +70,23 @@ margin:0 auto;
 				</h:panelGrid>
 			<h:panelGroup>
 			
-			<p:lineChart model="#{codlBean.chart01}" titleX="Time"
-					titleY="Body Weight(kg)" style="chartStyle" />
+			<p:lineChart model="#{codlBean.chart01}" titleX="#{labels['chart.time']}"
+					titleY="#{labels['obsBodyWeightBMW01.label']}(kg)" style="chartStyle" />
 			</h:panelGroup>	
 			
 			<!--  
 			<p:panel closable="false" toggleable="true" style="width:100%;height:600px"
 			header="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}">
-				<p:lineChart model="#{codlBean.chart01}" titleX="Time"
+				<p:lineChart model="#{codlBean.chart01}" titleX=" {labels['chart.time']}"
 					titleY="Body Weight(kg)" style="chartStyle" />
 			</p:panel>-->
 	</p:tab>
-	<p:tab title="Blood Pressure">
+	<p:tab title="#{labels['obsBloodPressureA01.label']}">
 
 				<!--  blood pressure 						<h:outputLabel value="Blood Pressure" />-->
 				
 <!--  
-					<h:outputLabel value="Chart" for="idField_chart_bp"
+					<h:outputLabel value="XX{labels['default.chart.label']}" for="idField_chart_bp"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_chart_bp" layout="block">
 							<h:form>
@@ -97,10 +97,10 @@ margin:0 auto;
 					</p:outputPanel>
 -->
 				<h:panelGrid columns="2" cellpadding="2" style="float:left;margin:0 auto;">
-					<h:outputLabel value="Date" for="idField_bp_date" styleClass="form-dialog-label" />	
+					<h:outputLabel value="#{labels['short.date.label']}"  styleClass="form-dialog-label" />
 					<h:outputLabel value="#{codlBean.vitalsMap.bp_date}" style="float:right;"/>
 	
-					<h:outputLabel for="idField_bp" value="Blood Pressure"
+					<h:outputLabel for="idField_bp" value="#{labels['obsBloodPressureA01.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bp" layout="block"
 						style="text-align:right">
@@ -111,7 +111,7 @@ margin:0 auto;
 						</h:panelGrid>
 					</p:outputPanel>
 
-					<h:outputLabel for="idField_bp_hr" value="Heart Rate"
+					<h:outputLabel for="idField_bp_hr" value="#{labels['obsBloodPressureA01.bpHeartRate.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bp_hr" style="float:right;">
 						<h:outputLabel value="#{codlBean.vitalsMap.bp_heartrate}" />
@@ -120,14 +120,14 @@ margin:0 auto;
 				</h:panelGrid>
 			<h:panelGroup>
 			
-				<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
-					titleX="Time" style="chartStyle" />
+				<p:lineChart model="#{codlBean.chart02}" titleY="#{labels['obsBloodPressureA01.label']}"
+					titleX="#{labels['chart.time']}" style="chartStyle" />
 			</h:panelGroup>	
 			<!--  		
 				<p:panel closable="false" toggleable="true" 
 					header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}">
 					<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
-					titleX="Time" style="chartStyle" />
+					titleX=" {labels['chart.time']}" style="chartStyle" />
 			</p:panel>
 			-->
 	</p:tab>
@@ -139,8 +139,8 @@ margin:0 auto;
 			header="#{labels['default.tab.charts']} : #{labels['obsBodyWeightBMW01.label']}"
 			resizable="false" modal="false" width="550">
 			<p:outputPanel id="idPanelChart01">
-				<p:lineChart model="#{codlBean.chart01}" titleX="Time"
-					titleY="Body Weight(kg)" style="chartStyle" />
+				<p:lineChart model="#{codlBean.chart01}" titleX="#{labels['chart.time']}"
+					titleY="#{labels['obsBodyWeightBMW01.label']}(kg)" style="chartStyle" />
 			</p:outputPanel>
 		</p:dialog>
 
@@ -148,8 +148,8 @@ margin:0 auto;
 			header="#{labels['default.tab.charts']} : #{labels['obsBloodPressureA01.label']}"
 			resizable="true" modal="false" width="550">
 			<p:outputPanel id="idPanelChart02">
-				<p:lineChart model="#{codlBean.chart02}" titleY="Blood Pressure"
-					titleX="Time" style="chartStyle" />
+				<p:lineChart model="#{codlBean.chart02}" titleY="#{labels['obsBloodPressureA01.label']}"
+					titleX="#{labels['chart.time']}" style="chartStyle" />
 			</p:outputPanel>
 		</p:dialog>
 

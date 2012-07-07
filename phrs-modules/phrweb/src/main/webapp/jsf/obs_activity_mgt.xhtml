@@ -54,11 +54,11 @@
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents -->
 
-			<p:fieldset legend="Physical Activity">
+			<p:fieldset legend="#{labels['activityItem.label']}">
 
 			<p:toolbar>
 				<p:toolbarGroup align="left">
-					<p:commandButton value="create" immediate="true"
+					<p:commandButton value="#{labels['default.button.newform.label']}" immediate="true"
 						rendered="#{odlact.allowCreate}"
 						title="#{labels['default.button.newform.label']}"
 						image="ui-icon-plus" actionListener="#{odlact.create}"
@@ -70,7 +70,7 @@
 				widgetVar="widItemTableOact" var="theItem"
 				value="#{odlact.modelMain}" paginator="true" rows="20">
 
-				<p:column style="width:50px" headerText="Options">
+				<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 					<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 
 						<!-- ok, success view  odlact 
@@ -151,18 +151,6 @@
 <!-- form dialog -->
 		<!--  add dialog here and wrap with the form -->
 		<ui:include src="./obs_activity_dialog.xhtml" />
-		<!--<p:dialog widgetVar="widDialogOact" id="idDialogOact"
-			modal="true"	appendToBody="true"
-			header="Action Details" width="600" showEffect="clip"
-			hideEffect="clip">
-
-			<p:outputPanel id="idPanelOact" layout="block">
-				<h:form id="idFormOact">
-				
-				test
-				</h:form>
-			</p:outputPanel>
-		</p:dialog>-->
 
 
 </ui:define>

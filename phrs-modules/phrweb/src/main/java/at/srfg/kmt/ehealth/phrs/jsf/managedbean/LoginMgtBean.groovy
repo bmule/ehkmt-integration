@@ -378,7 +378,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
             FacesContext context = UserSessionService.getFacesContext()
 
-            LOGGER.debug("START processLocalLogin isLoggedIn =" + UserSessionService.loggedIn() + " sessionMap {} " + UserSessionService.getSessionMap())
+            //LOGGER.debug("START processLocalLogin isLoggedIn =" + UserSessionService.loggedIn() + " sessionMap {} " + UserSessionService.getSessionMap())
             if (context) {
 
                 PhrFederatedUser pfu = UserSessionService.managePhrUserSessionLocalLoginScenario(username, null, null)
@@ -386,7 +386,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                 String userMessageCode = null
                 if (pfu != null) {
                     // String redirectUrl=context.getExternalContext().getRequestContextPath() + "/index.xhtml";
-                    LOGGER.debug('processLocalLogin success local login, redirect  user handleLocalLogin= ' + username)
+                    //LOGGER.debug('processLocalLogin success local login, redirect  user handleLocalLogin= ' + username)
                     //TODO  userMessageCode success to flash message
                     //new page, should have session params set
 
@@ -487,7 +487,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                 //fail,
                 if (!username) {
                     WebUtil.addFacesMessageSeverityError('Login Status',
-                            'Login name is missing =' + username);
+                            reportTool.getLabel('login.unknown_username','Unknown User ')+' ' + username);
                 }
                 if (!loginType) {
                     WebUtil.addFacesMessageSeverityError('Login Status',
@@ -581,6 +581,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     public boolean isValidTestLogin(String id){
 
         if(id != null && !id.isEmpty()){
+            if(id.startsWith('phra')) return true;
             return testLoginIds.contains(id);
         }
         return false;

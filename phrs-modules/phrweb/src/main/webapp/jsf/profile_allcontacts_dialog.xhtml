@@ -365,7 +365,7 @@ render="#{allcontacts.selected.contactType eq  'healthcare_provider'}
 							<p:inputTextarea value="#{allcontacts.selected.note}" 
 								id="field_note_contact_input"
 								autoResize="false" cols="30" rows="5"  
-								rendered="#{allcontacts.modify eq 'yes'}" label="Comment"
+								rendered="#{allcontacts.modify eq 'yes'}" label="#{labels['default.comments.label']}"
 								styleClass="commentTextInputArea" />
 						</p:outputPanel>
 						<p:message for="field_note_contact_input" display="text" />

@@ -43,14 +43,13 @@ public class  VocabularyService implements Serializable{
 				BasePhrsModel obj = clazz.newInstance()
 				obj.code = lv.id
 				obj.status = PhrsConstants.SELECTION_NO_ANSWER
-				//obj.atest="test123"
 				modelMain.add(obj)
 			}
 		}
 		return modelMain
 	}
 
-	/**
+	/** todo1
 	 * Query against skos:related
 	 * @param tag
 	 * @param language
@@ -87,27 +86,6 @@ public class  VocabularyService implements Serializable{
 		return set
 	}
 
-	/*
-	 * 
-	 * @param propertyMap
-	 * @param language
-	 * @return
-	 static Collection<ModelLabelValue> xtransformPropertyMapsToLabelValues(Collection propertyMaps,String language){
-	 Collection<ModelLabelValue> lvs = new ArrayList<ModelLabelValue>()
-	 if(propertyMaps){
-	 propertyMaps.each() {key,value ->
-	 //ModelLabelValue lv = transformPropertyMapToLabelValue()
-	 if(key != PhrsConstants.RDF_MAP_KEY_SUBJECT) {
-	 //TODO remove null?
-	 if(value){
-	 ModelLabelValue lv = new ModelLabelValue(key,value,language)	
-	 lvs.add(lv)
-	 }
-	 }
-	 }
-	 }
-	 return lvs
-	 }*/
 	public static ModelLabelValue transformPropertyMapToLabelValue(Map propertyMap,String language){
 		ModelLabelValue lv =null
 
@@ -129,21 +107,29 @@ public class  VocabularyService implements Serializable{
 			}
 			if(key){
 				//not PhrsConstants.SKOS_RELATED
-				def res2 = propertyMap.containsKey(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) ? propertyMap.get(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) : null
-				String value =null
+                //check localization I18 first
 
-				if( res2){
-					if(res2 instanceof Collection){
-						if( res2 && !  ((Collection)res2).isEmpty()) {
-							value = ((Collection)res2).iterator().hasNext() ? ((Collection)res2).iterator().next() : null
-						}
-						//value = ( res2 && ! res2.isEmpty())  ? res2.getAt(0) : null
-					} else {
-						value = res2
-					}
-					//String lang = language && language instanceof String : language ? language.getLanguage():null
-					if(key && value) lv = new ModelLabelValue(key,value,language ? language:null)
-				}
+                String label = I18Tool.getInstance().getLabelFromi18Tool( VocabularyEnhancer.transformToI18term(key),language);
+                if(label){
+                    lv = new ModelLabelValue(key,label,language ? language:null)
+                } else {
+                    //if(key && label) lv = new ModelLabelValue(key,label,language ? language:null)
+                    def res2 = propertyMap.containsKey(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) ? propertyMap.get(PhrsConstants.SKOS_PROPERTY_PREFERRED_LABEL) : null
+
+
+                    if( res2){
+                        if(res2 instanceof Collection){
+                            if( res2 && !  ((Collection)res2).isEmpty()) {
+                                label = ((Collection)res2).iterator().hasNext() ? ((Collection)res2).iterator().next() : null
+                            }
+                            //value = ( res2 && ! res2.isEmpty())  ? res2.getAt(0) : null
+                        } else {
+                            label = res2
+                        }
+                        //String lang = language && language instanceof String : language ? language.getLanguage():null
+                        if(key && label) lv = new ModelLabelValue(key, label, language ? language:null)
+                    }
+                }
 			}
 
 		}
@@ -188,9 +174,9 @@ public class  VocabularyService implements Serializable{
 		String label
 
         if(termId.startsWith('http')) {
-            label = I18Tool.getInstance().getLabelFromi18Tool( VocabularyEnhancer.transformToI18term(termId),language)
+            label = I18Tool.getInstance().getLabelFromi18Tool( VocabularyEnhancer.transformToI18term(termId),language);
         }  else {
-            label = I18Tool.getInstance().getLabelFromi18Tool(termId,language)
+            label = I18Tool.getInstance().getLabelFromi18Tool(termId,language);
         }
 
 		ModelLabelValue lv
@@ -322,7 +308,7 @@ public class  VocabularyService implements Serializable{
 		if(choose){
 			ModelLabelValue lv = new ModelLabelValue()
 			lv.id=PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE
-			//lv.label=Labels.getLabel(PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE);//lookup from I18
+
 			lv.label= I18Tool.getInstance().getLabelFromi18Tool(PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE,language)
 			lv.sortOrder=lv.label
 			list.add(lv)
@@ -356,7 +342,9 @@ public class  VocabularyService implements Serializable{
 
 		}
 		if(choose){
-			list.add(PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE)
+			//list.add(PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE)
+            String label= I18Tool.getInstance().getLabelFromi18Tool(PhrsConstants.SELECTION_BOX_PLEASE_CHOOSE,language)
+            list.add(label)
 			if(temp && !temp.isEmpty()) list.addAll(temp)
 
 		} else {
@@ -505,11 +493,11 @@ public class  VocabularyService implements Serializable{
 		if(lvs) {
 			lvs.each(){lv ->
 				set.add(lv.getId())
-				//println("lv "+lv.getId())
+
 			}
 		}
 		if(additionalSelections){
-			set.addAll(additionalSelections)//new HashSet(additionalSelections))
+			set.addAll(additionalSelections)
 		}
 
 		return set.asList()

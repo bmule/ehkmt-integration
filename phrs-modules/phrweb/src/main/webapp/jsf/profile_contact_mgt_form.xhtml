@@ -258,7 +258,7 @@ These do not exist, cause errors
         <p:inputTextarea value="#{procon.selected.note}"
                          id="field_note_contact_input"
                          autoResize="false" cols="30" rows="5"
-                         rendered="#{procon.modify eq 'yes'}" label="Comment"
+                         rendered="#{procon.modify eq 'yes'}" label="#{labels['default.comments.label']}"
                          styleClass="commentTextInputArea"/>
     </p:outputPanel>
     <p:message for="field_note_contact_input" display="text"/>

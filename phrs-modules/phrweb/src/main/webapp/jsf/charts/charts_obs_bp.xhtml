@@ -21,7 +21,7 @@
 		resizable="true" 
 		width="550">
 			<p:outputPanel id="idPanelChart02">
-				<p:lineChart model="#{odlbpBean.chartModel}" style="chartStyle" titleY="Blood Pressure" titleX="Time"/>
+				<p:lineChart model="#{odlbpBean.chartModel}" style="chartStyle" titleY="#{labels['obsBloodPressureA01.label']}" titleX="#{labels['chart.time']}"/>
 			</p:outputPanel>
 		</p:dialog>			
    </h:form>        

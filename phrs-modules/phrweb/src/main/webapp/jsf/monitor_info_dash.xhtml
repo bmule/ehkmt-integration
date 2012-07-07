@@ -81,8 +81,8 @@
 
 
 <p><p:spacer width="2"/></p>
-<p:outputPanel rendered="#{monmgtBean.selectedOwnerGreetName ne null}">
-     <h:outputLabel value="#{labels['reports.health_info_for']}"/>:<p:spacer width="2px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
+<p:outputPanel rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+     <h:outputLabel value="#{labels['reports.health_info_for']}"/>:<p:spacer width="4px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
 </p:outputPanel>
 
 <!--
@@ -208,17 +208,18 @@ Contact info...wait.
 <h:panelGroup rendered="#{monmgtBean.selectedLocalResourceType eq 'BW'}">
     <h:form>
         <!--
-        <p:panel header="PDF Report"  rendered="#{monmgtBean.printable}">
+        <p:panel header="PDF Document"  rendered="#{monmgtBean.printable}">
             <h:commandLink value="Export as PDF">
                 <p:graphicImage value="/images/pdf.png"/>
                 <p:dataExporter type="pdf" target="tblBW" fileName="phr_report_body_weight.pdf"/>
             </h:commandLink>
         </p:panel>
+
         -->
         <p:dataTable widgetVar="widItemTableMonitorBW" id="tblBW"
                      var="theItem" value="#{monmgtBean.modelMain}">
 
-            <p:column headerText="Date" sortBy="#{theItem.beginDate}">
+            <p:column headerText="#{labels['default.date.label']}" sortBy="#{theItem.beginDate}">
                 <h:outputLabel value="#{theItem.beginDate}">
                     <f:convertDateTime pattern="yyyy-MM-dd"/>
                 </h:outputLabel>

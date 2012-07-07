@@ -55,7 +55,7 @@ topic=Thema
 
         <h:panelGroup rendered="#{loginBean.medicalRole eq false}" >
             <p>
-                Linkliste erhalten Sie eine kleine Auswahl von interessanten Internet-Adressen. Hier finden Sie, wenn Sie es mochten, weitere detaillierte Informationen, die Sie jederzeit bei Bedarf abrufen und nachlesen können:
+                <h:outputText value="#{labels['message.home.links']}"/>
             </p>
             <table width="100%">
                 <tr><th colspan="2">Linkliste</th></tr>
@@ -91,7 +91,7 @@ topic=Thema
                 </td><td>(Deutsche Gesellschaft fur Kardiologie –Herz- und Kreislaufforschung)</td></tr>
                 <tr><td>
                     <a href="http://www.herzfonds.at" target="_blank">www.herzfonds.at</a>
-                </td><td>Selbst hilf gruppe</td></tr>
+                </td><td>Selbsthilfegruppe</td></tr>
 
             </table>
 

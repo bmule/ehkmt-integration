@@ -7,10 +7,7 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="/templates/template_ui.xhtml">
-	<!-- 	xmlns:p="http://primefaces.prime.com.tr/ui">  forM4 http://primefaces.org/ui
-	http://www.javabeat.net/tips/72-how-to-use-hselectoneradio-inside-hdatatabl.html
-	http://www.javabeat.net/tips/43-how-to-use-hselectbooleancheckbox-within-hd.html
-	-->
+
 	<ui:define name="head">
 	
 			<script type="text/javascript">
@@ -28,16 +25,10 @@
 		<style type="text/css">
 		.table.innertable td { border:0;
 		}
-	</style>
+	    </style>
 		<ui:insert name="head"></ui:insert>
-	</ui:define>
-	<!-- TODO ADD column render options for modify, and make column for modify = no
-activityOfDailyLivingItem.activityCode.label
 
-prependId="false"
-			<f:facet name="header">Choose the edit option on each row to update your answer </f:facet>
-
- -->
+    </ui:define>
 
 	<ui:define name="content">
 		<div class="entry">
@@ -48,14 +39,11 @@ prependId="false"
 
 				<p:fieldset legend="#{labels['activityOfDailyLivingItem.label']}">
 
-					<!--  rendered="#{padlBean.modify eq 'yes'}" 
-					onRowEditUpdate="msgs"-->
-
 
 					<p:dataTable widgetVar="widItemTableAdl" id="idItemTableAdl"
 					 	var="theItem" value="#{padlBean.modelMain}">
 					 	
-						<p:column style="width:50px" headerText="Options">
+						<p:column style="width:50px" headerText="#{labels['list.options.label']}">
 							<h:panelGrid columns="2" styleClass="actions" cellpadding="2">
 		
 								<!-- ok, success view  padlBean 
@@ -154,16 +142,23 @@ prependId="false"
 								<h:outputLabel for="idField_status" value="#{labels['activityOfDailyLivingItem.valueActivity.label']}" styleClass="form-dialog-label" />
 								<p:outputPanel id="idField_status" layout="block">
 										<h:selectOneRadio value="#{padlBean.selected.status}">
-											<f:selectItem itemLabel="I can do this without assistance"
+											<f:selectItem itemLabel="#{labels['activityOfDailyLivingItem.isActivityUnassisted.label']}"
 												itemValue="http://www.icardea.at/phrs/instances/ICanDo"/>
-											<f:selectItem itemLabel="I require assistance"
+											<f:selectItem itemLabel="#{labels['activityOfDailyLivingItem.isActivityAssisted.label']}"
 												itemValue="http://www.icardea.at/phrs/instances/IRequireAssistance"/>
 											<f:selectItem itemLabel="Not answered"
 												itemValue="default.no_answer.label" />
 										</h:selectOneRadio>					
 								</p:outputPanel>
 								<p:message for="idField_status" display="text" />
-                            <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
+                            <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>
+
+
+
+                            #{labels['activityOfDailyLivingItem.isActivityUnassisted.label']}
+                            #{labels['activityOfDailyLivingItem.isActivityAssisted.label']}
+                            #{labels['default.no_answer.label']}
+                            -->
 			           			<h:outputLabel for="field_note"
 									value="#{labels['default.comments.label']}"
 									styleClass="form-dialog-label" />  
@@ -173,7 +168,7 @@ prependId="false"
 											rendered="#{padlBean.modify eq 'no'}" styleClass="commentText" />
 										<p:inputTextarea value="#{padlBean.selected.note}"
 											autoResize="false" cols="30" rows="5"  
-											rendered="#{padlBean.modify eq 'yes'}" label="Comment"  styleClass="commentTextInputArea" />										
+											rendered="#{padlBean.modify eq 'yes'}" label="#{labels['default.comments.label']}"  styleClass="commentTextInputArea" />
 					  				</p:outputPanel>
 					  				<p:message for="field_note" display="text" /> 
 				  				</p:column>		  						
