@@ -112,24 +112,28 @@ prependId="false"
 						<!--  
 						<p:column headerText="#{labels['default_date_modified']}">
 							<h:outputLabel value="#{theItem.modifyDate}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
 						</p:column>-->
 						<!-- short.date.label=Date-->
 						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}"
                                   style="width:120px;">
 							<h:outputLabel value="#{theItem.beginDate}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
 						</p:column>
 
 						<p:column headerText="#{labels['obsBodyWeightBMW01.label']}" sortBy="#{theItem.bodyWeight}"
                                   style="width:150px;">
-							<h:outputLabel value="#{theItem.bodyWeight}" /> kg
+							<h:outputLabel value="#{theItem.bodyWeight}" >
+                                <f:convertNumber maxFractionDigits="1"></f:convertNumber>
+							</h:outputLabel> kg
 						</p:column>
 						<p:column headerText="#{labels['obsBodyWeightBMW01.bodyBMI.label']}" sortBy="#{theItem.bmi}"
                                   style="width:150px;">
-							<h:outputLabel value="#{theItem.bmi}" />
+							<h:outputLabel value="#{theItem.bmi}" >
+                                <f:convertNumber maxFractionDigits="1"></f:convertNumber>
+							</h:outputLabel>
 						</p:column>
                         <!--
 						<p:column
@@ -160,9 +164,38 @@ prependId="false"
 				
 				
 				<p:outputPanel id="idPanelObw" layout="block">
-				<h:form id="idFormObw">	
-						<!--		Test date=<h:outputLabel value="#{odlbwBean.selected.beginDate}" />
-					<br />-->
+				<h:form id="idFormObw">
+                    <h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+                        <f:facet name="header">
+                            <!-- 							update="idItemTableObw msgs idPanelObw" -->
+                            <p:commandButton rendered="#{odlbwBean.modify eq 'yes'}"
+                                             widgetVar="widDialogSaveButtonObw" process="idFormObw"
+                                             value="#{labels['default.button.create.label']}"
+                                             title="#{labels['default.button.create.label']}"
+                                             update="msgs idFormObw idItemTableObw"
+                                             actionListener="#{odlbwBean.store}"
+                                             oncomplete="onEditComplete(xhr,status,args)"
+                                             image="ui-icon ui-icon-check" />
+
+                            <!--p:commandButton
+                                       value="#{odlbwBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+                                       type="reset" immediate="true" onclick="widDialogObw.hide()"
+                                       image="ui-icon ui-icon-close" />-->
+
+                            <p:commandButton rendered="#{odlbwBean.modify eq 'yes'}"
+                                             value="#{labels['default.button.reset.label']}"
+                                             actionListener="#{odlbwBean.refresh}" immediate="true"
+                                             onsuccess="widDialogObw.hide()"
+                                             image="ui-icon ui-icon-close" />
+
+                            <p:commandButton  rendered="#{odlbwBean.modify eq 'no'}"
+                                              value="#{labels['default.button.close.label']}"
+                                              reset="true"
+                                              onsuccess="widDialogObw.hide()"
+                                              image="ui-icon ui-icon-close" />
+
+                        </f:facet>
+                    </h:panelGrid>
 					<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;">
 									
 						<h:outputLabel value="#{labels['short.dateStart.label']}"
@@ -170,14 +203,22 @@ prependId="false"
 						<p:outputPanel id="beginDateField" layout="block">
 							<h:outputLabel value="#{odlbwBean.selected.beginDate}"
 								rendered="#{odlbwBean.modify eq 'no'}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
 							<!-- calendar option-->
 							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}" 
 								id="beginDateField_input"
-								rendered="#{odlbwBean.modify eq 'yes'}" title="yyyy-MM-dd"
+								rendered="#{odlbwBean.modify eq 'yes'}"
 								value="#{odlbwBean.selected.beginDate}" showOn="button"
-								pattern="yyyy-MM-dd" />								
+								pattern="dd.MM.yyyy" />
+                            <!-- tip.date.formating.slash
+                                <p:inputMask mask="99.99.9999"  requiredMessage="#{labels['default_required_field']}"
+                                    id="beginDateField_input" required="true"
+                                    value="#{odlbwBean.selected.endDate}"
+                                    rendered="#{odlbwBean.modify eq 'yes'}">
+                                    <f:convertDateTime pattern="dd.MM.yyyy" />
+                                </p:inputMask>
+                            -->
 						</p:outputPanel>
 						<p:message for="beginDateField_input" display="text" />
 						
@@ -231,37 +272,7 @@ prependId="false"
 						</p:column>
 
 					</h:panelGrid>
-					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
-						<f:facet name="header">
-<!-- 							update="idItemTableObw msgs idPanelObw" -->
-							<p:commandButton rendered="#{odlbwBean.modify eq 'yes'}"
-								widgetVar="widDialogSaveButtonObw" process="idFormObw"
-								value="#{labels['default.button.create.label']}"
-								title="#{labels['default.button.create.label']}"
-								update="msgs idFormObw idItemTableObw" 
-								actionListener="#{odlbwBean.store}"
-								oncomplete="onEditComplete(xhr,status,args)"
-								image="ui-icon ui-icon-check" />
 
-							<!--p:commandButton
-								value="#{odlbwBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
-								type="reset" immediate="true" onclick="widDialogObw.hide()"
-								image="ui-icon ui-icon-close" />-->
-								
-						<p:commandButton rendered="#{odlbwBean.modify eq 'yes'}" 
-							value="#{labels['default.button.reset.label']}" 						
-							actionListener="#{odlbwBean.refresh}" immediate="true" 
-							onsuccess="widDialogObw.hide()"									
-							image="ui-icon ui-icon-close" />
-					
-						<p:commandButton  rendered="#{odlbwBean.modify eq 'no'}" 
-							value="#{labels['default.button.close.label']}" 						
-							reset="true"
-							onsuccess="widDialogObw.hide()"
-							image="ui-icon ui-icon-close" />								
-
-						</f:facet>
-					</h:panelGrid>
 				 </h:form>
 				</p:outputPanel>
 		

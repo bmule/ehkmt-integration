@@ -38,7 +38,7 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
     String password
 
-    private  Set<String> testLoginIds;
+
     private ReportTool reportTool;
 
     public LoginMgtBean() {
@@ -53,7 +53,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
             makeTestLogin()
         }
 
-        testLoginIds=LoginMgtBean.getTestLoginIds()
     }
     /**
      * Test login when AppModeTest is true. Default ownerUri and user name
@@ -177,19 +176,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
     public boolean isLoggedIn() {
         boolean result = UserSessionService.loggedIn();
 
-//        if (!result) {
-//            //boolean isVerified = UserSessionService.getSessionAttributeOpenIdIsVerified()
-//            String msg = UserSessionService.getSessionAttribute(PhrsConstants.ERROR_MSG_ATTR)
-//            if (msg) {
-//                //TODO
-//                String msgLabel = LoginUtils.getMessageLabel(msg, null);//TODO locale
-//                //WebUtil.addFacesMessageSeverityError('Login Status: login failed, error (', msgLabel + ')');
-//                //remove
-//                Map sessionMap = UserSessionService.getSessionMap()
-//                UserSessionService.removeSessionAttr(sessionMap, PhrsConstants.ERROR_MSG_ATTR)
-//            }
-//        }
-
         return result
     }
 
@@ -216,11 +202,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         return UserSessionService.getSessionAttributePhrId();
     }
 
-    //    public String getUsername() {
-    //        String greetName = UserSessionService.getSessionUserGreetName();
-    //        String userName = greetName ? greetName : userAuthenticatedName()
-    //        return userName ? userName : ''
-    //    }
 
     public String getGreetname() {
         String greetName = UserSessionService.getSessionUserGreetName();
@@ -413,12 +394,6 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
         }
     }
 
-    //build IP, protocol also
-    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteAddr()
-    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemoteHost()
-    //((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest()).getRemotePort()
-    //String appReturnUrl = LoginUtils.getOpenIdReturnToUrl(context);
-
     private void processOpenIdLogin() throws Exception {
 
         try {
@@ -469,10 +444,10 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
                 //ok
                 if (detectedLocalLogin()) {
 
-                    if(isValidTestLogin(username)) {
+                    if(ConfigurationService.getInstance().isValidLocalLogin(username,password)) {
                         processLocalLogin()
                     } else {
-                        WebUtil.addFacesMessageSeverityError('Login Status', reportTool.getLabel('login.unknown_username','Unknown User ') + username);
+                        WebUtil.addFacesMessageSeverityError('Login Status', reportTool.getLabel('login.unknown_username','Unknown User or password')+ ' : '+ username);
                         LOGGER.debug('processLogin failed unknown loginType: ' + loginType)
 
                     }
@@ -506,96 +481,5 @@ public class LoginMgtBean extends FaceCommon implements Serializable {
 
 
 
-    public static Set<String> getTestLoginIds(){
-        Set<String> testLoginIds= new HashSet<String>();
-        String demoLoginIds=ConfigurationService.getInstance().getProperty('demo.login.ids');
 
-        if(demoLoginIds) {
-            String[] ids= demoLoginIds.split(',');
-            List<String> list= ids.toList() ;
-
-            testLoginIds.addAll(list)
-        }
-//        else {
-//
-//            testLoginIds.add("phrsm");
-//            testLoginIds.add("phrdoctor");
-//            testLoginIds.add("nurse");
-//            testLoginIds.add("doctor");
-//
-//            testLoginIds.add("phr0");
-//            testLoginIds.add("phr1");
-//            testLoginIds.add("phr2");
-//            testLoginIds.add("phr3");
-//            testLoginIds.add("phr4");
-//            testLoginIds.add("phr5");
-//            testLoginIds.add("phr6");
-//            testLoginIds.add("phr7");
-//            testLoginIds.add("phr8");
-//            testLoginIds.add("phr9");
-//
-//            testLoginIds.add("phr1031");
-//            testLoginIds.add("phr1183");
-//            testLoginIds.add("phr1242");
-//            testLoginIds.add("phr1346");
-//            testLoginIds.add("phr1427");
-//            testLoginIds.add("phr1556");
-//            testLoginIds.add("phr1628");
-//            testLoginIds.add("phr1745");
-//            testLoginIds.add("phr1875");
-//            testLoginIds.add("phr1935");
-//            testLoginIds.add("phr2041");
-//            testLoginIds.add("phr2174");
-//            testLoginIds.add("phr2232");
-//            testLoginIds.add("phr2327");
-//            testLoginIds.add("phr2492");
-//            testLoginIds.add("phr2519");
-//            testLoginIds.add("phr2646");
-//            testLoginIds.add("phr2767");
-//            testLoginIds.add("phr2821");
-//            testLoginIds.add("phr2944");
-//            testLoginIds.add("phr3043");
-//            testLoginIds.add("phr3247");
-//            testLoginIds.add("phr3288");
-//            testLoginIds.add("phr3312");
-//            testLoginIds.add("phr3476");
-//            testLoginIds.add("phr3548");
-//            testLoginIds.add("phr3673");
-//            testLoginIds.add("phr3732");
-//            testLoginIds.add("phr3849");
-//            testLoginIds.add("phr3932");
-//            testLoginIds.add("phr4078");
-//            testLoginIds.add("phr4163");
-//            testLoginIds.add("phr4266");
-//            testLoginIds.add("phr4323");
-//            testLoginIds.add("phr4432");
-//            testLoginIds.add("phr4591");
-//            testLoginIds.add("phr4632");
-//            testLoginIds.add("phr4723");
-//            testLoginIds.add("phr4814");
-//            testLoginIds.add("phr4932");
-//            testLoginIds.add("phr5321");
-//            testLoginIds.add("phr5179");
-//            testLoginIds.add("phr5193");
-//            testLoginIds.add("phr5332");
-//            testLoginIds.add("phr5443");
-//            testLoginIds.add("phr5583");
-//            testLoginIds.add("phr5683");
-//            testLoginIds.add("phr5752");
-//            testLoginIds.add("phr5890");
-//            testLoginIds.add("phr5193");
-//
-//        }
-
-        return testLoginIds;
-    }
-
-    public boolean isValidTestLogin(String id){
-
-        if(id != null && !id.isEmpty()){
-            if(id.startsWith('phra')) return true;
-            return testLoginIds.contains(id);
-        }
-        return false;
-    }
 }

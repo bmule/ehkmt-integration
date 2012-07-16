@@ -173,18 +173,17 @@ Contact info...wait.
             <p:columnGroup type="header">
 
                 <p:row>
-                    <p:column headerText="#{labels['labels.menu.options.label']}"/>
                     <p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.beginDate}"/>
                     <p:column headerText="#{labels['obsBloodPressureA01.label']}" sortBy="#{theItem.systolic}"/>
                     <p:column headerText="#{labels['obsBloodPressureA01.bpHeartRate.label']}"
                               sortBy="#{theItem.heartRate}"/>
-                    <p:column headerText="#{labels['default.comments.label']}"/>
+                    <!--<p:column headerText="#{labels['default.comments.label']}"/> -->
                 </p:row>
             </p:columnGroup>
 
             <p:column>
                 <h:outputLabel value="#{theItem.beginDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy"/>
                 </h:outputLabel>
             </p:column>
 
@@ -196,10 +195,10 @@ Contact info...wait.
             <p:column style="text-align:center;">
                 <h:outputLabel value="#{theItem.heartRate}"/> <h:outputLabel value=" bpm"/>
             </p:column>
-
-            <p:column>
-                <h:outputText value="#{theItem.note}" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"/>
-            </p:column>
+            <!--rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"-->
+            <!--<p:column>
+                <h:outputText value="#{theItem.note}" />
+            </p:column>-->
 
         </p:dataTable>
     </h:form>
@@ -221,7 +220,7 @@ Contact info...wait.
 
             <p:column headerText="#{labels['default.date.label']}" sortBy="#{theItem.beginDate}">
                 <h:outputLabel value="#{theItem.beginDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy"/>
                 </h:outputLabel>
             </p:column>
 
@@ -235,10 +234,10 @@ Contact info...wait.
                     headerText="#{labels['obsBodyWeightBMW01.height.label']}">
                 <h:outputLabel value="#{theItem.bodyHeight}"/> cm
             </p:column>
-
-            <p:column>
+           <!--
+            <p:column headerText="#{labels['default.comments.label']}">
                 <h:outputText value="#{theItem.note}" rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}"/>
-            </p:column>
+            </p:column> -->
         </p:dataTable>
     </h:form>
 </h:panelGroup>
@@ -309,7 +308,7 @@ Contact info...wait.
 
             <p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}">
                 <h:outputLabel value="#{theItem.displayDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy"/>
                 </h:outputLabel>
             </p:column>
 
@@ -356,7 +355,7 @@ Contact info...wait.
             </p:column>
             <p:column headerText="Start Date">
                 <h:outputText value="#{theItem.beginDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy"/>
                 </h:outputText>
             </p:column>
 
@@ -369,7 +368,7 @@ Contact info...wait.
 
             <p:column headerText="End Date">
                 <h:outputText value="#{theItem.endDate}">
-                    <f:convertDateTime pattern="yyyy-MM-dd"/>
+                    <f:convertDateTime pattern="dd.MM.yyyy"/>
                 </h:outputText>
             </p:column>
 

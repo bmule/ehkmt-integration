@@ -267,6 +267,7 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    <!-- duplicate fatigue
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/Fatigue-Symptom">
         <skos:prefLabel>Fatigue - symptom</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/Problem/Symptom</skos:related>
@@ -279,6 +280,7 @@
             </rdf:Description>
         </icadyCode:code>
     </rdf:Description>
+    -->
     <rdf:Description rdf:about="http://www.icardea.at/phrs/instances/AFewTimesPerWeek">
         <skos:prefLabel>A few times per week</skos:prefLabel>
         <skos:related>http://www.icardea.at/phrs/instances/FrequencyOfActivity_howLong</skos:related>

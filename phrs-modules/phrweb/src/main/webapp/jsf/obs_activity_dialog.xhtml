@@ -121,30 +121,30 @@
 						<p:message for="field_activity_status_input" display="text" />
 
 						<h:outputLabel for="displayDate"
-							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							value="#{labels['short.date.label']} #{labels['tip.date.formating.slash']}"
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="displayDate" layout="block">
 
 							<p:outputPanel rendered="#{odlact.modify eq 'no'}">
-								<h:outputLabel value="#{theItem.displayDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+								<h:outputLabel value="#{odlact.selected.displayDate}">
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage="#{labels['default_required_field']}"
 								id="displayDate_input"
 								value="#{odlact.selected.displayDate}"
 								rendered="#{odlact.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
 						<!-- 	TODO displayDate or beginDate ?
 							-->
 						<!-- 	<p:calendar required="true"  requiredMessage="#{labels['default_required_field']}" 
 								id="displayDate_input"
-								rendered="#{odlact.modify eq 'yes'}" title="yyyy-MM-dd"
+								rendered="#{odlact.modify eq 'yes'}"
 								value="#{odlact.selected.displayDate}" showOn="button"
-								pattern="yyyy-MM-dd" />		-->						
+								pattern="dd.MM.yyyy" />		-->
 						</p:outputPanel>
 						<p:message for="displayDate_input" display="text" />
 

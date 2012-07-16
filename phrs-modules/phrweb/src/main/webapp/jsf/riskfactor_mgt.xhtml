@@ -29,7 +29,7 @@
             <!--   f: convertNumber type="#,###.00" -->
 
             <h:form prependId="false">
-                <p:messages />
+
                 <!-- show validation messages for create form contents -->
                 <p:growl id="msgs" showDetail="true" />
                 <!-- shows the validation messages for dialog contents -->
@@ -69,7 +69,7 @@
 
                         <p:column headerText="#{labels['date_modified']}">
                             <h:outputLabel value="#{theItem.modifyDate}">
-                                <f:convertDateTime pattern="yyyy-MM-dd" />
+                                <f:convertDateTime pattern="dd.MM.yyyy" />
                             </h:outputLabel>
                         </p:column>
 

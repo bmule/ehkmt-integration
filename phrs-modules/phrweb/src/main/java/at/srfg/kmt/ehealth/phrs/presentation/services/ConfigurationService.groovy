@@ -20,11 +20,16 @@ public class ConfigurationService implements Serializable {
     private final static Logger LOGGER = LoggerFactory.getLogger(ConfigurationService.class);
     private static ConfigurationService m_instance  //= new ConfigurationService();
 
+    public static final String ENDPOINT_TYPE_PIX = "pix.connectionhub.endpoint"
+    public static final String ENDPOINT_TYPE_CONSENT_WS = "consent.ws.endpoint"
+
+
     static {
         staticInit();
     }
 
     protected static void staticInit() {
+        println('staticInit')
         try {
             m_instance = new ConfigurationService();
         } catch (Exception ex) {
@@ -36,22 +41,18 @@ public class ConfigurationService implements Serializable {
     public static final String forwardRedirectIsAuthenticatedToPage = "/jsf/home.xhtml";
     public static final String formwardRedirectFilteredDirectory = "/jsf/";
     public static final String forwardRedirectLoginPage = "/WEB-INF/views/jsp/login.jsp";
-    private List<String> rolesLocal = []
-    private List<String> rolesConsentMgr = []
+
 
     //private static XMLConfiguration xmlConfig;
     private static PropertiesConfiguration propertiesConfig
     private static PropertiesConfiguration menuLinksConfig
     private static PropertiesConfiguration icardeaConfig
 
-    // Initialization-on-demand holder idiom
+    private List<String> rolesLocal = []
+    private List<String> rolesConsentMgr = []
 
-    //    private static class LazyHolder {
-    //    public static final ConfigurationService m_instance = new ConfigurationService();
-    //    }
-    //    public static ConfigurationService getInstance() {
-    //        return LazyHolder.m_instance;
-    //    } 
+
+    private Map<String,String> localLoginCredentials = [:]
 
     public static ConfigurationService getInstance() {
 
@@ -61,6 +62,10 @@ public class ConfigurationService implements Serializable {
     private ConfigurationService() {
         init()
         initRoles()
+        if(!propertiesConfig)  LOGGER.error('propertiesConfig failed to init')
+        localLoginCredentials =  loadLocalLoginCredentials()
+
+
     }
 
     private void initRoles() {
@@ -95,10 +100,10 @@ public class ConfigurationService implements Serializable {
         if (menuLinksConfig == null) {
             refreshMenuLinksConfig()
         }
+
     }
 
     public synchronized void refreshMenuLinksConfig() {
-
 
         try {
             menuLinksConfig = new PropertiesConfiguration("phrscontent.properties");
@@ -107,7 +112,6 @@ public class ConfigurationService implements Serializable {
         }
     }
     public synchronized void refreshPropertiesConfig() {
-
 
         try {
             propertiesConfig = new PropertiesConfiguration("phrs.properties");
@@ -120,7 +124,6 @@ public class ConfigurationService implements Serializable {
      */
     public synchronized void refreshPropertiesIcardeaConfig() {
 
-
         try {
             icardeaConfig = new PropertiesConfiguration("icardea.properties");
         } catch (ConfigurationException e) {
@@ -128,8 +131,6 @@ public class ConfigurationService implements Serializable {
         }
     }
 
-    public static final String ENDPOINT_TYPE_PIX = "pix.connectionhub.endpoint"
-    public static final String ENDPOINT_TYPE_CONSENT_WS = "consent.ws.endpoint"
 
     public String getEndPoint(String prop) {
 
@@ -171,32 +172,17 @@ public class ConfigurationService implements Serializable {
         }
         return value
     }
-    /*
-    public Set<String> getContentLinkValues(){
-        Set<String> set
-        Map temp = getContentLinks()
-        if(temp ){
-            set =  temp.values()
-        }  else {
+    public List<String> getPropertyList(String prop) {
+        List<String> value = null;
 
-            if(!menuLinksConfig ) LOGGER.error('getContentLinks menuLinksConfig is null')
+        if (prop) {
+
+            value = propertiesConfig.getList(prop)
         }
-        return set
+        if(!value) value=[]
+        return value
     }
 
-    public Map<String,String> getContentLinks(){
-        Map<String,String> map=[:]
-        if(menuLinksConfig ){
-            map = menuLinksConfig.getProperties()
-            if(map) LOGGER.debug('getContentLinks map size='+ map.keySet().size() )
-            else LOGGER.debug('getContentLinks map null')
-        }  else {
-
-            LOGGER.error('getContentLinks menuLinksConfig is null')
-        }
-        LOGGER.debug('getContentLinks map= '+map.entrySet())
-        return map
-    } */
     public String getProperty(String prop) {
         String value = null;
 
@@ -259,10 +245,7 @@ public class ConfigurationService implements Serializable {
     }
 
     public static boolean isAppModeSingleUserTest() {
-//consent.mode.local
-//user.mode.singleuser
-//consultation.reports.listall
-//pix.mode.test
+
         String testValue = ConfigurationService.getInstance().getProperty('user.mode.singleuser', 'false').trim()
         //was testsingleusermode
         if (testValue != null
@@ -460,15 +443,6 @@ public class ConfigurationService implements Serializable {
         return values
     }
 
-//    public String makeIcardeaOpenIdentifier(String shortUserName) {
-//        String name = shortUserName;
-//        if (name) {
-//            if (!name.startsWith('http')) {
-//                name = this.getProperty(OPENID_DISCOVERY_IDENTIFIER_KEY) + 'u=' + shortUserName
-//            }
-//        }
-//        return name
-//    }
     /**
      *
      * @param value
@@ -537,13 +511,10 @@ public class ConfigurationService implements Serializable {
      * @param role
      */
     public boolean isHealthInfoAccessibleByThisRole(String role) {
-        //check
-        //from UserSessionService.getSessionAttributeRole();
+
         if (isAccessControlLocalForHealthInfo()) {
 
-            //boolean flag = isHealthInfoAccessibleByRole()
-            //if (flag && role != null) {
-                //role=role.toLowerCase();
+
                 switch (role) {
                     case [
                             'ROLECODE:DOCTOR',
@@ -648,6 +619,186 @@ public class ConfigurationService implements Serializable {
             LOGGER.error("error processing socket.listener.port property", e);
         }
         return subscriberSocketListenerPort;
+    }
+    /**
+     * Load local credentials
+     * comma separated login IDs. An ID can have a password by adding a delimeter '!' followed by the password.
+     * @return
+     */
+
+    public  Map<String,String> loadLocalLoginCredentials(){
+        LOGGER.debug('loadLocalLoginCredentials start');
+        Map<String,String> ids= [:];
+        List<String> demoLoginCred= getPropertyList('local.login.ids');
+
+        if(demoLoginCred) {
+            for(String row:demoLoginCred){
+                String password=''
+                String id=row
+                try{
+                    if(id.contains('!')){
+                        String[] tokens= id.split('!');
+                        for(int i =0; i < tokens.length ; i++) {
+                            //System.out.println(tokens[i]);
+                            if(i == 0)          id = tokens[0]
+                            else if(i == 1)     password=tokens[1]
+                        }
+                        if(password == null) password=''
+                        password=password.trim()
+                    }
+                    if(id){
+                        ids.put(id.trim(),password)
+                    }
+                } catch(Exception e){
+                    LOGGER.error("error reading loadLocalLoginCredentials on ID="+row, e);
+                }
+            }
+
+            LOGGER.debug('loadTestLoginIds map prepared='+ids);
+//            demoLoginIds = demoLoginIds.replace(' ','');
+//            String[] tokens= demoLoginIds.split(',');
+//            for (int i = 0; i < tokens.length; i++)  {
+//                println('>'+tokens[i]+'<');
+//                ids.add(tokens[i].trim());
+//
+//            }
+        }
+        return ids
+    }
+    public  Set<String> loadTestLoginIds(){
+        LOGGER.debug('loadTestLoginIds start');
+        Set<String> ids= new HashSet<String>();
+        List<String> demoLoginIds= getPropertyList('local.login.ids');
+
+        if(demoLoginIds) {
+            ids=demoLoginIds.toSet();
+            LOGGER.debug('loadTestLoginIds local.login.ids found='+ids);
+//            demoLoginIds = demoLoginIds.replace(' ','');
+//            String[] tokens= demoLoginIds.split(',');
+//            for (int i = 0; i < tokens.length; i++)  {
+//                println('>'+tokens[i]+'<');
+//                ids.add(tokens[i].trim());
+//
+//            }
+        }
+        /*else {
+            LOGGER.error('loadTestLoginIds demo.login.ids null');
+
+            ids.add("phrsm");
+            ids.add("phrdoctor");
+            ids.add("nurse");
+            ids.add("doctor");
+
+            ids.add("phr0");
+            ids.add("phr1");
+            ids.add("phr2");
+            ids.add("phr3");
+            ids.add("phr4");
+            ids.add("phr5");
+            ids.add("phr6");
+            ids.add("phr7");
+            ids.add("phr8");
+            ids.add("phr9");
+
+            ids.add("phr1031");
+            ids.add("phr1183");
+            ids.add("phr1242");
+            ids.add("phr1346");
+            ids.add("phr1427");
+            ids.add("phr1556");
+            ids.add("phr1628");
+            ids.add("phr1745");
+            ids.add("phr1875");
+            ids.add("phr1935");
+            ids.add("phr2041");
+            ids.add("phr2174");
+            ids.add("phr2232");
+            ids.add("phr2327");
+            ids.add("phr2492");
+            ids.add("phr2519");
+            ids.add("phr2646");
+            ids.add("phr2767");
+            ids.add("phr2821");
+            ids.add("phr2944");
+            ids.add("phr3043");
+            ids.add("phr3247");
+            ids.add("phr3288");
+            ids.add("phr3312");
+            ids.add("phr3476");
+            ids.add("phr3548");
+            ids.add("phr3673");
+            ids.add("phr3732");
+            ids.add("phr3849");
+            ids.add("phr3932");
+            ids.add("phr4078");
+            ids.add("phr4163");
+            ids.add("phr4266");
+            ids.add("phr4323");
+            ids.add("phr4432");
+            ids.add("phr4591");
+            ids.add("phr4632");
+            ids.add("phr4723");
+            ids.add("phr4814");
+            ids.add("phr4932");
+            ids.add("phr5321");
+            ids.add("phr5179");
+            ids.add("phr5193");
+            ids.add("phr5332");
+            ids.add("phr5443");
+            ids.add("phr5583");
+            ids.add("phr5683");
+            ids.add("phr5752");
+            ids.add("phr5890");
+            ids.add("phr5193");
+
+        } */
+        //if(ids) println('ids size='+ids.size())
+        //else    println('ids null or empty')
+
+        return ids;
+    }
+
+    public boolean isValidLocalLogin(String id, String password){
+        LOGGER.debug('isValidLocalLogin start - id='+id+' pass='+password);
+        if(id ){
+            if(id.startsWith('phra')) return true;
+            if(id.startsWith('phrsm')) return true;
+            if(id.startsWith('phrdoctor')) return true;
+            if(id.startsWith('phrnurse')) return true;
+            if(localLoginCredentials){
+                //println('testLoginIds and id valid size='+localLoginCredentials.size())
+                //if(id.startsWith('pha')) return true;
+
+                if( localLoginCredentials.keySet().contains(id)) {
+
+                    LOGGER.debug('isValidLocalLogin ID  found, id='+id);
+                    String pwd= localLoginCredentials.get(id)
+                    if(pwd){   //then validate when not blank or null
+                       if(!password){
+                           LOGGER.debug('isValidLocalLogin password false, password=null'+' expected='+pwd);
+                          return false
+
+                       } else if(pwd.equals(password)){
+                           LOGGER.debug('isValidLocalLogin password true, password='+password);
+                           return true
+                       }  else {
+                           LOGGER.debug('isValidLocalLogin password false, password='+password+' expected='+pwd);
+                           return false
+                       }
+                    } else {
+                        LOGGER.debug('isValidLocalLogin password true, no password expected');
+                    }
+
+                    return true
+                } else {
+
+                    LOGGER.debug('isValidLocalLogin FALSE ID not found, id='+id);
+                }
+            } else {
+                LOGGER.debug('isValidLocalLogin localLoginCredentials not assigned (null or empty), check properties file  at id='+id)
+            }
+        }
+        return false;
     }
 
 }

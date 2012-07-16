@@ -125,28 +125,28 @@
 						<p:message for="field_activity_status_input" display="text" />
 
 						<h:outputLabel for="displayDate"
-							value="#{labels['short.date.label']} #{labels['tip.date.formating']}"
+							value="#{labels['short.date.label']} #{labels['tip.date.formating.slash']}"
 							styleClass="form-dialog-label" />
 
 						<p:outputPanel id="displayDate" layout="block">
 
 							<p:outputPanel rendered="#{proids.modify eq 'no'}">
 								<h:outputLabel value="#{theItem.displayDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage="#{labels['default_required_field']}"
 								id="displayDate_input"
 								value="#{proids.selected.displayDate}"
 								rendered="#{proids.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
 							
 						</p:outputPanel>
 
 
-						<h:outputLabel for="field_durationcode"
+						<h:outputLabel for="field_identifierType"
 							value="#{labels['activityItem.activityDurationCode.label']}"
 							styleClass="form-dialog-label" />
 

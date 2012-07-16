@@ -55,7 +55,7 @@
 			
 						<p:column headerText="#{labels['short.dateStart.label']}" sortBy="#{theItem.beginDate}">
 							<h:outputLabel value="#{theItem.beginDate}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
 						</p:column>
 
@@ -89,10 +89,9 @@
 										
 						<h:outputLabel value="#{labels['short.dateStart.label']}"
 							 styleClass="form-dialog-label" />			
-							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}" 
-								title="yyyy-MM-dd"
+							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
 								value="#{testbwBean.selected.beginDate}" showOn="button"
-								pattern="yyyy-MM-dd" />															
+								pattern="dd.MM.yyyy" />
 			
 				 </h:form>
 				</p:outputPanel>

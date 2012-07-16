@@ -92,15 +92,15 @@
            
 
             <h:outputLabel for="from" value="From:" />
-            <p:inputMask id="from" mask="9999/99/99"
+            <p:inputMask id="from" mask="99.99.9999"
                 value="#{actionactBean.event.startDate}" >
-                <f:convertDateTime pattern="yyyy/MM/dd" />
+                <f:convertDateTime pattern="dd.MM.yyyy" />
             </p:inputMask>
 
             <h:outputLabel for="to" value="To:" />
-            <p:inputMask id="to" mask="9999/99/99"
+            <p:inputMask id="to" mask="99.99.9999"
                 value="#{actionactBean.event.endDate}" >
-                <f:convertDateTime pattern="yyyy/MM/dd" />
+                <f:convertDateTime pattern="dd.MM.yyyy" />
             </p:inputMask>
 
             <h:outputLabel for="allDay" value="All Day:" />

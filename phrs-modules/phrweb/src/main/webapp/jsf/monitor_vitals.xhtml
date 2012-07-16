@@ -43,27 +43,35 @@ margin:0 auto;
 				<h:panelGrid columns="2" cellpadding="2" style="float:left;" >
 					<h:outputLabel value="#{labels['short.date.label']}"
 						styleClass="form-dialog-label" />	
-					<h:outputLabel value="#{codlBean.vitalsMap.bw_date}" style="float:right;"/>
+					<h:outputLabel value="#{codlBean.vitalsMap.bw_date}" style="float:right;">
+                        <f:convertDateTime pattern="dd.MM.yyyy" />
+                    </h:outputLabel>
 
 
 					<h:outputLabel for="idField_bw" value="#{labels['obsBodyWeightBMW01.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bw" style="float:right;">
-						<h:outputLabel value="#{codlBean.vitalsMap.bw}" />
+						<h:outputLabel value="#{codlBean.vitalsMap.bw}" >
+                            <f:convertNumber maxFractionDigits="1"></f:convertNumber>
+						</h:outputLabel>
 					</p:outputPanel>
 
 
 					<h:outputLabel for="idField_bh" value="#{labels['obsBodyWeightBMW01.height.label']}"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bh" style="float:right;">
-						<h:outputLabel value="#{codlBean.vitalsMap.bh}" />
+						<h:outputLabel value="#{codlBean.vitalsMap.bh}" >
+                            <f:convertNumber maxFractionDigits="1"></f:convertNumber>
+						</h:outputLabel>
 					</p:outputPanel>
 
 
 					<h:outputLabel for="idField_bw_bmi" value="BMI"
 						styleClass="form-dialog-label" />
 					<p:outputPanel id="idField_bw_bmi" style="float:right;">
-						<h:outputLabel value="#{codlBean.vitalsMap.bw_bmi}" />
+						<h:outputLabel value="#{codlBean.vitalsMap.bw_bmi}" >
+                            <f:convertNumber maxFractionDigits="3"></f:convertNumber>
+						</h:outputLabel>
 					</p:outputPanel>
 
 
@@ -98,7 +106,9 @@ margin:0 auto;
 -->
 				<h:panelGrid columns="2" cellpadding="2" style="float:left;margin:0 auto;">
 					<h:outputLabel value="#{labels['short.date.label']}"  styleClass="form-dialog-label" />
-					<h:outputLabel value="#{codlBean.vitalsMap.bp_date}" style="float:right;"/>
+					<h:outputLabel value="#{codlBean.vitalsMap.bp_date}" style="float:right;">
+                        <f:convertDateTime pattern="dd.MM.yyyy" />
+                    </h:outputLabel>
 	
 					<h:outputLabel for="idField_bp" value="#{labels['obsBloodPressureA01.label']}"
 						styleClass="form-dialog-label" />

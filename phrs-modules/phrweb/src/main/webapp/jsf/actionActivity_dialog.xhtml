@@ -51,7 +51,30 @@
 									
 					<h:inputHidden value="#{actionmgtBean.selected.origin}" />
 					<h:inputHidden value="#{actionmgtBean.selected.originStatus}" />
-					
+                    <h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+                        <f:facet name="header">
+                            <p:commandButton value="#{labels['default.button.create.label']}"
+                                             title="#{labels['default.button.create.label']}"
+                                             process="idFormActionmgt"
+                                             update="idItemTableActionmgt msgs idFormActionmgt idFormActionCalendar"
+                                             oncomplete="onEditComplete(xhr,status,args)"
+                                             actionListener="#{actionmgtBean.store}"
+                                             image="ui-icon ui-icon-check" />
+
+                            <p:commandButton rendered="#{actionmgtBean.modify eq 'yes'}"
+                                             value="#{labels['default.button.reset.label']}"
+                                             actionListener="#{actionmgtBean.refresh}" immediate="true"
+                                             onsuccess="widDialogActionmgt.hide()"
+                                             image="ui-icon ui-icon-close" />
+
+                            <p:commandButton  rendered="#{actionmgtBean.modify eq 'no'}"
+                                              value="#{labels['default.button.close.label']}"
+                                              reset="true"
+                                              onsuccess="widDialogActionmgt.hide()"
+                                              image="ui-icon ui-icon-close" />
+
+                        </f:facet>
+                    </h:panelGrid>
 					<h:panelGrid columns="3">
 					
 						<h:outputLabel for="actiontitle"
@@ -114,14 +137,14 @@
 
 							<p:outputPanel rendered="#{actionmgtBean.modify eq 'no'}">
 								<h:outputLabel value="#{actionmgtBean.beginDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
 
 							<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
 									id="fromDate_input" rendered="#{actionmgtBean.modify eq 'yes'}"
 									value="#{actionmgtBean.selected.beginDate}" showOn="button"
-									pattern="yyyy-MM-dd" title="yyyy-MM-dd"/>	
+									pattern="dd.MM.yyyy" />
 															
 						</p:outputPanel>
 						<p:message for="fromDate_input" display="text" />
@@ -141,7 +164,7 @@
 								<h:panelGrid columns="2">
 									<p:outputPanel>
 										<h:outputLabel value="#{actionmgtBean.selected.endDate}">
-											<f:convertDateTime pattern="yyyy-MM-dd" />
+											<f:convertDateTime pattern="dd.MM.yyyy" />
 										</h:outputLabel>
 									</p:outputPanel>
 
@@ -188,7 +211,7 @@
 								</f:facet>
 								<h:panelGrid columns="2">							
 									<p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
-										rendered="#{actionmgtBean.modify eq 'yes'}" title="yyyy-MM-dd"
+										rendered="#{actionmgtBean.modify eq 'yes'}"
 										value="#{actionmgtBean.selected.endDate}" showOn="button"
 								</h:panelGrid>
 								-->
@@ -217,30 +240,7 @@ idFormActionCalendar should be updated...
 it is in a tab and cache=false causes an error to make all components
 in the tab to fail somewhere in the lifecycle e.g. this form and others.
  -->
-					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
-						<f:facet name="header">
-							<p:commandButton value="#{labels['default.button.create.label']}"
-								title="#{labels['default.button.create.label']}"
-								process="idFormActionmgt"
-								update="idItemTableActionmgt msgs idFormActionmgt idFormActionCalendar"
-								oncomplete="onEditComplete(xhr,status,args)"
-								actionListener="#{actionmgtBean.store}"
-								image="ui-icon ui-icon-check" />
 
-						<p:commandButton rendered="#{actionmgtBean.modify eq 'yes'}" 
-							value="#{labels['default.button.reset.label']}" 						
-							actionListener="#{actionmgtBean.refresh}" immediate="true" 
-							onsuccess="widDialogActionmgt.hide()"									
-							image="ui-icon ui-icon-close" />
-					
-						<p:commandButton  rendered="#{actionmgtBean.modify eq 'no'}" 
-							value="#{labels['default.button.close.label']}" 						
-							reset="true"
-							onsuccess="widDialogActionmgt.hide()"
-							image="ui-icon ui-icon-close" />								
-								
-						</f:facet>
-					</h:panelGrid>
 				</h:form>	
 			</p:outputPanel>
 		</p:dialog>
@@ -253,10 +253,10 @@ in the tab to fail somewhere in the lifecycle e.g. this form and others.
 								onclick="widDialogActionmgt.hide();" immediate="true"
 								image="ui-icon ui-icon-close" />-->
 <!--  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage="#{labels['default_required_field']}"
 								value="#{actionmgtBean.selected.beginDate}"
 								rendered="#{actionmgtBean.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
  			<radio value="action_isActiveStatusTrue"  label="${labels.action_isActiveStatusTrue}"  selected="true"/>
 				<radio value="action_isActiveStatusFalse" label="${labels.action_isActiveStatusFalse}"/>

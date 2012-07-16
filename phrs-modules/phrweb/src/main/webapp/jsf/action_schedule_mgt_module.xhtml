@@ -61,7 +61,7 @@
 		<p:menuitem  value="#{labels['calendar.view.calendar']}"  url="/jsf/action_schedule_calendar.xhtml"  immediate="true"
 			styleClass="ui-button-text" />		 						 
 </p:breadCrumb>			
-			<p:messages />
+
 			<!-- show validation messages for create form contents -->
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents 		
@@ -135,14 +135,14 @@
 				<p:column headerText="#{labels['action.date.when.label']}" 
 					sortBy="#{theItem.beginDate}">
 					<h:outputLabel value="#{theItem.beginDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>
 				<!--  
 				<p:column headerText="#{labels['action.date.end.label']}" 
 					sortBy="#{theItem.endDate}">
 					<h:outputLabel value="#{theItem.endDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>-->
 				<p:column headerText="#{labels['action.endtime.label']}" 

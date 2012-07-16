@@ -51,7 +51,7 @@
 			
 		
 		<h:form prependId="false">
-			<p:messages />
+
 			<!-- show validation messages for create form contents -->
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents -->
@@ -142,7 +142,7 @@ medicationSummary.list.completed.short.label=Abgeschlossen
 
 				<p:column headerText="#{labels['short.dateStart.label']}" style="width:110px;">
 					<h:outputText  value="#{theItem.beginDate}"><!-- beginDate-->
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputText>
 				</p:column>				
 				
@@ -157,19 +157,21 @@ medicationSummary.list.completed.short.label=Abgeschlossen
 
 				<p:column headerText="#{labels['short.dateEnd.label']}" style="width:110px;">
 					<h:outputText  value="#{theItem.endDate}"><!-- endDate-->
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputText>
 				</p:column>				
 				<!-- 
 				
 				<p:column headerText="End Date" >
 					<h:outputText  value="XX{theItem.displayDate }">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputText>
 				</p:column> -->
 			
 				<p:column headerText="#{labels['default.medicationDosage.label']}" style="width:150px;">
-					<h:outputLabel value="#{theItem.treatmentMatrix.dosage}"/>	
+					<h:outputLabel value="#{theItem.treatmentMatrix.dosage}">
+                        <f:convertNumber maxFractionDigits="1"></f:convertNumber>
+					</h:outputLabel>
 					<p:spacer width="2"/>
 					<h:outputLabel value="#{theItem.treatmentMatrix.dosageUnits}">
 						<f:converter converterId="labelLookup" />

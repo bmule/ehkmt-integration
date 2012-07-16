@@ -15,23 +15,7 @@
 
 	<ui:composition>
 
-<!-- 
- {labels['medicationSummary.medicationNameText.label']}
- {labels['medicationSummary.medicationStatus.main.label']}
- {labels['default.medicationDosage.label']}
-{labels['medicationSummary.medicationQuantity.label']}
-{labels['medicationSummary.medicationQuantityUnit.label']}
-{labels['medicationSummary.medicationFrequencyInterval.label']}
-{labels['treatmentMatrix.dosageInterval']}
-{labels['medicationSummary.medicationFrequencyTimeOfDay.label']}
-{labels['treatmentMatrix.dosageTimeOfDay']}
-	
-{labels['medicationSummary.prescribedByPersonName.label']}
-{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}
 
-{labels['default.comments.label']}
-
-	 -->
 		<p:dialog closable="false"  widgetVar="widDialogOmed" 
 			id="idDialogOmed" 
 			modal="true"	appendToBody="true"
@@ -69,8 +53,34 @@
 					<!-- 
 					<h:inputHidden value="#{odlmed.selected.status}" /> 
 					<h:inputHidden value="#{odlmed.selected.label}" /> 
-					-->                                        
-					
+					-->
+        <h:panelGrid columns="2" cellpadding="2" style="margin:0 auto;">
+            <f:facet name="header">
+                <p:commandButton value="#{labels['default.button.create.label']}"
+                                 title="#{labels['default.button.create.label']}"
+                                 process="idFormOmed"
+                                 update="msgs idFormOmed idItemTableOmed"
+                                 oncomplete="onEditComplete(xhr,status,args)"
+                                 actionListener="#{odlmed.store}" image="ui-icon ui-icon-check" />
+
+                <!-- p:commandButton type="reset"
+                                    value="#{odlmed.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+                                    onclick="widDialogOmed.hide();" immediate="true"
+                                    image="ui-icon ui-icon-close" />-->
+
+                <p:commandButton rendered="#{odlmed.modify eq 'yes'}"
+                                 value="#{labels['default.button.reset.label']}"
+                                 actionListener="#{odlmed.refresh}" immediate="true"
+                                 onsuccess="widDialogOmed.hide()"
+                                 image="ui-icon ui-icon-close" />
+
+                <p:commandButton  rendered="#{odlmed.modify eq 'no'}"
+                                  value="#{labels['default.button.close.label']}"
+                                  reset="true"
+                                  onsuccess="widDialogOmed.hide()"
+                                  image="ui-icon ui-icon-close" />
+            </f:facet>
+        </h:panelGrid>
 					<h:panelGrid columns="3">
 
 <!-- 								required="true" requiredMessage="#{labels['default_required_field']}" -->
@@ -118,39 +128,46 @@
 
 							<p:outputPanel rendered=" {odlmed.modify eq 'no'}">
 								<h:outputLabel value=" {odlmed.selected.displayDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage=" {labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage=" {labels['default_required_field']}"
 								id="displayDate_input"
 								value=" {odlmed.selected.displayDate}"
 								rendered=" {odlmed.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
 					
 						</p:outputPanel>
 						<p:message for="displayDate_input" display="text" />
 -->
 						<h:outputLabel for="beginDate"
-							value="#{labels['medicationSummary.observationDateStart.label']} #{labels['tip.date.formating']}"
+							value="#{labels['medicationSummary.observationDateStart.label']} #{labels['tip.date.formating.slash']}"
 							styleClass="form-dialog-label" />	
 												
 						<p:outputPanel id="beginDate" layout="block">
 
 							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
 								<h:outputLabel value="#{odlmed.selected.beginDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99" required="true" requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage="#{labels['default_required_field']}"
 								id="beginDate_input"
 								value="#{odlmed.selected.beginDate}"
 								rendered="#{odlmed.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
-					
+	<!--
+							<p:inputMask mask="99.99.9999" required="true" requiredMessage="#{labels['default_required_field']}"
+								id="beginDate_input"
+								value="#{odlmed.selected.beginDate}"
+								rendered="#{odlmed.modify eq 'yes'}">
+								<f:convertDateTime pattern="dd.MM.yyyy" />
+							</p:inputMask>
+					-->
 						</p:outputPanel>
 						<p:message for="beginDate_input" display="text" />
 <!-- status -->
@@ -177,21 +194,21 @@
 						<p:message for="field_activity_status" display="text" />
 <!-- end date -->
 						<h:outputLabel for="endDate"
-							value="#{labels['medicationSummary.observationDateEnd.label']} #{labels['tip.date.formating']}"
+							value="#{labels['medicationSummary.observationDateEnd.label']} #{labels['tip.date.formating.slash']}"
 							styleClass="form-dialog-label" />						
 						<p:outputPanel id="endDate" layout="block">
 
 							<p:outputPanel rendered="#{odlmed.modify eq 'no'}">
 								<h:outputLabel value="#{odlmed.selected.endDate}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 							</p:outputPanel>
  
-							<p:inputMask mask="9999/99/99"  requiredMessage="#{labels['default_required_field']}"
+							<p:inputMask mask="99.99.9999"  requiredMessage="#{labels['default_required_field']}"
 								id="endDate_input"
 								value="#{odlmed.selected.endDate}"
 								rendered="#{odlmed.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
 					
 						</p:outputPanel>
@@ -200,9 +217,9 @@
 						<!-- 	TODO displayDate or beginDate ?-->
 						<!-- 	<p:calendar required="true"  requiredMessage=" {labels['default_required_field']}" 
 								id="displayDate_input"
-								rendered=" {odlmed.modify eq 'yes'}" title="yyyy-MM-dd"
+								rendered=" {odlmed.modify eq 'yes'}"
 								value=" {odlmed.selected.displayDate}" showOn="button"
-								pattern="yyyy-MM-dd" />		-->	
+								pattern="dd.MM.yyyy" />		-->
   
 						<h:outputLabel for="field_dosage"
 							value="#{labels['medicationSummary.medicationQuantity.label']}"
@@ -334,34 +351,6 @@ reason_code_other=Other
 						</p:outputPanel>
 						<p:message for="field_note_med_input" display="text" />
 
-					</h:panelGrid>
-
-					<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
-						<f:facet name="header">
-							<p:commandButton value="#{labels['default.button.create.label']}"
-								title="#{labels['default.button.create.label']}"
-								process="idFormOmed" 
-								update="msgs idFormOmed idItemTableOmed"
-								oncomplete="onEditComplete(xhr,status,args)"
-								actionListener="#{odlmed.store}" image="ui-icon ui-icon-check" />
-
-							<!-- p:commandButton type="reset"
-								value="#{odlmed.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
-								onclick="widDialogOmed.hide();" immediate="true"
-								image="ui-icon ui-icon-close" />-->
-								
-						<p:commandButton rendered="#{odlmed.modify eq 'yes'}" 
-							value="#{labels['default.button.reset.label']}" 						
-							actionListener="#{odlmed.refresh}" immediate="true" 
-							onsuccess="widDialogOmed.hide()"									
-							image="ui-icon ui-icon-close" />
-					
-						<p:commandButton  rendered="#{odlmed.modify eq 'no'}" 
-							value="#{labels['default.button.close.label']}" 						
-							reset="true"
-							onsuccess="widDialogOmed.hide()"
-							image="ui-icon ui-icon-close" />								
-						</f:facet>
 					</h:panelGrid>
 				</h:form>
 			</p:outputPanel>

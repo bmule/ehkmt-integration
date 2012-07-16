@@ -114,12 +114,12 @@
 				<!-- short.date.label=Date-->
 				<p:column headerText="#{labels['short.dateStart.label']}">
 					<h:outputLabel value="#{theItem.beginDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>
 				<p:column headerText="#{labels['short.dateEnd.label']}">
 					<h:outputLabel value="#{theItem.endDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>
 
@@ -236,23 +236,23 @@
 					<p:outputPanel id="beginDateField" layout="block">
 						<h:outputLabel value="#{OOOBean.selected.beginDate}"
 							rendered="#{OOOBean.modify eq 'no'}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</h:outputLabel>
 						<!-- calendar option
 	                    <p:calendar 
 	                                rendered="X{OOOBean.modify eq 'yes'}"
-	                                title="yyyy-MM-dd"
+
 	                                value="#{OOOBean.selected.beginDate}"
 	                                showOn="button"
-	                                pattern="yyyy-MM-dd" />
+	                                pattern="dd.MM.yyyy" />
 	                                
 	                                -->
 
-						<p:inputMask mask="9999/99/99"
+						<p:inputMask mask="99.99.9999"
 						id="beginDateField_input"
 							value="#{OOOBean.selected.beginDate}"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:convertDateTime pattern="yyyy/MM/dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</p:inputMask>
 					</p:outputPanel>					
 					<p:message for="beginDateField_input" display="text" /> 
@@ -262,14 +262,14 @@
 					<p:outputPanel id="beginDateField" layout="block">
 								<h:outputLabel value="#{OOOBean.selected.beginDate}"
 									rendered="#{OOOBean.modify eq 'no'}">
-									<f:convertDateTime pattern="yyyy-MM-dd" />
+									<f:convertDateTime pattern="dd.MM.yyyy" />
 								</h:outputLabel>
 
 								<p:calendar id="beginDateField_input"
 									required="true" requiredMessage="#{labels['default_required_field']}"
-									rendered="#{OOOBean.modify eq 'yes'}" title="yyyy-MM-dd"
+									rendered="#{OOOBean.modify eq 'yes'}"
 									value="#{OOOBean.selected.beginDate}" showOn="button"
-									pattern="yyyy-MM-dd" />
+									pattern="dd.MM.yyyy" />
 									
 							</p:outputPanel>
 							<p:message for="beginDateField_input" display="text" />					
@@ -279,19 +279,19 @@
 					<p:outputPanel id="endDateField" layout="block">
 						<h:outputLabel value="#{OOOBean.selected.endDate}"
 							rendered="#{OOOBean.modify eq 'no'}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</h:outputLabel>
 						<!-- 	
 	                    <p:calendar 
 	                                rendered="X{OOOBean.modify eq 'yes'}"
-	                                title="yyyy-MM-dd"
+
 	                                value="X{OOOBean.selected.endDate}"
 	                                showOn="button"
-	                                pattern="yyyy-MM-dd" />-->
+	                                pattern="dd.MM.yyyy" />-->
 
-						<p:inputMask id="_DateField_input" mask="9999/99/99" value="#{OOOBean.selected.endDate}"
+						<p:inputMask id="_DateField_input" mask="99.99.9999" value="#{OOOBean.selected.endDate}"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:convertDateTime pattern="yyyy/MM/dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</p:inputMask>
 					</p:outputPanel>
 					<p:message for="_DateField_input" display="text" />
@@ -305,20 +305,19 @@
                                   
 						<h:outputLabel value="#{OOOBean.selected.displayDate}" 
 							rendered="#{OOOBean.modify eq 'no'}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</h:outputLabel>	                   
                   		<!-- 	
                   		 <p:calendar 
                                rendered="X{OOOBean.modify eq 'yes'}"
-                               title="yyyy-MM-dd"
                                value="X{OOOBean.selected.displayDate}"
                                showOn="button"
-                               pattern="yyyy-MM-dd" />-->
+                               pattern="dd.MM.yyyy" />-->
                                                        		
-						<p:inputMask id="_DateField2_input" mask="9999/99/99"
+						<p:inputMask id="_DateField2_input" mask="99.99.9999"
 							value="#{OOOBean.selected.displayDate}"
 							rendered="#{OOOBean.modify eq 'yes'}">
-							<f:convertDateTime pattern="yyyy/MM/dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</p:inputMask>									                                
                   </p:outputPanel>								
  						<p:message for="_DateField2_input" display="text" /> 

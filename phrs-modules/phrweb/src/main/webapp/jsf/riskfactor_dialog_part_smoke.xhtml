@@ -111,20 +111,19 @@
                                     
 						<h:outputLabel value="#{riskBean.selected.endDate}" 
 							rendered="#{riskBean.modify eq 'no'}">
-							<f:convertDateTime pattern="yyyy-MM-dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</h:outputLabel>	                   
 	                   <!-- 	
 	                    <p:calendar 
 	                                rendered="X{riskBean.modify eq 'yes'}"
-	                                title="yyyy-MM-dd"
 	                                value="X{riskBean.selected.endDate}"
 	                                showOn="button"
-	                                pattern="yyyy-MM-dd" />-->
+	                                pattern="dd.MM.yyyy" />-->
 	                                                        		
-						<p:inputMask mask="9999/99/99"
+						<p:inputMask mask="99.99.9999"
 							value="#{riskBean.selected.endDate}"
 							rendered="#{riskBean.modify eq 'yes'}">
-							<f:convertDateTime pattern="yyyy/MM/dd" />
+							<f:convertDateTime pattern="dd.MM.yyyy" />
 						</p:inputMask>
 							                                
                     </p:outputPanel>

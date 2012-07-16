@@ -244,13 +244,13 @@ render="#{allcontacts.selected.contactType eq  'healthcare_provider'}
 							render="#{allcontacts.selected.contactType eq 'healthcare_user'}">
 							<h:outputLabel value="#{allcontacts.selected.birthdate}"
 								rendered="#{allcontacts.modify eq 'no'}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
-							<p:inputMask mask="9999/99/99"
+							<p:inputMask mask="99.99.9999"
 								id="birthdateDateField_input"
 								value="#{allcontacts.selected.birthdate}"
 								rendered="#{allcontacts.modify eq 'yes'}">
-								<f:convertDateTime pattern="yyyy/MM/dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</p:inputMask>
 						</p:outputPanel>					
 						<p:message for="birthdateDateField_input" display="text" render="#{allcontacts.selected.contactType eq 'healthcare_user'}"/> 

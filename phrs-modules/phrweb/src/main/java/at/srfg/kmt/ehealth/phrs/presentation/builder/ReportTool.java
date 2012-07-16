@@ -5,12 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.faces.context.FacesContext;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 
-public class ReportTool {
+public class ReportTool implements Serializable {
     private final static Logger LOGGER = LoggerFactory
             .getLogger(ReportTool.class);
     protected ResourceBundle resourceBundle;

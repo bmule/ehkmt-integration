@@ -39,7 +39,7 @@ prependId="false"
 		<div class="entry">
 
 			<h:form prependId="false">
-				<p:messages />
+
 				<p:growl id="msgs" showDetail="true" />
 
 				<p:fieldset legend="#{labels['obsIssue.label']}">
@@ -80,18 +80,7 @@ prependId="false"
 								</p:commandButton>
 							</h:panelGrid>
 						</p:column>			
-	<!-- 
-	
-	
-	obsIssue.issueCode.label
-	obsIssue.isActiveStatus.label
-	
-	short.date.label = displayDate
-	obsIssue.isActiveStatus.label
-	default_activeStatusTrue=This is a current problem since
-    default_activeStatusFalse=This is no longer a problem as of
-	 -->												
-					
+
 									
 							<p:column headerText="#{labels['obsIssue.issueCode.label']}" sortBy="#{theItem.code}"
                                       style="width:210px;">
@@ -110,7 +99,7 @@ prependId="false"
 						<p:column headerText="#{labels['short.date.label']}" sortBy="#{theItem.displayDate}"
                                   style="width:120px;">
 							<h:outputLabel value="#{theItem.displayDate}">
-								<f:convertDateTime pattern="yyyy-MM-dd" />
+								<f:convertDateTime pattern="dd.MM.yyyy" />
 							</h:outputLabel>
 						</p:column>				
 															
@@ -160,6 +149,44 @@ prependId="false"
 					
 					<h:inputHidden value="#{odlprobBean.selected.origin}" />
 					<h:inputHidden value="#{odlprobBean.selected.originStatus}" />
+                        <h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
+                            <f:facet name="header">
+
+                                <p:commandButton rendered="#{odlprobBean.modify eq 'yes'}"
+                                                 widgetVar="widDialogSaveButtonOprob" process="idFormOprob"
+                                                 value="#{labels['default.button.create.label']}"
+                                                 title="#{labels['default.button.create.label']}"
+                                                 update="idFormOprob msgs idItemTableOprob"
+                                                 actionListener="#{odlprobBean.store}"
+                                                 oncomplete="onEditComplete(xhr,status,args)"
+                                                 image="ui-icon ui-icon-check" />
+
+
+                                <p:commandButton rendered="#{odlprobBean.modify eq 'yes'}"
+                                                 value="#{labels['default.button.reset.label']}"
+                                                 actionListener="#{odlprobBean.refresh}" immediate="true"
+                                                 onsuccess="widDialogOprob.hide()"
+                                                 image="ui-icon ui-icon-close" />
+
+                                <p:commandButton  rendered="#{odlprobBean.modify eq 'no'}"
+                                                  value="#{labels['default.button.close.label']}"
+                                                  reset="true"
+                                                  onsuccess="widDialogOprob.hide()"
+                                                  image="ui-icon ui-icon-close" />
+
+                                <!--
+                                                <p:commandButton  rendered="#{odlprob.modify eq 'no'}"
+                                                    value="#{labels['default.button.close.label']}"
+                                                    reset="true"
+                                                    onsuccess="widDialogObp.hide()"
+                                                    image="ui-icon ui-icon-close" />	-->
+                                <!--<p:commandButton
+                                                                value="#{odlprobBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
+                                                                type="reset" immediate="true" onclick="widDialogOprob.hide()"
+                                                                image="ui-icon ui-icon-close" />-->
+
+                            </f:facet>
+                        </h:panelGrid>
                         <!--  <f:selectItem label="... Please Select ..." noSelectionOption="true" itemValue=""/>-->
 									<h:panelGrid columns="3" cellpadding="2" style="margin:0 auto;" >	
 										
@@ -199,22 +226,23 @@ prependId="false"
 					                                  
 											<h:outputLabel value="#{odlprobBean.selected.displayDate}" 
 												rendered="#{odlprobBean.modify eq 'no'}">
-												<f:convertDateTime pattern="yyyy-MM-dd" />
+												<f:convertDateTime pattern="dd.MM.yyyy" />
 											</h:outputLabel>	                   
 					                  			
 					                  		 <p:calendar required="true" requiredMessage="#{labels['default_required_field']}"
 					                               rendered="#{odlprobBean.modify eq 'yes'}"
-					                               title="yyyy-MM-dd"
 					                               value="#{odlprobBean.selected.displayDate}"
 					                               showOn="button"
-					                               pattern="yyyy-MM-dd" />
+					                               pattern="dd.MM.yyyy" />
+                                           <!-- tip.date.formating.slash
+                                            <p:inputMask  mask="99.99.9999" requiredMessage="#{labels['default_required_field']}"
+                                                value="#{odlprobBean.selected.endDate}"   required="true"
+                                                rendered="#{odlprobBean.modify eq 'yes'}">
+                                                <f:convertDateTime pattern="dd.MM.yyyy" />
+                                            </p:inputMask>    -->
+
 					                                                       		
-										<!-- 	<p:inputMask mask="9999/99/99"
-												required="true" requiredMessage=" {labels['default_required_field']}"
-												value=" {odlprobBean.selected.displayDate}"
-												rendered=" {odlprobBean.modify eq 'yes'}">
-												<f:convertDateTime pattern="yyyy/MM/dd" />
-											</p:inputMask>	-->								                                
+
 					                  </p:outputPanel>								
 				  						<p:message for="displayDateField" display="text" /> 
 		
@@ -233,44 +261,7 @@ prependId="false"
 					  				  						
 	  						</h:panelGrid>	
 	  						
-							<h:panelGrid columns="2" cellpadding="4" style="margin:0 auto;">
-								<f:facet name="header">
-			
-									<p:commandButton rendered="#{odlprobBean.modify eq 'yes'}"
-										widgetVar="widDialogSaveButtonOprob" process="idFormOprob"
-										value="#{labels['default.button.create.label']}"
-										title="#{labels['default.button.create.label']}"
-										update="idFormOprob msgs idItemTableOprob"
-										actionListener="#{odlprobBean.store}"
-										oncomplete="onEditComplete(xhr,status,args)"
-										image="ui-icon ui-icon-check" />
-	
-											
-									<p:commandButton rendered="#{odlprobBean.modify eq 'yes'}" 
-										value="#{labels['default.button.reset.label']}" 						
-										actionListener="#{odlprobBean.refresh}" immediate="true" 
-										onsuccess="widDialogOprob.hide()"									
-										image="ui-icon ui-icon-close" />
-								
-									<p:commandButton  rendered="#{odlprobBean.modify eq 'no'}" 
-										value="#{labels['default.button.close.label']}" 						
-										reset="true"
-										onsuccess="widDialogOprob.hide()"
-										image="ui-icon ui-icon-close" />
-										
-										<!--  									
-										<p:commandButton  rendered="#{odlprob.modify eq 'no'}" 
-											value="#{labels['default.button.close.label']}" 						
-											reset="true"
-											onsuccess="widDialogObp.hide()"
-											image="ui-icon ui-icon-close" />	-->		
-													<!--<p:commandButton
-														value="#{odlprobBean.modify eq 'yes' ? labels['default.button.reset.label'] : labels['default.button.close.label']}"
-														type="reset" immediate="true" onclick="widDialogOprob.hide()"
-														image="ui-icon ui-icon-close" />-->
-			
-								</f:facet>
-							</h:panelGrid>	
+
 						</h:form>														
 						</p:outputPanel>
 				<!-- 

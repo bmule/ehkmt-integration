@@ -49,7 +49,7 @@
 
 		</h:outputScript>
 		<h:form prependId="false">
-			<p:messages />
+
 			<!-- show validation messages for create form contents -->
 			<p:growl id="msgs" showDetail="true" />
 			<!-- shows the validation messages for dialog contents -->
@@ -115,13 +115,13 @@
 				
 				<p:column headerText="#{labels['action.date.when.label']}">
 					<h:outputLabel value="#{theItem.displayDate }"><!-- beginDate-->
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>
 			<!--  
 				<p:column headerText="#{labels['action.date.end.label']}">
 					<h:outputLabel value="#{theItem.endDate}">
-						<f:convertDateTime pattern="yyyy-MM-dd" />
+						<f:convertDateTime pattern="dd.MM.yyyy" />
 					</h:outputLabel>
 				</p:column>
 			-->
