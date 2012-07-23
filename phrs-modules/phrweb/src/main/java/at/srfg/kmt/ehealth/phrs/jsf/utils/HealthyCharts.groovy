@@ -9,6 +9,7 @@ import org.primefaces.model.chart.CartesianChartModel
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBloodPressure
 import at.srfg.kmt.ehealth.phrs.model.baseform.ObsVitalsBodyWeight
 import at.srfg.kmt.ehealth.phrs.presentation.utils.HealthyUtils
+import at.srfg.kmt.ehealth.phrs.presentation.builder.ReportTool
 
 class HealthyCharts {
 
@@ -125,14 +126,19 @@ class HealthyCharts {
 
 	public static CartesianChartModel createChartBloodPressure(List<ObsVitalsBloodPressure> list){
 		CartesianChartModel cartesianModel = new CartesianChartModel();
-
+        ReportTool reportTool=new ReportTool();
 		ChartSeriesExt chart_1 = new ChartSeriesExt();
 		ChartSeriesExt chart_2 = new ChartSeriesExt();
 		ChartSeriesExt chart_3 = new ChartSeriesExt();
-
-		chart_1.setLabel("Blood Pressure (mmg/ml) Systolic");
+ /*
+ 		chart_1.setLabel("Blood Pressure (mmg/ml) Systolic");
 		chart_2.setLabel("Blood Pressure (mmg/ml) Diastolic");
 		chart_3.setLabel("Heart Rate (bpm)");
+  */
+
+		chart_1.setLabel(reportTool.getLabel('chart.label.bp.systolic','Systolic'));
+		chart_2.setLabel(reportTool.getLabel('chart.label.bp.diastolic','Diastolic'));
+		chart_3.setLabel(reportTool.getLabel('chart.label.bpm','bpm'));
 
 		//List listBw = getUserService().
 		//chart.set("2004", 120);
@@ -219,8 +225,8 @@ class HealthyCharts {
 
 		ChartSeriesExt chart_1 = new ChartSeriesExt();
 		ChartSeriesExt chart_2 = new ChartSeriesExt();
-
-		chart_1.setLabel("Body Weight (kg)");
+        ReportTool reportTool=new ReportTool();
+		chart_1.setLabel(reportTool.getLabel('chart.label.bw','kg'));
 		//chart_2.setLabel("BMI");
 
 		//List listBw = getUserService().

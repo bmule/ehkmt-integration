@@ -81,7 +81,7 @@
 
 
 <p><p:spacer width="2"/></p>
-<p:outputPanel rendered="#{monmgtBean.showFormType ne 'ROLEGROUP_MEDICAL'}">
+<p:outputPanel rendered="#{monmgtBean.showFormType eq 'ROLEGROUP_MEDICAL'}">
      <h:outputLabel value="#{labels['reports.health_info_for']}"/>:<p:spacer width="4px"/> <h:outputLabel value="#{monmgtBean.selectedOwnerGreetName}"/>
 </p:outputPanel>
 
@@ -389,13 +389,13 @@ Contact info...wait.
                 </h:outputLabel>
             </p:column>
 
-            <p:column headerText="Reason">
+            <p:column headerText="#{labels['medicationSummary.medicationReasonPrimaryKeywordCode.label']}">
                 <h:outputLabel value="#{theItem.reasonCode}">
                     <f:converter converterId="labelLookup"/>
                 </h:outputLabel>
             </p:column>
 
-            <p:column headerText="Prescribed by">
+            <p:column headerText="#{labels['medicationSummary.prescribedByPersonName.short.label']}">
 
                 <h:outputText value="#{theItem.prescribedByName}"/>
             </p:column>
